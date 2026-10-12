@@ -32,3 +32,18 @@ han ejecutado en esta sesión.
 - Conectar el plugin de Rojo, el MCP de Studio y verificar la prueba de humo.
 - Correr el checklist completo (`rojo build`, `selene src`, `stylua src`).
 - Definir el juego y crear `docs/backlog.md`.
+
+---
+
+## 2026-10-12 — Corrección del nombre del repositorio
+
+**Qué se hizo:**
+
+- El repositorio se llama `roblox-sandbox`, no `sandbox`. Se corrigió en `README.md`
+  el título, la URL y el `cd` del comando de clonado, y en `docs/setup.md` el nombre
+  del repositorio remoto a crear.
+- Se revisó el resto de la documentación: no quedan otras referencias al nombre anterior.
+
+**Qué se rompió:** nada.
+
+**Qué sigue:** lo pendiente de la sesión anterior (Rojo, MCP de Studio, checklist).

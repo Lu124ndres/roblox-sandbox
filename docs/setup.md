@@ -81,7 +81,7 @@ Repositorio: <https://github.com/ahujasid/blender-mcp>
 
 ### 4. Repositorio remoto
 
-- [ ] **[clic]** Crear el repositorio público `sandbox` (o el nombre elegido) en
+- [ ] **[clic]** Crear el repositorio público `roblox-sandbox` en
   github.com/Lu124ndres, sin README ni licencia (ya existen aquí).
 - [ ] **[terminal]**
   ```powershell

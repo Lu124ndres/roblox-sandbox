@@ -1,4 +1,4 @@
-# sandbox
+# roblox-sandbox
 
 Base de desarrollo para un juego de Roblox, construida con Luau estricto, Rojo y un
 flujo de trabajo pensado para código revisable y mantenible.
@@ -70,8 +70,8 @@ Requisitos: Windows, Roblox Studio y [Rokit](https://github.com/rojo-rbx/rokit).
 
 1. Clonar el repositorio:
    ```
-   git clone https://github.com/Lu124ndres/sandbox.git
-   cd sandbox
+   git clone https://github.com/Lu124ndres/roblox-sandbox.git
+   cd roblox-sandbox
    ```
 2. Instalar las herramientas en las versiones fijadas:
    ```
