@@ -96,3 +96,27 @@ han ejecutado en esta sesión.
 solo se carga al recargar VS Code, así que la prueba de humo en Studio sigue pendiente.
 
 **Qué sigue:** recargar VS Code, aprobar el servidor y repetir la prueba de humo.
+
+---
+
+## 2026-10-12 — Intento de prueba de humo en Studio por MCP
+
+**Qué se hizo:**
+
+- README: en "Cómo levantarlo" se indica que hay que crear `build/` antes del primer
+  `rojo build`, porque está en `.gitignore` y no viene en el clon.
+
+**Qué se rompió / qué no se verificó:**
+
+- **Prueba de humo en Studio: no ejecutada.** Tras recargar VS Code, el servidor
+  `roblox-studio` aparece conectado en la sesión del asistente, pero no expone ninguna
+  herramienta ni recurso. Sin herramientas no se pudo comprobar
+  `ServerScriptService.Server`, `ReplicatedStorage.Shared` ni el `require` de los
+  módulos de `src/shared`.
+
+**Qué sigue:**
+
+- Revisar por qué el MCP no publica herramientas: confirmar en `/mcp` el estado y la
+  lista de herramientas de `roblox-studio`, y que el MCP siga activo en el panel
+  Asistente de Studio con el lugar abierto.
+- Repetir la prueba de humo cuando las herramientas estén disponibles.

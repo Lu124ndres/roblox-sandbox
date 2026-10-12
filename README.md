@@ -92,8 +92,12 @@ Requisitos: Windows, Roblox Studio y [Rokit](https://github.com/rojo-rbx/rokit).
 Para generar un archivo de lugar sin Studio abierto:
 
 ```
+mkdir build
 rojo build --output build/test.rbxl
 ```
+
+La carpeta `build/` está en `.gitignore` y no viene en el clon. Hay que crearla antes
+del primer `rojo build`; si no existe, Rojo falla con `failed to create file`.
 
 Verificaciones de calidad:
 
