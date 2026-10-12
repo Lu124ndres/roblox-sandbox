@@ -120,3 +120,40 @@ solo se carga al recargar VS Code, así que la prueba de humo en Studio sigue pe
   lista de herramientas de `roblox-studio`, y que el MCP siga activo en el panel
   Asistente de Studio con el lugar abierto.
 - Repetir la prueba de humo cuando las herramientas estén disponibles.
+
+---
+
+## 2026-10-12 — Prueba de humo en Studio por MCP
+
+**Qué se hizo:** con el MCP de Studio ya publicando herramientas, se ejecutó la prueba
+de humo sobre `sandbox.rbxl` (modo Edit y luego Play).
+
+**Resultado:**
+
+- **Estructura: pasa.** `ServerScriptService.Server` (Folder) contiene `Hello` (Script);
+  `ReplicatedStorage.Shared` (Folder) contiene `Assets`, `Config` y `UIConfig`
+  (ModuleScript); `StarterPlayerScripts.Client` (Folder) contiene `Hello` (LocalScript).
+- **Contenido: pasa.** El `Source` de los cinco scripts mide exactamente los mismos
+  bytes que los archivos de `src/` y todos empiezan con `--!strict`.
+- **`require` de `src/shared`: pasa.** Los tres módulos cargan sin error, devuelven
+  tablas congeladas (`table.isfrozen`) con las claves esperadas:
+  `Assets` (MISSING, UI, Textures, Animations), `Config` (Economy, Progression,
+  Gameplay), `UIConfig` (Colors, Fonts, TextSizes, Spacing, Tweens).
+- **Play: pasa.** Output muestra `servidor conectado via Rojo` y
+  `cliente conectado via Rojo`.
+
+**Qué se rompió / qué no se verificó:**
+
+- El plugin de Rojo avisó en Output `Couldn't connect to the Rojo server` y no había
+  ningún proceso `rojo serve` corriendo. El contenido de Studio es el que se sincronizó
+  antes (coincide con `src/`), pero la **sincronización en vivo no se verificó** en esta
+  sesión.
+- `mcp.bat` (generado por Studio) imprime `"else" no se reconoce...` al terminar: el
+  `else` está en otra línea que el `)`. No afecta hoy; el respaldo por registro fallará
+  cuando Studio se actualice.
+
+**Qué sigue:**
+
+- Levantar `rojo serve`, reconectar el plugin y confirmar que un cambio en `src/` llega a
+  Studio.
+- Definir el juego y crear `docs/backlog.md`.
