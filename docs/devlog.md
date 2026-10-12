@@ -157,3 +157,25 @@ de humo sobre `sandbox.rbxl` (modo Edit y luego Play).
 - Levantar `rojo serve`, reconectar el plugin y confirmar que un cambio en `src/` llega a
   Studio.
 - Definir el juego y crear `docs/backlog.md`.
+
+---
+
+## 2026-10-12 — Prueba de humo repetida con Rojo conectado
+
+**Qué se hizo:** con `rojo serve` 7.7.1 escuchando en el puerto 34872 y el plugin
+conectado, se repitió la prueba de humo completa por MCP.
+
+**Resultado: todo pasa.**
+
+- **Sincronización en vivo:** se creó `src/shared/SyncProbe.luau` y apareció en
+  `ReplicatedStorage.Shared` al instante con el `Source` correcto; al borrarlo,
+  desapareció de Studio. El archivo de prueba no quedó en el repositorio.
+- **Estructura, contenido y `require`:** mismos resultados que en la entrada anterior
+  (carpetas y clases correctas, `Source` idéntico en bytes a `src/`, `--!strict` en los
+  cinco scripts, los tres módulos compartidos cargan congelados con sus claves).
+- **Play:** Output muestra solo `servidor conectado via Rojo` y
+  `cliente conectado via Rojo`, sin avisos de Rojo.
+
+**Qué se rompió:** nada. Queda abierto solo el bug de `mcp.bat` anotado antes.
+
+**Qué sigue:** definir el juego y crear `docs/backlog.md`.
