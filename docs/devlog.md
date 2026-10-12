@@ -79,3 +79,20 @@ han ejecutado en esta sesión.
 
 - Activar el MCP de Studio y repetir la prueba de humo.
 - Definir el juego y crear `docs/backlog.md`.
+
+---
+
+## 2026-10-12 — Registro del MCP de Studio en el proyecto
+
+**Qué se hizo:**
+
+- `.mcp.json` en la raíz: servidor `roblox-studio` (stdio) que ejecuta
+  `cmd.exe /c ${LOCALAPPDATA}\Roblox\mcp.bat`.
+- Verificado: el JSON es válido, `mcp.bat` existe y el `StudioMCP.exe` al que apunta
+  también.
+- `docs/setup.md`: dónde vive la configuración y que hay que recargar VS Code.
+
+**Qué se rompió / qué no se verificó:** la conexión no se probó todavía. El servidor
+solo se carga al recargar VS Code, así que la prueba de humo en Studio sigue pendiente.
+
+**Qué sigue:** recargar VS Code, aprobar el servidor y repetir la prueba de humo.

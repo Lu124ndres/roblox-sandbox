@@ -58,8 +58,16 @@ El MCP viene integrado en Roblox Studio; no hay que instalar nada aparte.
 > No usar `Roblox/studio-rust-mcp-server`: está descontinuado.
 
 - [ ] **[clic]** En Studio: abrir el panel **Asistente** → menú de tres puntos → activar
-  el servidor MCP.
-- [ ] **[clic]** Reiniciar el cliente de IA y verificar que las herramientas de Studio aparecen.
+  el servidor MCP. Al activarlo, Studio crea `%LOCALAPPDATA%\Roblox\mcp.bat`, que
+  lanza el ejecutable del servidor.
+- [x] La configuración del MCP para Claude Code vive en `.mcp.json`, en la raíz del
+  repositorio: registra `roblox-studio` como servidor stdio que ejecuta
+  `cmd.exe /c ${LOCALAPPDATA}\Roblox\mcp.bat`. Claude Code expande `${LOCALAPPDATA}`
+  al cargar el archivo, así que funciona en cualquier máquina sin exponer el usuario.
+- [ ] **[clic]** Recargar VS Code (**Ctrl+Shift+P** → **Developer: Reload Window**) para
+  que Claude Code lea `.mcp.json`. La primera vez pide aprobar el servidor del proyecto.
+- [ ] **[clic]** Con Studio abierto, verificar que las herramientas de Studio aparecen
+  en la sesión (`/mcp` muestra `roblox-studio` como conectado).
 
 ### 3. Addon de Blender MCP (necesario hasta la fase 2)
 
