@@ -37,6 +37,11 @@ wally --version
   ```powershell
   rojo plugin install
   ```
+  > Pueden quedar varias versiones del plugin de Rojo instaladas a la vez. Solo debe
+  > quedar la que coincide con el CLI (7.7.1); si hay otras, Studio puede conectarse
+  > con la equivocada. Revisar **Plugins** → **Manage Plugins** (versiones de la tienda)
+  > y la carpeta `%LOCALAPPDATA%\Roblox\Plugins` (donde `rojo plugin install` deja
+  > `RojoManagedPlugin.rbxm`), y quitar las demás.
 - [ ] **[clic]** Abrir Roblox Studio con una Baseplate vacía.
 - [ ] **[terminal]** Levantar el servidor de Rojo:
   ```powershell
@@ -48,17 +53,12 @@ wally --version
 
 ### 2. MCP de Studio
 
-Servidor oficial: <https://github.com/Roblox/studio-rust-mcp-server>
+El MCP viene integrado en Roblox Studio; no hay que instalar nada aparte.
 
-- [ ] **[clic]** Descargar el instalador de la última release del repositorio y ejecutarlo.
-  Instala el plugin de Studio y registra el servidor en los clientes compatibles que detecte.
-- [ ] **[clic]** Reiniciar Roblox Studio y confirmar en la pestaña **Plugins** que el
-  plugin de MCP aparece y está activo.
-- [ ] **[terminal]** Si el cliente es Claude Code y el instalador no lo registró, agregarlo
-  a mano (ajustar la ruta al ejecutable según el README del repositorio):
-  ```powershell
-  claude mcp add roblox-studio -- "C:\ruta\a\rbx-studio-mcp.exe" --stdio
-  ```
+> No usar `Roblox/studio-rust-mcp-server`: está descontinuado.
+
+- [ ] **[clic]** En Studio: abrir el panel **Asistente** → menú de tres puntos → activar
+  el servidor MCP.
 - [ ] **[clic]** Reiniciar el cliente de IA y verificar que las herramientas de Studio aparecen.
 
 ### 3. Addon de Blender MCP (necesario hasta la fase 2)
@@ -85,7 +85,7 @@ Repositorio: <https://github.com/ahujasid/blender-mcp>
   github.com/Lu124ndres, sin README ni licencia (ya existen aquí).
 - [ ] **[terminal]**
   ```powershell
-  git remote add origin https://github.com/Lu124ndres/<nombre-del-repo>.git
+  git remote add origin https://github.com/Lu124ndres/roblox-sandbox.git
   git branch -M main
   git push -u origin main
   ```
