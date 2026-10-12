@@ -47,3 +47,35 @@ han ejecutado en esta sesión.
 **Qué se rompió:** nada.
 
 **Qué sigue:** lo pendiente de la sesión anterior (Rojo, MCP de Studio, checklist).
+
+---
+
+## 2026-10-12 — Fin de línea, checklist de calidad y limpieza del repositorio
+
+**Qué se hizo:**
+
+- `.gitattributes` con `* text=auto eol=lf`. `git add --renormalize .` no cambió ningún
+  archivo: el índice ya tenía LF.
+- Checklist de calidad:
+  - `rojo build --output build/test.rbxl`: **pasa**. La primera corrida falló porque
+    la carpeta `build/` no existía (está en `.gitignore`); hubo que crearla.
+  - `selene src`: **pasa**, 0 errores y 0 warnings.
+  - `stylua --check src`: **pasa**, sin diferencias.
+- `docs/setup.md`: el MCP de Studio se activa desde el panel Asistente (viene
+  integrado); se quitó la instalación desde `studio-rust-mcp-server`, que está
+  descontinuado. Se agregó una advertencia sobre versiones duplicadas del plugin de
+  Rojo y se completó la URL de `git remote add`.
+- Se borraron 30 `tmp_obj_*` y 2 `stale-*` de `.git`; `git fsck` limpio.
+
+**Qué se rompió / qué no se verificó:**
+
+- **Prueba de humo en Studio: no ejecutada.** El MCP de Studio no estaba disponible en
+  la sesión del asistente, así que no se comprobó `ServerScriptService.Server`,
+  `ReplicatedStorage.Shared` ni el `require` de los módulos compartidos.
+- `default.project.json` todavía tiene `"name": "sandbox"` (no es documentación; queda
+  sin tocar).
+
+**Qué sigue:**
+
+- Activar el MCP de Studio y repetir la prueba de humo.
+- Definir el juego y crear `docs/backlog.md`.
