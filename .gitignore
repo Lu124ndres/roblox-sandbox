@@ -1,0 +1,17 @@
+# Salidas de build de Rojo
+build/
+*.rbxl
+*.rbxlx
+*.rbxm
+
+# Dependencias de Wally y lockfiles
+Packages/
+*.lock
+
+# Sistema operativo
+.DS_Store
+
+# Secretos: nunca deben llegar al repo
+.env
+*.key
+credentials.json
