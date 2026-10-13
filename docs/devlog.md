@@ -179,3 +179,44 @@ conectado, se repitió la prueba de humo completa por MCP.
 **Qué se rompió:** nada. Queda abierto solo el bug de `mcp.bat` anotado antes.
 
 **Qué sigue:** definir el juego y crear `docs/backlog.md`.
+
+---
+
+## 2026-10-12 — Preparación del modelo OrcaE1 en Blender
+
+**Qué se hizo:**
+
+- Importado `assets/blender/OrcaE1_meshy/` (FBX de Meshy con texturas embebidas y
+  4 PNG de 2048×2048: color, metallic, normal, roughness) en una escena nueva de Blender
+  5.2. Original: 46,748 triángulos, una sola pieza cerrada, sin esqueleto, sin geometría
+  suelta ni duplicada, normales consistentes, 0.67 × 1.90 × 1.12 m.
+- Limpieza: transformaciones aplicadas, origen en la base (entre los pies) y centrado.
+- Escala: 4.2 m de alto = 15 studs (3 personajes de 5 studs, 1 stud = 0.28 m).
+  Queda en 15 × 9.0 × 25.5 studs (alto × ancho × largo).
+- Polígonos: límite usado **10,000** (el de `blender-pipeline.md`; Roblox permite
+  20,000 por malla según su documentación de especificaciones de modelado).
+  Reducido a **9,806** triángulos en dos zonas: cara 0.30, cuerpo 0.19.
+- Texturas horneadas desde el original a 1024×1024 con UVs nuevas: color, normal y
+  rugosidad (8 bits en escala de grises). Metallic descartado: el mapa de Meshy es ≈ 0
+  (máximo 0.09, media 0.002).
+- Exportado `assets/blender/OrcaE1.fbx` con `OrcaE1_Color.png`, `OrcaE1_Normal.png`
+  y `OrcaE1_Roughness.png` al lado (rutas relativas). Verificado reimportando el FBX.
+- Capturas antes/después de frente y de lado en `docs/capturas/`.
+
+**Qué se rompió:**
+
+- El primer horneado salió con manchas blancas en la cara interna de las aletas: Smart
+  UV Project (66°) metió los dos lados de cada aleta en la misma isla y 296 triángulos se
+  solapaban en las UVs. Con 35° quedan 0 solapes.
+- Meshy trae normales personalizadas que el decimate dejó corruptas (99 esquinas de
+  hasta 166°). Se borraron; la malla reducida usa sombreado suave normal.
+
+**No verificado:**
+
+- No se importó en Roblox Studio todavía. Pendiente: confirmar que la orca mira hacia
+  donde se espera (exportado con forward −Z, up Y) y que el importador la lea en metros.
+- Este trabajo adelanta la fase 2 por pedido explícito; el modelo no se integra al juego
+  hasta que la fase 1 esté terminada.
+
+**Qué sigue:** importar `OrcaE1.fbx` en Studio y revisar orientación, escala y
+`SurfaceAppearance`.

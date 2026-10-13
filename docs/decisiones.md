@@ -87,3 +87,24 @@ exportadas desde Blender.
 `UIConfig.luau`, no requieren subir ni moderar assets y no dependen de IDs externos.
 Los rigs añadirían un pipeline completo (rigging, subida, permisos) sin beneficio para
 este tipo de juego.
+
+## 2026-10-12 — Reducir modelos de IA horneando texturas, no solo con decimate
+
+**Decisión:** los modelos generados con IA (Meshy) se reducen en dos zonas (cara con
+ratio 0.30, cuerpo con 0.19) y luego se hornea la apariencia del original sobre la malla
+reducida con UVs nuevas a 1024×1024: color, normal (tangente, OpenGL) y rugosidad. La
+textura original de Meshy no se reutiliza.
+
+**Contexto:** la orca de Meshy tenía 46,748 triángulos y texturas de 2048. Con solo
+decimate, los bordes pintados (parche del ojo, mancha celeste) quedaban dentados porque
+la textura estaba pintada para la malla original y las UVs se deforman al colapsar
+aristas.
+
+**Alternativas consideradas:** decimate uniforme (deforma ojos y sonrisa); decimate con
+grupo de vértices (protege la cara pero deja el cuerpo con ~200 triángulos); reutilizar
+las UVs de Meshy reduciendo la textura a 1024 (bordes dentados).
+
+**Por qué:** el horneado separa la geometría de la apariencia: la malla puede ser tan
+simple como pida el límite y la textura sigue viéndose como el original. Costos: hay que
+verificar que las UVs nuevas no se solapen (Smart UV Project con 66° solapaba las aletas;
+con 35° no) y que la distancia de proyección no tome superficies vecinas.
