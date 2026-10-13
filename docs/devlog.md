@@ -243,3 +243,34 @@ conectado, se repitió la prueba de humo completa por MCP.
 **No verificado:** la importación en Studio con el FBX nuevo.
 
 **Qué sigue:** reimportar `OrcaE1.fbx` en Studio y confirmar color, orientación y escala.
+
+---
+
+## 2026-10-12 — OrcaE1 importada en Roblox y registrada
+
+**Qué se hizo:**
+
+- El MCP de Studio no tiene ninguna herramienta para importar o subir `.fbx`
+  (`insert_asset` solo inserta IDs existentes; `upload_image` solo sube imágenes). La
+  importación se hizo a mano con **File → Import** y "Upload to Roblox".
+- La orca quedó en `ServerStorage.OrcaE1` (Model) con un `MeshPart` `OrcaE1` y su
+  `SurfaceAppearance` con ColorMap, NormalMap y RoughnessMap. Los cuatro assets existen
+  en Roblox a nombre de la cuenta (`GetProductInfo`).
+- IDs registrados en `src/shared/Assets.luau`: nueva sección `Meshes` y texturas
+  `OrcaE1Color`, `OrcaE1Normal`, `OrcaE1Roughness`. Verificado en Studio que coinciden
+  con los del `MeshPart`. Estados en `docs/ui-assets.md`: los cuatro `subido`; la
+  moderación no se puede consultar desde Studio.
+- Checklist: `rojo build`, `selene src` y `stylua --check src` pasan.
+
+**Resultado de las verificaciones:**
+
+- Frente: **pasa**. Mira a −Z (LookVector `0, 0, -1`; la cara se ve desde −Z).
+- Color y textura en Studio: **pasa**.
+- Escala: **no pasa**. Mide 4.2 studs de alto (2.53 × 4.2 × 7.14) en lugar de 15. Junto a
+  un personaje R15 por defecto (5.46 studs) queda en 0.77×. El importador tomó los metros
+  del archivo como studs. No se corrigió: queda a decisión.
+- La copia temporal y el personaje de la prueba se borraron.
+
+**Qué sigue:** decidir cómo corregir la escala (reimportar con Scale Unit en metros, o
+fijar el tamaño del MeshPart a 15 studs de alto). Guardar el lugar en Studio: el modelo en
+`ServerStorage` vive en el `.rbxl`, no en el repositorio.
