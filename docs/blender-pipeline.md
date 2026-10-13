@@ -14,6 +14,11 @@
   La iluminación la pone el motor.
 - **Escala en metros** en la configuración de la escena.
 - **Formato `.fbx` o `.glb`**, exportado a `assets/blender/`.
+- **Texturas embebidas en el FBX**: Path Mode en **Copy**, **Embed Textures** activado y
+  Apply Scalings en **FBX Unit Scale**. Si la textura solo se referencia por ruta, Studio
+  importa el modelo sin color.
+- **PNG finales de textura en `assets/textures/`** (`Nombre_color.png`, `_normal`,
+  `_roughness`). Los archivos de origen pesados (exportaciones de Meshy) no van al repo.
 - **Nombres en PascalCase que coincidan con el MeshPart en código.**
   Si el código busca `CoinGenerator`, el archivo es `CoinGenerator.fbx`.
 
@@ -32,6 +37,6 @@ un generador de imágenes no conoce el unwrap del modelo.
 - [ ] Textura 1024x1024, albedo plano, sin luz horneada.
 - [ ] Escala de escena en metros.
 - [ ] Nombre del objeto y del archivo en PascalCase, igual al MeshPart en código.
-- [ ] Exportado a `assets/blender/` como `.fbx` o `.glb`.
+- [ ] Exportado a `assets/blender/` como `.fbx` o `.glb`, con texturas embebidas.
 - [ ] Al subirlo, ID registrado en `src/shared/Assets.luau` y reemplazo anotado en
       `docs/devlog.md`.

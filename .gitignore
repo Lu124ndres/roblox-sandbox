@@ -15,3 +15,8 @@ Packages/
 .env
 *.key
 credentials.json
+
+# Modelos de origen pesados (exportaciones de Meshy u otros generadores).
+# Se conservan en disco; al repo solo van el .fbx final y sus texturas.
+assets/blender/*_meshy/
+assets/blender/*_meshy.fbx

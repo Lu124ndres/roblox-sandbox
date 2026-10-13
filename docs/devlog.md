@@ -220,3 +220,26 @@ conectado, se repitió la prueba de humo completa por MCP.
 
 **Qué sigue:** importar `OrcaE1.fbx` en Studio y revisar orientación, escala y
 `SurfaceAppearance`.
+
+---
+
+## 2026-10-12 — Texturas de OrcaE1 embebidas en el FBX
+
+**Qué se hizo:**
+
+- Diagnóstico: la orca importaba en Studio sin color porque `OrcaE1.fbx` se exportó con
+  las texturas referenciadas por ruta relativa, no embebidas. Los PNG horneados sí
+  existían, pero en `assets/blender/`.
+- Texturas finales movidas a `assets/textures/`: `OrcaE1_color.png`,
+  `OrcaE1_normal.png`, `OrcaE1_roughness.png` (1024×1024). El color se revisó: atlas con
+  las islas UV en azul pizarra, blanco y celeste; 18 % de fondo negro entre islas.
+- El material de la orca en Blender apunta a esos tres archivos y se ve con color.
+- `OrcaE1.fbx` reexportado con Path Mode Copy, Embed Textures y Apply Scalings en FBX
+  Unit Scale (3 MB). Reimportado en Blender: las tres texturas vienen empaquetadas y
+  conectadas a color, normal y rugosidad.
+- Los archivos de Meshy salen del repo (siguen en disco) y quedan en `.gitignore`.
+- `blender-pipeline.md`: regla de texturas embebidas y ubicación de los PNG finales.
+
+**No verificado:** la importación en Studio con el FBX nuevo.
+
+**Qué sigue:** reimportar `OrcaE1.fbx` en Studio y confirmar color, orientación y escala.
