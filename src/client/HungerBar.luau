@@ -27,6 +27,7 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local GiantName = require(script.Parent.GiantName)
+local GiantPortrait = require(script.Parent.Giant.GiantPortrait)
 local HungerPanel = require(script.Parent.Interface.HungerPanel)
 
 local ATTR = Protocol.GiantAttributes
@@ -54,11 +55,12 @@ function HungerBar.mount(
 	onStageReached: (stage: number) -> (),
 	onFull: () -> ()
 ): Frame
-	-- Arriba al centro, compacta: nombre y etapa, la barra con la comida grande
+	-- Arriba al centro, compacta: retrato, nombre y etapa, la barra con la comida grande
 	-- ("1,250 / 2,500"), la fila del enojo (AngerMeter) y los atajos para llenarlo.
 	local parts = HungerPanel.build(screen)
 	local panel, title, detail, amount, fill =
 		parts.panel, parts.title, parts.detail, parts.amount, parts.fill
+	local portrait = GiantPortrait.attach(parts.portrait)
 
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local currentId: string? = nil
@@ -121,11 +123,11 @@ function HungerBar.mount(
 	local function refresh()
 		local id = stateFolder:GetAttribute(ATTR.Id)
 		local name = stateFolder:GetAttribute(ATTR.DisplayName)
-		local multiplier = stateFolder:GetAttribute(ATTR.Multiplier)
 		local progress = stateFolder:GetAttribute(ATTR.Progress)
 		if type(id) ~= "string" or type(name) ~= "string" or type(progress) ~= "number" then
 			return
 		end
+		portrait.set(id)
 		local stage = GiantStages.stageFor(progress)
 		local full = progress >= 1
 		if id ~= currentId then
@@ -146,7 +148,7 @@ function HungerBar.mount(
 			showPhase(phase)
 			return
 		end
-		title.Text = `{name}  x{multiplier}`
+		title.Text = name
 		detail.Text = `Etapa {stage}/{GiantStages.count}`
 		local total = totalFood(id)
 		amount.Text = `{NumberFormat.big(math.floor(progress * total))} / {NumberFormat.big(total)}`

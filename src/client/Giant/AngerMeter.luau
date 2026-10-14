@@ -22,10 +22,12 @@ local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
 local Ui = require(script.Parent.Parent.Ui)
+local HungerPanel = require(script.Parent.Parent.Interface.HungerPanel)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local COLORS = UIConfig.Colors
 local ANGER = Config.Giants.anger
+local LEFT, TOP = HungerPanel.LEFT, HungerPanel.ANGER_TOP
 
 type Level = "calm" | "angry" | "furious"
 
@@ -51,21 +53,21 @@ local function word(level: Level, female: boolean): string
 end
 
 function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
-	-- Fila debajo de la barra de hambre (HungerBar deja el hueco en y = 78).
-	local label = Style.text(panel, "Enojo", 20, nil, 2)
+	-- Fila debajo de la barra de hambre, a la derecha del retrato.
+	local label = Style.text(panel, "Enojo", 15, nil, 1.5)
 	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Position = UDim2.fromOffset(2, 78)
-	label.Size = UDim2.new(0.4, 0, 0, 22)
+	label.Position = UDim2.fromOffset(LEFT + 2, TOP)
+	label.Size = UDim2.new(0.34, 0, 0, 15)
 
 	local track = Instance.new("Frame")
 	track.Name = "PistaEnojo"
 	track.BackgroundColor3 = Color3.fromRGB(34, 36, 46)
 	track.AnchorPoint = Vector2.new(1, 0)
-	track.Position = UDim2.new(1, -2, 0, 83)
-	track.Size = UDim2.new(0.56, 0, 0, 14)
+	track.Position = UDim2.new(1, -2, 0, TOP + 3)
+	track.Size = UDim2.new(0.42, 0, 0, 10)
 	Style.border(track, 2)
 	track.ClipsDescendants = true
-	Ui.corner(track, 7)
+	Ui.corner(track, 5)
 	track.Parent = panel
 
 	local fill = Instance.new("Frame")
@@ -73,7 +75,7 @@ function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
 	fill.BorderSizePixel = 0
 	fill.Size = UDim2.fromScale(0, 1)
 	fill.BackgroundColor3 = COLORS.Calm
-	Ui.corner(fill, 7)
+	Ui.corner(fill, 5)
 	fill.Parent = track
 
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
@@ -88,7 +90,7 @@ function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
 	local function showRest(phase: unknown): boolean
 		local resting = phase ~= nil and phase ~= "feeding"
 		track.Visible = not resting
-		label.Size = if resting then UDim2.new(1, -4, 0, 22) else UDim2.new(0.4, 0, 0, 22)
+		label.Size = if resting then UDim2.new(1, -LEFT - 4, 0, 15) else UDim2.new(0.34, 0, 0, 15)
 		if resting then
 			local player = Players.LocalPlayer
 			local perSecond = Config.Gameplay.training.powerPerTick

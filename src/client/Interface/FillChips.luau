@@ -14,17 +14,18 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Purchases = require(script.Parent.Parent.Menus.Purchases)
+local HungerPanel = require(script.Parent.HungerPanel)
 local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
 
 local COLORS =
 	{ Color3.fromRGB(110, 220, 60), Color3.fromRGB(255, 140, 30), Color3.fromRGB(235, 50, 60) }
 
-local ROW_TOP = 114 -- debajo de la fila del enojo
-local CHIP_HEIGHT = 48 -- alto antes de escalar...
+local ROW_TOP = HungerPanel.CHIPS_TOP -- debajo de la fila del enojo
+local CHIP_HEIGHT = 38 -- alto antes de escalar...
 local MIN_SCREEN_HEIGHT = 34 -- ...pero nunca menos que esto en pantalla
-local CHIP_MAX_WIDTH = 100
-local GAP = 20
+local CHIP_MAX_WIDTH = 92
+local GAP = 18
 
 local FillChips = {}
 
@@ -48,7 +49,7 @@ function FillChips.mount(panel: Frame)
 	local function resize()
 		local height = chipHeight()
 		row.Size = UDim2.new(1, 0, 0, height)
-		panel.Size = UDim2.new(panel.Size.X, UDim.new(0, ROW_TOP + height + 6))
+		panel.Size = UDim2.new(panel.Size.X, UDim.new(0, ROW_TOP + height + 4))
 	end
 	resize()
 	Layout.onScaleChanged(resize)
@@ -77,7 +78,7 @@ function FillChips.mount(panel: Frame)
 		local price = Style.robuxBadge(button, fill.robux)
 		local badge = price.Parent :: Frame
 		badge.Position = UDim2.new(1, 10, 0, 0)
-		badge.Size = UDim2.fromOffset(58, 24)
+		badge.Size = UDim2.fromOffset(50, 20)
 		task.spawn(function()
 			price.Text = tostring(Purchases.price(key, false, fill.robux))
 		end)
