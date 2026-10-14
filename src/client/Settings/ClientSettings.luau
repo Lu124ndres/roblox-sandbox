@@ -26,7 +26,7 @@ local UserInputService = game:GetService("UserInputService")
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 
 local SAVE_DELAY_SECONDS = 1
-local LOW_FX_SCALE = 0.35 -- partículas que quedan con efectos reducidos
+local LOW_FX_SCALE = 0.2 -- partículas que quedan en modo rápido
 
 export type Key = "music" | "sfx" | "shake" | "lowFx"
 

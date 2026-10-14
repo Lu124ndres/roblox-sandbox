@@ -2,9 +2,11 @@
 --[[
 	FxQuality
 
-	Aplica "efectos reducidos": baja el ritmo de las partículas que emiten
-	solas (cristales, bruma, chispas), apaga los rayos de sol y la
-	profundidad de campo. Recuerda el ritmo original de cada emisor en el
+	Aplica el "modo rápido" (ajuste lowFx, para celulares de gama baja): baja
+	mucho el ritmo de las partículas que emiten solas (cristales, bruma,
+	chispas), apaga sombras, olas y reflejos del agua,
+	brillo (bloom), rayos de sol y profundidad de campo. Todo es local: no
+	cambia nada para los demás. Recuerda el ritmo original de cada emisor en el
 	atributo RitmoBase para volver a él al desactivarlo. Las ráfagas de Fx
 	se achican aparte con ClientSettings.fxScale().
 
@@ -25,6 +27,10 @@ local ClientSettings = require(script.Parent.ClientSettings)
 local FpsWatchdog = require(script.Parent.FpsWatchdog)
 
 local BASE_ATTRIBUTE = "RitmoBase"
+-- Cómo estaban las sombras y el agua al empezar (para volver al apagar el modo rápido).
+local baseShadows = Lighting.GlobalShadows
+local baseWaves = Workspace.Terrain.WaterWaveSize
+local baseReflectance = Workspace.Terrain.WaterReflectance
 
 local FxQuality = {}
 
@@ -74,10 +80,19 @@ local function applyAll()
 	end
 	local low = ClientSettings.get("lowFx")
 	for _, effect in Lighting:GetChildren() do
-		if effect:IsA("SunRaysEffect") or effect:IsA("DepthOfFieldEffect") then
+		if
+			effect:IsA("SunRaysEffect")
+			or effect:IsA("DepthOfFieldEffect")
+			or effect:IsA("BloomEffect")
+			or effect:IsA("BlurEffect")
+		then
 			effect.Enabled = not low
 		end
 	end
+	Lighting.GlobalShadows = not (low or not baseShadows)
+	local terrain = Workspace.Terrain
+	terrain.WaterWaveSize = if low then 0 else baseWaves
+	terrain.WaterReflectance = if low then 0 else baseReflectance
 end
 
 function FxQuality.start()

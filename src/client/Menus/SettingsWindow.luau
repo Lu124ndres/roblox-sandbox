@@ -20,7 +20,7 @@ local OPTIONS: { { key: ClientSettings.Key, text: string } } = {
 	{ key = "music", text = "Música" },
 	{ key = "sfx", text = "Sonidos" },
 	{ key = "shake", text = "Temblor de cámara" },
-	{ key = "lowFx", text = "Efectos reducidos" },
+	{ key = "lowFx", text = "Modo rápido (celulares)" },
 }
 
 local SettingsWindow = {}
