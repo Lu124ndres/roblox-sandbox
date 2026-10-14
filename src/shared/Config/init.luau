@@ -40,6 +40,7 @@ export type RarityDef = Types.RarityDef
 export type GiantDef = Types.GiantDef
 export type PondDef = Types.PondDef
 export type UpgradeDef = Types.UpgradeDef
+export type PlaytimeGift = Types.PlaytimeGift
 export type Config = Types.Config
 
 local Config: Types.Config = {

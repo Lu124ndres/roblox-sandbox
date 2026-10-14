@@ -156,12 +156,14 @@ export type TutorialStep = {
 
 export type BadgeDef = { name: string, description: string }
 
+export type PlaytimeGift = { minutes: number, coins: number?, boostMinutes: number? }
 export type RetentionConfig = {
 	tutorial: { TutorialStep },
 	tutorialBonus: number, -- monedas extra al terminar todo el tutorial
 	discoveryCoins: { [string]: number }, -- por rareza: primera vez que se pesca una especie
 	collectionBonus: number, -- monedas al completar la colección
 	daily: { number }, -- monedas de cada día de la racha (1..7)
+	playtime: { PlaytimeGift }, -- regalos por minutos jugados en el servidor, en orden
 	badges: { [string]: BadgeDef }, -- clave = Assets.Badges[clave]
 }
 

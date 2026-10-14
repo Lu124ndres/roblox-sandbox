@@ -10,6 +10,10 @@
 
 	Diario: racha de 7 días; si se salta un día vuelve al día 1. Después del
 	día 7 se repite el premio del día 7.
+
+	Regalos por tiempo: 8 regalos según los minutos que lleva en el servidor
+	(se reinician al entrar de nuevo); el último a las 2 horas. Dan monedas
+	y minutos de impulso personal de poder (x2, ver Config.Social).
 ]]
 
 local Types = require(script.Parent.Types)
@@ -37,6 +41,16 @@ local Retention: Types.RetentionConfig = {
 	},
 	collectionBonus = 100000,
 	daily = { 100, 200, 350, 500, 800, 1200, 2500 },
+	playtime = {
+		{ minutes = 5, coins = 500 },
+		{ minutes = 10, boostMinutes = 10 },
+		{ minutes = 20, coins = 2500 },
+		{ minutes = 30, boostMinutes = 15 },
+		{ minutes = 45, coins = 10000 },
+		{ minutes = 60, coins = 5000, boostMinutes = 30 },
+		{ minutes = 90, coins = 40000 },
+		{ minutes = 120, coins = 100000, boostMinutes = 60 },
+	},
 	badges = {
 		PrimerPez = { name = "Primer pez", description = "Pescaste tu primer pez" },
 		PrimerRaro = { name = "¡Raro!", description = "Pescaste un pez raro" },

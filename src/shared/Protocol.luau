@@ -30,6 +30,7 @@ export type NoticeKind =
 	| "tutorial" -- (stepIndex, coins) completó un paso; stepIndex > total = terminó
 	| "badge" -- (badgeKey) logro nuevo
 	| "daily" -- (day, coins) cobró la recompensa diaria
+	| "playtime" -- (index, text) cobró un regalo por tiempo jugado
 	| "boost" -- (buyerName, multiplier) alguien subió el entrenamiento de todo el servidor
 	| "choose" -- (buyerName, giantId) alguien eligió el siguiente monstruo
 	| "fill" -- (buyerName, percent) alguien llenó parte del monstruo con Robux
@@ -77,6 +78,8 @@ local Protocol = {
 		Notice = "Notice",
 		-- cliente -> servidor: sin argumentos. Cobrar la recompensa diaria.
 		ClaimDaily = "ClaimDaily",
+		-- cliente -> servidor: (index: number). Cobrar el regalo por tiempo número index.
+		ClaimPlaytime = "ClaimPlaytime",
 		-- cliente -> servidor: (settings: { [string]: boolean }). Guardar ajustes.
 		SaveSettings = "SaveSettings",
 		-- cliente -> servidor: (code: string) canjear un código / reclamar el regalo del grupo
@@ -143,6 +146,8 @@ local Protocol = {
 		TutorialCount = "TutorialCount", -- avance dentro del paso actual
 		DailyStreak = "DailyStreak", -- racha de la recompensa diaria
 		DailyDay = "DailyDay", -- último día (UTC) en que la cobró
+		PlaytimeSince = "RegalosDesde", -- hora del servidor en que entró (regalos por tiempo)
+		PlaytimeClaimed = "RegalosCobrados", -- regalos por tiempo cobrados (bits: 1, 2, 4...)
 		Settings = "Settings", -- ajustes del jugador (JSON)
 		PassPrefix = "Pase_", -- Pase_<clave>: true si tiene ese pase de Robux
 		PondPrefix = "Estanque_", -- Estanque_<i>: true si compró ese estanque con Robux

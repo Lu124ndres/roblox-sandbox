@@ -100,6 +100,9 @@ function Notices.start(toasts: Toasts.Toasts)
 			}
 			Sounds.play(if a == "ok" then "LegendaryCatch" else "Click")
 			toasts.banner(texts[a] or "", if a == "ok" then COLORS.Coins else COLORS.Warning)
+		elseif kind == "playtime" and type(b) == "string" then
+			Sounds.play("LegendaryCatch")
+			toasts.banner(`¡Regalo por jugar! {b}`, COLORS.Coins)
 		elseif kind == "rare" and type(a) == "string" and type(b) == "string" then
 			local fish = FishCatalog.get(b)
 			local rarity = FishCatalog.rarity(b)
