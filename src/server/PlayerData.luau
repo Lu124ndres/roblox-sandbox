@@ -21,6 +21,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
+local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Basket = require(script.Parent.Feeding.Basket)
@@ -119,14 +120,15 @@ function PlayerData.setUpgrade(player: Player, category: Upgrades.Category, leve
 	end
 end
 
--- +1 kill: el jugador ayudó a llenar a este monstruo.
+-- Kills por ayudar a llenar a este monstruo: 1, o más con un pase con traje.
 function PlayerData.addKill(player: Player, giantId: string)
 	local data = dataByPlayer[player]
 	if not data then
 		return
 	end
-	data.save.kills += 1
-	data.save.killsByGiant[giantId] = (data.save.killsByGiant[giantId] or 0) + 1
+	local amount = Perks.killMultiplier(player)
+	data.save.kills += amount
+	data.save.killsByGiant[giantId] = (data.save.killsByGiant[giantId] or 0) + amount
 	ProfilePublish.kills(player, data.save)
 end
 

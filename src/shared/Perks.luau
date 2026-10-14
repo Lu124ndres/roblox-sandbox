@@ -104,6 +104,40 @@ function Perks.dailyMultiplier(player: Player): number
 	return passProduct(player, "dailyMultiplier")
 end
 
+-- La mejor ventaja de pesca entre los pases que tiene: la más chica si
+-- `lowest` (espera hasta que pica), si no la más grande. `fallback` si ninguno.
+local function passBest(player: Player, field: string, fallback: number, lowest: boolean): number
+	local best = fallback
+	for key, pass in MONETIZATION.passes do
+		local value = (pass :: any)[field]
+		if type(value) == "number" and Perks.hasPass(player, key) then
+			best = if lowest then math.min(best, value) else math.max(best, value)
+		end
+	end
+	return best
+end
+
+function Perks.biteDelayMultiplier(player: Player): number
+	return passBest(player, "biteDelay", 1, true)
+end
+
+function Perks.reelStrength(player: Player): number
+	return passBest(player, "reelStrength", 1, false)
+end
+
+function Perks.killMultiplier(player: Player): number
+	return passBest(player, "kills", 1, false)
+end
+
+function Perks.instantReel(player: Player): boolean
+	for key, pass in MONETIZATION.passes do
+		if pass.instantReel and Perks.hasPass(player, key) then
+			return true
+		end
+	end
+	return false
+end
+
 function Perks.luckBonus(player: Player): number
 	local bonus = 0
 	for key, pass in MONETIZATION.passes do

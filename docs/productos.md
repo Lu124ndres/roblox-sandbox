@@ -69,10 +69,16 @@ pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Pro
 | `Boots5` | Botas nivel 5 | 79 | botas | |
 | `Boots6` | Botas nivel 6 | 199 | botas | |
 
-## Pase
+## Pases
 
 | Clave | Nombre | Precio R$ | ID |
 |---|---|---|---|
 | `VIP` | VIP | 299 | |
+| `DiosDelVolcan` | Dios del Volcán | 399 | |
+| `ReyDelMar` | Rey del Mar | 149 | |
+
+Descripciones para el Creator Hub:
+- **Rey del Mar:** Traje de rey con corona y capa. Los peces pican 2 veces más rápido, recoges con el doble de fuerza y ganas x2 kills.
+- **Dios del Volcán:** Traje de fuego con corona ardiente. Los peces pican 3 veces más rápido, sacas cualquier pez de un toque y ganas x2 kills.
 
 Creator Hub → tu juego → Monetización → Pases → Crear pase. Después, en el pase → **Ventas**: activar "Artículo a la venta" y poner el precio.

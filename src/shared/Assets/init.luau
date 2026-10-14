@@ -143,6 +143,8 @@ local Assets: Assets = {
 	-- el juego publicado y su ID va aquí. En 0 la tienda lo muestra sin vender.
 	GamePasses = {
 		VIP = 0, -- R$ 299
+		ReyDelMar = 0, -- R$ 149
+		DiosDelVolcan = 0, -- R$ 399
 	},
 	Products = Products, -- productos de Robux: ver Products.luau
 }
