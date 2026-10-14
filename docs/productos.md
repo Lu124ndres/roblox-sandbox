@@ -6,7 +6,7 @@ pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Pro
 
 | Clave (no cambiar) | Nombre sugerido | Precio R$ | Grupo | ID |
 |---|---|---|---|---|
-| `Power1` | Poder 1 (x2) | 3 | Poder x2^n (para siempre) | |
+| `Power1` | Poder 1 (x2) | 3 | Poder x2^n (para siempre) | 2037380432 |
 | `Power2` | Poder 2 (x4) | 7 | Poder x2^n (para siempre) | |
 | `Power3` | Poder 3 (x8) | 15 | Poder x2^n (para siempre) | |
 | `Power4` | Poder 4 (x16) | 29 | Poder x2^n (para siempre) | |

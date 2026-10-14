@@ -2,14 +2,11 @@
 --[[
 	SkyCycle
 
-	Ciclo de día y noche. La hora sale del reloj del servidor
-	(GetServerTimeNow), así que todos los jugadores ven el mismo cielo sin
-	que el servidor mande nada. El día dura más que la noche, y la luz, la
-	bruma y el tono cambian por momentos: mañana, mediodía, atardecer y
-	noche estrellada.
-
-	Lighting se escribe cada SkyUpdateSeconds (UIConfig.Performance), o antes
-	si la hora o la mezcla del cráter se movieron de más: no cada cuadro.
+	Ciclo de día y noche con el reloj del servidor (GetServerTimeNow): todos
+	ven el mismo cielo. El día dura más que la noche; luz, bruma y tono
+	cambian: mañana, mediodía, atardecer y noche estrellada. Lighting se
+	escribe cada SkyUpdateSeconds (UIConfig.Performance) o si la hora o la
+	mezcla del cráter cambian de más. Workspace.HoraFija congela la hora.
 ]]
 
 local Lighting = game:GetService("Lighting")
@@ -134,6 +131,10 @@ function SkyCycle.hourAt(fraction: number): number
 end
 
 function SkyCycle.currentHour(): number
+	local fixed = Workspace:GetAttribute("HoraFija")
+	if type(fixed) == "number" then
+		return fixed
+	end
 	local cycleSeconds = EFFECTS.DayCycleMinutes * 60
 	local fraction = (Workspace:GetServerTimeNow() % cycleSeconds) / cycleSeconds
 	return SkyCycle.hourAt(fraction)

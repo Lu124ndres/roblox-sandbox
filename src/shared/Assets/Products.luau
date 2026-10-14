@@ -9,7 +9,7 @@
 
 local Products: { [string]: number } = {
 	-- Poder x2^n (para siempre)
-	Power1 = 0, -- R$ 3   x2
+	Power1 = 2037380432, -- R$ 3   x2
 	Power2 = 0, -- R$ 7   x4
 	Power3 = 0, -- R$ 15  x8
 	Power4 = 0, -- R$ 29  x16
