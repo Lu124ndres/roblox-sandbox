@@ -17,9 +17,9 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Layout = require(script.Parent.Parent.Interface.Layout)
-local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Window = require(script.Parent.Window)
 
@@ -148,7 +148,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 			local state = stateOf(index)
 			if state ~= shown[index] then
 				shown[index] = state
-				ShopParts.sunburst(
+				CardParts.paint(
 					card.box,
 					if state == "claimed"
 						then CARDS.Green

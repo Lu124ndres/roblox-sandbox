@@ -104,6 +104,7 @@ local function publish(player: Player)
 	for _, quest in todays(save.quests.day) do
 		table.insert(list, {
 			text = quest.text,
+			kind = quest.kind,
 			progress = save.quests.progress[quest.id] or 0,
 			goal = quest.goal,
 			done = save.quests.done[quest.id] == true,

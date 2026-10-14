@@ -2,10 +2,12 @@
 --[[
 	RebirthWindow
 
-	Renacer (botón RENACER de la columna derecha): cuánto multiplica ahora y
-	cuánto multiplicará, cuántas monedas faltan (barra), qué se pierde y qué
-	se queda, y el botón grande. El botón del HUD lleva un punto rojo cuando
-	ya alcanza. Lo decide el servidor (remote Rebirth, Retention/Rebirth).
+	Renacer (botón RENACER de la columna derecha) con el estilo de la TIENDA:
+	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada), con el
+	multiplicador de monedas y poder; la barra de monedas que faltan; qué se
+	reinicia (tarjeta roja) y qué se queda (verde); y el botón grande. El
+	botón del HUD lleva un punto rojo cuando ya alcanza. Lo decide el
+	servidor (remote Rebirth, Retention/Rebirth).
 ]]
 
 local Players = game:GetService("Players")
@@ -15,12 +17,14 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(ReplicatedStorage.Shared.RebirthMath)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Ui = require(script.Parent.Parent.Ui)
+local CardParts = require(script.Parent.Parent.Interface.CardParts)
+local Icons = require(script.Parent.Parent.Interface.Icons)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
 
 local ATTR = Protocol.PlayerAttributes
+local CARDS = Style.PALETTE.Cards
 
 local RebirthWindow = {}
 
@@ -28,44 +32,75 @@ local function multiplierText(value: number): string
 	return if value % 1 == 0 then `x{value}` else string.format("x%.1f", value)
 end
 
+-- Tarjeta de multiplicador: título arriba, número grande y nota abajo.
+local function multiplierCard(parent: Instance, title: string, color: Color3, x: number): TextLabel
+	local card = CardParts.card(parent, title, color, 16)
+	card.Position = UDim2.fromScale(x, 0)
+	card.Size = UDim2.new(0.4, 0, 0, 132)
+	local head = Style.text(card, "Titulo", 24, nil, 2.5)
+	head.Text = title
+	head.Position = UDim2.fromScale(0, 0.06)
+	head.Size = UDim2.fromScale(1, 0.2)
+	local value = Style.text(card, "Valor", 64, UIConfig.Colors.Coins, 4)
+	value.Position = UDim2.fromScale(0, 0.26)
+	value.Size = UDim2.fromScale(1, 0.48)
+	local note = Style.text(card, "Nota", 18, nil, 2)
+	note.Text = "monedas y poder"
+	note.Position = UDim2.fromScale(0, 0.76)
+	note.Size = UDim2.fromScale(1, 0.18)
+	return value
+end
+
+-- Tarjeta chica con título y una línea de texto.
+local function infoCard(parent: Instance, title: string, text: string, color: Color3, x: number)
+	local card = CardParts.card(parent, title, color, 12)
+	card.Position = UDim2.new(x, 0, 0, 220)
+	card.Size = UDim2.new(0.48, 0, 0, 84)
+	local head = Style.text(card, "Titulo", 22, nil, 2.5)
+	head.Text = title
+	head.Position = UDim2.fromScale(0.04, 0.06)
+	head.Size = UDim2.fromScale(0.92, 0.3)
+	local body = Style.text(card, "Texto", 18, nil, 2)
+	body.Text = text
+	body.Position = UDim2.fromScale(0.04, 0.4)
+	body.Size = UDim2.fromScale(0.92, 0.52)
+end
+
 function RebirthWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local remote = remotes:WaitForChild(Protocol.Remotes.Rebirth) :: RemoteEvent
-	local window = Window.create(screen, "Renacer", "Renacer", Vector2.new(700, 470))
+	local window = Window.create(screen, "Renacer", "Renacer", Vector2.new(720, 500))
 	local hud = HudButtons.side("Renacer", "arrow", window.toggle)
 	local content = window.content
 
-	local headline = Style.text(content, "Multiplicador", 40, UIConfig.Colors.Coins, 3)
-	headline.Size = UDim2.new(1, 0, 0, 48)
+	local nowValue = multiplierCard(content, "AHORA", CARDS.Blue, 0.04)
+	local afterValue = multiplierCard(content, "AL RENACER", CARDS.Yellow, 0.56)
+	local arrow = Icons.view(content, "arrow")
+	arrow.AnchorPoint = Vector2.new(0.5, 0.5)
+	arrow.Position = UDim2.new(0.5, 0, 0, 66)
+	arrow.Size = UDim2.fromOffset(72, 72)
+	arrow.Rotation = 90
 	local count = Style.text(content, "Veces", 22, nil, 2)
-	count.Position = UDim2.fromOffset(0, 50)
+	count.Position = UDim2.fromOffset(0, 140)
 	count.Size = UDim2.new(1, 0, 0, 26)
-	local track = Instance.new("Frame")
-	track.BackgroundColor3 = Color3.fromRGB(30, 32, 42)
-	track.Position = UDim2.new(0.05, 0, 0, 86)
-	track.Size = UDim2.new(0.9, 0, 0, 34)
-	track.ClipsDescendants = true
-	Ui.corner(track, 10)
-	Style.border(track, 3)
-	track.Parent = content
-	local fill = Instance.new("Frame")
-	fill.BorderSizePixel = 0
-	fill.BackgroundColor3 = UIConfig.Colors.Coins
-	fill.Size = UDim2.fromScale(0, 1)
-	Ui.corner(fill, 10)
-	fill.Parent = track
-	local money = Style.text(track, "Monedas", 24, nil, 2.5)
-	money.Size = UDim2.fromScale(1, 1)
-	money.ZIndex = 3
-	local lose = Style.text(content, "Pierdes", 20, Color3.fromRGB(255, 140, 130), 2)
-	lose.Position = UDim2.fromOffset(0, 130)
-	lose.Size = UDim2.new(1, 0, 0, 24)
-	lose.Text = "Se reinician: monedas, poder, mejoras de la tienda y canasta"
-	local keep = Style.text(content, "Quedan", 20, Color3.fromRGB(150, 255, 140), 2)
-	keep.Position = UDim2.fromOffset(0, 156)
-	keep.Size = UDim2.new(1, 0, 0, 24)
-	keep.Text = "Te quedas: kills, estanques, colección, pases y compras"
+	local bar = CardParts.bar(content, UIConfig.Colors.Coins, 24)
+	bar.track.Position = UDim2.new(0.04, 0, 0, 172)
+	bar.track.Size = UDim2.new(0.92, 0, 0, 36)
+	infoCard(
+		content,
+		"SE REINICIAN",
+		"Monedas, poder, mejoras de la tienda y canasta",
+		CARDS.Red,
+		0.01
+	)
+	infoCard(
+		content,
+		"TE QUEDAS",
+		"Kills, estanques, colección, pases y compras",
+		CARDS.Green,
+		0.51
+	)
 	local button = Style.button(content, "Renacer", Style.PALETTE.Buy, "¡RENACER!")
 	button.AnchorPoint = Vector2.new(0.5, 1)
 	button.Position = UDim2.fromScale(0.5, 1)
@@ -77,11 +112,10 @@ function RebirthWindow.start(screen: ScreenGui)
 		local cost = RebirthMath.cost(rebirths)
 		local coins = player:GetAttribute(ATTR.Coins)
 		local have = if type(coins) == "number" then coins else 0
-		local now, after = RebirthMath.multiplier(rebirths), RebirthMath.multiplier(rebirths + 1)
-		headline.Text = `{multiplierText(now)} → {multiplierText(after)} monedas y poder`
+		nowValue.Text = multiplierText(RebirthMath.multiplier(rebirths))
+		afterValue.Text = multiplierText(RebirthMath.multiplier(rebirths + 1))
 		count.Text = `Has renacido {rebirths} {if rebirths == 1 then "vez" else "veces"}`
-		fill.Size = UDim2.fromScale(math.clamp(have / cost, 0, 1), 1)
-		money.Text = `{NumberFormat.short(have)} / {NumberFormat.short(cost)} monedas`
+		bar.set(have / cost, `{NumberFormat.short(have)} / {NumberFormat.short(cost)} monedas`)
 		local ready = have >= cost
 		buttonText.Text = if ready then "¡RENACER!" else "Te faltan monedas"
 		local tint = if ready then Style.PALETTE.Buy else Style.PALETTE.Disabled
