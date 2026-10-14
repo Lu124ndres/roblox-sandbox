@@ -764,3 +764,30 @@ Rediseño pedido con 4 capturas de referencia (simulador de pirámides):
 más jugadores"), premio cobrado, MEJORAS en las 3 pestañas; productos entregados sin
 comprar: Rod3, Boots4 (velocidad 23), GiftVIP (etiqueta VIP), Pond3, Basket2 (30 peces),
 Power1 (x2). 0 errores.
+
+## 2026-10-14 — Listo para 40–50 jugadores: red, rendimiento, móvil y balance
+
+Revisión a fondo con tres revisores (servidor, cliente, diseño/móvil) y arreglos:
+
+- **Comida que escala**: el monstruo pide `loadsPerPlayer × 2.75 × capacidades de los
+  activos` (mínimo en `food`). Antes 50 jugadores con la canasta llena llenaban la Orca
+  en ~4 s al llegar. Kill solo con ≥0.5 % de la barra. Descanso 60–120 s según jugadores.
+- **Red**: la canasta se entrega por lotes de 0.25 s (máx. 4 s) y GiantFed va agrupado
+  por alimentador (antes un evento a todos por pez: hasta ~90k envíos/s). La canasta se
+  guarda como conteos por especie (guardado v7). Cada cambio publica solo su atributo;
+  el leaderstat de poder cada 3 s. Amigos con GetFriendsAsync (antes n² llamadas).
+  Guardado escalonado. Los jugadores no chocan entre sí.
+- **Seguridad**: regalo del grupo sin doble cobro, distancia al estanque comprobada en
+  el servidor, ranking sin ceros de jugadores cargando, pases con reintentos.
+- **Cliente**: niveles de detalle por distancia (cañas, canastas, capturas), sonidos
+  lejanos descartados, peces volando con tope (20, o 6 en calidad baja), una sola vuelta
+  de render para cañas y vuelos, luz/espuma/gigante actualizados menos veces, fugas de
+  conexiones al salir jugadores. Calidad baja automática en teléfonos y si baja de 35 FPS.
+- **Móvil**: PESCAR/¡TIRA! junto al botón de salto, botones de 44 px o más, ventanas más
+  grandes en pantallas táctiles, TIENDA en 2 columnas si es angosta, columna derecha
+  centrada, se quitó la lista de jugadores de Roblox (tapaba TIENDA/MEJORAS).
+- **Balance**: estanques 6–10 más caros, cañas 8–10 más baratas (ver `docs/balance.md`).
+
+**Prueba en Studio** (scripts ya borrados): canasta de 160 → la Orca pidió 660 y se
+entregó en ~4 s; etapa 2 alcanzada; 0 errores. Los modelos del Minotauro (acostados al
+importar) se descartaron: los monstruos se harán con Meshy al final.

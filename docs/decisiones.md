@@ -504,3 +504,17 @@ jugador) y el servidor lo recuerda 2 minutos; si cancela, se borra. El riesgo (c
 para uno y que llegue a otro) se evita porque el aviso es del mismo producto y se consume
 con el primer recibo. Solo VIP necesita un producto aparte (`GiftVIP`). Lo que es de todo
 el servidor (entrenamiento, llenar, elegir monstruo) no tiene botón de regalo.
+
+## 2026-10-14 — La comida del monstruo vuelve a escalar con los jugadores activos
+
+Con comida fija, en un servidor lleno lo que todos guardan durante el descanso basta
+para llenar al monstruo apenas llega. La comida se calcula al llegar con la capacidad de
+canasta de los jugadores **activos** (pescaron en 3 min o llevan peces) y solo puede
+subir mientras come; `food` queda como mínimo. Así un monstruo dura más o menos lo mismo
+con 1 o con 50 jugadores.
+
+## 2026-10-14 — Modelos desde Blender: deben llegar parados
+
+El importador 3D de Studio no aplica el cambio de ejes de un FBX de Blender (Z arriba):
+el Minotauro llegó acostado. `exportar.py` ahora usa `bake_space_transform`. Con Meshy,
+revisar en la vista previa del importador que el modelo esté parado antes de importar.

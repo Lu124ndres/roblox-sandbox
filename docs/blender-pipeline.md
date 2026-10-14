@@ -60,3 +60,7 @@ renders y exportaciones se usa `bpy.app.timers.register` y se espera el archivo.
 En el juego, cada etapa es un Model `<modelBase>E<n>` en ServerStorage (ver
 `GiantTemplates`); su tamaño real no importa: `GiantBody` lo escala a 3, 8, 15 y 30
 veces el alto de un jugador.
+
+**Orientación:** el modelo tiene que llegar a Studio parado (Y hacia arriba). Desde
+Blender, exportar con `bake_space_transform=True` (ya está en `exportar.py`). Con Meshy,
+confirmar en la vista previa de "Importar 3D" que esté parado y mirando al frente.
