@@ -9,8 +9,8 @@
 
 	El poder hace pescar MÁS y MÁS RÁPIDO (fórmulas en Shared/FishingPower):
 		velocidad = 1 + sqrt(poder) / 40   -> 2,000: x2.1; 40,000: x6; 600,000: x20
-		peces por pique = 1 + floor(log10(1 + poder / 1000)) -> 9,000: 2; 99,000: 3;
-		                  999,000: 4 (crece despacio: la comida de los monstruos es fija)
+		peces por pique = 1 + floor((poder / 1000) ^ 0.25) -> 1K: 2; 16K: 3; 81K: 4;
+		                  1M: 6; 100M: 18; 5B: 48 (la comida de los monstruos es fija)
 	La espera hasta el pique nunca baja de minBiteDelaySeconds.
 ]]
 
@@ -31,6 +31,7 @@ local Progression: Types.ProgressionConfig = {
 	},
 	biteSpeedDivisor = 40,
 	fishPerCatchStep = 1000,
+	fishPerCatchExponent = 0.25,
 	minBiteDelaySeconds = 0.4,
 }
 
