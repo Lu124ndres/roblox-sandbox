@@ -11,6 +11,9 @@
 	dan los códigos y el regalo del grupo; se suma el tiempo).
 	Grupo: quien está en el grupo y juega `minutes` seguidos puede reclamar
 	una vez `coins` y `boostMinutes` de impulso. Con groupId = 0 no se puede.
+	Invitar (referral): un jugador nuevo que entra por la invitación de otro
+	gana newCoins y newBoostMinutes; quien lo invitó, si está en el servidor,
+	inviterCoins e inviterBoostMinutes (server/Social/Referrals).
 ]]
 
 export type TitleDef = { power: number, name: string }
@@ -20,6 +23,12 @@ export type SocialConfig = {
 	friendBoost: { perFriend: number, maxFriends: number },
 	personalBoostMultiplier: number,
 	group: { groupId: number, minutes: number, coins: number, boostMinutes: number },
+	referral: {
+		newCoins: number,
+		newBoostMinutes: number,
+		inviterCoins: number,
+		inviterBoostMinutes: number,
+	},
 }
 
 local Social: SocialConfig = {
@@ -39,6 +48,13 @@ local Social: SocialConfig = {
 	personalBoostMultiplier = 2,
 	-- groupId: el número del grupo de Roblox del juego (en su página: roblox.com/groups/<número>).
 	group = { groupId = 0, minutes = 15, coins = 1500, boostMinutes = 15 },
+	-- Invitar: si un jugador NUEVO entra por la invitación de alguien, los dos ganan.
+	referral = {
+		newCoins = 1000,
+		newBoostMinutes = 15,
+		inviterCoins = 2500,
+		inviterBoostMinutes = 30,
+	},
 }
 
 return Social

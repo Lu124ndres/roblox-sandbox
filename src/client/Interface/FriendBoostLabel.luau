@@ -3,15 +3,18 @@
 	FriendBoostLabel
 
 	En la columna izquierda, debajo de las estadísticas: "Amigos +20%" con el
-	ícono de amigos, solo si hay algún amigo en el servidor (abajo a la izquierda quedaba bajo el joystick
-	en los teléfonos).
-	Sube 10 % por cada amigo de Roblox en el servidor (hasta 5); invita a
-	jugar con amigos. Lo calcula el servidor (atributo AmigosEnServidor).
+	ícono de amigos, o "Invita amigos: +10% c/u" si no hay ninguno. Siempre
+	se puede tocar: abre la invitación de Roblox (SocialService), y si un
+	amigo nuevo entra por ella los dos ganan premio (server/Social/Referrals).
+	Sube 10 % por cada amigo de Roblox en el servidor (hasta 5). Lo calcula
+	el servidor (atributo AmigosEnServidor).
 ]]
 
 local Players = game:GetService("Players")
+local SocialService = game:GetService("SocialService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Icons = require(script.Parent.Icons)
@@ -25,7 +28,9 @@ local HEIGHT = 28
 
 function FriendBoostLabel.start(_screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local frame = Instance.new("Frame")
+	local frame = Instance.new("TextButton")
+	frame.Text = ""
+	frame.AutoButtonColor = false
 	frame.Name = "ImpulsoAmigos"
 	frame.LayoutOrder = ORDER
 	frame.BackgroundTransparency = 1
@@ -40,10 +45,18 @@ function FriendBoostLabel.start(_screen: ScreenGui)
 
 	local function refresh()
 		local percent = math.round((Perks.friendMultiplier(player) - 1) * 100)
-		label.Text = `Amigos +{percent}%`
-		label.TextColor3 = Color3.fromRGB(140, 255, 120)
-		frame.Visible = percent > 0
+		local per = math.round(Config.Social.friendBoost.perFriend * 100)
+		label.Text = if percent > 0 then `Amigos +{percent}%` else `Invita amigos: +{per}% c/u`
+		label.TextColor3 = if percent > 0
+			then Color3.fromRGB(140, 255, 120)
+			else Color3.new(1, 1, 1)
 	end
+	frame.Activated:Connect(function()
+		local ok, allowed = pcall(SocialService.CanSendGameInviteAsync, SocialService, player)
+		if ok and allowed then
+			pcall(SocialService.PromptGameInvite, SocialService, player)
+		end
+	end)
 	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.FriendsInServer):Connect(refresh)
 	refresh()
 end
