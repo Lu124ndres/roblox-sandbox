@@ -2,14 +2,14 @@
 --[[
 	Gigantes: la cadena del servidor, cuánta comida piden y cuánto miden.
 
-	Comida para llenar la barra: FIJA (food), no cambia con los jugadores.
-	Calibrada con lo que entrega un jugador (ver docs/balance.md): un novato
-	~0.45 de comida/s y un pro (poder ~80K, caña 6, canasta 4) ~1.9/s, con
-	~80 % del tiempo pescando o entregando. Con 50 jugadores:
-		Orca          novatos ~8 min · pros ~1.5 min
-		Minotauro     ~10 min · ~2 min
-		Dragón marino ~13 min · ~2.5 min
-		Zorro de agua ~15 min · ~3 min (ninguno pasa de 15 min)
+	Comida para llenar la barra: FIJA (food), no cambia con los jugadores, y
+	crece con el multiplicador: food = 14.5K x raíz(multiplicador / 2). Un
+	novato da ~0.45 de comida/s y un pro (poder ~80K, caña 6, canasta 4)
+	~1.9/s. Con 45 novatos y 5 pros (~30/s):
+		Orca          ~8 min   (novatos solos ~11)
+		Minotauro     ~11 min  (novatos solos ~15)
+		Dragón marino ~18 min  (novatos solos ~24)
+		Zorro de agua ~26 min  (novatos solos ~34)
 	Solo se lleva la kill quien aportó al menos scaling.minKillShare de la barra.
 
 	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
@@ -56,7 +56,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Minotauro",
 			article = "el",
 			multiplier = 4,
-			food = 18000,
+			food = 20500,
 			modelBase = "Minotauro",
 			rouletteWeight = 30,
 			released = true,
@@ -67,7 +67,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Dragón marino",
 			article = "el",
 			multiplier = 10,
-			food = 23000,
+			food = 32400,
 			modelBase = "DragonMarino",
 			rouletteWeight = 15,
 			released = false,
@@ -78,7 +78,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Zorro de agua",
 			article = "el",
 			multiplier = 20,
-			food = 26000,
+			food = 45900,
 			modelBase = "ZorroDeAgua",
 			rouletteWeight = 5,
 			released = false,
@@ -90,7 +90,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca fantasma",
 			article = "la",
 			multiplier = 6,
-			food = 21000,
+			food = 25100,
 			modelBase = "OrcaFantasma",
 			rouletteWeight = 35,
 			released = true,
