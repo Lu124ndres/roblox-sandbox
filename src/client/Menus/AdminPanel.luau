@@ -12,6 +12,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Events = require(ReplicatedStorage.Shared.Config.Events)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
@@ -135,6 +136,11 @@ function AdminPanel.start(screen: ScreenGui)
 		)
 	end
 	row("Pases (on/off)", passes)
+	local events: { Button } = {}
+	for _, kind in Events.kinds do
+		table.insert(events, { text = kind.name, name = "event", value = kind.id })
+	end
+	row("Evento ya", events)
 	row("Regalos tiempo", {
 		{ text = "+10 min", name = "playtime", value = 10 },
 		{ text = "+1 h", name = "playtime", value = 60 },

@@ -12,6 +12,7 @@
 		giant                 id: si está comiendo lo cambia ya; si no, es el siguiente
 		fill                  fracción 0..1 de la barra del monstruo
 		skipRest              termina el descanso del volcán
+		event                 id: lanza ya ese evento del servidor (Config/Events)
 		pass                  clave: pone o quita ese pase (prueba trajes y ventajas)
 		playtime              minutos: adelanta los regalos por tiempo
 		tp                    "muelle", "volcan", "plaza" o "tienda"
@@ -25,6 +26,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local EventScheduler = require(script.Parent.Parent.Social.EventScheduler)
 local GiantCycle = require(script.Parent.Parent.GiantCycle)
 local GiantService = require(script.Parent.Parent.GiantService)
 local PlayerData = require(script.Parent.Parent.PlayerData)
@@ -141,6 +143,11 @@ local HANDLERS: { [string]: Handler } = {
 	fill = function(player, value)
 		local done = GiantService.fill(number(value, 0, 1), player)
 		return if done then "Barra llenada" else "Ahora no está comiendo"
+	end,
+	event = function(_player, value)
+		assert(type(value) == "string", "falta el evento")
+		EventScheduler.force(value)
+		return `Evento {value} en camino`
 	end,
 	skipRest = function()
 		GiantCycle.skipRest()

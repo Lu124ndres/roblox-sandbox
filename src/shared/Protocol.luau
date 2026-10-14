@@ -32,6 +32,7 @@ export type NoticeKind =
 	| "daily" -- (day, coins) cobró la recompensa diaria
 	| "playtime" -- (index, text) cobró un regalo por tiempo jugado
 	| "admin" -- (text) resultado de una orden del panel de administrador
+	| "event" -- (eventId) empezó un evento del servidor (Config/Events)
 	| "boost" -- (buyerName, multiplier) alguien subió el entrenamiento de todo el servidor
 	| "choose" -- (buyerName, giantId) alguien eligió el siguiente monstruo
 	| "fill" -- (buyerName, percent) alguien llenó parte del monstruo con Robux
@@ -111,6 +112,9 @@ local Protocol = {
 		NextGiant = "SiguienteMonstruo", -- id del monstruo elegido con Robux ("" = ruleta)
 		NextGiantBy = "ElegidoPor", -- quién lo eligió
 		ChoicesQueued = "EleccionesEnFila", -- cuántas elecciones esperan su turno
+		Event = "Evento", -- id del evento del servidor activo (Config/Events; "" = ninguno)
+		EventUntil = "EventoHasta", -- hora del servidor en que termina
+		NextEventAt = "EventoSiguiente", -- hora del servidor en que empieza el siguiente
 	},
 	GiantAttributes = {
 		Id = "Id",

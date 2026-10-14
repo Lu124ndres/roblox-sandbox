@@ -19,6 +19,7 @@ local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local ServerEvents = require(script.Parent.ServerEvents)
 
 local MONETIZATION = Config.Monetization
 local SOCIAL = Config.Social
@@ -94,10 +95,13 @@ function Perks.powerMultiplier(player: Player): number
 		* 2 ^ Perks.serverBoostLevel()
 		* personal
 		* Perks.friendMultiplier(player)
+		* ServerEvents.value("power", 1)
 end
 
 function Perks.coinMultiplier(player: Player): number
-	return 2 ^ Perks.level(player, "Coins") * Perks.friendMultiplier(player)
+	return 2 ^ Perks.level(player, "Coins")
+		* Perks.friendMultiplier(player)
+		* ServerEvents.value("coins", 1)
 end
 
 function Perks.dailyMultiplier(player: Player): number
@@ -118,7 +122,7 @@ local function passBest(player: Player, field: string, fallback: number, lowest:
 end
 
 function Perks.biteDelayMultiplier(player: Player): number
-	return passBest(player, "biteDelay", 1, true)
+	return passBest(player, "biteDelay", 1, true) * ServerEvents.value("biteDelay", 1)
 end
 
 function Perks.reelStrength(player: Player): number
@@ -139,7 +143,7 @@ function Perks.instantReel(player: Player): boolean
 end
 
 function Perks.luckBonus(player: Player): number
-	local bonus = 0
+	local bonus = ServerEvents.value("luck", 0)
 	for key, pass in MONETIZATION.passes do
 		if pass.luck and Perks.hasPass(player, key) then
 			bonus += pass.luck
