@@ -15,6 +15,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
+local SaveExtra = require(script.Parent.SaveExtra)
 
 export type Stats = {
 	fishCaught: number, -- peces sacados del agua en total
@@ -42,13 +43,17 @@ export type SaveData = {
 	groupClaimed: boolean, -- ya reclamó el regalo del grupo
 	boostUntil: number, -- unix en que termina su impulso personal de poder
 	gifts: { [string]: boolean }, -- pases que le regalaron ("VIP")
+	rebirths: number, -- veces que renació (v8, ver SaveExtra)
+	quests: SaveExtra.QuestsSave, -- misiones del día (v8)
+	starterPack: boolean, -- ya compró el pack de inicio (v8)
 }
 
 local SaveSchema = {}
 
 -- 2: kills; 3: mejoras de la tienda; 4: tutorial, diario, ajustes, insignias;
--- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie
-SaveSchema.VERSION = 7
+-- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie;
+-- 8: renacer, misiones diarias, pack de inicio (SaveExtra)
+SaveSchema.VERSION = 8
 
 function SaveSchema.default(): SaveData
 	return {
@@ -72,6 +77,9 @@ function SaveSchema.default(): SaveData
 		groupClaimed = false,
 		boostUntil = 0,
 		gifts = {},
+		rebirths = 0,
+		quests = SaveExtra.quests(),
+		starterPack = false,
 	}
 end
 
@@ -180,6 +188,7 @@ function SaveSchema.read(raw: unknown): SaveData
 	data.groupClaimed = source.groupClaimed == true
 	data.boostUntil = count(source.boostUntil)
 	flags(source.gifts, data.gifts)
+	SaveExtra.read(source, data)
 	if type(source.stats) == "table" then
 		data.stats.fishCaught = count(source.stats.fishCaught)
 		data.stats.fishDelivered = count(source.stats.fishDelivered)

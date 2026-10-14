@@ -28,6 +28,7 @@ local HudButtons = {}
 
 local order = 0
 local sideRow: Frame? = nil
+local sideCount = 0 -- botones grandes ya puestos (van de dos en dos por fila)
 
 local function alertDot(parent: GuiObject): Frame
 	local dot = Instance.new("Frame")
@@ -89,10 +90,10 @@ function HudButtons.iconButton(
 end
 
 function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButton
-	if not sideRow then
+	if sideCount % 2 == 0 then
 		local row = Instance.new("Frame")
 		row.Name = "Menu"
-		row.LayoutOrder = 10
+		row.LayoutOrder = 10 + sideCount // 2 * 30 -- Mejoras y Tienda arriba; Misiones y Renacer abajo de los atajos
 		row.BackgroundTransparency = 1
 		row.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, SIDE_SIZE + 4)
 		row.Parent = Layout.right()
@@ -105,6 +106,7 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 		sideRow = row
 	end
 	order += 1
+	sideCount += 1
 	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE)
 	button.LayoutOrder = order
 	press(button, onClick)

@@ -32,6 +32,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local GiantPublish = require(script.Parent.Feeding.GiantPublish)
 local GiantService = require(script.Parent.GiantService)
 local PlayerData = require(script.Parent.PlayerData)
+local Quests = require(script.Parent.Retention.Quests)
 local Milestones = require(script.Parent.Retention.Milestones)
 local Proximity = require(script.Parent.Proximity)
 local RateLimit = require(script.Parent.RateLimit)
@@ -101,6 +102,7 @@ local function restTick()
 			)
 			PlayerData.addPower(player, gained)
 			Remotes.TrainingTick:FireClient(player, gained)
+			Quests.add(player, "train", TRAINING.tickSeconds)
 		end
 	end
 end
@@ -114,6 +116,7 @@ local function cycle()
 		if player then
 			PlayerData.addKill(player, giantId)
 			Milestones.killed(player)
+			Quests.add(player, "kill", 1)
 		end
 	end
 	GiantService.setPhase("farewell", CYCLE.farewellSeconds)

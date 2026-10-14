@@ -111,6 +111,12 @@ function Notices.start(toasts: Toasts.Toasts)
 					)
 				end
 			end
+		elseif kind == "quest" and type(a) == "string" and type(b) == "string" then
+			Sounds.play("LegendaryCatch")
+			toasts.banner(`¡Misión cumplida! {a}: {b}`, COLORS.Success)
+		elseif kind == "rebirth" and type(a) == "string" and type(b) == "number" then
+			Sounds.play("StageUp")
+			toasts.banner(`¡{a} renació! ({b})`, COLORS.Power)
 		elseif kind == "admin" and type(a) == "string" then
 			toasts.show(a, COLORS.Power)
 		elseif kind == "playtime" and type(b) == "string" then

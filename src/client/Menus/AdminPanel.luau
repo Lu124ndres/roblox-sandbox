@@ -102,6 +102,7 @@ function AdminPanel.start(screen: ScreenGui)
 	row("Poder", { { text = "Poner", name = "power" } }, true)
 	row("Monedas", { { text = "Poner", name = "coins" } }, true)
 	row("Kills", { { text = "Poner", name = "kills" } }, true)
+	row("Renacimientos", { { text = "Poner", name = "rebirths" } }, true)
 	row("Peces", {
 		{ text = "Agregar", name = "fish" },
 		{ text = "Vaciar", name = "emptyBasket", value = 0 },

@@ -4,7 +4,7 @@
 
 	Las órdenes del panel de administrador (AdminService ya comprobó quién
 	las manda). run(jugador, nombre, valor) devuelve el texto del aviso.
-		power, coins, kills   número: pone ese valor
+		power, coins, kills, rebirths   número: pone ese valor
 		fish                  número: agrega esos peces (al azar, hasta llenar)
 		emptyBasket           vacía la canasta
 		speed                 número: velocidad al caminar (hasta reaparecer)
@@ -44,7 +44,7 @@ local function number(value: unknown, low: number, high: number): number
 	return math.clamp(value, low, high)
 end
 
-local function setField(field: "power" | "coins" | "kills"): Handler
+local function setField(field: "power" | "coins" | "kills" | "rebirths"): Handler
 	return function(player, value)
 		local amount = math.floor(number(value, 0, MAX_VALUE))
 		PlayerData.edit(player, function(save)
@@ -99,6 +99,7 @@ local HANDLERS: { [string]: Handler } = {
 	power = setField("power"),
 	coins = setField("coins"),
 	kills = setField("kills"),
+	rebirths = setField("rebirths"),
 	Rod = upgrade("Rod"),
 	Basket = upgrade("Basket"),
 	Boots = upgrade("Boots"),

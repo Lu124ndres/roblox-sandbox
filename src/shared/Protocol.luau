@@ -5,8 +5,6 @@
 	Nombres compartidos entre servidor y cliente: RemoteEvents, atributos
 	replicados, estados de pesca y nombres de piezas del mapa.
 
-	Un nombre escrito dos veces como string suelto es un bug esperando a
-	pasar. Aquí se escribe una sola vez y ambos lados lo importan.
 ]]
 
 -- Resultado que ve el dueño de la caña (avisos y botón TIRA).
@@ -33,6 +31,8 @@ export type NoticeKind =
 	| "playtime" -- (index, text) cobró un regalo por tiempo jugado
 	| "admin" -- (text) resultado de una orden del panel de administrador
 	| "event" -- (eventId) empezó un evento del servidor (Config/Events)
+	| "quest" -- (text, rewardText) cumplió una misión diaria (o el cofre)
+	| "rebirth" -- (count) renació
 	| "boost" -- (buyerName, multiplier) alguien subió el entrenamiento de todo el servidor
 	| "choose" -- (buyerName, giantId) alguien eligió el siguiente monstruo
 	| "fill" -- (buyerName, percent) alguien llenó parte del monstruo con Robux
@@ -57,8 +57,7 @@ local Protocol = {
 		CastRequest = "CastRequest",
 		-- cliente -> servidor: sin argumentos. Pide recoger el sedal.
 		ReelIn = "ReelIn",
-		-- cliente -> servidor: sin argumentos. Alimentar desde donde está parado
-		-- (cualquier punto de la orilla del volcán).
+		-- cliente -> servidor: sin argumentos. Alimentar desde la orilla del volcán.
 		FeedRequest = "FeedRequest",
 		-- servidor -> dueño: (status: FeedStatus, fishCount: number, coins: number)
 		FeedResult = "FeedResult",
@@ -75,8 +74,7 @@ local Protocol = {
 		ShopResult = "ShopResult",
 		-- servidor -> dueño: sin argumentos. Abrir la tienda (E en la cabaña).
 		OpenShop = "OpenShop",
-		-- servidor -> dueño: (kind: NoticeKind, a: any?, b: any?). Logros, pez nuevo,
-		-- tutorial, recompensa diaria: el cliente muestra el cartel que toque.
+		-- servidor -> dueño: (kind: NoticeKind, a: any?, b: any?). Carteles (logros, premios...).
 		Notice = "Notice",
 		-- cliente -> servidor: sin argumentos. Cobrar la recompensa diaria.
 		ClaimDaily = "ClaimDaily",
@@ -84,8 +82,8 @@ local Protocol = {
 		ClaimPlaytime = "ClaimPlaytime",
 		-- cliente -> servidor: (name: string, value: any). Orden del panel de administrador.
 		AdminCommand = "AdminCommand",
-		-- cliente -> servidor: sin argumentos. Ir a la guarida durante el descanso.
-		RestEnter = "RestEnter",
+		RestEnter = "RestEnter", -- cliente -> servidor: ir a la guarida durante el descanso
+		Rebirth = "Rebirth", -- cliente -> servidor: renacer (si le alcanzan las monedas)
 		-- cliente -> servidor: (settings: { [string]: boolean }). Guardar ajustes.
 		SaveSettings = "SaveSettings",
 		-- cliente -> servidor: (code: string) canjear un código / reclamar el regalo del grupo
@@ -161,6 +159,8 @@ local Protocol = {
 		PlaytimeSince = "RegalosDesde", -- hora del servidor en que entró (regalos por tiempo)
 		PlaytimeClaimed = "RegalosCobrados", -- regalos por tiempo cobrados (bits: 1, 2, 4...)
 		IsAdmin = "EsAdmin", -- true para los administradores (ven el panel de pruebas)
+		Rebirths = "Renacimientos", -- veces que renació
+		Quests = "Misiones", -- JSON con las misiones del día y su avance
 		Settings = "Settings", -- ajustes del jugador (JSON)
 		PassPrefix = "Pase_", -- Pase_<clave>: true si tiene ese pase de Robux
 		PondPrefix = "Estanque_", -- Estanque_<i>: true si compró ese estanque con Robux

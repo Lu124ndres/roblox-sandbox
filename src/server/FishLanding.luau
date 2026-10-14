@@ -18,6 +18,8 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Reel = require(ReplicatedStorage.Shared.Config.Reel)
 local PlayerData = require(script.Parent.PlayerData)
 local Milestones = require(script.Parent.Retention.Milestones)
+local Quests = require(script.Parent.Retention.Quests)
+local ServerEvents = require(ReplicatedStorage.Shared.ServerEvents)
 local Remotes = require(script.Parent.Remotes)
 
 local ATTR = Protocol.PlayerAttributes
@@ -45,6 +47,13 @@ function FishLanding.land(player: Player, fish: Config.FishDef, rarityIndex: num
 	player:SetAttribute(ATTR.FishingCatch, fish.id)
 	player:SetAttribute(ATTR.FishingCatchCount, added)
 	Milestones.caught(player, fish.id, added, firstTime)
+	Quests.add(player, "catch", added)
+	if rarityIndex >= 3 then
+		Quests.add(player, "rare", 1)
+	end
+	if ServerEvents.active() then
+		Quests.add(player, "eventCatch", added)
+	end
 	if rarityIndex >= Reel.announceFromRarity then
 		announce(player, fish.id)
 	end

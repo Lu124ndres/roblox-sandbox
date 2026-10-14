@@ -19,6 +19,7 @@ local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local RebirthMath = require(script.Parent.RebirthMath)
 local ServerEvents = require(script.Parent.ServerEvents)
 
 local MONETIZATION = Config.Monetization
@@ -96,12 +97,14 @@ function Perks.powerMultiplier(player: Player): number
 		* personal
 		* Perks.friendMultiplier(player)
 		* ServerEvents.value("power", 1)
+		* RebirthMath.multiplier(RebirthMath.count(player))
 end
 
 function Perks.coinMultiplier(player: Player): number
 	return 2 ^ Perks.level(player, "Coins")
 		* Perks.friendMultiplier(player)
 		* ServerEvents.value("coins", 1)
+		* RebirthMath.multiplier(RebirthMath.count(player))
 end
 
 function Perks.dailyMultiplier(player: Player): number

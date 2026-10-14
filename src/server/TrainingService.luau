@@ -30,6 +30,7 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local PlayerData = require(script.Parent.PlayerData)
+local Quests = require(script.Parent.Retention.Quests)
 local Milestones = require(script.Parent.Retention.Milestones)
 local Proximity = require(script.Parent.Proximity)
 local Remotes = require(script.Parent.Remotes)
@@ -122,6 +123,7 @@ local function tick()
 			PlayerData.addPower(player, gained)
 			Remotes.TrainingTick:FireClient(player, gained)
 			Milestones.trained(player, session.pond)
+			Quests.add(player, "train", TRAINING.tickSeconds)
 		end
 	end
 end
