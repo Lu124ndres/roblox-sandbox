@@ -125,6 +125,7 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.BoostUntil, save.boostUntil)
 	player:SetAttribute(ATTR.GroupClaimed, save.groupClaimed)
 	player:SetAttribute(ATTR.Rebirths, save.rebirths)
+	player:SetAttribute(ATTR.StarterPack, save.starterPack)
 	for key, level in save.levels do
 		player:SetAttribute(`{ATTR.LevelPrefix}{key}`, level)
 	end

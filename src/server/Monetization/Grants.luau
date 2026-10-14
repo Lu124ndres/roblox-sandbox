@@ -62,8 +62,24 @@ local function giftPass(player: Player, key: string): string
 	return MONETIZATION.passes[key].name
 end
 
+-- Pack de inicio: monedas, impulso de poder y caña y canasta mejores (nunca las baja).
+local function starterPack(player: Player): string
+	local pack = MONETIZATION.starterPack
+	PlayerData.edit(player, function(save)
+		save.starterPack = true
+		save.coins += pack.coins
+		save.boostUntil = math.max(save.boostUntil, os.time()) + pack.boostMinutes * 60
+	end)
+	raiseUpgrade(player, "Rod", pack.rod)
+	raiseUpgrade(player, "Basket", pack.basket)
+	return "Pack de inicio"
+end
+
 -- Entrega `key` a `player`. (ok, nombre de lo recibido si es algo propio).
 function Grants.grant(player: Player, key: string): (boolean, string?)
+	if key == "PackInicio" then
+		return true, starterPack(player)
+	end
 	local fill = MONETIZATION.fills[key]
 	if fill then
 		GiantFill.add(fill.fraction, player)

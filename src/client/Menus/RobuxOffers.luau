@@ -2,11 +2,9 @@
 --[[
 	RobuxOffers
 
-	Qué muestra y vende ahora cada tarjeta de la TIENDA: el siguiente nivel
-	de Poder y Monedas, VIP, el entrenamiento del servidor (nivel y tiempo),
-	llenar al monstruo, elegir el siguiente y los estanques. Las que son
-	del jugador traen `gift`: qué se le compraría a otro jugador (su propio
-	siguiente nivel, su VIP, su estanque).
+	Qué vende ahora cada tarjeta de la TIENDA (niveles, pases, pack de inicio,
+	entrenamiento, llenar, elegir monstruo, estanques). Las del jugador traen
+	`gift`: qué se le compraría a otro (su siguiente nivel, su VIP, su estanque).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -41,6 +39,23 @@ RobuxOffers.GIANT_ICONS = {
 	DragonMarino = "dragon",
 	ZorroDeAgua = "fox",
 } :: { [string]: string }
+
+-- Pack de inicio: una sola vez (el atributo PackInicio dice si ya lo compró).
+function RobuxOffers.starter(player: Player): () -> Offer
+	local pack = MONETIZATION.starterPack
+	return function()
+		return {
+			title = "Pack de inicio",
+			description = `{pack.coins // 1000}K monedas, caña y canasta mejores y x2 poder {pack.boostMinutes} min`,
+			key = "PackInicio",
+			isPass = false,
+			robux = pack.robux,
+			blocked = if player:GetAttribute(Protocol.PlayerAttributes.StarterPack) == true
+				then "¡Tuyo!"
+				else nil,
+		}
+	end
+end
 
 -- "4 minutos 05 segundos"
 function RobuxOffers.clock(seconds: number): string

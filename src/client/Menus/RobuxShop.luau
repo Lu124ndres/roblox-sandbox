@@ -2,18 +2,15 @@
 --[[
 	RobuxShop
 
-	La TIENDA (botón del HUD con el cofre): todo lo de Robux, estilo
-	simulador.
+	La TIENDA (botón del HUD con el cofre): todo lo de Robux, estilo simulador.
 		Banner         entrenamiento para todo el servidor (x2 → x4, tiempo)
 		Para siempre   Poder y Monedas (x2, x4, x8...) y VIP
 		Monstruo       llenarlo 25/50/75 % (para todos)
 		Siguiente      elegir el monstruo que sale después del descanso
 		Estanques      abrirlos para siempre
-	Las tarjetas se repintan cada segundo con lo que toca comprar ahora. Las
-	de Poder, Monedas, VIP y estanques se pueden regalar (botón rosa).
-	Las compras las abre Purchases y las entrega el servidor.
-	Las tarjetas van de a 3 por fila, o de a 2 si el contenido es angosto.
-	"Siguiente" solo aparece si la ruleta tiene al menos dos monstruos.
+	Arriba de todo, el pack de inicio (hasta comprarlo). Los estanques solo
+	si Config.Monetization.sellPonds. Las tarjetas se repintan cada segundo;
+	las de Poder, Monedas, VIP y estanques se pueden regalar (botón rosa).
 ]]
 
 local Players = game:GetService("Players")
@@ -132,6 +129,7 @@ function RobuxShop.start(screen: ScreenGui)
 	table.insert(painters, BoostBanner.new(list, order, buy, Purchases.price))
 
 	section("Para siempre")
+	add(CARDS.Pink, "giftPink", RobuxOffers.starter(player))
 	add(CARDS.Blue, "crystal", RobuxOffers.level(player, "Power"))
 	add(CARDS.Yellow, "coin", RobuxOffers.level(player, "Coins"))
 	for _, key in MONETIZATION.passOrder do
@@ -161,8 +159,10 @@ function RobuxShop.start(screen: ScreenGui)
 		end
 	end
 
-	section("Estanques")
-	for index = 2, #Config.Progression.ponds do
+	for index = 2, if MONETIZATION.sellPonds then #Config.Progression.ponds else 1 do
+		if index == 2 then
+			section("Estanques")
+		end
 		add(CARDS.Green, "pond", RobuxOffers.pond(player, index))
 	end
 

@@ -42,6 +42,7 @@ local Products: { [string]: number } = {
 	Fill50 = 0, -- R$ 89
 	Fill75 = 0, -- R$ 129
 	-- Elegir el siguiente monstruo
+	PackInicio = 0, -- R$ 49 (una sola vez)
 	ChooseOrca = 0, -- R$ 25
 	ChooseMinotauro = 0, -- R$ 49
 	ChooseDragonMarino = 0, -- R$ 79
