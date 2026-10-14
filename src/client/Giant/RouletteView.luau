@@ -15,6 +15,7 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Layout = require(script.Parent.Parent.Interface.Layout)
@@ -29,17 +30,6 @@ local CELLS, RESULT_INDEX = 40, 34
 local SPIN_SHARE = 0.7 -- parte del tiempo de la ruleta que gira; el resto muestra el resultado
 
 local RouletteView = {}
-
-local function candidates(): ({ Config.GiantDef }, number)
-	local list, total = {}, 0
-	for _, def in Config.Giants.chain do
-		if def.inRoulette then
-			table.insert(list, def)
-			total += def.rouletteWeight
-		end
-	end
-	return list, total
-end
 
 local function defFor(id: string): Config.GiantDef?
 	for _, def in Config.Giants.chain do
@@ -115,7 +105,7 @@ function RouletteView.start(screen: ScreenGui)
 		end
 		playing += 1
 		local mine = playing
-		local list, total = candidates()
+		local list, total = GiantPool.candidates()
 		local odds = {}
 		for _, def in list do
 			table.insert(odds, `{def.displayName} {math.round(def.rouletteWeight / total * 100)}%`)

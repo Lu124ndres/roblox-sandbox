@@ -118,7 +118,13 @@ local Monetization: MonetizationConfig = {
 		Fill50 = { name = "Llenar 50%", fraction = 0.5, robux = 89, order = 2 },
 		Fill75 = { name = "Llenar 75%", fraction = 0.75, robux = 129, order = 3 },
 	},
-	chooseGiant = { Orca = 25, Minotauro = 49, DragonMarino = 79, ZorroDeAgua = 99 },
+	chooseGiant = {
+		Orca = 25,
+		Minotauro = 49,
+		DragonMarino = 79,
+		ZorroDeAgua = 99,
+		OrcaFantasma = 149,
+	},
 	pondRobux = {
 		[2] = 25,
 		[3] = 49,

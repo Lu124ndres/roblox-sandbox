@@ -18,6 +18,7 @@ local ICONS: { [string]: string } = {
 	Minotauro = "minotaur",
 	DragonMarino = "dragon",
 	ZorroDeAgua = "fox",
+	OrcaFantasma = "orca",
 }
 
 export type Portrait = { set: (giantId: string) -> () }

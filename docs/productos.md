@@ -4,12 +4,12 @@ Creator Hub → Creaciones → tu juego → Monetización → Productos de desar
 Crea cada uno con el **precio** de la tabla, copia su ID (⋯ → Copiar ID del recurso) y
 pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Products.luau`).
 
-## Crea primero estos 16 (lo que más se ve y más vende)
+## Crea primero estos 17 (lo que más se ve y más vende)
 
 1. `PackInicio` (49) — oferta de bienvenida, se abre sola a los 2.5 min.
 2. Pases `VIP` (299), `ReyDelMar` (149), `DiosDelVolcan` (399) — sección Pases abajo.
 3. `Fill25` (49), `Fill50` (89), `Fill75` (129) — botones bajo la barra del monstruo.
-4. `ChooseOrca` (25), `ChooseMinotauro` (49), `ChooseDragonMarino` (79), `ChooseZorroDeAgua` (99) — botones del descanso.
+4. `ChooseOrca` (25), `ChooseMinotauro` (49), `ChooseDragonMarino` (79), `ChooseZorroDeAgua` (99) — botones del descanso. Para Halloween: `ChooseOrcaFantasma` (149).
 5. `ServerBoost1` (15), `ServerBoost2` (29), `ServerBoost3` (59) — banner de la tienda.
 6. `Power2` (7), `Coins1` (3), `Coins2` (7) — atajos de la columna derecha (Power1 ya existe).
 

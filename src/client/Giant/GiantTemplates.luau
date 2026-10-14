@@ -41,6 +41,7 @@ local STAND_IN_TINTS: { [string]: Color3 } = {
 	Minotauro = Color3.fromRGB(160, 95, 50),
 	DragonMarino = Color3.fromRGB(60, 200, 110),
 	ZorroDeAgua = Color3.fromRGB(70, 150, 255),
+	OrcaFantasma = Color3.fromRGB(170, 110, 255), -- Halloween
 }
 
 local function ownTemplate(folder: Instance, base: string, stage: number): Model?

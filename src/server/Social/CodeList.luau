@@ -14,6 +14,7 @@ local CodeList: { [string]: Code } = {
 	GIGANTES = { coins = 500 },
 	ORCA = { boostMinutes = 15 },
 	LANZAMIENTO = { coins = 1000, boostMinutes = 10 },
+	HALLOWEEN = { coins = 3000, boostMinutes = 30, expires = 1793664000 }, -- hasta el 3 de noviembre
 }
 
 return CodeList

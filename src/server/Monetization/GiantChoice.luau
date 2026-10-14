@@ -17,6 +17,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Remotes = require(script.Parent.Parent.Remotes)
 
@@ -59,7 +60,7 @@ end
 -- Devuelve false si el gigante no existe o todavía no puede salir (sin modelo).
 function GiantChoice.add(giantId: string, buyer: Player): boolean
 	local def = find(giantId)
-	if not def or not def.inRoulette then
+	if not def or not GiantPool.available(def) then
 		return false
 	end
 	table.insert(queue, { def = def, buyerName = buyer.DisplayName, buyerId = buyer.UserId })

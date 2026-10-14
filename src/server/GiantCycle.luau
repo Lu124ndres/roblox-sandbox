@@ -28,6 +28,7 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local GiantPublish = require(script.Parent.Feeding.GiantPublish)
 local GiantService = require(script.Parent.GiantService)
@@ -64,17 +65,12 @@ local function chooseNext(): (Config.GiantDef, string)
 	if chosen then
 		return chosen, buyer or ""
 	end
-	local total = 0
-	for _, def in Config.Giants.chain do
-		total += if def.inRoulette then def.rouletteWeight else 0
-	end
+	local candidates, total = GiantPool.candidates()
 	local roll = rng:NextNumber(0, total)
-	for _, def in Config.Giants.chain do
-		if def.inRoulette then
-			roll -= def.rouletteWeight
-			if roll <= 0 then
-				return def, ""
-			end
+	for _, def in candidates do
+		roll -= def.rouletteWeight
+		if roll <= 0 then
+			return def, ""
 		end
 	end
 	return GiantService.getCurrent(), ""

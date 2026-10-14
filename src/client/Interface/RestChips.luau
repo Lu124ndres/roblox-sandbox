@@ -15,6 +15,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Purchases = require(script.Parent.Parent.Menus.Purchases)
@@ -95,6 +96,12 @@ function RestChips.mount(panel: Frame)
 		local resting = state:GetAttribute(Protocol.GiantAttributes.Phase) == "rest"
 		row.Visible = resting
 		go.Visible = resting and not onArena()
+		for _, def in Config.Giants.chain do
+			local chip = chips[def.id]
+			if chip then
+				chip.Visible = GiantPool.available(def)
+			end
+		end
 		local chosen = boosts:GetAttribute(Protocol.BoostAttributes.NextGiant)
 		for id, chip in chips do
 			local stroke = chip:FindFirstChildOfClass("UIStroke")

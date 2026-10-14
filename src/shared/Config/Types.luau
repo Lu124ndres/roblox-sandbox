@@ -34,6 +34,7 @@ export type GiantDef = {
 	released: boolean, -- false = llega en una actualización (evento), no en la v1
 	rouletteWeight: number, -- peso en la ruleta (probabilidad = peso / suma de los que pueden salir)
 	inRoulette: boolean, -- puede salir en la ruleta al terminar el descanso (requiere su modelo)
+	season: { from: number, to: number }?, -- de evento: solo sale entre esas fechas (unix UTC)
 }
 
 -- Un estanque de la zona de entrenamiento.

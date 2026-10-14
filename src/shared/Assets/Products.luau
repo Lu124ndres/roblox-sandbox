@@ -44,6 +44,7 @@ local Products: { [string]: number } = {
 	-- Elegir el siguiente monstruo
 	PackInicio = 0, -- R$ 49 (una sola vez)
 	ChooseOrca = 0, -- R$ 25
+	ChooseOrcaFantasma = 0, -- R$ 149 (Halloween)
 	ChooseMinotauro = 0, -- R$ 49
 	ChooseDragonMarino = 0, -- R$ 79
 	ChooseZorroDeAgua = 0, -- R$ 99
