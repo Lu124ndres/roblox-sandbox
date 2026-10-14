@@ -6,10 +6,10 @@
 	Calibrada con lo que entrega un jugador (ver docs/balance.md): un novato
 	~0.45 de comida/s y un pro (poder ~80K, caña 6, canasta 4) ~1.9/s, con
 	~80 % del tiempo pescando o entregando. Con 50 jugadores:
-		Orca          novatos ~7 min · pros ~1.5 min
-		Minotauro     ~9 min · ~2 min
-		Dragón marino ~12 min · ~3 min
-		Zorro de agua ~15 min · ~3.5 min (ninguno pasa de 15 min)
+		Orca          novatos ~6 min · pros ~1 min
+		Minotauro     ~8 min · ~1.5 min
+		Dragón marino ~10 min · ~2 min
+		Zorro de agua ~13 min · ~2.5 min (ninguno pasa de 15 min)
 	Solo se lleva la kill quien aportó al menos scaling.minKillShare de la barra.
 
 	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
@@ -30,9 +30,10 @@
 	clamp(restBaseSeconds + restPerPlayerSeconds x jugadores, restMinSeconds,
 	restSeconds) segundos (restSeconds es el máximo). En el centro del lago emerge la guarida del descanso y
 	todo el que esté sobre ella gana poder solo, a restTrainingMultiplier x
-	su mejor estanque desbloqueado. Quien le dio de comer suma +1 kill. Al terminar, la
-	ruleta elige al siguiente entre los que tienen inRoulette (los que ya tienen
-	sus modelos en ServerStorage) y llega (arrivalSeconds).
+	su mejor estanque desbloqueado. Quien le dio de comer suma +1 kill. Al terminar
+	gira la ruleta (rouletteSeconds, todos la ven): sale el que alguien compró o,
+	si nadie, uno al azar entre los inRoulette según rouletteWeight (Orca 50 %,
+	Minotauro 30 %, Dragón 15 %, Zorro 5 %), y llega (arrivalSeconds).
 ]]
 
 local Types = require(script.Parent.Types)
@@ -44,8 +45,9 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca",
 			article = "la",
 			multiplier = 1,
-			food = 8000,
+			food = 10500,
 			modelBase = "Orca",
+			rouletteWeight = 50,
 			released = true,
 			inRoulette = true,
 		},
@@ -54,30 +56,33 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Minotauro",
 			article = "el",
 			multiplier = 3,
-			food = 10000,
+			food = 13000,
 			modelBase = "Minotauro",
+			rouletteWeight = 30,
 			released = true,
-			inRoulette = false, -- falta su modelo (Meshy)
+			inRoulette = true, -- sin modelo de Meshy aún: usa la orca teñida (GiantTemplates)
 		},
 		{
 			id = "DragonMarino",
 			displayName = "Dragón marino",
 			article = "el",
 			multiplier = 8,
-			food = 13000,
+			food = 17000,
 			modelBase = "DragonMarino",
+			rouletteWeight = 15,
 			released = false,
-			inRoulette = false,
+			inRoulette = true,
 		},
 		{
 			id = "ZorroDeAgua",
 			displayName = "Zorro de agua",
 			article = "el",
 			multiplier = 20,
-			food = 16000,
+			food = 21000,
 			modelBase = "ZorroDeAgua",
+			rouletteWeight = 5,
 			released = false,
-			inRoulette = false,
+			inRoulette = true,
 		},
 	},
 	stageThresholds = { 0, 0.25, 0.5, 0.75 },
@@ -105,6 +110,7 @@ local Giants: Types.GiantsConfig = {
 		restMinSeconds = 60,
 		restTrainingMultiplier = 2,
 		arrivalSeconds = 6,
+		rouletteSeconds = 6,
 	},
 	scaling = {
 		minKillShare = 0.005,

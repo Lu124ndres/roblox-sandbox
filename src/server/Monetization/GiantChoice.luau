@@ -68,11 +68,14 @@ function GiantChoice.add(giantId: string, buyer: Player): boolean
 	return true
 end
 
--- La ruleta pregunta aquí primero: la elección más vieja, o nil.
-function GiantChoice.take(): Config.GiantDef?
+-- La ruleta pregunta aquí primero: la elección más vieja (y quién la compró), o nil.
+function GiantChoice.take(): (Config.GiantDef?, string?)
 	local head = table.remove(queue, 1)
 	publish()
-	return if head then head.def else nil
+	if not head then
+		return nil, nil
+	end
+	return head.def, head.buyerName
 end
 
 return GiantChoice

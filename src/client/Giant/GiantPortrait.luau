@@ -24,6 +24,11 @@ export type Portrait = { set: (giantId: string) -> () }
 
 local GiantPortrait = {}
 
+-- Tipo de ícono (Interface/Icons) de un gigante.
+function GiantPortrait.iconFor(giantId: string): string
+	return ICONS[giantId] or "orca"
+end
+
 -- `image`: el ImageLabel donde se pinta (lo arma HungerPanel).
 function GiantPortrait.attach(image: ImageLabel): Portrait
 	local shownId: string? = nil
@@ -38,7 +43,7 @@ function GiantPortrait.attach(image: ImageLabel): Portrait
 			return
 		end
 		shownId = giantId
-		image.Visible = Icons.paint(image, ICONS[giantId] or "orca")
+		image.Visible = Icons.paint(image, GiantPortrait.iconFor(giantId))
 	end
 
 	return { set = set }

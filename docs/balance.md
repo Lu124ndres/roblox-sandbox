@@ -8,7 +8,8 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 | Perilla | Valor | Qué hace |
 |---|---|---|
-| `food` de cada monstruo | Orca 8,000 · Minotauro 10,000 · Dragón 13,000 · Zorro 16,000 | Comida **fija** para llenarlo. Con 50 jugadores: novatos ~7 / 9 / 12 / 15 min, pros ~1.5 / 2 / 3 / 3.5 min. |
+| `food` de cada monstruo | Orca 10,500 · Minotauro 13,000 · Dragón 17,000 · Zorro 21,000 | Comida **fija** para llenarlo. Con 50 jugadores: novatos ~6 / 8 / 10 / 13 min, pros ~1 / 1.5 / 2 / 2.5 min. |
+| `rouletteWeight` | 50 / 30 / 15 / 5 | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Sin modelo propio usan la Orca teñida. |
 | Ritmo de un jugador | novato ~0.45 comida/s · pro ~1.9 · tope ~5 | Calculado con el ciclo de pesca (pique, minijuego, viaje al volcán) al ~80 % del tiempo. Con menos jugadores tarda más: 10 novatos ~35 min la Orca. |
 | `scaling.minKillShare` | 0.005 | Hay que dar al menos el 0.5 % de la barra para ganar la kill. |
 | `multiplier` | 1 / 3 / 8 / 20 | Multiplica las monedas que da cada pez. |
@@ -20,7 +21,7 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 ## Poder de pesca (`Config/Progression.luau` + `Shared/FishingPower.luau`)
 
-Peces por pique = 1 + floor(log10(1 + poder / 1000)): 9K → 2, 99K → 3, 999K → 4.
+Peces por pique = 1 + floor((poder / 1000)^0.25): 1K → 2, 16K → 3, 81K → 4, 1M → 6, 100M → 18, 5B → 48.
 Crece despacio a propósito: la comida es fija y un pro no debe llenar solo al monstruo.
 
 ## Estanques (`Config/Progression.luau`)

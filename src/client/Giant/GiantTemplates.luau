@@ -3,7 +3,9 @@
 	GiantTemplates
 
 	De dónde sale el modelo de cada etapa del gigante (<base>E1..E4 en
-	GiantModelsFolder) y el marcador de primitivas cuando falta.
+	GiantModelsFolder). Si un gigante todavía no tiene modelo (Meshy), usa
+	el de la Orca teñido con su color (tint); si tampoco hay, el marcador de
+	primitivas.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -34,15 +36,47 @@ function GiantTemplates.placeholder(): (Model, number)
 	return model, 4
 end
 
--- Modelo de la etapa o, si falta, el de la etapa anterior más cercana.
-function GiantTemplates.templateFor(folder: Instance, def: Config.GiantDef, stage: number): Model?
+-- Color con que se tiñe la Orca cuando hace de otro gigante sin modelo.
+local STAND_IN_TINTS: { [string]: Color3 } = {
+	Minotauro = Color3.fromRGB(160, 95, 50),
+	DragonMarino = Color3.fromRGB(60, 200, 110),
+	ZorroDeAgua = Color3.fromRGB(70, 150, 255),
+}
+
+local function ownTemplate(folder: Instance, base: string, stage: number): Model?
 	for s = stage, 1, -1 do
-		local template = folder:FindFirstChild(`{def.modelBase}E{s}`)
+		local template = folder:FindFirstChild(`{base}E{s}`)
 		if template and template:IsA("Model") then
 			return template
 		end
 	end
 	return nil
+end
+
+-- Modelo de la etapa (o de la anterior más cercana). Sin modelo propio, el de
+-- la Orca: el segundo valor es el color con que hay que teñirlo (nil = propio).
+function GiantTemplates.templateFor(
+	folder: Instance,
+	def: Config.GiantDef,
+	stage: number
+): (Model?, Color3?)
+	local own = ownTemplate(folder, def.modelBase, stage)
+	if own then
+		return own, nil
+	end
+	local orca = ownTemplate(folder, Config.Giants.chain[1].modelBase, stage)
+	return orca, if orca then STAND_IN_TINTS[def.id] or Color3.new(1, 1, 1) else nil
+end
+
+-- Tiñe un modelo prestado (Highlight de relleno, sin contorno).
+function GiantTemplates.tint(model: Model, color: Color3)
+	local paint = Instance.new("Highlight")
+	paint.Name = "Tinte"
+	paint.FillColor = color
+	paint.FillTransparency = 0.4
+	paint.OutlineTransparency = 1
+	paint.DepthMode = Enum.HighlightDepthMode.Occluded
+	paint.Parent = model
 end
 
 return GiantTemplates

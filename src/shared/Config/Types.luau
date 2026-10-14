@@ -32,6 +32,7 @@ export type GiantDef = {
 	food: number, -- comida para llenar la barra (fija)
 	modelBase: string, -- nombre base de sus modelos: <base>E1..E4 en ServerStorage (uno por etapa)
 	released: boolean, -- false = llega en una actualización (evento), no en la v1
+	rouletteWeight: number, -- peso en la ruleta (probabilidad = peso / suma de los que pueden salir)
 	inRoulette: boolean, -- puede salir en la ruleta al terminar el descanso (requiere su modelo)
 }
 
@@ -104,6 +105,7 @@ export type CycleConfig = {
 	restMinSeconds: number,
 	restTrainingMultiplier: number, -- x sobre el mejor estanque desbloqueado del jugador
 	arrivalSeconds: number, -- llegada del siguiente gigante antes de poder alimentarlo
+	rouletteSeconds: number, -- la ruleta gira al final del descanso antes de que llegue
 }
 
 export type FoodScalingConfig = {
@@ -129,7 +131,8 @@ export type GiantsConfig = {
 export type ProgressionConfig = {
 	ponds: { PondDef }, -- uno por estanque, en orden alrededor de la plaza
 	biteSpeedDivisor: number, -- velocidad de pique = 1 + sqrt(poder) / divisor
-	fishPerCatchStep: number, -- peces por pique = 1 + floor(log10(1 + poder / step))
+	fishPerCatchStep: number, -- peces por pique = 1 + floor((poder / step) ^ exponente)
+	fishPerCatchExponent: number,
 	minBiteDelaySeconds: number, -- la espera hasta el pique nunca baja de esto
 }
 

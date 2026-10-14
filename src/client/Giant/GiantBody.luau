@@ -61,7 +61,7 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 	local baseHeight = 1
 	local shownScale = 0 -- última escala pasada a ScaleTo
 	local function dress(stage: number)
-		local template = GiantTemplates.templateFor(folder, def, stage)
+		local template, tint = GiantTemplates.templateFor(folder, def, stage)
 		if inner and template == innerTemplate then
 			return
 		end
@@ -69,6 +69,9 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 		local nextInner: Model
 		if template then
 			nextInner = template:Clone()
+			if tint then
+				GiantTemplates.tint(nextInner, tint)
+			end
 			local stored = nextInner:GetAttribute(Protocol.GiantModelAttributes.BaseHeight)
 			baseHeight = if type(stored) == "number" then stored else nextInner:GetExtentsSize().Y
 		else

@@ -22,20 +22,25 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local GiantPublish = require(script.Parent.Feeding.GiantPublish)
 local GiantService = require(script.Parent.GiantService)
 local PlayerData = require(script.Parent.PlayerData)
 local Milestones = require(script.Parent.Retention.Milestones)
 local Proximity = require(script.Parent.Proximity)
+local RateLimit = require(script.Parent.RateLimit)
 local Remotes = require(script.Parent.Remotes)
 local RestArena = require(script.Parent.RestArena)
 local GiantChoice = require(script.Parent.Monetization.GiantChoice)
 
 local CYCLE = Config.Giants.cycle
+local ATTRS = Protocol.GiantAttributes
 local TRAINING = Config.Gameplay.training
 
 local GiantCycle = {}
@@ -45,28 +50,33 @@ local rng = Random.new()
 local skipRest = false -- el panel de administrador corta el descanso
 local forcedNext: Config.GiantDef? = nil -- y elige el siguiente (aunque no esté en la ruleta)
 
--- La ruleta: el que alguien eligió con Robux (GiantChoice) o, si nadie, al azar
--- entre los que pueden salir. Sin candidatos, vuelve el actual.
-local function chooseNext(): Config.GiantDef
+-- La ruleta: el que eligió el panel de administrador, el que alguien compró
+-- (GiantChoice) o, si nadie, uno al azar entre los que pueden salir según su
+-- peso. Devuelve también quién lo compró ("" si salió al azar).
+local function chooseNext(): (Config.GiantDef, string)
 	local forced = forcedNext
 	if forced then
 		forcedNext = nil
-		return forced
+		return forced, ""
 	end
-	local chosen = GiantChoice.take()
+	local chosen, buyer = GiantChoice.take()
 	if chosen then
-		return chosen
+		return chosen, buyer or ""
 	end
-	local candidates = {}
+	local total = 0
+	for _, def in Config.Giants.chain do
+		total += if def.inRoulette then def.rouletteWeight else 0
+	end
+	local roll = rng:NextNumber(0, total)
 	for _, def in Config.Giants.chain do
 		if def.inRoulette then
-			table.insert(candidates, def)
+			roll -= def.rouletteWeight
+			if roll <= 0 then
+				return def, ""
+			end
 		end
 	end
-	if #candidates == 0 then
-		return GiantService.getCurrent()
-	end
-	return candidates[rng:NextInteger(1, #candidates)]
+	return GiantService.getCurrent(), ""
 end
 
 -- Descanso: restBaseSeconds + restPerPlayerSeconds por jugador conectado,
@@ -120,7 +130,14 @@ local function cycle()
 	end
 
 	RestArena.hide()
-	GiantService.reset(chooseNext())
+	-- La ruleta gira en todos los clientes (Giant/RouletteView) y luego llega.
+	local nextDef, buyer = chooseNext()
+	GiantPublish.set(ATTRS.RouletteResult, nextDef.id)
+	GiantPublish.set(ATTRS.RouletteBy, buyer)
+	GiantPublish.set(ATTRS.RouletteAt, Workspace:GetServerTimeNow())
+	GiantService.setPhase("rest", CYCLE.rouletteSeconds)
+	task.wait(CYCLE.rouletteSeconds)
+	GiantService.reset(nextDef)
 	GiantService.setPhase("arriving", CYCLE.arrivalSeconds)
 	task.wait(CYCLE.arrivalSeconds)
 	GiantService.setPhase("feeding")
@@ -138,7 +155,7 @@ local function run()
 		warn(`GiantCycle: falló el ciclo ({problem}); se trae el siguiente monstruo`)
 		pcall(RestArena.hide)
 		pcall(function()
-			GiantService.reset(chooseNext())
+			GiantService.reset((chooseNext()))
 			GiantService.setPhase("feeding")
 		end)
 	end
@@ -156,6 +173,14 @@ end
 
 function GiantCycle.init(map: Instance)
 	RestArena.init(map)
+	-- Botón "Ir a la guarida" del descanso.
+	Remotes.RestEnter.OnServerEvent:Connect(
+		RateLimit.wrap("RestEnter", 1, 2, function(player: Player)
+			if GiantService.getPhase() == "rest" then
+				RestArena.enter(player)
+			end
+		end)
+	)
 	GiantService.onFilled(run)
 end
 

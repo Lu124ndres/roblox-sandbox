@@ -83,6 +83,8 @@ local Protocol = {
 		ClaimPlaytime = "ClaimPlaytime",
 		-- cliente -> servidor: (name: string, value: any). Orden del panel de administrador.
 		AdminCommand = "AdminCommand",
+		-- cliente -> servidor: sin argumentos. Ir a la guarida durante el descanso.
+		RestEnter = "RestEnter",
 		-- cliente -> servidor: (settings: { [string]: boolean }). Guardar ajustes.
 		SaveSettings = "SaveSettings",
 		-- cliente -> servidor: (code: string) canjear un código / reclamar el regalo del grupo
@@ -120,6 +122,9 @@ local Protocol = {
 		Phase = "Phase", -- GiantPhase
 		PhaseEndsAt = "PhaseEndsAt", -- Workspace:GetServerTimeNow() en que termina la fase (0 = sin fin)
 		Food = "Food", -- comida total que pide la barra (fija por gigante)
+		RouletteResult = "RuletaResultado", -- id del gigante que salió en la última ruleta
+		RouletteBy = "RuletaComprador", -- quien lo compró ("" = salió al azar)
+		RouletteAt = "RuletaInicio", -- hora del servidor en que empezó a girar
 	},
 
 	-- Folder en ReplicatedStorage con las plantillas de los gigantes. El cliente
