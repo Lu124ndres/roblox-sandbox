@@ -12,6 +12,10 @@
 		- legendario o mítico: además onda dorada y la cámara tiembla un poco
 		  si el que pescó es el jugador local.
 	Cada rareza tiene su propio sonido.
+
+	Para otros jugadores lejos de la cámara (UIConfig.Performance, más cerca
+	con efectos reducidos): pasado CatchSplashOnlyDistance solo el chapuzón,
+	pasado CatchHideDistance nada (los sonidos se recortan solos, ver Sounds).
 ]]
 
 local Players = game:GetService("Players")
@@ -19,9 +23,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
+local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
+local Distance = require(script.Parent.Parent.Effects.Distance)
+local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local CatchLabels = require(script.Parent.CatchLabels)
@@ -47,17 +54,17 @@ local function backOf(character: Model): Vector3
 	return character:GetPivot().Position
 end
 
--- El pez se encoge mientras vuela a la canasta.
+-- El pez vuela rápido a la canasta y desaparece (solo PivotTo: nada de
+-- reescalar cada pieza en cada cuadro).
 local function stash(model: Model, character: Model)
 	local start = model:GetPivot()
-	local elapsed, duration = 0, 0.3
+	local elapsed = 0
 	local connection: RBXScriptConnection
 	connection = RunService.RenderStepped:Connect(function(dt: number)
 		elapsed += dt
-		local t = math.min(elapsed / duration, 1)
+		local t = math.min(elapsed / Performance.CatchStashSeconds, 1)
 		local target = backOf(character)
 		model:PivotTo(CFrame.new(start.Position:Lerp(target, t)) * start.Rotation)
-		model:ScaleTo(math.max(0.05, 1 - t * 0.95))
 		if t >= 1 then
 			connection:Disconnect()
 			Fx.sparkle(target, UIConfig.Colors.Coins, 6)
@@ -79,11 +86,21 @@ function CatchShow.play(
 	if not head then
 		return
 	end
+	local far = if player == Players.LocalPlayer
+		then 0
+		else Distance.fromCamera(head.Position) / Distance.scale()
+	if far > Performance.CatchHideDistance then
+		return
+	end
 	Fx.splash(from, 1.1 + level * 0.35)
 	Sounds.play("Catch", from)
 	Sounds.play(JINGLES[level] or "CatchPop", from, if level == 2 then 1.2 else 1)
+	if far > Performance.CatchSplashOnlyDistance then
+		return
+	end
 
 	local fish = FishModel.build(fishId, 1 + (level - 1) * 0.12)
+	FxQuality.scaleAll(fish)
 	local above = function(): CFrame
 		local root = character:FindFirstChild("HumanoidRootPart")
 		local facing = if root and root:IsA("BasePart") then root.CFrame.Rotation else CFrame.new()

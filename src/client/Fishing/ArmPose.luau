@@ -10,6 +10,10 @@
 	articulaciones nuevas (AnimationConstraint), R15 clásico (Motor6D) y R6.
 	La pose se suma a lo que dejó el Animator en Transform, así que la
 	animación de caminar de Roblox sigue funcionando debajo.
+
+	Inactiva (setActive(false), para jugadores a media distancia) no toca el
+	hombro: el ángulo sigue cambiando para que la caña lo use, pero el brazo
+	queda como lo deja el Animator.
 ]]
 
 local RunService = game:GetService("RunService")
@@ -19,6 +23,7 @@ export type ArmPose = {
 	set: (degrees: number, seconds: number, style: Enum.EasingStyle?) -> (),
 	angle: () -> number, -- ángulo actual en grados, con el temblor incluido
 	shake: (degrees: number) -> (),
+	setActive: (active: boolean) -> (), -- mover el hombro o no
 	destroy: () -> (),
 }
 
@@ -55,7 +60,7 @@ local function findJoint(character: Model): (Joint?, boolean)
 	return nil, false
 end
 
-function ArmPose.new(character: Model): ArmPose?
+function ArmPose.new(character: Model, active: boolean?): ArmPose?
 	local joint, isR6 = findJoint(character)
 	if not joint then
 		return nil
@@ -64,16 +69,27 @@ function ArmPose.new(character: Model): ArmPose?
 	local shakeDegrees = 0
 	local elapsed = 0
 	local current = 0
+	local connection: RBXScriptConnection? = nil
 
 	-- El Animator escribe Transform antes de la simulación; se suma la pose
 	-- justo después, así que la animación de caminar no la borra.
-	local connection = RunService.PreSimulation:Connect(function(dt: number)
+	local function step(dt: number)
 		elapsed += dt
 		current = angle.Value + math.sin(elapsed * SHAKE_SPEED) * shakeDegrees
 		local radians = math.rad(current)
 		local rotation = if isR6 then CFrame.Angles(0, 0, radians) else CFrame.Angles(radians, 0, 0)
 		joint(rotation)
-	end)
+	end
+
+	local function setActive(on: boolean)
+		if on and not connection then
+			connection = RunService.PreSimulation:Connect(step)
+		elseif not on and connection then
+			connection:Disconnect()
+			connection = nil
+		end
+	end
+	setActive(active ~= false)
 
 	return {
 		set = function(degrees: number, seconds: number, style: Enum.EasingStyle?)
@@ -82,13 +98,14 @@ function ArmPose.new(character: Model): ArmPose?
 			TweenService:Create(angle, info, { Value = degrees }):Play()
 		end,
 		angle = function(): number
-			return current
+			return if connection then current else angle.Value
 		end,
 		shake = function(degrees: number)
 			shakeDegrees = degrees
 		end,
+		setActive = setActive,
 		destroy = function()
-			connection:Disconnect()
+			setActive(false)
 			angle:Destroy()
 		end,
 	}

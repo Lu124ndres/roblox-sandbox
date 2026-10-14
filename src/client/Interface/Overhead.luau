@@ -7,7 +7,9 @@
 		su título, según su poder (Config.Social.titles), con un degradado por rango
 		su nombre
 	Reemplaza el nombre de Roblox (se oculta en este cliente). Lee atributos
-	que pone el servidor (Power, Kills, Pase_VIP).
+	que pone el servidor (Power, Kills, Pase_VIP). Solo reescribe el título
+	y las kills cuando cambian de verdad (Power cambia a cada rato). Con
+	efectos reducidos se quitan los contornos UIStroke y se ve de más cerca.
 ]]
 
 local Players = game:GetService("Players")
@@ -18,53 +20,19 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local Icons = require(script.Parent.Icons)
+local OverheadLook = require(script.Parent.OverheadLook)
 local Style = require(script.Parent.Style)
 
 local ATTR = Protocol.PlayerAttributes
 local TITLES = Config.Social.titles
 local TAG_NAME = "Encima"
-local rgb = Color3.fromRGB
-
--- Degradado del texto de cada título (mismo orden que Config.Social.titles).
-local TITLE_COLORS: { { Color3 } } = {
-	{ rgb(200, 200, 200), rgb(150, 150, 150) }, -- Novato
-	{ rgb(255, 255, 255), rgb(200, 220, 235) }, -- Aprendiz
-	{ rgb(140, 255, 120), rgb(40, 190, 70) }, -- Pescador
-	{ rgb(120, 245, 255), rgb(20, 170, 220) }, -- Marinero
-	{ rgb(120, 170, 255), rgb(40, 80, 230) }, -- Capitán
-	{ rgb(220, 140, 255), rgb(140, 50, 230) }, -- Almirante
-	{ rgb(255, 200, 90), rgb(255, 110, 20) }, -- Domador de Bestias
-	{ rgb(255, 90, 120), rgb(150, 20, 90) }, -- Señor del Abismo
-	{ rgb(255, 240, 140), rgb(255, 170, 0) }, -- Rey de los Océanos
-	{
-		rgb(255, 80, 80),
-		rgb(255, 220, 60),
-		rgb(80, 255, 120),
-		rgb(80, 160, 255),
-		rgb(200, 90, 255),
-	}, -- Dios del Mar
-}
 
 local Overhead = {}
 
-local function titleIndex(power: number): number
-	local index = 1
-	for i, title in TITLES do
-		if power >= title.power then
-			index = i
-		end
-	end
-	return index
-end
-
-local function sequence(colors: { Color3 }): ColorSequence
-	local points = {}
-	for i, color in colors do
-		table.insert(points, ColorSequenceKeypoint.new((i - 1) / math.max(1, #colors - 1), color))
-	end
-	return ColorSequence.new(points)
-end
+local guis: { [Player]: BillboardGui } = {}
+local connections: { [Player]: { RBXScriptConnection } } = {}
 
 local function build(player: Player, head: BasePart): () -> ()
 	local gui = Instance.new("BillboardGui")
@@ -72,7 +40,6 @@ local function build(player: Player, head: BasePart): () -> ()
 	-- Medido en studs: se ve del tamaño del mundo, como un cartel sobre la cabeza.
 	gui.Size = UDim2.fromScale(7, 2.7)
 	gui.StudsOffset = Vector3.new(0, 2.9, 0)
-	gui.MaxDistance = 120
 	gui.LightInfluence = 0
 	gui.ResetOnSpawn = false
 
@@ -112,16 +79,25 @@ local function build(player: Player, head: BasePart): () -> ()
 	name.Text = player.DisplayName
 
 	gui.Adornee = head
+	OverheadLook.applyQuality(gui)
 	gui.Parent = head
+	guis[player] = gui
 
+	local shownIndex, shownKills = 0, -1
 	return function()
 		local power = player:GetAttribute(ATTR.Power)
-		local index = titleIndex(if type(power) == "number" then power else 0)
-		title.Text = string.upper(TITLES[index].name)
-		gradient.Color = sequence(TITLE_COLORS[index] or TITLE_COLORS[1])
-		gradient.Rotation = if #(TITLE_COLORS[index] or {}) > 2 then 0 else 90
+		local index = OverheadLook.titleIndex(if type(power) == "number" then power else 0)
+		if index ~= shownIndex then
+			shownIndex = index
+			title.Text = string.upper(TITLES[index].name)
+			gradient.Color, gradient.Rotation = OverheadLook.gradient(index)
+		end
 		local value = player:GetAttribute(ATTR.Kills)
-		kills.Text = NumberFormat.short(if type(value) == "number" then value else 0)
+		local killCount = if type(value) == "number" then value else 0
+		if killCount ~= shownKills then
+			shownKills = killCount
+			kills.Text = NumberFormat.short(killCount)
+		end
 		vip.Visible = Perks.hasPass(player, "VIP")
 	end
 end
@@ -140,26 +116,47 @@ local function watch(player: Player)
 			update()
 		end
 	end
-	player.CharacterAdded:Connect(onCharacter)
+	local list = { player.CharacterAdded:Connect(onCharacter) }
+	connections[player] = list
 	if player.Character then
 		task.spawn(onCharacter, player.Character)
 	end
-	player.AttributeChanged:Connect(function(attribute: string)
-		if
-			refresh
-			and (
-				attribute == ATTR.Power
-				or attribute == ATTR.Kills
-				or string.find(attribute, ATTR.PassPrefix, 1, true) == 1
-			)
-		then
-			refresh()
-		end
-	end)
+	table.insert(
+		list,
+		player.AttributeChanged:Connect(function(attribute: string)
+			if
+				refresh
+				and (
+					attribute == ATTR.Power
+					or attribute == ATTR.Kills
+					or string.find(attribute, ATTR.PassPrefix, 1, true) == 1
+				)
+			then
+				refresh()
+			end
+		end)
+	)
 end
 
 function Overhead.start()
 	Players.PlayerAdded:Connect(watch)
+	Players.PlayerRemoving:Connect(function(player: Player)
+		local list = connections[player]
+		connections[player] = nil
+		if list then
+			for _, connection in list do
+				connection:Disconnect()
+			end
+		end
+		guis[player] = nil
+	end)
+	ClientSettings.onChanged(function(key: string)
+		if key == "lowFx" then
+			for _, gui in guis do
+				OverheadLook.applyQuality(gui)
+			end
+		end
+	end)
 	for _, player in Players:GetPlayers() do
 		watch(player)
 	end

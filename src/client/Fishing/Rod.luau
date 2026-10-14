@@ -7,13 +7,19 @@
 	el cuerpo del personaje, no con la mano: cada avatar orienta su mano
 	distinto, pero todos saben dónde es "adelante".
 
+	Todas las piezas van soldadas al mango y el mango, con una sola Weld, a
+	la HumanoidRootPart: mover la caña es cambiar el C0 de esa Weld (una
+	escritura por cuadro en vez de ~30 PivotTo), y entre actualizaciones la
+	caña sigue al cuerpo sola.
+
 	Es local: cada cliente dibuja las cañas de todos los jugadores a partir
-	de su atributo FishingState (ver FishingVisuals).
+	de su atributo FishingState (ver FishingVisuals y RodRig).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local RodBuilder = require(script.Parent.RodBuilder)
 
 local Rod = {}
@@ -27,8 +33,28 @@ export type Rod = {
 	model: Model,
 	tip: Attachment,
 	trail: Trail, -- estela de la punta; se enciende durante el latigazo
+	look: number, -- nivel de caña con que se armó (para saber si se puede reutilizar)
 	follow: (armDegrees: number) -> (), -- coloca la caña según el ángulo del brazo
+	setDetail: (full: boolean) -> (), -- apaga partículas y luces de los adornos
 }
+
+-- Suelda cada pieza al mango con su posición de armado y las suelta del mundo.
+local function weldTo(model: Model, grip: BasePart)
+	for _, descendant in model:GetDescendants() do
+		if descendant:IsA("BasePart") then
+			descendant.Anchored = false
+			descendant.Massless = true
+			descendant.CanCollide = false
+			if descendant ~= grip then
+				local weld = Instance.new("Weld")
+				weld.Part0 = grip
+				weld.Part1 = descendant
+				weld.C0 = grip.CFrame:ToObjectSpace(descendant.CFrame)
+				weld.Parent = descendant
+			end
+		end
+	end
+end
 
 -- tier = nivel de la caña comprada (UIConfig.RodLooks).
 function Rod.attach(character: Model, tier: number): Rod?
@@ -38,9 +64,18 @@ function Rod.attach(character: Model, tier: number): Rod?
 		return nil
 	end
 	local looks = UIConfig.RodLooks
-	local built = RodBuilder.build(looks[math.clamp(tier, 1, #looks)])
-	local model, tip, trail = built.model, built.tip, built.trail
-	model.Parent = character
+	local look = math.clamp(tier, 1, #looks)
+	local built = RodBuilder.build(looks[look])
+	local model, tip, trail, grip = built.model, built.tip, built.trail, built.grip
+	-- El modelo se arma con el pivote en el origen: el mango queda en grip.CFrame respecto de él.
+	local gripOffset = grip.CFrame
+	weldTo(model, grip)
+	local hold = Instance.new("Weld")
+	hold.Name = "AgarreCana"
+	hold.Part0 = root
+	hold.Part1 = grip
+	hold.C1 = gripOffset:Inverse()
+	hold.Parent = grip
 	local dropR6 = if hand.Name == "Right Arm" then R6_HAND_DROP else 0
 
 	local function follow(armDegrees: number)
@@ -48,15 +83,41 @@ function Rod.attach(character: Model, tier: number): Rod?
 			return
 		end
 		local elevation = math.rad(armDegrees + ARM_TO_ROD_DEGREES)
-		local origin = hand.Position - hand.CFrame.UpVector * dropR6
+		local origin = root.CFrame:PointToObjectSpace(hand.Position - hand.CFrame.UpVector * dropR6)
 		-- En el espacio del personaje: adelante es -Z y arriba es +Y.
-		local direction = root.CFrame:VectorToWorldSpace(
-			Vector3.new(0, math.sin(elevation), -math.cos(elevation))
-		)
-		model:PivotTo(CFrame.lookAt(origin, origin + direction))
+		local direction = Vector3.new(0, math.sin(elevation), -math.cos(elevation))
+		hold.C0 = CFrame.lookAt(origin, origin + direction)
 	end
+
+	local emitters: { ParticleEmitter } = {}
+	local lights: { Light } = {}
+	for _, descendant in model:GetDescendants() do
+		if descendant:IsA("ParticleEmitter") then
+			FxQuality.scaleEmitter(descendant)
+			table.insert(emitters, descendant)
+		elseif descendant:IsA("Light") then
+			table.insert(lights, descendant)
+		end
+	end
+	local function setDetail(full: boolean)
+		for _, emitter in emitters do
+			emitter.Enabled = full
+		end
+		for _, light in lights do
+			light.Enabled = full
+		end
+	end
+
 	follow(0)
-	return { model = model, tip = tip, trail = trail, follow = follow }
+	model.Parent = character
+	return {
+		model = model,
+		tip = tip,
+		trail = trail,
+		look = look,
+		follow = follow,
+		setDetail = setDetail,
+	}
 end
 
 return Rod

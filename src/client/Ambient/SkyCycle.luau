@@ -7,6 +7,9 @@
 	que el servidor mande nada. El día dura más que la noche, y la luz, la
 	bruma y el tono cambian por momentos: mañana, mediodía, atardecer y
 	noche estrellada.
+
+	Lighting se escribe cada SkyUpdateSeconds (UIConfig.Performance), o antes
+	si la hora o la mezcla del cráter se movieron de más: no cada cuadro.
 ]]
 
 local Lighting = game:GetService("Lighting")
@@ -14,6 +17,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
+local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local ZoneMood = require(script.Parent.ZoneMood)
 
@@ -162,10 +166,18 @@ function SkyCycle.start()
 	local correction = Lighting:FindFirstChildOfClass("ColorCorrectionEffect")
 	local baseSaturation = if correction then correction.Saturation else 0
 	local baseContrast = if correction then correction.Contrast else 0
-	RunService.RenderStepped:Connect(function()
+	local lastHour, lastZone, sinceWrite = -1, -1, math.huge
+	RunService.RenderStepped:Connect(function(dt: number)
+		sinceWrite += dt
 		local hour = SkyCycle.currentHour()
-		local a, b, t = moodAt(hour)
 		local zone = ZoneMood.blend()
+		local moved = math.abs(hour - lastHour) > Performance.SkyClockStep
+			or math.abs(zone - lastZone) > Performance.SkyZoneStep
+		if sinceWrite < Performance.SkyUpdateSeconds and not moved then
+			return
+		end
+		sinceWrite, lastHour, lastZone = 0, hour, zone
+		local a, b, t = moodAt(hour)
 		local brightness = a.brightness + (b.brightness - a.brightness) * t
 		Lighting.ClockTime = hour
 		Lighting.Brightness = brightness + (CRATER.brightness - brightness) * zone

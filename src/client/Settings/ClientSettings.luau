@@ -10,12 +10,18 @@
 
 	La música y los sonidos se silencian con dos SoundGroup locales:
 	Sounds pone cada efecto en Efectos y Music cada pista en Musica.
+
+	Valores automáticos (setAutomatic): valen solo esta sesión y no se
+	guardan. Así se encienden los efectos reducidos en un teléfono sin
+	teclado si el jugador nunca eligió, o cuando FpsWatchdog ve el juego
+	lento. Que el jugador "eligió" se marca con lowFxChosen al guardar.
 ]]
 
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
+local UserInputService = game:GetService("UserInputService")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 
@@ -28,7 +34,9 @@ local ClientSettings = {}
 
 local values: { [string]: boolean } = { music = true, sfx = true, shake = true, lowFx = false }
 local listeners: { (key: string, value: boolean) -> () } = {}
+local automatic: { [string]: boolean } = {} -- claves con valor de esta sesión, sin guardar
 local saveScheduled = false
+local lowFxChosen = false -- el jugador ya eligió los efectos reducidos alguna vez
 
 local function group(name: string): SoundGroup
 	local existing = SoundService:FindFirstChild(name)
@@ -79,15 +87,44 @@ local function notifyAll()
 	end
 end
 
-function ClientSettings.set(key: Key, value: boolean)
-	if values[key] == value then
-		return
-	end
+local function change(key: Key, value: boolean)
 	values[key] = value
 	apply()
 	for _, callback in listeners do
 		task.spawn(callback, key, value)
 	end
+end
+
+-- Solo los valores elegidos por el jugador; los automáticos no se guardan.
+local function payload(): { [string]: boolean }
+	local out: { [string]: boolean } = {}
+	for key, value in values do
+		if not automatic[key] then
+			out[key] = value
+		end
+	end
+	out.lowFxChosen = lowFxChosen
+	return out
+end
+
+-- Valor solo para esta sesión: no se guarda y no pisa lo que el jugador eligió.
+function ClientSettings.setAutomatic(key: Key, value: boolean)
+	if values[key] == value then
+		return
+	end
+	automatic[key] = true
+	change(key, value)
+end
+
+function ClientSettings.set(key: Key, value: boolean)
+	if values[key] == value then
+		return
+	end
+	automatic[key] = nil
+	if key == "lowFx" then
+		lowFxChosen = true
+	end
+	change(key, value)
 	if saveScheduled then
 		return
 	end
@@ -97,9 +134,18 @@ function ClientSettings.set(key: Key, value: boolean)
 		local remotes = ReplicatedStorage:FindFirstChild(Protocol.RemotesFolder)
 		local remote = remotes and remotes:FindFirstChild(Protocol.Remotes.SaveSettings)
 		if remote and remote:IsA("RemoteEvent") then
-			remote:FireServer(table.clone(values))
+			remote:FireServer(payload())
 		end
 	end)
+end
+
+-- Teléfono o tableta sin teclado y sin elección guardada: efectos reducidos.
+local function applyDeviceDefault()
+	local touchOnly = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+	if touchOnly and not lowFxChosen and not values.lowFx then
+		automatic.lowFx = true
+		values.lowFx = true
+	end
 end
 
 local function load(player: Player)
@@ -111,18 +157,22 @@ local function load(player: Player)
 	if not ok or type(decoded) ~= "table" then
 		return
 	end
+	local saved = decoded :: { [string]: unknown }
+	lowFxChosen = lowFxChosen or saved.lowFxChosen == true or saved.lowFx == true
 	for key in values do
-		local saved = (decoded :: { [string]: unknown })[key]
-		if type(saved) == "boolean" then
-			values[key] = saved
+		local value = saved[key]
+		if type(value) == "boolean" and not automatic[key] then
+			values[key] = value
 		end
 	end
+	applyDeviceDefault()
 	apply()
 	notifyAll()
 end
 
 function ClientSettings.start()
 	local player = Players.LocalPlayer
+	applyDeviceDefault()
 	apply()
 	load(player)
 	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.Settings):Connect(function()

@@ -7,6 +7,10 @@
 	faltan, como una silueta oscura con "???". Arriba, el avance (7/12) y el
 	premio por completarla. El botón Peces del HUD se marca cuando hay un
 	pez nuevo sin mirar. Los datos vienen de los atributos Pez_<id>.
+
+	Los peces solo giran con la ventana abierta (un único RenderStepped), y
+	una captura actualiza solo la tarjeta de ese pez (o la deja pendiente
+	hasta que se abra la ventana).
 ]]
 
 local Players = game:GetService("Players")
@@ -14,19 +18,18 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local FishModel = require(script.Parent.Parent.Effects.FishModel)
 local Ui = require(script.Parent.Parent.Ui)
+local FishDexCard = require(script.Parent.FishDexCard)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
 
-local COLORS = UIConfig.Colors
 local FISH = Config.Economy.fish
 local PREFIX = Protocol.PlayerAttributes.FishPrefix
-local SILHOUETTE = Color3.fromRGB(20, 26, 36)
+
+type Card = FishDexCard.Card
 
 local FishDex = {}
 
@@ -35,73 +38,11 @@ local function caught(player: Player, fishId: string): number
 	return if type(value) == "number" then value else 0
 end
 
-local function card(parent: Instance, fishId: string, amount: number, order: number)
-	local fish = FishCatalog.get(fishId)
-	local rarity = FishCatalog.rarity(fishId)
-	local known = amount > 0
-	local color = if known then UIConfig.RarityColors[rarity.id] else COLORS.TextMuted
-	local box = Instance.new("Frame")
-	box.LayoutOrder = order
-	box.BackgroundColor3 = COLORS.Track
-	box.BackgroundTransparency = 0.2
-	Ui.corner(box, 10)
-	Ui.stroke(box, color, 2, if known then 0 else 0.6)
-	box.Parent = parent
-
-	local view = Instance.new("ViewportFrame")
-	view.BackgroundTransparency = 1
-	view.Size = UDim2.new(1, 0, 0.62, 0)
-	view.Ambient = if known then Color3.fromRGB(200, 200, 210) else Color3.new(0, 0, 0)
-	view.LightColor = if known then Color3.new(1, 1, 1) else Color3.new(0, 0, 0)
-	view.Parent = box
-	local world = Instance.new("WorldModel")
-	world.Parent = view
-	local model = FishModel.build(fishId, 1)
-	if not known then
-		for _, part in model:GetDescendants() do
-			if part:IsA("BasePart") then
-				part.Color = SILHOUETTE
-				part.Material = Enum.Material.SmoothPlastic
-			elseif part:IsA("ParticleEmitter") or part:IsA("Light") then
-				part:Destroy()
-			end
-		end
-	end
-	model.Parent = world
-	local extent = model:GetExtentsSize().Magnitude
-	local camera = Instance.new("Camera")
-	camera.FieldOfView = 30
-	camera.CFrame = CFrame.lookAt(Vector3.new(extent * 1.5, extent * 0.35, 0), Vector3.zero)
-	camera.Parent = view
-	view.CurrentCamera = camera
-	if known then
-		local spin = RunService.RenderStepped:Connect(function()
-			model:PivotTo(CFrame.Angles(0, os.clock() * 1.2 + order, 0))
-		end)
-		box.Destroying:Once(function()
-			spin:Disconnect()
-		end)
-	end
-
-	local name = Ui.label("Nombre", box, UIConfig.Fonts.Title, UIConfig.TextSizes.Small)
-	name.Text = if known and fish then fish.displayName else "???"
-	name.Position = UDim2.fromScale(0.04, 0.62)
-	name.Size = UDim2.fromScale(0.92, 0.18)
-	local info = Ui.label("Info", box, UIConfig.Fonts.Body, UIConfig.TextSizes.Small)
-	info.Text = if known
-		then `{rarity.displayName} · x{NumberFormat.short(amount)}`
-		else rarity.displayName
-	info.TextColor3 = color
-	info.Position = UDim2.fromScale(0.04, 0.8)
-	info.Size = UDim2.fromScale(0.92, 0.16)
-end
-
 -- Punto rojo en el botón Peces cuando aparece una especie nueva sin mirar.
 local function watchSpecies(
 	player: Player,
 	hud: HudButtons.HudButton,
-	window: Window.Window,
-	render: () -> ()
+	changed: (fishId: string) -> ()
 )
 	for _, fish in FISH do
 		local before = caught(player, fish.id)
@@ -111,9 +52,7 @@ local function watchSpecies(
 				hud.setAlert(true) -- especie nueva sin mirar
 			end
 			before = now
-			if window.isOpen() then
-				render()
-			end
+			changed(fish.id)
 		end)
 	end
 end
@@ -141,34 +80,66 @@ function FishDex.start(screen: ScreenGui)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
 	layout.Parent = grid
 
+	local cards: { [string]: Card } = {}
+	local pending: { [string]: boolean } = {} -- tarjetas por (re)hacer al abrir
+	for _, fish in FISH do
+		pending[fish.id] = true
+	end
 	local function render()
-		for _, child in grid:GetChildren() do
-			if child:IsA("Frame") then
-				child:Destroy()
-			end
-		end
 		local found = 0
 		for index, fish in FISH do
 			local amount = caught(player, fish.id)
 			found += if amount > 0 then 1 else 0
-			card(grid, fish.id, amount, index)
+			local existing = cards[fish.id]
+			if pending[fish.id] and existing and existing.known and amount > 0 then
+				existing.info.Text = FishDexCard.infoText(fish.id, amount) -- solo cambió la cantidad
+			elseif pending[fish.id] then
+				if existing then
+					existing.box:Destroy()
+				end
+				cards[fish.id] = FishDexCard.build(grid, fish.id, amount, index)
+			end
+			pending[fish.id] = nil
 		end
 		summary.Text =
 			`Descubiertos {found}/{#FISH} · completa la colección: +{NumberFormat.short(
 				Config.Retention.collectionBonus
 			)} monedas`
 	end
+	local spin: RBXScriptConnection? = nil
 	window.onOpen(function()
 		hud.setAlert(false)
 		render()
+		if not spin then
+			spin = RunService.RenderStepped:Connect(function()
+				local t = os.clock() * 1.2
+				for _, entry in cards do
+					if entry.model then
+						entry.model:PivotTo(CFrame.Angles(0, t + entry.order, 0))
+					end
+				end
+			end)
+		end
 	end)
+	window.onClose(function()
+		if spin then
+			spin:Disconnect()
+			spin = nil
+		end
+	end)
+	local function changed(fishId: string)
+		pending[fishId] = true
+		if window.isOpen() then
+			render()
+		end
+	end
 	-- Las alertas empiezan cuando los datos ya cargaron (si no, todo parecería
 	-- nuevo). En otro hilo: el resto del cliente no espera a los datos.
 	task.spawn(function()
 		while player:GetAttribute(Protocol.PlayerAttributes.DataLoaded) ~= true do
 			player:GetAttributeChangedSignal(Protocol.PlayerAttributes.DataLoaded):Wait()
 		end
-		watchSpecies(player, hud, window, render)
+		watchSpecies(player, hud, changed)
 	end)
 end
 

@@ -11,7 +11,12 @@
 		5 red         red verde con nudos y boyas naranjas
 		6 abismo      bodega de metal oscuro con runas moradas que brillan
 	Devuelve las piezas que FishBasket anima (colas de pez, borde, luz).
-	Todo sin masa ni colisión, soldado al torso.
+	Todo sin masa ni colisión, soldado al torso con Weld (C0 fijo, así una
+	pieza sacada y vuelta a poner queda en su lugar).
+
+	Los adornos del estilo (costillas, flejes, tapa, boyas...) van en la
+	subcarpeta trim; FishBasket la deja sin padre para jugadores lejanos.
+	Cuerpo, borde, correas y colas quedan siempre.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -21,6 +26,7 @@ local BasketStyles = require(script.Parent.BasketStyles)
 
 export type Basket = {
 	folder: Folder,
+	trim: Folder, -- adornos que se pueden quitar de lejos
 	tails: { BasePart },
 	rim: BasePart,
 	rimColor: Color3,
@@ -41,7 +47,7 @@ BasketBuilder.SLOTS = SLOTS
 
 type Maker = BasketStyles.Maker
 
-local function maker(folder: Folder, torso: BasePart, back: CFrame): Maker
+local function maker(folder: Instance, torso: BasePart, back: CFrame): Maker
 	return function(size, cf, color, material, shape)
 		local part = Instance.new("Part")
 		part.Size = size
@@ -52,8 +58,9 @@ local function maker(folder: Folder, torso: BasePart, back: CFrame): Maker
 		part.Massless, part.CanCollide, part.CanQuery, part.CanTouch = true, false, false, false
 		part.CastShadow = false
 		part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
-		local weld = Instance.new("WeldConstraint")
+		local weld = Instance.new("Weld")
 		weld.Part0, weld.Part1 = torso, part
+		weld.C0 = torso.CFrame:ToObjectSpace(part.CFrame)
 		weld.Parent = part
 		part.Parent = folder
 		return part
@@ -73,8 +80,13 @@ function BasketBuilder.build(character: Model, level: number): Basket?
 	local folder = Instance.new("Folder")
 	folder.Name = "Canasta"
 	local back = torso.CFrame * CFrame.new(0, 0, torso.Size.Z / 2 + 0.55 * scale)
+	local trim = Instance.new("Folder")
+	trim.Name = "Adornos"
+	trim.Parent = folder
 	local p = maker(folder, torso, back)
-	local body, rim, rimColor, rimMaterial, top = style(p, scale)
+	-- El estilo crea todo en trim; después cuerpo y borde vuelven a la canasta.
+	local body, rim, rimColor, rimMaterial, top = style(maker(trim, torso, back), scale)
+	body.Parent, rim.Parent = folder, folder
 	for side = -1, 1, 2 do -- correas sobre los hombros
 		p(
 			Vector3.new(0.18, 0.12, torso.Size.Z + 1.1 * scale),
@@ -104,6 +116,7 @@ function BasketBuilder.build(character: Model, level: number): Basket?
 	folder.Parent = character
 	return {
 		folder = folder,
+		trim = trim,
 		tails = tails,
 		rim = rim,
 		rimColor = rimColor,

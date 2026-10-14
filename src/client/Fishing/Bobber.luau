@@ -5,6 +5,7 @@
 	Corcho de la pesca: vuela en arco desde la punta de la caña, cae con
 	salpicadura, flota con vaivén y ondas, mordisquea cuando pica y se hunde
 	si el pez se escapa. Efecto local: el servidor no sabe que existe.
+	Para jugadores a media distancia se apagan las ondas (setRipples).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -20,6 +21,7 @@ export type Mode = "flying" | "floating" | "nibble" | "sinking"
 export type Bobber = {
 	attachment: Attachment, -- donde se ata el sedal
 	setMode: (mode: Mode) -> (),
+	setRipples: (on: boolean) -> (), -- ondas en el agua alrededor del corcho
 	position: () -> Vector3,
 	destroy: () -> (),
 }
@@ -72,6 +74,7 @@ function Bobber.cast(from: Vector3, target: Vector3, startFloating: boolean?): B
 
 	local mode: Mode = if startFloating then "floating" else "flying"
 	local elapsed, modeTime, sinceRipple = 0, 0, 0
+	local ripples = true
 	local sink = Instance.new("NumberValue")
 	local current = if startFloating then target else from
 
@@ -101,7 +104,7 @@ function Bobber.cast(from: Vector3, target: Vector3, startFloating: boolean?): B
 			current = target + Vector3.new(0, y, 0)
 			sinceRipple += dt
 			local interval = if mode == "nibble" then 0.35 else EFFECTS.RippleSeconds
-			if sinceRipple >= interval and mode ~= "sinking" then
+			if sinceRipple >= interval and mode ~= "sinking" and ripples then
 				sinceRipple = 0
 				Fx.ring(target, if mode == "nibble" then 1.6 else 1.1, 1.1)
 			end
@@ -127,6 +130,9 @@ function Bobber.cast(from: Vector3, target: Vector3, startFloating: boolean?): B
 				TweenService:Create(float, info, { Transparency = 1 }):Play()
 				TweenService:Create(top, info, { Transparency = 1 }):Play()
 			end
+		end,
+		setRipples = function(on: boolean)
+			ripples = on
 		end,
 		position = function(): Vector3
 			return current

@@ -5,6 +5,11 @@
 	Vida del mar alrededor de la isla, toda local: las boyas se mecen, la
 	espuma de la orilla va y viene como olas, el sol destella sobre el agua
 	y de vez en cuando un pez salta fuera del agua.
+
+	La espuma son cientos de piezas: solo se mueven las que están cerca de
+	la cámara (FoamAnimateDistance), un cuarto en cada paso (por turnos), y
+	con efectos reducidos no cambian de transparencia. Los destellos del sol
+	son un emisor chico que sigue a la cámara.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -12,12 +17,15 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
+local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
+local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 
 local EFFECTS = UIConfig.Effects
 local FOAM_TRAVEL_STUDS = 1.2 -- cuánto sube y baja la espuma sobre la arena
@@ -54,8 +62,26 @@ local function collectFoam(folder: Instance): { Foam }
 	return foam
 end
 
-local function animate(buoys: { Floating }, foam: { Foam })
-	local elapsed, sinceFoam = 0, 0
+-- Mueve un cuarto de la espuma (por turnos) y solo la cercana a la cámara.
+local function stepFoam(foam: { Foam }, slice: number, elapsed: number, center: Vector3)
+	local fade = not ClientSettings.get("lowFx")
+	local reach = Performance.FoamAnimateDistance
+	for index = slice, #foam, Performance.FoamSlices do
+		local piece = foam[index]
+		if (piece.base.Position - center).Magnitude < reach then
+			local wave = math.sin(elapsed * 2 * math.pi / EFFECTS.FoamPulseSeconds + piece.phase)
+			-- Las piezas miran hacia afuera (Z local): -Z es hacia la arena.
+			piece.part.CFrame = piece.base * CFrame.new(0, 0, -wave * FOAM_TRAVEL_STUDS)
+			if fade then
+				piece.part.Transparency = piece.transparency
+					+ (1 - piece.transparency) * (0.5 + 0.5 * wave) * 0.6
+			end
+		end
+	end
+end
+
+local function animate(buoys: { Floating }, foam: { Foam }, glints: BasePart)
+	local elapsed, sinceFoam, slice = 0, 0, 0
 	RunService.Heartbeat:Connect(function(dt: number)
 		elapsed += dt
 		for _, buoy in buoys do
@@ -72,22 +98,19 @@ local function animate(buoys: { Floating }, foam: { Foam })
 			return
 		end
 		sinceFoam = 0
-		for _, piece in foam do
-			local wave = math.sin(elapsed * 2 * math.pi / EFFECTS.FoamPulseSeconds + piece.phase)
-			-- Las piezas miran hacia afuera (Z local): -Z es hacia la arena.
-			piece.part.CFrame = piece.base * CFrame.new(0, 0, -wave * FOAM_TRAVEL_STUDS)
-			piece.part.Transparency = piece.transparency
-				+ (1 - piece.transparency) * (0.5 + 0.5 * wave) * 0.6
-		end
+		local camera = Workspace.CurrentCamera
+		local center = if camera then camera.CFrame.Position else Vector3.zero
+		glints.CFrame = CFrame.new(center.X, WorldLayout.waterLevel + 0.3, center.Z)
+		slice = slice % Performance.FoamSlices + 1
+		stepFoam(foam, slice, elapsed, center)
 	end)
 end
 
--- Destellos del sol sobre el mar: un emisor plano del tamaño del océano visible.
-local function sunGlints()
+-- Destellos del sol sobre el mar: un emisor plano alrededor de la cámara.
+local function sunGlints(): BasePart
 	local plane = Instance.new("Part")
 	plane.Name = "DestellosDelSol"
-	plane.Size =
-		Vector3.new(WorldLayout.boundaryRadius * 2.4, 0.2, WorldLayout.boundaryRadius * 2.4)
+	plane.Size = Vector3.new(Performance.GlintAreaStuds, 0.2, Performance.GlintAreaStuds)
 	plane.CFrame = CFrame.new(0, WorldLayout.waterLevel + 0.3, 0)
 	plane.Transparency = 1
 	plane.Anchored = true
@@ -99,7 +122,7 @@ local function sunGlints()
 	glints.Texture = Assets.Particles.Sparkle
 	glints.Shape = Enum.ParticleEmitterShape.Box
 	glints.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
-	glints.Rate = 45
+	glints.Rate = Performance.GlintRate
 	glints.Lifetime = NumberRange.new(0.3, 0.7)
 	glints.Speed = NumberRange.new(0)
 	glints.Size = NumberSequence.new({
@@ -110,6 +133,8 @@ local function sunGlints()
 	glints.LightEmission = 1
 	glints.Color = ColorSequence.new(Color3.fromRGB(255, 252, 230))
 	glints.Parent = plane
+	FxQuality.scaleEmitter(glints)
+	return plane
 end
 
 local function jumpingFish()
@@ -141,13 +166,13 @@ local function jumpingFish()
 end
 
 function SeaLife.start()
-	sunGlints()
+	local glints = sunGlints()
 	jumpingFish()
 	task.spawn(function()
 		local map = Workspace:WaitForChild(Protocol.Map.Root, math.huge)
 		local buoys = collectBuoys(map:WaitForChild(Protocol.Map.Buoys, math.huge))
 		local foam = collectFoam(map:WaitForChild(Protocol.Map.Foam, math.huge))
-		animate(buoys, foam)
+		animate(buoys, foam, glints)
 	end)
 end
 

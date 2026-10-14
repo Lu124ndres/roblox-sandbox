@@ -7,7 +7,8 @@
 		- en los estanques x20 o más, tres cristalitos orbitan a su alrededor;
 		- si el jugador todavía no lo desbloqueó, el cristal se ve apagado y
 		  quieto, sin destellos: de un vistazo se sabe a cuáles puede entrar.
-	Solo se animan los estanques cerca de la cámara.
+	Solo se animan los estanques cerca de la cámara (PondAnimateDistance), y
+	los destellos de los lejanos se apagan.
 ]]
 
 local Players = game:GetService("Players")
@@ -17,9 +18,11 @@ local Workspace = game:GetService("Workspace")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local Perks = require(ReplicatedStorage.Shared.Perks)
+local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 
-local ANIMATE_DISTANCE = 220
+local ANIMATE_DISTANCE = Performance.PondAnimateDistance
 local LOCKED_COLOR = Color3.fromRGB(90, 96, 110)
 
 type Pond = {
@@ -30,6 +33,8 @@ type Pond = {
 	orbiters: { BasePart },
 	sparkles: ParticleEmitter,
 	light: PointLight?,
+	open: boolean, -- desbloqueado por el jugador
+	near: boolean, -- cerca de la cámara
 }
 
 local PondFx = {}
@@ -50,6 +55,7 @@ local function sparklesFor(crystal: BasePart, color: Color3): ParticleEmitter
 	emitter.Acceleration = Vector3.new(0, -2, 0)
 	emitter.Rate = 10
 	emitter.Parent = crystal
+	FxQuality.scaleEmitter(emitter)
 	return emitter
 end
 
@@ -77,6 +83,8 @@ local function collect(map: Instance): { Pond }
 				orbiters = orbiters,
 				sparkles = sparklesFor(descendant, descendant.Color),
 				light = descendant:FindFirstChildOfClass("PointLight"),
+				open = false,
+				near = true,
 			})
 		end
 	end
@@ -93,7 +101,8 @@ function PondFx.start()
 			local open = Perks.pondOpen(player, pond.index)
 			pond.crystal.Color = if open then pond.color else LOCKED_COLOR
 			pond.crystal.Material = if open then Enum.Material.Neon else Enum.Material.Glass
-			pond.sparkles.Enabled = open
+			pond.open = open
+			pond.sparkles.Enabled = open and pond.near
 			if pond.light then
 				pond.light.Enabled = open
 			end
@@ -111,8 +120,13 @@ function PondFx.start()
 		local camera = Workspace.CurrentCamera
 		local t = os.clock()
 		for _, pond in ponds do
-			if (camera.CFrame.Position - pond.base.Position).Magnitude < ANIMATE_DISTANCE then
-				local open = pond.crystal:GetAttribute("Abierto") == true
+			local near = (camera.CFrame.Position - pond.base.Position).Magnitude < ANIMATE_DISTANCE
+			if near ~= pond.near then
+				pond.near = near
+				pond.sparkles.Enabled = pond.open and near
+			end
+			if near then
+				local open = pond.open
 				local bob = if open then math.sin(t * 1.6 + pond.index) * 0.45 else 0
 				local spin = if open then t * 0.8 else 0
 				pond.crystal.CFrame = CFrame.new(pond.base.Position + Vector3.new(0, bob, 0))

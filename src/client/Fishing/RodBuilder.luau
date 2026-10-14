@@ -21,7 +21,8 @@ local SEGMENTS = { { 2.6, 0.2 }, { 2.4, 0.14 }, { 2.2, 0.09 } } -- largo y groso
 
 local RodBuilder = {}
 
-export type Built = { model: Model, tip: Attachment, tipPart: Part, trail: Trail }
+-- grip: el mango (Rod suelda todo lo demás a él).
+export type Built = { model: Model, tip: Attachment, tipPart: Part, trail: Trail, grip: Part }
 
 local function tipTrail(tipPart: Part, z: number, color: Color3): Trail
 	local upper, lower = Instance.new("Attachment"), Instance.new("Attachment")
@@ -153,7 +154,7 @@ function RodBuilder.build(look: UIConfig.RodLook): Built
 
 	RodOrnaments.add(model, look, z, point)
 	model.WorldPivot = CFrame.new() -- el pivote es el origen: el centro del mango
-	return { model = model, tip = tip, tipPart = point, trail = trail }
+	return { model = model, tip = tip, tipPart = point, trail = trail, grip = grip }
 end
 
 return RodBuilder
