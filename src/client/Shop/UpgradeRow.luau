@@ -2,7 +2,7 @@
 --[[
 	UpgradeRow
 
-	Fila de madera de MEJORAS: miniatura (la caña en 3D o el ícono), nombre,
+	Fila de madera de MEJORAS: miniatura 3D (caña, canasta o botas), nombre,
 	qué da, "Nivel N" y, según el estado:
 		comprada      "Equipada" / "Tienes"
 		la siguiente  botón verde con el precio en monedas y botón morado
@@ -18,6 +18,7 @@ local Device = require(script.Parent.Parent.Interface.Device)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
+local GearPreview = require(script.Parent.GearPreview)
 local RodPreview = require(script.Parent.RodPreview)
 
 local PALETTE = Style.PALETTE
@@ -74,6 +75,10 @@ function UpgradeRow.new(parent: Instance, spec: RowSpec)
 	slot.Parent = row
 	if spec.category == "Rod" then
 		RodPreview.attach(slot, spec.index, ROW_HEIGHT - 18)
+	elseif spec.category == "Basket" then
+		GearPreview.basket(slot, spec.index, ROW_HEIGHT - 18)
+	elseif spec.category == "Boots" then
+		GearPreview.boots(slot, spec.index, ROW_HEIGHT - 18)
 	else
 		local icon = Icons.view(slot, ICONS[spec.category])
 		icon.Position = UDim2.fromOffset(4, 4)

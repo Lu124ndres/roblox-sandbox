@@ -23,6 +23,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local BasketStyles = require(script.Parent.BasketStyles)
+local BasketStyles2 = require(script.Parent.BasketStyles2)
+local BasketStyles3 = require(script.Parent.BasketStyles3)
 
 export type Basket = {
 	folder: Folder,
@@ -40,6 +42,15 @@ local M = Enum.Material
 local SLOTS = 6
 local TAIL_COLORS =
 	{ UIConfig.FishColors.Sardina, UIConfig.FishColors.Caballa, UIConfig.FishColors.PezPayaso }
+
+-- Todas las canastas: 1-6 (BasketStyles), 7-10 (BasketStyles2) y 11-14 (BasketStyles3).
+local STYLES = table.clone(BasketStyles.list)
+for _, more in { BasketStyles2.list, BasketStyles3.list } do
+	for _, style in more do
+		table.insert(STYLES, style)
+	end
+end
+local GLOW_FROM = 6 -- desde esta canasta el borde brilla
 
 local BasketBuilder = {}
 
@@ -72,11 +83,10 @@ function BasketBuilder.build(character: Model, level: number): Basket?
 	if not torso or not torso:IsA("BasePart") then
 		return nil
 	end
-	local STYLES = BasketStyles.list
 	local style = STYLES[math.clamp(level, 1, #STYLES)]
 	-- Al tamaño del avatar (un torso normal mide 2 de ancho) y un poco más grande por nivel.
 	local fit = math.clamp(torso.Size.X / 2, 0.45, 1.3) * 0.85
-	local scale = fit * (1 + (math.clamp(level, 1, #STYLES) - 1) * 0.06)
+	local scale = fit * (1 + (math.clamp(level, 1, #STYLES) - 1) * 0.035)
 	local folder = Instance.new("Folder")
 	folder.Name = "Canasta"
 	local back = torso.CFrame * CFrame.new(0, 0, torso.Size.Z / 2 + 0.55 * scale)
@@ -110,8 +120,8 @@ function BasketBuilder.build(character: Model, level: number): Basket?
 	end
 	local light = Instance.new("PointLight")
 	light.Range = 8
-	light.Color = if level >= #BasketStyles.list then rgb(170, 70, 255) else UIConfig.Colors.Feeding
-	light.Enabled = level >= #BasketStyles.list
+	light.Color = if level >= GLOW_FROM then rgb(170, 70, 255) else UIConfig.Colors.Feeding
+	light.Enabled = level >= GLOW_FROM
 	light.Parent = rim
 	folder.Parent = character
 	return {

@@ -13,6 +13,9 @@
 		abismo     vetas moradas que brillan y estela de humo
 		volcanica  roca con grietas de lava y chispas
 		leviatan   escamas y aletas, burbujas en la punta
+	De la 11 a la 20 reusan esos estilos con colores y materiales nuevos
+	(perlas, esmeralda, hielo, kraken, sol, obsidiana, rubí, tormentas,
+	cosmos y Poseidón).
 ]]
 
 export type RodStyle =
@@ -106,6 +109,76 @@ local RodLooks: { RodLook } = {
 		blank = rgb(24, 120, 140),
 		accent = rgb(120, 255, 220),
 		material = M.SmoothPlastic,
+		glow = true,
+		style = "leviatan",
+	},
+	{
+		blank = rgb(250, 244, 236),
+		accent = rgb(255, 190, 220),
+		material = M.SmoothPlastic,
+		glow = false,
+		style = "coral",
+	},
+	{
+		blank = rgb(30, 160, 90),
+		accent = rgb(200, 255, 210),
+		material = M.Glass,
+		glow = true,
+		style = "cristal",
+	},
+	{
+		blank = rgb(200, 240, 255),
+		accent = rgb(120, 200, 255),
+		material = M.Ice,
+		glow = true,
+		style = "cristal",
+	},
+	{
+		blank = rgb(60, 20, 70),
+		accent = rgb(255, 80, 200),
+		material = M.SmoothPlastic,
+		glow = true,
+		style = "leviatan",
+	},
+	{
+		blank = rgb(255, 220, 90),
+		accent = rgb(255, 140, 40),
+		material = M.Neon,
+		glow = true,
+		style = "dorada",
+	},
+	{
+		blank = rgb(20, 18, 24),
+		accent = rgb(160, 120, 255),
+		material = M.Glass,
+		glow = true,
+		style = "abismo",
+	},
+	{
+		blank = rgb(170, 20, 40),
+		accent = rgb(255, 200, 200),
+		material = M.Glass,
+		glow = true,
+		style = "cristal",
+	},
+	{
+		blank = rgb(50, 60, 90),
+		accent = rgb(120, 220, 255),
+		material = M.Metal,
+		glow = true,
+		style = "acero",
+	},
+	{
+		blank = rgb(20, 16, 60),
+		accent = rgb(255, 255, 255),
+		material = M.Neon,
+		glow = true,
+		style = "abismo",
+	},
+	{
+		blank = rgb(10, 90, 150),
+		accent = rgb(255, 220, 90),
+		material = M.Foil,
 		glow = true,
 		style = "leviatan",
 	},
