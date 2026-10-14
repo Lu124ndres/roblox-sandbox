@@ -3,12 +3,15 @@
 	RestArena
 
 	La guarida del descanso: plataforma con rampas desde la punta de cada
-	muelle (world/GuaridaDescanso.model.json, en ServerStorage). No existe en
-	el mapa mientras el monstruo vive: al derrotarlo se clona hundida en el
-	lago y emerge (riseSeconds); al terminar el descanso, quien siga abajo
-	sube a la punta del muelle más cercano, la guarida se hunde y se borra.
-	Las puntas de los muelles (atributo AbreEnDescanso) solo se abren
-	mientras está arriba.
+	muelle (world/GuaridaDescanso.model.json, en ServerStorage). Se clona UNA
+	vez al empezar y queda guardada muy abajo del lago (sin crear ~85 piezas
+	de golpe al llenar un monstruo). Al empezar el descanso aparece en su
+	lugar con un solo movimiento, tapada por la ola que dibuja CycleView
+	(antes subía en 30 pasos y mandaba ~85 piezas cada vez: trababa el juego).
+	Al terminar, quien siga abajo sube a la punta del muelle más cercano y la
+	guarida vuelve a guardarse. Las puntas de los muelles
+	(atributo AbreEnDescanso) solo se abren mientras está arriba. enter()
+	lleva a un jugador directo a la guarida (botón del descanso).
 ]]
 
 local Players = game:GetService("Players")
@@ -21,33 +24,21 @@ local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Proximity = require(script.Parent.Proximity)
 
-local SINK_DEPTH = 16 -- studs bajo su lugar final cuando está hundida
-local RISE_SECONDS = 3
-local SINK_SECONDS = 2.5
-local STEP_SECONDS = 0.1 -- ~10 Hz: cada PivotTo replica las ~85 piezas a todos los clientes
+local PARK_DEPTH = 120 -- studs bajo su lugar mientras está guardada (bajo el fondo del lago)
+local RISE_SECONDS = 3 -- lo que tarda en subir en los clientes: luego se abren los muelles
+local SINK_SECONDS = 2.5 -- lo que tarda en bajar en los clientes: luego se guarda
 
 local RestArena = {}
 
-local template: Model
-local current: Model? = nil
+local arena: Model
+local final: CFrame
+local up = false
 local openings: { BasePart } = {}
+local rng = Random.new()
 
 local function setOpen(open: boolean)
 	for _, wall in openings do
 		wall.CanCollide = not open
-	end
-end
-
--- Mueve la guarida de "from" a "to" (desplazamientos verticales) con suavidad.
--- Va a pasos de STEP_SECONDS y no a cada Heartbeat: con 40-50 jugadores, mover
--- el modelo entero 60 veces por segundo satura la replicación.
-local function slide(model: Model, final: CFrame, from: number, to: number, seconds: number)
-	local elapsed = 0
-	while elapsed < seconds and model.Parent do
-		elapsed += task.wait(STEP_SECONDS)
-		local t = math.min(elapsed / seconds, 1)
-		local eased = 1 - (1 - t) ^ 3
-		model:PivotTo(final + Vector3.new(0, from + (to - from) * eased, 0))
 	end
 end
 
@@ -69,7 +60,11 @@ end
 function RestArena.init(map: Instance)
 	local found = ServerStorage:WaitForChild(Protocol.Map.RestArena, 10)
 	assert(found and found:IsA("Model"), "RestArena: falta ServerStorage.GuaridaDescanso")
-	template = found
+	final = found:GetPivot()
+	arena = found:Clone()
+	arena.ModelStreamingMode = Enum.ModelStreamingMode.Persistent
+	arena:PivotTo(final - Vector3.new(0, PARK_DEPTH, 0))
+	arena.Parent = Workspace
 	for _, descendant in map:GetDescendants() do
 		if
 			descendant:IsA("BasePart")
@@ -81,32 +76,26 @@ function RestArena.init(map: Instance)
 	setOpen(false)
 end
 
--- El monstruo fue derrotado: la guarida emerge del lago.
+-- El monstruo fue derrotado: la guarida sube (un solo movimiento; los clientes la animan).
 function RestArena.show()
-	if current then
+	if up then
 		return
 	end
-	local model = template:Clone()
-	model.ModelStreamingMode = Enum.ModelStreamingMode.Persistent
-	local final = template:GetPivot()
-	model:PivotTo(final - Vector3.new(0, SINK_DEPTH, 0))
-	model.Parent = Workspace
-	current = model
-	task.spawn(function()
-		slide(model, final, -SINK_DEPTH, 0, RISE_SECONDS)
-		if current == model then
+	up = true
+	arena:PivotTo(final)
+	task.delay(RISE_SECONDS, function()
+		if up then
 			setOpen(true) -- las rampas ya llegaron a la punta de los muelles
 		end
 	end)
 end
 
--- Termina el descanso: todos arriba, se cierran los muelles y la guarida se hunde.
+-- Termina el descanso: todos arriba, se cierran los muelles y la guarida se guarda.
 function RestArena.hide()
-	local model = current
-	if not model then
+	if not up then
 		return
 	end
-	current = nil
+	up = false
 	for _, player in Players:GetPlayers() do
 		local root = Proximity.getRoot(player)
 		local character = player.Character
@@ -115,10 +104,34 @@ function RestArena.hide()
 		end
 	end
 	setOpen(false)
-	task.spawn(function()
-		slide(model, template:GetPivot(), 0, -SINK_DEPTH, SINK_SECONDS)
-		model:Destroy()
+	task.delay(SINK_SECONDS, function()
+		if not up then
+			arena:PivotTo(final - Vector3.new(0, PARK_DEPTH, 0))
+		end
 	end)
+end
+
+-- Botón "Ir a la guarida": lo deja sobre la plataforma, mirando al centro.
+function RestArena.enter(player: Player): boolean
+	local character = player.Character
+	if not up or not character then
+		return false
+	end
+	local angle = rng:NextNumber(0, math.pi * 2)
+	local radius = rng:NextNumber(6, WorldLayout.restArenaRadius - 8)
+	local spot = WorldZones.craterCenter
+		+ Vector3.new(
+			math.cos(angle) * radius,
+			WorldLayout.restArenaTop + 4,
+			math.sin(angle) * radius
+		)
+	character:PivotTo(
+		CFrame.lookAt(
+			spot,
+			Vector3.new(WorldZones.craterCenter.X, spot.Y, WorldZones.craterCenter.Z)
+		)
+	)
+	return true
 end
 
 return RestArena

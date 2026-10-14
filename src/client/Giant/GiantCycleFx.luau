@@ -14,7 +14,6 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local Workspace = game:GetService("Workspace")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
@@ -26,6 +25,7 @@ local Fx = require(script.Parent.Parent.Effects.Fx)
 local GiantBody = require(script.Parent.GiantBody)
 
 local WATER = WorldZones.craterCenter + Vector3.new(0, WorldLayout.waterLevel, 0)
+local HIDDEN_DEPTH = 3 -- alturas del gigante bajo el agua mientras no está
 
 local GiantCycleFx = {}
 
@@ -51,8 +51,10 @@ local function wave(height: number, strength: number)
 	CameraShake.shake(0.5 + strength * 0.2, 1.4)
 end
 
+-- Se esconde hundiéndolo muy abajo, sin sacarlo del Workspace: quitar y volver
+-- a poner un modelo tan grande hacía que el juego se trabara al llenarse.
 local function hide(body: GiantBody.Body)
-	body.model.Parent = nil
+	body.lift.Value = -body.height() * HIDDEN_DEPTH
 end
 
 local function farewell(body: GiantBody.Body)
@@ -76,7 +78,6 @@ local function arrive(body: GiantBody.Body)
 	body.setStage(1, true)
 	local height = body.height()
 	body.lift.Value = -height * 1.4
-	body.model.Parent = Workspace
 	Sounds.play("OrcaCall", WATER, 0.8)
 	task.delay(0.6, function()
 		wave(height, 2)
@@ -102,9 +103,8 @@ function GiantCycleFx.watch(getBody: () -> GiantBody.Body?)
 			hide(body)
 		elseif phase == "arriving" and animate then
 			arrive(body)
-		elseif body.model.Parent == nil then
-			body.lift.Value = 0
-			body.model.Parent = Workspace
+		elseif body.lift.Value < -body.height() * 2 then
+			body.lift.Value = 0 -- estaba escondido (entró a mitad del ciclo)
 		end
 	end
 	stateFolder:GetAttributeChangedSignal(Protocol.GiantAttributes.Phase):Connect(function()
