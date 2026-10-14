@@ -30,6 +30,38 @@ local GAP_BELOW = 8 -- aire entre el panel de hambre y el primer aviso
 local Toasts = {}
 
 local stack: Frame? = nil
+-- Toasts.hold: mientras dura (la ruleta), los avisos esperan y salen después.
+local heldUntil = 0
+local waiting: { () -> () } = {}
+
+-- Guarda los avisos `seconds` segundos (y esconde los que ya están) para no tapar algo.
+function Toasts.hold(seconds: number)
+	heldUntil = math.max(heldUntil, os.clock() + seconds)
+	if stack then
+		stack.Visible = false
+	end
+	task.delay(seconds + 0.05, function()
+		if os.clock() < heldUntil then
+			return
+		end
+		if stack then
+			stack.Visible = true
+		end
+		local pending = waiting
+		waiting = {}
+		for index, run in pending do
+			task.delay((index - 1) * 0.6, run)
+		end
+	end)
+end
+
+local function held(run: () -> ()): boolean
+	if os.clock() < heldUntil then
+		table.insert(waiting, run)
+		return true
+	end
+	return false
+end
 
 local function popIn(target: GuiObject): UIScale
 	local scale = Instance.new("UIScale")
@@ -76,6 +108,11 @@ function Toasts.mount(screen: ScreenGui): Toasts
 	local order = 0
 
 	local function show(text: string, color: Color3?)
+		if held(function()
+			show(text, color)
+		end) then
+			return
+		end
 		order += 1
 		local toast = Ui.panel("Aviso", frame)
 		toast.LayoutOrder = order
@@ -93,6 +130,11 @@ function Toasts.mount(screen: ScreenGui): Toasts
 	end
 
 	local function banner(text: string, color: Color3?)
+		if held(function()
+			banner(text, color)
+		end) then
+			return
+		end
 		local frame = Instance.new("Frame")
 		frame.Name = "Banner"
 		frame.BackgroundTransparency = 1

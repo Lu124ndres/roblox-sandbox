@@ -8,7 +8,7 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 | Perilla | Valor | Qué hace |
 |---|---|---|
-| `food` de cada monstruo | Orca 10,500 · Minotauro 13,000 · Dragón 17,000 · Zorro 21,000 | Comida **fija** para llenarlo. Con 50 jugadores: novatos ~6 / 8 / 10 / 13 min, pros ~1 / 1.5 / 2 / 2.5 min. |
+| `food` de cada monstruo | Orca 14,500 · Minotauro 18,000 · Dragón 23,000 · Zorro 26,000 · Orca fantasma 21,000 | Comida **fija** para llenarlo. Con 50 jugadores: novatos ~8 / 10 / 13 / 15 min, pros ~1.5 / 2 / 2.5 / 3 min. |
 | `rouletteWeight` | 50 / 30 / 15 / 5 | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Sin modelo propio usan la Orca teñida. |
 | Ritmo de un jugador | novato ~0.45 comida/s · pro ~1.9 · tope ~5 | Calculado con el ciclo de pesca (pique, minijuego, viaje al volcán) al ~80 % del tiempo. Con menos jugadores tarda más: 10 novatos ~35 min la Orca. |
 | `scaling.minKillShare` | 0.005 | Hay que dar al menos el 0.5 % de la barra para ganar la kill. |

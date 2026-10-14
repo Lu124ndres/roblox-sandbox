@@ -6,10 +6,10 @@
 	Calibrada con lo que entrega un jugador (ver docs/balance.md): un novato
 	~0.45 de comida/s y un pro (poder ~80K, caña 6, canasta 4) ~1.9/s, con
 	~80 % del tiempo pescando o entregando. Con 50 jugadores:
-		Orca          novatos ~6 min · pros ~1 min
-		Minotauro     ~8 min · ~1.5 min
-		Dragón marino ~10 min · ~2 min
-		Zorro de agua ~13 min · ~2.5 min (ninguno pasa de 15 min)
+		Orca          novatos ~8 min · pros ~1.5 min
+		Minotauro     ~10 min · ~2 min
+		Dragón marino ~13 min · ~2.5 min
+		Zorro de agua ~15 min · ~3 min (ninguno pasa de 15 min)
 	Solo se lleva la kill quien aportó al menos scaling.minKillShare de la barra.
 
 	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
@@ -45,7 +45,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca",
 			article = "la",
 			multiplier = 1,
-			food = 10500,
+			food = 14500,
 			modelBase = "Orca",
 			rouletteWeight = 50,
 			released = true,
@@ -56,7 +56,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Minotauro",
 			article = "el",
 			multiplier = 3,
-			food = 13000,
+			food = 18000,
 			modelBase = "Minotauro",
 			rouletteWeight = 30,
 			released = true,
@@ -67,7 +67,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Dragón marino",
 			article = "el",
 			multiplier = 8,
-			food = 17000,
+			food = 23000,
 			modelBase = "DragonMarino",
 			rouletteWeight = 15,
 			released = false,
@@ -78,7 +78,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Zorro de agua",
 			article = "el",
 			multiplier = 20,
-			food = 21000,
+			food = 26000,
 			modelBase = "ZorroDeAgua",
 			rouletteWeight = 5,
 			released = false,
@@ -90,7 +90,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca fantasma",
 			article = "la",
 			multiplier = 6,
-			food = 15000,
+			food = 21000,
 			modelBase = "OrcaFantasma",
 			rouletteWeight = 35,
 			released = true,
