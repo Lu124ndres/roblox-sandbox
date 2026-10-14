@@ -4,7 +4,7 @@ Creator Hub → Creaciones → tu juego → Monetización → Productos de desar
 Crea cada uno con el **precio** de la tabla, copia su ID (⋯ → Copiar ID del recurso) y
 pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Products.luau`).
 
-## Crea primero estos 17 (lo que más se ve y más vende)
+## Crea primero estos 18 (lo que más se ve y más vende)
 
 1. `PackInicio` (49) — oferta de bienvenida, se abre sola a los 2.5 min.
 2. Pases `VIP` (299), `ReyDelMar` (149), `DiosDelVolcan` (399) — sección Pases abajo.
@@ -12,8 +12,9 @@ pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Pro
 4. `ChooseOrca` (25), `ChooseMinotauro` (49), `ChooseDragonMarino` (79), `ChooseZorroDeAgua` (99) — botones del descanso. Para Halloween: `ChooseOrcaFantasma` (149).
 5. `ServerBoost1` (15), `ServerBoost2` (29), `ServerBoost3` (59) — banner de la tienda.
 6. `Power2` (7), `Coins1` (3), `Coins2` (7) — atajos de la columna derecha (Power1 ya existe).
+7. `Pond11` (799) — **Estanque sagrado x250** del centro de la isla; solo se abre con este producto (también sale en la TIENDA, sección Para siempre).
 
-Los estanques (`Pond2`…`Pond10`) **no hacen falta**: ya no se venden (se abren con kills;
+Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren con kills;
 `sellPonds = false` en `Config/Monetization.luau`). El resto, cuando puedas.
 
 | `PackInicio` | Pack de inicio | 49 | Una sola vez: 15K monedas, caña 4, canasta 3, x2 poder 60 min | |
@@ -62,6 +63,7 @@ Los estanques (`Pond2`…`Pond10`) **no hacen falta**: ya no se venden (se abren
 | `Pond8` | Estanque 8 | 449 | Estanques para siempre | |
 | `Pond9` | Estanque 9 | 649 | Estanques para siempre | |
 | `Pond10` | Estanque 10 | 999 | Estanques para siempre | |
+| `Pond11` | Estanque sagrado x250 | 799 | Solo con Robux (centro de la isla) | |
 | `GiftVIP` | Regalar VIP | 299 | Regalar el pase VIP a otro jugador | |
 | `Rod2` | Caña nivel 2 | 5 | MEJORAS en Robux (el nivel 1 es gratis): cañas | |
 | `Rod3` | Caña nivel 3 | 15 | MEJORAS en Robux (el nivel 1 es gratis): cañas | |
