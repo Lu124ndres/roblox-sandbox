@@ -3,20 +3,19 @@
 	FishingController
 
 	La pesca del jugador local: muestra el botón Pescar cuando está en la
-	orilla o en un muelle, lo gira hacia el agua al lanzar, muestra el botón
-	TIRA cuando pica y los avisos de resultado. No decide nada: solo pide
-	CastRequest y ReelIn; el servidor valida. La caña, el corcho y el pez los
+	orilla o en un muelle, lo gira hacia el agua al lanzar y, cuando pica, el
+	minijuego de recoger: el botón TIRA y la barra (ReelBar) que sube con
+	cada toque. No decide nada: cada toque es un ReelIn; el servidor cuenta. La caña, el corcho y el pez los
 	dibuja FishingVisuals para todos los jugadores.
 
-	En PC: E (o F) para lanzar y E (o Espacio) para recoger. Consola: X y A.
+	En PC: E (o F) para lanzar; E, Espacio o clic para recoger. Consola: X y A.
 ]]
 
 local ContextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TweenService = game:GetService("TweenService")
 
-local Config = require(ReplicatedStorage.Shared.Config)
+local Reel = require(ReplicatedStorage.Shared.Config.Reel)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
@@ -26,11 +25,13 @@ local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
 local CatchCard = require(script.Parent.CatchCard)
 local FishingButtons = require(script.Parent.FishingButtons)
+local ReelBar = require(script.Parent.ReelBar)
 
 local COLORS = UIConfig.Colors
 local CAST_ACTION = "LanzarSedal"
 local REEL_ACTION = "RecogerSedal"
 local CHECK_SECONDS = 0.2 -- cada cuánto se revisa si el jugador está en la orilla
+local TAP_SECONDS = 1 / Reel.maxTapsPerSecond -- los toques más rápidos no cuentan en el servidor
 
 local FishingController = {}
 
@@ -74,7 +75,9 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 
 	local castButton = FishingButtons.cast(screen)
 	local card = CatchCard.mount(screen)
-	local biteButton, timer = FishingButtons.bite(screen)
+	local biteButton = FishingButtons.bite(screen)
+	local bar = ReelBar.mount(screen)
+	local lastTap = 0
 	local busy = false -- entre pedir el lanzamiento y conocer el resultado
 
 	local function cast()
@@ -95,23 +98,25 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 
 	local function hideBite()
 		biteButton.Visible = false
+		bar.hide()
 		ContextActionService:UnbindAction(REEL_ACTION)
 	end
 
+	-- Un toque: sube la barra y se lo dice al servidor.
 	local function reel()
-		if not biteButton.Visible then
+		local now = os.clock()
+		if not biteButton.Visible or now - lastTap < TAP_SECONDS then
 			return
 		end
-		hideBite()
-		Sounds.play("Click")
+		lastTap = now
+		bar.tap()
+		Sounds.play("Click", nil, 0.9 + math.random() * 0.3)
 		reelIn:FireServer()
 	end
 
-	local function showBite(windowSeconds: number)
+	local function showBite(params: ReelBar.Params, rarityId: string)
 		biteButton.Visible = true
-		timer.Size = UDim2.new(1, 0, 0, 10)
-		local info = TweenInfo.new(windowSeconds, Enum.EasingStyle.Linear)
-		TweenService:Create(timer, info, { Size = UDim2.fromOffset(0, 10) }):Play()
+		bar.show(params, rarityId)
 		ContextActionService:BindActionAtPriority(
 			REEL_ACTION,
 			function(_, inputState: Enum.UserInputState)
@@ -124,7 +129,8 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			Enum.ContextActionPriority.High.Value,
 			Enum.KeyCode.Space,
 			Enum.KeyCode.E,
-			Enum.KeyCode.ButtonA
+			Enum.KeyCode.ButtonA,
+			Enum.UserInputType.MouseButton1
 		)
 	end
 
@@ -151,11 +157,21 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			toasts.show("Espera a que pique...", COLORS.TextMuted)
 			return
 		elseif state == "bite" then
-			showBite(
-				if type(detail) == "number"
-					then detail
-					else Config.Gameplay.fishing.reelWindowSeconds
-			)
+			local info: { [string]: any } = if type(detail) == "table" then detail :: any else {}
+			if
+				type(info.start) == "number"
+				and type(info.gain) == "number"
+				and type(info.drain) == "number"
+				and type(info.timeout) == "number"
+			then
+				local params: ReelBar.Params = {
+					start = info.start,
+					gain = info.gain,
+					drain = info.drain,
+					timeout = info.timeout,
+				}
+				showBite(params, if type(info.rarity) == "string" then info.rarity else "")
+			end
 			return
 		end
 		hideBite()

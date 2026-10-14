@@ -34,6 +34,7 @@ export type NoticeKind =
 	| "choose" -- (buyerName, giantId) alguien eligió el siguiente monstruo
 	| "fill" -- (buyerName, percent) alguien llenó parte del monstruo con Robux
 	| "purchase" -- (text) compra propia aplicada (estanque, pase)
+	| "rare" -- (playerName, fishId) alguien del servidor sacó un pez legendario o mejor
 	| "code" -- (status: "ok" | "invalid" | "used" | "expired", text?) resultado de un código
 	| "group" -- (status: "ok" | "notMember" | "wait" | "claimed" | "off") regalo del grupo
 export type ShopStatus = "ok" | "poor" | "max" | "invalid"

@@ -6,7 +6,7 @@
 		Pescar     turquesa. Sale cuando el jugador está en la orilla o en un muelle.
 		Alimentar  coral, en el mismo lugar; sale en la orilla del volcán con peces.
 		¡TIRA!     rojo, en el mismo lugar y un poco más grande (el pulgar no se
-		           mueve), con una barra encima que se vacía durante la ventana.
+		           mueve): se toca rápido para recoger (la barra es ReelBar).
 	Dónde van (abajo a la derecha, sin tapar la columna derecha del HUD):
 		teléfono  justo a la izquierda del botón de saltar de Roblox
 		tablet    igual, más grande (el botón de saltar también lo es)
@@ -34,7 +34,6 @@ local PC_HEIGHT_FRACTION = 0.16
 local PC_MIN_SIZE = 96
 local BITE_GROWTH = 1.25 -- ¡TIRA! es un poco más grande que Pescar
 local BITE_HEIGHT = 0.36 -- ...pero nunca más de esta fracción del alto
-local TIMER_HEIGHT = 10
 
 type Spot = { position: UDim2, size: number }
 
@@ -146,7 +145,7 @@ end
 
 -- ¡TIRA!: su tamaño sale del alto de la pantalla (BITE_HEIGHT) con tope en
 -- 1.25 veces Pescar; la esquina de abajo a la derecha es la misma que la de Pescar.
-function FishingButtons.bite(screen: ScreenGui): (TextButton, Frame)
+function FishingButtons.bite(screen: ScreenGui): TextButton
 	local button = roundButton(screen, "Tira", "¡TIRA!", COLORS.Bite)
 	button.Size = UDim2.fromScale(BITE_HEIGHT, BITE_HEIGHT)
 	local limit = Instance.new("UISizeConstraint")
@@ -161,18 +160,7 @@ function FishingButtons.bite(screen: ScreenGui): (TextButton, Frame)
 	TweenService:Create(pulse, UIConfig.Tweens.Pulse, { Scale = 1.08 }):Play()
 	keyBadge(button, "E")
 
-	-- Encima del botón: abajo quedaría pegada al borde de la pantalla.
-	local timer = Instance.new("Frame")
-	timer.Name = "Tiempo"
-	timer.AnchorPoint = Vector2.new(0.5, 1)
-	timer.Position = UDim2.new(0.5, 0, 0, -12)
-	timer.Size = UDim2.new(1, 0, 0, TIMER_HEIGHT)
-	timer.BackgroundColor3 = COLORS.Text
-	timer.BorderSizePixel = 0
-	Ui.corner(timer, 5)
-	Ui.stroke(timer, COLORS.TextStroke, 2, 0)
-	timer.Parent = button
-	return button, timer
+	return button
 end
 
 return FishingButtons

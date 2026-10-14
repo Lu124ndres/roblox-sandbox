@@ -43,6 +43,14 @@ con solo la Orca en la ruleta tardaban 20–40 h). Canastas y botas en el mismo 
 Rareza, peso (probabilidad), comida y monedas de cada pez. Promedio actual: 2.75 de
 comida y ~4.6 monedas por pez.
 
+## Recoger el pez — minijuego (`Config/Reel.luau`)
+
+Al picar se decide el pez; la barra empieza en 25 %, cada toque suma `gain` y el pez
+la baja `drain` por segundo. A 7 toques/s con la caña 1: Común ~0.8 s, Raro ~1.8 s,
+Legendario ~3.8 s, Mítico ~5.5 s. Cada nivel de caña da +10 % de fuerza. Pases con
+traje: Rey del Mar (x2 fuerza, pique x2) y Dios del Volcán (un toque, pique x3).
+Desde Legendario se anuncia a todo el servidor (`announceFromRarity`).
+
 ## Premios y social
 
 - Premio diario, logros y misiones del tutorial: `Config/Retention.luau`.

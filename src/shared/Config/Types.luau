@@ -50,8 +50,6 @@ export type EconomyConfig = {
 export type FishingConfig = {
 	biteDelayMinSeconds: number, -- espera mínima hasta que pica
 	biteDelayMaxSeconds: number, -- espera máxima hasta que pica
-	reelWindowSeconds: number, -- tiempo que el cliente muestra el botón TIRA
-	latencyGraceSeconds: number, -- margen extra del servidor por ping alto
 	castSeconds: number, -- duración del lanzamiento antes de empezar a esperar
 	castDistanceStuds: number, -- distancia del jugador al corcho
 	resultHoldSeconds: number, -- cuánto se ve el pez atrapado antes de guardar la caña

@@ -4,7 +4,8 @@
 
 	Carteles de los avisos del servidor (remote Notice): pez nuevo en la
 	colección, colección completa, misión del tutorial cumplida, logro,
-	recompensa diaria y compras con Robux (las propias y las de otros para todos). Solo muestra; los premios ya los dio el servidor.
+	recompensa diaria, compras con Robux (las propias y las de otros para todos)
+	y los peces legendarios o mejores que saca alguien del servidor. Solo muestra; los premios ya los dio el servidor.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -99,6 +100,16 @@ function Notices.start(toasts: Toasts.Toasts)
 			}
 			Sounds.play(if a == "ok" then "LegendaryCatch" else "Click")
 			toasts.banner(texts[a] or "", if a == "ok" then COLORS.Coins else COLORS.Warning)
+		elseif kind == "rare" and type(a) == "string" and type(b) == "string" then
+			local fish = FishCatalog.get(b)
+			local rarity = FishCatalog.rarity(b)
+			if fish then
+				Sounds.play("LegendaryCatch")
+				toasts.banner(
+					`¡{a} sacó un {fish.displayName} {string.upper(rarity.displayName)}!`,
+					UIConfig.RarityColors[rarity.id]
+				)
+			end
 		elseif kind == "purchase" and type(a) == "string" then
 			Sounds.play("Coins")
 			toasts.banner(a, COLORS.Robux)
