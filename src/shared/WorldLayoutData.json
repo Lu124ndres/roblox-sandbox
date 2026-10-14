@@ -1,0 +1,137 @@
+{
+	"_comentario": "Geometría del mundo. Fuente única para el terreno (server/World), el generador de piezas (tools/generar_isla.py) y las validaciones del servidor. Distancias en studs; ángulos en grados sobre XZ (0 = +X, 90 = +Z). La isla principal está centrada en el origen; el cráter del gigante en craterCenter (x, z). shoreRadius = plateau + (beachEnd - plateau) * (plateauHeight - waterLevel) / (plateauHeight - beachEndHeight).",
+	"waterLevel": 2,
+	"oceanHalfSize": 760,
+	"seaFloorHeight": -18,
+	"plateauRadius": 125,
+	"plateauHeight": 6,
+	"beachEndRadius": 160,
+	"beachEndHeight": -4,
+	"shelfRadius": 220,
+	"shoreRadius": 139,
+	"deckHeight": 6.6,
+	"plazaRadius": 80,
+	"trainingPondCount": 10,
+	"trainingPondRingRadius": 58,
+	"trainingPondRadius": 12.5,
+	"trainingPondFloor": -1.5,
+	"trainingPondWaterTop": 6,
+	"pierAngles": [
+		45,
+		135,
+		225,
+		315
+	],
+	"pierStartRadius": 132,
+	"pierLength": 50,
+	"spawnAngle": 270,
+	"spawnRadius": 94,
+	"shopAngle": 0,
+	"shopRadius": 98,
+	"campAngle": 125,
+	"campRadius": 100,
+	"lighthouseAngle": 180,
+	"lighthouseRadius": 152,
+	"lighthouseBaseHeight": 15,
+	"lighthouseMoundRadius": 28,
+	"fishingBandInner": 132,
+	"fishingBandOuter": 215,
+	"bridgeAngle": 90,
+	"bridgeStartRadius": 118,
+	"bridgeWidth": 22,
+	"craterCenter": [
+		0,
+		400
+	],
+	"craterLakeRadius": 136,
+	"craterCliffRadius": 150,
+	"craterRimOuter": 170,
+	"craterBaseRadius": 210,
+	"craterRimHeight": 30,
+	"craterFloor": -34,
+	"pedestalTop": 0.5,
+	"craterPierCount": 8,
+	"craterPierTipRadius": 78,
+	"craterDeckHeight": 30.6,
+	"restArenaRadius": 34,
+	"restArenaTop": 3.5,
+	"boundaryCenter": [
+		0,
+		200
+	],
+	"boundaryRadius": 500,
+	"hills": [
+		[
+			-90,
+			20,
+			11
+		],
+		[
+			78,
+			-60,
+			10
+		],
+		[
+			-62,
+			-84,
+			10
+		],
+		[
+			-100,
+			-36,
+			9
+		],
+		[
+			88,
+			56,
+			10
+		],
+		[
+			-80,
+			72,
+			10
+		],
+		[
+			40,
+			-104,
+			9
+		],
+		[
+			-30,
+			104,
+			9
+		]
+	],
+	"shoreRocks": [
+		[
+			140,
+			16,
+			8
+		],
+		[
+			-20,
+			-140,
+			7
+		],
+		[
+			124,
+			-72,
+			7
+		],
+		[
+			-108,
+			96,
+			8
+		],
+		[
+			96,
+			108,
+			7
+		],
+		[
+			-130,
+			-60,
+			7
+		]
+	]
+}

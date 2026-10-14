@@ -1,0 +1,154 @@
+--!strict
+--[[
+	AngerMeter
+
+	Fila del enojo dentro del panel de hambre: "Calmada", "Molesta" o
+	"¡FURIOSA!" con una barrita que se llena y late. Durante el descanso del
+	volcán dice cuánto poder por segundo gana el jugador ahí dentro. Avisa con un cartel y un
+	rugido cuando el gigante empieza a enojarse y cuando se enfurece, y
+	cuando alguien lo calma. Solo muestra: el enojo lo decide el servidor
+	(EstadoGigante.Anger, ver server/GiantMood).
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local Config = require(ReplicatedStorage.Shared.Config)
+local Perks = require(ReplicatedStorage.Shared.Perks)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local GiantName = require(script.Parent.Parent.GiantName)
+local Toasts = require(script.Parent.Parent.Toasts)
+local Ui = require(script.Parent.Parent.Ui)
+local Style = require(script.Parent.Parent.Interface.Style)
+
+local COLORS = UIConfig.Colors
+local ANGER = Config.Giants.anger
+
+type Level = "calm" | "angry" | "furious"
+
+local AngerMeter = {}
+
+local function levelFor(anger: number): Level
+	if anger >= 1 then
+		return "furious"
+	elseif anger >= ANGER.angryThreshold then
+		return "angry"
+	end
+	return "calm"
+end
+
+local function word(level: Level, female: boolean): string
+	local ending = if female then "a" else "o"
+	if level == "furious" then
+		return `¡FURIOS{string.upper(ending)}!`
+	elseif level == "angry" then
+		return "Molest" .. ending
+	end
+	return "Calmad" .. ending
+end
+
+function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
+	-- Fila debajo de la barra de hambre (HungerBar deja el hueco en y = 78).
+	local label = Style.text(panel, "Enojo", 20, nil, 2)
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.Position = UDim2.fromOffset(2, 78)
+	label.Size = UDim2.new(0.4, 0, 0, 22)
+
+	local track = Instance.new("Frame")
+	track.Name = "PistaEnojo"
+	track.BackgroundColor3 = Color3.fromRGB(34, 36, 46)
+	track.AnchorPoint = Vector2.new(1, 0)
+	track.Position = UDim2.new(1, -2, 0, 83)
+	track.Size = UDim2.new(0.56, 0, 0, 14)
+	Style.border(track, 2)
+	track.ClipsDescendants = true
+	Ui.corner(track, 7)
+	track.Parent = panel
+
+	local fill = Instance.new("Frame")
+	fill.Name = "Relleno"
+	fill.BorderSizePixel = 0
+	fill.Size = UDim2.fromScale(0, 1)
+	fill.BackgroundColor3 = COLORS.Calm
+	Ui.corner(fill, 7)
+	fill.Parent = track
+
+	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
+	local level: Level = "calm"
+	local anger = 0
+
+	local function female(): boolean
+		return stateFolder:GetAttribute(Protocol.GiantAttributes.Article) == "la"
+	end
+
+	-- Fuera de la fase de comer la fila dice cuánto poder da el descanso del volcán.
+	local function showRest(phase: unknown): boolean
+		local resting = phase ~= nil and phase ~= "feeding"
+		track.Visible = not resting
+		label.Size = if resting then UDim2.new(1, -4, 0, 22) else UDim2.new(0.4, 0, 0, 22)
+		if resting then
+			local player = Players.LocalPlayer
+			local perSecond = Config.Gameplay.training.powerPerTick
+				* Perks.bestPondMultiplier(player)
+				* Perks.powerMultiplier(player)
+				* Config.Giants.cycle.restTrainingMultiplier
+			label.Text = if phase == "rest"
+				then `En la guarida del volcán: +{perSecond} poder/s (x{Config.Giants.cycle.restTrainingMultiplier})`
+				else ""
+			label.TextColor3 = COLORS.Power
+			label.TextTransparency = 0
+			level = "calm"
+		end
+		return resting
+	end
+
+	local function refresh()
+		if showRest(stateFolder:GetAttribute(Protocol.GiantAttributes.Phase)) then
+			return
+		end
+		local value = stateFolder:GetAttribute(Protocol.GiantAttributes.Anger)
+		anger = if type(value) == "number" then value else 0
+		local nextLevel: Level = levelFor(anger)
+		local name = GiantName.current(true)
+		if nextLevel ~= level then
+			if nextLevel == "furious" then
+				Sounds.play("Roar")
+				toasts.banner(
+					`¡{name} está furios{if female() then "a" else "o"}! ¡Aliméntal{if female()
+						then "a"
+						else "o"}!`,
+					COLORS.Furious
+				)
+			elseif nextLevel == "angry" and level == "calm" then
+				Sounds.play("Roar", nil, 1.15)
+				toasts.banner(`{name} tiene hambre y se está enojando`, COLORS.Annoyed)
+			elseif nextLevel == "calm" then
+				toasts.show(`{name} se calmó`, COLORS.Calm)
+			end
+			level = nextLevel
+		end
+		label.Text = word(level, female())
+		local color = if level == "furious"
+			then COLORS.Furious
+			elseif level == "angry" then COLORS.Annoyed
+			else COLORS.Calm
+		label.TextColor3 = color
+		fill.BackgroundColor3 = color
+		fill.Size = UDim2.fromScale(math.max(anger, 0.03), 1)
+	end
+
+	stateFolder.AttributeChanged:Connect(refresh)
+	refresh()
+
+	-- Furioso: la fila late.
+	RunService.RenderStepped:Connect(function()
+		local beat = if level == "furious" then 0.5 + 0.5 * math.sin(os.clock() * 9) else 0
+		label.TextTransparency = beat * 0.45
+		fill.BackgroundTransparency = beat * 0.5
+	end)
+end
+
+return AngerMeter

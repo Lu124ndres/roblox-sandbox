@@ -18,6 +18,97 @@
 					"$path": "src/client"
 				}
 			}
+		},
+		"Workspace": {
+			"$className": "Workspace",
+			"Isla": {
+				"$path": "world/Isla.model.json"
+			}
+		},
+		"Lighting": {
+			"$className": "Lighting",
+			"$properties": {
+				"ClockTime": 15.2,
+				"GeographicLatitude": 23,
+				"Brightness": 2.2,
+				"Ambient": [
+					0.27,
+					0.28,
+					0.32
+				],
+				"OutdoorAmbient": [
+					0.47,
+					0.48,
+					0.53
+				],
+				"EnvironmentDiffuseScale": 1,
+				"EnvironmentSpecularScale": 1,
+				"GlobalShadows": true,
+				"ShadowSoftness": 0.3,
+				"Technology": "ShadowMap",
+				"ExposureCompensation": -0.15
+			},
+			"Atmosphere": {
+				"$className": "Atmosphere",
+				"$properties": {
+					"Density": 0.28,
+					"Offset": 0.25,
+					"Color": [
+						0.78,
+						0.87,
+						0.93
+					],
+					"Decay": [
+						0.42,
+						0.56,
+						0.68
+					],
+					"Glare": 0.05,
+					"Haze": 0.55
+				}
+			},
+			"ColorCorrection": {
+				"$className": "ColorCorrectionEffect",
+				"$properties": {
+					"Saturation": 0.12,
+					"Contrast": 0.1,
+					"TintColor": [
+						1,
+						0.985,
+						0.96
+					]
+				}
+			},
+			"Bloom": {
+				"$className": "BloomEffect",
+				"$properties": {
+					"Intensity": 0.25,
+					"Size": 20,
+					"Threshold": 2.2
+				}
+			},
+			"SunRays": {
+				"$className": "SunRaysEffect",
+				"$properties": {
+					"Intensity": 0.08,
+					"Spread": 0.6
+				}
+			},
+			"Cielo": {
+				"$className": "Sky",
+				"$properties": {
+					"StarCount": 3000,
+					"CelestialBodiesShown": true,
+					"SunAngularSize": 16,
+					"MoonAngularSize": 10
+				}
+			}
+		},
+		"ServerStorage": {
+			"$className": "ServerStorage",
+			"GuaridaDescanso": {
+				"$path": "world/GuaridaDescanso.model.json"
+			}
 		}
 	}
 }

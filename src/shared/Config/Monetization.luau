@@ -1,0 +1,111 @@
+--!strict
+--[[
+	Monetización. Los IDs reales se crean en el Creator Hub con el juego
+	publicado: pases en Assets.GamePasses y productos en Assets.Products
+	(mismas claves que aquí). `robux` son los precios a poner al crearlos; la
+	tienda muestra el precio real de Roblox cuando el ID existe.
+
+	Mejoras que se acumulan (productos, una por nivel, cada una más cara):
+		Power<n>  todo el poder que gana x2^n   (x2, x4, x8...)
+		Coins<n>  monedas por alimentar y descubrir peces x2^n
+	x2 del servidor (ServerBoost<n>): dura `minutes`. Si alguien compra
+	mientras está activo, el tiempo vuelve a `minutes` y sube a x2^n. Al
+	vencer vuelve a x1 y la próxima compra es el nivel 1 otra vez.
+	Pase VIP: etiqueta, suerte extra y premio diario x2.
+	Fill25/50/75: llena esa parte de la barra del monstruo actual.
+	Choose<idGigante>: elige el monstruo que sale después del descanso.
+	Pond2..Pond10: desbloquea ese estanque para siempre.
+	Rod<n>, Basket<n>, Boots<n>: el nivel n de MEJORAS sin juntar monedas
+	(upgradeRobux[categoría][n]; el 1 es el gratis).
+	Gift<pase>: regalar un pase a otro jugador (los pases no se pueden
+	regalar directo en Roblox, así que es un producto con el mismo precio).
+	Regalos: Power<n>, Coins<n>, Pond<n> y Gift<pase> se pueden comprar para
+	otro jugador del servidor (botón rosa); lo recibe él.
+]]
+
+export type PassDef = {
+	name: string,
+	description: string,
+	robux: number,
+	luck: number?, -- se suma a la suerte de la caña
+	dailyMultiplier: number?,
+}
+
+export type LevelDef = {
+	name: string, -- "Poder", "Monedas"
+	description: string,
+	robux: { number }, -- precio de cada nivel; nivel n = x2^n
+}
+
+export type FillDef = { name: string, fraction: number, robux: number, order: number }
+
+export type MonetizationConfig = {
+	levels: { [string]: LevelDef }, -- claves: "Power", "Coins"
+	levelOrder: { string },
+	passes: { [string]: PassDef },
+	passOrder: { string },
+	serverBoost: { name: string, minutes: number, robux: { number } },
+	fills: { [string]: FillDef },
+	chooseGiant: { [string]: number }, -- precio por id de gigante
+	pondRobux: { [number]: number }, -- precio de cada estanque (2..10)
+	upgradeRobux: { [string]: { number } }, -- MEJORAS en Robux: Rod/Basket/Boots, por nivel
+	passGifts: { [string]: number }, -- precio del producto Gift<pase>
+	receiptHistory: number, -- cuántas compras recientes se recuerdan por jugador
+}
+
+local Monetization: MonetizationConfig = {
+	levels = {
+		Power = {
+			name = "Poder",
+			description = "Todo el poder que ganas, para siempre.",
+			robux = { 3, 7, 15, 29, 59, 99, 199, 349, 599, 999 },
+		},
+		Coins = {
+			name = "Monedas",
+			description = "Todas las monedas que ganas, para siempre.",
+			robux = { 3, 7, 15, 29, 59, 99, 199, 349, 599, 999 },
+		},
+	},
+	levelOrder = { "Power", "Coins" },
+	passes = {
+		VIP = {
+			name = "VIP",
+			description = "Etiqueta dorada, +20% suerte y premio diario x2.",
+			robux = 299,
+			luck = 0.2,
+			dailyMultiplier = 2,
+		},
+	},
+	passOrder = { "VIP" },
+	serverBoost = {
+		name = "Entrenamiento para todos",
+		minutes = 15,
+		robux = { 15, 29, 59, 99, 199, 349 }, -- x2, x4, x8, x16, x32, x64
+	},
+	fills = {
+		Fill25 = { name = "Llenar 25%", fraction = 0.25, robux = 49, order = 1 },
+		Fill50 = { name = "Llenar 50%", fraction = 0.5, robux = 89, order = 2 },
+		Fill75 = { name = "Llenar 75%", fraction = 0.75, robux = 129, order = 3 },
+	},
+	chooseGiant = { Orca = 25, Minotauro = 49, DragonMarino = 79, ZorroDeAgua = 99 },
+	pondRobux = {
+		[2] = 25,
+		[3] = 49,
+		[4] = 79,
+		[5] = 129,
+		[6] = 199,
+		[7] = 299,
+		[8] = 449,
+		[9] = 649,
+		[10] = 999,
+	},
+	upgradeRobux = {
+		Rod = { 0, 5, 15, 29, 59, 99, 199, 349, 599, 999 },
+		Basket = { 0, 9, 25, 49, 129, 299 },
+		Boots = { 0, 5, 19, 39, 79, 199 },
+	},
+	passGifts = { VIP = 299 },
+	receiptHistory = 50,
+}
+
+return Monetization

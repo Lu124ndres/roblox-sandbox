@@ -1,0 +1,105 @@
+--!strict
+--[[
+	TerrainBuilder
+
+	Construye el terreno del mundo: océano de agua real (olas, reflejos, se
+	puede nadar), isla principal con lomas, plaza, caminos y estanques de
+	entrenamiento, promontorio del faro y el Cráter del Abismo del gigante.
+
+	Escribe los vóxeles directamente (WriteVoxels) con la ocupación exacta de
+	cada uno. Las funciones Fill redondean a la cuadrícula de 4 studs y dejaban
+	el suelo hasta 4 studs más alto que las piezas de madera.
+
+	El terreno no se puede guardar en un archivo de Rojo, así que se genera al
+	arrancar el servidor. Para verlo en modo Edit, en la barra de comandos:
+		require(game.ServerScriptService.Server.World.TerrainBuilder).build()
+]]
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+
+local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
+local IslandShape = require(script.Parent.IslandShape)
+
+local L = WorldLayout
+local MATERIAL = Enum.Material
+local VOXEL = 4
+local HALF = VOXEL / 2
+local Y_MIN = -40
+local Y_MAX = 40
+local CHUNK_VOXELS = 32 -- columnas por lado en cada bloque escrito
+
+local TerrainBuilder = {}
+
+local function style(terrain: Terrain)
+	terrain.WaterColor = Color3.fromRGB(28, 168, 184)
+	terrain.WaterTransparency = 0.65
+	terrain.WaterReflectance = 0.55
+	terrain.WaterWaveSize = 0.22
+	terrain.WaterWaveSpeed = 14
+	terrain:SetMaterialColor(MATERIAL.Grass, Color3.fromRGB(108, 176, 74))
+	terrain:SetMaterialColor(MATERIAL.Sand, Color3.fromRGB(222, 198, 148))
+	terrain:SetMaterialColor(MATERIAL.Cobblestone, Color3.fromRGB(126, 118, 108))
+	terrain:SetMaterialColor(MATERIAL.Rock, Color3.fromRGB(122, 126, 134))
+	terrain:SetMaterialColor(MATERIAL.Basalt, Color3.fromRGB(42, 38, 46))
+	terrain:SetMaterialColor(MATERIAL.CrackedLava, Color3.fromRGB(255, 96, 40))
+	terrain:SetMaterialColor(MATERIAL.Slate, Color3.fromRGB(150, 150, 156))
+	if not terrain:FindFirstChildOfClass("Clouds") then
+		local clouds = Instance.new("Clouds")
+		clouds.Cover = 0.55
+		clouds.Density = 0.6
+		clouds.Parent = terrain
+	end
+end
+
+local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: number)
+	local rows = (Y_MAX - Y_MIN) / VOXEL
+	local materials, occupancies = {}, {}
+	for ix = 1, columns do
+		local x = x0 + (ix - 0.5) * VOXEL
+		local materialPlane, occupancyPlane = {}, {}
+		materials[ix], occupancies[ix] = materialPlane, occupancyPlane
+		for iy = 1, rows do
+			materialPlane[iy], occupancyPlane[iy] = {}, {}
+		end
+		for iz = 1, columns do
+			local z = z0 + (iz - 0.5) * VOXEL
+			local height, material, waterTop = IslandShape.sample(x, z)
+			for iy = 1, rows do
+				-- Medido en Studio: la superficie del suelo queda en el centro del vóxel
+				-- + ocupación x VOXEL (por eso se resta medio vóxel), y la del agua en
+				-- la base + ocupación x VOXEL. Así las alturas del diseño
+				-- (WorldLayout) son las que se ven.
+				local bottom = Y_MIN + (iy - 1) * VOXEL
+				local solid = math.clamp((height - bottom - HALF) / VOXEL, 0, 1)
+				if solid > 0 then
+					materialPlane[iy][iz], occupancyPlane[iy][iz] = material, solid
+				elseif bottom < waterTop then
+					materialPlane[iy][iz] = MATERIAL.Water
+					occupancyPlane[iy][iz] = math.clamp((waterTop - bottom) / VOXEL, 0, 1)
+				else
+					materialPlane[iy][iz], occupancyPlane[iy][iz] = MATERIAL.Air, 0
+				end
+			end
+		end
+	end
+	local size = columns * VOXEL
+	local region = Region3.new(Vector3.new(x0, Y_MIN, z0), Vector3.new(x0 + size, Y_MAX, z0 + size))
+	terrain:WriteVoxels(region, VOXEL, materials, occupancies)
+end
+
+function TerrainBuilder.build()
+	local terrain = Workspace.Terrain
+	terrain:Clear()
+	style(terrain)
+	local half = math.ceil(L.oceanHalfSize / (VOXEL * CHUNK_VOXELS)) * VOXEL * CHUNK_VOXELS
+	local step = VOXEL * CHUNK_VOXELS
+	for x0 = -half, half - step, step do
+		for z0 = -half, half - step, step do
+			writeChunk(terrain, x0, z0, CHUNK_VOXELS)
+			task.wait() -- reparte el trabajo para no congelar el servidor
+		end
+	end
+end
+
+return TerrainBuilder

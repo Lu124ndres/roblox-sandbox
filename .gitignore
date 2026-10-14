@@ -20,3 +20,11 @@ credentials.json
 # Se conservan en disco; al repo solo van el .fbx final y sus texturas.
 assets/blender/*_meshy/
 assets/blender/*_meshy.fbx
+
+# Los modelos de los monstruos (Model guardado desde Studio) sí van: Rojo los pone en ServerStorage.
+!assets/modelos/*.rbxm
+# Exportaciones descartadas (acostadas o de prueba) y salidas de Cowork.
+assets/_descartados/
+Claude outputs/
+.claude/
+*.fbm/

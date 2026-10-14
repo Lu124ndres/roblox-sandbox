@@ -1,0 +1,3210 @@
+{
+ "className": "Model",
+ "children": [
+  {
+   "name": "Base",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     8,
+     68,
+     68
+    ],
+    "CFrame": [
+     0,
+     -0.7,
+     400,
+     0.0,
+     -1.0,
+     0,
+     1.0,
+     0.0,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Shape": "Cylinder"
+   }
+  },
+  {
+   "name": "Brillo",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.4,
+     67.4,
+     67.4
+    ],
+    "CFrame": [
+     0,
+     3.3,
+     400,
+     0.0,
+     -1.0,
+     0,
+     1.0,
+     0.0,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Shape": "Cylinder",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Piso",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.4,
+     65,
+     65
+    ],
+    "CFrame": [
+     0,
+     3.4,
+     400,
+     0.0,
+     -1.0,
+     0,
+     1.0,
+     0.0,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Color": [
+     0.2275,
+     0.2196,
+     0.2588
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Shape": "Cylinder"
+   }
+  },
+  {
+   "name": "Sello",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.1,
+     13,
+     13
+    ],
+    "CFrame": [
+     0,
+     3.65,
+     400,
+     0.0,
+     -1.0,
+     0,
+     1.0,
+     0.0,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Shape": "Cylinder",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "SelloCentro",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.12,
+     10,
+     10
+    ],
+    "CFrame": [
+     0,
+     3.67,
+     400,
+     0.0,
+     -1.0,
+     0,
+     1.0,
+     0.0,
+     0,
+     0,
+     0,
+     1
+    ],
+    "Color": [
+     0.2275,
+     0.2196,
+     0.2588
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Shape": "Cylinder",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa0",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     16.0,
+     3.62,
+     400.0,
+     1.0,
+     0,
+     0.0,
+     0,
+     1,
+     0,
+     -0.0,
+     0,
+     1.0
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa1",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     11.3137,
+     3.62,
+     411.3137,
+     0.7071,
+     0,
+     -0.7071,
+     0,
+     1,
+     0,
+     0.7071,
+     0,
+     0.7071
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa2",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     0.0,
+     3.62,
+     416.0,
+     0.0,
+     0,
+     -1.0,
+     0,
+     1,
+     0,
+     1.0,
+     0,
+     0.0
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa3",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     -11.3137,
+     3.62,
+     411.3137,
+     -0.7071,
+     0,
+     -0.7071,
+     0,
+     1,
+     0,
+     0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa4",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     -16.0,
+     3.62,
+     400.0,
+     -1.0,
+     0,
+     -0.0,
+     0,
+     1,
+     0,
+     0.0,
+     0,
+     -1.0
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa5",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     -11.3137,
+     3.62,
+     388.6863,
+     -0.7071,
+     0,
+     0.7071,
+     0,
+     1,
+     0,
+     -0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa6",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     -0.0,
+     3.62,
+     384.0,
+     -0.0,
+     0,
+     1.0,
+     0,
+     1,
+     0,
+     -1.0,
+     0,
+     -0.0
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Runa7",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.4,
+     0.12,
+     3
+    ],
+    "CFrame": [
+     11.3137,
+     3.62,
+     388.6863,
+     0.7071,
+     0,
+     0.7071,
+     0,
+     1,
+     0,
+     -0.7071,
+     0,
+     0.7071
+    ],
+    "Color": [
+     0.5882,
+     0.7843,
+     1.0
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false,
+    "CanCollide": false
+   }
+  },
+  {
+   "name": "Rampa1",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       51.7389,
+       16.618,
+       421.4309,
+       -0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       52.6761,
+       17.2228,
+       418.2473,
+       -0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       50.9849,
+       20.5059,
+       417.3303,
+       -0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       50.1504,
+       17.2228,
+       424.3449,
+       -0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       48.3061,
+       20.5059,
+       423.7974,
+       -0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Rampa2",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       21.4309,
+       16.618,
+       451.7389,
+       -0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       24.3449,
+       17.2228,
+       450.1504,
+       -0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       23.7974,
+       20.5059,
+       448.3061,
+       -0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       18.2473,
+       17.2228,
+       452.6761,
+       -0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       17.3303,
+       20.5059,
+       450.9849,
+       -0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Rampa3",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       -21.4309,
+       16.618,
+       451.7389,
+       -0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -18.2473,
+       17.2228,
+       452.6761,
+       -0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -17.3303,
+       20.5059,
+       450.9849,
+       -0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -24.3449,
+       17.2228,
+       450.1504,
+       -0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -23.7974,
+       20.5059,
+       448.3061,
+       -0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       -0.4652,
+       -0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Rampa4",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       -51.7389,
+       16.618,
+       421.4309,
+       -0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -50.1504,
+       17.2228,
+       424.3449,
+       -0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -48.3061,
+       20.5059,
+       423.7974,
+       -0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -52.6761,
+       17.2228,
+       418.2473,
+       -0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -50.9849,
+       20.5059,
+       417.3303,
+       -0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       -0.1927,
+       -0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Rampa5",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       -51.7389,
+       16.618,
+       378.5691,
+       0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -52.6761,
+       17.2228,
+       381.7527,
+       0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -50.9849,
+       20.5059,
+       382.6697,
+       0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -50.1504,
+       17.2228,
+       375.6551,
+       0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -48.3061,
+       20.5059,
+       376.2026,
+       0.3827,
+       0.4652,
+       0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Rampa6",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       -21.4309,
+       16.618,
+       348.2611,
+       0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -24.3449,
+       17.2228,
+       349.8496,
+       0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -23.7974,
+       20.5059,
+       351.6939,
+       0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       -18.2473,
+       17.2228,
+       347.3239,
+       0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       -17.3303,
+       20.5059,
+       349.0151,
+       0.9239,
+       0.1927,
+       0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       -0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Rampa7",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       21.4309,
+       16.618,
+       348.2611,
+       0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       18.2473,
+       17.2228,
+       347.3239,
+       0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       17.3303,
+       20.5059,
+       349.0151,
+       0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       24.3449,
+       17.2228,
+       349.8496,
+       0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       23.7974,
+       20.5059,
+       351.6939,
+       0.9239,
+       -0.1927,
+       -0.3306,
+       0.0,
+       0.864,
+       -0.5035,
+       0.3827,
+       0.4652,
+       0.7982
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Rampa8",
+   "className": "Model",
+   "children": [
+    {
+     "name": "Piso",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       7,
+       1,
+       54.821
+      ],
+      "CFrame": [
+       51.7389,
+       16.618,
+       378.5691,
+       0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "Slate",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "Borde-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       50.1504,
+       17.2228,
+       375.6551,
+       0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro-1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       48.3061,
+       20.5059,
+       376.2026,
+       0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Borde1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.4,
+       0.4,
+       53.821
+      ],
+      "CFrame": [
+       52.6761,
+       17.2228,
+       381.7527,
+       0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.5882,
+       0.7843,
+       1.0
+      ],
+      "Material": "Neon",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       54.821
+      ],
+      "CFrame": [
+       50.9849,
+       20.5059,
+       382.6697,
+       0.3827,
+       -0.4652,
+       -0.7982,
+       0.0,
+       0.864,
+       -0.5035,
+       0.9239,
+       0.1927,
+       0.3306
+      ],
+      "Color": [
+       0.2275,
+       0.2196,
+       0.2588
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  },
+  {
+   "name": "Borde",
+   "className": "Folder",
+   "children": [
+    {
+     "name": "Muro0",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       34.0537,
+       7.5,
+       402.232,
+       0.9979,
+       0,
+       -0.0654,
+       0,
+       1,
+       0,
+       0.0654,
+       0,
+       0.9979
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro1",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       33.471,
+       7.5,
+       406.6578,
+       0.9808,
+       0,
+       -0.1951,
+       0,
+       1,
+       0,
+       0.1951,
+       0,
+       0.9808
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro4",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       28.3754,
+       7.5,
+       418.9598,
+       0.8315,
+       0,
+       -0.5556,
+       0,
+       1,
+       0,
+       0.5556,
+       0,
+       0.8315
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro5",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       25.6579,
+       7.5,
+       422.5013,
+       0.7518,
+       0,
+       -0.6593,
+       0,
+       1,
+       0,
+       0.6593,
+       0,
+       0.7518
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro6",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       22.5013,
+       7.5,
+       425.6579,
+       0.6593,
+       0,
+       -0.7518,
+       0,
+       1,
+       0,
+       0.7518,
+       0,
+       0.6593
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro7",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       18.9598,
+       7.5,
+       428.3754,
+       0.5556,
+       0,
+       -0.8315,
+       0,
+       1,
+       0,
+       0.8315,
+       0,
+       0.5556
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro10",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       6.6578,
+       7.5,
+       433.471,
+       0.1951,
+       0,
+       -0.9808,
+       0,
+       1,
+       0,
+       0.9808,
+       0,
+       0.1951
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro11",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       2.232,
+       7.5,
+       434.0537,
+       0.0654,
+       0,
+       -0.9979,
+       0,
+       1,
+       0,
+       0.9979,
+       0,
+       0.0654
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro12",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -2.232,
+       7.5,
+       434.0537,
+       -0.0654,
+       0,
+       -0.9979,
+       0,
+       1,
+       0,
+       0.9979,
+       0,
+       -0.0654
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro13",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -6.6578,
+       7.5,
+       433.471,
+       -0.1951,
+       0,
+       -0.9808,
+       0,
+       1,
+       0,
+       0.9808,
+       0,
+       -0.1951
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro16",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -18.9598,
+       7.5,
+       428.3754,
+       -0.5556,
+       0,
+       -0.8315,
+       0,
+       1,
+       0,
+       0.8315,
+       0,
+       -0.5556
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro17",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -22.5013,
+       7.5,
+       425.6579,
+       -0.6593,
+       0,
+       -0.7518,
+       0,
+       1,
+       0,
+       0.7518,
+       0,
+       -0.6593
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro18",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -25.6579,
+       7.5,
+       422.5013,
+       -0.7518,
+       0,
+       -0.6593,
+       0,
+       1,
+       0,
+       0.6593,
+       0,
+       -0.7518
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro19",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -28.3754,
+       7.5,
+       418.9598,
+       -0.8315,
+       0,
+       -0.5556,
+       0,
+       1,
+       0,
+       0.5556,
+       0,
+       -0.8315
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro22",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -33.471,
+       7.5,
+       406.6578,
+       -0.9808,
+       0,
+       -0.1951,
+       0,
+       1,
+       0,
+       0.1951,
+       0,
+       -0.9808
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro23",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -34.0537,
+       7.5,
+       402.232,
+       -0.9979,
+       0,
+       -0.0654,
+       0,
+       1,
+       0,
+       0.0654,
+       0,
+       -0.9979
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro24",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -34.0537,
+       7.5,
+       397.768,
+       -0.9979,
+       0,
+       0.0654,
+       0,
+       1,
+       0,
+       -0.0654,
+       0,
+       -0.9979
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro25",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -33.471,
+       7.5,
+       393.3422,
+       -0.9808,
+       0,
+       0.1951,
+       0,
+       1,
+       0,
+       -0.1951,
+       0,
+       -0.9808
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro28",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -28.3754,
+       7.5,
+       381.0402,
+       -0.8315,
+       0,
+       0.5556,
+       0,
+       1,
+       0,
+       -0.5556,
+       0,
+       -0.8315
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro29",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -25.6579,
+       7.5,
+       377.4987,
+       -0.7518,
+       0,
+       0.6593,
+       0,
+       1,
+       0,
+       -0.6593,
+       0,
+       -0.7518
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro30",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -22.5013,
+       7.5,
+       374.3421,
+       -0.6593,
+       0,
+       0.7518,
+       0,
+       1,
+       0,
+       -0.7518,
+       0,
+       -0.6593
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro31",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -18.9598,
+       7.5,
+       371.6246,
+       -0.5556,
+       0,
+       0.8315,
+       0,
+       1,
+       0,
+       -0.8315,
+       0,
+       -0.5556
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro34",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -6.6578,
+       7.5,
+       366.529,
+       -0.1951,
+       0,
+       0.9808,
+       0,
+       1,
+       0,
+       -0.9808,
+       0,
+       -0.1951
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro35",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       -2.232,
+       7.5,
+       365.9463,
+       -0.0654,
+       0,
+       0.9979,
+       0,
+       1,
+       0,
+       -0.9979,
+       0,
+       -0.0654
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro36",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       2.232,
+       7.5,
+       365.9463,
+       0.0654,
+       0,
+       0.9979,
+       0,
+       1,
+       0,
+       -0.9979,
+       0,
+       0.0654
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro37",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       6.6578,
+       7.5,
+       366.529,
+       0.1951,
+       0,
+       0.9808,
+       0,
+       1,
+       0,
+       -0.9808,
+       0,
+       0.1951
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro40",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       18.9598,
+       7.5,
+       371.6246,
+       0.5556,
+       0,
+       0.8315,
+       0,
+       1,
+       0,
+       -0.8315,
+       0,
+       0.5556
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro41",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       22.5013,
+       7.5,
+       374.3421,
+       0.6593,
+       0,
+       0.7518,
+       0,
+       1,
+       0,
+       -0.7518,
+       0,
+       0.6593
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro42",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       25.6579,
+       7.5,
+       377.4987,
+       0.7518,
+       0,
+       0.6593,
+       0,
+       1,
+       0,
+       -0.6593,
+       0,
+       0.7518
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro43",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       28.3754,
+       7.5,
+       381.0402,
+       0.8315,
+       0,
+       0.5556,
+       0,
+       1,
+       0,
+       -0.5556,
+       0,
+       0.8315
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro46",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       33.471,
+       7.5,
+       393.3422,
+       0.9808,
+       0,
+       0.1951,
+       0,
+       1,
+       0,
+       -0.1951,
+       0,
+       0.9808
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro47",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       4.474
+      ],
+      "CFrame": [
+       34.0537,
+       7.5,
+       397.768,
+       0.9979,
+       0,
+       0.0654,
+       0,
+       1,
+       0,
+       -0.0654,
+       0,
+       0.9979
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    }
+   ]
+  }
+ ]
+}

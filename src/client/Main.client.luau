@@ -1,0 +1,147 @@
+--!strict
+--[[
+	Punto de entrada del cliente. Monta la interfaz, el gigante, la pesca y
+	el entrenamiento visibles de todos los jugadores, la vida del mar, las
+	bandadas y el ambiente de cada zona; cada módulo documenta su propia
+	responsabilidad.
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
+local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local AbyssRescue = require(script.Parent.Ambient.AbyssRescue)
+local AfkNotice = require(script.Parent.Ambient.AfkNotice)
+local BridgeBoost = require(script.Parent.Ambient.BridgeBoost)
+local Flock = require(script.Parent.Ambient.Flock)
+local Lighthouse = require(script.Parent.Ambient.Lighthouse)
+local SeaLife = require(script.Parent.Ambient.SeaLife)
+local SkyCycle = require(script.Parent.Ambient.SkyCycle)
+local ZoneMood = require(script.Parent.Ambient.ZoneMood)
+local Music = require(script.Parent.Audio.Music)
+local Sounds = require(script.Parent.Audio.Sounds)
+local FeedFeedback = require(script.Parent.FeedFeedback)
+local FeedController = require(script.Parent.Feeding.FeedController)
+local FishingController = require(script.Parent.Fishing.FishingController)
+local FishingVisuals = require(script.Parent.Fishing.FishingVisuals)
+local FishBasket = require(script.Parent.Effects.FishBasket)
+local GiantName = require(script.Parent.GiantName)
+local AngerMeter = require(script.Parent.Giant.AngerMeter)
+local CycleView = require(script.Parent.Giant.CycleView)
+local GiantAttacks = require(script.Parent.Giant.GiantAttacks)
+local GiantView = require(script.Parent.Giant.GiantView)
+local Hud = require(script.Parent.Hud)
+local DailyWindow = require(script.Parent.Menus.DailyWindow)
+local FishDex = require(script.Parent.Menus.FishDex)
+local Notices = require(script.Parent.Menus.Notices)
+local BoostTimer = require(script.Parent.Menus.BoostTimer)
+local Purchases = require(script.Parent.Menus.Purchases)
+local RankingBoards = require(script.Parent.Menus.RankingBoards)
+local RobuxShop = require(script.Parent.Menus.RobuxShop)
+local SettingsWindow = require(script.Parent.Menus.SettingsWindow)
+local TutorialGuide = require(script.Parent.Menus.TutorialGuide)
+local HungerBar = require(script.Parent.HungerBar)
+local Toasts = require(script.Parent.Toasts)
+local PondFx = require(script.Parent.Training.PondFx)
+local PondSigns = require(script.Parent.Training.PondSigns)
+local ShopController = require(script.Parent.Shop.ShopController)
+local ClientSettings = require(script.Parent.Settings.ClientSettings)
+local FxQuality = require(script.Parent.Settings.FxQuality)
+local TrainingController = require(script.Parent.Training.TrainingController)
+local Ui = require(script.Parent.Ui)
+local FillChips = require(script.Parent.Interface.FillChips)
+local Layout = require(script.Parent.Interface.Layout)
+local QuickBuys = require(script.Parent.Interface.QuickBuys)
+local FriendBoostLabel = require(script.Parent.Interface.FriendBoostLabel)
+local Overhead = require(script.Parent.Interface.Overhead)
+local CodesWindow = require(script.Parent.Menus.CodesWindow)
+local GroupWindow = require(script.Parent.Menus.GroupWindow)
+
+local EFFECTS = UIConfig.Effects
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+ClientSettings.start()
+
+local screen = Ui.screen("Juego", playerGui, 1)
+Layout.mount(screen, playerGui)
+local toasts = Toasts.mount(screen)
+
+local hungerPanel = HungerBar.mount(screen, function(stage: number)
+	local color = UIConfig.HungerStageColors[stage]
+	Sounds.play("StageUp")
+	toasts.banner(`¡{GiantName.current(true)} creció! Etapa {stage}`, color)
+end, function()
+	Sounds.play("StageUp")
+	toasts.banner(`¡{GiantName.current(true)} se llenó!`, UIConfig.Colors.Feeding)
+end)
+AngerMeter.mount(hungerPanel, toasts)
+FillChips.mount(hungerPanel)
+local coinLabel = Hud.mount(screen, player)
+FishingController.start(screen, toasts)
+FeedFeedback.start(toasts, screen, coinLabel)
+FeedController.start(screen, toasts)
+ShopController.start(screen, player, toasts)
+FishDex.start(screen)
+DailyWindow.start(screen)
+SettingsWindow.start(screen)
+Purchases.start(toasts)
+RobuxShop.start(screen)
+QuickBuys.start()
+CodesWindow.start(screen)
+GroupWindow.start(screen)
+FriendBoostLabel.start(screen)
+BoostTimer.start(screen)
+TutorialGuide.start(screen)
+Notices.start(toasts)
+RankingBoards.start()
+TrainingController.start(toasts)
+PondSigns.start()
+PondFx.start()
+AbyssRescue.start(screen)
+BridgeBoost.start()
+GiantAttacks.start(screen, toasts)
+AfkNotice.start(toasts)
+CycleView.start(toasts)
+
+FishingVisuals.start()
+FishBasket.start()
+GiantView.start()
+ZoneMood.start()
+SkyCycle.start()
+Lighthouse.start()
+SeaLife.start()
+Music.start()
+Overhead.start()
+FxQuality.start()
+
+-- Gaviotas sobre la isla y murciélagos sobre el cráter.
+Flock.start({
+	name = "Gaviotas",
+	center = Vector3.new(0, EFFECTS.SeagullHeight, 0),
+	count = EFFECTS.SeagullCount,
+	radius = EFFECTS.SeagullRadius,
+	bodyColor = Color3.fromRGB(248, 250, 252),
+	wingColor = Color3.fromRGB(150, 158, 170),
+	beakColor = Color3.fromRGB(255, 196, 84),
+	size = 1,
+	flapSpeed = 9,
+	orbitSeconds = 26,
+	sound = "Seagull",
+})
+Flock.start({
+	name = "Murcielagos",
+	center = WorldZones.craterCenter + Vector3.new(0, WorldLayout.craterRimHeight + 30, 0),
+	count = EFFECTS.BatCount,
+	radius = WorldLayout.craterLakeRadius * 0.7,
+	bodyColor = Color3.fromRGB(28, 22, 30),
+	wingColor = Color3.fromRGB(40, 30, 44),
+	beakColor = Color3.fromRGB(255, 50, 40),
+	size = 0.9,
+	flapSpeed = 18,
+	orbitSeconds = 18,
+	sound = nil,
+})

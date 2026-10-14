@@ -17,9 +17,11 @@ humana o asistida, que escriba código o documentación aquí.
 |---|---|---|
 | `src/server/` | `ServerScriptService.Server` | Lógica autoritativa: estado de jugadores, economía, validación de remotes, guardado. |
 | `src/client/` | `StarterPlayer.StarterPlayerScripts.Client` | Input, UI, efectos visuales locales. Solo presenta y pide. |
-| `src/shared/` | `ReplicatedStorage.Shared` | Módulos que usan ambos lados: `Config`, `Assets`, `UIConfig`, tipos, utilidades puras. |
+| `src/shared/` | `ReplicatedStorage.Shared` | Módulos que usan ambos lados: `Config/`, `Assets`, `UIConfig/`, `WorldLayout`, tipos, utilidades puras. `Config` y `UIConfig` son carpetas con `init.luau` y secciones. |
 | `assets/blender/` | — | Archivos `.blend` y exportaciones `.fbx`/`.glb` (fase 2). |
 | `assets/textures/` | — | PNG fuente de texturas y UI antes de subirlos a Roblox. |
+| `world/` | `Workspace` | Piezas de la isla (`Isla.model.json`). Generado, no se edita a mano. |
+| `tools/` | — | Scripts de desarrollo (`generar_isla.py`). No corren en el juego. |
 | `docs/` | — | Documentación del proyecto (ver abajo). |
 | `docs/capturas/` | — | Capturas para el README y el devlog. |
 
@@ -31,7 +33,9 @@ Documentos en `docs/`:
 - `ideas.md`: ideas fuera de alcance. No se implementan.
 - `ui-assets.md`: seguimiento de assets visuales de ForgeGUI.
 - `blender-pipeline.md`: reglas de exportación (fase 2).
-- `backlog.md`: lista de tareas. Se crea cuando se defina el juego.
+- `alcance.md`: qué es el juego, qué entra en la v1 y con qué números (calibración).
+- `roadmap.md`: versiones públicas (v1 y eventos).
+- `backlog.md`: lista de tareas por hito.
 
 ## Reglas no negociables
 
@@ -39,8 +43,9 @@ Documentos en `docs/`:
 2. **Todo RemoteEvent valida en el servidor**: tipo de cada argumento, rango de valores y
    derecho del jugador a ejecutar esa acción. Se asume que todo argumento puede ser malicioso.
 3. **Nada de `while true do` sin espera.** Usar eventos de `RunService` o `task.wait`.
-4. **Nunca editar en Studio lo que existe en `src/`.** Studio es para construir el nivel,
-   no para escribir código. Rojo sobrescribe cualquier cambio hecho ahí.
+4. **Nunca editar en Studio lo que existe en `src/` o `world/`.** Rojo sobrescribe
+   cualquier cambio hecho ahí. Las piezas se cambian en `tools/generar_isla.py`, el
+   terreno en `src/server/World/` y las medidas de ambos en `WorldLayoutData.json`.
 5. **Un módulo, una responsabilidad.** Si un archivo pasa de 200 líneas, se divide.
 6. **Todo `rbxassetid` vive en `src/shared/Assets.luau`**, nunca inline.
 7. **Todos los números de balance viven en `src/shared/Config.luau`**, nunca mágicos.
@@ -62,6 +67,11 @@ Documentos en `docs/`:
   Nada de rigs ni keyframes en este proyecto.
 - Si aparece la tentación de mejorar lo visual antes de terminar la fase 1, la idea va a
   `docs/ideas.md` y **no se implementa**.
+- **Excepción: los gigantes.** Usan su modelo final en cuanto existe (hoy, `OrcaE1`), con
+  un marcador de primitivas si falta. Ver `docs/decisiones.md`.
+- **Ambiente y efectos (decidido el 2026-10-12):** el terreno de Roblox, las partículas y
+  los sonidos ya entran en el vertical slice. Las piezas siguen siendo primitivas
+  generadas por script; los modelos de Blender siguen siendo fase 2.
 
 ## Assets
 

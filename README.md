@@ -41,6 +41,8 @@ src/
   server/    -> ServerScriptService.Server
   client/    -> StarterPlayer.StarterPlayerScripts.Client
   shared/    -> ReplicatedStorage.Shared
+world/       -> Workspace (piezas de la isla, generadas)
+tools/       -> scripts de desarrollo
 assets/
   blender/
   textures/
@@ -130,8 +132,11 @@ Pendiente.
 
 ## Estado del proyecto
 
-Entorno base configurado. El juego todavía no está definido: el repositorio contiene la
-estructura, las herramientas, las convenciones y una prueba de humo de sincronización.
+Juego cooperativo de pesca en una isla: los jugadores pescan desde la orilla y alimentan
+a una cadena de gigantes marinos que crecen mientras comen (diseño en [`docs/alcance.md`](docs/alcance.md), versiones en
+[`docs/roadmap.md`](docs/roadmap.md)). Primer hito jugable en curso: pescar, llevar el
+pez a la Orca, ganar monedas y ver subir la barra de hambre
+([`docs/backlog.md`](docs/backlog.md), H1).
 El progreso por sesión se registra en [`docs/devlog.md`](docs/devlog.md).
 
 ## Licencia
