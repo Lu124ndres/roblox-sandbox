@@ -2,7 +2,8 @@
 --[[
 	Layout
 
-	Dónde va cada parte del HUD, para que nada se encime en PC ni en móvil:
+	Dónde va cada parte del HUD, para que nada se encime en PC ni en móvil
+	(las dos columnas van centradas a media altura de la pantalla):
 		izquierda   columna con las estadísticas y la misión del tutorial
 		derecha     columna con el aviso del entrenamiento del servidor, Tienda y
 		            Robux, y los atajos de Poder y Monedas
@@ -10,7 +11,7 @@
 		            colección), justo después de los botones de Roblox
 	Las columnas se achican en pantallas bajas (UIScale según el alto), así en
 	un teléfono acostado no llegan a los botones de Pescar y Saltar.
-	La columna derecha mide lo mismo que sus filas (dos botones de 78 con 10
+	La columna derecha mide lo mismo que sus filas (dos botones de 88 con 10
 	entre ellos) y las centra, así Tienda, Mejoras y los atajos quedan alineados.
 ]]
 
@@ -26,13 +27,13 @@ local REFERENCE_HEIGHT = 760
 local MIN_SCALE, MAX_SCALE = 0.5, 1
 local PHONE_REFERENCE_HEIGHT, PHONE_MIN_SCALE = 760, 0.45
 local MARGIN = 12
-local STAT_WIDTH = 230 -- ancho de las filas de estadísticas en PC
-local STAT_WIDTH_TOUCH = 200 -- más angostas en táctil: dejan sitio a la barra de hambre
+local STAT_WIDTH = 250 -- ancho de las filas de estadísticas en PC
+local STAT_WIDTH_TOUCH = 210 -- más angostas en táctil: dejan sitio a la barra de hambre
 
 local Layout = {}
 
 -- Medidas de la columna derecha (antes de escalar), las comparten todas sus filas.
-Layout.BUTTON_SIZE = 78
+Layout.BUTTON_SIZE = 88
 Layout.BUTTON_GAP = 10
 Layout.RIGHT_WIDTH = Layout.BUTTON_SIZE * 2 + Layout.BUTTON_GAP
 
@@ -52,15 +53,16 @@ local function column(screen: ScreenGui, name: string, anchorRight: boolean): Fr
 	local frame = Instance.new("Frame")
 	frame.Name = name
 	frame.BackgroundTransparency = 1
-	frame.AnchorPoint = Vector2.new(if anchorRight then 1 else 0, 0)
+	frame.AnchorPoint = Vector2.new(if anchorRight then 1 else 0, 0.5)
 	frame.Position =
-		UDim2.new(if anchorRight then 1 else 0, if anchorRight then -MARGIN else MARGIN, 0, MARGIN)
+		UDim2.new(if anchorRight then 1 else 0, if anchorRight then -MARGIN else MARGIN, 0.5, 0)
 	frame.Size =
 		UDim2.fromOffset(if anchorRight then Layout.RIGHT_WIDTH else Layout.statWidth(), 600)
 	frame.Parent = screen
 	local list = Instance.new("UIListLayout")
 	list.SortOrder = Enum.SortOrder.LayoutOrder
 	list.Padding = UDim.new(0, 4)
+	list.VerticalAlignment = Enum.VerticalAlignment.Center
 	list.HorizontalAlignment = if anchorRight
 		then Enum.HorizontalAlignment.Center
 		else Enum.HorizontalAlignment.Left

@@ -27,11 +27,11 @@ local Style = require(script.Parent.Interface.Style)
 
 local COLORS = UIConfig.Colors
 local ATTR = Protocol.PlayerAttributes
-local ROW_HEIGHT = 50
-local VALUE_HEIGHT = 36
+local ROW_HEIGHT = 60
+local VALUE_HEIGHT = 42
 local DETAIL_HEIGHT = ROW_HEIGHT - VALUE_HEIGHT
-local DETAIL_MAX_TEXT = 14
-local BADGE_HEIGHT = 18
+local DETAIL_MAX_TEXT = 16
+local BADGE_HEIGHT = 20
 
 type Row = { value: TextLabel, detail: TextLabel, badge: TextLabel }
 
