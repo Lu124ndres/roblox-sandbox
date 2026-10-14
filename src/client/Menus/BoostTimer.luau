@@ -23,7 +23,7 @@ function BoostTimer.start(_screen: ScreenGui)
 	-- Arriba de la columna derecha (encima de Tienda y Robux).
 	local pill = Ui.panel("ImpulsoServidor", Layout.right())
 	pill.LayoutOrder = 1
-	pill.Size = UDim2.fromOffset(220, 54)
+	pill.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, 54) -- el ancho de la columna
 	Style.border(pill, 3)
 	pill.BackgroundColor3 = UIConfig.Colors.Robux
 	pill.BackgroundTransparency = 0.1

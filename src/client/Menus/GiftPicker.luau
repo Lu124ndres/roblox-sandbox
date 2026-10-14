@@ -13,6 +13,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local Device = require(script.Parent.Parent.Interface.Device)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Purchases = require(script.Parent.Purchases)
@@ -22,7 +23,9 @@ local Window = require(script.Parent.Window)
 type Offer = RobuxOffers.Offer
 
 local PALETTE = Style.PALETTE
-local ROW_HEIGHT = 64
+local ROW_HEIGHT = 76
+local CLOSE_SIZE = 56
+local SCREEN_SHARE = Vector2.new(0.86, 0.8) -- parte de la pantalla que ocupa, ya escalado
 
 export type Picker = { open: (offer: Offer) -> () }
 
@@ -46,11 +49,12 @@ function GiftPicker.mount(screen: ScreenGui): Picker
 	local panel = Instance.new("Frame")
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position = UDim2.fromScale(0.5, 0.55)
-	panel.Size = UDim2.fromScale(0.86, 0.7)
+	panel.Size = UDim2.fromScale(SCREEN_SHARE.X, SCREEN_SHARE.Y)
 	panel.BackgroundColor3 = PALETTE.Gift
+	panel.Active = true -- un toque en el panel no llega al fondo (que lo cierra)
 	panel.Parent = backdrop
 	local limit = Instance.new("UISizeConstraint")
-	limit.MaxSize = Vector2.new(460, 400)
+	limit.MaxSize = Vector2.new(480, 440)
 	limit.Parent = panel
 	local scale = Instance.new("UIScale")
 	scale.Parent = panel
@@ -71,7 +75,8 @@ function GiftPicker.mount(screen: ScreenGui): Picker
 	local close = Style.button(panel, "Cerrar", PALETTE.Close, "X")
 	close.AnchorPoint = Vector2.new(0.5, 0.5)
 	close.Position = UDim2.new(1, -8, 0, 6)
-	close.Size = UDim2.fromOffset(48, 48)
+	close.Size = UDim2.fromOffset(CLOSE_SIZE, CLOSE_SIZE)
+	close.ZIndex = 3
 
 	local list = Instance.new("ScrollingFrame")
 	list.BackgroundTransparency = 1
@@ -90,6 +95,17 @@ function GiftPicker.mount(screen: ScreenGui): Picker
 	local function hide()
 		backdrop.Visible = false
 	end
+	-- Como Window: el tamaño se divide entre la escala, así solo se achica una vez.
+	local function resize()
+		local fit = Window.fit()
+		scale.Scale = fit
+		panel.Size = UDim2.fromScale(SCREEN_SHARE.X / fit, SCREEN_SHARE.Y / fit)
+	end
+	Device.onResize(function()
+		if backdrop.Visible then
+			resize()
+		end
+	end)
 	close.Activated:Connect(hide)
 	backdrop.Activated:Connect(hide)
 
@@ -169,9 +185,7 @@ function GiftPicker.mount(screen: ScreenGui): Picker
 			empty.TextWrapped = true
 			empty.Size = UDim2.new(1, -8, 0, 80)
 		end
-		local fit = Window.fit()
-		scale.Scale = fit
-		panel.Size = UDim2.fromScale(0.86 / fit, 0.7 / fit)
+		resize()
 		backdrop.Visible = true
 	end
 

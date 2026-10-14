@@ -74,8 +74,9 @@ function TutorialGuide.start(screen: ScreenGui)
 	panel.Visible = false
 	Style.border(panel, 3)
 	if touchOnly then
+		-- Un poco a la izquierda del centro: a la derecha abajo van Pescar y ¡TIRA!.
 		panel.AnchorPoint = Vector2.new(0.5, 1)
-		panel.Position = UDim2.new(0.5, 0, 1, -8)
+		panel.Position = UDim2.new(0.5, -40, 1, -8)
 		Layout.scaleWith(panel)
 	end
 	local title = Ui.label("Titulo", panel, UIConfig.Fonts.Title, UIConfig.TextSizes.Small)

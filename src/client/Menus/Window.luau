@@ -7,22 +7,29 @@
 	una X roja en la esquina derecha. Solo una ventana del menú está abierta
 	a la vez: abrir una cierra la otra. La usan la TIENDA, MEJORAS, la
 	colección, el premio diario, los ajustes, los códigos y el grupo.
+	En pantallas táctiles la ventana ocupa casi toda la pantalla y se ve más
+	grande (los dedos necesitan botones más grandes que el mouse).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local Workspace = game:GetService("Workspace")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local Device = require(script.Parent.Parent.Interface.Device)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local PALETTE = Style.PALETTE
 local TITLE_HEIGHT = 34 -- cuánto sobresale el título por encima del panel
+local CLOSE_SIZE = 56
 local REFERENCE_HEIGHT = 620 -- alto de pantalla (px) en que la ventana se ve a escala 1
+local TOUCH_REFERENCE_HEIGHT = 480 -- en táctil, escala 1 ya en pantallas más bajas
+local SCREEN_SHARE = Vector2.new(0.94, 0.84) -- parte de la pantalla que ocupa (PC)
+local TOUCH_SCREEN_SHARE = Vector2.new(0.96, 0.94)
 
 export type Window = {
 	frame: Frame,
+	scale: UIScale, -- escala de la ventana (para pasar tamaños de pantalla a los suyos)
 	panel: Frame,
 	content: Frame,
 	open: () -> (),
@@ -40,9 +47,22 @@ local current: Window? = nil
 -- Escala para que las ventanas se vean del mismo tamaño en cualquier
 -- pantalla (en una de 1440 px de alto, el doble que en una de 720).
 function Window.fit(): number
-	local camera = Workspace.CurrentCamera
-	local height = if camera then camera.ViewportSize.Y else REFERENCE_HEIGHT
+	local height = Device.viewport().Y
+	if Device.touch() then
+		return math.clamp(height / TOUCH_REFERENCE_HEIGHT, 0.8, 2)
+	end
 	return math.clamp(height / REFERENCE_HEIGHT, 0.6, 2)
+end
+
+-- Tamaño (en escala de la pantalla) para que, ya escalada, ocupe SCREEN_SHARE.
+function Window.share(): Vector2
+	return if Device.touch() then TOUCH_SCREEN_SHARE else SCREEN_SHARE
+end
+
+local function resize(frame: Frame, fit: number)
+	local share = Window.share()
+	frame.Size = UDim2.fromScale(share.X / fit, share.Y / fit)
+	frame.Position = UDim2.fromScale(0.5, if Device.touch() then 0.5 else 0.53)
 end
 
 -- `panelColor`: color del fondo (por defecto el oscuro de la tienda).
@@ -91,7 +111,7 @@ function Window.create(
 	local closeButton = Style.button(frame, "Cerrar", PALETTE.Close, "X")
 	closeButton.AnchorPoint = Vector2.new(0.5, 0.5)
 	closeButton.Position = UDim2.new(1, -10, 0, TITLE_HEIGHT + 8)
-	closeButton.Size = UDim2.fromOffset(56, 56)
+	closeButton.Size = UDim2.fromOffset(CLOSE_SIZE, CLOSE_SIZE)
 	closeButton.ZIndex = 4
 	closeButton.Rotation = 4
 
@@ -107,6 +127,7 @@ function Window.create(
 	local window: Window
 	window = {
 		frame = frame,
+		scale = scale,
 		panel = panel,
 		content = content,
 		open = function()
@@ -119,7 +140,7 @@ function Window.create(
 			end
 			Sounds.play("Click")
 			local fit = Window.fit()
-			frame.Size = UDim2.fromScale(0.94 / fit, 0.84 / fit)
+			resize(frame, fit)
 			frame.Visible = true
 			scale.Scale = fit * 0.85
 			TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = fit }):Play()
@@ -154,6 +175,14 @@ function Window.create(
 		end,
 	}
 	closeButton.Activated:Connect(window.close)
+	-- Si la pantalla cambia con la ventana abierta (girar el teléfono), se reacomoda.
+	Device.onResize(function()
+		if frame.Visible then
+			local fit = Window.fit()
+			resize(frame, fit)
+			scale.Scale = fit
+		end
+	end)
 	return window
 end
 

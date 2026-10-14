@@ -14,6 +14,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
+local Device = require(script.Parent.Parent.Interface.Device)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
@@ -21,6 +22,10 @@ local RodPreview = require(script.Parent.RodPreview)
 
 local PALETTE = Style.PALETTE
 local ROW_HEIGHT = 96
+local BUTTON_HEIGHT = 60 -- botones de precio (se tocan con el dedo)
+-- Texto mínimo de "qué da": en táctil la ventana escala ~0.8, así queda en ≥ 14 px.
+local EFFECT_MIN_TEXT = 14
+local EFFECT_MIN_TEXT_TOUCH = 18
 local ICONS: { [string]: string } = { Rod = "rod", Basket = "basket", Boots = "boots" }
 
 export type RowSpec = {
@@ -80,13 +85,17 @@ function UpgradeRow.new(parent: Instance, spec: RowSpec)
 	name.Text = spec.def.name
 	name.TextXAlignment = Enum.TextXAlignment.Left
 	name.Position = UDim2.fromOffset(left, 10)
-	name.Size = UDim2.new(0.4, -left + 40, 0, 32)
-	local effect = Style.text(row, "Efecto", 19, Color3.fromRGB(255, 236, 200), 2)
+	name.Size = UDim2.new(0.33, -left + 40, 0, 32) -- termina antes de "Nivel" (0.43)
+	local effect = Style.text(row, "Efecto", 20, Color3.fromRGB(255, 236, 200), 2)
 	effect.Text = Upgrades.describe(spec.category, spec.def)
 	effect.TextXAlignment = Enum.TextXAlignment.Left
-	effect.Position = UDim2.fromOffset(left, 46)
-	effect.Size = UDim2.new(0.4, -left + 40, 0, 36)
+	effect.Position = UDim2.fromOffset(left, 44)
+	effect.Size = UDim2.new(0.43, -left - 6, 0, 46)
 	effect.TextWrapped = true
+	local effectLimit = effect:FindFirstChildOfClass("UITextSizeConstraint")
+	if effectLimit then
+		effectLimit.MinTextSize = if Device.touch() then EFFECT_MIN_TEXT_TOUCH else EFFECT_MIN_TEXT
+	end
 
 	local level = Style.text(row, "Nivel", 24, nil, 2.5)
 	level.Text = `Nivel {spec.index}`
@@ -98,7 +107,7 @@ function UpgradeRow.new(parent: Instance, spec: RowSpec)
 	holder.BackgroundTransparency = 1
 	holder.AnchorPoint = Vector2.new(1, 0.5)
 	holder.Position = UDim2.new(1, -10, 0.5, 0)
-	holder.Size = UDim2.new(0.38, 0, 0, 56)
+	holder.Size = UDim2.new(0.38, 0, 0, BUTTON_HEIGHT)
 	holder.Parent = row
 	local layout = Instance.new("UIListLayout")
 	layout.FillDirection = Enum.FillDirection.Horizontal

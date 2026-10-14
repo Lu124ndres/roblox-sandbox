@@ -12,6 +12,8 @@
 	Las tarjetas se repintan cada segundo con lo que toca comprar ahora. Las
 	de Poder, Monedas, VIP y estanques se pueden regalar (botón rosa).
 	Las compras las abre Purchases y las entrega el servidor.
+	Las tarjetas van de a 3 por fila, o de a 2 si el contenido es angosto.
+	"Siguiente" solo aparece si la ruleta tiene al menos dos monstruos.
 ]]
 
 local Players = game:GetService("Players")
@@ -32,7 +34,10 @@ type Offer = RobuxOffers.Offer
 
 local CARDS = Style.PALETTE.Cards
 local MONETIZATION = Config.Monetization
-local CARD_HEIGHT = 236
+local CARD_HEIGHT = 260
+local TWO_COLUMNS_BELOW = 540 -- ancho del contenido (antes de escalar) para pasar a 2 columnas
+local THREE_COLUMNS = UDim2.new(1 / 3, -10, 0, CARD_HEIGHT)
+local TWO_COLUMNS = UDim2.new(0.5, -6, 0, CARD_HEIGHT)
 local GIANT_COLORS: { [string]: Color3 } = {
 	Orca = CARDS.Blue,
 	Minotauro = CARDS.Red,
@@ -63,7 +68,18 @@ local function scroller(parent: Instance): ScrollingFrame
 	return list
 end
 
-local function grid(parent: Instance, order: number): Frame
+-- ¿Hay al menos dos monstruos que pueden salir? Si no, elegir no sirve de nada.
+local function rouletteHasChoice(): boolean
+	local count = 0
+	for _, def in Config.Giants.chain do
+		if def.inRoulette then
+			count += 1
+		end
+	end
+	return count >= 2
+end
+
+local function grid(parent: Instance, order: number): (Frame, UIGridLayout)
 	local frame = Instance.new("Frame")
 	frame.Name = "Tarjetas"
 	frame.LayoutOrder = order
@@ -72,11 +88,11 @@ local function grid(parent: Instance, order: number): Frame
 	frame.AutomaticSize = Enum.AutomaticSize.Y
 	frame.Parent = parent
 	local layout = Instance.new("UIGridLayout")
-	layout.CellSize = UDim2.new(1 / 3, -10, 0, CARD_HEIGHT)
+	layout.CellSize = THREE_COLUMNS
 	layout.CellPadding = UDim2.fromOffset(12, 12)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
 	layout.Parent = frame
-	return frame
+	return frame, layout
 end
 
 function RobuxShop.start(screen: ScreenGui)
@@ -88,6 +104,7 @@ function RobuxShop.start(screen: ScreenGui)
 	local painters: { () -> () } = {}
 	local order = 0
 	local cards: Frame = list :: any
+	local grids: { UIGridLayout } = {}
 
 	local function buy(offer: Offer)
 		if offer.isPass then
@@ -102,7 +119,9 @@ function RobuxShop.start(screen: ScreenGui)
 		order += 1
 		ShopParts.section(list, order, text)
 		order += 1
-		cards = grid(list, order)
+		local frame, layout = grid(list, order)
+		cards = frame
+		table.insert(grids, layout)
 	end
 	local function add(color: Color3, icon: string, spec: () -> Offer)
 		order += 1
@@ -131,19 +150,36 @@ function RobuxShop.start(screen: ScreenGui)
 		add(CARDS.Orange, "meat", RobuxOffers.fill(key))
 	end
 
-	section("Elige el siguiente monstruo")
-	for _, def in Config.Giants.chain do
-		add(
-			GIANT_COLORS[def.id] or CARDS.Red,
-			RobuxOffers.GIANT_ICONS[def.id] or "fang",
-			RobuxOffers.choose(def)
-		)
+	if rouletteHasChoice() then
+		section("Elige el siguiente monstruo")
+		for _, def in Config.Giants.chain do
+			add(
+				GIANT_COLORS[def.id] or CARDS.Red,
+				RobuxOffers.GIANT_ICONS[def.id] or "fang",
+				RobuxOffers.choose(def)
+			)
+		end
 	end
 
 	section("Estanques")
 	for index = 2, #Config.Progression.ponds do
 		add(CARDS.Green, "pond", RobuxOffers.pond(player, index))
 	end
+
+	-- AbsoluteSize ya viene escalado: se divide entre la escala de la ventana.
+	local function columns()
+		local scale = window.scale.Scale
+		if scale <= 0 then
+			return
+		end
+		local width = list.AbsoluteSize.X / scale
+		local cell = if width < TWO_COLUMNS_BELOW then TWO_COLUMNS else THREE_COLUMNS
+		for _, layout in grids do
+			layout.CellSize = cell
+		end
+	end
+	list:GetPropertyChangedSignal("AbsoluteSize"):Connect(columns)
+	columns()
 
 	local function paintAll()
 		for _, paint in painters do

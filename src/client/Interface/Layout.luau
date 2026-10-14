@@ -10,22 +10,39 @@
 		            colección), justo después de los botones de Roblox
 	Las columnas se achican en pantallas bajas (UIScale según el alto), así en
 	un teléfono acostado no llegan a los botones de Pescar y Saltar.
+	La columna derecha mide lo mismo que sus filas (dos botones de 96 con 12
+	entre ellos) y las centra, así Tienda, Mejoras y los atajos quedan alineados.
 ]]
 
 local GuiService = game:GetService("GuiService")
 local Workspace = game:GetService("Workspace")
 
+local Device = require(script.Parent.Device)
+
 local REFERENCE_HEIGHT = 600 -- alto de pantalla en que el HUD va a escala 1
 local MIN_SCALE, MAX_SCALE = 0.55, 1.2
 local MARGIN = 12
+local STAT_WIDTH = 320 -- ancho de las filas de estadísticas en PC
+local STAT_WIDTH_TOUCH = 260 -- más angostas en táctil: dejan sitio a la barra de hambre
 
 local Layout = {}
+
+-- Medidas de la columna derecha (antes de escalar), las comparten todas sus filas.
+Layout.BUTTON_SIZE = 96
+Layout.BUTTON_GAP = 12
+Layout.RIGHT_WIDTH = Layout.BUTTON_SIZE * 2 + Layout.BUTTON_GAP
 
 local left: Frame
 local right: Frame
 local topBar: Frame
 local scales: { UIScale } = {}
+local scaleCallbacks: { () -> () } = {}
 local currentScale = 1
+
+-- Ancho de las filas de la columna izquierda (estadísticas, impulso de amigos).
+function Layout.statWidth(): number
+	return if Device.touch() then STAT_WIDTH_TOUCH else STAT_WIDTH
+end
 
 local function column(screen: ScreenGui, name: string, anchorRight: boolean): Frame
 	local frame = Instance.new("Frame")
@@ -34,13 +51,14 @@ local function column(screen: ScreenGui, name: string, anchorRight: boolean): Fr
 	frame.AnchorPoint = Vector2.new(if anchorRight then 1 else 0, 0)
 	frame.Position =
 		UDim2.new(if anchorRight then 1 else 0, if anchorRight then -MARGIN else MARGIN, 0, MARGIN)
-	frame.Size = UDim2.fromOffset(if anchorRight then 220 else 320, 600)
+	frame.Size =
+		UDim2.fromOffset(if anchorRight then Layout.RIGHT_WIDTH else Layout.statWidth(), 600)
 	frame.Parent = screen
 	local list = Instance.new("UIListLayout")
 	list.SortOrder = Enum.SortOrder.LayoutOrder
 	list.Padding = UDim.new(0, 8)
 	list.HorizontalAlignment = if anchorRight
-		then Enum.HorizontalAlignment.Right
+		then Enum.HorizontalAlignment.Center
 		else Enum.HorizontalAlignment.Left
 	list.Parent = frame
 	Layout.scaleWith(frame)
@@ -59,12 +77,20 @@ function Layout.scale(): number
 	return currentScale
 end
 
+-- `callback` corre cada vez que cambia la pantalla, ya con la escala nueva.
+function Layout.onScaleChanged(callback: () -> ())
+	table.insert(scaleCallbacks, callback)
+end
+
 local function refreshScale()
 	local camera = Workspace.CurrentCamera
 	local height = if camera then camera.ViewportSize.Y else REFERENCE_HEIGHT
 	currentScale = math.clamp(height / REFERENCE_HEIGHT, MIN_SCALE, MAX_SCALE)
 	for _, scale in scales do
 		scale.Scale = currentScale
+	end
+	for _, callback in scaleCallbacks do
+		task.spawn(callback)
 	end
 end
 

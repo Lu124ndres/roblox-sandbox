@@ -25,9 +25,9 @@ local Shop: Types.ShopConfig = {
 		{ name = "Caña de acero", price = 12000, value = 5, luck = 0.2 },
 		{ name = "Caña dorada", price = 45000, value = 8, luck = 0.3 },
 		{ name = "Caña de cristal", price = 150000, value = 12, luck = 0.4 },
-		{ name = "Caña del abismo", price = 500000, value = 20, luck = 0.55 },
-		{ name = "Caña volcánica", price = 1500000, value = 35, luck = 0.75 },
-		{ name = "Caña del leviatán", price = 5000000, value = 60, luck = 1 },
+		{ name = "Caña del abismo", price = 300000, value = 20, luck = 0.55 },
+		{ name = "Caña volcánica", price = 800000, value = 35, luck = 0.75 },
+		{ name = "Caña del leviatán", price = 2000000, value = 60, luck = 1 },
 	},
 	Basket = {
 		{ name = "Canasta de mimbre", price = 0, value = 1 },

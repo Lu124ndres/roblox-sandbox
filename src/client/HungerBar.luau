@@ -10,26 +10,42 @@
 	marcas en la barra, un color por etapa y avisos al pasar de etapa y al
 	llenarse. Al llenarse muestra la despedida, la cuenta regresiva del
 	descanso del volcán y la llegada del siguiente gigante.
+
+	El total de comida lo publica el servidor (atributo Food: crece con los
+	jugadores activos); si aún no llegó, se usa el de Config. Los cambios se
+	juntan y se pintan como mucho 10 veces por segundo (cada pez cambia
+	Progress y el enojo), y la barra solo se anima si algo cambió.
+	Las piezas del panel las arma Interface/HungerPanel.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
-local Config = require(ReplicatedStorage.Shared.Config)
 local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
+local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local GiantName = require(script.Parent.GiantName)
-local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
-local Ui = require(script.Parent.Ui)
-local Layout = require(script.Parent.Interface.Layout)
-local Style = require(script.Parent.Interface.Style)
+local HungerPanel = require(script.Parent.Interface.HungerPanel)
 
 local ATTR = Protocol.GiantAttributes
-local THRESHOLDS = Config.Giants.stageThresholds
-local PANEL_WIDTH = 440
 local STAGE_COLORS = UIConfig.HungerStageColors
+local REFRESH_SECONDS = 0.1 -- 10 veces por segundo como mucho
+-- Se lee con cuidado: si Protocol aún no tiene Food, el atributo se llama igual.
+local FOOD_ATTRIBUTE: string = (ATTR :: any).Food or "Food"
+
+-- Atributos de EstadoGigante que cambian lo que muestra la barra (no el enojo).
+local WATCHED: { [string]: boolean } = {
+	[ATTR.Id] = true,
+	[ATTR.DisplayName] = true,
+	[ATTR.Article] = true,
+	[ATTR.Multiplier] = true,
+	[ATTR.Progress] = true,
+	[ATTR.Phase] = true,
+	[ATTR.PhaseEndsAt] = true,
+	[FOOD_ATTRIBUTE] = true,
+}
 
 local HungerBar = {}
 
@@ -40,77 +56,43 @@ function HungerBar.mount(
 ): Frame
 	-- Arriba al centro, compacta: nombre y etapa, la barra con la comida grande
 	-- ("1,250 / 2,500"), la fila del enojo (AngerMeter) y los atajos para llenarlo.
-	local panel = Instance.new("Frame")
-	panel.Name = "Hambre"
-	panel.BackgroundTransparency = 1
-	panel.AnchorPoint = Vector2.new(0.5, 0)
-	panel.Position = UDim2.new(0.5, 0, 0, 8)
-	panel.Size = UDim2.fromOffset(PANEL_WIDTH, 150)
-	panel.Parent = screen
-	Layout.scaleWith(panel)
-
-	local title = Style.text(panel, "Nombre", 28)
-	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Size = UDim2.new(0.62, 0, 0, 30)
-
-	local detail = Style.text(panel, "Etapa", 22, Color3.fromRGB(255, 220, 70))
-	detail.TextXAlignment = Enum.TextXAlignment.Right
-	detail.AnchorPoint = Vector2.new(1, 0)
-	detail.Position = UDim2.new(1, -4, 0, 4)
-	detail.Size = UDim2.new(0.38, 0, 0, 24)
-	detail.Rotation = 4
-
-	local track = Instance.new("Frame")
-	track.Name = "Pista"
-	track.BackgroundColor3 = Color3.fromRGB(34, 36, 46)
-	track.Position = UDim2.fromOffset(0, 32)
-	track.Size = UDim2.new(1, 0, 0, 42)
-	Ui.corner(track, 12)
-	Style.border(track, 4)
-	track.Parent = panel
-	local clip = Instance.new("Frame")
-	clip.Name = "Recorte"
-	clip.BackgroundTransparency = 1
-	clip.Size = UDim2.fromScale(1, 1)
-	clip.ClipsDescendants = true
-	clip.Parent = track
-	Ui.corner(clip, 12)
-
-	local fill = Instance.new("Frame")
-	fill.Name = "Relleno"
-	fill.BorderSizePixel = 0
-	fill.Size = UDim2.fromScale(0, 1)
-	fill.BackgroundColor3 = STAGE_COLORS[1]
-	Ui.corner(fill, 12)
-	Style.gradient(fill, Color3.new(1, 1, 1))
-	fill.Parent = clip
-
-	for index = 2, #THRESHOLDS do
-		local tick = Instance.new("Frame")
-		tick.Name = `Marca{index}`
-		tick.BackgroundColor3 = Style.OUTLINE
-		tick.BackgroundTransparency = 0.3
-		tick.BorderSizePixel = 0
-		tick.AnchorPoint = Vector2.new(0.5, 0)
-		tick.Position = UDim2.fromScale(THRESHOLDS[index], 0)
-		tick.Size = UDim2.new(0, 3, 1, 0)
-		tick.ZIndex = 2
-		tick.Parent = clip
-	end
-
-	local amount = Style.text(track, "Cantidad", 34, nil, 3)
-	amount.AnchorPoint = Vector2.new(0.5, 0.5)
-	amount.Position = UDim2.fromScale(0.5, 0.5)
-	amount.Size = UDim2.new(1, -16, 1, -4)
-	amount.ZIndex = 4
+	local parts = HungerPanel.build(screen)
+	local panel, title, detail, amount, fill =
+		parts.panel, parts.title, parts.detail, parts.amount, parts.fill
 
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local currentId: string? = nil
 	local lastStage = 1
 	local wasFull = false
+	local shownFraction, shownColor = -1, Color3.new()
+
+	-- Anima la barra solo si cambia (cada animación nueva reemplaza a la anterior).
+	local function setFill(fraction: number, color: Color3)
+		if math.abs(fraction - shownFraction) < 0.0005 and color == shownColor then
+			return
+		end
+		shownFraction, shownColor = fraction, color
+		TweenService:Create(fill, UIConfig.Tweens.BarFill, {
+			Size = UDim2.fromScale(fraction, 1),
+			BackgroundColor3 = color,
+		}):Play()
+	end
+
+	-- Comida total del gigante actual: la que publica el servidor, o la de Config.
+	local function totalFood(id: string): number
+		local food = stateFolder:GetAttribute(FOOD_ATTRIBUTE)
+		if type(food) == "number" and food > 0 then
+			return food
+		end
+		return GiantStages.foodFor(id)
+	end
 
 	-- Fuera de la fase de comer, el panel cuenta la despedida, el descanso y la llegada.
+	local restTotal = 0 -- lo que duraba este descanso al empezar (varía con los jugadores)
 	local function showPhase(phase: string)
+		if phase ~= "rest" then
+			restTotal = 0
+		end
 		local name = GiantName.current(true)
 		local endsAt = stateFolder:GetAttribute(ATTR.PhaseEndsAt)
 		local left = if type(endsAt) == "number"
@@ -121,7 +103,8 @@ function HungerBar.mount(
 			title.Text = "Descanso del volcán"
 			detail.Text = "x2 entrenando"
 			amount.Text = string.format("%d:%02d", left // 60, math.floor(left % 60))
-			fraction = left / Config.Giants.cycle.restSeconds
+			restTotal = math.max(restTotal, left)
+			fraction = left / math.max(restTotal, 1)
 		elseif phase == "farewell" then
 			title.Text = `¡{name} se llenó!`
 			detail.Text = ""
@@ -132,10 +115,7 @@ function HungerBar.mount(
 			detail.Text = ""
 			amount.Text = "..."
 		end
-		TweenService:Create(fill, UIConfig.Tweens.BarFill, {
-			Size = UDim2.fromScale(fraction, 1),
-			BackgroundColor3 = color,
-		}):Play()
+		setFill(fraction, color)
 	end
 
 	local function refresh()
@@ -168,16 +148,23 @@ function HungerBar.mount(
 		end
 		title.Text = `{name}  x{multiplier}`
 		detail.Text = `Etapa {stage}/{GiantStages.count}`
-		local total = GiantStages.foodFor(id)
+		local total = totalFood(id)
 		amount.Text = `{NumberFormat.big(math.floor(progress * total))} / {NumberFormat.big(total)}`
-		local color = STAGE_COLORS[math.min(stage, #STAGE_COLORS)]
-		TweenService:Create(fill, UIConfig.Tweens.BarFill, {
-			Size = UDim2.fromScale(progress, 1),
-			BackgroundColor3 = color,
-		}):Play()
+		setFill(progress, STAGE_COLORS[math.min(stage, #STAGE_COLORS)])
 	end
 
-	stateFolder.AttributeChanged:Connect(refresh)
+	-- Varios cambios seguidos (un lote de peces) se pintan una sola vez.
+	local queued = false
+	stateFolder.AttributeChanged:Connect(function(attribute: string)
+		if queued or not WATCHED[attribute] then
+			return
+		end
+		queued = true
+		task.delay(REFRESH_SECONDS, function()
+			queued = false
+			refresh()
+		end)
+	end)
 	refresh()
 	task.spawn(function() -- la cuenta regresiva del descanso
 		while true do

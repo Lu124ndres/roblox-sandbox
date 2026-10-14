@@ -3,7 +3,7 @@
 	HudButtons
 
 	Botones del menú con ícono (Icons) y nombre con contorno:
-		HudButtons.side   grandes, en la columna derecha (Tienda, Robux)
+		HudButtons.side   grandes, en la columna derecha (Tienda, Mejoras), centrados
 		HudButtons.top    redondos, en la barra de Roblox (Ajustes, Premio, Peces)
 	Cada módulo agrega el suyo y decide qué hace al tocarlo. Un punto rojo
 	avisa que hay algo nuevo (por ejemplo, el premio diario).
@@ -19,7 +19,7 @@ local Style = require(script.Parent.Parent.Interface.Style)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 
 local COLORS = UIConfig.Colors
-local SIDE_SIZE = 96
+local SIDE_SIZE = Layout.BUTTON_SIZE
 local TOP_DARK = Color3.fromRGB(28, 30, 38)
 
 export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
@@ -58,7 +58,9 @@ local function press(button: TextButton, onClick: () -> ())
 	end)
 end
 
--- Botón de ícono con nombre abajo; lo usan también los atajos de Robux.
+-- Botón de ícono con nombre abajo; lo usan también los atajos de Robux. Todo el
+-- cuadro (ícono y nombre) es el botón: el ícono y el nombre no reciben toques,
+-- así el toque siempre llega al botón aunque caiga sobre el dibujo.
 function HudButtons.iconButton(
 	parent: Instance,
 	text: string,
@@ -69,14 +71,19 @@ function HudButtons.iconButton(
 	button.Name = `Boton{text}`
 	button.Text = ""
 	button.BackgroundTransparency = 1
+	button.Active = true
 	button.Size = UDim2.fromOffset(size, size + 4)
 	button.Parent = parent
 	local view = Icons.view(button, icon)
 	view.Size = UDim2.fromOffset(size, size - 10)
+	view.Active = false
+	view.Interactable = false
 	local label = Style.text(button, "Nombre", 26, nil, 2.5)
 	label.AnchorPoint = Vector2.new(0.5, 1)
 	label.Position = UDim2.new(0.5, 0, 1, 0)
-	label.Size = UDim2.new(1, 16, 0, 28)
+	label.Size = UDim2.new(1, 4, 0, 28) -- casi el ancho del botón: no pisa al vecino
+	label.Active = false
+	label.Interactable = false
 	label.Text = string.upper(text)
 	return button
 end
@@ -87,13 +94,13 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 		row.Name = "Menu"
 		row.LayoutOrder = 10
 		row.BackgroundTransparency = 1
-		row.Size = UDim2.fromOffset(SIDE_SIZE * 2 + 12, SIDE_SIZE + 4)
+		row.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, SIDE_SIZE + 4)
 		row.Parent = Layout.right()
 		local list = Instance.new("UIListLayout")
 		list.FillDirection = Enum.FillDirection.Horizontal
-		list.HorizontalAlignment = Enum.HorizontalAlignment.Right
+		list.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		list.SortOrder = Enum.SortOrder.LayoutOrder
-		list.Padding = UDim.new(0, 12)
+		list.Padding = UDim.new(0, Layout.BUTTON_GAP)
 		list.Parent = row
 		sideRow = row
 	end

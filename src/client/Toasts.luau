@@ -4,7 +4,9 @@
 
 	Mensajes cortos de feedback ("¡Pescaste una Caballa!", "+12 monedas") y
 	banners grandes para momentos importantes (la barra cambia de estado).
-	Aparecen con un rebote, esperan y se desvanecen solos.
+	Aparecen con un rebote, esperan y se desvanecen solos. La pila va justo
+	debajo del panel de hambre (Toasts.placeBelow), así no tapa los atajos
+	para llenar al monstruo, y por encima de las ventanas.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -23,7 +25,11 @@ local SIZES = UIConfig.TextSizes
 local TWEENS = UIConfig.Tweens
 local EFFECTS = UIConfig.Effects
 
+local GAP_BELOW = 8 -- aire entre el panel de hambre y el primer aviso
+
 local Toasts = {}
+
+local stack: Frame? = nil
 
 local function popIn(target: GuiObject): UIScale
 	local scale = Instance.new("UIScale")
@@ -52,25 +58,26 @@ local function fadeOutAndDestroy(target: GuiObject, label: TextLabel, seconds: n
 end
 
 function Toasts.mount(screen: ScreenGui): Toasts
-	local stack = Instance.new("Frame")
-	stack.Name = "Avisos"
-	stack.BackgroundTransparency = 1
-	stack.AnchorPoint = Vector2.new(0.5, 0)
-	stack.Position = UDim2.new(0.5, 0, 0.26, 10) -- debajo de la barra de hambre (se escala con el alto)
-	stack.Size = UDim2.fromScale(0.46, 0.4)
-	stack.ZIndex = 40 -- encima de las ventanas (TIENDA, MEJORAS...)
-	stack.Parent = screen
+	local frame = Instance.new("Frame")
+	frame.Name = "Avisos"
+	frame.BackgroundTransparency = 1
+	frame.AnchorPoint = Vector2.new(0.5, 0)
+	frame.Position = UDim2.new(0.5, 0, 0.26, 10) -- hasta que placeBelow la acomode
+	frame.Size = UDim2.fromScale(0.46, 0.4)
+	frame.ZIndex = 40 -- encima de las ventanas (TIENDA, MEJORAS...)
+	frame.Parent = screen
 	local layout = Instance.new("UIListLayout")
 	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	layout.Padding = UDim.new(0, 6)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
-	layout.Parent = stack
+	layout.Parent = frame
+	stack = frame
 
 	local order = 0
 
 	local function show(text: string, color: Color3?)
 		order += 1
-		local toast = Ui.panel("Aviso", stack)
+		local toast = Ui.panel("Aviso", frame)
 		toast.LayoutOrder = order
 		toast.Size = UDim2.new(1, 0, 0, 40)
 		local limit = Instance.new("UISizeConstraint")
@@ -104,6 +111,42 @@ function Toasts.mount(screen: ScreenGui): Toasts
 	end
 
 	return { show = show, banner = banner }
+end
+
+-- Pone la pila justo debajo de lo que se ve de `panel` (los atajos de llenar
+-- solo se ven mientras el monstruo come) y la sigue si el panel cambia.
+function Toasts.placeBelow(panel: GuiObject)
+	local function place()
+		local target = stack
+		if not target then
+			return
+		end
+		local bottom = panel.AbsolutePosition.Y
+		for _, child in panel:GetChildren() do
+			if child:IsA("GuiObject") and child.Visible then
+				bottom = math.max(bottom, child.AbsolutePosition.Y + child.AbsoluteSize.Y)
+			end
+		end
+		local parent = target.Parent
+		local top = if parent and parent:IsA("GuiBase2d") then parent.AbsolutePosition.Y else 0
+		target.Position = UDim2.new(0.5, 0, 0, math.floor(bottom - top + GAP_BELOW))
+	end
+	local function watch(child: Instance)
+		if child:IsA("GuiObject") then
+			child:GetPropertyChangedSignal("Visible"):Connect(place)
+			child:GetPropertyChangedSignal("AbsoluteSize"):Connect(place)
+		end
+	end
+	for _, child in panel:GetChildren() do
+		watch(child)
+	end
+	panel.ChildAdded:Connect(function(child)
+		watch(child)
+		task.defer(place)
+	end)
+	panel:GetPropertyChangedSignal("AbsolutePosition"):Connect(place)
+	panel:GetPropertyChangedSignal("AbsoluteSize"):Connect(place)
+	task.defer(place)
 end
 
 return Toasts

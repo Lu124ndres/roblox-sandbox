@@ -18,7 +18,7 @@ local RobuxOffers = require(script.Parent.Parent.Menus.RobuxOffers)
 local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
 
-local SIZE = 84
+local SIZE = Layout.BUTTON_SIZE -- igual que Tienda y Mejoras, así las filas quedan alineadas
 local ICONS = { Power = "crystal", Coins = "coin" }
 
 local QuickBuys = {}
@@ -29,14 +29,14 @@ function QuickBuys.start()
 	row.Name = "AtajosRobux"
 	row.LayoutOrder = 20
 	row.BackgroundTransparency = 1
-	row.Size = UDim2.fromOffset(SIZE * 2 + 24, SIZE + 16)
+	row.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, SIZE + 16) -- +16: la insignia sobresale arriba
 	row.Parent = Layout.right()
 	local list = Instance.new("UIListLayout")
 	list.FillDirection = Enum.FillDirection.Horizontal
-	list.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	list.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	list.VerticalAlignment = Enum.VerticalAlignment.Bottom
 	list.SortOrder = Enum.SortOrder.LayoutOrder
-	list.Padding = UDim.new(0, 24)
+	list.Padding = UDim.new(0, Layout.BUTTON_GAP)
 	list.Parent = row
 
 	local painters: { () -> () } = {}
