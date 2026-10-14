@@ -7,7 +7,7 @@
 
 		velocidad      = 1 + sqrt(poder) / biteSpeedDivisor
 		espera de pique = espera base / velocidad (nunca menos de minBiteDelaySeconds)
-		peces por pique = 1 + floor(sqrt(poder) / fishPerCatchDivisor)
+		peces por pique = 1 + floor(log10(1 + poder / fishPerCatchStep))
 		capacidad       = carryCapacity x peces por pique x canasta (tienda)
 
 	La capacidad crece con los peces por pique para que un jugador fuerte no
@@ -31,7 +31,7 @@ function FishingPower.speed(power: number): number
 end
 
 function FishingPower.fishPerCatch(power: number): number
-	return 1 + math.floor(root(power) / PROGRESSION.fishPerCatchDivisor)
+	return 1 + math.floor(math.log10(1 + math.max(0, power) / PROGRESSION.fishPerCatchStep))
 end
 
 function FishingPower.capacity(power: number, basketMultiplier: number?): number

@@ -141,14 +141,6 @@ function PlayerData.getCarriedCount(player: Player): number
 	return if data then Basket.total(data.save.carried) else 0
 end
 
--- Activo: pescó hace poco (x3 de margen si lleva peces). Un AFK con la canasta llena no cuenta.
-function PlayerData.isActive(player: Player, withinSeconds: number): boolean
-	local data = dataByPlayer[player]
-	local carrying = data ~= nil and next(data.save.carried) ~= nil
-	return data ~= nil
-		and os.clock() - data.lastCatchAt <= withinSeconds * (if carrying then 3 else 1)
-end
-
 -- La capacidad crece con el poder (ver Shared/FishingPower).
 function PlayerData.getCapacity(player: Player): number
 	return FishingPower.playerCapacity(player)

@@ -113,7 +113,7 @@ local Protocol = {
 		Anger = "Anger", -- 0..1 (1 = furioso)
 		Phase = "Phase", -- GiantPhase
 		PhaseEndsAt = "PhaseEndsAt", -- Workspace:GetServerTimeNow() en que termina la fase (0 = sin fin)
-		Food = "Food", -- comida total que pide la barra ahora (crece con los jugadores activos)
+		Food = "Food", -- comida total que pide la barra (fija por gigante)
 	},
 
 	-- Folder en ReplicatedStorage con las plantillas de los gigantes. El cliente

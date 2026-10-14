@@ -11,8 +11,8 @@
 	llenarse. Al llenarse muestra la despedida, la cuenta regresiva del
 	descanso del volcán y la llegada del siguiente gigante.
 
-	El total de comida lo publica el servidor (atributo Food: crece con los
-	jugadores activos); si aún no llegó, se usa el de Config. Los cambios se
+	El total de comida lo publica el servidor (atributo Food, fijo por
+	gigante); si aún no llegó, se usa el de Config. Los cambios se
 	juntan y se pintan como mucho 10 veces por segundo (cada pez cambia
 	Progress y el enojo), y la barra solo se anima si algo cambió.
 	Las piezas del panel las arma Interface/HungerPanel.

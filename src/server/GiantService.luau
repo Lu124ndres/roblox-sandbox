@@ -7,8 +7,7 @@
 	Progress con freno, al instante al cruzar una etapa o llenarse).
 
 	El hambre es un progreso (0..1): cada lote avanza comida / total. El total
-	(atributo Food) sale de los jugadores activos al llegar (Feeding/GiantFood)
-	y solo sube mientras come, conservando lo ya comido. Lo comido se anuncia
+	(atributo Food) es la comida fija de cada gigante (Config). Lo comido se anuncia
 	por lotes (Feeding/FedBroadcast) y se anota por jugador (Contributions).
 ]]
 
@@ -21,7 +20,6 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Contributions = require(script.Parent.Feeding.Contributions)
 local FedBroadcast = require(script.Parent.Feeding.FedBroadcast)
 local GiantAnger = require(script.Parent.Feeding.GiantAnger)
-local GiantFood = require(script.Parent.Feeding.GiantFood)
 local GiantPublish = require(script.Parent.Feeding.GiantPublish)
 
 local GIANTS = Config.Giants
@@ -50,16 +48,6 @@ local function publish()
 	GiantPublish.progress(progress, true)
 end
 
--- Ajusta el total a los jugadores activos de ahora, conservando lo ya comido.
-local function retarget(target: number)
-	if progress >= 1 or target == totalFood then
-		return
-	end
-	progress, totalFood = GiantFood.rescale(progress, totalFood, target)
-	GiantPublish.set(ATTR.Food, totalFood)
-	GiantPublish.progress(progress, true)
-end
-
 function GiantService.init(map: Instance)
 	local anchor = map:FindFirstChild(Protocol.Map.GiantAnchor, true)
 	assert(
@@ -69,16 +57,9 @@ function GiantService.init(map: Instance)
 	center = anchor.Position
 	currentDef = GIANTS.chain[1]
 	progress = 0
-	totalFood = GiantFood.target(currentDef)
+	totalFood = currentDef.food
 	publish()
 	GiantPublish.show()
-	-- Quien se vuelve activo (entra, pesca) lo sube; quien se va o deja de pescar lo baja.
-	task.spawn(function()
-		while true do
-			task.wait(GIANTS.scaling.recomputeSeconds)
-			retarget(GiantFood.target(currentDef))
-		end
-	end)
 end
 
 function GiantService.getCurrent(): Config.GiantDef
@@ -121,12 +102,11 @@ function GiantService.onFilled(listener: () -> ())
 	table.insert(filledListeners, listener)
 end
 
--- Llega un gigante nuevo (o vuelve el mismo) con la barra en cero y la comida
--- total calculada con los jugadores activos de ahora.
+-- Llega un gigante nuevo (o vuelve el mismo) con la barra en cero y su comida fija.
 function GiantService.reset(def: Config.GiantDef)
 	currentDef = def
 	progress = 0
-	totalFood = GiantFood.target(def)
+	totalFood = def.food
 	GiantAnger.calm()
 	Contributions.reset()
 	publish()

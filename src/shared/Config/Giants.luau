@@ -2,17 +2,15 @@
 --[[
 	Gigantes: la cadena del servidor, cuánta comida piden y cuánto miden.
 
-	Comida para llenar la barra: crece con los jugadores ACTIVOS (pescaron en
-	los últimos scaling.activeSeconds o llevan peces), así 50 jugadores con
-	canastas llenas no lo llenan en segundos:
-		total = clamp(loadsPerPlayer x comida media por pez
-		              x Σ base x (capacidad / base) ^ capacityExponent,
-		              food, food x scaling.maxFoodFactor)     (base = canasta inicial)
-	food es el MÍNIMO (y el total si no hay nadie activo). loadsPerPlayer =
-	canastas llenas que cada jugador activo tiene que entregar. El total se
-	ajusta mientras come (sube si llegan jugadores, baja si se van) sin
-	que el gigante encoja ni se llene solo. Solo se
-	lleva la kill quien aportó al menos scaling.minKillShare de la barra.
+	Comida para llenar la barra: FIJA (food), no cambia con los jugadores.
+	Calibrada con lo que entrega un jugador (ver docs/balance.md): un novato
+	~0.45 de comida/s y un pro (poder ~80K, caña 6, canasta 4) ~1.9/s, con
+	~80 % del tiempo pescando o entregando. Con 50 jugadores:
+		Orca          novatos ~7 min · pros ~1.5 min
+		Minotauro     ~9 min · ~2 min
+		Dragón marino ~12 min · ~3 min
+		Zorro de agua ~15 min · ~3.5 min (ninguno pasa de 15 min)
+	Solo se lleva la kill quien aportó al menos scaling.minKillShare de la barra.
 
 	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
 	stepSeconds (cada paso es un lote de peces). Los lotes se anuncian a los
@@ -46,8 +44,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca",
 			article = "la",
 			multiplier = 1,
-			food = 300, -- mínimo
-			loadsPerPlayer = 1.5,
+			food = 8000,
 			modelBase = "Orca",
 			released = true,
 			inRoulette = true,
@@ -57,8 +54,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Minotauro",
 			article = "el",
 			multiplier = 3,
-			food = 2000, -- mínimo
-			loadsPerPlayer = 3,
+			food = 10000,
 			modelBase = "Minotauro",
 			released = true,
 			inRoulette = false, -- falta su modelo (Meshy)
@@ -68,8 +64,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Dragón marino",
 			article = "el",
 			multiplier = 8,
-			food = 10000, -- mínimo
-			loadsPerPlayer = 5,
+			food = 13000,
 			modelBase = "DragonMarino",
 			released = false,
 			inRoulette = false,
@@ -79,8 +74,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Zorro de agua",
 			article = "el",
 			multiplier = 20,
-			food = 40000, -- mínimo
-			loadsPerPlayer = 8,
+			food = 16000,
 			modelBase = "ZorroDeAgua",
 			released = false,
 			inRoulette = false,
@@ -95,7 +89,7 @@ local Giants: Types.GiantsConfig = {
 		smallServerGraceSeconds = 150,
 		rampSeconds = 60,
 		angryThreshold = 0.5,
-		hungerDecayPerSecond = 0.002, -- fracción de la barra: ~2 min para perder una etapa entera
+		hungerDecayPerSecond = 0.0005, -- fracción de la barra: ~8 min para perder una etapa entera
 		attackIntervalSeconds = 9,
 		telegraphSeconds = 3,
 		attackRadiusStuds = 18,
@@ -113,11 +107,7 @@ local Giants: Types.GiantsConfig = {
 		arrivalSeconds = 6,
 	},
 	scaling = {
-		activeSeconds = 180,
-		maxFoodFactor = 100,
 		minKillShare = 0.005,
-		recomputeSeconds = 2,
-		capacityExponent = 0.6, -- canasta x10 => la comida pide ~x4: mejorar sí acorta los viajes
 	},
 	delivery = {
 		stepSeconds = 0.25,

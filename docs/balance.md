@@ -8,11 +8,8 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 | Perilla | Valor | Qué hace |
 |---|---|---|
-| `food` de cada monstruo | Orca 300, Minotauro 2,000, Dragón 10,000, Zorro 40,000 | **Mínimo** de comida (con pocos jugadores). |
-| `loadsPerPlayer` | 1.5 / 3 / 5 / 8 | Cuántas canastas llenas pide por jugador activo. La comida real = `loadsPerPlayer × 2.75 × Σ 20 × (capacidad/20)^0.6` de los activos. Sube si llegan jugadores y baja si se van. |
-| `scaling.activeSeconds` | 180 | Cuenta como activo quien pescó en los últimos 3 min (9 min si lleva peces). |
-| `scaling.capacityExponent` | 0.6 | 1 = la comida crece igual que la canasta (mejorar no acorta). Con 0.6, canasta x10 → comida x4: menos viajes. |
-| `scaling.maxFoodFactor` | 100 | Tope: la comida nunca pasa de 100 × el mínimo. |
+| `food` de cada monstruo | Orca 8,000 · Minotauro 10,000 · Dragón 13,000 · Zorro 16,000 | Comida **fija** para llenarlo. Con 50 jugadores: novatos ~7 / 9 / 12 / 15 min, pros ~1.5 / 2 / 3 / 3.5 min. |
+| Ritmo de un jugador | novato ~0.45 comida/s · pro ~1.9 · tope ~5 | Calculado con el ciclo de pesca (pique, minijuego, viaje al volcán) al ~80 % del tiempo. Con menos jugadores tarda más: 10 novatos ~35 min la Orca. |
 | `scaling.minKillShare` | 0.005 | Hay que dar al menos el 0.5 % de la barra para ganar la kill. |
 | `multiplier` | 1 / 3 / 8 / 20 | Multiplica las monedas que da cada pez. |
 | `delivery.maxDeliverySeconds` | 4 | Una canasta, por grande que sea, se entrega en 4 s. |
@@ -20,7 +17,11 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | `cycle.restSeconds` (máx.), `restBaseSeconds`, `restPerPlayerSeconds` | 120 · 60 · 1.2 | Descanso = 60 s + 1.2 s por jugador, máximo 120. |
 | `anger.*` | — | Cuánto tarda en enojarse y cada cuánto ataca. Con 3 jugadores o menos espera 150 s (`smallServerGraceSeconds`) en vez de 45. |
 
-**Probado en Studio:** 1 jugador con canasta de 160 peces → la Orca pidió 660 (1.5 × 2.75 × 160) y la canasta se entregó en ~4 s.
+
+## Poder de pesca (`Config/Progression.luau` + `Shared/FishingPower.luau`)
+
+Peces por pique = 1 + floor(log10(1 + poder / 1000)): 9K → 2, 99K → 3, 999K → 4.
+Crece despacio a propósito: la comida es fija y un pro no debe llenar solo al monstruo.
 
 ## Estanques (`Config/Progression.luau`)
 

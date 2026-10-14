@@ -36,8 +36,8 @@ function GiantStages.heightFor(stage: number): number
 end
 
 -- Comida total que necesita un gigante para llenarse. Si es el gigante actual,
--- la que publica el servidor (atributo Food de EstadoGigante: crece con los
--- jugadores activos); si no, su mínimo de Config (1 si no existe).
+-- la que publica el servidor (atributo Food de EstadoGigante); si no, la de
+-- Config (1 si no existe).
 function GiantStages.foodFor(giantId: string): number
 	local state = ReplicatedStorage:FindFirstChild(Protocol.GiantStateFolder)
 	local food = state and state:GetAttribute(Protocol.GiantAttributes.Food)

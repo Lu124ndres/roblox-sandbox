@@ -29,8 +29,7 @@ export type GiantDef = {
 	displayName: string,
 	article: string, -- "la" o "el": para textos como "alimenta a la Orca"
 	multiplier: number, -- monedas por pez = fish.coins * multiplier
-	food: number, -- comida MÍNIMA para llenar la barra (y la de un servidor sin jugadores activos)
-	loadsPerPlayer: number, -- canastas llenas por jugador activo que pide la barra
+	food: number, -- comida para llenar la barra (fija)
 	modelBase: string, -- nombre base de sus modelos: <base>E1..E4 en ServerStorage (uno por etapa)
 	released: boolean, -- false = llega en una actualización (evento), no en la v1
 	inRoulette: boolean, -- puede salir en la ruleta al terminar el descanso (requiere su modelo)
@@ -107,12 +106,8 @@ export type CycleConfig = {
 	arrivalSeconds: number, -- llegada del siguiente gigante antes de poder alimentarlo
 }
 
-export type FoodScalingConfig = { -- comida según los jugadores activos (ver Giants.luau)
-	activeSeconds: number, -- activo = pescó en estos últimos segundos (x3 si lleva peces)
-	maxFoodFactor: number, -- tope del total: food x esto
+export type FoodScalingConfig = {
 	minKillShare: number, -- fracción de la barra que hay que aportar para la kill
-	recomputeSeconds: number, -- cada cuánto se revisa si el total tiene que cambiar
-	capacityExponent: number, -- 1 = la comida crece igual que la canasta; menos = mejorar sí acorta
 }
 export type DeliveryConfig = { -- entrega de peces al gigante, por lotes
 	stepSeconds: number, -- un lote de peces cada tanto
@@ -134,7 +129,7 @@ export type GiantsConfig = {
 export type ProgressionConfig = {
 	ponds: { PondDef }, -- uno por estanque, en orden alrededor de la plaza
 	biteSpeedDivisor: number, -- velocidad de pique = 1 + sqrt(poder) / divisor
-	fishPerCatchDivisor: number, -- peces por pique = 1 + floor(sqrt(poder) / divisor)
+	fishPerCatchStep: number, -- peces por pique = 1 + floor(log10(1 + poder / step))
 	minBiteDelaySeconds: number, -- la espera hasta el pique nunca baja de esto
 }
 
