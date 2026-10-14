@@ -70,7 +70,7 @@ function TutorialGuide.start(screen: ScreenGui)
 	local touchOnly = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 	local panel = Ui.panel("Mision", if touchOnly then screen else Layout.left())
 	panel.LayoutOrder = 20
-	panel.Size = UDim2.fromOffset(280, 92)
+	panel.Size = UDim2.fromOffset(230, 70)
 	panel.Visible = false
 	Style.border(panel, 3)
 	if touchOnly then
@@ -82,21 +82,21 @@ function TutorialGuide.start(screen: ScreenGui)
 	local title = Ui.label("Titulo", panel, UIConfig.Fonts.Title, UIConfig.TextSizes.Small)
 	title.TextColor3 = COLORS.Coins
 	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Position = UDim2.fromOffset(10, 6)
-	title.Size = UDim2.new(1, -20, 0, 22)
-	local text = Ui.label("Texto", panel, UIConfig.Fonts.Body, UIConfig.TextSizes.Body)
+	title.Position = UDim2.fromOffset(8, 4)
+	title.Size = UDim2.new(1, -16, 0, 18)
+	local text = Ui.label("Texto", panel, UIConfig.Fonts.Body, UIConfig.TextSizes.Small)
 	text.TextXAlignment = Enum.TextXAlignment.Left
 	text.TextYAlignment = Enum.TextYAlignment.Top
 	text.TextWrapped = true
-	text.Position = UDim2.fromOffset(10, 30)
-	text.Size = UDim2.new(1, -20, 0, 54)
+	text.Position = UDim2.fromOffset(8, 23)
+	text.Size = UDim2.new(1, -16, 0, 44)
 
 	-- Marcador en el mundo: flecha que flota sobre el destino, siempre visible.
 	local anchor = Instance.new("Attachment")
 	anchor.Name = "DestinoTutorial"
 	anchor.Parent = Workspace.Terrain
 	local marker = Instance.new("BillboardGui")
-	marker.Size = UDim2.fromOffset(110, 70)
+	marker.Size = UDim2.fromOffset(90, 58)
 	marker.AlwaysOnTop = true
 	marker.LightInfluence = 0
 	marker.Adornee = anchor

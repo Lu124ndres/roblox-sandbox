@@ -34,7 +34,7 @@ local function alertDot(parent: GuiObject): Frame
 	dot.Name = "Aviso"
 	dot.AnchorPoint = Vector2.new(0.5, 0.5)
 	dot.Position = UDim2.new(1, -8, 0, 8)
-	dot.Size = UDim2.fromOffset(18, 18)
+	dot.Size = UDim2.fromOffset(14, 14)
 	dot.BackgroundColor3 = COLORS.Bite
 	dot.Visible = false
 	dot.ZIndex = 6
@@ -78,10 +78,10 @@ function HudButtons.iconButton(
 	view.Size = UDim2.fromOffset(size, size - 10)
 	view.Active = false
 	view.Interactable = false
-	local label = Style.text(button, "Nombre", 26, nil, 2.5)
+	local label = Style.text(button, "Nombre", 20, nil, 2)
 	label.AnchorPoint = Vector2.new(0.5, 1)
 	label.Position = UDim2.new(0.5, 0, 1, 0)
-	label.Size = UDim2.new(1, 4, 0, 28) -- casi el ancho del botón: no pisa al vecino
+	label.Size = UDim2.new(1, 4, 0, 22) -- casi el ancho del botón: no pisa al vecino
 	label.Active = false
 	label.Interactable = false
 	label.Text = string.upper(text)

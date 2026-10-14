@@ -8,7 +8,7 @@
 	Debajo quedan huecos para la fila del enojo (AngerMeter, y = 78) y los
 	atajos para llenarlo (FillChips, y = 114, que fija el alto del panel).
 
-	Ancho: hasta 440, pero nunca tanto como para pisar las columnas del HUD.
+	Ancho: hasta 400, pero nunca tanto como para pisar las columnas del HUD.
 	El panel va centrado, así que se deja libre el ancho de la columna
 	izquierda (la más ancha) más un margen a cada lado.
 ]]
@@ -23,7 +23,7 @@ local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
 
 local THRESHOLDS = Config.Giants.stageThresholds
-local MAX_WIDTH = 440
+local MAX_WIDTH = 400
 local MIN_WIDTH = UIConfig.Spacing.HungerWidthMin
 local SIDE_GAP = 24 -- aire entre el panel y cada columna
 local START_HEIGHT = 150 -- FillChips lo ajusta a lo que miden sus botones

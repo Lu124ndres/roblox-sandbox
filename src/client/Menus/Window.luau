@@ -22,9 +22,9 @@ local Style = require(script.Parent.Parent.Interface.Style)
 local PALETTE = Style.PALETTE
 local TITLE_HEIGHT = 34 -- cuánto sobresale el título por encima del panel
 local CLOSE_SIZE = 56
-local REFERENCE_HEIGHT = 620 -- alto de pantalla (px) en que la ventana se ve a escala 1
+local REFERENCE_HEIGHT = 720 -- alto de pantalla (px) en que la ventana se ve a escala 1
 local TOUCH_REFERENCE_HEIGHT = 480 -- en táctil, escala 1 ya en pantallas más bajas
-local SCREEN_SHARE = Vector2.new(0.94, 0.84) -- parte de la pantalla que ocupa (PC)
+local SCREEN_SHARE = Vector2.new(0.72, 0.8) -- parte de la pantalla que ocupa (PC): deja ver el juego
 local TOUCH_SCREEN_SHARE = Vector2.new(0.96, 0.94)
 
 export type Window = {
@@ -51,7 +51,7 @@ function Window.fit(): number
 	if Device.touch() then
 		return math.clamp(height / TOUCH_REFERENCE_HEIGHT, 0.8, 2)
 	end
-	return math.clamp(height / REFERENCE_HEIGHT, 0.6, 2)
+	return math.clamp(height / REFERENCE_HEIGHT, 0.6, 1.6)
 end
 
 -- Tamaño (en escala de la pantalla) para que, ya escalada, ocupe SCREEN_SHARE.

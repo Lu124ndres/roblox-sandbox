@@ -10,7 +10,7 @@
 		            colección), justo después de los botones de Roblox
 	Las columnas se achican en pantallas bajas (UIScale según el alto), así en
 	un teléfono acostado no llegan a los botones de Pescar y Saltar.
-	La columna derecha mide lo mismo que sus filas (dos botones de 96 con 12
+	La columna derecha mide lo mismo que sus filas (dos botones de 78 con 10
 	entre ellos) y las centra, así Tienda, Mejoras y los atajos quedan alineados.
 ]]
 
@@ -20,18 +20,20 @@ local Workspace = game:GetService("Workspace")
 
 local Device = require(script.Parent.Device)
 
-local REFERENCE_HEIGHT = 600 -- alto de pantalla en que el HUD va a escala 1
-local MIN_SCALE, MAX_SCALE = 0.55, 1.2
-local PHONE_REFERENCE_HEIGHT, PHONE_MIN_SCALE = 700, 0.45
+-- Escala 1 a partir de 760 px de alto (un monitor 1080p) y nunca más grande:
+-- el HUD es chico y deja ver el juego.
+local REFERENCE_HEIGHT = 760
+local MIN_SCALE, MAX_SCALE = 0.5, 1
+local PHONE_REFERENCE_HEIGHT, PHONE_MIN_SCALE = 760, 0.45
 local MARGIN = 12
-local STAT_WIDTH = 320 -- ancho de las filas de estadísticas en PC
-local STAT_WIDTH_TOUCH = 260 -- más angostas en táctil: dejan sitio a la barra de hambre
+local STAT_WIDTH = 230 -- ancho de las filas de estadísticas en PC
+local STAT_WIDTH_TOUCH = 200 -- más angostas en táctil: dejan sitio a la barra de hambre
 
 local Layout = {}
 
 -- Medidas de la columna derecha (antes de escalar), las comparten todas sus filas.
-Layout.BUTTON_SIZE = 96
-Layout.BUTTON_GAP = 12
+Layout.BUTTON_SIZE = 78
+Layout.BUTTON_GAP = 10
 Layout.RIGHT_WIDTH = Layout.BUTTON_SIZE * 2 + Layout.BUTTON_GAP
 
 local left: Frame
@@ -58,7 +60,7 @@ local function column(screen: ScreenGui, name: string, anchorRight: boolean): Fr
 	frame.Parent = screen
 	local list = Instance.new("UIListLayout")
 	list.SortOrder = Enum.SortOrder.LayoutOrder
-	list.Padding = UDim.new(0, 8)
+	list.Padding = UDim.new(0, 4)
 	list.HorizontalAlignment = if anchorRight
 		then Enum.HorizontalAlignment.Center
 		else Enum.HorizontalAlignment.Left
