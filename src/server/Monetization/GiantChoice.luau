@@ -56,10 +56,10 @@ local function publish()
 	folder:SetAttribute(ATTR.ChoicesQueued, #queue)
 end
 
--- Devuelve false si el gigante no existe.
+-- Devuelve false si el gigante no existe o todavía no puede salir (sin modelo).
 function GiantChoice.add(giantId: string, buyer: Player): boolean
 	local def = find(giantId)
-	if not def then
+	if not def or not def.inRoulette then
 		return false
 	end
 	table.insert(queue, { def = def, buyerName = buyer.DisplayName, buyerId = buyer.UserId })

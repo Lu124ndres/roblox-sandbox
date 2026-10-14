@@ -37,12 +37,15 @@ end
 
 function GiantFill.add(fraction: number, buyer: Player)
 	local item = { fraction = fraction, buyer = buyer }
-	if #queue > 0 or not apply(item) then
+	local waiting = #queue > 0
+	if waiting or not apply(item) then
 		table.insert(queue, item)
 		Remotes.Notice:FireClient(
 			buyer,
 			"purchase",
-			"El monstruo está descansando: se llenará en cuanto vuelva a comer"
+			if waiting and GiantService.isFeeding()
+				then "Hay otro llenado antes que el tuyo: va justo después"
+				else "El monstruo está descansando: se llenará en cuanto vuelva a comer"
 		)
 	end
 end

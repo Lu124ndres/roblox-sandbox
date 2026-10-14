@@ -35,7 +35,7 @@ local function raiseLevel(player: Player, key: string, bought: number): string
 	local def = MONETIZATION.levels[key]
 	local level = 0
 	PlayerData.edit(player, function(save)
-		level = math.min(math.max(save.levels[key] + 1, bought), #def.robux)
+		level = math.min(math.max(save.levels[key], bought), #def.robux)
 		save.levels[key] = level
 	end)
 	return `{def.name} x{2 ^ level}`
@@ -83,7 +83,7 @@ function Grants.grant(player: Player, key: string): (boolean, string?)
 		return false, nil
 	end
 	if name == "ServerBoost" and MONETIZATION.serverBoost.robux[n] then
-		ServerBoost.add(player)
+		ServerBoost.add(player, n)
 		return true, nil
 	elseif MONETIZATION.levels[name] and MONETIZATION.levels[name].robux[n] then
 		return true, raiseLevel(player, name, n)

@@ -32,8 +32,9 @@ folder:SetAttribute(ATTR.TrainingUntil, 0)
 folder:SetAttribute(ATTR.TrainingLevel, 0)
 folder:SetAttribute(ATTR.BoughtBy, "")
 
-function ServerBoost.add(buyer: Player)
-	local level = math.min(Perks.serverBoostLevel() + 1, #BOOST.robux)
+-- `bought`: el nivel que pagó (el producto ServerBoost<n>). Nunca baja el activo.
+function ServerBoost.add(buyer: Player, bought: number)
+	local level = math.clamp(math.max(Perks.serverBoostLevel(), bought), 1, #BOOST.robux)
 	folder:SetAttribute(ATTR.TrainingLevel, level)
 	folder:SetAttribute(ATTR.TrainingUntil, Workspace:GetServerTimeNow() + BOOST.minutes * 60)
 	folder:SetAttribute(ATTR.BoughtBy, buyer.DisplayName)
