@@ -274,3 +274,493 @@ conectado, se repitió la prueba de humo completa por MCP.
 **Qué sigue:** decidir cómo corregir la escala (reimportar con Scale Unit en metros, o
 fijar el tamaño del MeshPart a 15 studs de alto). Guardar el lugar en Studio: el modelo en
 `ServerStorage` vive en el `.rbxl`, no en el repositorio.
+
+---
+
+## 2026-10-12 — Definición del juego y vertical slice: pescar y alimentar a la Orca
+
+**Qué se hizo:**
+
+- Diseño: `docs/alcance.md` (concepto, cuatro gigantes, barra de hambre, ataques,
+  recompensa del ciclo y calibración de números), `docs/roadmap.md` (v1 con Orca y
+  Minotauro; Dragón marino y Zorro de agua como eventos 1 y 2) y `docs/backlog.md`
+  (hitos H1 a H5 y eventos).
+- Mapa: `world/Playa.model.json` (504 partes) generado por `tools/generar_playa.py`:
+  arena, orilla con espuma, agua, muelle con 4 puntos de pesca turquesa, plataforma con
+  cubeta coral, isla de la guarida, palmeras, rocas, sombrillas, faroles con luz.
+  `default.project.json` ahora mapea `Workspace.Playa` y la iluminación de tarde.
+- Servidor: `PlayerData`, `FishingService`, `FeedingService`, `GiantService`,
+  `GiantModel`, `Proximity`, `Remotes` y `Main.server`. Se borraron los `Hello` de la
+  prueba de humo.
+- Cliente: barra de hambre de 4 estados, monedas y carga, botón TIRA, corcho y sedal,
+  avisos y banners.
+- Compartido: `Config` (peces, pesca, cadena de gigantes), `Protocol` (nombres de
+  remotes, atributos y piezas del mapa), `UIConfig` (paleta y animaciones).
+- Checklist: `rojo build` pasa; `selene src` 0 errores y 0 warnings; `stylua --check`
+  pasa; además `luau-lsp analyze` en modo estricto sin errores.
+
+**Prueba en Studio (`sandbox.rbxl`, 1 jugador):**
+
+- La playa se insertó a mano desde un `.rbxm` porque el `rojo serve` abierto se había
+  levantado con el proyecto anterior y no recarga el árbol nuevo.
+- Pescar: el prompt aparece, pica entre 2 y 5 s, el botón TIRA se ve grande al centro y
+  Espacio también recoge. Capturas registradas (+1 Sardina, +1 Caballa), carga 3/5.
+- Alimentar: con la carga vacía avisa "No llevas peces". Con 3 peces: +12 monedas,
+  barra al 14 % (7 de comida / 48), la Orca (`ServerStorage.OrcaE1`) crece sobre la isla
+  y mira al muelle.
+
+**Qué se rompió:**
+
+- El avatar caía al mar: los pasamanos están a 2.3 studs y un avatar bajo pasa por
+  debajo, y la plataforma tenía un hueco en el frente. Se cerró el frente y se agregaron
+  paredes invisibles en todo el borde del muelle.
+- La primera versión del mapa no compilaba: Rojo pide `UDim2` explícito
+  (`{"UDim2": [[1, 0], [1, 0]]}`) y `Font` con `weight` y `style`.
+
+**No verificado:**
+
+- Dos jugadores a la vez, ping simulado y emulador de móvil.
+- La iluminación del proyecto: con el `rojo serve` viejo no se aplicó a `Lighting`.
+- Cambios sin guardar en `sandbox.rbxl`: se borraron `Baseplate` y el `SpawnLocation`
+  viejo y se quitó la copia importada de la playa. No se guardó el lugar.
+
+**Qué sigue:** reiniciar `rojo serve`, guardar el lugar limpio y terminar H1 (dos
+jugadores, ping, móvil). Después H2: despedida y relevo al Minotauro.
+
+---
+
+## 2026-10-12 — Isla grande, pesca desde la orilla, Orca animada, ambiente y sonido
+
+**Qué se hizo:**
+
+- Mapa nuevo: isla de ~250 studs con laguna central, anillo de madera con 8 cubetas y 8
+  antorchas, 4 muelles, cabaña, campamento con fogata y hamaca, faro en un promontorio,
+  34 palmeras, arbustos con flores, conchas, boyas y espuma. Piezas en
+  `world/Isla.model.json` (2,071 partes) desde `tools/generar_isla.py`; terreno desde
+  `src/server/World/` al arrancar. Medidas comunes en `src/shared/WorldLayoutData.json`.
+- Pesca desde cualquier punto de la orilla o de los muelles (`ShoreCast`, remote
+  `CastRequest`), con botón Pescar en pantalla y tecla F.
+- Caña de primitivas, brazo animado por código, estela en la punta y en el corcho,
+  ondas, "!" al picar, pez que salta hasta el jugador. Todos ven la pesca de todos
+  (atributos `FishingState`, `FishingTarget`, `FishingCatch`).
+- Orca dibujada en el cliente: crece suave, respira, se mece, mira alrededor, gira hacia
+  quien la alimenta, rebota con corazones y salpicadura, salta en cada estado y echa
+  agua por el espiráculo.
+- Ambiente: ciclo de día y noche de 16 min con atardecer y estrellas, haz del faro,
+  gaviotas, peces que saltan, destellos del sol, espuma que va y viene.
+- Sonidos: olas, gaviota, latigazo, plop, burbuja, carrete, mordida, orca, fanfarria,
+  monedas y clic (Tienda de creadores + sonidos instalados de Roblox).
+- Checklist: `rojo build`, `selene src` (0/0), `stylua --check src` y `luau-lsp analyze`
+  en estricto pasan.
+
+**Prueba en Studio:** pesca desde la playa (3 peces: Caballa, Sardina...), alimentar desde
+una cubeta del anillo (+5 monedas, barra al 8 %), la Orca reacciona. Los 11 sonidos con ID
+cargan (`IsLoaded`) y el océano suena en bucle.
+
+**Qué se rompió:**
+
+- Con `FillCylinder` el suelo quedó 4 studs más alto de lo planeado (redondeo a la
+  cuadrícula) y tapaba el anillo. Se pasó a `WriteVoxels` con ocupación exacta.
+- El brazo no se movía: el avatar usa `AnimationConstraint` y el Animator pisa los
+  cambios de `C0`/attachment; además cada avatar orienta la mano distinto y la caña salía
+  de costado. Ahora la pose se suma al `Transform` después del Animator y la caña se
+  orienta con el cuerpo.
+- Rojo dejó una `Isla` y un `Sky` duplicados al cambiar propiedades de la raíz y de
+  `Lighting` ("Could not swap instances"). Se borraron a mano en Studio.
+
+**No verificado:** cómo suenan (no hay audio en la sesión remota), dos jugadores a la vez,
+rendimiento en móvil.
+
+**Qué sigue:** escuchar y ajustar volúmenes, prueba en móvil, guardar el lugar y seguir con
+H2 (despedida y Minotauro).
+
+---
+
+## 2026-10-13 — Zona de entrenamiento, poder de pesca y Cráter del Abismo
+
+**Qué se hizo:**
+
+- Centro de la isla: zona de entrenamiento con 10 estanques (agua de terreno propia),
+  estatua de un pez dorado, bancos y antorchas. `TrainingService` da poder AFK.
+- Poder de pesca: leaderstats "Poder", HUD con el bonus por pez, carteles por estanque.
+- Gigante por etapas (3, 8, 15 y 25 jugadores de alto) con rugido, temblor y olas.
+- Cráter del Abismo al norte (centro en z = 420) con puente de piedra, muelles, puerta,
+  agujas, esqueletos, cristales y lava. Ambiente que cambia al acercarse.
+- Sonidos nuevos: rugido, ambiente de terror, trueno (Tienda de creadores).
+- `Config` y `UIConfig` divididos en carpetas.
+
+**Prueba en Studio:** entrenar en el estanque x1 (poder 0 → 22, bonus x1.05); carteles
+x1 "Entrenar (E)" y x100 "Necesitas 600K"; la Orca en el cráter crece a la etapa 2 y a la
+4 (simulado cambiando el progreso en el cliente); el rescate del abismo devuelve a la
+puerta; el botón Pescar ya no aparece en el cráter.
+
+**Qué se rompió:** la pared invisible del borde del acantilado tenía un hueco frente a la
+puerta y se caía directo al lago; se dejó hueco solo en los muelles. Un `Part` del cráter
+recibía la rotación en el lugar del material y Rojo no compilaba.
+
+**No verificado:** alimentar en el cráter con peces reales, 2 jugadores, móvil.
+
+## 2026-10-13 — Puente rápido, entrenamiento para 50, poder que acelera y gigante que se enoja
+
+**Qué se hizo:**
+
+- Puente al volcán rehecho: una sola rampa lisa (antes eran losas inclinadas al revés,
+  en serrucho) con corriente: velocidad 44, cámara un poco más abierta y flechas turquesa
+  que se encienden en onda. Calderos extra junto a la puerta. Sin portales.
+- Isla y plaza más grandes; 10 estanques de 12.5 studs llenos hasta el borde. Cada
+  jugador lanza el corcho frente a sí, así caben todos en el mismo estanque.
+- Luz: brillo de día 3.1 → 2.2, bloom 0.5 → 0.25 (umbral 2.2), sin resplandor del sol,
+  bruma más baja, exposición −0.15, piedra y arena más oscuras, cristales menos intensos.
+- Poder de pesca: más velocidad de pique y más peces por pique; capacidad 20 x peces por
+  pique (antes 5 fija). HUD: "Poder N · xV vel · P/pique" y "Peces n/capacidad".
+- Hambre escalada hasta 50 jugadores.
+- Enojo del gigante (`GiantMood`, `AngerMeter`, `GiantAttacks`): fila Calmada / Molesta /
+  ¡FURIOSA! en el panel de hambre, carteles y rugidos, contorno rojo que late y se
+  sacude, la barra baja sin encoger, Salpicón con círculo rojo de 3 s y empujón.
+
+**Prueba en Studio:** HUD "Poder 0 · x1.0 vel · 1/pique", "Peces 0/20"; zona de
+entrenamiento legible con la luz nueva; el enojo pasa a Molesta y a ¡FURIOSA! con su
+cartel; en la puerta del cráter llegaron Salpicones (círculo rojo, empujón, aviso) sin
+perder nada; sobre el puente WalkSpeed 44 y 100 studs subidos en 3 s.
+
+**No verificado:** pescar con mucho poder (no hay forma de darse poder en el cliente),
+calmar a la Orca entregando peces, varios jugadores en un estanque, móvil. Selene no corrió
+(no pudo bajar el API dump de Roblox); luau-lsp estricto sin errores.
+
+## 2026-10-13 — Alimentar desde toda la orilla y hambre recalibrada
+
+**Qué se hizo:**
+
+- `FeedRequest` + `client/Feeding/FeedController`: botón Alimentar (F) en cualquier punto
+  de la orilla del volcán con peces encima; aviso al llegar. Línea coral brillante en el
+  borde del cráter. `FeedThrow`: los peces vuelan en arco hasta la boca y el gigante
+  muerde al llegar.
+- `foodPerPlayer` 48/77/96/115 → 64/102/128/154; el hambre se multiplica por el ritmo
+  medio de pesca de los conectados (`FishingPower.rateFactor`).
+- Se quitó `maxFeedDistanceStuds` (la validación ahora es la orilla).
+
+**Prueba en Studio:** pescar 1 sardina en un muelle, ir al borde del cráter del lado
+opuesto a la puerta: aparece Alimentar; con F entrega (+1 moneda, barra 1 %) y la Orca
+furiosa se calma. Un Salpicón que ya estaba en aviso golpeó después de calmarla: ahora
+el servidor lo anula si el gigante ya no está furioso.
+
+**No verificado:** el arco de los peces de cerca, el botón en móvil.
+
+## 2026-10-13 — Comida fija, 12 peces con rarezas, animaciones, efectos y sonidos
+
+**Qué se hizo:**
+
+- Comida fija por gigante (2,500 / 15,000 / 75,000 / 300,000); se quitó la escala por
+  jugadores y por poder.
+- 12 peces en 6 rarezas con modelo propio (cuerpo de dos tonos, ojos con pupila, cola en
+  V, aletas, rayas, púas, espada, farolito con luz, brillo, arcoíris).
+- Captura: chapuzón según rareza, salto con giro, coletazos sobre la cabeza, cartel con
+  la rareza, trofeo en un haz de luz, onda y temblor; el pez se guarda en la canasta.
+- Canasta de mimbre en la espalda que se llena y brilla coral llena.
+- Tarjeta de captura con el pez en 3D girando; monedas que saltan y vuelan al contador.
+- Peces lanzados al gigante giran, con whoosh y destellos al llegar.
+- Sonidos nuevos (Tienda de creadores): aleteo, pop, rareza rara/épica/legendaria, whoosh.
+
+**Prueba en Studio:** los 12 modelos de cerca; captura legendaria de prueba (haz dorado
+y cartel "¡LEGENDARIO!"); pescar una sardina real (tarjeta "Común · Sardina · +1 comida",
+canasta 1/20); alimentar en la puerta (+1 moneda); ráfaga de monedas al contador; los 6
+sonidos nuevos cargan (IsLoaded = true).
+
+**No verificado:** el lanzamiento al gigante de cerca, móvil, 2+ jugadores.
+
+## 2026-10-13 — Camino a publicar (7 etapas) y Etapa 1: guardado
+
+**Qué se hizo:**
+
+- Backlog reorganizado en 7 etapas hasta publicar (guardado, ciclo de gigantes, tienda,
+  ataques y seguridad, retención, pruebas, publicación).
+- `Save/SaveSchema`, `Save/SaveStore`, `Save/SaveService`: DataStore con reintentos,
+  bloqueo de sesión, autoguardado, guardado al salir y al cerrar; versión de datos.
+- `PlayerData` ahora recibe los datos del guardado (`attach`/`snapshot`/`detach`), cuenta
+  especies atrapadas y estadísticas; atributo `DataLoaded`.
+- Pescar y entrenar esperan a que carguen los datos.
+
+**Prueba en Studio:** el lugar no está publicado (PlaceId 0), así que corre en modo
+memoria con su aviso; el jugador carga (`DataLoaded = true`) y juega normal. Prueba de
+`SaveStore` desde el servidor: abrir → 0 monedas; escribir 77 monedas, un Atún, un pez
+inexistente y 2 Peces dorados; volver a abrir → 77 monedas, 1 pez (el inválido se
+descartó) y 2 Peces dorados.
+
+**No verificado:** DataStore real y el bloqueo entre dos servidores (necesita publicar).
+
+## 2026-10-13 — Etapa 2: despedida, descanso del volcán y llegada
+
+**Qué se hizo:**
+
+- `GiantService` con fases (`feeding`, `farewell`, `rest`, `arriving`) y su fin en tiempo
+  del servidor; `GiantCycle` corre el ciclo y reparte el poder del descanso.
+- `GiantCycleFx`: despedida (salto, giro, zambullida, ola) y llegada desde el fondo.
+- Panel de hambre con la cuenta regresiva; la fila del enojo dice el poder por segundo.
+- `CycleView`: carteles, lago que brilla con destellos, avisos al entrar o salir.
+- Ruleta preparada (`inRoulette`); por ahora solo entra la Orca.
+
+**Prueba en Studio** (con comida 2 y descanso 25 s solo para la prueba, ya restaurados):
+pescar 2 sardinas y entregarlas en la puerta → "¡La Orca se llenó!", la Orca se
+zambulle; descanso con cuenta regresiva, "+2 poder" cada segundo dentro del volcán
+(0 → 50 de poder en 25 s); "¡Llega la Orca!" y vuelve a la fase de comer con la barra en 0.
+
+**Corregido:** los títulos decían "Orca se llenó" sin artículo; el cartel del descanso
+mostraba los minutos con decimales.
+
+## 2026-10-13 — Guarida del descanso y kills
+
+**Qué se hizo:**
+
+- Guarida del descanso en el mapa: plataforma de basalto con borde brillante, sello y
+  runas en el centro del lago, 8 rampas desde la punta de los muelles y pared invisible
+  al borde. `RestArena` la muestra en el descanso y la esconde al terminar, subiendo a la
+  punta de un muelle a quien siga abajo. El caldero de cada muelle se movió atrás.
+- El poder del descanso solo se gana sobre la guarida (`WorldZones.isInRestArena`).
+- Kills: `GiantService` registra quién le dio de comer; `GiantCycle` reparte +1 kill.
+  `SaveSchema` v2 guarda `kills` y `killsByGiant`. Tabla de jugadores: Poder y Kills.
+- `CycleView`: la guarida aparece con una ola, destellos, aviso a los 10 s, "+1 Kill".
+- `AbyssRescue` solo rescata a quien nada (la guarida está apenas sobre el agua y el
+  rescate se activaba estando de pie en ella).
+
+**Prueba en Studio** (comida 2 y descanso 40 s solo para la prueba, ya restaurados): llenar
+a la Orca desde la punta de un muelle → Kills 1; la guarida emerge con sus rampas; bajar
+caminando y ganar +2 poder/s sobre ella (0 → 70); al terminar aparecí en la punta del
+muelle y volvió la Orca.
+
+## 2026-10-13 — La guarida solo existe al derrotar al monstruo
+
+**Qué se hizo:** la guarida del descanso salió del mapa (`world/Isla.model.json`) a su
+propio archivo, `world/GuaridaDescanso.model.json`, que Rojo pone en `ServerStorage`.
+`RestArena` la clona hundida 16 studs al empezar el descanso, la hace emerger en 3 s,
+abre las puntas de los muelles cuando las rampas ya llegaron y, al terminar, sube a
+todos a un muelle, la hunde en 2.5 s y la borra. En Studio (modo edición) y durante la
+pelea ya no se ve.
+
+`default.project.json` cambió (nuevo `ServerStorage.GuaridaDescanso`): hubo que reiniciar
+`rojo serve`.
+
+**Prueba en Studio** (con un script temporal que llenaba a la Orca, ya borrado): antes de
+derrotarla no hay guarida en el lago; al llenarse emerge con sus rampas, dura el descanso
+y al terminar se hunde y desaparece; vuelve la Orca.
+
+## 2026-10-13 — Etapa 3: tienda de la cabaña
+
+**Qué se hizo:**
+
+- `Config/Shop.luau` (10 cañas, 6 canastas, 6 botas), `Shared/Upgrades` (niveles,
+  descripciones), `ShopService` (compra en el servidor, E en el mostrador, velocidad).
+- `PlayerData`: `spendCoins`, `setUpgrade`; `SaveSchema` v3 guarda los niveles.
+- Efectos: poder x caña en estanques y descanso, suerte en la tirada de peces,
+  capacidad x canasta (HUD y canasta de la espalda), velocidad de las botas.
+- Caña con color y brillo por nivel (`UIConfig.RodLooks`).
+- Ventana de la tienda (`ShopWindow`, `ShopController`) y botón Tienda en el HUD.
+- Cartel de la cabaña: "TIENDA".
+
+**Prueba en Studio** (con un script temporal que daba monedas, ya borrado): abrir la
+tienda desde el HUD, comprar Caña de madera (150), Botas de playa (200) y Canasta
+reforzada (300): monedas bajan a 9.3K, la canasta pasa a 0/30, WalkSpeed 18 y niveles
+Rod/Basket/Boots = 2.
+
+**Corregido:** la lista ordenaba por nombre (Nivel10 antes que Nivel2); ahora por nivel.
+
+## 2026-10-13 — Todo con E, alimentar de 1 en 1, estanques y cañas nuevos, terreno a su altura
+
+**Qué se hizo:**
+
+- Controles de PC: E lanza, E tira y E alimenta (F sigue sirviendo). Los botones grandes
+  quedan para móvil y muestran la tecla "E" si hay teclado. Se quitaron los
+  ProximityPrompts de los calderos (chocaban con E).
+- Alimentar de 1 en 1: `FeedingService` saca un pez a la vez de la canasta (en ~4 s en
+  total, entre 0.06 y 0.3 s por pez); cada pez vuela a la boca con su especie
+  (`GiantFed` lleva el id) y paga sus monedas. Se corta si sales de la orilla o se
+  llena el gigante; lo que quede sigue en la canasta. El gigante muerde como mucho cada
+  0.45 s para no saturar de efectos.
+- Estanques rehechos: anillo de piedra tallada con línea brillante arriba y en el agua,
+  escalón exterior, círculo de runas bajo el agua, cristal flotante que gira (`PondFx`),
+  nenúfares con flores, 4 faroles de piedra; desde x5 racimos de cristales y desde x20
+  cristalitos en órbita. Bloqueado: el cristal se ve apagado y quieto.
+- Cañas rehechas (`RodBuilder`, `RodOrnaments`, `RodParts`): contera, mango con amarres,
+  carrete con platos, virolas y anillas; cada nivel con su estilo (nudos de bambú,
+  hilos, coral y perla, acero, oro con gemas, cristal con núcleo y destellos, vetas del
+  abismo con humo, lava con chispas, aletas del leviatán con burbujas). La tienda muestra
+  la caña en 3D en cada fila.
+- La tarjeta de captura pasó a la izquierda (tapaba ¡TIRA!).
+- **Terreno a su altura real:** medido en Studio, el suelo se dibujaba 2 studs más alto
+  que lo diseñado (la superficie queda en el centro del vóxel + ocupación); los estanques
+  quedaban 2 studs hundidos y las piezas del suelo (bancos, bordes) enterradas.
+  `TerrainBuilder` ahora resta medio vóxel: plaza a 6, borde del cráter a 30, mar a 2.
+
+**Prueba en Studio** (con monedas y poder de prueba, script ya borrado): alturas medidas
+(plaza 5.8, cráter 29.8, mar 2, estanques 6); estanques nuevos con sus bordes, runas y
+cristales (de noche); las 10 cañas alineadas; pescar con E (lanzar y tirar: Sardina x6);
+alimentar con E: 6 peces de 1 en 1, +6 monedas y la Orca se calmó.
+
+**No verificado:** cómo se ve todo el mapa con el terreno 2 studs más bajo (playa,
+muelles, cabaña), la caña nueva en la mano de cerca, móvil.
+
+## 2026-10-13 — Etapa 4: avisos de ataque, límites y AFK
+
+**Qué se hizo:**
+
+- `RateLimit` (cubeta de fichas por jugador y remote) en CastRequest, ReelIn,
+  FeedRequest y BuyUpgrade; avisa en la salida si alguien abusa, nunca expulsa.
+- `FishingService.interrupt`: un Salpicón hace escapar el pez que picaba.
+- `GiantAttacks`: si el círculo cae sobre ti, cartel "¡Sal del círculo rojo!" y cuenta
+  regresiva grande.
+- `AfkNotice`: aviso desde los 14 min sin moverse (Roblox expulsa a los 20).
+- El terreno se arma al final del arranque del servidor: ya no sale la advertencia de
+  `EstadoGigante` en los clientes.
+- No se puede pescar desde el puente.
+
+**Prueba en Studio:** sin advertencias al arrancar; parado en la puerta del cráter con la
+Orca furiosa: cartel, cuenta regresiva y empujón. Recorrido con el terreno corregido:
+plaza, estanques, muelle y puente se ven a su altura.
+
+
+## 2026-10-13 — Etapa 5: retención
+
+**Qué se hizo:**
+
+- Datos v4 (`SaveSchema`): especies, tutorial, racha diaria, ajustes, insignias.
+  `ProfilePublish` publica todo en atributos del jugador.
+- Botones del HUD en cuadrícula (`HudButtons`): Tienda, Peces, Premio, Ajustes; ventanas
+  con `Window` (una abierta a la vez).
+- Colección de peces (`FishDex`) con modelos 3D y siluetas; aviso y monedas al descubrir
+  una especie (25 a 25,000 según rareza) y 100K al completar las 12.
+- Tutorial de 4 misiones con flecha y distancia sobre el destino (`TutorialGuide`).
+- Premio diario de 7 días (100 → 2,500); se abre solo si toca cobrar.
+- Insignias con aviso en partida (`Badges`); BadgeService cuando haya IDs.
+- Ranking de Poder y Kills en los tableros de la entrada; cada 120 s con DataStore,
+  cada 10 s sin él.
+- Ajustes (música, sonidos, temblor, efectos reducidos) con SoundGroups `Musica` y
+  `Efectos`; efectos reducidos baja las partículas al 35 % y apaga rayos de sol.
+- Música con licencia de Roblox: isla "The Fisherman's Small Boat", cráter "Tension Repeat
+  Drones 29", descanso "Work Like A Champion".
+
+**Prueba en Studio** (script de prueba ya borrado): el premio diario se abrió solo y
+pagó 100; peces descubiertos con aviso y monedas, la colección muestra los 3 y siluetas;
+la misión 1 se completó y pasó a la 2 con flecha; los tableros mostraron el poder del
+jugador; las 3 pistas cargan (2:38, 2:04, 2:25) y suena la de la isla; ajustes sin
+errores en la salida.
+
+**No verificado:** insignias reales y ranking global (requieren lugar publicado),
+la misión de entrenar/comprar de punta a punta, móvil.
+
+## 2026-10-13 — Monetización
+
+**Qué se hizo:**
+
+- `Config.Monetization`: precios sugeridos y efectos. IDs en `Assets.GamePasses` y
+  `Assets.Products` (en 0 hasta crearlos en el Creator Hub).
+- Pases: x2 Poder (todo el poder, también en el descanso), x2 Monedas (entrega y
+  descubrir peces), VIP (etiqueta dorada, +20 % de suerte, premio diario x2).
+- Productos: x2 de entrenamiento para todo el servidor (15 min que se suman, cartel con
+  cuenta regresiva y quién lo compró), llenar al monstruo 25/50/75 % o entero
+  ("siguiente monstruo"; si está descansando queda en fila), estanques 2–10 para siempre
+  (también se ofrecen al apretar E en un estanque bloqueado).
+- `Perks` (compartido) calcula todo desde atributos que pone el servidor.
+- `Receipts`: idempotente con el PurchaseId guardado (v5 del guardado) y `saveNow`.
+- Tienda de Robux: botón ancho "R$ Robux" en el HUD.
+- `FishDex` ya no frena el arranque del cliente mientras cargan los datos.
+
+**Prueba en Studio** (script de prueba ya borrado): pases VIP y x2 Poder marcados como
+"¡Tuyo!" y etiqueta VIP sobre la cabeza; x2 del servidor con cartel arriba a la derecha;
+estanque x8 "Abierto"; llenar 25 % subió la barra de 0 a 0.25 con aviso; comprar con ID 0
+avisa "Disponible cuando el juego esté publicado"; sin errores en la salida.
+
+**Nota:** Rojo duplicó en Studio los archivos nuevos (dos `Monetization`, dos scripts de
+prueba) tras la reconexión; desconectar y reconectar Rojo lo limpió.
+
+## 2026-10-13 — Monetización escalonada y elegir monstruo
+
+**Cambios pedidos:** x2 Poder y x2 Monedas pasan de pases a mejoras que se acumulan
+(x2, x4, x8... 10 niveles, desde R$ 3); el x2 del servidor sube de nivel con cada compra y
+reinicia sus 15 min; "siguiente monstruo" ahora es elegir cuál sale después del descanso
+(Orca, Minotauro, Dragón marino, Zorro de agua).
+
+- `Config.Monetization` reescrito; IDs de productos en `Assets/Products.luau` (42).
+- Guardado v5 con `levels` (Power, Coins); atributos `NivelPower` / `NivelCoins`.
+- `ServerBoost` por niveles; `GiantChoice` (fila de elecciones) que la ruleta usa primero.
+- Tienda: cada fila muestra el siguiente nivel y su precio (`RobuxOffers`, `RobuxCards.offer`).
+
+**Prueba en Studio** (script ya borrado): Poder y Monedas suben de nivel y la tienda pasa al
+siguiente precio; entrenamiento del servidor subió de nivel y reinició el tiempo (cartel
+x16); elegir Orca aparece en la fila; los monstruos sin modelo dicen "Pronto"; 0 errores.
+
+## 2026-10-13 — Interfaz estilo simulador
+
+Pedido: interfaz parecida a una captura de un simulador (números grandes con contorno,
+íconos 3D, botones de Robux a la vista). Decisiones del usuario: íconos 3D hechos en el
+juego, barra del monstruo arriba pero más chica, atajos de Poder/Monedas y Llenar 25/50/75 %.
+
+- `Interface/Style` (texto con contorno negro grueso, degradados, insignia de Robux),
+  `Interface/IconModels` + `Icon3D` (moneda, gema, calavera, canasta, regalo, engrane,
+  cofre y peces, girando en ViewportFrames).
+- `Interface/Layout`: columna izquierda (Monedas, Poder, Peces, Kills con su
+  multiplicador; misión del tutorial), columna derecha (aviso del entrenamiento del
+  servidor, Tienda, Robux, atajos x Poder / x Monedas) y botones redondos en la barra de
+  Roblox (Peces, Premio, Ajustes) con `GuiService.TopbarInset`. Todo se escala con el alto
+  de la pantalla (escala 1 a 600 px de alto, entre 0.55 y 1.2).
+- Barra del monstruo compacta: "comida / total" grande, etapa, enojo y chips +25/+50/+75 %.
+- En pantallas táctiles la misión va abajo al centro (a la izquierda tapaba el joystick).
+- Pescar/Alimentar bajó 35 px para no chocar con la columna derecha en teléfonos.
+
+**Prueba en Studio:** PC y simulador de iPhone XR sin encimarse; tarjeta de captura bajo
+la misión; 0 errores (script de prueba ya borrado; Rojo reconectado para limpiar copias).
+
+## 2026-10-13 — Íconos de imagen estilo 3D
+
+El usuario prefirió imágenes quietas estilo 3D (como su referencia) a los modelos que
+giraban. 9 íconos generados con IA en Canva, recortados (fondo blanco a transparente) y
+juntados en una hoja de 3x3 subida con el Gestor de recursos (`Assets.UI.IconSheet`).
+`Interface/Icons` los usa y deja `Icon3D` como reserva. Probado en Studio: se ven nítidos.
+
+## 2026-10-13 — Títulos, amigos, códigos, regalo del grupo y canastas
+
+- **Sobre la cabeza** (`Interface/Overhead`): pirámide dorada con las kills, "VIP", título
+  según el poder (`Config.Social.titles`, 10 rangos de Novato a Dios del Mar, cada uno con
+  su degradado) y el nombre. Medido en studs (se ve del tamaño del mundo). Reemplaza el
+  nombre de Roblox y el antiguo `VipTags` (borrado).
+- **Impulso de amigos** (`Social/FriendBoost`): +10 % de poder y monedas por amigo en el
+  servidor, hasta +50 %; cartel abajo a la izquierda.
+- **Códigos** (`Social/Codes`, lista solo en el servidor `Social/CodeList`): GIGANTES,
+  ORCA, LANZAMIENTO. Ventana con el boleto en la barra de Roblox. Se guardan los usados.
+- **Regalo del grupo** (`Social/GroupReward`): estar en el grupo + 15 min en la partida →
+  1,500 monedas y 15 min de x2 poder, una vez. Falta poner `Config.Social.group.groupId`.
+- **Impulso personal** x2 de poder (`boostUntil` en el guardado) para códigos y grupo.
+- **Canastas** (`Effects/BasketBuilder` + `BasketStyles`): 6 estilos según la canasta
+  comprada (mimbre, reforzada, pescador, baúl, red, abismo), al tamaño del avatar.
+- 4 íconos nuevos (códigos, amigos, grupo, pirámide); hoja de íconos 4x4 (v2).
+
+**Prueba en Studio** (scripts ya borrados): título CAPITÁN con 3 kills y VIP; +20 % de
+amigos y los multiplicadores x1.2 / x2.4; código canjeado, repetido y falso; las 6
+canastas; ventana del grupo en "Pronto" sin grupo; 0 errores.
+
+## 2026-10-14 — TIENDA, MEJORAS y regalos estilo simulador
+
+Rediseño pedido con 4 capturas de referencia (simulador de pirámides):
+
+- **Ventanas** (`Menus/Window`): título enorme con contorno sobre la esquina, panel oscuro
+  (o de madera) con borde negro grueso y X roja. Se escalan con el alto de la pantalla
+  (`Window.fit`), así en un monitor de 1440 px no se ven chiquitas.
+- **TIENDA** (antes "Robux"; se quitó ese botón): banner verde "¡Impulsa el entrenamiento
+  del servidor!" (x1 → x2, tiempo en rosa, precio) y secciones con tarjetas de colores con
+  rayos que giran (`OfferCard`, `ShopParts`): Para siempre (Poder, Monedas, VIP), Llenar
+  al monstruo, Elige el siguiente monstruo y Estanques.
+- **Regalos** (`GiftPicker`, `server/Monetization/Gifts`): botón rosa en Poder, Monedas,
+  VIP y estanques. Se elige a otro jugador del servidor y se le compra SU siguiente nivel;
+  el servidor anota el regalo 2 min (remote `SetGift`) y el recibo se lo entrega a él. Si
+  se fue, se lo queda quien pagó. VIP se regala con el producto `GiftVIP` (queda en
+  `save.gifts`, guardado v6).
+- **MEJORAS** (antes tienda de la cabaña): filas de madera con la caña en 3D (ahora en
+  diagonal) o el ícono, nivel, precio en monedas (verde) y en Robux (morado, productos
+  `Rod/Basket/Boots<n>`). Se abre con el botón Mejoras o con E en el mostrador.
+- **Premio diario**: 7 tarjetas de regalo con rayos (hecho en verde con ✓, hoy dorado) y
+  botón ¡RECLAMAR!.
+- `server/Monetization/Grants` separa qué da cada producto; `Receipts` queda con el cobro.
+- Hoja 2 de íconos (12 nuevos + rayos), subida con el Gestor de recursos.
+
+**Prueba en Studio** (scripts ya borrados): TIENDA completa, ventana de regalar ("No hay
+más jugadores"), premio cobrado, MEJORAS en las 3 pestañas; productos entregados sin
+comprar: Rod3, Boots4 (velocidad 23), GiftVIP (etiqueta VIP), Pond3, Basket2 (30 peces),
+Power1 (x2). 0 errores.

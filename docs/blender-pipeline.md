@@ -40,3 +40,23 @@ un generador de imágenes no conoce el unwrap del modelo.
 - [ ] Exportado a `assets/blender/` como `.fbx` o `.glb`, con texturas embebidas.
 - [ ] Al subirlo, ID registrado en `src/shared/Assets.luau` y reemplazo anotado en
       `docs/devlog.md`.
+
+## Monstruos por código (`tools/blender/`)
+
+Los monstruos se modelan con scripts de Python que corren en Blender 5.2 (por el MCP o
+pegándolos en la consola de Python de Blender):
+
+| Archivo | Qué hace |
+|---|---|
+| `criaturas.py` | Bloques comunes: cadenas de piel (Skin), masas, fusionar (remesh por vóxeles + suavizado), pintar colores por vértice, materiales de pelaje/escamas/cuerno, estudio y render. |
+| `minotauro.py`, `dragon.py`, `zorro.py` | Un monstruo en 4 etapas: `construir_<monstruo>(etapa, voxel)` devuelve sus objetos. |
+| `vista_etapas.py` | `vista_etapas(construir, alto, ruta, voxel, angulo=8)`: las 4 etapas lado a lado (cámara ortográfica que encuadra todo) para revisar el diseño. Renders en `assets/blender/render/`. |
+| `exportar.py` | `exportar_monstruo(nombre, objetos, proyecto)`: una malla ≤ 9,800 triángulos, UVs automáticas, color + brillo + normales horneados a 1024 y FBX con texturas embebidas. |
+| `exportar_todos.py` | `exportar_cola([("Minotauro", 2), ...])`: exporta varios en cola, cada uno en su temporizador (Blender no se congela) y deja `log_<Nombre>.json` y `cola.json`. Cada uno tarda ~5 min. |
+
+Los llamados largos por el MCP se cortan a los 60 s aunque Blender siga trabajando: para
+renders y exportaciones se usa `bpy.app.timers.register` y se espera el archivo.
+
+En el juego, cada etapa es un Model `<modelBase>E<n>` en ServerStorage (ver
+`GiantTemplates`); su tamaño real no importa: `GiantBody` lo escala a 3, 8, 15 y 30
+veces el alto de un jugador.
