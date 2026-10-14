@@ -22,8 +22,8 @@ local COLORS =
 
 local ROW_TOP = 114 -- debajo de la fila del enojo
 local CHIP_HEIGHT = 48 -- alto antes de escalar...
-local MIN_SCREEN_HEIGHT = 44 -- ...pero nunca menos que esto en pantalla
-local CHIP_MAX_WIDTH = 120
+local MIN_SCREEN_HEIGHT = 34 -- ...pero nunca menos que esto en pantalla
+local CHIP_MAX_WIDTH = 100
 local GAP = 20
 
 local FillChips = {}

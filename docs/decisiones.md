@@ -518,3 +518,10 @@ con 1 o con 50 jugadores.
 El importador 3D de Studio no aplica el cambio de ejes de un FBX de Blender (Z arriba):
 el Minotauro llegó acostado. `exportar.py` ahora usa `bake_space_transform`. Con Meshy,
 revisar en la vista previa del importador que el modelo esté parado antes de importar.
+
+## 2026-10-14 — Los estanques se abren con monstruos llenados
+
+Pedido del usuario: el progreso de estanques sigue a los monstruos que ayudaste a
+llenar (kills, con al menos 0.5 % de la barra), no al poder. Premia jugar en equipo y
+evita que entrenar solo en un estanque abra el siguiente. Umbrales en
+`Config/Progression.luau` (`requiredKills`).

@@ -33,7 +33,7 @@ local VALUE_HEIGHT = 54
 local DETAIL_HEIGHT = ROW_HEIGHT - VALUE_HEIGHT
 -- Texto de la línea chica: en un teléfono (escala ~0.63) 20 se ve de ~13 px.
 local DETAIL_MAX_TEXT = 22
-local DETAIL_MIN_TEXT_TOUCH = 20
+local DETAIL_MIN_TEXT_TOUCH = 14
 
 type Row = { value: TextLabel, detail: TextLabel, badge: TextLabel }
 
@@ -76,7 +76,6 @@ local function row(order: number, icon: string, color: Color3): Row
 	local limit = detail:FindFirstChildOfClass("UITextSizeConstraint")
 	if limit and Device.touch() then
 		limit.MinTextSize = DETAIL_MIN_TEXT_TOUCH
-		detail.TextTruncate = Enum.TextTruncate.AtEnd
 	end
 	return { value = value, detail = detail, badge = badge }
 end

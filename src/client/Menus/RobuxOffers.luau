@@ -12,7 +12,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 
@@ -166,7 +165,7 @@ function RobuxOffers.pond(player: Player, index: number): () -> Offer
 	return function()
 		return {
 			title = `Estanque x{pond.multiplier}`,
-			description = `Entrena aquí sin juntar {NumberFormat.short(pond.requiredPower)} de poder`,
+			description = `Entrena aquí sin llenar {pond.requiredKills} monstruos`,
 			key = `Pond{index}`,
 			isPass = false,
 			robux = robux,

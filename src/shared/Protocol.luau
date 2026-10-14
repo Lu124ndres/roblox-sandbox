@@ -63,7 +63,7 @@ local Protocol = {
 		GiantFed = "GiantFed",
 		-- servidor -> dueño: (gained: number). Un tick de entrenamiento en un estanque.
 		TrainingTick = "TrainingTick",
-		-- servidor -> dueño: (status: "locked" | "busy", requiredPower: number?, pond: number?)
+		-- servidor -> dueño: (status: "locked" | "busy", requiredKills: number?, pond: number?)
 		TrainingDenied = "TrainingDenied",
 		-- cliente -> servidor: (category: UpgradeCategory). Comprar el siguiente nivel.
 		BuyUpgrade = "BuyUpgrade",

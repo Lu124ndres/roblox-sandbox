@@ -124,14 +124,14 @@ function Perks.pondOpen(player: Player, index: number): boolean
 	if not pond then
 		return false
 	end
-	local power = player:GetAttribute(ATTR.Power)
-	return (type(power) == "number" and power >= pond.requiredPower)
+	local kills = player:GetAttribute(ATTR.Kills)
+	return (type(kills) == "number" and kills >= pond.requiredKills)
 		or Perks.ownsPond(player, index)
 end
 
 -- ¿Este atributo del jugador cambia qué estanques tiene abiertos? (poder o compra)
 function Perks.affectsPonds(attribute: string): boolean
-	return attribute == ATTR.Power or string.sub(attribute, 1, #ATTR.PondPrefix) == ATTR.PondPrefix
+	return attribute == ATTR.Kills or string.sub(attribute, 1, #ATTR.PondPrefix) == ATTR.PondPrefix
 end
 
 -- Multiplicador del mejor estanque abierto (para el descanso del volcán).

@@ -25,10 +25,12 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 | Estanque | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Multiplicador | x1 | x2 | x3 | x5 | x8 | x12 | x20 | x35 | x60 | x100 |
-| Poder requerido | 0 | 150 | 600 | 2K | 6K | **30K** | **150K** | **600K** | **2.5M** | **10M** |
+| Multiplicador | x1 | x2 | x4 | x10 | x15 | x25 | x40 | x75 | x100 | x200 |
+| Monstruos llenados (`requiredKills`) | 0 | 1 | 2 | 4 | 7 | 12 | 20 | 35 | 60 | 100 |
 
-En negrita lo que se subió hoy: antes se abrían todos en ~2 h, mucho antes que las cañas.
+Desde el 2026-10-14 los estanques se abren con **monstruos llenados** (kills), no con
+poder. Un monstruo dura ~5–10 min más el descanso: el estanque 10 llega en ~15–20 h de
+juego. También se pueden abrir con Robux (`pondRobux`).
 
 ## Tienda de monedas — MEJORAS (`Config/Shop.luau`)
 
@@ -51,11 +53,11 @@ comida y ~4.6 monedas por pez.
 
 | Producto | Precios actuales (R$) |
 |---|---|
-| Poder / Monedas x2 → x1024 (10 niveles) | 3, 7, 15, 29, 59, 99, 199, 349, 599, 999 |
+| Poder / Monedas x2 → x1024 (10 niveles) | 3, 7, 15, 36, 74, 114, 205, 349, 599, 999 |
 | VIP (pase) / regalar VIP | 299 / 299 |
-| Entrenamiento del servidor 15 min, x2 → x64 | 15, 29, 59, 99, 199, 349 |
+| Entrenamiento del servidor 15 min, x2 → x64 | 60, 150, 359, 629, 849, 1139 |
 | Llenar 25 / 50 / 75 % | 49 / 89 / 129 |
-| Elegir siguiente monstruo | Orca 25, Minotauro 49, Dragón 79, Zorro 99 (se oculta con un solo monstruo) |
+| Elegir siguiente monstruo | Orca 25, Minotauro 49, Dragón 249, Zorro 399 (se oculta con un solo monstruo) |
 | Estanques 2–10 | 25 … 999 |
 | MEJORAS en Robux | cañas 5 … 999, canastas 9 … 299, botas 5 … 199 |
 

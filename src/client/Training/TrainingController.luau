@@ -93,7 +93,7 @@ function TrainingController.start(toasts: Toasts.Toasts)
 	denied.OnClientEvent:Connect(function(status: unknown, required: unknown, pond: unknown)
 		if status == "locked" and type(required) == "number" then
 			toasts.show(
-				`Necesitas {NumberFormat.short(required)} de poder, o desbloquéalo con Robux`,
+				`Llena {required} {if required == 1 then "monstruo" else "monstruos"} para abrirlo, o desbloquéalo con Robux`,
 				COLORS.Warning
 			)
 			if type(pond) == "number" then

@@ -52,11 +52,11 @@ function FishingPower.biteDelay(baseSeconds: number, power: number): number
 	return math.max(PROGRESSION.minBiteDelaySeconds, baseSeconds / FishingPower.speed(power))
 end
 
--- Multiplicador del mejor estanque que el jugador ya desbloqueó.
-function FishingPower.bestPondMultiplier(power: number): number
+-- Multiplicador del mejor estanque que se abre con `kills` monstruos llenados.
+function FishingPower.bestPondMultiplier(kills: number): number
 	local best = 1
 	for _, pond in PROGRESSION.ponds do
-		if power >= pond.requiredPower then
+		if kills >= pond.requiredKills then
 			best = math.max(best, pond.multiplier)
 		end
 	end

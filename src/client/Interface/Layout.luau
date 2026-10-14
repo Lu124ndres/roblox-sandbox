@@ -15,12 +15,14 @@
 ]]
 
 local GuiService = game:GetService("GuiService")
+local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
 local Device = require(script.Parent.Device)
 
 local REFERENCE_HEIGHT = 600 -- alto de pantalla en que el HUD va a escala 1
 local MIN_SCALE, MAX_SCALE = 0.55, 1.2
+local PHONE_REFERENCE_HEIGHT, PHONE_MIN_SCALE = 700, 0.45
 local MARGIN = 12
 local STAT_WIDTH = 320 -- ancho de las filas de estadísticas en PC
 local STAT_WIDTH_TOUCH = 260 -- más angostas en táctil: dejan sitio a la barra de hambre
@@ -85,7 +87,11 @@ end
 local function refreshScale()
 	local camera = Workspace.CurrentCamera
 	local height = if camera then camera.ViewportSize.Y else REFERENCE_HEIGHT
-	currentScale = math.clamp(height / REFERENCE_HEIGHT, MIN_SCALE, MAX_SCALE)
+	-- En teléfonos (pantalla baja y táctil) el HUD va un poco más chico.
+	local phone = height <= 500 and UserInputService.TouchEnabled
+	local reference = if phone then PHONE_REFERENCE_HEIGHT else REFERENCE_HEIGHT
+	currentScale =
+		math.clamp(height / reference, if phone then PHONE_MIN_SCALE else MIN_SCALE, MAX_SCALE)
 	for _, scale in scales do
 		scale.Scale = currentScale
 	end

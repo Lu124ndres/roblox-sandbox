@@ -39,7 +39,7 @@ export type GiantDef = {
 -- Un estanque de la zona de entrenamiento.
 export type PondDef = {
 	multiplier: number, -- poder por segundo = powerPerTick * multiplier
-	requiredPower: number, -- poder mínimo para usarlo
+	requiredKills: number, -- monstruos llenados (kills) para usarlo
 }
 
 export type EconomyConfig = {

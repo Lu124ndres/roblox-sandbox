@@ -27,7 +27,6 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
-local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local PlayerData = require(script.Parent.PlayerData)
@@ -83,7 +82,7 @@ local function start(player: Player, pond: number, part: BasePart)
 	end
 	local def = PONDS[pond]
 	if not Perks.pondOpen(player, pond) then
-		Remotes.TrainingDenied:FireClient(player, "locked", def.requiredPower, pond)
+		Remotes.TrainingDenied:FireClient(player, "locked", def.requiredKills, pond)
 		return
 	end
 	local state = player:GetAttribute(ATTR.FishingState)
@@ -138,8 +137,10 @@ function TrainingService.init(map: Instance)
 		then
 			local def = PONDS[index]
 			if def then
-				local requirement = if def.requiredPower > 0
-					then `Requiere {NumberFormat.short(def.requiredPower)} de poder`
+				local requirement = if def.requiredKills > 0
+					then `Requiere {def.requiredKills} {if def.requiredKills == 1
+						then "monstruo llenado"
+						else "monstruos llenados"}`
 					else "Poder de pesca"
 				local prompt = Proximity.makePrompt(
 					descendant,
