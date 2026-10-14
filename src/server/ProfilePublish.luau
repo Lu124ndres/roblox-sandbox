@@ -38,7 +38,8 @@ function ProfilePublish.prepare(player: Player)
 	end
 	local leaderstats = Instance.new("Folder")
 	leaderstats.Name = "leaderstats"
-	for _, name in { Protocol.Leaderstats.Power, Protocol.Leaderstats.Kills } do
+	local stats = Protocol.Leaderstats
+	for _, name in { stats.Power, stats.Coins, stats.Kills, stats.Rebirths } do
 		local value = Instance.new("IntValue")
 		value.Name = name
 		value.Parent = leaderstats
@@ -81,6 +82,7 @@ end
 
 function ProfilePublish.coins(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.Coins, save.coins)
+	stat(player, Protocol.Leaderstats.Coins, save.coins)
 end
 
 function ProfilePublish.power(player: Player, save: SaveSchema.SaveData)
@@ -125,6 +127,7 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.BoostUntil, save.boostUntil)
 	player:SetAttribute(ATTR.GroupClaimed, save.groupClaimed)
 	player:SetAttribute(ATTR.Rebirths, save.rebirths)
+	stat(player, Protocol.Leaderstats.Rebirths, save.rebirths)
 	player:SetAttribute(ATTR.StarterPack, save.starterPack)
 	for key, level in save.levels do
 		player:SetAttribute(`{ATTR.LevelPrefix}{key}`, level)

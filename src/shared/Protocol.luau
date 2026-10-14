@@ -172,10 +172,11 @@ local Protocol = {
 		JoinedAt = "EntroEn", -- GetServerTimeNow() al entrar (para los 15 min del grupo)
 	},
 
-	-- Estadísticas de la tabla de jugadores: poder de pesca y monstruos llenados.
-	Leaderstats = {
+	Leaderstats = { -- tabla de jugadores (Tab), en este orden
 		Power = "Poder",
+		Coins = "Monedas",
 		Kills = "Kills",
+		Rebirths = "Renacimientos",
 	},
 
 	-- Piezas de world/Isla.model.json que el código busca por nombre.
