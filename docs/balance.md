@@ -9,15 +9,16 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | Perilla | Valor | Qué hace |
 |---|---|---|
 | `food` de cada monstruo | Orca 300, Minotauro 2,000, Dragón 10,000, Zorro 40,000 | **Mínimo** de comida (con pocos jugadores). |
-| `loadsPerPlayer` | 1.5 / 3 / 5 / 8 | Cuántas canastas llenas pide por jugador activo. La comida real = `loadsPerPlayer × 2.75 × suma de capacidades de los activos`. Así 50 jugadores no lo llenan en segundos. |
-| `scaling.activeSeconds` | 180 | Cuenta como activo quien pescó en los últimos 3 min o lleva peces. |
+| `loadsPerPlayer` | 1.5 / 3 / 5 / 8 | Cuántas canastas llenas pide por jugador activo. La comida real = `loadsPerPlayer × 2.75 × Σ 20 × (capacidad/20)^0.6` de los activos. Sube si llegan jugadores y baja si se van. |
+| `scaling.activeSeconds` | 180 | Cuenta como activo quien pescó en los últimos 3 min (9 min si lleva peces). |
+| `scaling.capacityExponent` | 0.6 | 1 = la comida crece igual que la canasta (mejorar no acorta). Con 0.6, canasta x10 → comida x4: menos viajes. |
 | `scaling.maxFoodFactor` | 100 | Tope: la comida nunca pasa de 100 × el mínimo. |
 | `scaling.minKillShare` | 0.005 | Hay que dar al menos el 0.5 % de la barra para ganar la kill. |
 | `multiplier` | 1 / 3 / 8 / 20 | Multiplica las monedas que da cada pez. |
 | `delivery.maxDeliverySeconds` | 4 | Una canasta, por grande que sea, se entrega en 4 s. |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
 | `cycle.restSeconds` (máx.), `restBaseSeconds`, `restPerPlayerSeconds` | 120 · 60 · 1.2 | Descanso = 60 s + 1.2 s por jugador, máximo 120. |
-| `anger.*` | — | Cuánto tarda en enojarse y cada cuánto ataca. |
+| `anger.*` | — | Cuánto tarda en enojarse y cada cuánto ataca. Con 3 jugadores o menos espera 150 s (`smallServerGraceSeconds`) en vez de 45. |
 
 **Probado en Studio:** 1 jugador con canasta de 160 peces → la Orca pidió 660 (1.5 × 2.75 × 160) y la canasta se entregó en ~4 s.
 

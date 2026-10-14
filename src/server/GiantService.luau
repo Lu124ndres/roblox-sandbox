@@ -50,9 +50,9 @@ local function publish()
 	GiantPublish.progress(progress, true)
 end
 
--- Sube el total (nunca lo baja) conservando lo ya comido.
-local function raiseFood(target: number)
-	if progress >= 1 or target <= totalFood then
+-- Ajusta el total a los jugadores activos de ahora, conservando lo ya comido.
+local function retarget(target: number)
+	if progress >= 1 or target == totalFood then
 		return
 	end
 	progress, totalFood = GiantFood.rescale(progress, totalFood, target)
@@ -72,11 +72,11 @@ function GiantService.init(map: Instance)
 	totalFood = GiantFood.target(currentDef)
 	publish()
 	GiantPublish.show()
-	-- Quien se vuelve activo (entra, pesca) mientras el gigante come sube el total.
+	-- Quien se vuelve activo (entra, pesca) lo sube; quien se va o deja de pescar lo baja.
 	task.spawn(function()
 		while true do
 			task.wait(GIANTS.scaling.recomputeSeconds)
-			raiseFood(GiantFood.target(currentDef))
+			retarget(GiantFood.target(currentDef))
 		end
 	end)
 end

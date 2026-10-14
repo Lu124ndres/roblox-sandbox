@@ -83,6 +83,8 @@ export type GameplayConfig = {
 
 export type AngerConfig = {
 	graceSeconds: number, -- segundos sin comer antes de empezar a enojarse
+	smallServerPlayers: number, -- con estos jugadores o menos...
+	smallServerGraceSeconds: number, -- ...la espera es esta (un viaje solo tarda ~2 min)
 	rampSeconds: number, -- segundos para pasar de 0 a furioso
 	angryThreshold: number, -- desde este enojo la barra baja sola
 	hungerDecayPerSecond: number, -- fracción de la barra que pierde por segundo enojado
@@ -106,10 +108,11 @@ export type CycleConfig = {
 }
 
 export type FoodScalingConfig = { -- comida según los jugadores activos (ver Giants.luau)
-	activeSeconds: number, -- activo = pescó en estos últimos segundos (o lleva peces)
+	activeSeconds: number, -- activo = pescó en estos últimos segundos (x3 si lleva peces)
 	maxFoodFactor: number, -- tope del total: food x esto
 	minKillShare: number, -- fracción de la barra que hay que aportar para la kill
-	recomputeSeconds: number, -- cada cuánto se revisa si el total tiene que subir
+	recomputeSeconds: number, -- cada cuánto se revisa si el total tiene que cambiar
+	capacityExponent: number, -- 1 = la comida crece igual que la canasta; menos = mejorar sí acorta
 }
 export type DeliveryConfig = { -- entrega de peces al gigante, por lotes
 	stepSeconds: number, -- un lote de peces cada tanto

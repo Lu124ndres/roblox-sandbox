@@ -5,11 +5,13 @@
 	Comida para llenar la barra: crece con los jugadores ACTIVOS (pescaron en
 	los últimos scaling.activeSeconds o llevan peces), así 50 jugadores con
 	canastas llenas no lo llenan en segundos:
-		total = clamp(loadsPerPlayer x comida media por pez x Σ capacidad,
-		              food, food x scaling.maxFoodFactor)
+		total = clamp(loadsPerPlayer x comida media por pez
+		              x Σ base x (capacidad / base) ^ capacityExponent,
+		              food, food x scaling.maxFoodFactor)     (base = canasta inicial)
 	food es el MÍNIMO (y el total si no hay nadie activo). loadsPerPlayer =
-	canastas llenas que cada jugador activo tiene que entregar. Si alguien se
-	vuelve activo mientras come, el total solo sube (nunca baja). Solo se
+	canastas llenas que cada jugador activo tiene que entregar. El total se
+	ajusta mientras come (sube si llegan jugadores, baja si se van) sin
+	que el gigante encoja ni se llene solo. Solo se
 	lleva la kill quien aportó al menos scaling.minKillShare de la barra.
 
 	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
@@ -89,6 +91,8 @@ local Giants: Types.GiantsConfig = {
 	stageHeightsInPlayers = { 3, 8, 15, 30 },
 	anger = {
 		graceSeconds = 45,
+		smallServerPlayers = 3,
+		smallServerGraceSeconds = 150,
 		rampSeconds = 60,
 		angryThreshold = 0.5,
 		hungerDecayPerSecond = 0.002, -- fracción de la barra: ~2 min para perder una etapa entera
@@ -113,6 +117,7 @@ local Giants: Types.GiantsConfig = {
 		maxFoodFactor = 100,
 		minKillShare = 0.005,
 		recomputeSeconds = 2,
+		capacityExponent = 0.6, -- canasta x10 => la comida pide ~x4: mejorar sí acorta los viajes
 	},
 	delivery = {
 		stepSeconds = 0.25,

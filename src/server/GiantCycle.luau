@@ -88,11 +88,8 @@ local function restTick()
 	end
 end
 
-local function run()
-	if running then
-		return
-	end
-	running = true
+-- Despedida, descanso y llegada del siguiente.
+local function cycle()
 	-- +1 kill a los que aportaron lo suficiente y siguen en el servidor.
 	local giantId = GiantService.getCurrent().id
 	for _, userId in GiantService.getParticipants() do
@@ -119,6 +116,24 @@ local function run()
 	GiantService.setPhase("arriving", CYCLE.arrivalSeconds)
 	task.wait(CYCLE.arrivalSeconds)
 	GiantService.setPhase("feeding")
+end
+
+-- Si algo falla a mitad del ciclo, el servidor no puede quedar sin monstruo:
+-- se trae el siguiente y se vuelve a comer.
+local function run()
+	if running then
+		return
+	end
+	running = true
+	local ok, problem: any = pcall(cycle)
+	if not ok then
+		warn(`GiantCycle: falló el ciclo ({problem}); se trae el siguiente monstruo`)
+		pcall(RestArena.hide)
+		pcall(function()
+			GiantService.reset(chooseNext())
+			GiantService.setPhase("feeding")
+		end)
+	end
 	running = false
 end
 

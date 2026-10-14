@@ -49,9 +49,8 @@ function PlayerData.attach(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.DataLoaded, true)
 end
 
--- Para módulos dueños de su parte de los datos (tutorial, diario, ajustes,
--- insignias): cambian lo suyo dentro de fn y se publica al cliente. Devuelve
--- false si el jugador no tiene datos cargados.
+-- Para módulos dueños de su parte de los datos (tutorial, diario, ajustes, insignias):
+-- cambian lo suyo dentro de fn y se publica. false si no tiene datos cargados.
 function PlayerData.edit(player: Player, fn: (save: SaveSchema.SaveData) -> ()): boolean
 	local data = dataByPlayer[player]
 	if not data then
@@ -142,11 +141,12 @@ function PlayerData.getCarriedCount(player: Player): number
 	return if data then Basket.total(data.save.carried) else 0
 end
 
--- Activo: pescó en los últimos `withinSeconds` o lleva peces (GiantFood).
+-- Activo: pescó hace poco (x3 de margen si lleva peces). Un AFK con la canasta llena no cuenta.
 function PlayerData.isActive(player: Player, withinSeconds: number): boolean
 	local data = dataByPlayer[player]
+	local carrying = data ~= nil and next(data.save.carried) ~= nil
 	return data ~= nil
-		and (os.clock() - data.lastCatchAt <= withinSeconds or next(data.save.carried) ~= nil)
+		and os.clock() - data.lastCatchAt <= withinSeconds * (if carrying then 3 else 1)
 end
 
 -- La capacidad crece con el poder (ver Shared/FishingPower).

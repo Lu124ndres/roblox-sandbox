@@ -3,7 +3,8 @@
 	GiantMood
 
 	El gigante se enoja si nadie le da de comer:
-		- Pasados graceSeconds sin un bocado, el enojo sube de 0 a 1 en
+		- Pasados graceSeconds sin un bocado (smallServerGraceSeconds con
+		  pocos jugadores), el enojo sube de 0 a 1 en
 		  rampSeconds y se publica en EstadoGigante.Anger.
 		- Desde angryThreshold, el hambre vuelve: la barra baja sola, pero
 		  nunca por debajo del inicio de la etapa actual (no encoge).
@@ -84,7 +85,11 @@ local function tick()
 		GiantService.calm()
 		return
 	end
-	local over = GiantService.secondsSinceFed() - ANGER.graceSeconds
+	-- Con pocos jugadores un viaje tarda más que la espera normal.
+	local grace = if #Players:GetPlayers() <= ANGER.smallServerPlayers
+		then ANGER.smallServerGraceSeconds
+		else ANGER.graceSeconds
+	local over = GiantService.secondsSinceFed() - grace
 	local raw = math.clamp(over / ANGER.rampSeconds, 0, 1)
 	local anger = if raw >= 1 then 1 else math.floor(raw / ANGER_STEP) * ANGER_STEP
 	GiantService.setAnger(anger)
