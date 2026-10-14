@@ -56,6 +56,7 @@ Desde Legendario se anuncia a todo el servidor (`announceFromRarity`).
 ## Premios y social
 
 - Premio diario, logros y misiones del tutorial: `Config/Retention.luau`.
+- Regalos por tiempo jugado (`Retention.playtime`): 5, 10, 20, 30, 45, 60, 90 y 120 min; monedas y minutos de x2 poder. Se reinician al volver a entrar.
 - Impulso de amigos (+10 % cada uno, máx. 5), regalo del grupo, títulos: `Config/Social.luau`.
 - Códigos: `src/server/Social/CodeList.luau` (solo servidor, para que nadie los lea).
 
