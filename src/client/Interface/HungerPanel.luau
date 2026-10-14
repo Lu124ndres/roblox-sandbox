@@ -20,14 +20,12 @@
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Config = require(ReplicatedStorage.Shared.Config)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Ui = require(script.Parent.Parent.Ui)
 local Device = require(script.Parent.Device)
 local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
 
-local THRESHOLDS = Config.Giants.stageThresholds
 local MAX_WIDTH = 400
 local MIN_WIDTH = UIConfig.Spacing.HungerWidthMin
 local SIDE_GAP = 24 -- aire entre el panel y cada columna
@@ -134,19 +132,6 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	Ui.corner(fill, 10)
 	Style.gradient(fill, Color3.new(1, 1, 1))
 	fill.Parent = clip
-
-	for index = 2, #THRESHOLDS do
-		local tick = Instance.new("Frame")
-		tick.Name = `Marca{index}`
-		tick.BackgroundColor3 = Style.OUTLINE
-		tick.BackgroundTransparency = 0.3
-		tick.BorderSizePixel = 0
-		tick.AnchorPoint = Vector2.new(0.5, 0)
-		tick.Position = UDim2.fromScale(THRESHOLDS[index], 0)
-		tick.Size = UDim2.new(0, 3, 1, 0)
-		tick.ZIndex = 2
-		tick.Parent = clip
-	end
 
 	local amount = Style.text(track, "Cantidad", 26, nil, 2.5)
 	amount.AnchorPoint = Vector2.new(0.5, 0.5)

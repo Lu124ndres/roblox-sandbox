@@ -6,9 +6,9 @@
 	que lleva sobre el total en grande, el nombre y la etapa. Lee el estado de
 	ReplicatedStorage.EstadoGigante (atributos que publica el servidor).
 
-	La barra marca las 4 etapas del gigante (empiezan en 0, 25, 50 y 75 %):
-	marcas en la barra, un color por etapa y avisos al pasar de etapa y al
-	llenarse. Al llenarse muestra la despedida, la cuenta regresiva del
+	La barra muestra solo la etapa actual: la comida que lleva y la que pide
+	para la siguiente ("450 / 2,000"), con un color por etapa; avisos al
+	crecer ("¡La Orca creció!") y al llenarse. Al llenarse muestra la despedida, la cuenta regresiva del
 	descanso del volcán y la llegada del siguiente gigante.
 
 	El total de comida lo publica el servidor (atributo Food, fijo por
@@ -22,6 +22,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
+local Config = require(ReplicatedStorage.Shared.Config)
 local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
@@ -32,6 +33,7 @@ local HungerPanel = require(script.Parent.Interface.HungerPanel)
 
 local ATTR = Protocol.GiantAttributes
 local STAGE_COLORS = UIConfig.HungerStageColors
+local THRESHOLDS = Config.Giants.stageThresholds
 local REFRESH_SECONDS = 0.1 -- 10 veces por segundo como mucho
 -- Se lee con cuidado: si Protocol aún no tiene Food, el atributo se llama igual.
 local FOOD_ATTRIBUTE: string = (ATTR :: any).Food or "Food"
@@ -148,11 +150,16 @@ function HungerBar.mount(
 			showPhase(phase)
 			return
 		end
+		-- Solo el nombre, y la comida que falta para la SIGUIENTE etapa (no el total).
 		title.Text = name
-		detail.Text = `Etapa {stage}/{GiantStages.count}`
+		detail.Text = ""
 		local total = totalFood(id)
-		amount.Text = `{NumberFormat.big(math.floor(progress * total))} / {NumberFormat.big(total)}`
-		setFill(progress, STAGE_COLORS[math.min(stage, #STAGE_COLORS)])
+		local from = THRESHOLDS[stage] or 0
+		local to = THRESHOLDS[stage + 1] or 1
+		local need = math.max(1, math.floor((to - from) * total + 0.5))
+		local have = math.clamp(math.floor((progress - from) * total + 0.5), 0, need)
+		amount.Text = `{NumberFormat.big(have)} / {NumberFormat.big(need)}`
+		setFill(have / need, STAGE_COLORS[math.min(stage, #STAGE_COLORS)])
 	end
 
 	-- Varios cambios seguidos (un lote de peces) se pintan una sola vez.
