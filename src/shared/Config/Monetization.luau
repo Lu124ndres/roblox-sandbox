@@ -72,12 +72,12 @@ local Monetization: MonetizationConfig = {
 		Power = {
 			name = "Poder",
 			description = "Todo el poder que ganas, para siempre.",
-			robux = { 3, 7, 15, 29, 59, 99, 199, 349, 599, 999 },
+			robux = { 3, 7, 15, 32, 76, 128, 229, 599, 999, 999 }, -- Poder 10 pendiente de confirmar
 		},
 		Coins = {
 			name = "Monedas",
 			description = "Todas las monedas que ganas, para siempre.",
-			robux = { 3, 7, 15, 29, 59, 99, 199, 349, 599, 999 },
+			robux = { 3, 7, 15, 32, 76, 128, 229, 599, 999, 999 }, -- Poder 10 pendiente de confirmar
 		},
 	},
 	levelOrder = { "Power", "Coins" },
@@ -112,7 +112,7 @@ local Monetization: MonetizationConfig = {
 	serverBoost = {
 		name = "Entrenamiento para todos",
 		minutes = 15,
-		robux = { 15, 29, 59, 99, 199, 349 }, -- x2, x4, x8, x16, x32, x64
+		robux = { 60, 129, 239, 416, 678, 880 }, -- x2, x4, x8, x16, x32, x64
 	},
 	fills = {
 		Fill25 = { name = "Llenar 25%", fraction = 0.25, robux = 49, order = 1 },
@@ -121,9 +121,9 @@ local Monetization: MonetizationConfig = {
 	},
 	chooseGiant = {
 		Orca = 25,
-		Minotauro = 49,
-		DragonMarino = 79,
-		ZorroDeAgua = 99,
+		Minotauro = 99,
+		DragonMarino = 265,
+		ZorroDeAgua = 408,
 		OrcaFantasma = 149,
 	},
 	pondRobux = {

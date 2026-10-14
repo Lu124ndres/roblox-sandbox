@@ -69,7 +69,7 @@ Desde Legendario se anuncia a todo el servidor (`announceFromRarity`).
 | VIP (pase) / regalar VIP | 299 / 299 |
 | Entrenamiento del servidor 15 min, x2 → x64 | 60, 150, 359, 629, 849, 1139 |
 | Llenar 25 / 50 / 75 % | 49 / 89 / 129 |
-| Elegir siguiente monstruo | Orca 25, Minotauro 49, Dragón 249, Zorro 399 (se oculta con un solo monstruo) |
+| Elegir siguiente monstruo | Orca 25, Minotauro 99, Dragón 265, Zorro 408 (se oculta con un solo monstruo) |
 | Estanques 2–10 | 25 … 999 |
 | MEJORAS en Robux | cañas 5 … 999, canastas 9 … 299, botas 5 … 199 |
 
