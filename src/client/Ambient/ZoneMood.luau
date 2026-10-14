@@ -3,10 +3,10 @@
 	ZoneMood
 
 	Cambia el ambiente según dónde está el jugador. Al cruzar el puente hacia
-	el Cráter del Abismo todo se oscurece: niebla rojiza, colores apagados,
-	el océano se calla y entra un ambiente de terror, con relámpagos y truenos
-	de vez en cuando. Sobre el lago del cráter flota una bruma y el fondo del
-	abismo brilla en rojo.
+	el Cráter del Abismo la luz se vuelve cálida, de lava (clara para jugar,
+	pero se nota el peligro): bruma anaranjada, chispas que suben del lago,
+	el fondo del abismo brilla en rojo, el océano se calla, entra un ambiente
+	tenso y de vez en cuando hay relámpagos y truenos.
 
 	SkyCycle lee ZoneMood.blend() para mezclar la luz del día con la del cráter.
 ]]
@@ -60,7 +60,7 @@ local function craterEffects()
 	mist.Texture = Assets.Particles.Mist
 	mist.Shape = Enum.ParticleEmitterShape.Box
 	mist.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
-	mist.Color = ColorSequence.new(Color3.fromRGB(150, 120, 150), Color3.fromRGB(90, 60, 80))
+	mist.Color = ColorSequence.new(Color3.fromRGB(255, 170, 120), Color3.fromRGB(200, 90, 60))
 	mist.Size = NumberSequence.new(18, 34)
 	mist.Transparency = NumberSequence.new({
 		NumberSequenceKeypoint.new(0, 1),
@@ -80,15 +80,34 @@ local function craterEffects()
 		WorldZones.craterCenter + Vector3.new(0, WorldLayout.waterLevel - 8, 0)
 	)
 	local light = Instance.new("PointLight")
-	light.Color = Color3.fromRGB(255, 40, 30)
+	light.Color = Color3.fromRGB(255, 70, 30)
 	light.Range = 60
-	light.Brightness = 4
+	light.Brightness = 5
 	light.Parent = glow
 	TweenService:Create(
 		light,
 		TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-		{ Brightness = 1.5 }
+		{ Brightness = 2 }
 	):Play()
+
+	-- Chispas de lava que suben del lago hasta más arriba del borde.
+	local embers = Instance.new("ParticleEmitter")
+	embers.Name = "Chispas"
+	embers.Texture = Assets.Particles.Spark
+	embers.Shape = Enum.ParticleEmitterShape.Box
+	embers.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
+	embers.Color = ColorSequence.new(Color3.fromRGB(255, 200, 80), Color3.fromRGB(255, 60, 20))
+	embers.LightEmission = 1
+	embers.Size = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.9),
+		NumberSequenceKeypoint.new(1, 0),
+	})
+	embers.Lifetime = NumberRange.new(4, 7)
+	embers.Rate = 70
+	embers.Speed = NumberRange.new(6, 12)
+	embers.SpreadAngle = Vector2.new(25, 25)
+	embers.Acceleration = Vector3.new(0, 2, 0)
+	embers.Parent = fog
 end
 
 local function lightningLoop()

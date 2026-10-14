@@ -110,15 +110,15 @@ local MOODS: { Mood } = {
 -- Ambiente del cráter: se mezcla encima del momento del día según ZoneMood.
 local CRATER: Mood = {
 	hour = 0,
-	brightness = 1.1,
-	atmosphere = Color3.fromRGB(90, 34, 40),
-	decay = Color3.fromRGB(40, 10, 18),
-	density = 0.5,
-	tint = Color3.fromRGB(255, 196, 196),
-	ambient = Color3.fromRGB(110, 60, 70),
+	brightness = 1.9, -- claro para jugar, pero con bruma y luz de lava (peligro)
+	atmosphere = Color3.fromRGB(255, 120, 70),
+	decay = Color3.fromRGB(200, 60, 30),
+	density = 0.42,
+	tint = Color3.fromRGB(255, 212, 182),
+	ambient = Color3.fromRGB(180, 105, 80),
 }
-local CRATER_SATURATION = -0.25
-local CRATER_CONTRAST = 0.2
+local CRATER_SATURATION = 0.12
+local CRATER_CONTRAST = 0.12
 
 local SkyCycle = {}
 
