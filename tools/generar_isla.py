@@ -636,21 +636,24 @@ def limites():
     return grupo("Limites", hijos, "Folder")
 
 
+E = L["plateauRadius"] / 125  # la isla creció: más palmeras y arbustos en el mismo espacio
+
+
 def decoracion():
     hijos = []
     hijos.append(grupo("Palmeras", [
         palmera(f"Palmera{i}", polar(a, r, altura_terreno(r) - 0.6), rng.uniform(0, 360), rng.uniform(3.5, 6.5), rng.choice((5, 6, 7)))
-        for i, (a, r) in enumerate(sitios(46, 84, 136, 8))
+        for i, (a, r) in enumerate(sitios(round(46 * E * E), 84 * E, 136 * E, 8))
     ], "Folder"))
     hijos.append(grupo("Arbustos", [
-        arbusto(f"Arbusto{i}", polar(a, r, L["plateauHeight"])) for i, (a, r) in enumerate(sitios(34, 84, 120, 7))
+        arbusto(f"Arbusto{i}", polar(a, r, L["plateauHeight"])) for i, (a, r) in enumerate(sitios(round(34 * E * E), 84 * E, 120 * E, 7))
     ], "Folder"))
     hijos.append(grupo("Rocas", [
         rocas(f"Rocas{i}", (math.cos(math.radians(a + s)) * (L["pierStartRadius"] + 2), math.sin(math.radians(a + s)) * (L["pierStartRadius"] + 2)), 4)
         for i, (a, s) in enumerate((x, sgn) for x in L["pierAngles"] for sgn in (-14, 14))
     ], "Folder"))
     conchas = []
-    for i, (a, r) in enumerate(sitios(60, 128, 138, 4)):
+    for i, (a, r) in enumerate(sitios(round(60 * E), L["plateauRadius"] + 3, L["shoreRadius"] - 1, 4)):
         conchas.append(pieza(f"Concha{i}", (0.9, 0.5, 0.9), polar(a, r, altura_terreno(r) + 0.15), CONCHA[i % 3], "SmoothPlastic", ry(rng.uniform(0, 360)), forma="Ball", **DECORADO, CanCollide=False))
     hijos.append(grupo("Conchas", conchas, "Folder"))
     return grupo("Decoracion", hijos)

@@ -1,18 +1,18 @@
 {
 	"_comentario": "Geometría del mundo. Fuente única para el terreno (server/World), el generador de piezas (tools/generar_isla.py) y las validaciones del servidor. Distancias en studs; ángulos en grados sobre XZ (0 = +X, 90 = +Z). La isla principal está centrada en el origen; el cráter del gigante en craterCenter (x, z). shoreRadius = plateau + (beachEnd - plateau) * (plateauHeight - waterLevel) / (plateauHeight - beachEndHeight).",
 	"waterLevel": 2,
-	"oceanHalfSize": 760,
+	"oceanHalfSize": 840,
 	"seaFloorHeight": -18,
-	"plateauRadius": 125,
+	"plateauRadius": 150,
 	"plateauHeight": 6,
-	"beachEndRadius": 160,
+	"beachEndRadius": 192,
 	"beachEndHeight": -4,
-	"shelfRadius": 220,
-	"shoreRadius": 139,
+	"shelfRadius": 264,
+	"shoreRadius": 167,
 	"deckHeight": 6.6,
-	"plazaRadius": 80,
+	"plazaRadius": 96,
 	"trainingPondCount": 10,
-	"trainingPondRingRadius": 58,
+	"trainingPondRingRadius": 70,
 	"trainingPondRadius": 12.5,
 	"trainingPondFloor": -1.5,
 	"trainingPondWaterTop": 6,
@@ -24,26 +24,26 @@
 		225,
 		315
 	],
-	"pierStartRadius": 132,
-	"pierLength": 50,
+	"pierStartRadius": 158,
+	"pierLength": 56,
 	"spawnAngle": 270,
-	"spawnRadius": 94,
+	"spawnRadius": 113,
 	"shopAngle": 0,
-	"shopRadius": 98,
+	"shopRadius": 118,
 	"campAngle": 125,
-	"campRadius": 100,
+	"campRadius": 120,
 	"lighthouseAngle": 180,
-	"lighthouseRadius": 152,
+	"lighthouseRadius": 182,
 	"lighthouseBaseHeight": 15,
-	"lighthouseMoundRadius": 28,
-	"fishingBandInner": 132,
-	"fishingBandOuter": 215,
+	"lighthouseMoundRadius": 30,
+	"fishingBandInner": 158,
+	"fishingBandOuter": 258,
 	"bridgeAngle": 90,
-	"bridgeStartRadius": 118,
+	"bridgeStartRadius": 142,
 	"bridgeWidth": 22,
 	"craterCenter": [
 		0,
-		400
+		450
 	],
 	"craterLakeRadius": 136,
 	"craterCliffRadius": 150,
@@ -59,80 +59,80 @@
 	"restArenaTop": 3.5,
 	"boundaryCenter": [
 		0,
-		200
+		225
 	],
-	"boundaryRadius": 500,
+	"boundaryRadius": 560,
 	"hills": [
 		[
-			-90,
-			20,
+			-108,
+			24,
 			11
 		],
 		[
-			78,
-			-60,
+			94,
+			-72,
 			10
 		],
 		[
-			-62,
-			-84,
+			-74,
+			-101,
 			10
 		],
 		[
-			-100,
+			-120,
+			-43,
+			9
+		],
+		[
+			106,
+			67,
+			10
+		],
+		[
+			-96,
+			86,
+			10
+		],
+		[
+			48,
+			-125,
+			9
+		],
+		[
 			-36,
-			9
-		],
-		[
-			88,
-			56,
-			10
-		],
-		[
-			-80,
-			72,
-			10
-		],
-		[
-			40,
-			-104,
-			9
-		],
-		[
-			-30,
-			104,
+			125,
 			9
 		]
 	],
 	"shoreRocks": [
 		[
-			140,
-			16,
+			168,
+			19,
 			8
 		],
 		[
-			-20,
-			-140,
+			-24,
+			-168,
 			7
 		],
 		[
-			124,
-			-72,
-			7
-		],
-		[
-			-108,
-			96,
-			8
-		],
-		[
-			96,
-			108,
+			149,
+			-86,
 			7
 		],
 		[
 			-130,
-			-60,
+			115,
+			8
+		],
+		[
+			115,
+			130,
+			7
+		],
+		[
+			-156,
+			-72,
 			7
 		]
 	]
