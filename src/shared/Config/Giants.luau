@@ -2,11 +2,19 @@
 --[[
 	Gigantes: la cadena del servidor, cuánta comida piden y cuánto miden.
 
-	food = comida total para llenar la barra. Es FIJA: no cambia con la
-	cantidad de jugadores ni con su poder. La dificultad la pone cada gigante:
-	la Orca es la más fácil y cada uno pide mucho más que el anterior (x6, x5,
-	x4), así los siguientes necesitan jugadores con más poder. Ver
-	docs/alcance.md, "Calibración".
+	Comida para llenar la barra: crece con los jugadores ACTIVOS (pescaron en
+	los últimos scaling.activeSeconds o llevan peces), así 50 jugadores con
+	canastas llenas no lo llenan en segundos:
+		total = clamp(loadsPerPlayer x comida media por pez x Σ capacidad,
+		              food, food x scaling.maxFoodFactor)
+	food es el MÍNIMO (y el total si no hay nadie activo). loadsPerPlayer =
+	canastas llenas que cada jugador activo tiene que entregar. Si alguien se
+	vuelve activo mientras come, el total solo sube (nunca baja). Solo se
+	lleva la kill quien aportó al menos scaling.minKillShare de la barra.
+
+	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
+	stepSeconds (cada paso es un lote de peces). Los lotes se anuncian a los
+	clientes y el progreso se publica a lo sumo cada broadcastSeconds.
 
 	Crecen por etapas: cada etapa empieza en stageThresholds[i] de la barra y
 	mide stageHeightsInPlayers[i] veces el alto de un jugador. Con un jugador
@@ -18,8 +26,9 @@
 	Salpicones cada attackIntervalSeconds con telegraphSeconds de aviso. El
 	golpe solo empuja: nunca se pierde nada. Un solo bocado lo calma.
 
-	Ciclo: al llenarse se despide (farewellSeconds) y empieza el descanso
-	(restSeconds): en el centro del lago emerge la guarida del descanso y
+	Ciclo: al llenarse se despide (farewellSeconds) y empieza el descanso:
+	clamp(restBaseSeconds + restPerPlayerSeconds x jugadores, restMinSeconds,
+	restSeconds) segundos (restSeconds es el máximo). En el centro del lago emerge la guarida del descanso y
 	todo el que esté sobre ella gana poder solo, a restTrainingMultiplier x
 	su mejor estanque desbloqueado. Quien le dio de comer suma +1 kill. Al terminar, la
 	ruleta elige al siguiente entre los que tienen inRoulette (los que ya tienen
@@ -35,7 +44,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca",
 			article = "la",
 			multiplier = 1,
-			food = 2500,
+			food = 300, -- mínimo
+			loadsPerPlayer = 1.5,
 			modelBase = "Orca",
 			released = true,
 			inRoulette = true,
@@ -45,7 +55,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Minotauro",
 			article = "el",
 			multiplier = 3,
-			food = 15000,
+			food = 2000, -- mínimo
+			loadsPerPlayer = 3,
 			modelBase = "Minotauro",
 			released = true,
 			inRoulette = false, -- falta su modelo (Meshy)
@@ -55,7 +66,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Dragón marino",
 			article = "el",
 			multiplier = 8,
-			food = 75000,
+			food = 10000, -- mínimo
+			loadsPerPlayer = 5,
 			modelBase = "DragonMarino",
 			released = false,
 			inRoulette = false,
@@ -65,7 +77,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Zorro de agua",
 			article = "el",
 			multiplier = 20,
-			food = 300000,
+			food = 40000, -- mínimo
+			loadsPerPlayer = 8,
 			modelBase = "ZorroDeAgua",
 			released = false,
 			inRoulette = false,
@@ -88,9 +101,23 @@ local Giants: Types.GiantsConfig = {
 	},
 	cycle = {
 		farewellSeconds = 7,
-		restSeconds = 120,
+		restSeconds = 120, -- máximo
+		restBaseSeconds = 60,
+		restPerPlayerSeconds = 1.2,
+		restMinSeconds = 60,
 		restTrainingMultiplier = 2,
 		arrivalSeconds = 6,
+	},
+	scaling = {
+		activeSeconds = 180,
+		maxFoodFactor = 100,
+		minKillShare = 0.005,
+		recomputeSeconds = 2,
+	},
+	delivery = {
+		stepSeconds = 0.25,
+		maxDeliverySeconds = 4,
+		broadcastSeconds = 0.25,
 	},
 }
 

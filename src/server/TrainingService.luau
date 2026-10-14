@@ -13,6 +13,11 @@
 	Caben todos los que quieran en el mismo estanque (servidores de 40-50):
 	cada uno lanza su corcho hacia el agua frente a él, no al mismo punto.
 	El poder hace pescar más peces y más rápido (Shared/FishingPower).
+
+	El servidor no confía en el ProximityPrompt: al empezar y en cada tick
+	el jugador tiene que estar a promptDistanceStuds + PROMPT_SLACK_STUDS
+	del estanque. Se puede empezar justo después de pescar (estados "caught"
+	y "escaped": el pez de la mano aún se está mostrando).
 ]]
 
 local Players = game:GetService("Players")
@@ -30,11 +35,14 @@ local Milestones = require(script.Parent.Retention.Milestones)
 local Proximity = require(script.Parent.Proximity)
 local Remotes = require(script.Parent.Remotes)
 
-type Session = { pond: number, origin: Vector3 }
+type Session = { pond: number, origin: Vector3, part: BasePart }
 
 local TRAINING = Config.Gameplay.training
 local PONDS = Config.Progression.ponds
 local ATTR = Protocol.PlayerAttributes
+local PROMPT_SLACK_STUDS = 4 -- margen sobre el alcance del prompt (ping y borde del estanque)
+-- Estados de pesca desde los que se puede empezar a entrenar.
+local FREE_STATES: { [string]: boolean } = { idle = true, caught = true, escaped = true }
 
 local TrainingService = {}
 
@@ -64,9 +72,13 @@ local function targetFor(position: Vector3, pond: number): Vector3
 	return center + offset.Unit * WorldLayout.trainingPondRadius * 0.45
 end
 
-local function start(player: Player, pond: number)
+local function nearPond(player: Player, part: BasePart): boolean
+	return Proximity.isNear(player, part, TRAINING.promptDistanceStuds + PROMPT_SLACK_STUDS)
+end
+
+local function start(player: Player, pond: number, part: BasePart)
 	local root = Proximity.getRoot(player)
-	if not root or not PlayerData.isLoaded(player) then
+	if not root or not PlayerData.isLoaded(player) or not nearPond(player, part) then
 		return
 	end
 	local def = PONDS[pond]
@@ -75,27 +87,30 @@ local function start(player: Player, pond: number)
 		return
 	end
 	local state = player:GetAttribute(ATTR.FishingState)
-	if state ~= nil and state ~= "idle" then
+	if state ~= nil and not FREE_STATES[state :: string] then
 		Remotes.TrainingDenied:FireClient(player, "busy")
 		return
 	end
-	sessions[player] = { pond = pond, origin = root.Position }
+	sessions[player] = { pond = pond, origin = root.Position, part = part }
 	player:SetAttribute(ATTR.TrainingPond, pond)
 	player:SetAttribute(ATTR.FishingTarget, targetFor(root.Position, pond))
 	player:SetAttribute(ATTR.FishingState, "training")
 end
 
-local function onPrompt(player: Player, pond: number)
+local function onPrompt(player: Player, pond: number, part: BasePart)
 	local current = sessions[player]
 	TrainingService.stop(player)
 	if not current or current.pond ~= pond then
-		start(player, pond)
+		start(player, pond, part)
 	end
 end
 
 local function tick()
 	for player, session in sessions do
-		if not Proximity.isNearPoint(player, session.origin, TRAINING.maxDriftStuds) then
+		if
+			not Proximity.isNearPoint(player, session.origin, TRAINING.maxDriftStuds)
+			or not nearPond(player, session.part)
+		then
 			TrainingService.stop(player)
 		else
 			local rod = Upgrades.current(player, "Rod").value
@@ -133,7 +148,7 @@ function TrainingService.init(map: Instance)
 					TRAINING.promptDistanceStuds
 				)
 				prompt.Triggered:Connect(function(player: Player)
-					onPrompt(player, index)
+					onPrompt(player, index, descendant)
 				end)
 				count += 1
 			end

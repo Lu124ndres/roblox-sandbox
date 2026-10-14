@@ -126,6 +126,28 @@ function FishModel.build(fishId: string, scale: number): Model
 	return model
 end
 
+-- Pose de un pez en arco de "from" a "to" en la fracción t (0..1) del vuelo.
+-- elapsed (segundos) mueve el coleteo; turns = vueltas completas en el aire.
+-- Sin conexiones: la usan arc y los vuelos que comparten un solo bucle (FeedFlights).
+function FishModel.arcPose(
+	from: Vector3,
+	to: Vector3,
+	height: number,
+	t: number,
+	elapsed: number,
+	turns: number
+): CFrame
+	local flat = Vector3.new(to.X - from.X, 0, to.Z - from.Z)
+	local heading = if flat.Magnitude > 0.01
+		then CFrame.lookAt(Vector3.zero, flat)
+		else CFrame.new()
+	local position = from:Lerp(to, t) + Vector3.new(0, height * 4 * t * (1 - t), 0)
+	local pitch = math.rad(70 - 140 * t) -- sube con la nariz arriba y cae de cabeza
+	local wiggle = math.sin(elapsed * 30) * 0.4
+	local roll = t * turns * math.pi * 2
+	return CFrame.new(position) * heading.Rotation * CFrame.Angles(pitch, wiggle, roll)
+end
+
 -- Salto en arco de "from" a "to" girando; llama onDone al terminar.
 -- spins = vueltas completas en el aire (0 = solo cabecea).
 function FishModel.arc(
@@ -138,20 +160,11 @@ function FishModel.arc(
 	spins: number?
 )
 	local elapsed = 0
-	local flat = Vector3.new(to.X - from.X, 0, to.Z - from.Z)
-	local heading = if flat.Magnitude > 0.01
-		then CFrame.lookAt(Vector3.zero, flat)
-		else CFrame.new()
-	local turns = spins or 0
 	local connection: RBXScriptConnection
 	connection = RunService.RenderStepped:Connect(function(dt: number)
 		elapsed += dt
 		local t = math.min(elapsed / seconds, 1)
-		local position = from:Lerp(to, t) + Vector3.new(0, height * 4 * t * (1 - t), 0)
-		local pitch = math.rad(70 - 140 * t) -- sube con la nariz arriba y cae de cabeza
-		local wiggle = math.sin(elapsed * 30) * 0.4
-		local roll = t * turns * math.pi * 2
-		model:PivotTo(CFrame.new(position) * heading.Rotation * CFrame.Angles(pitch, wiggle, roll))
+		model:PivotTo(FishModel.arcPose(from, to, height, t, elapsed, spins or 0))
 		if t >= 1 then
 			connection:Disconnect()
 			if onDone then

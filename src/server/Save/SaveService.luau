@@ -7,7 +7,8 @@
 		  servidor todavía tiene sus datos abiertos (acaba de cambiar de
 		  servidor), espera y reintenta; si no se liberan, lo expulsa con un
 		  mensaje amable antes que arriesgar sus datos.
-		- Cada autosaveSeconds: guarda a todos (y renueva el bloqueo).
+		- Cada autosaveSeconds: guarda a todos (y renueva el bloqueo),
+		  repartidos a lo largo del intervalo y no todos en el mismo frame.
 		- Al salir: guarda y suelta el bloqueo.
 		- Al cerrar el servidor (BindToClose): guarda a todos a la vez y
 		  espera a que terminen.
@@ -92,9 +93,18 @@ function SaveService.init()
 
 	task.spawn(function()
 		while true do
-			task.wait(SAVING.autosaveSeconds)
-			for _, player in Players:GetPlayers() do
-				task.spawn(save, player, false)
+			local players = Players:GetPlayers()
+			if #players == 0 then
+				task.wait(SAVING.autosaveSeconds)
+				continue
+			end
+			-- Uno cada autosaveSeconds / N: con 50 jugadores, uno cada ~1,2 s.
+			local gap = SAVING.autosaveSeconds / #players
+			for _, player in players do
+				task.wait(gap)
+				if player.Parent then
+					task.spawn(save, player, false)
+				end
 			end
 		end
 	end)

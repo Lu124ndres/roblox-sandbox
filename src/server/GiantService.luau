@@ -2,17 +2,14 @@
 --[[
 	GiantService
 
-	Estado del gigante actual del servidor: quién es, cuánta hambre le queda
-	y cuándo se llena. Publica ese estado como atributos de la carpeta
-	ReplicatedStorage.EstadoGigante; los clientes dibujan y animan al gigante
-	con esos datos (ver client/Giant/GiantView).
+	Estado del gigante actual: quién es, cuánta hambre le queda y cuándo se
+	llena, publicado en ReplicatedStorage.EstadoGigante (Feeding/GiantPublish;
+	Progress con freno, al instante al cruzar una etapa o llenarse).
 
-	El hambre se guarda como progreso (0..1): cada bocado avanza
-	comida / def.food. La comida total de cada gigante es fija (no cambia con
-	los jugadores conectados ni con su poder); la Orca es la más fácil.
-
-	Hito H1: solo la Orca. Al llenarse queda satisfecha; la despedida y el
-	paso al Minotauro son el hito H2.
+	El hambre es un progreso (0..1): cada lote avanza comida / total. El total
+	(atributo Food) sale de los jugadores activos al llegar (Feeding/GiantFood)
+	y solo sube mientras come, conservando lo ya comido. Lo comido se anuncia
+	por lotes (Feeding/FedBroadcast) y se anota por jugador (Contributions).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -21,35 +18,46 @@ local Workspace = game:GetService("Workspace")
 local Config = require(ReplicatedStorage.Shared.Config)
 local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
-local Remotes = require(script.Parent.Remotes)
+local Contributions = require(script.Parent.Feeding.Contributions)
+local FedBroadcast = require(script.Parent.Feeding.FedBroadcast)
+local GiantAnger = require(script.Parent.Feeding.GiantAnger)
+local GiantFood = require(script.Parent.Feeding.GiantFood)
+local GiantPublish = require(script.Parent.Feeding.GiantPublish)
 
 local GIANTS = Config.Giants
 local ATTR = Protocol.GiantAttributes
+local FULL_EPSILON = 1e-9 -- error de coma flotante que ya cuenta como lleno
 
 local GiantService = {}
 
-local stateFolder = Instance.new("Folder")
-stateFolder.Name = Protocol.GiantStateFolder
-
 local currentDef: Config.GiantDef
 local progress = 0
-local anger = 0
-local lastFedAt = os.clock()
+local totalFood = 1
 local center = Vector3.zero
 local phase: Protocol.GiantPhase = "feeding"
 local phaseEndsAt = 0
 local filledListeners: { () -> () } = {}
-local participants: { [number]: boolean } = {} -- userIds que le dieron de comer a este gigante
 
 local function publish()
-	stateFolder:SetAttribute(ATTR.Id, currentDef.id)
-	stateFolder:SetAttribute(ATTR.DisplayName, currentDef.displayName)
-	stateFolder:SetAttribute(ATTR.Article, currentDef.article)
-	stateFolder:SetAttribute(ATTR.Multiplier, currentDef.multiplier)
-	stateFolder:SetAttribute(ATTR.Progress, progress)
-	stateFolder:SetAttribute(ATTR.Anger, anger)
-	stateFolder:SetAttribute(ATTR.Phase, phase)
-	stateFolder:SetAttribute(ATTR.PhaseEndsAt, phaseEndsAt)
+	GiantPublish.set(ATTR.Id, currentDef.id)
+	GiantPublish.set(ATTR.DisplayName, currentDef.displayName)
+	GiantPublish.set(ATTR.Article, currentDef.article)
+	GiantPublish.set(ATTR.Multiplier, currentDef.multiplier)
+	GiantPublish.set(ATTR.Food, totalFood)
+	GiantPublish.set(ATTR.Anger, GiantAnger.get())
+	GiantPublish.set(ATTR.Phase, phase)
+	GiantPublish.set(ATTR.PhaseEndsAt, phaseEndsAt)
+	GiantPublish.progress(progress, true)
+end
+
+-- Sube el total (nunca lo baja) conservando lo ya comido.
+local function raiseFood(target: number)
+	if progress >= 1 or target <= totalFood then
+		return
+	end
+	progress, totalFood = GiantFood.rescale(progress, totalFood, target)
+	GiantPublish.set(ATTR.Food, totalFood)
+	GiantPublish.progress(progress, true)
 end
 
 function GiantService.init(map: Instance)
@@ -61,8 +69,16 @@ function GiantService.init(map: Instance)
 	center = anchor.Position
 	currentDef = GIANTS.chain[1]
 	progress = 0
+	totalFood = GiantFood.target(currentDef)
 	publish()
-	stateFolder.Parent = ReplicatedStorage
+	GiantPublish.show()
+	-- Quien se vuelve activo (entra, pesca) mientras el gigante come sube el total.
+	task.spawn(function()
+		while true do
+			task.wait(GIANTS.scaling.recomputeSeconds)
+			raiseFood(GiantFood.target(currentDef))
+		end
+	end)
 end
 
 function GiantService.getCurrent(): Config.GiantDef
@@ -83,6 +99,11 @@ function GiantService.isFeeding(): boolean
 	return phase == "feeding" and progress < 1
 end
 
+-- Comida que le falta para llenarse (FeedingService no saca más peces que esto).
+function GiantService.remainingFood(): number
+	return math.max(0, (1 - progress) * totalFood)
+end
+
 function GiantService.getPhase(): Protocol.GiantPhase
 	return phase
 end
@@ -91,7 +112,8 @@ end
 function GiantService.setPhase(nextPhase: Protocol.GiantPhase, seconds: number?)
 	phase = nextPhase
 	phaseEndsAt = if seconds then Workspace:GetServerTimeNow() + seconds else 0
-	publish()
+	GiantPublish.set(ATTR.Phase, phase)
+	GiantPublish.set(ATTR.PhaseEndsAt, phaseEndsAt)
 end
 
 -- GiantCycle se entera aquí de que la barra llegó al 100 %.
@@ -99,32 +121,39 @@ function GiantService.onFilled(listener: () -> ())
 	table.insert(filledListeners, listener)
 end
 
--- Llega un gigante nuevo (o vuelve el mismo) con la barra en cero.
+-- Llega un gigante nuevo (o vuelve el mismo) con la barra en cero y la comida
+-- total calculada con los jugadores activos de ahora.
 function GiantService.reset(def: Config.GiantDef)
 	currentDef = def
 	progress = 0
-	anger = 0
-	lastFedAt = os.clock()
-	participants = {}
+	totalFood = GiantFood.target(def)
+	GiantAnger.calm()
+	Contributions.reset()
 	publish()
 end
 
--- Quienes le dieron de comer al gigante actual (para repartir las kills al llenarse).
+-- Quienes aportaron al menos minKillShare de la barra (se llevan la kill).
 function GiantService.getParticipants(): { number }
-	local list = {}
-	for userId in participants do
-		table.insert(list, userId)
-	end
-	return list
+	return Contributions.participants(totalFood)
 end
+
+-- Enojo (GiantMood lo decide; ver Feeding/GiantAnger). calm = enojo a cero y
+-- la cuenta del hambre empieza de nuevo (servidor vacío, gigante lleno, comió).
+GiantService.getAnger = GiantAnger.get
+GiantService.setAnger = GiantAnger.set
+GiantService.calm = GiantAnger.calm
+GiantService.secondsSinceFed = GiantAnger.secondsSinceFed
 
 -- Avanza la barra (fracción de la comida total) y avisa si se llenó.
-local function advance(fraction: number, feeder: Player)
+local function advance(fraction: number, userId: number, food: number)
+	local stageBefore = GiantStages.stageFor(progress)
 	progress = math.min(1, progress + fraction)
-	participants[feeder.UserId] = true
-	lastFedAt = os.clock()
-	anger = 0
-	publish()
+	if progress >= 1 - FULL_EPSILON then
+		progress = 1
+	end
+	Contributions.add(userId, food)
+	GiantAnger.calm()
+	GiantPublish.progress(progress, progress >= 1 or GiantStages.stageFor(progress) > stageBefore)
 	if progress >= 1 then
 		for _, listener in filledListeners do
 			task.spawn(listener)
@@ -132,13 +161,14 @@ local function advance(fraction: number, feeder: Player)
 	end
 end
 
--- Suma comida al gigante actual. El servidor ya validó quién y cuánto.
-function GiantService.feed(food: number, feeder: Player, fishId: string)
+-- Suma un lote al gigante actual: `count` peces con `food` de comida en total
+-- (fishId = la especie más rara, para el efecto). El servidor ya validó quién y cuánto.
+function GiantService.feed(food: number, feeder: Player, count: number, fishId: string)
 	if food <= 0 or not GiantService.isFeeding() then
 		return
 	end
-	Remotes.GiantFed:FireAllClients(feeder.UserId, food, fishId)
-	advance(food / currentDef.food, feeder)
+	FedBroadcast.add(feeder.UserId, count, fishId)
+	advance(food / totalFood, feeder.UserId, food)
 end
 
 -- Compra con Robux: llena esa parte de la barra de una vez (1 = entero).
@@ -147,31 +177,8 @@ function GiantService.fill(fraction: number, buyer: Player): boolean
 	if fraction <= 0 or not GiantService.isFeeding() then
 		return false
 	end
-	advance(fraction, buyer)
+	advance(fraction, buyer.UserId, fraction * totalFood)
 	return true
-end
-
--- Reinicia la cuenta del enojo (servidor vacío o gigante lleno).
-function GiantService.calm()
-	lastFedAt = os.clock()
-	GiantService.setAnger(0)
-end
-
--- Segundos desde el último bocado (GiantMood decide el enojo con esto).
-function GiantService.secondsSinceFed(): number
-	return os.clock() - lastFedAt
-end
-
-function GiantService.getAnger(): number
-	return anger
-end
-
-function GiantService.setAnger(value: number)
-	value = math.clamp(value, 0, 1)
-	if value ~= anger then
-		anger = value
-		publish()
-	end
 end
 
 -- Hambre que vuelve: la barra baja, pero nunca por debajo del inicio de la
@@ -184,7 +191,7 @@ function GiantService.starve(fraction: number)
 	local nextProgress = math.max(floor, progress - fraction)
 	if nextProgress ~= progress then
 		progress = nextProgress
-		publish()
+		GiantPublish.progress(progress, false)
 	end
 end
 

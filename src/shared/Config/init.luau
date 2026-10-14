@@ -67,9 +67,6 @@ local Config: Types.Config = {
 		feeding = {
 			promptDistanceStuds = 10,
 			requestCooldownSeconds = 0.5,
-			streamSeconds = 4,
-			minFishIntervalSeconds = 0.06,
-			maxFishIntervalSeconds = 0.3,
 		},
 		training = {
 			tickSeconds = 1,
@@ -94,7 +91,7 @@ local Config: Types.Config = {
 		autosaveSeconds = 60,
 		maxAttempts = 5,
 		retryBaseSeconds = 1,
-		lockExpireSeconds = 300,
+		lockExpireSeconds = 180, -- ~3 autoguardados: el guardado repartido renueva cada <= 2 intervalos
 		lockedRetries = 6,
 		lockedRetrySeconds = 5,
 	},

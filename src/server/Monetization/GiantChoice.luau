@@ -7,6 +7,11 @@
 	nuevo espera su turno (fila): cada descanso usa la primera elección.
 	La primera de la fila se publica en ReplicatedStorage.Impulsos para que
 	la tienda y los avisos la muestren.
+
+	Límite conocido: la fila vive solo en memoria. Si el servidor cierra con
+	elecciones pendientes, se pierden (no hay campo de guardado para un
+	crédito y una elección es un efecto del servidor, no del jugador). Al
+	cerrar se deja constancia en la consola para poder compensar a mano.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -17,11 +22,19 @@ local Remotes = require(script.Parent.Parent.Remotes)
 
 local ATTR = Protocol.BoostAttributes
 
-type Choice = { def: Config.GiantDef, buyerName: string }
+type Choice = { def: Config.GiantDef, buyerName: string, buyerId: number }
 
 local GiantChoice = {}
 
 local queue: { Choice } = {}
+
+game:BindToClose(function()
+	for _, choice in queue do
+		warn(
+			`GiantChoice: elección sin usar al cerrar: {choice.def.id} de {choice.buyerName} ({choice.buyerId})`
+		)
+	end
+end)
 
 local function find(giantId: string): Config.GiantDef?
 	for _, def in Config.Giants.chain do
@@ -49,7 +62,7 @@ function GiantChoice.add(giantId: string, buyer: Player): boolean
 	if not def then
 		return false
 	end
-	table.insert(queue, { def = def, buyerName = buyer.DisplayName })
+	table.insert(queue, { def = def, buyerName = buyer.DisplayName, buyerId = buyer.UserId })
 	publish()
 	Remotes.Notice:FireAllClients("choose", buyer.DisplayName, def.id)
 	return true

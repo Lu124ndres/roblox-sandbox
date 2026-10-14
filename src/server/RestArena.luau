@@ -13,7 +13,6 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 local Workspace = game:GetService("Workspace")
 
@@ -25,6 +24,7 @@ local Proximity = require(script.Parent.Proximity)
 local SINK_DEPTH = 16 -- studs bajo su lugar final cuando está hundida
 local RISE_SECONDS = 3
 local SINK_SECONDS = 2.5
+local STEP_SECONDS = 0.1 -- ~10 Hz: cada PivotTo replica las ~85 piezas a todos los clientes
 
 local RestArena = {}
 
@@ -39,10 +39,12 @@ local function setOpen(open: boolean)
 end
 
 -- Mueve la guarida de "from" a "to" (desplazamientos verticales) con suavidad.
+-- Va a pasos de STEP_SECONDS y no a cada Heartbeat: con 40-50 jugadores, mover
+-- el modelo entero 60 veces por segundo satura la replicación.
 local function slide(model: Model, final: CFrame, from: number, to: number, seconds: number)
 	local elapsed = 0
 	while elapsed < seconds and model.Parent do
-		elapsed += RunService.Heartbeat:Wait()
+		elapsed += task.wait(STEP_SECONDS)
 		local t = math.min(elapsed / seconds, 1)
 		local eased = 1 - (1 - t) ^ 3
 		model:PivotTo(final + Vector3.new(0, from + (to - from) * eased, 0))

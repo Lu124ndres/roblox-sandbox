@@ -3,8 +3,9 @@
 	Leaderboards
 
 	Ranking global de poder y de kills (OrderedDataStore). Cada
-	REFRESH_SECONDS se suben los valores de los jugadores conectados y se
-	leen los 10 mejores; el resultado se publica como JSON en atributos de
+	REFRESH_SECONDS se suben los valores de los jugadores conectados (solo
+	los que ya cargaron sus datos y cuyo valor cambió desde la última
+	escritura) y se leen los 10 mejores; el resultado se publica como JSON en atributos de
 	ReplicatedStorage.Rankings (Poder y Kills) para que los tableros de la
 	plaza lo muestren. Sin DataStore (Studio sin publicar), muestra a los
 	jugadores de este servidor y se actualiza cada LOCAL_REFRESH_SECONDS.
@@ -29,6 +30,8 @@ local folder = Instance.new("Folder")
 folder.Name = "Rankings"
 
 local names: { [number]: string } = {}
+-- Último valor escrito por tablero y jugador: si no cambió, no se gasta una escritura.
+local lastWritten: { [string]: { [number]: number } } = { Poder = {}, Kills = {} }
 
 local function nameOf(userId: number): string
 	if names[userId] then
@@ -54,18 +57,22 @@ local function stores(): { [string]: OrderedDataStore }?
 	return if ok then result else nil
 end
 
-local function valueOf(player: Player, board: string): number
+-- nil si sus datos todavía no cargaron: un 0 falso no se muestra ni se sube.
+local function valueOf(player: Player, board: string): number?
 	local save = PlayerData.read(player)
 	if not save then
-		return 0
+		return nil
 	end
-	return if board == "Poder" then save.power else save.kills
+	return math.floor(if board == "Poder" then save.power else save.kills)
 end
 
 local function localTop(board: string): { Entry }
 	local list = {}
 	for _, player in Players:GetPlayers() do
-		table.insert(list, { name = player.DisplayName, value = valueOf(player, board) })
+		local value = valueOf(player, board)
+		if value then
+			table.insert(list, { name = player.DisplayName, value = value })
+		end
 	end
 	table.sort(list, function(a, b)
 		return a.value > b.value
@@ -74,10 +81,18 @@ local function localTop(board: string): { Entry }
 end
 
 local function globalTop(store: OrderedDataStore, board: string): { Entry }?
+	local written = lastWritten[board]
 	for _, player in Players:GetPlayers() do
-		pcall(function()
-			store:SetAsync(tostring(player.UserId), math.floor(valueOf(player, board)))
-		end)
+		local value = valueOf(player, board)
+		local userId = player.UserId
+		if value and written[userId] ~= value then
+			local ok = pcall(function()
+				store:SetAsync(tostring(userId), value)
+			end)
+			if ok then
+				written[userId] = value
+			end
+		end
 	end
 	local ok, pages = pcall(function()
 		return store:GetSortedAsync(false, TOP)
@@ -102,6 +117,11 @@ end
 
 function Leaderboards.init()
 	folder.Parent = ReplicatedStorage
+	Players.PlayerRemoving:Connect(function(player: Player)
+		for _, written in lastWritten do
+			written[player.UserId] = nil
+		end
+	end)
 	task.spawn(function()
 		while true do
 			refresh()

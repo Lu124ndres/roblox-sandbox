@@ -7,7 +7,10 @@
 	cada etapa es un múltiplo del alto de un jugador.
 ]]
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local Config = require(script.Parent.Config)
+local Protocol = require(script.Parent.Protocol)
 
 local GIANTS = Config.Giants
 
@@ -32,8 +35,19 @@ function GiantStages.heightFor(stage: number): number
 	return multiple * GIANTS.playerHeightStuds
 end
 
--- Comida total que necesita un gigante para llenarse (1 si no existe).
+-- Comida total que necesita un gigante para llenarse. Si es el gigante actual,
+-- la que publica el servidor (atributo Food de EstadoGigante: crece con los
+-- jugadores activos); si no, su mínimo de Config (1 si no existe).
 function GiantStages.foodFor(giantId: string): number
+	local state = ReplicatedStorage:FindFirstChild(Protocol.GiantStateFolder)
+	local food = state and state:GetAttribute(Protocol.GiantAttributes.Food)
+	if
+		state
+		and state:GetAttribute(Protocol.GiantAttributes.Id) == giantId
+		and type(food) == "number"
+	then
+		return food
+	end
 	for _, def in GIANTS.chain do
 		if def.id == giantId then
 			return def.food

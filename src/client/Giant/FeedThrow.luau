@@ -3,9 +3,14 @@
 	FeedThrow
 
 	Cuando alguien alimenta al gigante, todos ven sus peces volar en arco
-	desde el jugador hasta la boca, de 1 en 1 (el servidor manda un GiantFed
-	por pez, con su especie). Al llegar se llama onArrive: ahí el gigante
-	muerde (ver GiantView). Solo efecto visual.
+	desde el jugador hasta la boca. El servidor manda un GiantFed cada ~0.25 s
+	con un lote: { { userId, count, fishId }, ... } (uno por jugador; fishId =
+	la especie más rara que entregó). Por cada jugador se dibujan a lo sumo
+	MAX_PER_FEEDER peces, y en total no vuelan más de MAX_FLIGHTS a la vez
+	(MAX_FLIGHTS_LOW_FX con efectos reducidos). Los de jugadores a más de
+	MAX_CAMERA_STUDS de la cámara no se dibujan. Los del jugador local se ven
+	siempre. Al llegar se llama onArrive: ahí el gigante muerde (GiantView).
+	Solo efecto visual.
 ]]
 
 local Players = game:GetService("Players")
@@ -18,13 +23,21 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
 local Fx = require(script.Parent.Parent.Effects.Fx)
+local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
+local FeedFlights = require(script.Parent.FeedFlights)
 
 local EFFECTS = UIConfig.Effects
 local BITE_SECONDS = 0.45
+local MAX_PER_FEEDER = 3 -- peces dibujados por jugador en cada lote
+local MAX_FLIGHTS = 20 -- vuelos a la vez en todo el servidor
+local MAX_FLIGHTS_LOW_FX = 6
+local MAX_CAMERA_STUDS = 250 -- más lejos de la cámara no se dibuja
+local STAGGER_SECONDS = 0.08 -- separación entre los peces de un mismo lote
 
 local FeedThrow = {}
 
 local rng = Random.new()
+local queued = 0 -- vuelos programados que todavía no despegan
 
 -- Un pez (de la especie entregada) vuela girando desde la mano hasta la boca.
 function FeedThrow.throw(from: Vector3, to: Vector3, fishId: string, onArrive: () -> ())
@@ -34,48 +47,79 @@ function FeedThrow.throw(from: Vector3, to: Vector3, fishId: string, onArrive: (
 	local model = FishModel.build(if FishCatalog.get(fishId) then fishId else "Sardina", 1.4)
 	model.Parent = Workspace
 	local spread = Vector3.new(rng:NextNumber(-2, 2), 0, rng:NextNumber(-2, 2))
-	FishModel.arc(
-		model,
-		from + Vector3.new(0, 2, 0),
-		to + spread,
-		height,
-		EFFECTS.FeedThrowSeconds,
-		function()
-			model:Destroy()
-			Fx.sparkle(to + spread, UIConfig.Colors.Coins, 6)
-			onArrive()
-		end,
-		1
-	)
+	local start = from + Vector3.new(0, 2, 0)
+	FeedFlights.launch(model, start, to + spread, height, EFFECTS.FeedThrowSeconds, 1, function()
+		model:Destroy()
+		Fx.sparkle(to + spread, UIConfig.Colors.Coins, 6)
+		onArrive()
+	end)
 end
 
--- Escucha GiantFed (un evento por pez). getMouth da la boca del gigante (nil si
--- aún no existe). El gigante reacciona a lo sumo cada BITE_SECONDS: con muchos
--- peces seguidos se ve una mordida tras otra, no una ráfaga de efectos.
+local function maxFlights(): number
+	return if ClientSettings.get("lowFx") then MAX_FLIGHTS_LOW_FX else MAX_FLIGHTS
+end
+
+local function tooFar(position: Vector3): boolean
+	local camera = Workspace.CurrentCamera
+	return camera ~= nil and (camera.CFrame.Position - position).Magnitude > MAX_CAMERA_STUDS
+end
+
+-- Escucha GiantFed (un lote cada ~0.25 s). getMouth da la boca del gigante (nil
+-- si aún no existe). El gigante reacciona a lo sumo cada BITE_SECONDS: con
+-- muchos peces seguidos se ve una mordida tras otra, no una ráfaga de efectos.
 function FeedThrow.listen(getMouth: () -> Vector3?, onArrive: (character: Model) -> ())
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local giantFed = remotes:WaitForChild(Protocol.Remotes.GiantFed) :: RemoteEvent
 	local lastBite = 0
-	giantFed.OnClientEvent:Connect(function(feederUserId: unknown, _food: unknown, fishId: unknown)
-		local feeder = if type(feederUserId) == "number"
-			then Players:GetPlayerByUserId(feederUserId)
-			else nil
-		local character = feeder and feeder.Character
+
+	local function launch(character: Model, fishId: string)
 		local mouth = getMouth()
-		if not character or not mouth then
+		if not mouth or not character.Parent then
 			return
 		end
-		FeedThrow.throw(
-			character:GetPivot().Position,
-			mouth,
-			if type(fishId) == "string" then fishId else "Sardina",
-			function()
-				if os.clock() - lastBite >= BITE_SECONDS then
-					lastBite = os.clock()
-					onArrive(character)
-				end
+		FeedThrow.throw(character:GetPivot().Position, mouth, fishId, function()
+			if os.clock() - lastBite >= BITE_SECONDS then
+				lastBite = os.clock()
+				onArrive(character)
 			end
-		)
+		end)
+	end
+
+	local function show(entry: { [any]: any })
+		local userId, count, fishId = entry.userId, entry.count, entry.fishId
+		if type(userId) ~= "number" or type(count) ~= "number" or type(fishId) ~= "string" then
+			return
+		end
+		local feeder = Players:GetPlayerByUserId(userId)
+		local character = feeder and feeder.Character
+		if not feeder or not character then
+			return
+		end
+		local isLocal = feeder == Players.LocalPlayer
+		if not isLocal and tooFar(character:GetPivot().Position) then
+			return
+		end
+		for index = 1, math.clamp(math.floor(count), 0, MAX_PER_FEEDER) do
+			if not isLocal and FeedFlights.count() + queued >= maxFlights() then
+				return
+			end
+			queued += 1
+			task.delay((index - 1) * STAGGER_SECONDS, function()
+				queued -= 1
+				launch(character, fishId)
+			end)
+		end
+	end
+
+	giantFed.OnClientEvent:Connect(function(batch: unknown)
+		if type(batch) ~= "table" or not getMouth() then
+			return
+		end
+		for _, entry in batch :: { any } do
+			if type(entry) == "table" then
+				show(entry)
+			end
+		end
 	end)
 end
 

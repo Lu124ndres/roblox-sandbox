@@ -4,8 +4,14 @@
 
 	Lo que el cliente ve de los datos de un jugador: leaderstats (Poder y
 	Kills) y atributos del jugador (monedas, peces, mejoras, colección,
-	tutorial, recompensa diaria y ajustes). Lo usa PlayerData cada vez que
-	cambian los datos. SetAttribute con el mismo valor no se vuelve a enviar.
+	tutorial, recompensa diaria y ajustes). SetAttribute con el mismo valor
+	no se vuelve a enviar.
+
+	all publica todo (al cargar y tras PlayerData.edit); el resto publica un
+	solo campo, para que pescar, cobrar o entrenar no reescriban ~35 atributos.
+	El leaderstat de Poder se actualiza a lo sumo cada POWER_STAT_SECONDS por
+	jugador (cada IntValue replica a todos los jugadores del servidor); el
+	atributo Power sí cambia al instante.
 ]]
 
 local HttpService = game:GetService("HttpService")
@@ -13,11 +19,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local Basket = require(script.Parent.Feeding.Basket)
 local SaveSchema = require(script.Parent.Save.SaveSchema)
 
 local ATTR = Protocol.PlayerAttributes
+local POWER_STAT_SECONDS = 3
 
 local ProfilePublish = {}
+
+-- Último leaderstat de Poder publicado y el pendiente (claves débiles: se van con el jugador).
+local powerStatAt: { [Player]: number } = setmetatable({}, { __mode = "k" }) :: any
+local powerStatPending: { [Player]: number } = setmetatable({}, { __mode = "k" }) :: any
 
 -- Leaderstats en cero apenas entra (la tabla de jugadores no espera al guardado).
 function ProfilePublish.prepare(player: Player)
@@ -45,19 +57,66 @@ local function stat(player: Player, name: string, value: number)
 	end
 end
 
-function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
-	stat(player, Protocol.Leaderstats.Power, save.power)
-	stat(player, Protocol.Leaderstats.Kills, save.kills)
-	player:SetAttribute(ATTR.Coins, save.coins)
-	player:SetAttribute(ATTR.Kills, save.kills)
-	player:SetAttribute(ATTR.Power, save.power)
-	player:SetAttribute(ATTR.CarriedFish, #save.carried)
-	for category, level in save.upgrades do
-		player:SetAttribute(category, level)
+-- Leaderstat de Poder: al instante si pasó POWER_STAT_SECONDS; si no, queda
+-- pendiente y se publica el último valor cuando se cumpla el plazo.
+local function powerStat(player: Player, value: number, now: boolean)
+	local remaining = POWER_STAT_SECONDS - (os.clock() - (powerStatAt[player] or -math.huge))
+	if now or remaining <= 0 then
+		powerStatAt[player] = os.clock()
+		powerStatPending[player] = nil
+		stat(player, Protocol.Leaderstats.Power, value)
+		return
 	end
-	-- Colección: cuántos de cada especie (Pez_<id>), para la ventana de peces.
+	local scheduled = powerStatPending[player] ~= nil
+	powerStatPending[player] = value
+	if not scheduled then
+		task.delay(remaining, function()
+			local latest = powerStatPending[player]
+			if latest and player.Parent then
+				powerStat(player, latest, true)
+			end
+		end)
+	end
+end
+
+function ProfilePublish.coins(player: Player, save: SaveSchema.SaveData)
+	player:SetAttribute(ATTR.Coins, save.coins)
+end
+
+function ProfilePublish.power(player: Player, save: SaveSchema.SaveData)
+	player:SetAttribute(ATTR.Power, save.power)
+	powerStat(player, save.power, false)
+end
+
+function ProfilePublish.kills(player: Player, save: SaveSchema.SaveData)
+	stat(player, Protocol.Leaderstats.Kills, save.kills)
+	player:SetAttribute(ATTR.Kills, save.kills)
+end
+
+function ProfilePublish.carried(player: Player, save: SaveSchema.SaveData)
+	player:SetAttribute(ATTR.CarriedFish, Basket.total(save.carried))
+end
+
+-- Colección: cuántos de esa especie ha pescado (Pez_<id>), para la ventana de peces.
+function ProfilePublish.species(player: Player, save: SaveSchema.SaveData, fishId: string)
+	player:SetAttribute(`{ATTR.FishPrefix}{fishId}`, save.species[fishId] or 0)
+end
+
+function ProfilePublish.upgrade(player: Player, save: SaveSchema.SaveData, category: string)
+	player:SetAttribute(category, save.upgrades[category])
+end
+
+function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
+	powerStat(player, save.power, true)
+	ProfilePublish.kills(player, save)
+	ProfilePublish.coins(player, save)
+	player:SetAttribute(ATTR.Power, save.power)
+	ProfilePublish.carried(player, save)
+	for category in save.upgrades do
+		ProfilePublish.upgrade(player, save, category)
+	end
 	for _, fish in Config.Economy.fish do
-		player:SetAttribute(`{ATTR.FishPrefix}{fish.id}`, save.species[fish.id] or 0)
+		ProfilePublish.species(player, save, fish.id)
 	end
 	player:SetAttribute(ATTR.Tutorial, save.tutorial)
 	player:SetAttribute(ATTR.DailyStreak, save.daily.streak)

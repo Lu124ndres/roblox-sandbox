@@ -37,6 +37,9 @@ export type NoticeKind =
 	| "code" -- (status: "ok" | "invalid" | "used" | "expired", text?) resultado de un código
 	| "group" -- (status: "ok" | "notMember" | "wait" | "claimed" | "off") regalo del grupo
 export type ShopStatus = "ok" | "poor" | "max" | "invalid"
+-- Un elemento del lote de GiantFed: cuántos peces entregó ese jugador y la
+-- especie más rara entre ellos (la que se dibuja volando).
+export type GiantFedEntry = { userId: number, count: number, fishId: string }
 -- Momento del ciclo del gigante (atributo Phase de EstadoGigante).
 export type GiantPhase = "feeding" | "farewell" | "rest" | "arriving"
 
@@ -55,8 +58,8 @@ local Protocol = {
 		FeedRequest = "FeedRequest",
 		-- servidor -> dueño: (status: FeedStatus, fishCount: number, coins: number)
 		FeedResult = "FeedResult",
-		-- servidor -> todos: (feederUserId: number, food: number, fishId: string).
-		-- Un pez que llega al gigante (se entregan de 1 en 1).
+		-- servidor -> todos: (batch: { GiantFedEntry }). Lo que llegó al gigante en
+		-- el último ~0.25 s, un elemento por jugador (ver server/Feeding/FedBroadcast).
 		GiantFed = "GiantFed",
 		-- servidor -> dueño: (gained: number). Un tick de entrenamiento en un estanque.
 		TrainingTick = "TrainingTick",
@@ -109,6 +112,7 @@ local Protocol = {
 		Anger = "Anger", -- 0..1 (1 = furioso)
 		Phase = "Phase", -- GiantPhase
 		PhaseEndsAt = "PhaseEndsAt", -- Workspace:GetServerTimeNow() en que termina la fase (0 = sin fin)
+		Food = "Food", -- comida total que pide la barra ahora (crece con los jugadores activos)
 	},
 
 	-- Folder en ReplicatedStorage con las plantillas de los gigantes. El cliente

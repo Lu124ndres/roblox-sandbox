@@ -71,8 +71,12 @@ local function reveal()
 	end
 end
 
-local function restLength(): string
-	local seconds = CYCLE.restSeconds
+-- Cuánto dura este descanso (depende de cuántos jugadores hay): sale de PhaseEndsAt.
+local function restLength(stateFolder: Instance): string
+	local endsAt = stateFolder:GetAttribute(ATTR.PhaseEndsAt)
+	local seconds = if type(endsAt) == "number"
+		then math.max(1, math.round(endsAt - Workspace:GetServerTimeNow()))
+		else CYCLE.restSeconds
 	return if seconds % 60 == 0 then `{seconds // 60} min` else `{seconds} s`
 end
 
@@ -92,7 +96,9 @@ function CycleView.start(toasts: Toasts.Toasts)
 			reveal()
 			Sounds.play("StageUp")
 			toasts.banner(
-				`¡Descanso! Baja a la guarida del volcán: entrenamiento x{CYCLE.restTrainingMultiplier} por {restLength()}`,
+				`¡Descanso! Baja a la guarida del volcán: entrenamiento x{CYCLE.restTrainingMultiplier} por {restLength(
+					stateFolder
+				)}`,
 				COLORS.Power
 			)
 		elseif phase == "arriving" then

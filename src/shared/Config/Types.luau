@@ -29,7 +29,8 @@ export type GiantDef = {
 	displayName: string,
 	article: string, -- "la" o "el": para textos como "alimenta a la Orca"
 	multiplier: number, -- monedas por pez = fish.coins * multiplier
-	food: number, -- comida total para llenar la barra (fija: no depende de los jugadores)
+	food: number, -- comida MÍNIMA para llenar la barra (y la de un servidor sin jugadores activos)
+	loadsPerPlayer: number, -- canastas llenas por jugador activo que pide la barra
 	modelBase: string, -- nombre base de sus modelos: <base>E1..E4 en ServerStorage (uno por etapa)
 	released: boolean, -- false = llega en una actualización (evento), no en la v1
 	inRoulette: boolean, -- puede salir en la ruleta al terminar el descanso (requiere su modelo)
@@ -62,9 +63,6 @@ export type FishingConfig = {
 export type FeedingConfig = {
 	promptDistanceStuds: number,
 	requestCooldownSeconds: number, -- espera mínima entre dos pedidos de alimentar del mismo jugador
-	streamSeconds: number, -- los peces se entregan de 1 en 1 repartidos en este tiempo
-	minFishIntervalSeconds: number, -- pero nunca más rápido que esto entre pez y pez
-	maxFishIntervalSeconds: number, -- ni más lento que esto
 }
 
 export type TrainingConfig = {
@@ -101,9 +99,24 @@ export type AngerConfig = {
 -- Lo que pasa al llenar a un gigante: despedida, descanso en el volcán y llegada del siguiente.
 export type CycleConfig = {
 	farewellSeconds: number, -- despedida: salta, gira y se sumerge
-	restSeconds: number, -- descanso: dentro del volcán se entrena solo
+	restSeconds: number, -- descanso (máximo): dentro del volcán se entrena solo
+	restBaseSeconds: number, -- descanso = clamp(base + porJugador x jugadores, min, restSeconds)
+	restPerPlayerSeconds: number,
+	restMinSeconds: number,
 	restTrainingMultiplier: number, -- x sobre el mejor estanque desbloqueado del jugador
 	arrivalSeconds: number, -- llegada del siguiente gigante antes de poder alimentarlo
+}
+
+export type FoodScalingConfig = { -- comida según los jugadores activos (ver Giants.luau)
+	activeSeconds: number, -- activo = pescó en estos últimos segundos (o lleva peces)
+	maxFoodFactor: number, -- tope del total: food x esto
+	minKillShare: number, -- fracción de la barra que hay que aportar para la kill
+	recomputeSeconds: number, -- cada cuánto se revisa si el total tiene que subir
+}
+export type DeliveryConfig = { -- entrega de peces al gigante, por lotes
+	stepSeconds: number, -- un lote de peces cada tanto
+	maxDeliverySeconds: number, -- una canasta entera se entrega en a lo sumo esto
+	broadcastSeconds: number, -- lotes a los clientes y progreso, a lo sumo cada tanto
 }
 
 export type GiantsConfig = {
@@ -113,6 +126,8 @@ export type GiantsConfig = {
 	stageHeightsInPlayers: { number }, -- alto del gigante en cada etapa, en jugadores
 	anger: AngerConfig,
 	cycle: CycleConfig,
+	scaling: FoodScalingConfig,
+	delivery: DeliveryConfig,
 }
 
 export type ProgressionConfig = {

@@ -34,19 +34,31 @@ local function isMember(player: Player): boolean
 	return ok and result == true
 end
 
+local inFlight: { [Player]: boolean } = {} -- una consulta al grupo por jugador a la vez
+
 local function claim(player: Player)
-	local save = PlayerData.read(player)
-	if not save then
-		return
-	end
 	local function reply(status: string, text: string?)
 		Remotes.Notice:FireClient(player, "group", status, text)
+	end
+	local save = PlayerData.read(player)
+	if not save or inFlight[player] then
+		return
 	end
 	if GROUP.groupId == 0 then
 		return reply("off")
 	elseif save.groupClaimed then
 		return reply("claimed")
-	elseif not isMember(player) then
+	end
+	inFlight[player] = true
+	local member = isMember(player) -- cede el hilo: otro reclamo puede llegar mientras
+	inFlight[player] = nil
+	-- Se vuelve a leer tras la espera: pudo salir o reclamar por otra vía.
+	local fresh = PlayerData.read(player)
+	if not fresh or not player.Parent then
+		return
+	elseif fresh.groupClaimed then
+		return reply("claimed")
+	elseif not member then
 		return reply("notMember")
 	elseif os.clock() - (joinedAt[player] or os.clock()) < GROUP.minutes * 60 then
 		return reply("wait")
@@ -71,6 +83,7 @@ function GroupReward.init()
 	end
 	Players.PlayerRemoving:Connect(function(player: Player)
 		joinedAt[player] = nil
+		inFlight[player] = nil
 	end)
 	Remotes.ClaimGroup.OnServerEvent:Connect(RateLimit.wrap("ClaimGroup", 0.5, 2, claim))
 end

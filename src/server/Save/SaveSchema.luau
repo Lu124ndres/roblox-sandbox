@@ -25,7 +25,7 @@ export type SaveData = {
 	version: number,
 	coins: number,
 	power: number,
-	carried: { string }, -- ids de peces en la canasta (nunca se pierden al salir)
+	carried: { [string]: number }, -- canasta: cuántos de cada especie (nunca se pierden al salir)
 	species: { [string]: number }, -- cuántos de cada especie ha pescado (colección)
 	stats: Stats,
 	kills: number, -- monstruos llenados en los que participó (estadística "Kills")
@@ -33,7 +33,7 @@ export type SaveData = {
 	upgrades: { [string]: number }, -- nivel de cada mejora de la tienda (Rod, Basket, Boots)
 	tutorial: number, -- pasos del tutorial ya hechos (0 = recién llega)
 	daily: { lastDay: number, streak: number }, -- recompensa diaria: último día cobrado (UTC) y racha
-	settings: { music: boolean, sfx: boolean, shake: boolean, lowFx: boolean },
+	settings: { music: boolean, sfx: boolean, shake: boolean, lowFx: boolean, lowFxChosen: boolean },
 	badges: { [string]: boolean }, -- insignias ya entregadas (para no pedirlas otra vez)
 	ponds: { [string]: boolean }, -- estanques comprados con Robux ("2".."10")
 	receipts: { string }, -- PurchaseId de las últimas compras (no cobrar dos veces)
@@ -46,7 +46,9 @@ export type SaveData = {
 
 local SaveSchema = {}
 
-SaveSchema.VERSION = 6 -- 2: kills; 3: mejoras de la tienda; 4: tutorial, diario, ajustes, insignias; 5: compras, códigos, grupo; 6: pases regalados
+-- 2: kills; 3: mejoras de la tienda; 4: tutorial, diario, ajustes, insignias;
+-- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie
+SaveSchema.VERSION = 7
 
 function SaveSchema.default(): SaveData
 	return {
@@ -61,7 +63,7 @@ function SaveSchema.default(): SaveData
 		upgrades = { Rod = 1, Basket = 1, Boots = 1 },
 		tutorial = 0,
 		daily = { lastDay = 0, streak = 0 },
-		settings = { music = true, sfx = true, shake = true, lowFx = false },
+		settings = { music = true, sfx = true, shake = true, lowFx = false, lowFxChosen = false },
 		badges = {},
 		ponds = {},
 		receipts = {},
@@ -113,10 +115,16 @@ function SaveSchema.read(raw: unknown): SaveData
 	local source = raw :: { [string]: any }
 	data.coins = count(source.coins)
 	data.power = count(source.power)
+	-- Canasta: hasta la versión 6 era una lista de ids ({ "Sardina", ... });
+	-- desde la 7, un conteo ({ Sardina = 12 }). Se leen las dos formas.
 	if type(source.carried) == "table" then
-		for _, fishId in source.carried do
-			if type(fishId) == "string" and FishCatalog.get(fishId) then
-				table.insert(data.carried, fishId)
+		for key, value in source.carried do
+			local fishId, amount = key, count(value)
+			if type(key) == "number" then
+				fishId, amount = value, 1
+			end
+			if type(fishId) == "string" and FishCatalog.get(fishId) and amount > 0 then
+				data.carried[fishId] = (data.carried[fishId] or 0) + amount
 			end
 		end
 	end

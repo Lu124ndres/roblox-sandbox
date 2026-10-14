@@ -3,11 +3,13 @@
 	GiantCycle
 
 	Lo que pasa cuando la barra del gigante llega al 100 %:
-		0. Kill: +1 a cada jugador que le dio de comer y sigue conectado.
+		0. Kill: +1 a cada jugador que sigue conectado y aportó al menos
+		   scaling.minKillShare de la barra (GiantService.getParticipants).
 		1. Despedida (farewell): los clientes lo ven saltar, girar y
 		   sumergirse en el lago.
 		2. Descanso (rest): emerge la guarida en el centro del lago (RestArena)
-		   y durante restSeconds, cada segundo, todo jugador sobre ella gana
+		   y durante el descanso (más largo con más jugadores: restLength),
+		   cada segundo, todo jugador sobre ella gana
 		   poder sin hacer nada:
 		   powerPerTick x su mejor estanque desbloqueado x restTrainingMultiplier.
 		   Se ve como en los estanques ("+N poder").
@@ -60,6 +62,13 @@ local function chooseNext(): Config.GiantDef
 	return candidates[rng:NextInteger(1, #candidates)]
 end
 
+-- Descanso: restBaseSeconds + restPerPlayerSeconds por jugador conectado,
+-- entre restMinSeconds y restSeconds (más gente = más tiempo en la guarida).
+local function restLength(): number
+	local seconds = CYCLE.restBaseSeconds + CYCLE.restPerPlayerSeconds * #Players:GetPlayers()
+	return math.clamp(seconds, CYCLE.restMinSeconds, CYCLE.restSeconds)
+end
+
 local function restTick()
 	for _, player in Players:GetPlayers() do
 		local root = Proximity.getRoot(player)
@@ -84,7 +93,7 @@ local function run()
 		return
 	end
 	running = true
-	-- +1 kill a todos los que le dieron de comer y siguen en el servidor.
+	-- +1 kill a los que aportaron lo suficiente y siguen en el servidor.
 	local giantId = GiantService.getCurrent().id
 	for _, userId in GiantService.getParticipants() do
 		local player = Players:GetPlayerByUserId(userId)
@@ -96,9 +105,10 @@ local function run()
 	GiantService.setPhase("farewell", CYCLE.farewellSeconds)
 	task.wait(CYCLE.farewellSeconds)
 
-	GiantService.setPhase("rest", CYCLE.restSeconds)
+	local restSeconds = restLength()
+	GiantService.setPhase("rest", restSeconds)
 	RestArena.show()
-	local finish = os.clock() + CYCLE.restSeconds
+	local finish = os.clock() + restSeconds
 	while os.clock() < finish do
 		task.wait(TRAINING.tickSeconds)
 		restTick()
