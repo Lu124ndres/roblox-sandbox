@@ -100,6 +100,8 @@ function Notices.start(toasts: Toasts.Toasts)
 			}
 			Sounds.play(if a == "ok" then "LegendaryCatch" else "Click")
 			toasts.banner(texts[a] or "", if a == "ok" then COLORS.Coins else COLORS.Warning)
+		elseif kind == "admin" and type(a) == "string" then
+			toasts.show(a, COLORS.Power)
 		elseif kind == "playtime" and type(b) == "string" then
 			Sounds.play("LegendaryCatch")
 			toasts.banner(`¡Regalo por jugar! {b}`, COLORS.Coins)

@@ -42,10 +42,17 @@ local GiantCycle = {}
 
 local running = false
 local rng = Random.new()
+local skipRest = false -- el panel de administrador corta el descanso
+local forcedNext: Config.GiantDef? = nil -- y elige el siguiente (aunque no esté en la ruleta)
 
 -- La ruleta: el que alguien eligió con Robux (GiantChoice) o, si nadie, al azar
 -- entre los que pueden salir. Sin candidatos, vuelve el actual.
 local function chooseNext(): Config.GiantDef
+	local forced = forcedNext
+	if forced then
+		forcedNext = nil
+		return forced
+	end
 	local chosen = GiantChoice.take()
 	if chosen then
 		return chosen
@@ -106,7 +113,8 @@ local function cycle()
 	GiantService.setPhase("rest", restSeconds)
 	RestArena.show()
 	local finish = os.clock() + restSeconds
-	while os.clock() < finish do
+	skipRest = false
+	while os.clock() < finish and not skipRest do
 		task.wait(TRAINING.tickSeconds)
 		restTick()
 	end
@@ -135,6 +143,15 @@ local function run()
 		end)
 	end
 	running = false
+end
+
+-- Panel de administrador: termina el descanso ya y elige el siguiente monstruo.
+function GiantCycle.skipRest()
+	skipRest = true
+end
+
+function GiantCycle.setNext(def: Config.GiantDef)
+	forcedNext = def
 end
 
 function GiantCycle.init(map: Instance)

@@ -36,6 +36,7 @@ local Remotes = {
 	Notice = makeEvent(Protocol.Remotes.Notice),
 	ClaimDaily = makeEvent(Protocol.Remotes.ClaimDaily),
 	ClaimPlaytime = makeEvent(Protocol.Remotes.ClaimPlaytime),
+	AdminCommand = makeEvent(Protocol.Remotes.AdminCommand),
 	SaveSettings = makeEvent(Protocol.Remotes.SaveSettings),
 	RedeemCode = makeEvent(Protocol.Remotes.RedeemCode),
 	ClaimGroup = makeEvent(Protocol.Remotes.ClaimGroup),
