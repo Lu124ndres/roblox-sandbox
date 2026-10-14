@@ -7,7 +7,7 @@
 		[retrato]  [ barra con la comida grande ]
 		[retrato]  Calmada   [enojo]
 		           +25%  +50%  +75%
-	El retrato del monstruo (GiantPortrait) va a la izquierda; la fila del
+	El retrato del monstruo (GiantPortrait, su ícono) va a la izquierda; la fila del
 	enojo (AngerMeter, y = ANGER_TOP) y los atajos para llenarlo (FillChips,
 	y = CHIPS_TOP, que fija el alto del panel) usan las medidas de aquí.
 	HungerBar llena las piezas con el estado del gigante.
@@ -35,7 +35,7 @@ local TOPBAR_GAP = 12 -- aire entre los botones de la barra de Roblox y el panel
 
 export type Parts = {
 	panel: Frame,
-	portrait: ViewportFrame,
+	portrait: ImageLabel,
 	title: TextLabel,
 	detail: TextLabel,
 	amount: TextLabel,
@@ -87,23 +87,16 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	end
 	relayout()
 
-	local frame = Instance.new("Frame")
-	frame.Name = "Retrato"
-	frame.BackgroundColor3 = Color3.fromRGB(34, 36, 46)
-	frame.Size = UDim2.fromOffset(HungerPanel.PORTRAIT, HungerPanel.PORTRAIT)
-	Ui.corner(frame, 14)
-	Style.border(frame, 3)
-	Style.gradient(frame, Color3.fromRGB(90, 150, 210))
-	frame.Parent = panel
-	local portrait = Instance.new("ViewportFrame")
-	portrait.Name = "Modelo"
+	-- Ícono del monstruo, un poco más grande que su lugar para que resalte.
+	local portrait = Instance.new("ImageLabel")
+	portrait.Name = "Retrato"
 	portrait.BackgroundTransparency = 1
-	portrait.Size = UDim2.fromScale(1, 1)
-	portrait.Ambient = Color3.fromRGB(205, 205, 215)
-	portrait.LightColor = Color3.new(1, 1, 1)
-	portrait.LightDirection = Vector3.new(-0.5, -1, 0.6)
-	Ui.corner(portrait, 14)
-	portrait.Parent = frame
+	portrait.ScaleType = Enum.ScaleType.Fit
+	portrait.AnchorPoint = Vector2.new(0.5, 0.5)
+	portrait.Position = UDim2.fromOffset(HungerPanel.PORTRAIT / 2, HungerPanel.PORTRAIT / 2)
+	portrait.Size = UDim2.fromOffset(HungerPanel.PORTRAIT + 10, HungerPanel.PORTRAIT + 10)
+	portrait.ZIndex = 3
+	portrait.Parent = panel
 
 	local left = HungerPanel.LEFT
 	local title = Style.text(panel, "Nombre", 22)
