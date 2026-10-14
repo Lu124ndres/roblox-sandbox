@@ -2,14 +2,15 @@
 --[[
 	Outfits
 
-	Trajes de los pases (Config.Monetization.passes[...].outfit), hechos de
-	piezas soldadas al personaje para que todos los vean:
-		ReyDelMar      corona dorada con gema azul y capa azul
-		DiosDelVolcan  corona de rayos de fuego que arde, capa negra con
-		               borde de lava y chispas alrededor
-	Se ponen al aparecer el personaje y en cuanto se compra el pase. Las
-	piezas no chocan, no pesan y los rayos las ignoran. Si tiene los dos
-	pases, se ve el más caro.
+	Todos los jugadores se ven como marineros (no con su avatar): el juego
+	no carga la apariencia (StarterPlayer.LoadCharacterAppearance = false) y
+	aquí se viste a cada personaje con piezas soldadas que todos ven:
+		Marinero       el uniforme de SailorParts, con el tono de piel del
+		               avatar del jugador
+		ReyDelMar      almirante de los mares (PassLooks + corona y capa de
+		DiosDelVolcan  OutfitParts), un poco más grandes para que resalten
+	El traje de pase sale de Config.Monetization.passes[...].outfit; si tiene
+	los dos, se ve el más caro. Se viste al aparecer y al comprar un pase.
 ]]
 
 local Players = game:GetService("Players")
@@ -18,16 +19,59 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local OutfitKit = require(script.Parent.OutfitKit)
 local OutfitParts = require(script.Parent.OutfitParts)
+local PassLooks = require(script.Parent.PassLooks)
+local SailorParts = require(script.Parent.SailorParts)
 
 local PASSES = Config.Monetization.passes
 local FOLDER = "Traje"
+local SAILOR = "Marinero"
+local rgb = OutfitKit.rgb
+-- Tonos de piel de reserva (si no se puede leer el del avatar).
+local SKINS = {
+	rgb(255, 220, 177),
+	rgb(234, 184, 146),
+	rgb(204, 142, 105),
+	rgb(160, 102, 72),
+	rgb(120, 76, 52),
+}
+
+type Colors = { head: Color3?, torso: Color3, arms: Color3?, legs: Color3 }
+-- Colores del cuerpo por traje (nil = el tono de piel del jugador).
+local BODY: { [string]: Colors } = {
+	[SAILOR] = { torso = SailorParts.WHITE, legs = SailorParts.NAVY },
+	ReyDelMar = { torso = rgb(24, 48, 120), legs = rgb(245, 245, 240) },
+	DiosDelVolcan = {
+		head = rgb(58, 48, 48),
+		torso = rgb(32, 26, 28),
+		arms = rgb(58, 48, 48),
+		legs = rgb(36, 30, 30),
+	},
+}
+local SCALE: { [string]: number } = { ReyDelMar = 1.1, DiosDelVolcan = 1.15 }
 
 local Outfits = {}
 
--- El traje del pase más caro que tiene (nil si ninguno).
-local function outfitFor(player: Player): string?
-	local best: string?, price = nil, -1
+local skins: { [number]: Color3 } = {}
+
+local function skinOf(player: Player): Color3
+	local known = skins[player.UserId]
+	if known then
+		return known
+	end
+	local fallback = SKINS[player.UserId % #SKINS + 1]
+	local ok, description = pcall(function()
+		return Players:GetHumanoidDescriptionFromUserId(player.UserId)
+	end)
+	local skin = if ok and description then description.HeadColor else fallback
+	skins[player.UserId] = skin
+	return skin
+end
+
+-- El traje del pase más caro que tiene, o el de marinero.
+local function outfitFor(player: Player): string
+	local best, price = SAILOR, -1
 	for key, pass in PASSES do
 		if pass.outfit and pass.robux > price and Perks.hasPass(player, key) then
 			best, price = pass.outfit, pass.robux
@@ -36,39 +80,81 @@ local function outfitFor(player: Player): string?
 	return best
 end
 
+-- Quita lo que traiga del avatar (por si la apariencia llegó a cargar).
+local function strip(character: Model)
+	for _, item in character:GetChildren() do
+		if
+			item:IsA("Accessory")
+			or item:IsA("Clothing")
+			or item:IsA("ShirtGraphic")
+			or item:IsA("BodyColors")
+		then
+			item:Destroy()
+		end
+	end
+end
+
+local function paint(character: Model, outfit: string, skin: Color3)
+	local colors = BODY[outfit] or BODY[SAILOR]
+	local body = Instance.new("BodyColors")
+	body.HeadColor3 = colors.head or skin
+	body.TorsoColor3 = colors.torso
+	body.LeftArmColor3 = colors.arms or skin
+	body.RightArmColor3 = colors.arms or skin
+	body.LeftLegColor3 = colors.legs
+	body.RightLegColor3 = colors.legs
+	body.Parent = character
+	local head = character:FindFirstChild("Head")
+	local face = head and head:FindFirstChildOfClass("Decal")
+	if face then -- el Dios del Volcán tiene ojos de fuego en vez de cara
+		face.Transparency = if outfit == "DiosDelVolcan" then 1 else 0
+	end
+end
+
 local function dress(player: Player)
 	local character = player.Character
 	if not character then
 		return
 	end
-	local old = character:FindFirstChild(FOLDER)
 	local outfit = outfitFor(player)
+	local old = character:FindFirstChild(FOLDER)
 	if old and old:GetAttribute("Outfit") == outfit then
 		return
 	end
 	if old then
 		old:Destroy()
 	end
-	local head = character:FindFirstChild("Head")
-	local torso = character:FindFirstChild("UpperTorso") or character:FindFirstChild("Torso")
-	if
-		not outfit
-		or not (head and head:IsA("BasePart"))
-		or not (torso and torso:IsA("BasePart"))
-	then
+	if math.abs(character:GetScale() - 1) > 0.001 then
+		pcall(character.ScaleTo, character, 1)
+	end
+	local rig = OutfitKit.rig(character)
+	if not rig then
 		return
 	end
+	strip(character)
+	paint(character, outfit, skinOf(player))
 	local model = Instance.new("Model")
 	model.Name = FOLDER
 	model:SetAttribute("Outfit", outfit)
-	OutfitParts.build(outfit, model, head, torso)
+	if outfit == SAILOR then
+		SailorParts.build(model, rig)
+	else
+		PassLooks.build(outfit, model, rig)
+		OutfitParts.build(outfit, model, rig.head, rig.torso)
+	end
 	model.Parent = character
+	local scale = SCALE[outfit]
+	if scale then
+		pcall(character.ScaleTo, character, scale)
+	end
 end
 
 local function watch(player: Player)
+	task.spawn(skinOf, player) -- se pide una vez, antes de que aparezca
 	player.CharacterAdded:Connect(function(character: Model)
 		character:WaitForChild("Head", 10)
-		task.wait(0.5) -- que carguen ropa y accesorios antes de medir la cabeza
+		character:WaitForChild("Humanoid", 10)
+		task.wait(0.2) -- que terminen de armarse las partes del cuerpo
 		dress(player)
 	end)
 	player.AttributeChanged:Connect(function(attribute: string)
@@ -89,6 +175,9 @@ function Outfits.init()
 	for _, player in Players:GetPlayers() do
 		watch(player)
 	end
+	Players.PlayerRemoving:Connect(function(player: Player)
+		skins[player.UserId] = nil
+	end)
 end
 
 return Outfits
