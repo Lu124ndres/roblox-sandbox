@@ -19,7 +19,8 @@
 	Si tiene los dos, de cada ventaja vale la mejor.
 	Fill25/50/75: llena esa parte de la barra del monstruo actual.
 	Choose<idGigante>: elige el monstruo que sale después del descanso.
-	Pond2..Pond10: desbloquea ese estanque para siempre.
+	Pond2..Pond10: desbloquea ese estanque para siempre. Pond11: el estanque
+	sagrado del centro (x250), que solo se abre así.
 	Rod<n>, Basket<n>, Boots<n>: el nivel n de MEJORAS sin juntar monedas
 	(upgradeRobux[categoría][n]; el 1 es el gratis).
 	Gift<pase>: regalar un pase a otro jugador (los pases no se pueden
@@ -57,7 +58,7 @@ export type MonetizationConfig = {
 	serverBoost: { name: string, minutes: number, robux: { number } },
 	fills: { [string]: FillDef },
 	chooseGiant: { [string]: number }, -- precio por id de gigante
-	pondRobux: { [number]: number }, -- precio de cada estanque (2..10)
+	pondRobux: { [number]: number }, -- precio de cada estanque (2..11)
 	upgradeRobux: { [string]: { number } }, -- MEJORAS en Robux: Rod/Basket/Boots, por nivel
 	passGifts: { [string]: number }, -- precio del producto Gift<pase>
 	-- Pack de inicio (producto PackInicio): una sola vez, mucho valor por poco.
@@ -135,6 +136,7 @@ local Monetization: MonetizationConfig = {
 		[8] = 449,
 		[9] = 649,
 		[10] = 999,
+		[11] = 799, -- estanque sagrado x250 (solo Robux)
 	},
 	upgradeRobux = {
 		Rod = { 0, 5, 15, 29, 59, 99, 199, 349, 599, 999 },

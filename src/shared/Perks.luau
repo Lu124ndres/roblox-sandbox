@@ -165,6 +165,9 @@ function Perks.pondOpen(player: Player, index: number): boolean
 	if not pond then
 		return false
 	end
+	if pond.robuxOnly then
+		return Perks.ownsPond(player, index)
+	end
 	local kills = player:GetAttribute(ATTR.Kills)
 	return (type(kills) == "number" and kills >= pond.requiredKills)
 		or Perks.ownsPond(player, index)

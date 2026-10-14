@@ -8,9 +8,9 @@
 		Monstruo       llenarlo 25/50/75 % (para todos)
 		Siguiente      elegir el monstruo que sale después del descanso
 		Estanques      abrirlos para siempre
-	Arriba de todo, el pack de inicio (hasta comprarlo). Los estanques solo
-	si Config.Monetization.sellPonds. Las tarjetas se repintan cada segundo;
-	las de Poder, Monedas, VIP y estanques se pueden regalar (botón rosa).
+	Pack de inicio y estanque sagrado (x250) en "Para siempre"; los demás
+	estanques solo si sellPonds. Se repintan cada segundo; Poder, Monedas,
+	VIP y estanques se pueden regalar (botón rosa).
 ]]
 
 local Players = game:GetService("Players")
@@ -28,7 +28,6 @@ local RobuxOffers = require(script.Parent.RobuxOffers)
 local Window = require(script.Parent.Window)
 
 type Offer = RobuxOffers.Offer
-
 local CARDS = Style.PALETTE.Cards
 local MONETIZATION = Config.Monetization
 local CARD_HEIGHT = 260
@@ -132,6 +131,7 @@ function RobuxShop.start(screen: ScreenGui)
 	add(CARDS.Pink, "giftPink", RobuxOffers.starter(player))
 	add(CARDS.Blue, "crystal", RobuxOffers.level(player, "Power"))
 	add(CARDS.Yellow, "coin", RobuxOffers.level(player, "Coins"))
+	add(CARDS.Cyan, "pond", RobuxOffers.pond(player, #Config.Progression.ponds)) -- sagrado
 	for _, key in MONETIZATION.passOrder do
 		add(CARDS.Purple, "crown", RobuxOffers.pass(player, key))
 	end
@@ -159,7 +159,7 @@ function RobuxShop.start(screen: ScreenGui)
 		end
 	end
 
-	for index = 2, if MONETIZATION.sellPonds then #Config.Progression.ponds else 1 do
+	for index = 2, if MONETIZATION.sellPonds then #Config.Progression.ponds - 1 else 1 do
 		if index == 2 then
 			section("Estanques")
 		end

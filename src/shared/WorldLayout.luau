@@ -33,6 +33,8 @@ export type WorldLayout = {
 	trainingPondRadius: number,
 	trainingPondFloor: number,
 	trainingPondWaterTop: number,
+	sacredPondRadius: number, -- estanque sagrado del centro (solo Robux)
+	pondCoverDepth: number, -- tapa invisible: el piso queda así de hondo bajo el agua
 	pierAngles: { number },
 	pierStartRadius: number,
 	pierLength: number,

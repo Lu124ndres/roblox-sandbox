@@ -77,10 +77,11 @@ end
 local LIGHTHOUSE = polar(L.lighthouseAngle, L.lighthouseRadius)
 local CRATER = Vector2.new(L.craterCenter[1], L.craterCenter[2])
 
-local PONDS: { Vector2 } = {}
-for index = 1, L.trainingPondCount do
+local PONDS: { { center: Vector2, radius: number } } = {}
+for index = 1, WorldZones.SACRED_POND do
 	local center = WorldZones.pondCenter(index)
-	PONDS[index] = Vector2.new(center.X, center.Z)
+	PONDS[index] =
+		{ center = Vector2.new(center.X, center.Z), radius = WorldZones.pondRadius(index) }
 end
 
 local function distanceToSegment(point: Vector2, a: Vector2, b: Vector2): number
@@ -134,13 +135,13 @@ local function mainIsland(point: Vector2): (number, Enum.Material, number)
 		material = MATERIAL.Cobblestone
 		-- Estanques de entrenamiento: borde de piedra y fondo de arena con agua propia.
 		for _, pond in PONDS do
-			local d = (point - pond).Magnitude
-			if d < L.trainingPondRadius then
-				local bowl = (d / L.trainingPondRadius) ^ 2
+			local d = (point - pond.center).Magnitude
+			if d < pond.radius then
+				local bowl = (d / pond.radius) ^ 2
 				height = L.trainingPondFloor
 					+ bowl * (L.trainingPondWaterTop - L.trainingPondFloor - 0.6)
 				material, waterTop = MATERIAL.Sand, L.trainingPondWaterTop
-			elseif d < L.trainingPondRadius + POND_RIM_WIDTH then
+			elseif d < pond.radius + POND_RIM_WIDTH then
 				material = MATERIAL.Slate
 			end
 		end

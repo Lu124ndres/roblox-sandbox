@@ -11,6 +11,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
@@ -91,7 +92,14 @@ function TrainingController.start(toasts: Toasts.Toasts)
 	end)
 
 	denied.OnClientEvent:Connect(function(status: unknown, required: unknown, pond: unknown)
-		if status == "locked" and type(required) == "number" then
+		local def = if type(pond) == "number" then Config.Progression.ponds[pond] else nil
+		if status == "locked" and def and def.robuxOnly then
+			toasts.show(
+				"Estanque sagrado x250: desbloquéalo con Robux para siempre",
+				COLORS.Warning
+			)
+			Purchases.promptProduct(`Pond{pond}`)
+		elseif status == "locked" and type(required) == "number" then
 			toasts.show(
 				`Llena {required} {if required == 1 then "monstruo" else "monstruos"} para abrirlo, o desbloquéalo con Robux`,
 				COLORS.Warning

@@ -18,6 +18,7 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 
 local PONDS = Config.Progression.ponds
 local SIGN_HEIGHT = 8.5 -- sobre el cristal flotante
+local SACRED_SIGN_HEIGHT = 21
 
 local PondSigns = {}
 
@@ -46,10 +47,12 @@ end
 local function build(index: number): Sign
 	local anchor = Instance.new("Attachment")
 	anchor.Name = `CartelEstanque{index}`
-	anchor.WorldPosition = WorldZones.pondCenter(index) + Vector3.new(0, SIGN_HEIGHT, 0)
+	local sacred = PONDS[index].robuxOnly == true -- más alto: arriba de la estatua del centro
+	anchor.WorldPosition = WorldZones.pondCenter(index)
+		+ Vector3.new(0, if sacred then SACRED_SIGN_HEIGHT else SIGN_HEIGHT, 0)
 	anchor.Parent = Workspace.Terrain
 	local billboard = Instance.new("BillboardGui")
-	billboard.Size = UDim2.fromScale(7, 3.6) -- en studs: se ve del tamaño del estanque
+	billboard.Size = if sacred then UDim2.fromScale(11, 5.6) else UDim2.fromScale(7, 3.6) -- en studs
 	billboard.MaxDistance = 90
 	billboard.LightInfluence = 0
 	billboard.Adornee = anchor
@@ -81,6 +84,10 @@ function PondSigns.start()
 				sign.requirement.Text = "Entrenar [E]"
 				sign.requirement.TextColor3 = UIConfig.Colors.Success
 				sign.multiplier.TextTransparency = 0
+			elseif PONDS[index].robuxOnly then
+				sign.requirement.Text = "SAGRADO · [E] R$"
+				sign.requirement.TextColor3 = UIConfig.Colors.Warning
+				sign.multiplier.TextTransparency = 0.2
 			else
 				sign.requirement.Text = `{needed} monstruos · [E] R$`
 				sign.requirement.TextColor3 = UIConfig.Colors.Warning

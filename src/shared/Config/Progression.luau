@@ -28,6 +28,7 @@ local Progression: Types.ProgressionConfig = {
 		{ multiplier = 35, requiredKills = 35 },
 		{ multiplier = 60, requiredKills = 60 },
 		{ multiplier = 100, requiredKills = 100 },
+		{ multiplier = 250, requiredKills = 0, robuxOnly = true }, -- sagrado, en el centro
 	},
 	biteSpeedDivisor = 40,
 	fishPerCatchStep = 1000,

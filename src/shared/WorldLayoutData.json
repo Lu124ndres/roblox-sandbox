@@ -16,6 +16,8 @@
 	"trainingPondRadius": 12.5,
 	"trainingPondFloor": -1.5,
 	"trainingPondWaterTop": 6,
+	"sacredPondRadius": 18,
+	"pondCoverDepth": 0.5,
 	"pierAngles": [
 		45,
 		135,

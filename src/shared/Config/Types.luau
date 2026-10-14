@@ -41,6 +41,7 @@ export type GiantDef = {
 export type PondDef = {
 	multiplier: number, -- poder por segundo = powerPerTick * multiplier
 	requiredKills: number, -- monstruos llenados (kills) para usarlo
+	robuxOnly: boolean?, -- solo se abre comprándolo (el estanque sagrado del centro)
 }
 
 export type EconomyConfig = {

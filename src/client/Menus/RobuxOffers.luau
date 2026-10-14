@@ -2,9 +2,8 @@
 --[[
 	RobuxOffers
 
-	Qué vende ahora cada tarjeta de la TIENDA (niveles, pases, pack de inicio,
-	entrenamiento, llenar, elegir monstruo, estanques). Las del jugador traen
-	`gift`: qué se le compraría a otro (su siguiente nivel, su VIP, su estanque).
+	Qué vende ahora cada tarjeta de la TIENDA. Las del jugador traen `gift`:
+	qué se le compraría a otro (su siguiente nivel, su VIP, su estanque).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -17,10 +16,7 @@ local MONETIZATION = Config.Monetization
 local BOOST = MONETIZATION.serverBoost
 local BOOST_ATTR = Protocol.BoostAttributes
 
--- Lo que se le compraría a `target` al regalar (o por qué no se puede).
 export type GiftOffer = { key: string, robux: number, blocked: string? }
-
--- Lo que muestra y vende una tarjeta en este momento (cambia con el nivel).
 export type Offer = {
 	title: string,
 	description: string,
@@ -179,8 +175,12 @@ function RobuxOffers.pond(player: Player, index: number): () -> Offer
 	local robux = MONETIZATION.pondRobux[index] or 0
 	return function()
 		return {
-			title = `Estanque x{pond.multiplier}`,
-			description = `Entrena aquí sin llenar {pond.requiredKills} monstruos`,
+			title = if pond.robuxOnly
+				then `Estanque sagrado x{pond.multiplier}`
+				else `Estanque x{pond.multiplier}`,
+			description = if pond.robuxOnly
+				then "El estanque grande del centro, para siempre"
+				else `Entrena aquí sin llenar {pond.requiredKills} monstruos`,
 			key = `Pond{index}`,
 			isPass = false,
 			robux = robux,

@@ -25,7 +25,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
-local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Perks = require(ReplicatedStorage.Shared.Perks)
@@ -69,7 +68,7 @@ local function targetFor(position: Vector3, pond: number): Vector3
 	if offset.Magnitude < 0.5 then
 		return center
 	end
-	return center + offset.Unit * WorldLayout.trainingPondRadius * 0.45
+	return center + offset.Unit * WorldZones.pondRadius(pond) * 0.45
 end
 
 local function nearPond(player: Player, part: BasePart): boolean
@@ -139,7 +138,10 @@ function TrainingService.init(map: Instance)
 		then
 			local def = PONDS[index]
 			if def then
-				local requirement = if def.requiredKills > 0
+				local requirement = if def.robuxOnly
+					then "Estanque sagrado · solo con Robux"
+					elseif
+						def.requiredKills > 0
 					then `Requiere {def.requiredKills} {if def.requiredKills == 1
 						then "monstruo llenado"
 						else "monstruos llenados"}`

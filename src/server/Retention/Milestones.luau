@@ -13,6 +13,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
+local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local Remotes = require(script.Parent.Parent.Remotes)
@@ -63,7 +64,7 @@ end
 
 function Milestones.trained(player: Player, pondIndex: number)
 	Tutorial.progress(player, "entrenar", 1)
-	if pondIndex >= #Config.Progression.ponds then
+	if pondIndex >= WorldZones.SACRED_POND - 1 then -- el x100 (o el sagrado)
 		Badges.award(player, "EstanqueMaximo")
 	end
 end

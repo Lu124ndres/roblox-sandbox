@@ -104,6 +104,7 @@ local UIConfig: UIConfig = {
 		Color3.fromRGB(255, 150, 60),
 		Color3.fromRGB(255, 205, 60),
 		Color3.fromRGB(255, 245, 170),
+		Color3.fromRGB(120, 245, 255), -- sagrado
 	},
 
 	FishColors = FishColors.Fish,

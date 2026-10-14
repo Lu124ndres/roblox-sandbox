@@ -36,17 +36,27 @@ function WorldZones.distanceToIsland(position: Vector3): number
 	return flat(position).Magnitude
 end
 
--- Centro del estanque número index (1..trainingPondCount), a la altura del agua.
--- El 1 y el último quedan a los lados del camino que llega desde la aparición.
+-- Estanques: 1..trainingPondCount en círculo y, después, el sagrado en el centro.
+WorldZones.SACRED_POND = L.trainingPondCount + 1
+
+-- Centro del estanque número index, a la altura del agua.
+-- El 1 y el último del círculo quedan a los lados del camino que llega desde la aparición.
 function WorldZones.pondAngle(index: number): number
 	local step = 360 / L.trainingPondCount
 	return L.spawnAngle + step / 2 + (index - 1) * step
 end
 
 function WorldZones.pondCenter(index: number): Vector3
+	if index >= WorldZones.SACRED_POND then
+		return Vector3.new(0, L.trainingPondWaterTop, 0)
+	end
 	local angle = math.rad(WorldZones.pondAngle(index))
 	local radius = L.trainingPondRingRadius
 	return Vector3.new(math.cos(angle) * radius, L.trainingPondWaterTop, math.sin(angle) * radius)
+end
+
+function WorldZones.pondRadius(index: number): number
+	return if index >= WorldZones.SACRED_POND then L.sacredPondRadius else L.trainingPondRadius
 end
 
 -- Calderos junto a la puerta del cráter: alimentar apenas se llega.
