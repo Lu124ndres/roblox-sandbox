@@ -2,22 +2,33 @@
 --[[
 	FishDexCard
 
-	Una tarjeta de la colección (FishDex): el pez en 3D dentro de un
-	ViewportFrame (o su silueta si falta descubrirlo), el nombre y la rareza
-	con la cantidad pescada. El giro lo hace FishDex, solo con la ventana
-	abierta, con el model que devuelve build.
+	Una tarjeta de la colección (FishDex) con el estilo de la TIENDA: fondo
+	con rayos del color de su rareza (gris oscuro si falta descubrirlo), el
+	pez en 3D dentro de un ViewportFrame (o su silueta con un candado), el
+	nombre y la rareza con la cantidad pescada. El giro lo hace FishDex,
+	solo con la ventana abierta, con el model que devuelve build.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
-local Ui = require(script.Parent.Parent.Ui)
+local CardParts = require(script.Parent.Parent.Interface.CardParts)
+local Style = require(script.Parent.Parent.Interface.Style)
 
-local COLORS = UIConfig.Colors
+local CARDS = Style.PALETTE.Cards
 local SILHOUETTE = Color3.fromRGB(20, 26, 36)
+local LOCKED = Color3.fromRGB(52, 58, 76)
+-- Color de la tarjeta por rareza (los de UIConfig.RarityColors son para texto).
+local CARD_COLORS: { [string]: Color3 } = {
+	Comun = Color3.fromRGB(120, 132, 156),
+	PocoComun = CARDS.Green,
+	Raro = CARDS.Blue,
+	Epico = CARDS.Purple,
+	Legendario = CARDS.Yellow,
+	Mitico = CARDS.Pink,
+}
 
 export type Card = { box: Frame, model: Model?, info: TextLabel, known: boolean, order: number }
 
@@ -30,22 +41,39 @@ function FishDexCard.infoText(fishId: string, amount: number): string
 		else rarity.displayName
 end
 
+local function silhouette(model: Model)
+	for _, part in model:GetDescendants() do
+		if part:IsA("BasePart") then
+			part.Color = SILHOUETTE
+			part.Material = Enum.Material.SmoothPlastic
+		elseif part:IsA("ParticleEmitter") or part:IsA("Light") then
+			part:Destroy()
+		end
+	end
+end
+
 function FishDexCard.build(parent: Instance, fishId: string, amount: number, order: number): Card
 	local fish = FishCatalog.get(fishId)
 	local rarity = FishCatalog.rarity(fishId)
 	local known = amount > 0
-	local color = if known then UIConfig.RarityColors[rarity.id] else COLORS.TextMuted
-	local box = Instance.new("Frame")
+	local box = CardParts.card(
+		parent,
+		`Pez{order}`,
+		if known then CARD_COLORS[rarity.id] or CARDS.Blue else LOCKED,
+		14
+	)
 	box.LayoutOrder = order
-	box.BackgroundColor3 = COLORS.Track
-	box.BackgroundTransparency = 0.2
-	Ui.corner(box, 10)
-	Ui.stroke(box, color, 2, if known then 0 else 0.6)
-	box.Parent = parent
+	if not known then
+		local rays = box:FindFirstChild("Rayos")
+		if rays then
+			rays:Destroy() -- sin descubrir: tarjeta lisa, oscura
+		end
+	end
 
 	local view = Instance.new("ViewportFrame")
 	view.BackgroundTransparency = 1
-	view.Size = UDim2.new(1, 0, 0.62, 0)
+	view.Position = UDim2.fromScale(0.04, 0.04)
+	view.Size = UDim2.fromScale(0.92, 0.58)
 	view.Ambient = if known then Color3.fromRGB(200, 200, 210) else Color3.new(0, 0, 0)
 	view.LightColor = if known then Color3.new(1, 1, 1) else Color3.new(0, 0, 0)
 	view.Parent = box
@@ -53,32 +81,33 @@ function FishDexCard.build(parent: Instance, fishId: string, amount: number, ord
 	world.Parent = view
 	local model = FishModel.build(fishId, 1)
 	if not known then
-		for _, part in model:GetDescendants() do
-			if part:IsA("BasePart") then
-				part.Color = SILHOUETTE
-				part.Material = Enum.Material.SmoothPlastic
-			elseif part:IsA("ParticleEmitter") or part:IsA("Light") then
-				part:Destroy()
-			end
-		end
+		silhouette(model)
 	end
 	model.Parent = world
+	-- Lejos según el largo del pez: los alargados (pez espada) caben enteros.
 	local extent = model:GetExtentsSize().Magnitude
 	local camera = Instance.new("Camera")
 	camera.FieldOfView = 30
-	camera.CFrame = CFrame.lookAt(Vector3.new(extent * 1.5, extent * 0.35, 0), Vector3.zero)
+	camera.CFrame = CFrame.lookAt(Vector3.new(extent * 1.6, extent * 0.38, 0), Vector3.zero)
 	camera.Parent = view
 	view.CurrentCamera = camera
+	if not known then
+		local lock = Style.text(box, "Candado", 34, nil, 0)
+		lock.Text = "🔒"
+		lock.AnchorPoint = Vector2.new(0.5, 0.5)
+		lock.Position = UDim2.fromScale(0.5, 0.33)
+		lock.Size = UDim2.fromScale(0.4, 0.3)
+		lock.ZIndex = 3
+	end
 
-	local name = Ui.label("Nombre", box, UIConfig.Fonts.Title, UIConfig.TextSizes.Small)
+	local name = Style.text(box, "Nombre", 22, nil, 2.5)
 	name.Text = if known and fish then fish.displayName else "???"
-	name.Position = UDim2.fromScale(0.04, 0.62)
-	name.Size = UDim2.fromScale(0.92, 0.18)
-	local info = Ui.label("Info", box, UIConfig.Fonts.Body, UIConfig.TextSizes.Small)
+	name.Position = UDim2.fromScale(0.04, 0.63)
+	name.Size = UDim2.fromScale(0.92, 0.17)
+	local info = Style.text(box, "Info", 17, nil, 2)
 	info.Text = FishDexCard.infoText(fishId, amount)
-	info.TextColor3 = color
-	info.Position = UDim2.fromScale(0.04, 0.8)
-	info.Size = UDim2.fromScale(0.92, 0.16)
+	info.Position = UDim2.fromScale(0.04, 0.81)
+	info.Size = UDim2.fromScale(0.92, 0.14)
 	return {
 		box = box,
 		model = if known then model else nil,

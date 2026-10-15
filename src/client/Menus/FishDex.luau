@@ -21,7 +21,8 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Ui = require(script.Parent.Parent.Ui)
+local CardParts = require(script.Parent.Parent.Interface.CardParts)
+local Style = require(script.Parent.Parent.Interface.Style)
 local FishDexCard = require(script.Parent.FishDexCard)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
@@ -62,21 +63,30 @@ function FishDex.start(screen: ScreenGui)
 	local window = Window.create(screen, "Coleccion", "Colección de peces", Vector2.new(620, 460))
 	local hud = HudButtons.top("Peces", "fish", window.toggle)
 
-	local summary = Ui.label("Avance", window.content, UIConfig.Fonts.Body, UIConfig.TextSizes.Body)
-	summary.TextXAlignment = Enum.TextXAlignment.Left
-	summary.Size = UDim2.new(1, 0, 0, 26)
+	-- Arriba: barra de especies descubiertas y el premio por completarla.
+	local bar = CardParts.bar(window.content, Style.PALETTE.Cards.Green, 22)
+	bar.track.Position = UDim2.fromOffset(4, 6)
+	bar.track.Size = UDim2.new(0.62, 0, 0, 36)
+	local prize, prizeText = CardParts.iconText(window.content, "chest", 26, UIConfig.Colors.Coins)
+	prize.AnchorPoint = Vector2.new(1, 0)
+	prize.Position = UDim2.new(1, -4, 0, 2)
+	prize.Size = UDim2.new(0.35, 0, 0, 44)
+	prizeText.Text = `+{NumberFormat.short(Config.Retention.collectionBonus)} monedas`
 	local grid = Instance.new("ScrollingFrame")
 	grid.BackgroundTransparency = 1
 	grid.BorderSizePixel = 0
-	grid.Position = UDim2.fromOffset(0, 32)
-	grid.Size = UDim2.new(1, 0, 1, -32)
+	grid.Position = UDim2.fromOffset(0, 54)
+	grid.Size = UDim2.new(1, 0, 1, -54)
 	grid.ScrollBarThickness = 6
 	grid.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	grid.CanvasSize = UDim2.new()
 	grid.Parent = window.content
 	local layout = Instance.new("UIGridLayout")
-	layout.CellSize = UDim2.fromOffset(132, 150)
-	layout.CellPadding = UDim2.fromOffset(8, 8)
+	layout.CellSize = UDim2.fromOffset(134, 158)
+	layout.CellPadding = UDim2.fromOffset(10, 10)
+	local pad = Instance.new("UIPadding") -- deja ver el borde negro de las tarjetas
+	pad.PaddingTop, pad.PaddingLeft = UDim.new(0, 4), UDim.new(0, 4)
+	pad.Parent = grid
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
 	layout.Parent = grid
 
@@ -101,10 +111,7 @@ function FishDex.start(screen: ScreenGui)
 			end
 			pending[fish.id] = nil
 		end
-		summary.Text =
-			`Descubiertos {found}/{#FISH} · completa la colección: +{NumberFormat.short(
-				Config.Retention.collectionBonus
-			)} monedas`
+		bar.set(found / #FISH, `Descubiertos {found} / {#FISH}`)
 	end
 	local spin: RBXScriptConnection? = nil
 	window.onOpen(function()
