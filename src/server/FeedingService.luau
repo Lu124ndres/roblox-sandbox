@@ -3,8 +3,9 @@
 	FeedingService
 
 	Alimentar al gigante desde cualquier punto de la orilla del volcán (el
-	borde del cráter, con su paseo de obsidiana). En PC con E (o F) y en móvil
-	con el botón Alimentar, el cliente manda FeedRequest. Los peces se
+	borde del cráter, con su paseo de obsidiana). Se alimenta MIENTRAS se
+	mantiene E (o F) o el botón Alimentar: el cliente manda FeedRequest(true)
+	al apretar y FeedRequest(false) al soltar; al soltar se corta. Los peces se
 	entregan por lotes: un lote cada delivery.stepSeconds, y la canasta
 	entera en a lo sumo delivery.maxDeliverySeconds sin importar su tamaño.
 	Cada lote cobra sus monedas una vez (multiplicadas por el gigante actual)
@@ -38,6 +39,7 @@ local FeedingService = {}
 
 local lastRequestAt: { [Player]: number } = {}
 local streaming: { [Player]: boolean } = {} -- entregando peces ahora mismo
+local holding: { [Player]: boolean } = {} -- mantiene apretado alimentar
 
 local function send(player: Player, status: Protocol.FeedStatus, fishCount: number, coins: number)
 	Remotes.FeedResult:FireClient(player, status, fishCount, coins)
@@ -48,8 +50,8 @@ local function onShore(player: Player): boolean
 	return root ~= nil and WorldZones.isOnCraterShore(root.Position)
 end
 
--- Entrega la canasta por lotes. Se corta si el jugador sale de la orilla, se
--- va o el gigante se llena (si evoluciona, espera); lo que quede sigue en la canasta. Devuelve
+-- Entrega la canasta por lotes. Se corta si el jugador suelta, sale de la orilla,
+-- se va o el gigante se llena (si evoluciona, espera); lo que quede sigue en la canasta. Devuelve
 -- cuántos peces entregó y cuántas monedas cobró.
 local function deliver(player: Player, total: number): (number, number)
 	local steps = math.max(1, math.ceil(DELIVERY.maxDeliverySeconds / DELIVERY.stepSeconds))
@@ -61,6 +63,7 @@ local function deliver(player: Player, total: number): (number, number)
 	while
 		(GiantService.isFeeding() or GiantService.isEvolving())
 		and player.Parent
+		and holding[player]
 		and onShore(player)
 	do
 		if GiantService.isEvolving() then
@@ -87,7 +90,12 @@ local function deliver(player: Player, total: number): (number, number)
 	return fed, coins
 end
 
-local function onFeed(player: Player)
+local function onFeed(player: Player, hold: unknown)
+	if hold == false then
+		holding[player] = nil -- soltó: la entrega se corta en el próximo lote
+		return
+	end
+	holding[player] = true
 	if streaming[player] then
 		return
 	end
@@ -119,21 +127,22 @@ local function onFeed(player: Player)
 		warn(`FeedingService: falló la entrega de {player.Name}: {fed}`)
 		return
 	end
-	if player.Parent then
+	if player.Parent and fed > 0 then
 		send(player, "ok", fed, coins)
 		Milestones.fed(player, fed)
-		if fed > 0 then
-			Quests.add(player, "feed", 1) -- cuenta entregas (viajes al volcán), no peces
+		if PlayerData.getCarriedCount(player) == 0 then
+			Quests.add(player, "feed", 1) -- cuenta canastas vaciadas (viajes al volcán), no toques
 		end
 	end
 end
 
 function FeedingService.init()
-	-- FeedRequest no lleva argumentos: el servidor mira dónde está el jugador.
+	-- FeedRequest(mantiene: boolean): el servidor mira dónde está el jugador.
 	Remotes.FeedRequest.OnServerEvent:Connect(RateLimit.wrap("FeedRequest", 4, 6, onFeed))
 	Players.PlayerRemoving:Connect(function(player: Player)
 		lastRequestAt[player] = nil
 		streaming[player] = nil
+		holding[player] = nil
 	end)
 end
 

@@ -1,9 +1,7 @@
 --!strict
 --[[
-	Protocol
-
-	Nombres compartidos entre servidor y cliente: RemoteEvents, atributos
-	replicados, estados de pesca y nombres de piezas del mapa.
+	Protocol: nombres compartidos entre servidor y cliente: RemoteEvents,
+	atributos replicados, estados de pesca y nombres de piezas del mapa.
 ]]
 
 -- Resultado que ve el dueño de la caña (avisos y botón TIRA).
@@ -56,7 +54,7 @@ local Protocol = {
 		CastRequest = "CastRequest",
 		-- cliente -> servidor: sin argumentos. Pide recoger el sedal.
 		ReelIn = "ReelIn",
-		-- cliente -> servidor: sin argumentos. Alimentar desde la orilla del volcán.
+		-- cliente -> servidor: (mantiene: boolean) alimentar desde la orilla mientras está apretado.
 		FeedRequest = "FeedRequest",
 		-- servidor -> dueño: (status: FeedStatus, fishCount: number, coins: number)
 		FeedResult = "FeedResult",

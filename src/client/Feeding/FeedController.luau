@@ -5,8 +5,9 @@
 	Alimentar desde cualquier punto de la orilla del volcán (el borde del
 	cráter, marcado con una línea coral sobre el paseo). Cuando el
 	jugador está ahí y lleva peces aparece el botón Alimentar (E o F en PC, X
-	en consola). Solo pide FeedRequest: el servidor valida dónde está y cuánto
-	lleva, y FeedFeedback muestra el resultado.
+	en consola): se alimenta MIENTRAS se mantiene apretado. Solo avisa
+	FeedRequest(true) al apretar y FeedRequest(false) al soltar: el servidor
+	valida dónde está y cuánto lleva, y FeedFeedback muestra el resultado.
 ]]
 
 local ContextActionService = game:GetService("ContextActionService")
@@ -23,7 +24,6 @@ local Toasts = require(script.Parent.Parent.Toasts)
 
 local FEED_ACTION = "Alimentar"
 local CHECK_SECONDS = 0.2
-local RETRY_SECONDS = 0.6 -- tras pedir, el botón se esconde un momento
 
 local FeedController = {}
 
@@ -48,24 +48,42 @@ function FeedController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 	local feedRequest = remotes:WaitForChild(Protocol.Remotes.FeedRequest) :: RemoteEvent
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local button = FishingButtons.feed(screen)
-	local waitUntil = 0
+	local holding = false
 	local wasThere = false
 
-	local function feed()
-		if not button.Visible then
+	-- Se alimenta mientras se mantiene apretado (E, F, X o el botón); al soltar, para.
+	local function startFeed()
+		if holding or not button.Visible then
 			return
 		end
-		button.Visible = false
-		waitUntil = os.clock() + RETRY_SECONDS
+		holding = true
 		Sounds.play("Click")
-		feedRequest:FireServer()
+		feedRequest:FireServer(true)
+	end
+	local function stopFeed()
+		if holding then
+			holding = false
+			feedRequest:FireServer(false)
+		end
 	end
 
-	button.Activated:Connect(feed)
+	button.MouseButton1Down:Connect(startFeed)
+	button.MouseButton1Up:Connect(stopFeed)
+	button.InputEnded:Connect(function(input: InputObject)
+		if
+			input.UserInputType == Enum.UserInputType.Touch
+			or input.UserInputType == Enum.UserInputType.MouseButton1
+		then
+			stopFeed()
+		end
+	end)
 	-- Se registra después de la pesca: F alimenta aquí y lanza en la playa.
 	ContextActionService:BindAction(FEED_ACTION, function(_, inputState: Enum.UserInputState)
 		if inputState == Enum.UserInputState.Begin and button.Visible then
-			feed()
+			startFeed()
+			return Enum.ContextActionResult.Sink
+		elseif inputState ~= Enum.UserInputState.Begin and holding then
+			stopFeed()
 			return Enum.ContextActionResult.Sink
 		end
 		return Enum.ContextActionResult.Pass
@@ -76,10 +94,13 @@ function FeedController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			local phase = stateFolder:GetAttribute(Protocol.GiantAttributes.Phase)
 			local feeding = phase == nil or phase == "feeding"
 			local there = feeding and onShore(player) and carrying(player) > 0
-			button.Visible = there and os.clock() >= waitUntil
+			button.Visible = there
+			if not there then
+				stopFeed()
+			end
 			if there and not wasThere then
 				toasts.show(
-					`Alimenta a {GiantName.current()} desde cualquier punto de la orilla`,
+					`Mantén E (o el botón) para alimentar a {GiantName.current()}`,
 					UIConfig.Colors.Feeding
 				)
 			end
