@@ -68,7 +68,7 @@ local Config: Types.Config = {
 			requestCooldownSeconds = 0.5,
 		},
 		training = {
-			tickSeconds = 1,
+			tickSeconds = 0.6, -- cada 0.6 s se gana poder (estanques y guarida)
 			powerPerTick = 1,
 			promptDistanceStuds = 18,
 			maxDriftStuds = 9,
