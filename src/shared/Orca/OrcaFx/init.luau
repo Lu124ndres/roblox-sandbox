@@ -5,10 +5,11 @@
 	Sonidos y efectos de la orca, con los colores del modelo (dorado de la
 	armadura, turquesa de las marcas, coral de la corona, cristal de la aleta):
 		- nadando: burbujas turquesa, estela de espuma, la aleta de cristal
-		  brilla y cada tanto un llamado de orca (Trails);
+		  brilla y cada tanto un llamado con la voz de su etapa (Trails);
 		- al salir a respirar: chorro por el espiráculo;
-		- al saltar: llamado, salpicadura al salir y ola grande al caer con
-		  destellos dorados, coral y turquesa, y temblor de cámara cerca;
+		- al saltar: salpicadura al salir y ola grande al caer, con destellos
+		  dorados, coral y turquesa y temblor de cámara cerca;
+		- en los trucos: coletazos, aletazos, rugidos, cascadas (Events);
 		- al comer: llamado y salpicadura al asomarse, ondas alrededor y
 		  destellos dorados en la boca.
 	Lee OrcaMotion.state cada cuadro y detecta los cambios (cruzar el agua,
@@ -19,6 +20,7 @@
 local WorldLayout = require(script.Parent.Parent.WorldLayout)
 local OrcaMotion = require(script.Parent.OrcaMotion)
 local Rig = require(script.Parent.OrcaMotion.Rig)
+local Events = require(script.Events)
 local Trails = require(script.Trails)
 
 local WATER = WorldLayout.waterLevel
@@ -27,15 +29,7 @@ local CALL_MIN, CALL_MAX = 18, 35 -- segundos entre llamados mientras nada
 local RING_SECONDS = 1.1 -- ondas mientras come
 local COLORS = Trails.Colors
 
-export type Hooks = {
-	play: (key: string, position: Vector3?, pitch: number?) -> (),
-	splash: (position: Vector3, scale: number) -> (),
-	ring: (position: Vector3, radius: number, seconds: number?) -> (),
-	sparkle: (position: Vector3, color: Color3, count: number?) -> (),
-	spout: (position: Vector3, scale: number) -> (),
-	shake: (position: Vector3, magnitude: number, seconds: number) -> (), -- más fuerte cerca
-	fxScale: () -> number, -- 0 en modo rápido
-}
+export type Hooks = Events.Hooks
 export type Fx = {
 	step: (dt: number) -> (),
 	destroy: () -> (),
@@ -46,7 +40,7 @@ local OrcaFx = {}
 function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 	local trails: Trails.Trails? = nil
 	local trailsFor: Rig.Rig? = nil
-	local lastRel, lastBreath, lastBreach, wasFeeding = 0, 0, -1, false
+	local lastRel, lastBreath, wasFeeding = 0, 0, false
 	local ringIn, callIn = 0, math.random(CALL_MIN, CALL_MAX)
 
 	-- Destellos con los colores de la orca.
@@ -56,16 +50,15 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 		hooks.sparkle(position, COLORS.Teal, math.floor(10 * scale))
 	end
 
+	-- Cruzar la superficie rápido: sale de un salto o cae al agua.
 	local function crossings(rel: number, height: number, scale: number)
 		local state = motion.state
 		local water = motion.water()
 		if lastRel < 0 and rel >= 0 and state.vy > height * 0.5 then
-			-- Sale del agua de un salto.
 			hooks.play("BigSplash", water, 1.25)
 			hooks.splash(water, 2.2 * scale)
 			hooks.sparkle(water + Vector3.new(0, height * 0.2, 0), COLORS.Crystal, 16)
 		elseif lastRel > 0 and rel <= 0 and state.vy < -height * 0.5 then
-			-- Cae: ola grande.
 			hooks.play("BigSplash", water, 0.85)
 			hooks.splash(water, 4 * scale)
 			for k = 1, 3 do
@@ -91,25 +84,27 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 		local height = state.height
 		local rel = state.center.Y - WATER
 		if state.hidden then
+			table.clear(state.events)
 			lastRel, wasFeeding = rel, false
 			return
 		end
 		local scale = math.sqrt(height / BASE_HEIGHT)
 		crossings(rel, height, scale)
-
-		if state.breach >= 0 and lastBreach < 0 then
-			hooks.play("OrcaCall", state.center, 1.15) -- grita antes de saltar
+		for _, event in state.events do
+			Events.play(event, motion, hooks)
 		end
+		table.clear(state.events)
+
 		-- Vuelve a la superficie a respirar: chorro por el espiráculo.
-		if state.breath < lastBreath and state.breach < 0 and state.feeding < 0.3 then
+		if state.breath < lastBreath and not state.trick and state.feeding < 0.3 then
 			local blowhole = motion.top()
 			hooks.spout(blowhole, math.max(1, height / 15))
-			hooks.play("Spout", blowhole)
+			hooks.play("Spout", blowhole, math.clamp(1.2 / scale, 0.6, 1.2))
 		end
 
 		local feeding = state.feeding > 0.5
 		if feeding and not wasFeeding then
-			hooks.play("OrcaCall", motion.mouth(), 1.05)
+			hooks.play("OrcaCall", motion.mouth(), state.voice)
 			hooks.splash(motion.water(), 1.6 * scale)
 		end
 		if feeding then
@@ -118,14 +113,14 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 				ringIn = RING_SECONDS
 				hooks.ring(motion.water(), height * 0.7, 1.4)
 			end
-		else
+		elseif not state.trick then
 			callIn -= dt
 			if callIn <= 0 then
 				callIn = math.random(CALL_MIN, CALL_MAX)
-				hooks.play("OrcaCall", motion.top(), 0.9 + math.random() * 0.3)
+				hooks.play("OrcaCall", motion.top(), state.voice * (0.9 + math.random() * 0.25))
 			end
 		end
-		lastRel, lastBreath, lastBreach, wasFeeding = rel, state.breath, state.breach, feeding
+		lastRel, lastBreath, wasFeeding = rel, state.breath, feeding
 	end
 
 	return {

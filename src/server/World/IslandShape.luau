@@ -44,10 +44,11 @@ function IslandShape.craterHeight(rho: number): number?
 	if rho >= L.craterBaseRadius then
 		return nil
 	elseif rho < L.craterLakeRadius then
-		return L.craterFloor + (rho / L.craterLakeRadius) ^ 2 * 10 -- cuenco
+		return L.craterFloor + (rho / L.craterLakeRadius) ^ 2 * L.craterBowlRise -- cuenco
 	elseif rho < L.craterCliffRadius then
 		local t = (rho - L.craterLakeRadius) / (L.craterCliffRadius - L.craterLakeRadius)
-		return L.craterFloor + 10 + (L.craterRimHeight - L.craterFloor - 10) * t
+		local foot = L.craterFloor + L.craterBowlRise
+		return foot + (L.craterRimHeight - foot) * t
 	elseif rho < L.craterRimOuter then
 		return L.craterRimHeight
 	end

@@ -6,25 +6,21 @@
 	del servidor (Workspace:GetServerTimeNow()): todos los clientes la ven en el
 	mismo lugar sin mandar nada por la red.
 		- Nada en vueltas que cambian solas de radio y de ritmo (parece al azar).
-		- Cada BREATH_SECONDS baja un poco y vuelve a subir a respirar.
-		- En algunos tramos de BREACH_SLOT segundos salta fuera del agua con un
-		  giro completo (breach). Qué tramos y cuándo sale de un hash del tramo.
-	Las alturas son del centro del cuerpo respecto al agua (negativo = hundida).
+		- Cada `breath.seconds` baja un poco y vuelve a subir a respirar.
+		- En algunos tramos de `trickEvery` segundos hace un truco de su etapa;
+		  cuál y cuándo sale de un hash del tramo (igual en todos los clientes).
+	Las alturas van en altos del modelo (negativo = bajo el agua).
 ]]
-
-local BREATH_SECONDS = 16
-local BREACH_SLOT = 26
-local BREACH_CHANCE = 0.55 -- tramos con salto
-local BREACH_SECONDS = 3.6
-local DIVE_END, AIR_END = 0.22, 0.82 -- partes del salto: tomar impulso, en el aire, volver a entrar
 
 export type Sample = {
 	position: Vector3, -- desde el centro del lago (Y = 0)
 	velocity: Vector3,
 	depth: number,
 	breath: number, -- 0..1 del ciclo de respirar (0 = en la superficie)
-	breach: number, -- -1 sin salto; 0..1 avance del salto
 }
+export type Breath = { seconds: number, shallow: number, deep: number }
+
+local Perfil = require(script.Parent.Parent.Etapas.Perfil)
 
 local Path = {}
 
@@ -33,15 +29,16 @@ local function hash(n: number): number
 	return x - math.floor(x)
 end
 
-local function smooth(t: number): number
-	t = math.clamp(t, 0, 1)
-	return t * t * (3 - 2 * t)
-end
-
 -- Radio en que puede nadar sin que la cabeza toque el acantilado (el cuerpo
--- mide ~1.5 veces el alto del modelo). Las etapas grandes casi no se mueven.
+-- mide ~1.5 veces el alto del modelo). Las etapas enormes casi no se mueven.
 function Path.radius(lakeRadius: number, height: number): number
 	return math.max(0, lakeRadius - height * 0.9 - 4)
+end
+
+-- Fondo del lago a esa distancia del centro, en studs respecto al agua.
+function Path.floor(radius: number, layout: { [string]: any }): number
+	local reach = math.min(radius / layout.craterLakeRadius, 1)
+	return layout.craterFloor + reach ^ 2 * layout.craterBowlRise - layout.waterLevel
 end
 
 -- Velocidad de crucero en studs/s: las más grandes avanzan más rápido.
@@ -59,52 +56,48 @@ local function point(t: number, radius: number, speed: number): Vector3
 	return Vector3.new(math.cos(angle) * r, 0, math.sin(angle) * r)
 end
 
-local function breachProgress(t: number): number
-	local slot = math.floor(t / BREACH_SLOT)
-	if hash(slot) > BREACH_CHANCE then
-		return -1
-	end
-	local start = slot * BREACH_SLOT + 3 + hash(slot + 0.5) * (BREACH_SLOT - BREACH_SECONDS - 4)
-	local u = (t - start) / BREACH_SECONDS
-	return if u >= 0 and u < 1 then u else -1
-end
-
-function Path.sample(t: number, radius: number, speed: number, height: number): Sample
+function Path.sample(t: number, radius: number, speed: number, breath: Breath): Sample
 	local position = point(t, radius, speed)
-	local breath = (t % BREATH_SECONDS) / BREATH_SECONDS
+	local cycle = (t % breath.seconds) / breath.seconds
 	return {
 		position = position,
 		velocity = (point(t + 0.25, radius, speed) - position) / 0.25,
-		depth = -height * (0.05 + 0.15 * math.sin(math.pi * breath) ^ 2), -- el lomo casi siempre se ve
-		breath = breath,
-		breach = breachProgress(t),
+		depth = breath.shallow + (breath.deep - breath.shallow) * math.sin(math.pi * cycle) ^ 2,
+		breath = cycle,
 	}
 end
 
--- Pose del salto en el avance u (0..1): altura del centro, cabeceo (+ = nariz
--- arriba) y giro sobre su eje. `from` es la altura de crucero al empezar.
-function Path.breachPose(u: number, height: number, from: number): (number, number, number)
-	local apex = height * math.clamp(1.15 - height / 200, 0.35, 1)
-	local exit = -0.15 * height
-	if u < DIVE_END then
-		-- Se hunde tomando impulso y apunta la nariz hacia arriba.
-		local a = u / DIVE_END
-		local low = -0.45 * height
-		local depth = if a < 0.6
-			then from + (low - from) * smooth(a / 0.6)
-			else low + (exit - low) * smooth((a - 0.6) / 0.4)
-		local pitch = if a < 0.6
-			then -0.35 * math.sin(math.pi * a / 0.6)
-			else 0.95 * smooth((a - 0.6) / 0.4)
-		return depth, pitch, 0
-	elseif u < AIR_END then
-		-- En el aire: parábola, la nariz pasa de arriba a abajo y da una vuelta.
-		local b = (u - DIVE_END) / (AIR_END - DIVE_END)
-		return exit + (apex - exit) * 4 * b * (1 - b), 0.95 - 2 * b, math.pi * 2 * smooth(b)
+-- Truco del tramo actual: índice en `tricks` (0 = ninguno), su avance (0..1) y
+-- el número de tramo (sirve para saber cuándo empieza uno nuevo).
+function Path.trick(
+	t: number,
+	every: number,
+	chance: number,
+	tricks: { Perfil.Entry }
+): (number, number, number)
+	local slot = math.floor(t / every)
+	if #tricks == 0 or hash(slot) > chance then
+		return 0, 0, slot
 	end
-	-- Entra al agua de cabeza y se endereza.
-	local c = (u - AIR_END) / (1 - AIR_END)
-	return exit + (from - 0.2 * height - exit) * smooth(c), -1.05 * (1 - smooth(c)), 0
+	local total = 0
+	for _, entry in tricks do
+		total += entry.weight
+	end
+	local pick, index = hash(slot + 0.25) * total, #tricks
+	for k, entry in tricks do
+		pick -= entry.weight
+		if pick <= 0 then
+			index = k
+			break
+		end
+	end
+	local seconds = tricks[index].trick.seconds
+	local start = slot * every + 2 + hash(slot + 0.5) * math.max(0, every - seconds - 4)
+	local u = (t - start) / seconds
+	if u >= 0 and u < 1 then
+		return index, u, slot
+	end
+	return 0, 0, slot
 end
 
 return table.freeze(Path)

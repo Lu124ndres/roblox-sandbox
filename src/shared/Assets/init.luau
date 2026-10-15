@@ -34,7 +34,7 @@ export type Assets = {
 	MISSING: string,
 	UI: AssetMap,
 	Meshes: AssetMap,
-	Textures: AssetMap,
+	Textures: { [string]: { string } }, -- por modelo: color, normales, rugosidad, metal
 	Sounds: AssetMap,
 	Particles: AssetMap,
 	Animations: AssetMap,
@@ -63,20 +63,44 @@ local Assets: Assets = {
 	},
 
 	Meshes = {
-		-- Orca etapa 1 (modelo de Meshy reducido, 9,600 triángulos, con huesos para
-		-- nadar y abrir la boca: tools/blender/rig_orca.py). Fuente:
-		-- assets/blender/OrcaE1.fbx. Model en ServerStorage.OrcaE1 (vive en el .rbxl).
-		OrcaE1 = "rbxassetid://107562062733485",
+		-- Orca en 4 etapas (modelos de Meshy reducidos y con huesos para nadar y abrir la
+		-- boca: tools/blender/procesar_meshy.py y rig_orca.py). Fuente: assets/blender/OrcaE*.fbx.
+		-- Los Model están en ServerStorage.OrcaE1..E4 (viven en el .rbxl).
+		OrcaE1 = "rbxassetid://129807151713126", -- bebé (7,840 triángulos)
+		OrcaE2 = "rbxassetid://110833679153524", -- joven (11,760)
+		OrcaE3 = "rbxassetid://119056308763073", -- adulta (15,680)
+		OrcaE4 = "rbxassetid://131514620036527", -- anciana (19,110)
 		-- Pendiente de modelar. Mientras falte, el juego usa un marcador de primitivas.
 		MinotauroE1 = "rbxassetid://0",
 	},
 
+	-- SurfaceAppearance de cada etapa de la orca: color, normales, rugosidad, metal.
+	-- Fuente: assets/textures/OrcaE*_*.png.
 	Textures = {
-		-- SurfaceAppearance de la orca etapa 1. Fuente: assets/textures/OrcaE1_*.png.
-		OrcaE1Color = "rbxassetid://127128851587935",
-		OrcaE1Normal = "rbxassetid://117533377898225",
-		OrcaE1Roughness = "rbxassetid://75086159412197",
-		OrcaE1Metalness = "rbxassetid://77816773195561",
+		OrcaE1 = {
+			"rbxassetid://71957072265867",
+			"rbxassetid://96425004406950",
+			"rbxassetid://136742021496638",
+			"rbxassetid://124811014431361",
+		},
+		OrcaE2 = {
+			"rbxassetid://115410241013048",
+			"rbxassetid://77696394182660",
+			"rbxassetid://79855472680358",
+			"rbxassetid://138965288650521",
+		},
+		OrcaE3 = {
+			"rbxassetid://128239156725457",
+			"rbxassetid://111345670740047",
+			"rbxassetid://106258607441741",
+			"rbxassetid://81140731876410",
+		},
+		OrcaE4 = {
+			"rbxassetid://94834853518339",
+			"rbxassetid://116198259641181",
+			"rbxassetid://85563111169953",
+			"rbxassetid://87177939844055",
+		},
 	},
 
 	Sounds = {

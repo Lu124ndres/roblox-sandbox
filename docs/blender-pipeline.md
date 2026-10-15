@@ -64,3 +64,17 @@ veces el alto de un jugador.
 **Orientación:** el modelo tiene que llegar a Studio parado (Y hacia arriba). Desde
 Blender, exportar con `bake_space_transform=True` (ya está en `exportar.py`). Con Meshy,
 confirmar en la vista previa de "Importar 3D" que esté parado y mirando al frente.
+
+## Monstruos de Meshy con huesos (orca)
+
+1. `blender -b --python tools/blender/procesar_meshy.py -- <fbx de Meshy> <salida.blend> OrcaE<n> <triángulos>`:
+   una malla, simetría en X, origen en la base, nariz hacia -Y, texturas de 1024.
+2. Medir la boca y las aletas (renders laterales con cuadrícula) y anotarlas en
+   `tools/blender/orcas.json` (bisagra, línea entre los labios, franja de las aletas).
+3. `blender -b --python tools/blender/rig_orca.py -- <modelo.blend> <salida.fbx> tools/blender/orcas.json OrcaE<n>`:
+   huesos Raiz, Cabeza, Mandibula, Cola1..Cola4, AletaIzq/Der y los puntos Boca,
+   Espiraculo y Dorsal, con pesos suaves.
+4. Studio → Importar 3D → marcar **"Mantener huesos de influencia cero"** (si no, se
+   pierden Boca, Espiraculo y Dorsal). Mover el Model a `ServerStorage.OrcaE<n>` y anotar
+   los IDs en `Assets`.
+5. Cómo se mueve cada etapa: `src/shared/Orca/Etapas/` (un script por etapa).

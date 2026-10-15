@@ -837,3 +837,27 @@ siguen usando el modelo escalado hasta tener los suyos.
 
 **Qué sigue:** guardar/publicar el lugar (OrcaE1 nuevo en ServerStorage). Ajustar ritmo
 de saltos o profundidad si hace falta al verla con jugadores.
+
+## 2026-10-15 — Volcán más grande, agua nueva y la orca en sus 4 etapas
+
+**Qué se hizo:**
+
+- Cráter más grande y hondo (`WorldLayoutData`): lago de 190 de radio, fondo a -90,
+  centro en (0, 520); se quitó el pedestal y las rocas del centro (estorbaban al crecer).
+  El terreno baja más solo donde hace falta (TerrainBuilder por bloque). Guarida de
+  descanso de 64. Piezas regeneradas con `tools/generar_isla.py`.
+- Agua del cráter (`Ambient/CraterWater` y `CraterVents`): jade turquesa con poco reflejo
+  al entrar, motas bioluminiscentes, espuma y vapor contra el acantilado y 5 fumarolas
+  con brillo de lava, columnas de burbujas y burbujones. Se quitó la luz roja del centro.
+- Orca en 4 etapas de Meshy (bebé, joven, adulta, anciana): `procesar_meshy.py` +
+  `rig_orca.py` con columna de 4 huesos en la cola y pesos suaves. ServerStorage.OrcaE1..E4.
+- Animación nueva: onda de nado de la cabeza a la cola, resortes en altura/cabeceo/giro,
+  planeo entre aletazos, aletas con retraso y timón, mordidas. Un script por etapa en
+  `Shared/Orca/Etapas` (OrcaBebe, OrcaJoven, OrcaAdulta, OrcaAnciana) con su ritmo, voz y
+  trucos: saltitos, persigue su cola, giros, asomarse, saltos con giro, coletazos,
+  aletazos, zambullidas, rugido y emerger (Tricks/Jumps, Surface, Show). Los trucos se
+  sincronizan con la hora del servidor (todos ven lo mismo).
+
+**Qué se rompió:** nada visto en Studio (0 errores; probadas las 4 etapas y comer).
+
+**Qué sigue:** guardar/publicar el lugar (los 4 modelos viven en el .rbxl).

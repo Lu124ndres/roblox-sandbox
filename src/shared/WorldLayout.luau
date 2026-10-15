@@ -60,7 +60,8 @@ export type WorldLayout = {
 	craterRimOuter: number,
 	craterBaseRadius: number,
 	craterRimHeight: number,
-	craterFloor: number,
+	craterFloor: number, -- fondo del lago en el centro
+	craterBowlRise: number, -- cuánto sube el fondo hasta el pie del acantilado
 	pedestalTop: number,
 	craterDeckHeight: number,
 	restArenaRadius: number, -- guarida del descanso en el centro del lago

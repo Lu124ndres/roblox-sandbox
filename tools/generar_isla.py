@@ -819,10 +819,11 @@ DECK_ABISMO = L["craterDeckHeight"]
 def altura_crater(rho):
     """Misma curva que IslandShape.craterHeight."""
     if rho < L["craterLakeRadius"]:
-        return L["craterFloor"] + (rho / L["craterLakeRadius"]) ** 2 * 10
+        return L["craterFloor"] + (rho / L["craterLakeRadius"]) ** 2 * L["craterBowlRise"]
     if rho < L["craterCliffRadius"]:
         t = (rho - L["craterLakeRadius"]) / (L["craterCliffRadius"] - L["craterLakeRadius"])
-        return L["craterFloor"] + 10 + (RIM_Y - L["craterFloor"] - 10) * t
+        pie = L["craterFloor"] + L["craterBowlRise"]
+        return pie + (RIM_Y - pie) * t
     if rho < L["craterRimOuter"]:
         return RIM_Y
     t = (rho - L["craterRimOuter"]) / (L["craterBaseRadius"] - L["craterRimOuter"])
@@ -950,7 +951,7 @@ def cresta(nombre, angulo, rho, humo=False):
 
 def cascada_lava(nombre, angulo):
     """Río de lava que baja por la ladera exterior hasta el mar, con vapor al tocar el agua."""
-    rho0, rho1 = L["craterRimOuter"] - 2, 222
+    rho0, rho1 = L["craterRimOuter"] - 2, L["craterBaseRadius"] - 14
     pasos, ancho = 9, rng.uniform(3.2, 4.6)
     hijos, puntos = [], []
     for k in range(pasos + 1):
@@ -1025,12 +1026,7 @@ def cristales(nombre, angulo, rho):
 def crater():
     hijos = []
     tope = L["pedestalTop"]
-    hijos.append(pieza("Pedestal", (tope - L["craterFloor"], 34, 34), (CRATER[0], (tope + L["craterFloor"]) / 2, CRATER[2]),
-                       BASALTO[1], "Basalt", VERTICAL, "Cylinder"))
-    for k in range(9):  # rocas alrededor del pedestal
-        a, s = k * 40 + rng.uniform(-10, 10), rng.uniform(5, 9)
-        p = polar_crater(a, rng.uniform(16, 21), tope - s * 0.4)
-        hijos.append(pieza(f"RocaPedestal{k}", (s * 1.3, s, s), p, BASALTO[k % 3], "Basalt", mat(ry(rng.uniform(0, 360)), rx(rng.uniform(-15, 15)))))
+    # Sin pedestal ni rocas en el centro: el lago queda libre para que el gigante nade.
     # Anclaje del gigante: invisible, mira hacia -Z (hacia el puente y la isla).
     hijos.append(pieza("GuaridaGigante", (2, 1, 2), (CRATER[0], tope, CRATER[2]), CORAL, **INVISIBLE, CanCollide=False))
     hijos.append(puerta_abismo())

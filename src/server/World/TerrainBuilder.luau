@@ -25,7 +25,7 @@ local L = WorldLayout
 local MATERIAL = Enum.Material
 local VOXEL = 4
 local HALF = VOXEL / 2
-local Y_MIN = -40
+local Y_MIN = -40 -- más abajo solo donde el suelo baja (el lago hondo del cráter)
 local Y_MAX = 40
 local CHUNK_VOXELS = 32 -- columnas por lado en cada bloque escrito
 
@@ -52,25 +52,38 @@ local function style(terrain: Terrain)
 	end
 end
 
+type Sample = { height: number, material: Enum.Material, water: number }
+
 local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: number)
-	local rows = (Y_MAX - Y_MIN) / VOXEL
+	-- Primero las alturas: el piso de este bloque baja hasta su punto más hondo.
+	local samples: { { Sample } } = {}
+	local yMin = Y_MIN
+	for ix = 1, columns do
+		samples[ix] = {}
+		for iz = 1, columns do
+			local height, material, waterTop =
+				IslandShape.sample(x0 + (ix - 0.5) * VOXEL, z0 + (iz - 0.5) * VOXEL)
+			samples[ix][iz] = { height = height, material = material, water = waterTop }
+			yMin = math.min(yMin, math.floor(height / VOXEL) * VOXEL - VOXEL)
+		end
+	end
+	local rows = (Y_MAX - yMin) / VOXEL
 	local materials, occupancies = {}, {}
 	for ix = 1, columns do
-		local x = x0 + (ix - 0.5) * VOXEL
 		local materialPlane, occupancyPlane = {}, {}
 		materials[ix], occupancies[ix] = materialPlane, occupancyPlane
 		for iy = 1, rows do
 			materialPlane[iy], occupancyPlane[iy] = {}, {}
 		end
 		for iz = 1, columns do
-			local z = z0 + (iz - 0.5) * VOXEL
-			local height, material, waterTop = IslandShape.sample(x, z)
+			local sample = samples[ix][iz]
+			local height, material, waterTop = sample.height, sample.material, sample.water
 			for iy = 1, rows do
 				-- Medido en Studio: la superficie del suelo queda en el centro del vóxel
 				-- + ocupación x VOXEL (por eso se resta medio vóxel), y la del agua en
 				-- la base + ocupación x VOXEL. Así las alturas del diseño
 				-- (WorldLayout) son las que se ven.
-				local bottom = Y_MIN + (iy - 1) * VOXEL
+				local bottom = yMin + (iy - 1) * VOXEL
 				local solid = math.clamp((height - bottom - HALF) / VOXEL, 0, 1)
 				if solid > 0 then
 					materialPlane[iy][iz], occupancyPlane[iy][iz] = material, solid
@@ -84,7 +97,7 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 		end
 	end
 	local size = columns * VOXEL
-	local region = Region3.new(Vector3.new(x0, Y_MIN, z0), Vector3.new(x0 + size, Y_MAX, z0 + size))
+	local region = Region3.new(Vector3.new(x0, yMin, z0), Vector3.new(x0 + size, Y_MAX, z0 + size))
 	terrain:WriteVoxels(region, VOXEL, materials, occupancies)
 end
 

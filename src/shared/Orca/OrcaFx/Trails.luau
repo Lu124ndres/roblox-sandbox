@@ -77,7 +77,7 @@ end
 
 function Trails.attach(rig: Rig.Rig): Trails
 	local bubbles = emitter(
-		rig.bones.Cola3 or rig.bones.Raiz,
+		rig.bones.Cola4 or rig.bones.Cola3 or rig.bones.Raiz,
 		Assets.Particles.Sparkle,
 		Colors.Teal,
 		Colors.Crystal
@@ -145,7 +145,7 @@ function Trails.update(trails: Trails, status: Status, fxScale: number, visible:
 		resize(trails, height)
 	end
 	local rate = if visible then fxScale else 0
-	local tail = Rig.point(trails.rig, "Cola3") or status.center
+	local tail = Rig.point(trails.rig, "Cola4") or status.center
 	trails.bubbles.Rate = if tail.Y < WATER then (4 + status.speed * 0.8) * rate else 0
 	-- El lomo corta el agua: espuma en la superficie sobre el cuerpo.
 	local rel = status.center.Y - WATER

@@ -5,7 +5,7 @@
 	Cambia el ambiente según dónde está el jugador. Al cruzar el puente hacia
 	el Cráter del Abismo la luz se vuelve cálida, de lava (clara para jugar,
 	pero se nota el peligro): bruma anaranjada, chispas que suben del lago,
-	el fondo del abismo brilla en rojo, el océano se calla, entra un ambiente
+	fumarolas brillan en el fondo (CraterWater), el océano se calla, entra un ambiente
 	tenso y de vez en cuando hay relámpagos y truenos.
 
 	SkyCycle lee ZoneMood.blend() para mezclar la luz del día con la del cráter.
@@ -22,6 +22,7 @@ local Assets = require(ReplicatedStorage.Shared.Assets)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local CraterWater = require(script.Parent.CraterWater)
 
 local BLEND_SHARPNESS = 1.5 -- qué tan rápido cambia el ambiente al entrar o salir (1/s)
 local LIGHTNING_MIN_SECONDS, LIGHTNING_MAX_SECONDS = 14, 30
@@ -48,7 +49,7 @@ local function invisiblePart(name: string, size: Vector3, position: Vector3): Pa
 	return part
 end
 
--- Bruma sobre el lago del cráter y un brillo rojo que sube desde el abismo.
+-- Bruma y chispas sobre el lago del cráter (el brillo de lava sale de las fumarolas).
 local function craterEffects()
 	local lake = WorldLayout.craterLakeRadius * 1.6
 	local fog = invisiblePart(
@@ -73,23 +74,6 @@ local function craterEffects()
 	mist.SpreadAngle = Vector2.new(180, 10)
 	mist.RotSpeed = NumberRange.new(-8, 8)
 	mist.Parent = fog
-
-	local glow = invisiblePart(
-		"BrilloDelAbismo",
-		Vector3.one,
-		WorldZones.craterCenter + Vector3.new(0, WorldLayout.waterLevel - 14, 0)
-	)
-	-- Suave y poco saturada: si es muy roja, tiñe de naranja al gigante de encima.
-	local light = Instance.new("PointLight")
-	light.Color = Color3.fromRGB(255, 150, 110)
-	light.Range = 50
-	light.Brightness = 1.6
-	light.Parent = glow
-	TweenService:Create(
-		light,
-		TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-		{ Brightness = 0.7 }
-	):Play()
 
 	-- Chispas de lava que suben del lago hasta más arriba del borde.
 	local embers = Instance.new("ParticleEmitter")
@@ -132,6 +116,7 @@ end
 
 function ZoneMood.start()
 	craterEffects()
+	CraterWater.start(ZoneMood.blend)
 	lightningLoop()
 	local ocean = Sounds.loop("OceanWaves")
 	local horror = Sounds.loop("HorrorAmbience")
