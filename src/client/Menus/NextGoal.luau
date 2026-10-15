@@ -82,18 +82,20 @@ local function goals(player: Player): { Goal }
 			ready = false,
 		})
 	end
-	-- Renacer.
-	local cost = RebirthMath.cost(RebirthMath.count(player))
-	if coins >= cost then
-		table.insert(list, {
-			icon = "arrow",
-			text = `¡Puedes RENACER! Alimentas x{RebirthMath.feedMultiplier(
-				RebirthMath.count(player) + 1
-			)} más rápido`,
-			fraction = 1,
-			ready = true,
-		})
-	end
+	-- Renacer: pide monedas y poder; da velocidad de alimentar.
+	local rebirths = RebirthMath.count(player)
+	local cost, powerCost = RebirthMath.cost(rebirths), RebirthMath.powerCost(rebirths)
+	local power = number(player, ATTR.Power)
+	local ready = RebirthMath.canRebirth(coins, power, rebirths)
+	local speed = RebirthMath.speedText(rebirths + 1)
+	table.insert(list, {
+		icon = "arrow",
+		text = if ready
+			then `¡Puedes RENACER! Alimentas {speed} peces/s`
+			else `Renacer: {NumberFormat.short(cost)} monedas y {NumberFormat.short(powerCost)} poder`,
+		fraction = math.min(coins / cost, power / powerCost),
+		ready = ready,
+	})
 	return list
 end
 

@@ -2,9 +2,9 @@
 --[[
 	Rebirth
 
-	Renacer (Config/Rebirth, cuentas en Shared/RebirthMath): con monedas
-	suficientes, el remote Rebirth reinicia monedas, poder, mejoras de la
-	tienda y canasta, y suma un renacimiento (alimenta x2 más rápido para
+	Renacer (Config/Rebirth, cuentas en Shared/RebirthMath): con monedas y
+	poder suficientes, el remote Rebirth reinicia monedas, poder, mejoras de la
+	tienda y canasta, y suma un renacimiento (alimenta x1.35 más rápido para
 	siempre, ver RebirthMath). Se avisa a todo el servidor.
 ]]
 
@@ -20,7 +20,7 @@ local Rebirth = {}
 
 local function rebirth(player: Player)
 	local save = PlayerData.read(player)
-	if not save or save.coins < RebirthMath.cost(save.rebirths) then
+	if not save or not RebirthMath.canRebirth(save.coins, save.power, save.rebirths) then
 		return
 	end
 	local count = save.rebirths + 1

@@ -13,9 +13,9 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | Ritmo de un jugador | novato ~0.45 comida/s · pro ~1.9 · tope ~5 | Calculado con el ciclo de pesca (pique, minijuego, viaje al volcán) al ~80 % del tiempo. Con menos jugadores tarda más: 10 novatos ~35 min la Orca. |
 | Kill | — | Para **todos los que le dieron algo** (con un pez basta; `Feeding/Contributions`). Debajo del panel: tu aporte y el top 3. |
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
-| `delivery.fishPerSecond` | 3 | Se alimenta **manteniendo E**: un pez cada 0.33 s sin renacer; cada renacimiento lo duplica (`Rebirth.feedGrowth` = 2). Con los peces medios (~3.4 de comida) la Orca (500K) tarda ~14 h a una persona sin renacer: obliga a renacer y a jugar en grupo. |
+| `delivery.fishPerSecond` | 3 | Se alimenta **manteniendo E**: un pez cada 0.33 s sin renacer; cada renacimiento lo multiplica por 1.35 (`Rebirth.feedGrowth`): 3, 4, 5.5, 7.4, 10… peces/s. Con los peces medios (~3.4 de comida) la Orca (500K) tarda ~14 h a una persona sin renacer: obliga a renacer y a jugar en grupo. |
 | `delivery.minSoloSeconds` | 300 | Tope por persona: nunca más de 1/300 de la barra por segundo. Aunque tenga todos los peces y renacimientos, una persona sola tarda al menos 5 min; varias, menos. |
-| Renacer (`Config/Rebirth.luau`) | 1M x 3^n monedas | Solo da velocidad de alimentar (x2 por vez). Ya no multiplica monedas ni poder. |
+| Renacer (`Config/Rebirth.luau`) | monedas 20K x 2.4^n · poder 3K x 2.6^n | Pide monedas **y** poder: 20K/3K, 48K/7.8K, 120K/20K, 280K/53K, 660K/140K… (dos cifras). Los primeros salen rápido; cada uno cuesta más de lo que acelera el anterior. Solo da velocidad de alimentar (x1.35 por vez). |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
 | `cycle.evolveSeconds` | 3 s | Al llenar cada cuarto de barra evoluciona: no come esos segundos (la entrega espera y sigue). |
 | `cycle.restSeconds` (máx.), `restBaseSeconds`, `restPerPlayerSeconds` | 120 · 60 · 1.2 | Descanso = 60 s + 1.2 s por jugador, máximo 120. |

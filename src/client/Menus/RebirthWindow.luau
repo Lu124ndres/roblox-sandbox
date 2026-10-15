@@ -4,8 +4,9 @@
 
 	Renacer (botón RENACER de la columna derecha) con el estilo de la TIENDA:
 	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada), con los
-	peces por segundo al alimentar (lo único que da renacer); la barra de monedas que faltan; qué se
-	reinicia (tarjeta roja) y qué se queda (verde); y el botón grande. El
+	peces por segundo al alimentar (lo único que da renacer); las barras de
+	monedas y de poder que pide; qué se reinicia (tarjeta roja) y qué se
+	queda (verde); y el botón grande. El
 	botón del HUD lleva un punto rojo cuando ya alcanza. Lo decide el
 	servidor (remote Rebirth, Retention/Rebirth).
 ]]
@@ -29,8 +30,7 @@ local CARDS = Style.PALETTE.Cards
 local RebirthWindow = {}
 
 local function speedText(rebirths: number): string
-	local perSecond = RebirthMath.fishPerSecond(rebirths)
-	return `{NumberFormat.short(perSecond)}/s`
+	return `{RebirthMath.speedText(rebirths)}/s`
 end
 
 -- Tarjeta de multiplicador: título arriba, número grande y nota abajo.
@@ -85,9 +85,13 @@ function RebirthWindow.start(screen: ScreenGui)
 	local count = Style.text(content, "Veces", 22, nil, 2)
 	count.Position = UDim2.fromOffset(0, 140)
 	count.Size = UDim2.new(1, 0, 0, 26)
-	local bar = CardParts.bar(content, UIConfig.Colors.Coins, 24)
+	-- Lo que pide: monedas y poder, una barra para cada uno.
+	local bar = CardParts.bar(content, UIConfig.Colors.Coins, 22)
 	bar.track.Position = UDim2.new(0.04, 0, 0, 172)
-	bar.track.Size = UDim2.new(0.92, 0, 0, 36)
+	bar.track.Size = UDim2.new(0.45, 0, 0, 36)
+	local powerBar = CardParts.bar(content, UIConfig.Colors.Power, 22)
+	powerBar.track.Position = UDim2.new(0.51, 0, 0, 172)
+	powerBar.track.Size = UDim2.new(0.45, 0, 0, 36)
 	infoCard(
 		content,
 		"SE REINICIAN",
@@ -110,15 +114,23 @@ function RebirthWindow.start(screen: ScreenGui)
 
 	local function render()
 		local rebirths = RebirthMath.count(player)
-		local cost = RebirthMath.cost(rebirths)
-		local coins = player:GetAttribute(ATTR.Coins)
+		local cost, powerCost = RebirthMath.cost(rebirths), RebirthMath.powerCost(rebirths)
+		local coins, power = player:GetAttribute(ATTR.Coins), player:GetAttribute(ATTR.Power)
 		local have = if type(coins) == "number" then coins else 0
+		local strength = if type(power) == "number" then power else 0
 		nowValue.Text = speedText(rebirths)
 		afterValue.Text = speedText(rebirths + 1)
 		count.Text = `Has renacido {rebirths} {if rebirths == 1 then "vez" else "veces"}`
 		bar.set(have / cost, `{NumberFormat.short(have)} / {NumberFormat.short(cost)} monedas`)
-		local ready = have >= cost
-		buttonText.Text = if ready then "¡RENACER!" else "Te faltan monedas"
+		powerBar.set(
+			strength / powerCost,
+			`{NumberFormat.short(strength)} / {NumberFormat.short(powerCost)} poder`
+		)
+		local ready = RebirthMath.canRebirth(have, strength, rebirths)
+		buttonText.Text = if ready
+			then "¡RENACER!"
+			elseif have < cost then "Te faltan monedas"
+			else "Te falta poder"
 		local tint = if ready then Style.PALETTE.Buy else Style.PALETTE.Disabled
 		button.BackgroundColor3 = tint
 		local gradient = button:FindFirstChildOfClass("UIGradient")
@@ -130,14 +142,18 @@ function RebirthWindow.start(screen: ScreenGui)
 	end
 
 	button.Activated:Connect(function()
-		local cost = RebirthMath.cost(RebirthMath.count(player))
-		local coins = player:GetAttribute(ATTR.Coins)
-		if type(coins) == "number" and coins >= cost then
+		local coins, power = player:GetAttribute(ATTR.Coins), player:GetAttribute(ATTR.Power)
+		if
+			type(coins) == "number"
+			and type(power) == "number"
+			and RebirthMath.canRebirth(coins, power, RebirthMath.count(player))
+		then
 			remote:FireServer()
 		end
 	end)
 	player:GetAttributeChangedSignal(ATTR.Coins):Connect(render)
 	player:GetAttributeChangedSignal(ATTR.Rebirths):Connect(render)
+	player:GetAttributeChangedSignal(ATTR.Power):Connect(render)
 	window.onOpen(render)
 	render()
 end
