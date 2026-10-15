@@ -879,3 +879,28 @@ de saltos o profundidad si hace falta al verla con jugadores.
 - Las orcas nadan un poco más arriba en su ciclo de respirar.
 
 **Qué se rompió:** nada visto en Studio.
+
+---
+
+## 2026-10-15 — Lago de 400 de hondo que se vacía en el descanso
+
+**Qué se hizo:**
+
+- Lago del cráter de 400 de hondo con fondo plano de radio 75 (`craterFloor`,
+  `craterFlatRadius`); agua oscura (azul petróleo) en el cráter.
+- Arreglo: `IslandShape` solo ponía el fondo del cráter donde quedaba más alto que el
+  fondo del mar, así que el pozo nunca pasaba de unos 18 de hondo. Ahora dentro del
+  acantilado manda siempre el cráter.
+- Descanso: el volcán se vacía (`client/Ambient/CraterDrain`, 8 s, con remolino,
+  retumbo y temblor) y la guarida queda fija en el fondo (`restArenaTop` −386).
+  "IR A LA GUARIDA" lleva al fondo cuando ya se vació. Al terminar, `RestArena.hide`
+  regresa a la orilla de la puerta (junto al puente) a quien siga en el pozo y el agua
+  vuelve a subir (6 s) mientras llega el siguiente monstruo. Atributo `VolcanVacio`.
+- `AbyssRescue` no rescata a quien camina por el fondo vacío; `CycleView` usa el
+  atributo para los avisos y los destellos ("¡El agua vuelve al volcán en 10 s!").
+
+**Qué se rompió:** `fillSurface` recorría las tablas de `ReadVoxels` con `for in`
+(traen `Size`) y fallaba; se cambió a bucles numéricos. Probado en Studio: vaciar,
+entrenar en el fondo, regreso a la orilla y llenado, 0 errores.
+
+**Qué sigue:** modelos de Meshy del Dios del Volcán y el Rey del Mar cuando estén.

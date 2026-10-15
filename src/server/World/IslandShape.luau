@@ -147,7 +147,8 @@ function IslandShape.sample(x: number, z: number): (number, Enum.Material, numbe
 	local offset = point - CRATER
 	local rho, angle = offset.Magnitude, math.atan2(offset.Y, offset.X)
 	local crater = CraterShape.height(rho, angle)
-	if crater and crater > height then
+	-- Dentro del acantilado manda el cráter aunque sea más hondo que el fondo del mar.
+	if crater and (crater > height or rho < L.craterCliffRadius) then
 		height, material = crater, CraterShape.material(rho, angle, crater)
 	end
 	return height, material, waterTop

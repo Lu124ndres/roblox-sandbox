@@ -32,7 +32,8 @@ function WorldZones.craterBlend(position: Vector3): number
 end
 
 -- Altura del fondo del lago del cráter a `radius` del centro: una plataforma
--- clara y poco honda junto al acantilado y, hacia el centro, un pozo hondo.
+-- poco honda junto al acantilado y, hacia el centro, un pozo hondo con el
+-- fondo plano (la guarida del descanso, que se ve al vaciarse el volcán).
 -- Misma curva que fondo_lago() en tools/generar_isla.py.
 function WorldZones.lakeFloor(radius: number): number
 	local shelfStart = L.craterLakeRadius - L.craterShelfWidth
@@ -41,7 +42,7 @@ function WorldZones.lakeFloor(radius: number): number
 		local t = math.min((radius - shelfStart) / L.craterShelfWidth, 1)
 		return shelf + (L.craterShelfDepth - 3) * t
 	end
-	local t = radius / shelfStart
+	local t = math.max(radius - L.craterFlatRadius, 0) / (shelfStart - L.craterFlatRadius)
 	return L.craterFloor + (shelf - L.craterFloor) * (1 - math.cos(math.pi * t)) / 2
 end
 
@@ -108,7 +109,7 @@ function WorldZones.isOnCraterShore(position: Vector3): boolean
 		and position.Y <= L.craterRimHeight + 14
 end
 
--- Guarida del descanso: la plataforma que emerge en el centro del lago. Solo ahí
+-- Guarida del descanso: la plataforma del fondo del volcán vacío. Solo ahí
 -- se gana poder durante el descanso (las rampas no cuentan).
 function WorldZones.isInRestArena(position: Vector3): boolean
 	return WorldZones.distanceToCrater(position) <= L.restArenaRadius + 1

@@ -5,9 +5,10 @@
 	Avisos y ambiente del ciclo del gigante para el jugador local:
 		- carteles al llenarse, al empezar el descanso y al llegar el siguiente;
 		- "+1 Kill" cuando ayudó a llenar al monstruo;
-		- la guarida del descanso emerge del lago (RestArena la sube) con una
-		  ola y suben destellos: sobre ella se entrena solo (GiantCycle);
-		- avisos al subir o bajar de la guarida y 10 s antes de que se hunda.
+		- en el descanso el volcán se vacía (CraterDrain) y la guarida queda en
+		  el fondo, con destellos: sobre ella se entrena solo (GiantCycle);
+		- avisos al entrar o salir de la guarida y 10 s antes de que vuelva
+		  el agua (RestArena regresa a la orilla a los que sigan adentro).
 	El "+N poder" de cada segundo lo muestra TrainingController.
 ]]
 
@@ -23,7 +24,6 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
-local Fx = require(script.Parent.Parent.Effects.Fx)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
@@ -64,16 +64,6 @@ local function buildSparkles(): ParticleEmitter
 	return rising
 end
 
--- La guarida emerge del lago (la mueve el servidor): ola y onda al salir.
-local function reveal()
-	local water = CENTER + Vector3.new(0, WorldLayout.waterLevel, 0)
-	Sounds.play("BigSplash", water)
-	Fx.splash(water, 6)
-	for k = 1, 3 do
-		Fx.ring(water, WorldLayout.restArenaRadius * (0.6 + k * 0.4), 1 + k * 0.4)
-	end
-end
-
 -- Cuánto dura este descanso (depende de cuántos jugadores hay): sale de PhaseEndsAt.
 local function restLength(stateFolder: Instance): string
 	local endsAt = stateFolder:GetAttribute(ATTR.PhaseEndsAt)
@@ -91,12 +81,10 @@ function CycleView.start(toasts: Toasts.Toasts)
 
 	local function onPhase(announce: boolean)
 		local phase = stateFolder:GetAttribute(ATTR.Phase)
-		sparkles.Enabled = phase == "rest"
 		if not announce then
 			return
 		end
 		if phase == "rest" then
-			reveal()
 			Sounds.play("StageUp")
 			toasts.banner(
 				`¡Descanso! Toca IR A LA GUARIDA: entrenamiento x{GiantPool.restMultiplier()} por {restLength(
@@ -116,6 +104,13 @@ function CycleView.start(toasts: Toasts.Toasts)
 	end)
 	onPhase(false)
 
+	-- Destellos solo mientras el volcán está vacío.
+	local function onDrained()
+		sparkles.Enabled = stateFolder:GetAttribute(ATTR.Drained) == true
+	end
+	stateFolder:GetAttributeChangedSignal(ATTR.Drained):Connect(onDrained)
+	onDrained()
+
 	-- +1 Kill: este jugador ayudó a llenar al monstruo.
 	local kills = player:GetAttribute(Protocol.PlayerAttributes.Kills)
 	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.Kills):Connect(function()
@@ -132,7 +127,7 @@ function CycleView.start(toasts: Toasts.Toasts)
 		while true do
 			task.wait(CHECK_SECONDS)
 			local character = player.Character
-			local resting = stateFolder:GetAttribute(ATTR.Phase) == "rest"
+			local resting = stateFolder:GetAttribute(ATTR.Drained) == true
 			local now = resting
 				and character ~= nil
 				and WorldZones.isInRestArena(character:GetPivot().Position)
@@ -153,7 +148,7 @@ function CycleView.start(toasts: Toasts.Toasts)
 				else math.huge
 			if resting and left <= WARNING_SECONDS and not warned then
 				warned = true
-				toasts.banner(`¡La guarida se hunde en {WARNING_SECONDS} s!`, COLORS.Warning)
+				toasts.banner(`¡El agua vuelve al volcán en {WARNING_SECONDS} s!`, COLORS.Warning)
 			elseif not resting then
 				warned = false
 			end

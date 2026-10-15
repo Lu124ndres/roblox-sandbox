@@ -108,6 +108,8 @@ export type CycleConfig = {
 	restMinSeconds: number,
 	arrivalSeconds: number, -- llegada del siguiente gigante antes de poder alimentarlo
 	rouletteSeconds: number, -- la ruleta gira al final del descanso antes de que llegue
+	drainSeconds: number, -- se vacía el volcán (el descanso es en su fondo)
+	refillSeconds: number, -- vuelve el agua
 }
 
 export type DeliveryConfig = { -- entrega de peces al gigante, por lotes

@@ -3,12 +3,14 @@
 	CraterWater
 
 	El agua del lago del cráter, solo en el cliente:
-		- al entrar al cráter el agua cambia a un turquesa de cristal, más
-		  clara para ver nadar al gigante (el color del agua es uno solo para
-		  todo el mapa, así que se mezcla con ZoneMood.blend());
+		- al entrar al cráter el agua cambia a un azul petróleo oscuro, de lago
+		  hondo (el color del agua es uno solo para todo el mapa, así que se
+		  mezcla con ZoneMood.blend());
 		- motas bioluminiscentes que flotan sobre la superficie;
 		- espuma y vapor donde el agua toca el acantilado caliente;
-		- fumarolas en el fondo (CraterVents).
+		- fumarolas en el fondo (CraterVents);
+		- en el descanso se vacía y se vuelve a llenar (CraterDrain): mientras
+		  está vacío se quitan las motas, la espuma y el abismo.
 	Los emisores pasan por FxQuality (modo rápido = sin partículas).
 ]]
 
@@ -21,20 +23,21 @@ local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
+local CraterDrain = require(script.Parent.CraterDrain)
 local CraterVents = require(script.Parent.CraterVents)
 
 local L = WorldLayout
 local WATER = L.waterLevel
 local CENTER = WorldZones.craterCenter
-local LAKE_COLOR = Color3.fromRGB(0, 128, 136) -- turquesa: claro en la plataforma, hondo en el pozo
-local LAKE_TRANSPARENCY = 0.82 -- clara: se ve al gigante bajo el agua
+local LAKE_COLOR = Color3.fromRGB(4, 52, 66) -- oscuro: lago de 400 de hondo
+local LAKE_TRANSPARENCY = 0.7 -- clara: se ve al gigante bajo el agua
 local LAKE_REFLECTANCE = 0.12 -- poco reflejo: si no, la bruma naranja lo vuelve beige
 local LAKE_WAVES = 0.32 -- un poco más agitada que el mar
 local GLOW = Color3.fromRGB(120, 255, 230)
 local FOAM = Color3.fromRGB(235, 252, 250)
 -- Capas del abismo: radio (en radios del lago), hondura bajo el agua y color.
 local ABYSS_LAYERS = 7 -- discos: más capas = degradado más suave
-local ABYSS_SHORE, ABYSS_DEEP = Color3.fromRGB(24, 98, 106), Color3.fromRGB(3, 22, 36)
+local ABYSS_SHORE, ABYSS_DEEP = Color3.fromRGB(14, 66, 80), Color3.fromRGB(2, 12, 22)
 local EDGE_PIECES = 20 -- tramos de espuma alrededor del acantilado
 
 local CraterWater = {}
@@ -178,6 +181,10 @@ function CraterWater.start(getBlend: () -> number)
 		end
 	end)
 	CraterVents.start(folder, getBlend)
+	-- En el descanso el volcán se vacía: sin agua no hay abismo, motas ni fumarolas.
+	CraterDrain.start(function(shown: boolean)
+		folder.Parent = if shown then Workspace else nil
+	end)
 end
 
 return CraterWater

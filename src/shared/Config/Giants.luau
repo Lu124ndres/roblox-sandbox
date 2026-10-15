@@ -124,6 +124,8 @@ local Giants: Types.GiantsConfig = {
 		restMinSeconds = 60,
 		arrivalSeconds = 6,
 		rouletteSeconds = 6,
+		drainSeconds = 8, -- el agua del volcán baja hasta el fondo al empezar el descanso
+		refillSeconds = 6, -- y vuelve a subir con el siguiente monstruo
 	},
 	delivery = {
 		stepSeconds = 0.25,

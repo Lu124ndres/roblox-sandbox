@@ -825,7 +825,7 @@ def fondo_lago(rho):
     if rho >= inicio:
         t = min((rho - inicio) / L["craterShelfWidth"], 1)
         return plataforma + (L["craterShelfDepth"] - 3) * t
-    t = rho / inicio
+    t = max(rho - L["craterFlatRadius"], 0) / (inicio - L["craterFlatRadius"])
     return L["craterFloor"] + (plataforma - L["craterFloor"]) * (1 - math.cos(math.pi * t)) / 2
 
 

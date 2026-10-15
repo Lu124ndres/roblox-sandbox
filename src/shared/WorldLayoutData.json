@@ -50,7 +50,8 @@
 	"craterRimOuter": 265,
 	"craterBaseRadius": 320,
 	"craterRimHeight": 30,
-	"craterFloor": -150,
+	"craterFloor": -400,
+	"craterFlatRadius": 75,
 	"craterShelfDepth": 10,
 	"craterShelfWidth": 40,
 	"craterWalkWidth": 30,
@@ -58,7 +59,7 @@
 	"pedestalTop": 0.5,
 	"craterDeckHeight": 30.6,
 	"restArenaRadius": 64,
-	"restArenaTop": 3.5,
+	"restArenaTop": -386,
 	"boundaryCenter": [
 		0,
 		225

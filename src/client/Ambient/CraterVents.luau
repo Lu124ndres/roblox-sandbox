@@ -109,7 +109,7 @@ function CraterVents.start(folder: Instance, getBlend: () -> number)
 		local rng = Random.new()
 		while true do
 			task.wait(rng:NextNumber(4, 9))
-			if getBlend() > 0.5 then
+			if getBlend() > 0.5 and folder.Parent then -- sin agua (descanso) no hay burbujones
 				local top = tops[rng:NextInteger(1, #tops)]
 				Fx.splash(top, 1.6)
 				Fx.ring(top, 10, 1.4)

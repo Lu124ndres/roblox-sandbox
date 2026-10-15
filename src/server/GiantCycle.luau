@@ -7,7 +7,7 @@
 		   sea un pez (GiantService.getParticipants).
 		1. Despedida (farewell): los clientes lo ven saltar, girar y
 		   sumergirse en el lago.
-		2. Descanso (rest): emerge la guarida en el centro del lago (RestArena)
+		2. Descanso (rest): el volcán se vacía y la guarida queda en el fondo (RestArena)
 		   y durante el descanso (más largo con más jugadores: restLength, y
 		   con los minutos que alguien compre: Monetization/RestTime),
 		   cada segundo, todo jugador sobre ella gana

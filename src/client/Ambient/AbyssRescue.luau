@@ -5,12 +5,15 @@
 	El lago del cráter está rodeado de acantilados: quien cae ahí no puede
 	salir nadando. Si el jugador local nada en el abismo unos segundos, la
 	pantalla se oscurece y aparece de vuelta en la puerta del cráter.
+	En el descanso el volcán está vacío (CraterDrain): caminar en el fondo
+	no cuenta, solo nadar.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 
@@ -59,18 +62,20 @@ function AbyssRescue.start(screen: ScreenGui)
 	cover.Parent = screen
 
 	task.spawn(function()
+		local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 		local swimming = 0
 		while true do
 			task.wait(CHECK_SECONDS)
 			local character = Players.LocalPlayer.Character
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			local drained = stateFolder:GetAttribute(Protocol.GiantAttributes.Drained) == true
 			local inAbyss = character ~= nil
 				and humanoid ~= nil
 				and WorldZones.distanceToCrater(character:GetPivot().Position) < WorldLayout.craterCliffRadius
-				-- nadando (la guarida del descanso está apenas sobre el agua: ahí no se rescata)
+				-- nadando (o bajo el agua, si el volcán está lleno)
 				and (
 					humanoid:GetState() == Enum.HumanoidStateType.Swimming
-					or character:GetPivot().Position.Y < WorldLayout.waterLevel
+					or (not drained and character:GetPivot().Position.Y < WorldLayout.waterLevel)
 				)
 			swimming = if inAbyss then swimming + CHECK_SECONDS else 0
 			if character and swimming >= SECONDS_BEFORE_RESCUE then

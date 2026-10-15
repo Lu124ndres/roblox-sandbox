@@ -60,15 +60,16 @@ export type WorldLayout = {
 	craterRimOuter: number,
 	craterBaseRadius: number,
 	craterRimHeight: number,
-	craterFloor: number, -- fondo del lago en el centro
+	craterFloor: number, -- fondo del lago en el centro (ahí está la guarida del descanso)
+	craterFlatRadius: number, -- radio del fondo plano
 	craterShelfDepth: number, -- hondura de la plataforma clara junto al acantilado
 	craterShelfWidth: number, -- ancho de esa plataforma
 	craterWalkWidth: number, -- paseo plano desde el borde del acantilado
 	craterPeakHeight: number, -- alto máximo de las montañas del anillo sobre el paseo
 	pedestalTop: number,
 	craterDeckHeight: number,
-	restArenaRadius: number, -- guarida del descanso en el centro del lago
-	restArenaTop: number, -- altura de su piso
+	restArenaRadius: number, -- guarida del descanso, en el fondo del lago
+	restArenaTop: number, -- altura de su piso (se ve al vaciarse el volcán)
 	boundaryCenter: { number },
 	boundaryRadius: number,
 	hills: { { number } }, -- { x, z, radio }

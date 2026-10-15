@@ -127,6 +127,7 @@ local Protocol = {
 		RouletteAt = "RuletaInicio", -- hora del servidor en que empezó a girar
 		TopShares = "TopAportes", -- JSON: los 3 que más aportaron [{n = nombre, s = 0..1}]
 		EvolvingUntil = "EvolucionHasta", -- hora del servidor en que termina de evolucionar (0 = no)
+		Drained = "VolcanVacio", -- true en el descanso: el agua del cráter se va y queda la guarida
 	},
 
 	-- Folder en ReplicatedStorage con las plantillas de los gigantes (los anima el cliente, GiantView).
@@ -182,7 +183,6 @@ local Protocol = {
 	},
 
 	-- Piezas de world/Isla.model.json que el código busca por nombre.
-	-- (El gigante vive en el cráter: GuaridaGigante está en su centro.)
 	Map = {
 		Root = "Isla",
 		ShopCounter = "Mostrador", -- mostrador de la cabaña: ahí se abre la tienda (E)
