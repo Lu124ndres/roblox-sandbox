@@ -81,6 +81,8 @@ en los estanques y en la guarida del descanso.
 - **Siguiente meta** (`client/Menus/NextGoal.luau`): al terminar el tutorial, un panel muestra
   siempre la meta más cercana (estanque, caña, título o renacer) con su barra.
 - Impulso de amigos (+10 % cada uno, máx. 5), regalo del grupo, títulos: `Config/Social.luau`.
+- Roblox Premium (`premiumMultiplier` en `Config/Social.luau`): x1.2 al poder y a las monedas,
+  con su ícono sobre la cabeza (Overhead) y aviso al entrar.
 - Códigos: `src/server/Social/CodeList.luau` (solo servidor, para que nadie los lea).
 
 ## Robux (`Config/Monetization.luau` + IDs en `Assets/Products.luau`)

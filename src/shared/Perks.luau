@@ -8,10 +8,10 @@
 		Pase_<clave> en el jugador          pases (Config.Monetization.passes)
 		Nivel<Power|Coins> en el jugador    mejoras que se acumulan (x2^nivel)
 		Estanque_<i> en el jugador          estanques comprados
+		MembershipType (Roblox Premium)     x premiumMultiplier poder y monedas
 		ReplicatedStorage.Impulsos          entrenamiento de todo el servidor (x2^nivel)
-
-	Lo usan el entrenamiento, el descanso, la entrega, la pesca, el premio
-	diario, los carteles de los estanques y la tienda.
+	Lo usan el entrenamiento, el descanso, la entrega, la pesca, el premio diario,
+	los carteles de los estanques y la tienda.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -88,6 +88,12 @@ function Perks.personalBoostSeconds(player: Player): number
 	return if type(value) == "number" then math.max(0, value - Workspace:GetServerTimeNow()) else 0
 end
 
+function Perks.premiumMultiplier(player: Player): number
+	return if player.MembershipType == Enum.MembershipType.Premium
+		then SOCIAL.premiumMultiplier
+		else 1
+end
+
 function Perks.powerMultiplier(player: Player): number
 	local personal = if Perks.personalBoostSeconds(player) > 0
 		then SOCIAL.personalBoostMultiplier
@@ -95,6 +101,7 @@ function Perks.powerMultiplier(player: Player): number
 	return 2 ^ Perks.level(player, "Power")
 		* 2 ^ Perks.serverBoostLevel()
 		* personal
+		* Perks.premiumMultiplier(player)
 		* Perks.friendMultiplier(player)
 		* ServerEvents.value("power", 1)
 		* RebirthMath.multiplier(RebirthMath.count(player))
@@ -102,6 +109,7 @@ end
 
 function Perks.coinMultiplier(player: Player): number
 	return 2 ^ Perks.level(player, "Coins")
+		* Perks.premiumMultiplier(player)
 		* Perks.friendMultiplier(player)
 		* ServerEvents.value("coins", 1)
 		* RebirthMath.multiplier(RebirthMath.count(player))

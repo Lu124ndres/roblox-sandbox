@@ -85,6 +85,10 @@ CoreGuiSetup.start()
 local screen = Ui.screen("Juego", playerGui, 1)
 Layout.mount(screen, playerGui)
 local toasts = Toasts.mount(screen)
+if player.MembershipType == Enum.MembershipType.Premium then
+	local bonus = require(ReplicatedStorage.Shared.Config).Social.premiumMultiplier
+	task.delay(8, toasts.show, `Premium: x{bonus} poder y monedas`, UIConfig.Colors.Coins)
+end
 
 local hungerPanel = HungerBar.mount(screen, function(stage: number)
 	local color = UIConfig.HungerStageColors[stage]

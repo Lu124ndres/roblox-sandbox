@@ -3,7 +3,7 @@
 	Overhead
 
 	Lo que se ve sobre la cabeza de cada jugador (para todos):
-		colmillo de monstruo con sus kills al lado (monstruos llenados) y "VIP" si lo tiene
+		colmillo con sus kills (monstruos llenados), "VIP" si lo tiene y el ícono de Premium
 		su título (atributo Titulo, por su poder máximo), con un degradado por
 		rango; desde Dios del Mar el brillo recorre el texto
 		su nombre
@@ -68,6 +68,7 @@ local function build(player: Player, head: BasePart): () -> ()
 	vip.Text = "VIP"
 	vip.Size = UDim2.fromScale(0.18, 0.7)
 	vip.LayoutOrder = 2
+	OverheadLook.premiumBadge(top, player)
 
 	local title = Style.text(gui, "Titulo", 90, nil, 3)
 	title.Position = UDim2.fromScale(0, 0.4)

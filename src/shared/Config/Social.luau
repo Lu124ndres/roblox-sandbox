@@ -23,6 +23,7 @@ export type SocialConfig = {
 	titles: { TitleDef },
 	friendBoost: { perFriend: number, maxFriends: number },
 	personalBoostMultiplier: number,
+	premiumMultiplier: number,
 	group: { groupId: number, minutes: number, coins: number, boostMinutes: number },
 	referral: {
 		newCoins: number,
@@ -63,6 +64,8 @@ local Social: SocialConfig = {
 
 	friendBoost = { perFriend = 0.1, maxFriends = 5 },
 	personalBoostMultiplier = 2,
+	-- Roblox Premium: multiplica el poder y las monedas (y lleva el ícono de Premium encima).
+	premiumMultiplier = 1.2,
 	-- groupId: el número del grupo de Roblox del juego (en su página: roblox.com/groups/<número>).
 	group = { groupId = 0, minutes = 15, coins = 1500, boostMinutes = 15 },
 	-- Invitar: si un jugador NUEVO entra por la invitación de alguien, los dos ganan.
