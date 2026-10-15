@@ -63,19 +63,20 @@ local Assets: Assets = {
 	},
 
 	Meshes = {
-		-- Orca etapa 1. Fuente: assets/blender/OrcaE1.fbx (9,806 triángulos).
-		-- Model en ServerStorage.OrcaE1 (vive en el .rbxl, no en el repositorio).
-		OrcaE1 = "rbxassetid://116864238392648",
+		-- Orca etapa 1 (modelo de Meshy reducido). Fuente: assets/blender/OrcaE1.fbx
+		-- (9,600 triángulos). Model en ServerStorage.OrcaE1 (vive en el .rbxl, no en
+		-- el repositorio), con el atributo GiroY = 180 para que mire al frente.
+		OrcaE1 = "rbxassetid://105300429950730",
 		-- Pendiente de modelar. Mientras falte, el juego usa un marcador de primitivas.
 		MinotauroE1 = "rbxassetid://0",
 	},
 
 	Textures = {
 		-- SurfaceAppearance de la orca etapa 1. Fuente: assets/textures/OrcaE1_*.png.
-		-- Sin mapa de metalicidad: el modelo no es metálico.
-		OrcaE1Color = "rbxassetid://78747470199717",
-		OrcaE1Normal = "rbxassetid://79662647526007",
-		OrcaE1Roughness = "rbxassetid://86419609055550",
+		OrcaE1Color = "rbxassetid://127128851587935",
+		OrcaE1Normal = "rbxassetid://117533377898225",
+		OrcaE1Roughness = "rbxassetid://75086159412197",
+		OrcaE1Metalness = "rbxassetid://77816773195561",
 	},
 
 	Sounds = {

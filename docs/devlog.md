@@ -791,3 +791,23 @@ Revisión a fondo con tres revisores (servidor, cliente, diseño/móvil) y arreg
 **Prueba en Studio** (scripts ya borrados): canasta de 160 → la Orca pidió 660 y se
 entregó en ~4 s; etapa 2 alcanzada; 0 errores. Los modelos del Minotauro (acostados al
 importar) se descartaron: los monstruos se harán con Meshy al final.
+
+## 2026-10-15 — Orca etapa 1 con el modelo de Meshy
+
+**Qué se hizo:**
+
+- El modelo de Meshy (orca con armadura dorada, corona de coral y aleta de cristal) se
+  redujo en Blender de 179,664 a 9,600 triángulos, con el origen en la base y texturas de
+  1024 (color, normales, rugosidad y metalicidad) embebidas en `assets/blender/OrcaE1.fbx`.
+- Importado en Studio como `ServerStorage.OrcaE1`; el anterior quedó como
+  `OrcaE1_Respaldo`. IDs nuevos en `Assets` (malla y las 4 texturas).
+- Atributo `GiroY` (grados) en el modelo de ServerStorage: `GiantTemplates` lo aplica al
+  pivote para corregir modelos que llegan mirando al revés. La orca usa `GiroY = 180`.
+- La luz roja del fondo del cráter (`BrilloDelAbismo`) ahora es más suave y menos
+  saturada y está más honda: teñía de naranja al gigante.
+
+**Qué se rompió:** nada. Probado en Studio: la orca mira a los jugadores.
+
+**Qué sigue:** guardar/publicar el lugar (el modelo vive en el .rbxl). Las etapas 2–4
+siguen usando el modelo escalado hasta tener los suyos.
+

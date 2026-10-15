@@ -133,6 +133,7 @@ local Protocol = {
 	GiantModelsFolder = "ModelosGigantes",
 	GiantModelAttributes = {
 		BaseHeight = "BaseHeight", -- alto en studs a escala 1
+		Turn = "GiroY", -- en ServerStorage: grados para girar el frente (Meshy a veces lo da al revés)
 	},
 
 	PlayerAttributes = {

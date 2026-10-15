@@ -57,7 +57,11 @@ local function prepare(name: string): Model?
 	end
 	model.PrimaryPart = main
 	local box, size = model:GetBoundingBox()
-	model.WorldPivot = box * CFrame.new(0, -size.Y / 2, 0)
+	-- El frente del gigante es -Z del pivote. Si el modelo llegó mirando a otro lado,
+	-- el atributo GiroY (grados) en el modelo de ServerStorage lo corrige.
+	local turn = template:GetAttribute(Protocol.GiantModelAttributes.Turn)
+	local spin = if type(turn) == "number" then math.rad(turn) else 0
+	model.WorldPivot = box * CFrame.new(0, -size.Y / 2, 0) * CFrame.Angles(0, spin, 0)
 	model:SetAttribute(Protocol.GiantModelAttributes.BaseHeight, size.Y)
 	model.Name = name
 	return model

@@ -77,17 +77,18 @@ local function craterEffects()
 	local glow = invisiblePart(
 		"BrilloDelAbismo",
 		Vector3.one,
-		WorldZones.craterCenter + Vector3.new(0, WorldLayout.waterLevel - 8, 0)
+		WorldZones.craterCenter + Vector3.new(0, WorldLayout.waterLevel - 14, 0)
 	)
+	-- Suave y poco saturada: si es muy roja, tiñe de naranja al gigante de encima.
 	local light = Instance.new("PointLight")
-	light.Color = Color3.fromRGB(255, 70, 30)
-	light.Range = 60
-	light.Brightness = 5
+	light.Color = Color3.fromRGB(255, 150, 110)
+	light.Range = 50
+	light.Brightness = 1.6
 	light.Parent = glow
 	TweenService:Create(
 		light,
 		TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-		{ Brightness = 2 }
+		{ Brightness = 0.7 }
 	):Play()
 
 	-- Chispas de lava que suben del lago hasta más arriba del borde.
