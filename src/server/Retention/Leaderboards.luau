@@ -2,12 +2,12 @@
 --[[
 	Leaderboards
 
-	Ranking global de poder y de kills (OrderedDataStore). Cada
+	Ranking global de poder, de kills y de renacimientos (OrderedDataStore). Cada
 	REFRESH_SECONDS se suben los valores de los jugadores conectados (solo
 	los que ya cargaron sus datos y cuyo valor cambió desde la última
 	escritura) y se leen los 10 mejores; el resultado se publica como JSON en atributos de
-	ReplicatedStorage.Rankings (Poder y Kills) para que los tableros de la
-	plaza lo muestren. Sin DataStore (Studio sin publicar), muestra a los
+	ReplicatedStorage.Rankings (Poder, Kills y Renacimientos) para que los
+	tableros de la entrada lo muestren. Sin DataStore (Studio sin publicar), muestra a los
 	jugadores de este servidor y se actualiza cada LOCAL_REFRESH_SECONDS.
 ]]
 
@@ -31,7 +31,9 @@ folder.Name = "Rankings"
 
 local names: { [number]: string } = {}
 -- Último valor escrito por tablero y jugador: si no cambió, no se gasta una escritura.
-local lastWritten: { [string]: { [number]: number } } = { Poder = {}, Kills = {} }
+local BOARDS = { "Poder", "Kills", "Renacimientos" }
+local lastWritten: { [string]: { [number]: number } } =
+	{ Poder = {}, Kills = {}, Renacimientos = {} }
 
 local function nameOf(userId: number): string
 	if names[userId] then
@@ -52,6 +54,7 @@ local function stores(): { [string]: OrderedDataStore }?
 		return {
 			Poder = DataStoreService:GetOrderedDataStore("RankingPoder"),
 			Kills = DataStoreService:GetOrderedDataStore("RankingKills"),
+			Renacimientos = DataStoreService:GetOrderedDataStore("RankingRenacimientos"),
 		}
 	end)
 	return if ok then result else nil
@@ -63,7 +66,11 @@ local function valueOf(player: Player, board: string): number?
 	if not save then
 		return nil
 	end
-	return math.floor(if board == "Poder" then save.power else save.kills)
+	local value = if board == "Poder"
+		then save.power
+		elseif board == "Kills" then save.kills
+		else save.rebirths
+	return math.floor(value)
 end
 
 local function localTop(board: string): { Entry }
@@ -109,7 +116,7 @@ end
 
 local function refresh()
 	local ordered = stores()
-	for _, board in { "Poder", "Kills" } do
+	for _, board in BOARDS do
 		local list = if ordered then globalTop(ordered[board], board) else nil
 		folder:SetAttribute(board, HttpService:JSONEncode(list or localTop(board)))
 	end

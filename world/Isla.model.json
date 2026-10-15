@@ -130933,8 +130933,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -131169,8 +131169,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -131405,8 +131405,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -131641,8 +131641,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -131877,8 +131877,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -132113,8 +132113,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -132349,8 +132349,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -132585,8 +132585,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -132821,8 +132821,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -133057,8 +133057,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -133293,8 +133293,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -133529,8 +133529,8 @@
            "name": "Brillo",
            "className": "PointLight",
            "properties": {
-            "Brightness": 1.2,
-            "Range": 22,
+            "Brightness": 0.8,
+            "Range": 18,
             "Color": [
              1.0,
              0.8392,
@@ -189310,8 +189310,8 @@
          "name": "Brillo",
          "className": "PointLight",
          "properties": {
-          "Brightness": 1.2,
-          "Range": 22,
+          "Brightness": 0.8,
+          "Range": 18,
           "Color": [
            1.0,
            0.8392,
@@ -189546,8 +189546,8 @@
          "name": "Brillo",
          "className": "PointLight",
          "properties": {
-          "Brightness": 1.2,
-          "Range": 22,
+          "Brightness": 0.8,
+          "Range": 18,
           "Color": [
            1.0,
            0.8392,
@@ -189782,8 +189782,8 @@
          "name": "Brillo",
          "className": "PointLight",
          "properties": {
-          "Brightness": 1.2,
-          "Range": 22,
+          "Brightness": 0.8,
+          "Range": 18,
           "Color": [
            1.0,
            0.8392,
@@ -190018,8 +190018,8 @@
          "name": "Brillo",
          "className": "PointLight",
          "properties": {
-          "Brightness": 1.2,
-          "Range": 22,
+          "Brightness": 0.8,
+          "Range": 18,
           "Color": [
            1.0,
            0.8392,
@@ -190714,6 +190714,146 @@
      ]
     },
     {
+     "name": "PedestalTableroPoder",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       14,
+       3.2,
+       3
+      ],
+      "CFrame": [
+       18.0,
+       7.6,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       0.9333,
+       0.9137,
+       0.8784
+      ],
+      "Material": "Marble",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BandaTableroPoder",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       14.3,
+       0.35,
+       3.3
+      ],
+      "CFrame": [
+       18.0,
+       9,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       1.0,
+       0.7843,
+       0.2745
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "TableroPoder",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       12,
+       14,
+       0.5
+      ],
+      "CFrame": [
+       18.0,
+       16.4,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       0.0941,
+       0.1176,
+       0.1882
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "MarcoTableroPoder",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       12.8,
+       14.8,
+       0.3
+      ],
+      "CFrame": [
+       18.0,
+       16.4,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       1.0,
+       0.7843,
+       0.2745
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
      "name": "PilarTableroPoder-1",
      "className": "Model",
      "children": [
@@ -190723,14 +190863,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         2.6,
          1.2,
-         2.4
+         2.6
         ],
         "CFrame": [
-         19.6,
+         25.6,
          6.6,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -190757,14 +190897,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.4,
-         10,
-         1.4
+         1.6,
+         17,
+         1.6
         ],
         "CFrame": [
-         19.6,
-         12.2,
-         -105.0,
+         25.6,
+         15.7,
+         -101.0,
          1,
          0,
          0,
@@ -190791,14 +190931,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         19.6,
+         25.6,
          7.5,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -190827,14 +190967,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         19.6,
-         16.9,
-         -105.0,
+         25.6,
+         23.9,
+         -101.0,
          1,
          0,
          0,
@@ -190863,14 +191003,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.2,
+         2.4,
          0.8,
-         2.2
+         2.4
         ],
         "CFrame": [
-         19.6,
-         17.6,
-         -105.0,
+         25.6,
+         24.6,
+         -101.0,
          1,
          0,
          0,
@@ -190903,14 +191043,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         2.6,
          1.2,
-         2.4
+         2.6
         ],
         "CFrame": [
-         8.4,
+         10.4,
          6.6,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -190937,14 +191077,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.4,
-         10,
-         1.4
+         1.6,
+         17,
+         1.6
         ],
         "CFrame": [
-         8.4,
-         12.2,
-         -105.0,
+         10.4,
+         15.7,
+         -101.0,
          1,
          0,
          0,
@@ -190971,14 +191111,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         8.4,
+         10.4,
          7.5,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -191007,14 +191147,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         8.4,
-         16.9,
-         -105.0,
+         10.4,
+         23.9,
+         -101.0,
          1,
          0,
          0,
@@ -191043,14 +191183,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.2,
+         2.4,
          0.8,
-         2.2
+         2.4
         ],
         "CFrame": [
-         8.4,
-         17.6,
-         -105.0,
+         10.4,
+         24.6,
+         -101.0,
          1,
          0,
          0,
@@ -191074,89 +191214,19 @@
      ]
     },
     {
-     "name": "TableroPoder",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       8.5,
-       0.5
-      ],
-      "CFrame": [
-       14.0,
-       12.2,
-       -105.0,
-       -1.0,
-       0.0,
-       -0.0,
-       0.0,
-       1.0,
-       0,
-       0.0,
-       0.0,
-       -1.0
-      ],
-      "Color": [
-       0.0941,
-       0.1176,
-       0.1882
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "MarcoTableroPoder",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10.6,
-       9.1,
-       0.3
-      ],
-      "CFrame": [
-       14.0,
-       12.2,
-       -105.0,
-       -1.0,
-       0.0,
-       -0.0,
-       0.0,
-       1.0,
-       0,
-       0.0,
-       0.0,
-       -1.0
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
      "name": "TituloTableroPoderMarco",
      "className": "Part",
      "properties": {
       "Anchored": true,
       "Size": [
-       9.5,
-       2.1,
+       11.5,
+       2.5,
        0.35
       ],
       "CFrame": [
-       14.0,
-       17.9,
-       -105.0,
+       18.0,
+       25.2,
+       -101.0,
        -1.0,
        0.0,
        -0.0,
@@ -191185,14 +191255,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       9,
-       1.6,
+       11,
+       2,
        0.5
       ],
       "CFrame": [
-       14.0,
-       17.9,
-       -105.0,
+       18.0,
+       25.2,
+       -101.0,
        -1.0,
        0.0,
        -0.0,
@@ -191281,6 +191351,146 @@
      ]
     },
     {
+     "name": "PedestalTableroKills",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       14,
+       3.2,
+       3
+      ],
+      "CFrame": [
+       -18.0,
+       7.6,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       0.9333,
+       0.9137,
+       0.8784
+      ],
+      "Material": "Marble",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "BandaTableroKills",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       14.3,
+       0.35,
+       3.3
+      ],
+      "CFrame": [
+       -18.0,
+       9,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       1.0,
+       0.7843,
+       0.2745
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "TableroKills",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       12,
+       14,
+       0.5
+      ],
+      "CFrame": [
+       -18.0,
+       16.4,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       0.0941,
+       0.1176,
+       0.1882
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "MarcoTableroKills",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       12.8,
+       14.8,
+       0.3
+      ],
+      "CFrame": [
+       -18.0,
+       16.4,
+       -101.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       1.0,
+       0.7843,
+       0.2745
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
      "name": "PilarTableroKills-1",
      "className": "Model",
      "children": [
@@ -191290,14 +191500,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         2.6,
          1.2,
-         2.4
+         2.6
         ],
         "CFrame": [
-         -8.4,
+         -10.4,
          6.6,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -191324,14 +191534,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.4,
-         10,
-         1.4
+         1.6,
+         17,
+         1.6
         ],
         "CFrame": [
-         -8.4,
-         12.2,
-         -105.0,
+         -10.4,
+         15.7,
+         -101.0,
          1,
          0,
          0,
@@ -191358,14 +191568,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         -8.4,
+         -10.4,
          7.5,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -191394,14 +191604,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         -8.4,
-         16.9,
-         -105.0,
+         -10.4,
+         23.9,
+         -101.0,
          1,
          0,
          0,
@@ -191430,14 +191640,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.2,
+         2.4,
          0.8,
-         2.2
+         2.4
         ],
         "CFrame": [
-         -8.4,
-         17.6,
-         -105.0,
+         -10.4,
+         24.6,
+         -101.0,
          1,
          0,
          0,
@@ -191470,14 +191680,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         2.6,
          1.2,
-         2.4
+         2.6
         ],
         "CFrame": [
-         -19.6,
+         -25.6,
          6.6,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -191504,14 +191714,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.4,
-         10,
-         1.4
+         1.6,
+         17,
+         1.6
         ],
         "CFrame": [
-         -19.6,
-         12.2,
-         -105.0,
+         -25.6,
+         15.7,
+         -101.0,
          1,
          0,
          0,
@@ -191538,14 +191748,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         -19.6,
+         -25.6,
          7.5,
-         -105.0,
+         -101.0,
          1,
          0,
          0,
@@ -191574,14 +191784,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         1.7,
+         1.9,
          0.3,
-         1.7
+         1.9
         ],
         "CFrame": [
-         -19.6,
-         16.9,
-         -105.0,
+         -25.6,
+         23.9,
+         -101.0,
          1,
          0,
          0,
@@ -191610,14 +191820,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.2,
+         2.4,
          0.8,
-         2.2
+         2.4
         ],
         "CFrame": [
-         -19.6,
-         17.6,
-         -105.0,
+         -25.6,
+         24.6,
+         -101.0,
          1,
          0,
          0,
@@ -191641,89 +191851,19 @@
      ]
     },
     {
-     "name": "TableroKills",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       8.5,
-       0.5
-      ],
-      "CFrame": [
-       -14.0,
-       12.2,
-       -105.0,
-       -1.0,
-       0.0,
-       -0.0,
-       0.0,
-       1.0,
-       0,
-       0.0,
-       0.0,
-       -1.0
-      ],
-      "Color": [
-       0.0941,
-       0.1176,
-       0.1882
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "MarcoTableroKills",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10.6,
-       9.1,
-       0.3
-      ],
-      "CFrame": [
-       -14.0,
-       12.2,
-       -105.0,
-       -1.0,
-       0.0,
-       -0.0,
-       0.0,
-       1.0,
-       0,
-       0.0,
-       0.0,
-       -1.0
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
      "name": "TituloTableroKillsMarco",
      "className": "Part",
      "properties": {
       "Anchored": true,
       "Size": [
-       9.5,
-       2.1,
+       11.5,
+       2.5,
        0.35
       ],
       "CFrame": [
-       -14.0,
-       17.9,
-       -105.0,
+       -18.0,
+       25.2,
+       -101.0,
        -1.0,
        0.0,
        -0.0,
@@ -191752,14 +191892,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       9,
-       1.6,
+       11,
+       2,
        0.5
       ],
       "CFrame": [
-       -14.0,
-       17.9,
-       -105.0,
+       -18.0,
+       25.2,
+       -101.0,
        -1.0,
        0.0,
        -0.0,
@@ -191821,7 +191961,248 @@
            ]
           },
           "BackgroundTransparency": 1,
-          "Text": "TOP KILLS",
+          "Text": "TOP MONSTRUOS",
+          "TextScaled": true,
+          "TextColor3": [
+           1.0,
+           0.8392,
+           0.3529
+          ],
+          "TextStrokeTransparency": 0.2,
+          "TextStrokeColor3": [
+           0.2353,
+           0.1176,
+           0.0
+          ],
+          "FontFace": {
+           "Font": {
+            "family": "rbxasset://fonts/families/FredokaOne.json",
+            "weight": "Regular",
+            "style": "Normal"
+           }
+          }
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "BaseTablero",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       19,
+       1,
+       3
+      ],
+      "CFrame": [
+       -0.0,
+       24.0,
+       -99.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       0.9333,
+       0.9137,
+       0.8784
+      ],
+      "Material": "Marble",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "TableroRenacimientos",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       17,
+       8,
+       0.5
+      ],
+      "CFrame": [
+       -0.0,
+       28.6,
+       -99.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       0.0941,
+       0.1176,
+       0.1882
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth"
+     }
+    },
+    {
+     "name": "MarcoTableroRenacimientos",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       17.8,
+       8.8,
+       0.3
+      ],
+      "CFrame": [
+       -0.0,
+       28.6,
+       -99.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       1.0,
+       0.7843,
+       0.2745
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "TituloTableroRenacimientosMarco",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       13.5,
+       2.5,
+       0.35
+      ],
+      "CFrame": [
+       -0.0,
+       34.0,
+       -99.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       1.0,
+       0.7843,
+       0.2745
+      ],
+      "Material": "Metal",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     }
+    },
+    {
+     "name": "TituloTableroRenacimientos",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       13,
+       2,
+       0.5
+      ],
+      "CFrame": [
+       -0.0,
+       34.0,
+       -99.0,
+       -1.0,
+       0.0,
+       -0.0,
+       0.0,
+       1.0,
+       0,
+       0.0,
+       0.0,
+       -1.0
+      ],
+      "Color": [
+       0.0941,
+       0.1176,
+       0.1882
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "CanQuery": false,
+      "CanTouch": false
+     },
+     "children": [
+      {
+       "name": "Texto",
+       "className": "SurfaceGui",
+       "properties": {
+        "Face": "Back",
+        "SizingMode": "PixelsPerStud",
+        "PixelsPerStud": 40,
+        "LightInfluence": 0
+       },
+       "children": [
+        {
+         "name": "Etiqueta",
+         "className": "TextLabel",
+         "properties": {
+          "Size": {
+           "UDim2": [
+            [
+             0.94,
+             0
+            ],
+            [
+             0.8,
+             0
+            ]
+           ]
+          },
+          "Position": {
+           "UDim2": [
+            [
+             0.03,
+             0
+            ],
+            [
+             0.1,
+             0
+            ]
+           ]
+          },
+          "BackgroundTransparency": 1,
+          "Text": "TOP RENACIMIENTOS",
           "TextScaled": true,
           "TextColor3": [
            1.0,

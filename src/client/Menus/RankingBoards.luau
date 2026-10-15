@@ -2,8 +2,8 @@
 --[[
 	RankingBoards
 
-	Dibuja el ranking global en los tableros de la entrada (TableroPoder y
-	TableroKills del mapa) con lo que publica el servidor en
+	Dibuja el ranking global en los tableros del salón de la fama de la entrada
+	(TableroPoder, TableroKills y TableroRenacimientos del mapa) con lo que publica el servidor en
 	ReplicatedStorage.Rankings (Leaderboards): top 10 con nombre y valor.
 ]]
 
@@ -15,7 +15,8 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 
-local BOARDS = { Poder = "TableroPoder", Kills = "TableroKills" }
+local BOARDS =
+	{ Poder = "TableroPoder", Kills = "TableroKills", Renacimientos = "TableroRenacimientos" }
 local MEDALS =
 	{ Color3.fromRGB(255, 205, 60), Color3.fromRGB(210, 220, 230), Color3.fromRGB(220, 150, 90) }
 

@@ -460,7 +460,7 @@ def anillo_con_huecos(nombre, radio, n, ancho, alto, y_tope, colores, material, 
 def farola(nombre, x, z, y, alto=8):
     """Farola: base de mármol, poste de hierro negro, anillo de oro y farol de luz cálida."""
     farol_ = pieza("Farol", (1.1, 1.5, 1.1), (x, y + alto + 0.75, z), LUZ_FAROLA, "Neon", **DECORADO)
-    farol_["children"] = [luz(22, 1.2, LUZ_FAROLA)]
+    farol_["children"] = [luz(18, 0.8, LUZ_FAROLA)]  # suave: el mármol blanco no se encandila
     largo = alto - 1
     return grupo(nombre, [
         pieza("Base", (1.8, 1, 1.8), (x, y + 0.5, z), MARMOL_CLARO, "Marble"),
@@ -549,9 +549,18 @@ def plaza_aparicion():
     return grupo("PlazaAparicion", hijos)
 
 
+def tablero(nombre, pos, r, ancho, alto):
+    """Tablero del ranking (lo dibuja RankingBoards por la cara de atrás) con marco de oro."""
+    return [
+        pieza(nombre, (ancho, alto, 0.5), pos, PLACA, "SmoothPlastic", r),
+        pieza(f"Marco{nombre}", (ancho + 0.8, alto + 0.8, 0.3), pos, ORO, "Metal", r, **DECORADO),
+    ]
+
+
 def arco_entrada():
-    """Arco de mármol con bandas de oro y la placa de la laguna; a los lados, los tableros
-    del ranking global (Leaderboards / RankingBoards) con marco de mármol."""
+    """Arco de mármol con bandas de oro y la placa de la laguna, y el salón de la fama:
+    los tableros grandes del ranking global (Leaderboards / RankingBoards) a los lados
+    del arco (poder y monstruos) y sobre él (renacimientos)."""
     a = L["spawnAngle"]
     r = base_con_z(direccion(a))
     base = polar(a, L["plazaRadius"] + 3, 0)
@@ -564,13 +573,18 @@ def arco_entrada():
         hijos.append(pieza(f"Moldura{k}", (19.7, 0.3, 3.2), add(base, (0, y + dy, 0)), ORO, "Metal", r, **DECORADO))
     # El texto mira hacia afuera (+Z local = hacia la aparición).
     hijos += placa("Cartel", add(base, (0, y + 12.6, 0)), r, "LAGUNA DE LOS GIGANTES", 12.6, 2.6)
-    for lado, nombre, titulo in ((-1, "TableroPoder", "TOP PODER"), (1, "TableroKills", "TOP KILLS")):
-        p = add(polar(a, L["plazaRadius"] + 9, 0), aplicar(r, (14 * lado, 0, 0)))
+    # Salón de la fama: dos tableros grandes a los lados del arco y uno sobre él.
+    for lado, nombre, titulo in ((-1, "TableroPoder", "TOP PODER"), (1, "TableroKills", "TOP MONSTRUOS")):
+        p = add(base, aplicar(r, (18 * lado, 0, 2)))
+        hijos.append(pieza(f"Pedestal{nombre}", (14, 3.2, 3), (p[0], y + 1.6, p[2]), MARMOL_CLARO, "Marble", r))
+        hijos.append(pieza(f"Banda{nombre}", (14.3, 0.35, 3.3), (p[0], y + 3, p[2]), ORO, "Metal", r, **DECORADO))
+        hijos += tablero(nombre, (p[0], y + 10.4, p[2]), r, 12, 14)
         for k in (-1, 1):
-            hijos.append(pilar(f"Pilar{nombre}{k}", add(p, aplicar(r, (5.6 * k, 0, 0))), y, 10, 1.4))
-        hijos.append(pieza(nombre, (10, 8.5, 0.5), (p[0], y + 6.2, p[2]), PLACA, "SmoothPlastic", r))
-        hijos.append(pieza(f"Marco{nombre}", (10.6, 9.1, 0.3), (p[0], y + 6.2, p[2]), ORO, "Metal", r, **DECORADO))
-        hijos += placa(f"Titulo{nombre}", (p[0], y + 11.9, p[2]), r, titulo, 9, 1.6)
+            hijos.append(pilar(f"Pilar{nombre}{k}", add(p, aplicar(r, (7.6 * k, 0, 0))), y, 17, 1.6))
+        hijos += placa(f"Titulo{nombre}", (p[0], y + 19.2, p[2]), r, titulo, 11, 2)
+    hijos.append(pieza("BaseTablero", (19, 1, 3), add(base, (0, y + 18, 0)), MARMOL_CLARO, "Marble", r))
+    hijos += tablero("TableroRenacimientos", add(base, (0, y + 22.6, 0)), r, 17, 8)
+    hijos += placa("TituloTableroRenacimientos", add(base, (0, y + 28, 0)), r, "TOP RENACIMIENTOS", 13, 2)
     return grupo("ArcoEntrada", hijos)
 
 
