@@ -15,7 +15,7 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
 | `delivery.maxDeliverySeconds` | 4 | Una canasta, por grande que sea, se entrega en 4 s. |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
-| `cycle.evolveSeconds` | 5 s | Al llenar cada cuarto de barra evoluciona: no come esos segundos (la entrega espera y sigue). |
+| `cycle.evolveSeconds` | 3 s | Al llenar cada cuarto de barra evoluciona: no come esos segundos (la entrega espera y sigue). |
 | `cycle.restSeconds` (máx.), `restBaseSeconds`, `restPerPlayerSeconds` | 120 · 60 · 1.2 | Descanso = 60 s + 1.2 s por jugador, máximo 120. |
 | `anger.*` | — | Cuánto tarda en enojarse y cada cuánto ataca. Con 3 jugadores o menos espera 150 s (`smallServerGraceSeconds`) en vez de 45. |
 

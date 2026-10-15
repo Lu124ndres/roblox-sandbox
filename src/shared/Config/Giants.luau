@@ -115,7 +115,7 @@ local Giants: Types.GiantsConfig = {
 	},
 	cycle = {
 		farewellSeconds = 7,
-		evolveSeconds = 5, -- al llenar cada cuarto de barra evoluciona y no come
+		evolveSeconds = 3, -- al llenar cada cuarto de barra evoluciona y no come
 		restSeconds = 120, -- máximo
 		restBaseSeconds = 60,
 		restPerPlayerSeconds = 1.2,
