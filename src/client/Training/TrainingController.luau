@@ -4,7 +4,8 @@
 
 	Lado cliente del entrenamiento del jugador local: lo gira hacia el
 	estanque al empezar, muestra "+N poder" flotando sobre su cabeza en cada
-	tick y avisa si el estanque está bloqueado. El poder lo suma el servidor.
+	tick (y en la pantalla: Effects/PowerGainFx) y avisa si el estanque está
+	bloqueado. El poder lo suma el servidor.
 ]]
 
 local Players = game:GetService("Players")
@@ -19,6 +20,7 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Toasts = require(script.Parent.Parent.Toasts)
 local Purchases = require(script.Parent.Parent.Menus.Purchases)
+local PowerGainFx = require(script.Parent.Parent.Effects.PowerGainFx)
 
 local COLORS = UIConfig.Colors
 
@@ -88,6 +90,7 @@ function TrainingController.start(toasts: Toasts.Toasts)
 		if character and type(gained) == "number" then
 			floatingGain(character, `+{NumberFormat.short(gained)} poder`, COLORS.Power)
 			Sounds.play("PowerTick")
+			PowerGainFx.gain(gained)
 		end
 	end)
 
