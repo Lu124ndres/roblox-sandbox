@@ -6,7 +6,7 @@
 	pesca crece rápido y un número de 9 cifras no cabe en un móvil.
 ]]
 
-local SUFFIXES = { "", "K", "M", "B", "T" }
+local SUFFIXES = { "", "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc" }
 
 local NumberFormat = {}
 

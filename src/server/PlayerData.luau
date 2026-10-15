@@ -96,6 +96,7 @@ function PlayerData.addPower(player: Player, amount: number)
 		return
 	end
 	data.save.power += math.floor(amount)
+	data.save.bestPower = math.max(data.save.bestPower, data.save.power)
 	ProfilePublish.power(player, data.save)
 end
 

@@ -4,7 +4,8 @@
 	regalo del grupo. (Los códigos viven en el servidor, en
 	server/Retention/CodeList, para que nadie los lea desde el cliente.)
 
-	Títulos: el más alto cuyo `power` ya alcanzó el jugador.
+	Títulos: el más alto cuyo `power` ya alcanzó el jugador con su poder
+	MÁXIMO (bestPower): al renacer el título no baja (shared/Titles).
 	Impulso de amigos: +perFriend por cada amigo de Roblox en el mismo
 	servidor, hasta maxFriends; multiplica el poder y las monedas.
 	Impulso personal: x`personalBoostMultiplier` de poder mientras dure (lo
@@ -43,6 +44,21 @@ local Social: SocialConfig = {
 		{ power = 5000000, name = "Señor del Abismo" },
 		{ power = 100000000, name = "Rey de los Océanos" },
 		{ power = 10000000000, name = "Dios del Mar" },
+		{ power = 50e9, name = "Titán de las Mareas" },
+		{ power = 250e9, name = "Señor de las Tormentas" },
+		{ power = 1e12, name = "Devorador de Leviatanes" },
+		{ power = 5e12, name = "Emperador del Abismo" },
+		{ power = 25e12, name = "Guardián de los Siete Mares" },
+		{ power = 100e12, name = "Coloso Abisal" },
+		{ power = 500e12, name = "Dios de los Maremotos" },
+		{ power = 2.5e15, name = "Soberano Eterno" },
+		{ power = 10e15, name = "Avatar del Océano" },
+		{ power = 50e15, name = "Leyenda Inmortal" },
+		{ power = 250e15, name = "Destructor de Mundos" },
+		{ power = 1e18, name = "Dios Primordial" },
+		{ power = 10e18, name = "Omnipotente" },
+		{ power = 100e18, name = "El Infinito" },
+		{ power = 1e21, name = "Más Allá del Infinito" },
 	},
 	friendBoost = { perFriend = 0.1, maxFriends = 5 },
 	personalBoostMultiplier = 2,

@@ -21,6 +21,7 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Basket = require(script.Parent.Feeding.Basket)
 local SaveSchema = require(script.Parent.Save.SaveSchema)
+local Titles = require(ReplicatedStorage.Shared.Titles)
 
 local ATTR = Protocol.PlayerAttributes
 local POWER_STAT_SECONDS = 3
@@ -85,9 +86,15 @@ function ProfilePublish.coins(player: Player, save: SaveSchema.SaveData)
 	stat(player, Protocol.Leaderstats.Coins, save.coins)
 end
 
+-- Título por el poder máximo (no baja al renacer); solo se replica cuando cambia.
+local function title(player: Player, save: SaveSchema.SaveData)
+	player:SetAttribute(ATTR.Title, Titles.index(math.max(save.power, save.bestPower)))
+end
+
 function ProfilePublish.power(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.Power, save.power)
 	powerStat(player, save.power, false)
+	title(player, save)
 end
 
 function ProfilePublish.kills(player: Player, save: SaveSchema.SaveData)
@@ -113,6 +120,7 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 	ProfilePublish.kills(player, save)
 	ProfilePublish.coins(player, save)
 	player:SetAttribute(ATTR.Power, save.power)
+	title(player, save)
 	ProfilePublish.carried(player, save)
 	for category in save.upgrades do
 		ProfilePublish.upgrade(player, save, category)

@@ -4,21 +4,22 @@
 
 	Lo que se ve sobre la cabeza de cada jugador (para todos):
 		colmillo de monstruo con sus kills al lado (monstruos llenados) y "VIP" si lo tiene
-		su título, según su poder (Config.Social.titles), con un degradado por rango
+		su título (atributo Titulo, por su poder máximo), con un degradado por
+		rango; desde Dios del Mar el brillo recorre el texto
 		su nombre
 	Reemplaza el nombre de Roblox (se oculta en este cliente). Lee atributos
-	que pone el servidor (Power, Kills, Pase_VIP). Solo reescribe el título
-	y las kills cuando cambian de verdad (Power cambia a cada rato). Con
-	efectos reducidos se quitan los contornos UIStroke y se ve de más cerca.
+	que pone el servidor (Titulo, Kills, Pase_VIP). Con efectos reducidos se
+	quitan los contornos UIStroke y se ve de más cerca.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
-local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local Titles = require(ReplicatedStorage.Shared.Titles)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local Icons = require(script.Parent.Icons)
@@ -26,12 +27,12 @@ local OverheadLook = require(script.Parent.OverheadLook)
 local Style = require(script.Parent.Style)
 
 local ATTR = Protocol.PlayerAttributes
-local TITLES = Config.Social.titles
 local TAG_NAME = "Encima"
 
 local Overhead = {}
 
 local guis: { [Player]: BillboardGui } = {}
+local shimmering: { [UIGradient]: boolean } = {} -- títulos cuyo brillo recorre el texto
 local connections: { [Player]: { RBXScriptConnection } } = {}
 
 local function build(player: Player, head: BasePart): () -> ()
@@ -85,15 +86,21 @@ local function build(player: Player, head: BasePart): () -> ()
 
 	local shownIndex, shownKills = 0, -1
 	return function()
-		local power = player:GetAttribute(ATTR.Power)
-		local index = OverheadLook.titleIndex(if type(power) == "number" then power else 0)
+		local value = player:GetAttribute(ATTR.Title)
+		local index = if type(value) == "number" then value else 1
 		if index ~= shownIndex then
 			shownIndex = index
-			title.Text = string.upper(TITLES[index].name)
+			title.Text = string.upper(Titles.name(index))
 			gradient.Color, gradient.Rotation = OverheadLook.gradient(index)
+			if OverheadLook.animated(index) then
+				shimmering[gradient] = true
+			else
+				shimmering[gradient] = nil
+			end
+			gradient.Offset = Vector2.zero
 		end
-		local value = player:GetAttribute(ATTR.Kills)
-		local killCount = if type(value) == "number" then value else 0
+		local kills_ = player:GetAttribute(ATTR.Kills)
+		local killCount = if type(kills_) == "number" then kills_ else 0
 		if killCount ~= shownKills then
 			shownKills = killCount
 			kills.Text = NumberFormat.short(killCount)
@@ -127,7 +134,7 @@ local function watch(player: Player)
 			if
 				refresh
 				and (
-					attribute == ATTR.Power
+					attribute == ATTR.Title
 					or attribute == ATTR.Kills
 					or string.find(attribute, ATTR.PassPrefix, 1, true) == 1
 				)
@@ -148,7 +155,23 @@ function Overhead.start()
 				connection:Disconnect()
 			end
 		end
+		local gui = guis[player]
+		local gradient = gui and gui:FindFirstChild("UIGradient", true)
+		if gradient and gradient:IsA("UIGradient") then
+			shimmering[gradient] = nil
+		end
 		guis[player] = nil
+	end)
+	-- Un solo bucle para todos los títulos con brillo (los de más rango).
+	RunService.Heartbeat:Connect(function()
+		local offset = Vector2.new(math.sin(os.clock() * 1.6) * 0.6, 0)
+		for gradient in shimmering do
+			if gradient.Parent then
+				gradient.Offset = offset
+			else
+				shimmering[gradient] = nil
+			end
+		end
 	end)
 	ClientSettings.onChanged(function(key: string)
 		if key == "lowFx" then

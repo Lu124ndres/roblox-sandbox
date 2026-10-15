@@ -160,6 +160,7 @@ local Protocol = {
 		PlaytimeClaimed = "RegalosCobrados", -- regalos por tiempo cobrados (bits: 1, 2, 4...)
 		IsAdmin = "EsAdmin", -- true para los administradores (ven el panel de pruebas)
 		Rebirths = "Renacimientos", -- veces que renació
+		Title = "Titulo", -- índice del título (Config.Social.titles) por su poder máximo
 		StarterPack = "PackInicio", -- ya compró el pack de inicio
 		Quests = "Misiones", -- JSON con las misiones del día y su avance
 		Settings = "Settings", -- ajustes del jugador (JSON)

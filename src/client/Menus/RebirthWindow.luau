@@ -97,7 +97,7 @@ function RebirthWindow.start(screen: ScreenGui)
 	infoCard(
 		content,
 		"TE QUEDAS",
-		"Kills, estanques, colección, pases y compras",
+		"Títulos, kills, estanques, colección, pases y compras",
 		CARDS.Green,
 		0.51
 	)
