@@ -31,6 +31,20 @@ function WorldZones.craterBlend(position: Vector3): number
 	return math.clamp((outer - distance) / (outer - inner), 0, 1)
 end
 
+-- Altura del fondo del lago del cráter a `radius` del centro: una plataforma
+-- clara y poco honda junto al acantilado y, hacia el centro, un pozo hondo.
+-- Misma curva que fondo_lago() en tools/generar_isla.py.
+function WorldZones.lakeFloor(radius: number): number
+	local shelfStart = L.craterLakeRadius - L.craterShelfWidth
+	local shelf = L.waterLevel - L.craterShelfDepth
+	if radius >= shelfStart then
+		local t = math.min((radius - shelfStart) / L.craterShelfWidth, 1)
+		return shelf + (L.craterShelfDepth - 3) * t
+	end
+	local t = radius / shelfStart
+	return L.craterFloor + (shelf - L.craterFloor) * (1 - math.cos(math.pi * t)) / 2
+end
+
 -- Distancia horizontal al centro de la isla principal.
 function WorldZones.distanceToIsland(position: Vector3): number
 	return flat(position).Magnitude

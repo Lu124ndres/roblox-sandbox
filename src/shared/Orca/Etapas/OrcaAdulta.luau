@@ -18,7 +18,7 @@ local profile: Perfil.Profile = {
 	name = "OrcaAdulta",
 	voice = 1,
 	swim = { speed = 1, beat = 1, amplitude = 1, glide = 0.4, wiggle = 0, bank = 0.7, flap = 0.8 },
-	breath = { seconds = 16, shallow = -0.05, deep = -0.22 },
+	breath = { seconds = 16, shallow = -0.05, deep = -0.14 },
 	feed = { pitch = 0.68, rise = 0.14, jaw = 1, chew = 1.8, wiggle = 0 },
 	trickEvery = 24,
 	trickChance = 0.7,

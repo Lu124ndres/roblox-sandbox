@@ -26,12 +26,15 @@ local CraterVents = require(script.Parent.CraterVents)
 local L = WorldLayout
 local WATER = L.waterLevel
 local CENTER = WorldZones.craterCenter
-local LAKE_COLOR = Color3.fromRGB(0, 160, 150) -- jade turquesa
-local LAKE_TRANSPARENCY = 0.55
-local LAKE_REFLECTANCE = 0.15 -- poco reflejo: si no, la bruma naranja lo vuelve beige
+local LAKE_COLOR = Color3.fromRGB(0, 128, 136) -- turquesa: claro en la plataforma, hondo en el pozo
+local LAKE_TRANSPARENCY = 0.82 -- clara: se ve al gigante bajo el agua
+local LAKE_REFLECTANCE = 0.12 -- poco reflejo: si no, la bruma naranja lo vuelve beige
 local LAKE_WAVES = 0.32 -- un poco más agitada que el mar
 local GLOW = Color3.fromRGB(120, 255, 230)
 local FOAM = Color3.fromRGB(235, 252, 250)
+-- Capas del abismo: radio (en radios del lago), hondura bajo el agua y color.
+local ABYSS_LAYERS = 7 -- discos: más capas = degradado más suave
+local ABYSS_SHORE, ABYSS_DEEP = Color3.fromRGB(24, 98, 106), Color3.fromRGB(3, 22, 36)
 local EDGE_PIECES = 20 -- tramos de espuma alrededor del acantilado
 
 local CraterWater = {}
@@ -71,6 +74,28 @@ local function emitter(
 end
 
 -- Motas que brillan apenas sobre el agua, en todo el lago.
+-- El agua de Roblox muestra la bruma del cielo donde no ve fondo cerca (y el
+-- lago es muy hondo): unos discos oscuros apenas bajo la superficie hacen de
+-- "abismo", del turquesa de la orilla al azul casi negro del centro. Lo que
+-- baja más hondo (el gigante al zambullirse) se pierde en la oscuridad.
+local function abyss()
+	for index = 1, ABYSS_LAYERS do
+		local t = (index - 1) / (ABYSS_LAYERS - 1)
+		local radius = L.craterLakeRadius * (1.02 - 0.8 * t)
+		local disc = holder(
+			`Abismo{index}`,
+			Vector3.new(0.4, radius * 2, radius * 2),
+			CFrame.new(CENTER + Vector3.new(0, WATER - 14.5 - 5 * t, 0))
+				* CFrame.Angles(0, 0, math.rad(90))
+		)
+		disc.Shape = Enum.PartType.Cylinder
+		disc.Transparency = 0
+		disc.Color = ABYSS_SHORE:Lerp(ABYSS_DEEP, t)
+		disc.Material = Enum.Material.SmoothPlastic
+		disc.CastShadow = false
+	end
+end
+
 local function motes()
 	local size = L.craterLakeRadius * 1.6
 	local box = holder(
@@ -130,6 +155,7 @@ end
 
 -- getBlend: 0 fuera del cráter, 1 adentro (ZoneMood).
 function CraterWater.start(getBlend: () -> number)
+	abyss()
 	motes()
 	edge()
 	folder.Parent = Workspace

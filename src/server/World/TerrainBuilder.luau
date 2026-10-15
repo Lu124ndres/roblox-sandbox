@@ -26,7 +26,7 @@ local MATERIAL = Enum.Material
 local VOXEL = 4
 local HALF = VOXEL / 2
 local Y_MIN = -40 -- más abajo solo donde el suelo baja (el lago hondo del cráter)
-local Y_MAX = 40
+local Y_MAX = 40 -- más arriba solo donde hay montañas (el anillo del cráter)
 local CHUNK_VOXELS = 32 -- columnas por lado en cada bloque escrito
 
 local TerrainBuilder = {}
@@ -44,6 +44,9 @@ local function style(terrain: Terrain)
 	terrain:SetMaterialColor(MATERIAL.Basalt, Color3.fromRGB(42, 38, 46))
 	terrain:SetMaterialColor(MATERIAL.CrackedLava, Color3.fromRGB(255, 96, 40))
 	terrain:SetMaterialColor(MATERIAL.Slate, Color3.fromRGB(150, 150, 156))
+	-- Fondo claro del lago del cráter: bajo el agua se ve turquesa (y el gigante resalta).
+	terrain:SetMaterialColor(MATERIAL.Limestone, Color3.fromRGB(70, 118, 112))
+	terrain:SetMaterialColor(MATERIAL.Asphalt, Color3.fromRGB(58, 46, 48)) -- cumbres del volcán
 	if not terrain:FindFirstChildOfClass("Clouds") then
 		local clouds = Instance.new("Clouds")
 		clouds.Cover = 0.55
@@ -57,7 +60,7 @@ type Sample = { height: number, material: Enum.Material, water: number }
 local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: number)
 	-- Primero las alturas: el piso de este bloque baja hasta su punto más hondo.
 	local samples: { { Sample } } = {}
-	local yMin = Y_MIN
+	local yMin, yMax = Y_MIN, Y_MAX
 	for ix = 1, columns do
 		samples[ix] = {}
 		for iz = 1, columns do
@@ -65,9 +68,10 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 				IslandShape.sample(x0 + (ix - 0.5) * VOXEL, z0 + (iz - 0.5) * VOXEL)
 			samples[ix][iz] = { height = height, material = material, water = waterTop }
 			yMin = math.min(yMin, math.floor(height / VOXEL) * VOXEL - VOXEL)
+			yMax = math.max(yMax, math.ceil(height / VOXEL) * VOXEL + VOXEL)
 		end
 	end
-	local rows = (Y_MAX - yMin) / VOXEL
+	local rows = (yMax - yMin) / VOXEL
 	local materials, occupancies = {}, {}
 	for ix = 1, columns do
 		local materialPlane, occupancyPlane = {}, {}
@@ -97,7 +101,7 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 		end
 	end
 	local size = columns * VOXEL
-	local region = Region3.new(Vector3.new(x0, yMin, z0), Vector3.new(x0 + size, Y_MAX, z0 + size))
+	local region = Region3.new(Vector3.new(x0, yMin, z0), Vector3.new(x0 + size, yMax, z0 + size))
 	terrain:WriteVoxels(region, VOXEL, materials, occupancies)
 end
 

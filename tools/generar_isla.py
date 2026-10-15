@@ -696,7 +696,9 @@ def anillo_espuma(nombre, centro, radio, n):
 def espuma():
     hijos = anillo_espuma("Isla", (0, 0, 0), L["shoreRadius"], 96)
     # Orilla exterior del cráter: donde su ladera corta el agua.
-    rho = L["craterRimOuter"] + (RIM_Y - AGUA_Y) / (RIM_Y - L["seaFloorHeight"]) * (L["craterBaseRadius"] - L["craterRimOuter"])
+    fin_paseo = L["craterCliffRadius"] + L["craterWalkWidth"]
+    t = ((RIM_Y - AGUA_Y) / (RIM_Y - L["seaFloorHeight"])) ** (1 / 1.6)
+    rho = fin_paseo + t * (L["craterBaseRadius"] - fin_paseo)
     hijos += anillo_espuma("Crater", CRATER, rho, 110)
     return grupo("Espuma", hijos, "Folder")
 
@@ -816,18 +818,52 @@ RIM_Y = L["craterRimHeight"]
 DECK_ABISMO = L["craterDeckHeight"]
 
 
-def altura_crater(rho):
-    """Misma curva que IslandShape.craterHeight."""
+def fondo_lago(rho):
+    """Misma curva que WorldZones.lakeFloor: plataforma clara junto al acantilado y pozo hondo."""
+    inicio = L["craterLakeRadius"] - L["craterShelfWidth"]
+    plataforma = AGUA_Y - L["craterShelfDepth"]
+    if rho >= inicio:
+        t = min((rho - inicio) / L["craterShelfWidth"], 1)
+        return plataforma + (L["craterShelfDepth"] - 3) * t
+    t = rho / inicio
+    return L["craterFloor"] + (plataforma - L["craterFloor"]) * (1 - math.cos(math.pi * t)) / 2
+
+
+def _suave(t):
+    t = max(0.0, min(1.0, t))
+    return t * t * (3 - 2 * t)
+
+
+def _puerta(a):
+    """1 en la puerta del puente, 0 lejos (a en radianes)."""
+    puerta = math.radians(L["bridgeAngle"] + 180)
+    d = math.degrees(abs((a - puerta + math.pi) % (2 * math.pi) - math.pi))
+    return 1 - _suave((d - 14) / 12)
+
+
+def _cumbre(a):
+    forma = 0.55 + 0.3 * math.sin(5 * a + 1.3) + 0.15 * math.sin(11 * a + 0.4) + 0.08 * math.sin(23 * a) + 0.1 * abs(math.sin(37 * a + 0.7))
+    return L["craterPeakHeight"] * max(forma, 0.15) * (1 - _puerta(a))
+
+
+def altura_crater(rho, angulo):
+    """Misma curva que CraterShape.height (angulo en grados sobre XZ)."""
+    a = math.radians(angulo)
     if rho < L["craterLakeRadius"]:
-        return L["craterFloor"] + (rho / L["craterLakeRadius"]) ** 2 * L["craterBowlRise"]
+        return fondo_lago(rho)
     if rho < L["craterCliffRadius"]:
+        pie = fondo_lago(L["craterLakeRadius"])
         t = (rho - L["craterLakeRadius"]) / (L["craterCliffRadius"] - L["craterLakeRadius"])
-        pie = L["craterFloor"] + L["craterBowlRise"]
-        return pie + (RIM_Y - pie) * t
-    if rho < L["craterRimOuter"]:
+        return pie + (RIM_Y - pie) * t ** 0.6
+    fin_paseo = L["craterCliffRadius"] + L["craterWalkWidth"]
+    if rho < fin_paseo:
         return RIM_Y
-    t = (rho - L["craterRimOuter"]) / (L["craterBaseRadius"] - L["craterRimOuter"])
-    return RIM_Y + (L["seaFloorHeight"] - RIM_Y) * t
+    t = min((rho - fin_paseo) / (L["craterBaseRadius"] - fin_paseo), 1)
+    ladera = RIM_Y + (L["seaFloorHeight"] - RIM_Y) * t ** 1.6
+    alto = ladera + _cumbre(a) * math.sin(math.pi * min(t / 0.6, 1)) ** 1.3
+    if rho < L["craterRimOuter"]:
+        alto += (max(alto, RIM_Y) - alto) * _puerta(a)
+    return alto
 
 
 def polar_crater(angulo, rho, y):
@@ -927,7 +963,7 @@ def cresta(nombre, angulo, rho, humo=False):
     """Cresta de roca volcánica en el borde exterior del cráter: un pico de bloques de
     basalto que se afinan hacia arriba (como una montaña chica) y rocas sueltas al pie;
     algunas echan humo por la punta."""
-    y = altura_crater(rho + 5) - 2
+    y = altura_crater(rho + 5, angulo) - 2
     base = polar_crater(angulo, rho, 0)
     hijos, ancho = [], rng.uniform(10, 15)
     alto_total = rng.uniform(16, 34)
@@ -944,7 +980,7 @@ def cresta(nombre, angulo, rho, humo=False):
         ancho *= 0.62
     for k in range(rng.randint(1, 2)):  # rocas sueltas al pie
         s = rng.uniform(4, 7)
-        q = add(base, polar(rng.uniform(0, 360), rng.uniform(7, 10), altura_crater(rho + 5) - 1 + s * 0.3))
+        q = add(base, polar(rng.uniform(0, 360), rng.uniform(7, 10), altura_crater(rho + 5, angulo) - 1 + s * 0.3))
         hijos.append(pieza(f"Roca{k}", (s * 1.3, s, s), q, BASALTO[(k + 1) % 3], "Basalt", mat(ry(rng.uniform(0, 90)), rx(rng.uniform(-15, 15)))))
     return grupo(nombre, hijos)
 
@@ -957,7 +993,7 @@ def cascada_lava(nombre, angulo):
     for k in range(pasos + 1):
         rho = rho0 + (rho1 - rho0) * k / pasos
         a = angulo + math.sin(k * 0.9 + angulo) * 1.3
-        puntos.append(polar_crater(a, rho, max(altura_crater(rho), AGUA_Y) + 0.3))
+        puntos.append(polar_crater(a, rho, max(altura_crater(rho, a), AGUA_Y) + 0.3))
     for k in range(pasos):
         p0, p1 = puntos[k], puntos[k + 1]
         d = norm(tuple(p1[i] - p0[i] for i in range(3)))
@@ -1047,7 +1083,7 @@ def crater():
     hijos.append(grupo("Lava", [cascada_lava(f"Cascada{k}", a) for k, a in enumerate((20, 62, 108, 150, 192, 228, 318, 345))], "Folder"))
     hijos.append(esqueleto("Esqueleto1", llegada + 55, L["craterCliffRadius"] + 26, 26))
     hijos.append(esqueleto("Esqueleto2", llegada - 120, L["craterCliffRadius"] + 25, 20))
-    hijos.append(grupo("Cristales", [cristales(f"Cristales{k}", llegada + d, L["craterRimOuter"] - 12) for k, d in enumerate((30, 95, 160, 205, 250, 320))], "Folder"))
+    hijos.append(grupo("Cristales", [cristales(f"Cristales{k}", llegada + d, L["craterCliffRadius"] + L["craterWalkWidth"] - 6) for k, d in enumerate((30, 95, 160, 205, 250, 320))], "Folder"))
     # Pared invisible al borde del acantilado, sin huecos: nadie cae al abismo.
     muros, m = [], 72
     rho = L["craterCliffRadius"] + 0.5

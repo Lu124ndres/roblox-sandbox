@@ -861,3 +861,21 @@ de saltos o profundidad si hace falta al verla con jugadores.
 **Qué se rompió:** nada visto en Studio (0 errores; probadas las 4 etapas y comer).
 
 **Qué sigue:** guardar/publicar el lugar (los 4 modelos viven en el .rbxl).
+
+## 2026-10-15 — Volcán con montañas, lago más hondo y agua turquesa
+
+**Qué se hizo:**
+
+- Forma del cráter en `server/World/CraterShape` (y `altura_crater` en el generador):
+  plataforma poco honda junto al acantilado, pozo de 150 de hondo en el centro
+  (`WorldZones.lakeFloor`), paseo plano de 30 y montañas de basalto de hasta 70 de alto
+  con picos filosos, cumbres oscuras y vetas de lava; se abren en la puerta del puente.
+  El terreno sube o baja por bloque solo donde hace falta.
+- Agua: el agua de Roblox mostraba la bruma del cielo (beige) donde no veía fondo
+  cerca. Ahora hay 7 discos oscuros apenas bajo la superficie (`CraterWater`) que dan
+  el degradado de turquesa en la orilla a azul casi negro en el centro; el agua es más
+  clara (0.82) y el gigante se ve entero cerca de la superficie. Menos bruma naranja
+  en el cráter (`SkyMoods`). Fumarolas brillando sobre el abismo.
+- Las orcas nadan un poco más arriba en su ciclo de respirar.
+
+**Qué se rompió:** nada visto en Studio.

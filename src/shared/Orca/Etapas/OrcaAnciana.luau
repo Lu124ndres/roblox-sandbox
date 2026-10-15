@@ -27,7 +27,7 @@ local profile: Perfil.Profile = {
 		bank = 0.45,
 		flap = 0.5,
 	},
-	breath = { seconds = 22, shallow = -0.04, deep = -0.16 },
+	breath = { seconds = 22, shallow = -0.04, deep = -0.1 },
 	feed = { pitch = 0.45, rise = 0.12, jaw = 1.1, chew = 1, wiggle = 0 },
 	trickEvery = 30,
 	trickChance = 0.65,

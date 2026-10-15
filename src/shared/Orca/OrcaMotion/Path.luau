@@ -20,6 +20,8 @@ export type Sample = {
 }
 export type Breath = { seconds: number, shallow: number, deep: number }
 
+local WorldLayout = require(script.Parent.Parent.Parent.WorldLayout)
+local WorldZones = require(script.Parent.Parent.Parent.WorldZones)
 local Perfil = require(script.Parent.Parent.Etapas.Perfil)
 
 local Path = {}
@@ -36,9 +38,8 @@ function Path.radius(lakeRadius: number, height: number): number
 end
 
 -- Fondo del lago a esa distancia del centro, en studs respecto al agua.
-function Path.floor(radius: number, layout: { [string]: any }): number
-	local reach = math.min(radius / layout.craterLakeRadius, 1)
-	return layout.craterFloor + reach ^ 2 * layout.craterBowlRise - layout.waterLevel
+function Path.floor(radius: number): number
+	return WorldZones.lakeFloor(radius) - WorldLayout.waterLevel
 end
 
 -- Velocidad de crucero en studs/s: las más grandes avanzan más rápido.

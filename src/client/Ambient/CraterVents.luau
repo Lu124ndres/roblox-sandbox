@@ -56,17 +56,14 @@ local function emitter(
 	return particles
 end
 
-local function floorAt(radius: number): number
-	return L.craterFloor + (radius / L.craterLakeRadius) ^ 2 * L.craterBowlRise
-end
-
 -- Fumarolas: brillo de lava en el fondo y una columna de burbujas que revienta arriba.
 local function build(folder: Instance): { Vector3 }
 	local tops = {}
 	for index, vent in VENTS do
 		local angle, radius = math.rad(vent[1]), vent[2] * L.craterLakeRadius
 		local flat = CENTER + Vector3.new(math.cos(angle) * radius, 0, math.sin(angle) * radius)
-		local bottom = floorAt(radius)
+		-- Sobre el disco más hondo del abismo (CraterWater): ahí se ven brillar.
+		local bottom = math.max(WorldZones.lakeFloor(radius), WATER - 18)
 		local column = holder(
 			folder,
 			`Fumarola{index}`,
@@ -75,7 +72,7 @@ local function build(folder: Instance): { Vector3 }
 		)
 		local light = Instance.new("PointLight")
 		light.Color = LAVA
-		light.Range = 40
+		light.Range = 22
 		light.Brightness = 3
 		light.Shadows = false
 		light.Parent = column

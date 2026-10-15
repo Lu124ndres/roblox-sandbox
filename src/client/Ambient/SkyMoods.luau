@@ -105,7 +105,7 @@ SkyMoods.day = {
 
 -- Cráter: claro para jugar, pero con bruma y luz de lava (peligro).
 SkyMoods.crater =
-	mood(0, 1.9, rgb(255, 120, 70), rgb(200, 60, 30), 0.42, rgb(255, 212, 182), rgb(180, 105, 80))
+	mood(0, 1.9, rgb(255, 120, 70), rgb(200, 60, 30), 0.3, rgb(255, 228, 210), rgb(180, 105, 80))
 SkyMoods.craterSaturation = 0.12
 SkyMoods.craterContrast = 0.12
 

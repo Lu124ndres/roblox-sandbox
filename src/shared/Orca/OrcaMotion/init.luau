@@ -141,7 +141,7 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 			height = height,
 			now = now,
 			cruiseDepth = sample.depth,
-			floor = Path.floor(steer.position.Magnitude, L) + 0.2 * height,
+			floor = Path.floor(steer.position.Magnitude) + 0.2 * height,
 			speed = speed,
 			cruise = cruise,
 			turn = turn,

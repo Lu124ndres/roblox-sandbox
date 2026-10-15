@@ -9,14 +9,15 @@
 
 	Isla principal: meseta de pasto, playa, plaza de piedra con 10 estanques
 	de entrenamiento, caminos, lomas, rocas y el promontorio del faro.
-	Cráter del Abismo: lago profundo de basalto, acantilado interior, anillo
-	volcánico con grietas de lava y ladera exterior hacia el mar.
+	Cráter del Abismo: su forma está en CraterShape (lago, acantilado, paseo,
+	montañas con vetas de lava y ladera hacia el mar).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local CraterShape = require(script.Parent.CraterShape)
 
 local L = WorldLayout
 local MATERIAL = Enum.Material
@@ -37,23 +38,6 @@ function IslandShape.baseHeight(radius: number): number
 		return L.beachEndHeight + (L.seaFloorHeight - L.beachEndHeight) * t
 	end
 	return L.seaFloorHeight
-end
-
--- Perfil del cráter según la distancia a su centro. Misma curva que altura_crater().
-function IslandShape.craterHeight(rho: number): number?
-	if rho >= L.craterBaseRadius then
-		return nil
-	elseif rho < L.craterLakeRadius then
-		return L.craterFloor + (rho / L.craterLakeRadius) ^ 2 * L.craterBowlRise -- cuenco
-	elseif rho < L.craterCliffRadius then
-		local t = (rho - L.craterLakeRadius) / (L.craterCliffRadius - L.craterLakeRadius)
-		local foot = L.craterFloor + L.craterBowlRise
-		return foot + (L.craterRimHeight - foot) * t
-	elseif rho < L.craterRimOuter then
-		return L.craterRimHeight
-	end
-	local t = (rho - L.craterRimOuter) / (L.craterBaseRadius - L.craterRimOuter)
-	return L.craterRimHeight + (L.seaFloorHeight - L.craterRimHeight) * t
 end
 
 local function polar(angleDegrees: number, radius: number): Vector2
@@ -157,28 +141,14 @@ local function mainIsland(point: Vector2): (number, Enum.Material, number)
 	return height, material, waterTop
 end
 
--- Grietas de lava en el anillo: un patrón de vetas según el ángulo y la distancia.
-local function lavaVein(offset: Vector2): boolean
-	local angle = math.atan2(offset.Y, offset.X)
-	local rho = offset.Magnitude
-	return math.sin(angle * 11 + rho * 0.35) + math.sin(angle * 5 - rho * 0.2) > 1.55
-end
-
 function IslandShape.sample(x: number, z: number): (number, Enum.Material, number)
 	local point = Vector2.new(x, z)
 	local height, material, waterTop = mainIsland(point)
 	local offset = point - CRATER
-	local crater = IslandShape.craterHeight(offset.Magnitude)
+	local rho, angle = offset.Magnitude, math.atan2(offset.Y, offset.X)
+	local crater = CraterShape.height(rho, angle)
 	if crater and crater > height then
-		height = crater
-		local rho = offset.Magnitude
-		if rho >= L.craterRimOuter then
-			material = MATERIAL.Rock
-		elseif rho >= L.craterCliffRadius and lavaVein(offset) then
-			material = MATERIAL.CrackedLava
-		else
-			material = MATERIAL.Basalt
-		end
+		height, material = crater, CraterShape.material(rho, angle, crater)
 	end
 	return height, material, waterTop
 end
