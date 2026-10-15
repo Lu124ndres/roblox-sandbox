@@ -83,6 +83,7 @@ function RigParts.attachLine(rig: Rig)
 	line.Segments = 10
 	line.Parent = rig.rod.model
 	rig.line = line
+	rig.bobber.setLine(line, rig.rod.tip)
 end
 
 function RigParts.launch(rig: Rig, target: Vector3, floating: boolean)

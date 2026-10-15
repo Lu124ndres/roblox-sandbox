@@ -154,7 +154,6 @@ local UIConfig: UIConfig = {
 		FeedThrowSeconds = 1.1,
 		-- Pesca
 		BobberSize = 0.9,
-		CastFlightSeconds = 0.55, -- vuelo del corcho desde la punta de la caña
 		CastArcHeight = 7,
 		BobAmplitude = 0.12,
 		NibbleDepth = 0.55, -- cuánto se hunde el corcho cuando pica

@@ -27,7 +27,10 @@ type Rig = RigParts.Rig
 local FishingStates = {}
 
 -- Ángulos del brazo (ver ArmPose): abajo, espera, atrás, latigazo, tirón.
-local POSE = { rest = 0, hold = 60, windup = 150, whip = 72, pull = 118, slack = 35 }
+local POSE = { rest = 0, hold = 60, windup = 158, whip = 100, pull = 118, slack = 35 }
+-- Lanzamiento: brazo atrás (despacio), pausa, latigazo al frente, el corcho sale a
+-- mitad del latigazo y el brazo baja a la espera.
+local CAST = { windup = 0.32, pause = 0.06, whip = 0.14, release = 0.07, settle = 0.5 }
 FishingStates.POSE = POSE
 
 -- Corcho (y sedal) con el detalle que toca a este jugador.
@@ -82,17 +85,17 @@ function FishingStates.apply(player: Player, rig: Rig)
 		RigParts.clearBobber(rig)
 		if pose then
 			pose.shake(0)
-			pose.set(POSE.windup, 0.22)
+			pose.set(POSE.windup, CAST.windup, Enum.EasingStyle.Sine)
 		end
-		task.delay(0.24, function()
+		task.delay(CAST.windup + CAST.pause, function()
 			if rig.generation ~= generation then
 				return
 			end
 			if pose then
-				pose.set(POSE.whip, 0.12, Enum.EasingStyle.Back)
-				task.delay(0.5, function()
-					if rig.generation == generation and state == "training" then
-						pose.set(POSE.hold, 0.6, Enum.EasingStyle.Sine)
+				pose.set(POSE.whip, CAST.whip, Enum.EasingStyle.Quad)
+				task.delay(CAST.whip + 0.12, function()
+					if rig.generation == generation then
+						pose.set(POSE.hold, CAST.settle, Enum.EasingStyle.Sine)
 					end
 				end)
 			end
@@ -104,7 +107,11 @@ function FishingStates.apply(player: Player, rig: Rig)
 				end)
 			end
 			Sounds.play("Cast", RigParts.headPosition(character))
-			FishingStates.launch(player, rig, target, false)
+			task.delay(CAST.release, function()
+				if rig.generation == generation then
+					FishingStates.launch(player, rig, target, false)
+				end
+			end)
 		end)
 	elseif state == "training" then
 		if pose then

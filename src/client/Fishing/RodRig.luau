@@ -11,7 +11,9 @@
 	Guardar la caña no la destruye: queda sin padre y se reutiliza la
 	próxima vez si es la misma caña y el mismo personaje. Solo se destruye
 	al cambiar de personaje o al irse el jugador. Un único RenderStepped
-	mueve las cañas de todos.
+	mueve las cañas de todos. De cerca la caña sigue al brazo con un resorte:
+	se queda atrás al empezar un movimiento y lo pasa un poco al frenar (se
+	ve flexible, como un latigazo de verdad).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -31,9 +33,13 @@ type Entry = {
 	character: Model?, -- personaje para el que se armó la caña guardada
 	full: boolean, -- nivel "near"
 	since: number, -- segundos desde la última vez que se movió la caña
+	angle: number?, -- ángulo actual de la caña (resorte); nil = pegada al brazo
+	speed: number, -- velocidad del resorte en grados por segundo
 }
 
 local HOLD_DEGREES = 60 -- ángulo del brazo si no hay pose
+local SPRING = 240 -- rigidez del resorte de la caña (más = sigue más pegada al brazo)
+local DAMPING = 2 * math.sqrt(SPRING) * 0.38 -- < 1 crítico: rebota un poco al frenar
 
 local RodRig = {}
 
@@ -45,9 +51,19 @@ local function step(dt: number)
 		local rod, pose = entry.rig.rod, entry.rig.pose
 		if rod then
 			entry.since += dt
-			if entry.full or entry.since >= Performance.RodMidUpdateSeconds then
+			local target = if pose then pose.angle() else HOLD_DEGREES
+			if entry.full then
+				-- Resorte: la caña persigue al brazo (pasos chicos para que sea estable).
+				local angle = entry.angle or target
+				local step = math.min(dt, 1 / 30)
+				entry.speed += (SPRING * (target - angle) - DAMPING * entry.speed) * step
+				angle += entry.speed * step
+				entry.angle = angle
+				rod.follow(angle)
+			elseif entry.since >= Performance.RodMidUpdateSeconds then
 				entry.since = 0
-				rod.follow(if pose then pose.angle() else HOLD_DEGREES)
+				entry.angle, entry.speed = nil, 0
+				rod.follow(target)
 			end
 		end
 	end
@@ -56,7 +72,7 @@ end
 local function entryFor(player: Player, rig: Rig): Entry
 	local entry = entries[player]
 	if not entry then
-		entry = { rig = rig, full = true, since = 0 }
+		entry = { rig = rig, full = true, since = 0, speed = 0 }
 		entries[player] = entry
 	end
 	if not loop then
