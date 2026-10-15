@@ -132,8 +132,8 @@ export type GiantsConfig = {
 export type ProgressionConfig = {
 	ponds: { PondDef }, -- uno por estanque, en orden alrededor de la plaza
 	biteSpeedDivisor: number, -- velocidad de pique = 1 + sqrt(poder) / divisor
-	fishPerCatchStep: number, -- peces por pique = 1 + floor((poder / step) ^ exponente)
-	fishPerCatchExponent: number,
+	capacityPerRoot: number, -- capacidad = (carryCapacity + esto x sqrt(poder)) x canasta
+	castsToFill: { start: number, perRod: number, min: number }, -- lanzamientos para llenarla
 	minBiteDelaySeconds: number, -- la espera hasta el pique nunca baja de esto
 }
 

@@ -110,11 +110,11 @@ function Hud.mount(_screen: ScreenGui, player: Player): TextLabel
 		set(power.value, NumberFormat.big(amount))
 		power.badge.Text = multiplier(Perks.powerMultiplier(player))
 		local speed = string.format("%.1f", FishingPower.speed(amount))
-		local perCatch = FishingPower.fishPerCatch(amount)
+		local perCatch = NumberFormat.short(FishingPower.playerFishPerCatch(player))
 		power.detail.Text = `Velocidad x{speed} · {perCatch} peces por pique`
 		local capacity = FishingPower.playerCapacity(player)
 		local carried = number(player, ATTR.CarriedFish)
-		set(fish.value, `{carried}/{capacity}`)
+		set(fish.value, `{NumberFormat.short(carried)}/{NumberFormat.short(capacity)}`)
 		fish.value.TextColor3 = if carried >= capacity then COLORS.Feeding else COLORS.Fishing
 		local full = carried >= capacity
 		fish.detail.Text = if full then "¡Canasta llena! Al volcán" else "peces en la canasta"

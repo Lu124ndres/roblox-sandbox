@@ -37,7 +37,7 @@ end
 
 -- true y { id, count } si lo sacó; false y la capacidad si ya no cabía nada.
 function FishLanding.land(player: Player, fish: Config.FishDef, rarityIndex: number): (boolean, any)
-	local count = FishingPower.fishPerCatch(PlayerData.getPower(player))
+	local count = FishingPower.playerFishPerCatch(player)
 	local before = PlayerData.read(player)
 	local firstTime = before ~= nil and (before.species[fish.id] or 0) == 0
 	local added = PlayerData.addFish(player, fish.id, count)
@@ -47,12 +47,12 @@ function FishLanding.land(player: Player, fish: Config.FishDef, rarityIndex: num
 	player:SetAttribute(ATTR.FishingCatch, fish.id)
 	player:SetAttribute(ATTR.FishingCatchCount, added)
 	Milestones.caught(player, fish.id, added, firstTime)
-	Quests.add(player, "catch", added)
+	Quests.add(player, "catch", 1) -- cuenta piques: con muchos peces por pique sería instantáneo
 	if rarityIndex >= 3 then
 		Quests.add(player, "rare", 1)
 	end
 	if ServerEvents.active() then
-		Quests.add(player, "eventCatch", added)
+		Quests.add(player, "eventCatch", 1)
 	end
 	if rarityIndex >= Reel.announceFromRarity then
 		announce(player, fish.id)

@@ -19,6 +19,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Basket = require(script.Parent.Feeding.Basket)
@@ -54,6 +55,8 @@ local function deliver(player: Player, total: number): (number, number)
 	local steps = math.max(1, math.ceil(DELIVERY.maxDeliverySeconds / DELIVERY.stepSeconds))
 	local perStep = math.max(1, math.ceil(total / steps))
 	local fed, coins = 0, 0
+	-- Con mucha fuerza se cargan muchos peces: cada uno paga menos (FishingPower.coinScale).
+	local coinScale = FishingPower.coinScale(PlayerData.getPower(player))
 	while GiantService.isFeeding() and player.Parent and onShore(player) do
 		local taken, count, food, baseCoins =
 			PlayerData.takeFishBatch(player, perStep, GiantService.remainingFood())
@@ -61,11 +64,13 @@ local function deliver(player: Player, total: number): (number, number)
 			break
 		end
 		local earned = math.floor(
-			baseCoins * GiantService.getCurrent().multiplier * Perks.coinMultiplier(player)
+			baseCoins
+				* coinScale
+				* GiantService.getCurrent().multiplier
+				* Perks.coinMultiplier(player)
 		)
 		GiantService.feed(food, player, count, Basket.rarest(taken))
 		PlayerData.addCoins(player, earned)
-		Quests.add(player, "feed", count)
 		fed += count
 		coins += earned
 		task.wait(DELIVERY.stepSeconds)
@@ -104,6 +109,9 @@ local function onFeed(player: Player)
 	if player.Parent then
 		send(player, "ok", fed, coins)
 		Milestones.fed(player, fed)
+		if fed > 0 then
+			Quests.add(player, "feed", 1) -- cuenta entregas (viajes al volcán), no peces
+		end
 	end
 end
 

@@ -28,6 +28,20 @@ function NumberFormat.short(value: number): string
 	return sign .. text .. SUFFIXES[index]
 end
 
+-- Hito más alto de la serie 1-2-5 (1, 2, 5, 10, 20, 50, 100…) que ya alcanzó `count`.
+function NumberFormat.milestone(count: number): number
+	local best, step = 1, 1
+	while step <= count do
+		for _, factor in { 1, 2, 5 } do
+			if step * factor <= count then
+				best = step * factor
+			end
+		end
+		step *= 10
+	end
+	return best
+end
+
 -- 920,741 con comas mientras quepa (menos de un millón); después, corto (54.2M).
 function NumberFormat.big(value: number): string
 	if math.abs(value) >= 1e6 then

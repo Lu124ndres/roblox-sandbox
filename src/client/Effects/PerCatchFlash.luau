@@ -2,11 +2,12 @@
 --[[
 	PerCatchFlash
 
-	Cuando un jugador llega a un pez más por pique (FishingPower.fishPerCatch
-	sube con su poder), su personaje da un destello azul de 1 segundo que ven
+	Cuando los peces por pique de un jugador pasan un hito (2, 5, 10, 20, 50,
+	100, 200, 500, 1K…: con la fuerza suben a cada rato, así que se celebran
+	los saltos grandes), su personaje da un destello azul de 1 segundo que ven
 	todos cerca: cuerpo iluminado (Highlight), columna de luz, aro en el suelo,
-	chispas, luz azul y "+1 PEZ POR PIQUE" sobre la cabeza. Solo al ganar uno
-	extra (no al entrar ni al cargar el guardado); al dueño le suena y avisa.
+	chispas, luz azul y el número sobre la cabeza. No al entrar ni al cargar
+	el guardado; al dueño le suena y avisa.
 ]]
 
 local Debris = game:GetService("Debris")
@@ -17,11 +18,12 @@ local Workspace = game:GetService("Workspace")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
+local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Toasts = require(script.Parent.Parent.Toasts)
 local Distance = require(script.Parent.Distance)
+local Style = require(script.Parent.Parent.Interface.Style)
 
 local ATTR = Protocol.PlayerAttributes
 local BLUE = Color3.fromRGB(70, 170, 255)
@@ -69,18 +71,11 @@ local function label(root: BasePart, perCatch: number)
 	board.LightInfluence = 0
 	board.Adornee = root
 	board.Parent = root
-	local text = Instance.new("TextLabel")
-	text.BackgroundTransparency = 1
+	local text = Style.text(board, "Texto", 60, WHITE_BLUE, 3)
 	text.Size = UDim2.fromScale(1, 1)
-	text.FontFace = UIConfig.Fonts.Title
-	text.TextScaled = true
-	text.TextColor3 = WHITE_BLUE
-	text.Text = `+1 PEZ POR PIQUE ({perCatch})`
-	local stroke = Instance.new("UIStroke")
+	text.Text = `¡{NumberFormat.short(perCatch)}+ PECES POR PIQUE!`
+	local stroke = text:FindFirstChildOfClass("UIStroke") :: UIStroke
 	stroke.Color = Color3.fromRGB(10, 40, 90)
-	stroke.Thickness = 3
-	stroke.Parent = text
-	text.Parent = board
 	tween(board, SECONDS * 1.3, { StudsOffsetWorldSpace = Vector3.new(0, 7, 0) })
 	tween(text, SECONDS * 1.3, { TextTransparency = 1 }, 0.6)
 	tween(stroke, SECONDS * 1.3, { Transparency = 1 }, 0.6)
@@ -166,8 +161,7 @@ local function watch(player: Player, toasts: Toasts.Toasts)
 		if player:GetAttribute(ATTR.DataLoaded) ~= true then
 			return -- mientras carga el guardado el poder salta: no cuenta
 		end
-		local power = player:GetAttribute(ATTR.Power)
-		local perCatch = FishingPower.fishPerCatch(if type(power) == "number" then power else 0)
+		local perCatch = NumberFormat.milestone(FishingPower.playerFishPerCatch(player))
 		local before = known
 		known = perCatch
 		if before == nil or perCatch <= before then
@@ -179,10 +173,15 @@ local function watch(player: Player, toasts: Toasts.Toasts)
 		end
 		if player == Players.LocalPlayer then
 			Sounds.play("StageUp", nil, 1.3)
-			toasts.banner(`¡Ahora sacas {perCatch} peces por pique!`, BLUE)
+			toasts.banner(
+				`¡Ahora sacas más de {NumberFormat.short(perCatch)} peces por pique!`,
+				BLUE
+			)
 		end
 	end
 	player:GetAttributeChangedSignal(ATTR.Power):Connect(check)
+	player:GetAttributeChangedSignal("Rod"):Connect(check) -- la caña y la canasta también cuentan
+	player:GetAttributeChangedSignal("Basket"):Connect(check)
 	player:GetAttributeChangedSignal(ATTR.DataLoaded):Connect(check)
 	check()
 end
