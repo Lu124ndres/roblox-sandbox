@@ -206,23 +206,6 @@ def farol(nombre, x, z, y_base=CUBIERTA_Y, alto=6):
     ])
 
 
-def antorcha(nombre, x, z, y_base=CUBIERTA_Y, color_fuego=((255, 150, 60), (255, 230, 120)), color_luz=LUZ_CALIDA):
-    """Antorcha tiki: fuego real (Fire) y luz. Se ve de día y de noche."""
-    arriba = y_base + 6.5
-    fuego = pieza("Llama", (0.6, 0.6, 0.6), (x, arriba + 0.6, z), LUZ_CALIDA, **INVISIBLE, CanCollide=False)
-    fuego["children"] = [
-        {"name": "Fuego", "className": "Fire",
-         "properties": {"Size": 3.2, "Heat": 7, "Color": color(color_fuego[0]), "SecondaryColor": color(color_fuego[1])}},
-        luz(20, 1.8, color_luz),
-    ]
-    return grupo(nombre, [
-        poste("Palo", x, z, arriba, y_base, 0.55, MADERA_MEDIA),
-        pieza("Amarre", (0.5, 0.75, 0.75), (x, arriba - 1.2, z), PAJA, "Fabric", VERTICAL, "Cylinder", **DECORADO),
-        pieza("Cuenco", (1.1, 1.8, 1.8), (x, arriba + 0.15, z), MADERA_OSCURA, "Wood", VERTICAL, "Cylinder", **DECORADO),
-        fuego,
-    ])
-
-
 def cartel(nombre, pos, r, texto, ancho, alto, cara="Front"):
     tabla = pieza("Tabla", (ancho, alto, 0.4), pos, MADERA_CLARA, "WoodPlanks", r, **DECORADO)
     tabla["children"] = [{
@@ -380,12 +363,7 @@ def estatua_central(e=1.8, agua=None):
 
 def zona_entrenamiento():
     y = L["plateauHeight"]
-    hijos = [grupo("Estanques", [estanque(i + 1) for i in range(SAGRADO)], "Folder")]
-    antorchas = []
-    for i in range(12):
-        p = polar(15 + i * 30, L["plazaRadius"] - 2, 0)
-        antorchas.append(antorcha(f"Antorcha{i + 1}", p[0], p[2], y))
-    hijos.append(grupo("Antorchas", antorchas, "Folder"))
+    hijos = [grupo("Estanques", [estanque(i + 1) for i in range(SAGRADO)], "Folder"), borde_plaza()]
     return grupo("ZonaEntrenamiento", hijos)
 
 
@@ -460,40 +438,139 @@ def muelle(indice, angulo):
 
 
 # --- Aparición, entrada y cabaña ----------------------------------------------------------
+# --- Plaza, entrada y aparición (diseño limpio: mármol claro, oro y farolas) ------------
+MARMOL_CLARO = (238, 233, 224)
+HIERRO_NEGRO = (40, 40, 46)
+LUZ_FAROLA = (255, 214, 150)
+SETO = ((52, 122, 64), (62, 138, 72))
+PLACA = (24, 30, 48)
+ANGULOS_CAMINO = [L["spawnAngle"], L["shopAngle"], L["campAngle"], L["lighthouseAngle"], L["bridgeAngle"]] + L["pierAngles"]
+
+
+def sobre_camino(angulo, margen):
+    return any(abs((angulo - b + 180) % 360 - 180) < margen for b in ANGULOS_CAMINO)
+
+
+def anillo_con_huecos(nombre, radio, n, ancho, alto, y_tope, colores, material, margen, **extra):
+    """anillo_tallado alrededor del origen, sin los bloques que caen sobre un camino."""
+    piezas = anillo_tallado(nombre, 0, 0, radio, n, ancho, alto, y_tope, colores, material, **extra)
+    return [p for k, p in enumerate(piezas) if not sobre_camino(k * 360 / n, margen)]
+
+
+def farola(nombre, x, z, y, alto=8):
+    """Farola: base de mármol, poste de hierro negro, anillo de oro y farol de luz cálida."""
+    farol_ = pieza("Farol", (1.1, 1.5, 1.1), (x, y + alto + 0.75, z), LUZ_FAROLA, "Neon", **DECORADO)
+    farol_["children"] = [luz(22, 1.2, LUZ_FAROLA)]
+    largo = alto - 1
+    return grupo(nombre, [
+        pieza("Base", (1.8, 1, 1.8), (x, y + 0.5, z), MARMOL_CLARO, "Marble"),
+        pieza("Poste", (largo, 0.45, 0.45), (x, y + 1 + largo / 2, z), HIERRO_NEGRO, "Metal", VERTICAL, "Cylinder"),
+        pieza("Anillo", (0.3, 0.9, 0.9), (x, y + alto - 0.1, z), ORO, "Metal", VERTICAL, "Cylinder", **DECORADO),
+        farol_,
+        pieza("Techo", (1.6, 0.25, 1.6), (x, y + alto + 1.6, z), HIERRO_NEGRO, "Metal", **DECORADO),
+        pieza("Remate", (0.55, 0.55, 0.55), (x, y + alto + 2, z), ORO, "Metal", ry(45), **DECORADO),
+    ])
+
+
+def placa(nombre, pos, r, texto, ancho, alto, cara="Back"):
+    """Placa azul noche con borde y letras de oro (carteles de la entrada)."""
+    tabla = pieza(nombre, (ancho, alto, 0.5), pos, PLACA, "SmoothPlastic", r, **DECORADO)
+    tabla["children"] = [{
+        "name": "Texto", "className": "SurfaceGui",
+        "properties": {"Face": cara, "SizingMode": "PixelsPerStud", "PixelsPerStud": 40, "LightInfluence": 0},
+        "children": [{"name": "Etiqueta", "className": "TextLabel", "properties": {
+            "Size": {"UDim2": [[0.94, 0], [0.8, 0]]}, "Position": {"UDim2": [[0.03, 0], [0.1, 0]]},
+            "BackgroundTransparency": 1, "Text": texto, "TextScaled": True,
+            "TextColor3": color((255, 214, 90)), "TextStrokeTransparency": 0.2, "TextStrokeColor3": color((60, 30, 0)),
+            "FontFace": {"Font": {"family": "rbxasset://fonts/families/FredokaOne.json", "weight": "Regular", "style": "Normal"}},
+        }}],
+    }]
+    marco = pieza(f"{nombre}Marco", (ancho + 0.5, alto + 0.5, 0.35), pos, ORO, "Metal", r, **DECORADO)
+    return [marco, tabla]
+
+
+def pilar(nombre, p, y0, alto, ancho=2.4):
+    """Pilar cuadrado de mármol con zócalo, bandas de oro y capitel."""
+    return grupo(nombre, [
+        pieza("Zocalo", (ancho + 1, 1.2, ancho + 1), (p[0], y0 + 0.6, p[2]), MARMOL_CLARO, "Marble"),
+        pieza("Fuste", (ancho, alto, ancho), (p[0], y0 + 1.2 + alto / 2, p[2]), MARMOL_CLARO, "Marble"),
+        pieza("BandaBaja", (ancho + 0.3, 0.3, ancho + 0.3), (p[0], y0 + 1.5, p[2]), ORO, "Metal", **DECORADO),
+        pieza("BandaAlta", (ancho + 0.3, 0.3, ancho + 0.3), (p[0], y0 + alto + 0.9, p[2]), ORO, "Metal", **DECORADO),
+        pieza("Capitel", (ancho + 0.8, 0.8, ancho + 0.8), (p[0], y0 + alto + 1.6, p[2]), MARMOL_CLARO, "Marble"),
+    ])
+
+
+def borde_plaza():
+    """Bordillo de mármol con filo de oro alrededor de la plaza, setos con flores por
+    fuera y farolas por dentro; todo abre paso a los caminos."""
+    y, R = L["plateauHeight"], L["plazaRadius"]
+    hijos = anillo_con_huecos("Bordillo", R - 0.4, 120, 2.2, 1.2, y + 0.45, MARMOL_CLARO, "Marble", 4.5)
+    hijos += anillo_con_huecos("FiloOro", R - 1.45, 120, 0.3, 1.2, y + 0.5, ORO, "Metal", 4.5, **DECORADO)
+    seto = anillo_con_huecos("Seto", R + 2.6, 120, 2.6, 2.6, y + 1.8, SETO, "Grass", 7.5)
+    hijos += seto
+    for k, s in enumerate(seto[::3]):  # flores sobre el seto
+        p = s["properties"]["CFrame"]
+        hijos.append(pieza(f"Flor{k}", (0.8, 0.8, 0.8), (p[0], y + 2.05, p[2]), FLORES[k % len(FLORES)], "SmoothPlastic",
+                           forma="Ball", **FANTASMA))
+    for k in range(18):  # farolas por dentro del bordillo
+        a = 10 + k * 20
+        if not sobre_camino(a, 6):
+            p = polar(a, R - 4, 0)
+            hijos.append(farola(f"Farola{k}", p[0], p[2], y))
+    return grupo("BordePlaza", hijos)
+
+
 def aparicion():
+    """Plataforma redonda de mármol donde se aparece (mira hacia la laguna)."""
     a = L["spawnAngle"]
     d = direccion(a)
     return {
         "name": "Aparicion", "className": "SpawnLocation",
         "properties": {
-            "Anchored": True, "Neutral": True, "Duration": 0, "Size": [12, 1, 12],
-            # Mira hacia la laguna: su LookVector (-Z local) apunta al centro.
-            "CFrame": cf(polar(a, L["spawnRadius"], L["plateauHeight"] + 0.3), base_con_z(d)),
-            "Color": color(MADERA_CLARA), "Material": "WoodPlanks", "TopSurface": "Smooth", "BottomSurface": "Smooth",
+            "Anchored": True, "Neutral": True, "Duration": 0, "Size": [1, 14, 14], "Shape": "Cylinder",
+            # Cilindro de pie que sigue mirando a la laguna: su LookVector (-Z local) apunta al centro.
+            "CFrame": cf(polar(a, L["spawnRadius"], L["plateauHeight"] + 0.3), mat(base_con_z(d), rz(90))),
+            "Color": color(MARMOL_CLARO), "Material": "Marble", "TopSurface": "Smooth", "BottomSurface": "Smooth",
         },
     }
 
 
+def plaza_aparicion():
+    """Anillos de oro y mármol alrededor de la aparición y cuatro farolas."""
+    a = L["spawnAngle"]
+    c = polar(a, L["spawnRadius"], 0)
+    y = L["plateauHeight"]
+    hijos = anillo_tallado("Oro", c[0], c[2], 7.05, 48, 0.4, 0.9, y + 0.85, ORO, "Metal", **DECORADO)
+    hijos += anillo_tallado("Escalon", c[0], c[2], 9.2, 48, 4.2, 0.7, y + 0.35, MARMOL_CLARO, "Marble")
+    hijos += anillo_tallado("Emblema", c[0], c[2], 4.5, 32, 0.35, 0.1, y + 0.83, ORO, "Metal", **FANTASMA)
+    for k in range(4):
+        p = add(c, polar(a + 45 + k * 90, 12.5, 0))
+        hijos.append(farola(f"Farola{k}", p[0], p[2], y, 7))
+    return grupo("PlazaAparicion", hijos)
+
+
 def arco_entrada():
+    """Arco de mármol con bandas de oro y la placa de la laguna; a los lados, los tableros
+    del ranking global (Leaderboards / RankingBoards) con marco de mármol."""
     a = L["spawnAngle"]
     r = base_con_z(direccion(a))
     base = polar(a, L["plazaRadius"] + 3, 0)
+    y = L["plateauHeight"]
     hijos = []
     for lado in (-1, 1):
-        p = add(base, aplicar(r, (6.5 * lado, 0, 0)))
-        hijos.append(poste(f"Columna{lado}", p[0], p[2], L["plateauHeight"] + 13, L["plateauHeight"] - 1, 1.6))
-    hijos.append(pieza("Viga", (16, 1.2, 1.4), add(base, (0, L["plateauHeight"] + 12.6, 0)), MADERA_OSCURA, "Wood", r))
+        hijos.append(pilar(f"Pilar{lado}", add(base, aplicar(r, (8 * lado, 0, 0))), y, 13))
+    hijos.append(pieza("Viga", (19.5, 1.8, 3), add(base, (0, y + 16.4, 0)), MARMOL_CLARO, "Marble", r))
+    for k, dy in enumerate((15.45, 17.35)):
+        hijos.append(pieza(f"Moldura{k}", (19.7, 0.3, 3.2), add(base, (0, y + dy, 0)), ORO, "Metal", r, **DECORADO))
     # El texto mira hacia afuera (+Z local = hacia la aparición).
-    hijos.append(cartel("Cartel", add(base, (0, L["plateauHeight"] + 10.6, 0)), r, "LAGUNA DE LOS GIGANTES", 13, 2.6, "Back"))
-    # Tableros del ranking global a los lados del camino (Leaderboards / RankingBoards).
+    hijos += placa("Cartel", add(base, (0, y + 12.6, 0)), r, "LAGUNA DE LOS GIGANTES", 12.6, 2.6)
     for lado, nombre, titulo in ((-1, "TableroPoder", "TOP PODER"), (1, "TableroKills", "TOP KILLS")):
-        p = add(polar(a, L["plazaRadius"] + 9, 0), aplicar(r, (13 * lado, 0, 0)))
-        y = L["plateauHeight"]
+        p = add(polar(a, L["plazaRadius"] + 9, 0), aplicar(r, (14 * lado, 0, 0)))
         for k in (-1, 1):
-            q = add(p, aplicar(r, (4.6 * k, 0, 0)))
-            hijos.append(poste(f"Poste{nombre}{k}", q[0], q[2], y + 11, y - 1, 0.8))
-        hijos.append(pieza(nombre, (10, 8.5, 0.5), (p[0], y + 6, p[2]), MADERA_OSCURA, "Wood", r))
-        hijos.append(cartel(f"Titulo{nombre}", (p[0], y + 11.2, p[2]), r, titulo, 9, 1.6, "Back"))
+            hijos.append(pilar(f"Pilar{nombre}{k}", add(p, aplicar(r, (5.6 * k, 0, 0))), y, 10, 1.4))
+        hijos.append(pieza(nombre, (10, 8.5, 0.5), (p[0], y + 6.2, p[2]), PLACA, "SmoothPlastic", r))
+        hijos.append(pieza(f"Marco{nombre}", (10.6, 9.1, 0.3), (p[0], y + 6.2, p[2]), ORO, "Metal", r, **DECORADO))
+        hijos += placa(f"Titulo{nombre}", (p[0], y + 11.9, p[2]), r, titulo, 9, 1.6)
     return grupo("ArcoEntrada", hijos)
 
 
@@ -716,10 +793,7 @@ BASALTO = ((38, 34, 42), (48, 44, 54), (30, 28, 34))
 AZUL_PODER = (150, 200, 255)  # color del poder (UIConfig.Colors.Power)
 PIZARRA_OSCURA = (58, 56, 66)
 HUESO = (232, 224, 204)
-MADERA_NEGRA = (62, 48, 42)
 HIERRO = (54, 56, 62)
-FUEGO_AZUL = ((70, 150, 255), (170, 230, 255))
-LUZ_AZUL = (110, 170, 255)
 LUZ_ROJA = (255, 50, 40)
 CRISTAL_MORADO = (170, 70, 255)
 
@@ -834,51 +908,72 @@ def puerta_abismo():
     return grupo("PuertaDelAbismo", hijos)
 
 
-def muelle_abismo(indice, angulo):
-    """Muelle de madera negra que entra al abismo, con un mirador en la punta."""
-    rho0, rho1 = L["craterCliffRadius"] + 2, L["craterPierTipRadius"]
-    largo = rho0 - rho1
-    hijos = []
-    # Local: +Z hacia el centro del cráter, origen sobre el anillo.
-    z, i = 0, 0
-    while z < largo - 0.01:
-        hijos.append(pieza(f"Tablon{i}", (10, 0.5, 1.8), (0, DECK_ABISMO - 0.25, z + 1), variar(MADERA_NEGRA, 6), "WoodPlanks"))
-        z, i = z + 2, i + 1
-    plat = largo - 7
-    hijos.append(pieza("Plataforma", (18, 0.6, 14), (0, DECK_ABISMO - 0.3, plat), variar(MADERA_NEGRA, 4), "WoodPlanks"))
-    for k, zz in enumerate(range(8, int(largo) - 10, 12)):
-        for lado in (-1, 1):
-            hijos.append(poste(f"Poste{k}_{lado}", 5.3 * lado, zz, DECK_ABISMO + 0.6, L["craterFloor"], 1.1, HIERRO))
-    for lado in (-1, 1):
-        for esquina in (plat - 6.5, plat + 6.5):
-            hijos.append(poste(f"Pata{lado}_{esquina:.0f}", 9 * lado, esquina, DECK_ABISMO + 0.6, L["craterFloor"], 1.3, HIERRO))
-    # Paredes invisibles: nadie cae al abismo por accidente.
-    hijos += [
-        muro("MuroI", (-5.4, 0), (-5.4, plat - 7), DECK_ABISMO), muro("MuroD", (5.4, 0), (5.4, plat - 7), DECK_ABISMO),
-        muro("MuroPI", (-9.3, plat - 7), (-9.3, plat + 7), DECK_ABISMO), muro("MuroPD", (9.3, plat - 7), (9.3, plat + 7), DECK_ABISMO),
-        muro("MuroPunta", (-9.3, plat + 7), (9.3, plat + 7), DECK_ABISMO),
-        muro("MuroAtrasI", (-9.3, plat - 7), (-5.4, plat - 7), DECK_ABISMO), muro("MuroAtrasD", (5.4, plat - 7), (9.3, plat - 7), DECK_ABISMO),
-    ]
-    for lado in (-1, 1):  # baranda baja de hierro
-        hijos.append(pieza(f"Riel{lado}", (0.3, 0.3, plat - 7), (5.2 * lado, DECK_ABISMO + 2.2, (plat - 7) / 2), HIERRO, "Metal", **DECORADO))
-    for lado in (-1, 1):
-        hijos.append(antorcha(f"Antorcha{lado}", 8 * lado, plat + 6, DECK_ABISMO, FUEGO_AZUL, LUZ_AZUL))
-    d = direccion(angulo + 180)  # del borde hacia el centro
-    origen = polar_crater(angulo, rho0, 0)
-    return mover(grupo(f"MuelleAbismo{indice}", hijos), base_con_z(d), origen)
-
-
-def aguja(nombre, base, alto):
-    """Aguja de basalto: bloques apilados que se afinan y se tuercen."""
-    hijos, y, ancho = [], base[1], rng.uniform(4, 6.5)
-    tramos = 3 if alto > 20 else 2
-    for k in range(tramos):
-        h = alto / tramos
-        hijos.append(pieza(f"Tramo{k}", (ancho, h + 0.4, ancho * rng.uniform(0.7, 1)), (base[0] + rng.uniform(-0.6, 0.6), y + h / 2, base[2] + rng.uniform(-0.6, 0.6)),
-                           BASALTO[k % 3], "Basalt", mat(ry(rng.uniform(0, 90)), rz(rng.uniform(-8, 8)))))
-        y += h
+def cresta(nombre, angulo, rho, humo=False):
+    """Cresta de roca volcánica en el borde exterior del cráter: un pico de bloques de
+    basalto que se afinan hacia arriba (como una montaña chica) y rocas sueltas al pie;
+    algunas echan humo por la punta."""
+    y = altura_crater(rho + 5) - 2
+    base = polar_crater(angulo, rho, 0)
+    hijos, ancho = [], rng.uniform(10, 15)
+    alto_total = rng.uniform(16, 34)
+    for k in range(3):
+        alto = alto_total * (0.42, 0.33, 0.25)[k] + 1
+        p = (base[0] + rng.uniform(-1.5, 1.5), y + alto / 2, base[2] + rng.uniform(-1.5, 1.5))
+        giro = mat(ry(rng.uniform(0, 90)), mat(rx(rng.uniform(-9, 9)), rz(rng.uniform(-9, 9))))
+        roca = pieza(f"Pico{k}", (ancho, alto, ancho * rng.uniform(0.7, 0.95)), p, BASALTO[k % 3], "Basalt", giro)
+        if k == 2 and humo:
+            roca["children"] = [{"name": "Humo", "className": "Smoke", "properties": {
+                "Color": color((70, 62, 62)), "Opacity": 0.14, "RiseVelocity": 7, "Size": 16}}]
+        hijos.append(roca)
+        y += alto - 1
         ancho *= 0.62
+    for k in range(rng.randint(1, 2)):  # rocas sueltas al pie
+        s = rng.uniform(4, 7)
+        q = add(base, polar(rng.uniform(0, 360), rng.uniform(7, 10), altura_crater(rho + 5) - 1 + s * 0.3))
+        hijos.append(pieza(f"Roca{k}", (s * 1.3, s, s), q, BASALTO[(k + 1) % 3], "Basalt", mat(ry(rng.uniform(0, 90)), rx(rng.uniform(-15, 15)))))
     return grupo(nombre, hijos)
+
+
+def cascada_lava(nombre, angulo):
+    """Río de lava que baja por la ladera exterior hasta el mar, con vapor al tocar el agua."""
+    rho0, rho1 = L["craterRimOuter"] - 2, 222
+    pasos, ancho = 9, rng.uniform(3.2, 4.6)
+    hijos, puntos = [], []
+    for k in range(pasos + 1):
+        rho = rho0 + (rho1 - rho0) * k / pasos
+        a = angulo + math.sin(k * 0.9 + angulo) * 1.3
+        puntos.append(polar_crater(a, rho, max(altura_crater(rho), AGUA_Y) + 0.3))
+    for k in range(pasos):
+        p0, p1 = puntos[k], puntos[k + 1]
+        d = norm(tuple(p1[i] - p0[i] for i in range(3)))
+        largo = math.dist(p0, p1) + 0.8
+        medio = tuple((p0[i] + p1[i]) / 2 for i in range(3))
+        tramo = pieza(f"Tramo{k}", (ancho * (1 + k * 0.04), 0.5, largo), medio, LAVA, "Neon", base_con_z(d), **FANTASMA)
+        if k % 4 == 1:
+            tramo["children"] = [luz(18, 1.1, LAVA)]
+        hijos.append(tramo)
+    fin = puntos[-1]
+    charco = pieza("Charco", (0.4, 10, 10), (fin[0], AGUA_Y + 0.1, fin[2]), LAVA, "Neon", VERTICAL, "Cylinder", **FANTASMA)
+    charco["children"] = [{"name": "Vapor", "className": "Smoke", "properties": {
+        "Color": color((235, 235, 240)), "Opacity": 0.12, "RiseVelocity": 5, "Size": 9}}]
+    hijos.append(charco)
+    return grupo(nombre, hijos)
+
+
+def paseo_crater():
+    """Paseo de obsidiana pulida al borde del acantilado (desde aquí se alimenta), con
+    filos de oro y obeliscos con fuego cada 30 grados (menos en la puerta)."""
+    rho0, rho1 = L["craterCliffRadius"] + 1.2, L["craterCliffRadius"] + 10
+    cx, cz = CRATER[0], CRATER[2]
+    hijos = anillo_tallado("Losa", cx, cz, (rho0 + rho1) / 2, 120, rho1 - rho0, 0.6, RIM_Y + 0.3, MARMOL_NEGRO, "Marble")
+    hijos += anillo_tallado("OroDentro", cx, cz, rho0 + 0.2, 120, 0.4, 0.65, RIM_Y + 0.35, ORO, "Metal", **DECORADO)
+    hijos += anillo_tallado("OroFuera", cx, cz, rho1, 120, 0.4, 0.65, RIM_Y + 0.35, ORO, "Metal", **DECORADO)
+    llegada = L["bridgeAngle"] + 180
+    for k in range(12):
+        a = k * 30 + 15
+        if abs((a - llegada + 180) % 360 - 180) > 20:
+            hijos.append(obelisco(f"Obelisco{k + 1}", a, rho1 - 2, RIM_Y + 0.3))
+    return grupo("Paseo", hijos)
 
 
 def esqueleto(nombre, angulo, rho, largo):
@@ -924,34 +1019,30 @@ def crater():
         hijos.append(pieza(f"RocaPedestal{k}", (s * 1.3, s, s), p, BASALTO[k % 3], "Basalt", mat(ry(rng.uniform(0, 360)), rx(rng.uniform(-15, 15)))))
     # Anclaje del gigante: invisible, mira hacia -Z (hacia el puente y la isla).
     hijos.append(pieza("GuaridaGigante", (2, 1, 2), (CRATER[0], tope, CRATER[2]), CORAL, **INVISIBLE, CanCollide=False))
-    n = L["craterPierCount"]
-    angulos_muelle = [22.5 + k * 360 / n for k in range(n)]
-    hijos.append(grupo("MuellesDelAbismo", [muelle_abismo(k + 1, a) for k, a in enumerate(angulos_muelle)], "Folder"))
     hijos.append(puerta_abismo())
     llegada = L["bridgeAngle"] + 180
 
     def libre(a, margen):
-        return all(abs((a - b + 180) % 360 - 180) > margen for b in angulos_muelle + [llegada])
+        return abs((a - llegada + 180) % 360 - 180) > margen
 
-    agujas, k = [], 0
-    while len(agujas) < 30:
-        a = rng.uniform(0, 360)
-        if libre(a, 7):
-            rho = rng.uniform(L["craterCliffRadius"] + 4, L["craterRimOuter"] - 2)
-            agujas.append(aguja(f"Aguja{k}", polar_crater(a, rho, RIM_Y - 1), rng.uniform(12, 42)))
-            k += 1
-    hijos.append(grupo("Agujas", agujas, "Folder"))
-    hijos.append(esqueleto("Esqueleto1", llegada + 55, L["craterCliffRadius"] + 10, 26))
-    hijos.append(esqueleto("Esqueleto2", llegada - 120, L["craterCliffRadius"] + 9, 20))
-    hijos.append(grupo("Cristales", [cristales(f"Cristales{k}", llegada + d, L["craterCliffRadius"] + 12) for k, d in enumerate((30, 95, 160, 205, 250, 320))], "Folder"))
-    # Pared invisible al borde del acantilado, con hueco solo en cada muelle.
+    hijos.append(paseo_crater())
+    # Corona de crestas de roca en el borde exterior (con hueco en la puerta).
+    crestas, n = [], 40
+    for k in range(n):
+        a = k * 360 / n + rng.uniform(-3, 3)
+        if libre(a, 18):
+            rho = L["craterRimOuter"] + rng.uniform(-3, 2)
+            crestas.append(cresta(f"Cresta{k}", a, rho, humo=k % 5 == 0))
+    hijos.append(grupo("Crestas", crestas, "Folder"))
+    hijos.append(grupo("Lava", [cascada_lava(f"Cascada{k}", a) for k, a in enumerate((20, 62, 108, 150, 192, 228, 318, 345))], "Folder"))
+    hijos.append(esqueleto("Esqueleto1", llegada + 55, L["craterCliffRadius"] + 26, 26))
+    hijos.append(esqueleto("Esqueleto2", llegada - 120, L["craterCliffRadius"] + 25, 20))
+    hijos.append(grupo("Cristales", [cristales(f"Cristales{k}", llegada + d, L["craterRimOuter"] - 12) for k, d in enumerate((30, 95, 160, 205, 250, 320))], "Folder"))
+    # Pared invisible al borde del acantilado, sin huecos: nadie cae al abismo.
     muros, m = [], 72
     rho = L["craterCliffRadius"] + 0.5
     for k in range(m):
         a0, a1 = k * 360 / m, (k + 1) * 360 / m
-        medio = (a0 + a1) / 2
-        if any(abs((medio - b + 180) % 360 - 180) <= 4 for b in angulos_muelle):
-            continue
         p0, p1 = polar_crater(a0, rho, 0), polar_crater(a1, rho, 0)
         muros.append(muro(f"Muro{k}", (p0[0], p0[2]), (p1[0], p1[2]), RIM_Y, 8))
     hijos.append(grupo("Borde", muros, "Folder"))
@@ -961,7 +1052,7 @@ def crater():
         a0, a1 = k * 360 / m, (k + 1) * 360 / m
         p0, p1 = polar_crater(a0, rho, 0), polar_crater(a1, rho, 0)
         dx, dz = p1[0] - p0[0], p1[2] - p0[2]
-        centro = ((p0[0] + p1[0]) / 2, RIM_Y + 0.05, (p0[2] + p1[2]) / 2)
+        centro = ((p0[0] + p1[0]) / 2, RIM_Y + 0.34, (p0[2] + p1[2]) / 2)
         orilla.append(pieza(f"Brillo{k}", (3.6, 0.1, math.hypot(dx, dz) + 0.3), centro, CORAL, "Neon",
                             ry(math.degrees(math.atan2(dx, dz))), Transparency=0.25, **FANTASMA))
     hijos.append(grupo("OrillaAlimentar", orilla, "Folder"))
@@ -1075,6 +1166,7 @@ def main():
         crater(),
         grupo("Muelles", [muelle(i + 1, a) for i, a in enumerate(L["pierAngles"])], "Folder"),
         aparicion(),
+        plaza_aparicion(),
         arco_entrada(),
         cabana(),
         faro(),
