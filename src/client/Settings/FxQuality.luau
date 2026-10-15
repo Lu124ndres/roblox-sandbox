@@ -2,10 +2,10 @@
 --[[
 	FxQuality
 
-	Aplica el "modo rápido" (ajuste lowFx, para celulares de gama baja): baja
-	mucho el ritmo de las partículas que emiten solas (cristales, bruma,
-	chispas), apaga sombras, olas y reflejos del agua,
-	brillo (bloom), rayos de sol y profundidad de campo. Todo es local: no
+	Aplica el "modo rápido" (ajuste lowFx, para celulares de gama baja): quita
+	las partículas (emisores a ritmo 0 y sin ráfagas), el humo, el fuego y los
+	destellos del mapa, y apaga sombras, olas y reflejos del agua, brillo
+	(bloom), rayos de sol y profundidad de campo. Todo es local: no
 	cambia nada para los demás. Recuerda el ritmo original de cada emisor en el
 	atributo RitmoBase para volver a él al desactivarlo. Las ráfagas de Fx
 	se achican aparte con ClientSettings.fxScale().
@@ -67,10 +67,23 @@ function FxQuality.scaleAll(root: Instance)
 	end
 end
 
+-- Humo, fuego y destellos del mapa (no tienen ritmo): se apagan en modo rápido.
+local function toggle(effect: Instance, low: boolean)
+	local base = effect:GetAttribute(BASE_ATTRIBUTE)
+	if type(base) ~= "boolean" then
+		base = (effect :: any).Enabled
+		effect:SetAttribute(BASE_ATTRIBUTE, base)
+	end
+	(effect :: any).Enabled = base == true and not low
+end
+
 local function applyAll()
+	local low = ClientSettings.get("lowFx")
 	for _, descendant in Workspace:GetDescendants() do
 		if descendant:IsA("ParticleEmitter") then
 			adjust(descendant)
+		elseif descendant:IsA("Smoke") or descendant:IsA("Fire") or descendant:IsA("Sparkles") then
+			toggle(descendant, low)
 		end
 	end
 	for emitter in registered do
@@ -78,7 +91,6 @@ local function applyAll()
 			adjust(emitter)
 		end
 	end
-	local low = ClientSettings.get("lowFx")
 	for _, effect in Lighting:GetChildren() do
 		if
 			effect:IsA("SunRaysEffect")

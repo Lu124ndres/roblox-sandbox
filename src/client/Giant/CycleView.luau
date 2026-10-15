@@ -24,6 +24,7 @@ local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Fx = require(script.Parent.Parent.Effects.Fx)
+local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
 
@@ -56,6 +57,7 @@ local function buildSparkles(): ParticleEmitter
 	rising.Speed = NumberRange.new(6, 12)
 	rising.EmissionDirection = Enum.NormalId.Right -- el eje del disco apunta hacia arriba
 	rising.Rate = 40
+	FxQuality.scaleEmitter(rising)
 	rising.Enabled = false
 	rising.Parent = disc
 	disc.Parent = Workspace

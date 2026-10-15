@@ -10,6 +10,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
+local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 
 local FishGlow = {}
 
@@ -28,6 +29,7 @@ function FishGlow.aura(body: BasePart, color: Color3, scale: number)
 	emitter.SpreadAngle = Vector2.new(180, 180)
 	emitter.Rate = 14
 	emitter.Parent = body
+	FxQuality.scaleEmitter(emitter)
 end
 
 -- Arcoíris: cuerpo y aletas cambian de tono hasta que el pez se destruye.

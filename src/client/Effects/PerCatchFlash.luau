@@ -22,6 +22,7 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Toasts = require(script.Parent.Parent.Toasts)
+local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local Distance = require(script.Parent.Distance)
 local Style = require(script.Parent.Parent.Interface.Style)
 
@@ -142,7 +143,7 @@ local function flash(character: Model, perCatch: number)
 	burst.Drag = 2
 	burst.Enabled = false
 	burst.Parent = root
-	burst:Emit(28)
+	burst:Emit(math.round(28 * ClientSettings.fxScale())) -- modo rápido: ninguna
 	Debris:AddItem(burst, SECONDS + 0.5)
 	local light = Instance.new("PointLight")
 	light.Color = BLUE

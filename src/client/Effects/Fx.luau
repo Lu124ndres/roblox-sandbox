@@ -25,9 +25,12 @@ local holderFolder = Instance.new("Folder")
 holderFolder.Name = "EfectosLocales"
 holderFolder.Parent = Workspace
 
--- Ráfaga de partículas, más chica con efectos reducidos.
+-- Ráfaga de partículas; en modo rápido no sale ninguna.
 local function burst(particles: ParticleEmitter, count: number)
-	particles:Emit(math.max(1, math.round(count * ClientSettings.fxScale())))
+	local amount = math.round(count * ClientSettings.fxScale())
+	if amount > 0 then
+		particles:Emit(math.max(1, amount))
+	end
 end
 
 local function anchorAt(position: Vector3, lifetime: number): Attachment
