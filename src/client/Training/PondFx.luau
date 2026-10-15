@@ -23,7 +23,9 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 
 local ANIMATE_DISTANCE = Performance.PondAnimateDistance
-local LOCKED_COLOR = Color3.fromRGB(90, 96, 110)
+-- Bloqueado: del color del estanque pero liso (sin neón, destellos ni luz).
+-- El cristal (Glass) se veía casi negro, sobre todo de noche.
+local LOCKED_MATERIAL = Enum.Material.SmoothPlastic
 
 type Pond = {
 	index: number,
@@ -99,8 +101,8 @@ function PondFx.start()
 	local function refreshLocks()
 		for _, pond in ponds do
 			local open = Perks.pondOpen(player, pond.index)
-			pond.crystal.Color = if open then pond.color else LOCKED_COLOR
-			pond.crystal.Material = if open then Enum.Material.Neon else Enum.Material.Glass
+			pond.crystal.Color = pond.color
+			pond.crystal.Material = if open then Enum.Material.Neon else LOCKED_MATERIAL
 			pond.open = open
 			pond.sparkles.Enabled = open and pond.near
 			if pond.light then
