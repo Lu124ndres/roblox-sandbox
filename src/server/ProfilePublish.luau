@@ -86,20 +86,20 @@ function ProfilePublish.coins(player: Player, save: SaveSchema.SaveData)
 	stat(player, Protocol.Leaderstats.Coins, save.coins)
 end
 
--- Título por el poder máximo (no baja al renacer); solo se replica cuando cambia.
+-- Título por los monstruos llenados (no baja al renacer); solo se replica si cambia.
 local function title(player: Player, save: SaveSchema.SaveData)
-	player:SetAttribute(ATTR.Title, Titles.index(math.max(save.power, save.bestPower)))
+	player:SetAttribute(ATTR.Title, Titles.index(save.kills))
 end
 
 function ProfilePublish.power(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.Power, save.power)
 	powerStat(player, save.power, false)
-	title(player, save)
 end
 
 function ProfilePublish.kills(player: Player, save: SaveSchema.SaveData)
 	stat(player, Protocol.Leaderstats.Kills, save.kills)
 	player:SetAttribute(ATTR.Kills, save.kills)
+	title(player, save)
 end
 
 function ProfilePublish.carried(player: Player, save: SaveSchema.SaveData)

@@ -73,9 +73,10 @@ en los estanques y en la guarida del descanso.
   por tiempo pagan lo mayor entre sus monedas fijas y una fracción (`share`, `dailyShare`)
   del precio de la **siguiente caña** (regalo de 2 h = 3 cañas, día 7 = 0.6). Las misiones
   se multiplican por precio de la siguiente caña / 3,000. Así siguen valiendo la pena al final.
-- **Títulos** (`Config/Social.luau`): 26, de Novato (0) a Más Allá del Infinito (1e21 de poder).
-  Se calculan con el **poder máximo** (`bestPower` en el guardado): al renacer no bajan. Desde
-  Dios del Mar el brillo recorre el texto. Al subir, aviso grande "¡Nuevo título!".
+- **Títulos** (`Config/Social.luau`): 25, por **monstruos llenados** (kills): Aprendiz 1, Capitán 10,
+  Dios del Mar 100, Coloso Abisal 650, Más Allá del Infinito 5,000. Las kills no se pierden al
+  renacer: el título nunca baja. Desde Dios del Mar el brillo recorre el texto. Al subir, aviso
+  grande "¡Nuevo título!".
 - **Siguiente meta** (`client/Menus/NextGoal.luau`): al terminar el tutorial, un panel muestra
   siempre la meta más cercana (estanque, caña, título o renacer) con su barra.
 - Impulso de amigos (+10 % cada uno, máx. 5), regalo del grupo, títulos: `Config/Social.luau`.

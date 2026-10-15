@@ -6,8 +6,8 @@
 	siempre hay algo claro que perseguir, con su barra. Elige entre
 		- algo que YA puede hacer: comprar la siguiente caña o renacer
 		  (la tarjeta se pone verde);
-		- si no, la meta más avanzada entre el siguiente estanque (monstruos
-		  llenados), la siguiente caña (monedas) y el siguiente título (poder).
+		- si no, la meta más avanzada entre el siguiente estanque y el siguiente
+		  título (monstruos llenados) y la siguiente caña (monedas).
 	Se recalcula cada segundo como mucho. Solo lee atributos del jugador.
 ]]
 
@@ -71,15 +71,14 @@ local function goals(player: Player): { Goal }
 			ready = ready,
 		})
 	end
-	-- Siguiente título.
+	-- Siguiente título (por monstruos llenados).
 	local title = math.max(number(player, ATTR.Title), 1)
 	local nextTitle = TITLES[title + 1]
 	if nextTitle then
-		local power = number(player, ATTR.Power)
 		table.insert(list, {
 			icon = "crown",
-			text = `Llega a {NumberFormat.short(nextTitle.power)} de poder: {Titles.name(title + 1)}`,
-			fraction = power / nextTitle.power,
+			text = `Llena {nextTitle.kills - kills} monstruos más: título {Titles.name(title + 1)}`,
+			fraction = kills / nextTitle.kills,
 			ready = false,
 		})
 	end

@@ -5,7 +5,6 @@
 	Campos del guardado que llegaron en la versión 8 (SaveSchema los declara
 	y llama a read):
 		rebirths     veces que renació (Retention/Rebirth)
-		bestPower    poder máximo alcanzado (el título no baja al renacer)
 		quests       misiones del día: día UTC, avance y cuáles se cumplieron
 		starterPack  ya compró el pack de inicio (se ofrece una sola vez)
 ]]
@@ -34,7 +33,6 @@ end
 -- Lee lo de la versión 8 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
 function SaveExtra.read(source: { [string]: any }, data: any)
 	data.rebirths = count(source.rebirths)
-	data.bestPower = math.max(count(source.bestPower), count(source.power))
 	data.starterPack = source.starterPack == true
 	local saved = source.quests
 	if type(saved) == "table" then

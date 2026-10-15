@@ -43,7 +43,6 @@ export type SaveData = {
 	boostUntil: number, -- unix en que termina su impulso personal de poder
 	gifts: { [string]: boolean }, -- pases que le regalaron ("VIP")
 	rebirths: number, -- veces que renació (v8, ver SaveExtra)
-	bestPower: number, -- poder máximo alcanzado: el título no baja al renacer (SaveExtra)
 	quests: SaveExtra.QuestsSave, -- misiones del día (v8)
 	starterPack: boolean, -- ya compró el pack de inicio (v8)
 }
@@ -78,7 +77,6 @@ function SaveSchema.default(): SaveData
 		boostUntil = 0,
 		gifts = {},
 		rebirths = 0,
-		bestPower = 0,
 		quests = SaveExtra.quests(),
 		starterPack = false,
 	}

@@ -2,10 +2,10 @@
 --[[
 	Titles
 
-	Qué título le toca a un poder (Config.Social.titles): el más alto que ya
-	alcanzó. El servidor lo calcula con el poder MÁXIMO del jugador (no baja
-	al renacer) y lo publica en el atributo Titulo (ProfilePublish); los
-	clientes lo leen para el cartel sobre la cabeza y el aviso de título nuevo.
+	Qué título le toca a un jugador por sus monstruos llenados (kills,
+	Config.Social.titles): el más alto que ya alcanzó. El servidor lo publica
+	en el atributo Titulo (ProfilePublish); los clientes lo leen para el
+	cartel sobre la cabeza, el aviso de título nuevo y la siguiente meta.
 ]]
 
 local Config = require(script.Parent.Config)
@@ -16,10 +16,10 @@ local Titles = {}
 
 Titles.COUNT = #TITLES
 
-function Titles.index(power: number): number
+function Titles.index(kills: number): number
 	local index = 1
 	for i, title in TITLES do
-		if power >= title.power then
+		if kills >= title.kills then
 			index = i
 		end
 	end

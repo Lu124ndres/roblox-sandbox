@@ -4,8 +4,8 @@
 	regalo del grupo. (Los códigos viven en el servidor, en
 	server/Retention/CodeList, para que nadie los lea desde el cliente.)
 
-	Títulos: el más alto cuyo `power` ya alcanzó el jugador con su poder
-	MÁXIMO (bestPower): al renacer el título no baja (shared/Titles).
+	Títulos: el más alto cuyas `kills` (monstruos llenados) ya alcanzó el
+	jugador. Las kills no se pierden al renacer: el título nunca baja.
 	Impulso de amigos: +perFriend por cada amigo de Roblox en el mismo
 	servidor, hasta maxFriends; multiplica el poder y las monedas.
 	Impulso personal: x`personalBoostMultiplier` de poder mientras dure (lo
@@ -17,7 +17,7 @@
 	inviterCoins e inviterBoostMinutes (server/Social/Referrals).
 ]]
 
-export type TitleDef = { power: number, name: string }
+export type TitleDef = { kills: number, name: string }
 
 export type SocialConfig = {
 	titles: { TitleDef },
@@ -34,32 +34,33 @@ export type SocialConfig = {
 
 local Social: SocialConfig = {
 	titles = {
-		{ power = 0, name = "Novato" },
-		{ power = 100, name = "Aprendiz" },
-		{ power = 1000, name = "Pescador" },
-		{ power = 5000, name = "Marinero" },
-		{ power = 25000, name = "Capitán" },
-		{ power = 100000, name = "Almirante" },
-		{ power = 500000, name = "Domador de Bestias" },
-		{ power = 5000000, name = "Señor del Abismo" },
-		{ power = 100000000, name = "Rey de los Océanos" },
-		{ power = 10000000000, name = "Dios del Mar" },
-		{ power = 50e9, name = "Titán de las Mareas" },
-		{ power = 250e9, name = "Señor de las Tormentas" },
-		{ power = 1e12, name = "Devorador de Leviatanes" },
-		{ power = 5e12, name = "Emperador del Abismo" },
-		{ power = 25e12, name = "Guardián de los Siete Mares" },
-		{ power = 100e12, name = "Coloso Abisal" },
-		{ power = 500e12, name = "Dios de los Maremotos" },
-		{ power = 2.5e15, name = "Soberano Eterno" },
-		{ power = 10e15, name = "Avatar del Océano" },
-		{ power = 50e15, name = "Leyenda Inmortal" },
-		{ power = 250e15, name = "Destructor de Mundos" },
-		{ power = 1e18, name = "Dios Primordial" },
-		{ power = 10e18, name = "Omnipotente" },
-		{ power = 100e18, name = "El Infinito" },
-		{ power = 1e21, name = "Más Allá del Infinito" },
+		{ kills = 0, name = "Novato" },
+		{ kills = 1, name = "Aprendiz" },
+		{ kills = 3, name = "Pescador" },
+		{ kills = 5, name = "Marinero" },
+		{ kills = 10, name = "Capitán" },
+		{ kills = 20, name = "Almirante" },
+		{ kills = 35, name = "Domador de Bestias" },
+		{ kills = 50, name = "Señor del Abismo" },
+		{ kills = 75, name = "Rey de los Océanos" },
+		{ kills = 100, name = "Dios del Mar" },
+		{ kills = 150, name = "Titán de las Mareas" },
+		{ kills = 200, name = "Señor de las Tormentas" },
+		{ kills = 300, name = "Devorador de Leviatanes" },
+		{ kills = 400, name = "Emperador del Abismo" },
+		{ kills = 500, name = "Guardián de los Siete Mares" },
+		{ kills = 650, name = "Coloso Abisal" },
+		{ kills = 800, name = "Dios de los Maremotos" },
+		{ kills = 1000, name = "Soberano Eterno" },
+		{ kills = 1250, name = "Avatar del Océano" },
+		{ kills = 1500, name = "Leyenda Inmortal" },
+		{ kills = 2000, name = "Destructor de Mundos" },
+		{ kills = 2500, name = "Dios Primordial" },
+		{ kills = 3000, name = "Omnipotente" },
+		{ kills = 4000, name = "El Infinito" },
+		{ kills = 5000, name = "Más Allá del Infinito" },
 	},
+
 	friendBoost = { perFriend = 0.1, maxFriends = 5 },
 	personalBoostMultiplier = 2,
 	-- groupId: el número del grupo de Roblox del juego (en su página: roblox.com/groups/<número>).
