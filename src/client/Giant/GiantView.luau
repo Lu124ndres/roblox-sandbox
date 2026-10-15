@@ -4,14 +4,11 @@
 
 	Dibuja al gigante en el centro del Cráter del Abismo y lo hace reaccionar:
 		- al comer: le llegan los peces volando (FeedThrow), gira hacia quien
-		  lo alimentó, rebota, salpica, suelta corazones y hace "ñam";
+		  lo alimentó y rebota (la orca muerde), salpica, suelta corazones;
 		- al llenarse, en el descanso y al volver: GiantCycleFx;
 		- al pasar de etapa: ruge, la cámara tiembla y crece hasta su nuevo
 		  tamaño (3, 8, 15 y 25 veces un jugador) entre olas y espuma;
-		- cada tanto: gruñe y echa un chorro de agua por el espiráculo.
-
-	El servidor solo publica quién es, cuánto comió y en qué fase está
-	(EstadoGigante y GiantFed). Todo el movimiento es local, a 60 fps.
+		- cada tanto: gruñe y echa un chorro (la orca, al respirar). Todo local.
 ]]
 
 local Players = game:GetService("Players")
@@ -50,8 +47,7 @@ end
 local function waterAround(body: GiantBody.Body, spread: number): Vector3
 	local angle = math.random() * math.pi * 2
 	local radius = body.height() * spread
-	return CENTER
-		+ Vector3.new(math.cos(angle) * radius, WorldLayout.waterLevel, math.sin(angle) * radius)
+	return body.water() + Vector3.new(math.cos(angle) * radius, 0, math.sin(angle) * radius)
 end
 
 local function hop(value: NumberValue, height: number, upSeconds: number)
@@ -80,8 +76,12 @@ end
 local function onFed(body: GiantBody.Body, character: Model)
 	body.lookAt(character:GetPivot().Position, EFFECTS.GiantAttentionSeconds)
 	local scale = body.height() / GiantStages.heightFor(1)
-	hop(body.lift, EFFECTS.GiantBounceHeight * scale, 0.18)
-	local top = body.top()
+	if body.swims then
+		body.bite()
+	else
+		hop(body.lift, EFFECTS.GiantBounceHeight * scale, 0.18)
+	end
+	local top = body.mouth()
 	Sounds.play("Chomp", top)
 	Fx.hearts(top, 4)
 	Fx.sparkle(top, UIConfig.Colors.Coins, 16)
@@ -107,7 +107,7 @@ local function onStage(body: GiantBody.Body, stage: number)
 		:Play()
 	body.setStage(stage)
 	task.delay(1.2, function()
-		local water = CENTER + Vector3.new(0, WorldLayout.waterLevel, 0)
+		local water = body.water()
 		Sounds.play("BigSplash", water)
 		Fx.splash(water, 3 + scale)
 		for k = 1, 3 do
@@ -126,7 +126,7 @@ local function ambientLoop(getBody: () -> GiantBody.Body?)
 		while true do
 			task.wait(math.random(EFFECTS.SpoutMinSeconds, EFFECTS.SpoutMaxSeconds))
 			local body = getBody()
-			if body then
+			if body and not body.swims then -- la orca echa el chorro al salir a respirar (OrcaFx)
 				local top = body.top()
 				Fx.spout(top, math.max(1, body.height() / 15))
 				Sounds.play("Spout", top)
@@ -183,7 +183,7 @@ function GiantView.start()
 	refresh()
 
 	FeedThrow.listen(function()
-		return if body then body.top() else nil
+		return if body then body.mouth() else nil
 	end, function(character: Model)
 		if body then
 			onFed(body, character)

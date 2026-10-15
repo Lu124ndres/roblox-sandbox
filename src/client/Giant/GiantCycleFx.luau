@@ -17,14 +17,11 @@ local TweenService = game:GetService("TweenService")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
-local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local GiantBody = require(script.Parent.GiantBody)
 
-local WATER = WorldZones.craterCenter + Vector3.new(0, WorldLayout.waterLevel, 0)
 local HIDDEN_DEPTH = 3 -- alturas del gigante bajo el agua mientras no está
 
 local GiantCycleFx = {}
@@ -42,11 +39,11 @@ local function tween(
 	return animation
 end
 
-local function wave(height: number, strength: number)
-	Sounds.play("BigSplash", WATER)
-	Fx.splash(WATER, 3 + strength)
+local function wave(water: Vector3, height: number, strength: number)
+	Sounds.play("BigSplash", water)
+	Fx.splash(water, 3 + strength)
 	for k = 1, 4 do
-		Fx.ring(WATER, height * (0.35 + k * 0.3), 1 + k * 0.35)
+		Fx.ring(water, height * (0.35 + k * 0.3), 1 + k * 0.35)
 	end
 	CameraShake.shake(0.5 + strength * 0.2, 1.4)
 end
@@ -67,7 +64,7 @@ local function farewell(body: GiantBody.Body)
 	up.Completed:Once(function()
 		local dive =
 			tween(body.lift, -height * 1.4, 1.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-		task.delay(0.5, wave, height, 3)
+		task.delay(0.5, wave, body.water(), height, 3)
 		dive.Completed:Once(function()
 			hide(body)
 		end)
@@ -78,10 +75,11 @@ local function arrive(body: GiantBody.Body)
 	body.setStage(1, true)
 	local height = body.height()
 	body.lift.Value = -height * 1.4
-	Sounds.play("OrcaCall", WATER, 0.8)
+	local water = body.water()
+	Sounds.play("OrcaCall", water, 0.8)
 	task.delay(0.6, function()
-		wave(height, 2)
-		Sounds.play("Roar", WATER)
+		wave(water, height, 2)
+		Sounds.play("Roar", water)
 		tween(body.lift, 0, 1.6, Enum.EasingStyle.Back)
 		tween(body.spin, body.spin.Value + 360, 1.6, Enum.EasingStyle.Quad)
 	end)

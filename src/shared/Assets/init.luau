@@ -63,10 +63,10 @@ local Assets: Assets = {
 	},
 
 	Meshes = {
-		-- Orca etapa 1 (modelo de Meshy reducido). Fuente: assets/blender/OrcaE1.fbx
-		-- (9,600 triángulos). Model en ServerStorage.OrcaE1 (vive en el .rbxl, no en
-		-- el repositorio), con el atributo GiroY = 180 para que mire al frente.
-		OrcaE1 = "rbxassetid://105300429950730",
+		-- Orca etapa 1 (modelo de Meshy reducido, 9,600 triángulos, con huesos para
+		-- nadar y abrir la boca: tools/blender/rig_orca.py). Fuente:
+		-- assets/blender/OrcaE1.fbx. Model en ServerStorage.OrcaE1 (vive en el .rbxl).
+		OrcaE1 = "rbxassetid://107562062733485",
 		-- Pendiente de modelar. Mientras falte, el juego usa un marcador de primitivas.
 		MinotauroE1 = "rbxassetid://0",
 	},

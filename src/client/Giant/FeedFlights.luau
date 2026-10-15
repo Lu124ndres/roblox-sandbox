@@ -15,7 +15,7 @@ local FishModel = require(script.Parent.Parent.Effects.FishModel)
 type Flight = {
 	model: Model,
 	from: Vector3,
-	to: Vector3,
+	target: () -> Vector3, -- se pide cada cuadro: la boca puede moverse (la orca nada)
 	height: number,
 	seconds: number,
 	spins: number,
@@ -37,7 +37,7 @@ local function step(dt: number)
 			flight.model:PivotTo(
 				FishModel.arcPose(
 					flight.from,
-					flight.to,
+					flight.target(),
 					flight.height,
 					t,
 					flight.elapsed,
@@ -63,12 +63,12 @@ function FeedFlights.count(): number
 	return #flights
 end
 
--- El modelo vuela en arco de "from" a "to" en `seconds`; onDone al llegar
+-- El modelo vuela en arco de "from" a target() en `seconds`; onDone al llegar
 -- (quien llama destruye el modelo ahí).
 function FeedFlights.launch(
 	model: Model,
 	from: Vector3,
-	to: Vector3,
+	target: () -> Vector3,
 	height: number,
 	seconds: number,
 	spins: number,
@@ -77,7 +77,7 @@ function FeedFlights.launch(
 	table.insert(flights, {
 		model = model,
 		from = from,
-		to = to,
+		target = target,
 		height = height,
 		seconds = math.max(seconds, 0.05),
 		spins = spins,

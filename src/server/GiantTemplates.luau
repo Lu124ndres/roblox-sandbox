@@ -57,11 +57,19 @@ local function prepare(name: string): Model?
 	end
 	model.PrimaryPart = main
 	local box, size = model:GetBoundingBox()
+	if main and main:FindFirstChildWhichIsA("Bone", true) then
+		-- Con huesos (orca) el importador gira el pivote y la caja lo sigue: se usa la pieza.
+		box, size = main.CFrame, main.Size
+	end
 	-- El frente del gigante es -Z del pivote. Si el modelo llegó mirando a otro lado,
 	-- el atributo GiroY (grados) en el modelo de ServerStorage lo corrige.
 	local turn = template:GetAttribute(Protocol.GiantModelAttributes.Turn)
 	local spin = if type(turn) == "number" then math.rad(turn) else 0
-	model.WorldPivot = box * CFrame.new(0, -size.Y / 2, 0) * CFrame.Angles(0, spin, 0)
+	local pivot = box * CFrame.new(0, -size.Y / 2, 0) * CFrame.Angles(0, spin, 0)
+	model.WorldPivot = pivot
+	if main then
+		main.PivotOffset = main.CFrame:ToObjectSpace(pivot) -- con PrimaryPart manda su PivotOffset
+	end
 	model:SetAttribute(Protocol.GiantModelAttributes.BaseHeight, size.Y)
 	model.Name = name
 	return model

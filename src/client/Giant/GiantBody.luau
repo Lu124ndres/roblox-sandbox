@@ -2,15 +2,12 @@
 --[[
 	GiantBody
 
-	El cuerpo del gigante en el cliente y su movimiento continuo: crece
-	hacia el alto de su etapa (GiantStages) y cambia al modelo de esa etapa
-	(<base>E1..E4), respira, se mece en el agua y mira alrededor. Tiene un
-	contorno rojo que late con el enojo (GiantOutline). Expone
-	"palancas" (salto, giro, atención) que usan las reacciones para animar
-	momentos puntuales. Todo por CFrame y escala, sin rigs.
-
-	ScaleTo toca cada pieza: solo se llama cuando la escala cambia más de
-	GiantScaleStep (al crecer); la respiración es un vaivén vertical.
+	El cuerpo del gigante en el cliente: crece hacia el alto de su etapa
+	(GiantStages) con el modelo de esa etapa (<base>E1..E4), respira, se mece y
+	mira alrededor, con un contorno rojo que late con el enojo (GiantOutline).
+	Las "palancas" (salto, giro, atención) animan momentos puntuales. ScaleTo
+	solo se llama cuando la escala cambia más de GiantScaleStep (al crecer).
+	Un modelo con huesos de orca nada por el lago y abre la boca (OrcaSwim).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -22,8 +19,10 @@ local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local GiantOutline = require(script.Parent.GiantOutline)
+local OrcaSwim = require(script.Parent.OrcaSwim)
 local GiantTemplates = require(script.Parent.GiantTemplates)
 
 local EFFECTS = UIConfig.Effects
@@ -38,6 +37,10 @@ export type Body = {
 	lookAt: (position: Vector3, seconds: number) -> (),
 	height: () -> number,
 	top: () -> Vector3, -- punto sobre la cabeza
+	mouth: () -> Vector3, -- adonde vuelan los peces
+	water: () -> Vector3, -- el agua justo bajo el gigante
+	bite: () -> (), -- muerde (la orca cierra la boca un instante)
+	swims: boolean,
 	destroy: () -> (),
 }
 
@@ -88,6 +91,7 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 		shownScale = 0 -- otro alto base: hay que reescalar
 	end
 	dress(1)
+	local swim = OrcaSwim.attach(GiantTemplates.templateFor(folder, def, 1), base.Position)
 
 	local outline = GiantOutline.attach(model)
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
@@ -119,6 +123,11 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 		elapsed += dt
 		updateScale(dt)
 		outline(dt, elapsed)
+		local anger = tonumber(stateFolder:GetAttribute(Protocol.GiantAttributes.Anger)) or 0
+		if swim then
+			model:PivotTo(swim.step(dt, currentHeight, lift.Value, spin.Value, anger, inner))
+			return
+		end
 
 		local idleYaw = math.sin(elapsed * 2 * math.pi / EFFECTS.GiantLookSeconds)
 			* EFFECTS.GiantLookDegrees
@@ -134,18 +143,19 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 		local bob = math.sin(elapsed * 2 * math.pi / EFFECTS.GiantBobSeconds)
 				* EFFECTS.GiantBobAmplitude
 			+ breath
-		local value = stateFolder:GetAttribute(Protocol.GiantAttributes.Anger)
-		local anger = if type(value) == "number" then value else 0
-		-- Enojado se sacude más.
 		local roll = math.sin(elapsed * 2 * math.pi / (EFFECTS.GiantBobSeconds * 1.7))
 				* EFFECTS.GiantSwayDegrees
-			+ math.sin(elapsed * 23) * anger * 2.5
+			+ math.sin(elapsed * 23) * anger * 2.5 -- enojado se sacude más
 		model:PivotTo(
 			base
 				* CFrame.new(0, bob + lift.Value, 0)
 				* CFrame.Angles(0, math.rad(yaw + spin.Value), math.rad(roll))
 		)
 	end)
+
+	local function top(): Vector3
+		return model:GetPivot().Position + Vector3.new(0, currentHeight * 0.92, 0)
+	end
 
 	return {
 		model = model,
@@ -166,11 +176,20 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 		height = function(): number
 			return currentHeight
 		end,
-		top = function(): Vector3
-			return model:GetPivot().Position + Vector3.new(0, currentHeight * 0.92, 0)
-		end,
+		top = if swim then swim.top else top,
+		mouth = if swim then swim.mouth else top,
+		water = if swim
+			then swim.water
+			else function(): Vector3
+				return Vector3.new(base.X, WorldLayout.waterLevel, base.Z)
+			end,
+		bite = if swim then swim.bite else function() end,
+		swims = swim ~= nil,
 		destroy = function()
 			connection:Disconnect()
+			if swim then
+				swim.destroy()
+			end
 			lift:Destroy()
 			spin:Destroy()
 			model:Destroy()

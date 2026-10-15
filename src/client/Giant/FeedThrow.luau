@@ -39,18 +39,22 @@ local FeedThrow = {}
 local rng = Random.new()
 local queued = 0 -- vuelos programados que todavía no despegan
 
--- Un pez (de la especie entregada) vuela girando desde la mano hasta la boca.
-function FeedThrow.throw(from: Vector3, to: Vector3, fishId: string, onArrive: () -> ())
-	local distance = (to - from).Magnitude
+-- Un pez (de la especie entregada) vuela girando desde la mano hasta la boca
+-- (target se pide cada cuadro: la boca de la orca se mueve).
+function FeedThrow.throw(from: Vector3, target: () -> Vector3, fishId: string, onArrive: () -> ())
+	local distance = (target() - from).Magnitude
 	local height = math.clamp(distance * 0.3, 6, 40)
 	Sounds.play("Whoosh", from, rng:NextNumber(0.9, 1.15))
 	local model = FishModel.build(if FishCatalog.get(fishId) then fishId else "Sardina", 1.4)
 	model.Parent = Workspace
 	local spread = Vector3.new(rng:NextNumber(-2, 2), 0, rng:NextNumber(-2, 2))
 	local start = from + Vector3.new(0, 2, 0)
-	FeedFlights.launch(model, start, to + spread, height, EFFECTS.FeedThrowSeconds, 1, function()
+	local function aim(): Vector3
+		return target() + spread
+	end
+	FeedFlights.launch(model, start, aim, height, EFFECTS.FeedThrowSeconds, 1, function()
 		model:Destroy()
-		Fx.sparkle(to + spread, UIConfig.Colors.Coins, 6)
+		Fx.sparkle(aim(), UIConfig.Colors.Coins, 6)
 		onArrive()
 	end)
 end
@@ -77,7 +81,12 @@ function FeedThrow.listen(getMouth: () -> Vector3?, onArrive: (character: Model)
 		if not mouth or not character.Parent then
 			return
 		end
-		FeedThrow.throw(character:GetPivot().Position, mouth, fishId, function()
+		local last: Vector3 = mouth
+		local function target(): Vector3
+			last = getMouth() or last
+			return last
+		end
+		FeedThrow.throw(character:GetPivot().Position, target, fishId, function()
 			if os.clock() - lastBite >= BITE_SECONDS then
 				lastBite = os.clock()
 				onArrive(character)

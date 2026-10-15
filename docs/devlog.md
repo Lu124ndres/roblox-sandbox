@@ -811,3 +811,29 @@ importar) se descartaron: los monstruos se harán con Meshy al final.
 **Qué sigue:** guardar/publicar el lugar (el modelo vive en el .rbxl). Las etapas 2–4
 siguen usando el modelo escalado hasta tener los suyos.
 
+
+## 2026-10-15 — La orca nada, salta y abre la boca para comer
+
+**Qué se hizo:**
+
+- OrcaE1 con huesos (`tools/blender/rig_orca.py`): Raiz, Cabeza, Mandibula, cola en 3
+  partes, aletas pectorales y puntos Boca, Espiraculo y Dorsal. Pesos calculados por
+  posición; se importó en Studio con "Mantener huesos de influencia cero".
+- Dos módulos en `ReplicatedStorage.Shared.Orca`:
+  - `OrcaMotion` (con Path, Steer, Feeders y Rig): nada por el lago en un recorrido que
+    sale de la hora del servidor (todos la ven igual), sale a respirar, salta del agua
+    con una vuelta en tramos al azar y, cuando alguien le da de comer, va a la orilla
+    de quien alimenta, saca la cabeza y abre la boca (muerde con cada pez). Anima cola,
+    cabeza, mandíbula y aletas con Bone.Transform.
+  - `OrcaFx` (con Trails): burbujas turquesa, estela de espuma, brillo de la aleta de
+    cristal, destellos dorados en la boca, chorro al respirar, salpicadura y ola al
+    saltar y caer (con temblor cerca), llamados de orca. Usa los sonidos del juego.
+- `Giant/OrcaSwim` une ambos con el cliente; GiantBody hace nadar a cualquier modelo con
+  hueso Raiz. Los peces vuelan hasta la boca aunque se mueva (FeedFlights sigue la meta).
+- GiantTemplates: con huesos, la caja y el PivotOffset salen de la pieza (el importador
+  dejaba el pivote girado 90° y la orca quedaba parada).
+
+**Qué se rompió:** al principio la orca nadaba de punta (ejes girados); corregido.
+
+**Qué sigue:** guardar/publicar el lugar (OrcaE1 nuevo en ServerStorage). Ajustar ritmo
+de saltos o profundidad si hace falta al verla con jugadores.
