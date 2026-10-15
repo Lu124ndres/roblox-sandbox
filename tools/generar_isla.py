@@ -387,17 +387,6 @@ def estatua_central(e=1.8, agua=None):
 def zona_entrenamiento():
     y = L["plateauHeight"]
     hijos = [grupo("Estanques", [estanque(i + 1) for i in range(SAGRADO)], "Folder")]
-    paso = 360 / L["trainingPondCount"]
-    bancos = []
-    for i in range(L["trainingPondCount"]):  # bancos entre estanques, mirando al centro
-        a = angulo_estanque(i + 1) + paso / 2
-        p = polar(a, L["trainingPondRingRadius"] + 4, y + 0.9)
-        r = base_con_z(direccion(a))
-        bancos.append(grupo(f"Banco{i}", [
-            pieza("Asiento", (4.6, 0.5, 1.6), p, MADERA_CLARA, "WoodPlanks", r),
-            pieza("Respaldo", (4.6, 1.6, 0.4), add(p, aplicar(r, (0, 0.9, 0.7))), MADERA_MEDIA, "WoodPlanks", r),
-        ]))
-    hijos.append(grupo("Bancos", bancos, "Folder"))
     antorchas = []
     for i in range(12):
         p = polar(15 + i * 30, L["plazaRadius"] - 2, 0)
