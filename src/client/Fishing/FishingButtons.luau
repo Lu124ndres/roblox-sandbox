@@ -15,12 +15,12 @@
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Ui = require(script.Parent.Parent.Ui)
 local Device = require(script.Parent.Parent.Interface.Device)
+local ActionButton = require(script.Parent.ActionButton)
 
 local COLORS = UIConfig.Colors
 
@@ -71,32 +71,6 @@ local function addPlacer(placer: () -> ())
 	end
 end
 
-local function roundButton(screen: ScreenGui, name: string, text: string, color: Color3): TextButton
-	local button = Instance.new("TextButton")
-	button.Name = name
-	button.AnchorPoint = Vector2.new(1, 1)
-	button.BackgroundColor3 = color
-	button.AutoButtonColor = true
-	button.Text = text
-	button.FontFace = UIConfig.Fonts.Title
-	button.TextScaled = true
-	button.TextColor3 = COLORS.Text
-	button.TextStrokeColor3 = COLORS.TextStroke
-	button.TextStrokeTransparency = 0.2
-	button.Visible = false
-	Ui.corner(button, 1000)
-	Ui.stroke(button, COLORS.Text, 4, 0)
-	local aspect = Instance.new("UIAspectRatioConstraint")
-	aspect.DominantAxis = Enum.DominantAxis.Height
-	aspect.Parent = button
-	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft = UDim.new(0.16, 0)
-	padding.PaddingRight = UDim.new(0.16, 0)
-	padding.Parent = button
-	button.Parent = screen
-	return button
-end
-
 -- Insignia con la tecla (solo si hay teclado): en PC no hace falta hacer clic.
 local function keyBadge(button: TextButton, key: string)
 	if not UserInputService.KeyboardEnabled then
@@ -105,21 +79,32 @@ local function keyBadge(button: TextButton, key: string)
 	local badge = Instance.new("TextLabel")
 	badge.Name = "Tecla"
 	badge.AnchorPoint = Vector2.new(0.5, 0.5)
-	badge.Position = UDim2.fromScale(0.86, 0.12)
-	badge.Size = UDim2.fromScale(0.34, 0.34)
-	badge.BackgroundColor3 = COLORS.Text
+	badge.Position = UDim2.fromScale(0.84, 0.14)
+	badge.Size = UDim2.fromScale(0.3, 0.3)
+	badge.BackgroundColor3 = Color3.fromRGB(18, 26, 40)
 	badge.Text = key
 	badge.TextScaled = true
 	badge.FontFace = UIConfig.Fonts.Title
-	badge.TextColor3 = COLORS.TextStroke
-	badge.ZIndex = button.ZIndex + 1
+	badge.TextColor3 = COLORS.Text
+	badge.ZIndex = button.ZIndex + 2
 	Ui.corner(badge, 8)
+	Ui.stroke(badge, COLORS.Text, 2, 0)
+	local padding = Instance.new("UIPadding")
+	padding.PaddingTop = UDim.new(0.14, 0)
+	padding.PaddingBottom = UDim.new(0.14, 0)
+	padding.Parent = badge
 	badge.Parent = button
 end
 
 -- Pescar y Alimentar: tamaño fijo en píxeles, en el lugar del pulgar.
-local function mainButton(screen: ScreenGui, name: string, text: string, color: Color3): TextButton
-	local button = roundButton(screen, name, text, color)
+local function mainButton(
+	screen: ScreenGui,
+	name: string,
+	text: string,
+	color: Color3,
+	icon: string
+): TextButton
+	local button = ActionButton.new(screen, name, text, color, icon)
 	addPlacer(function()
 		local where = spot()
 		button.Position = where.position
@@ -129,24 +114,23 @@ local function mainButton(screen: ScreenGui, name: string, text: string, color: 
 end
 
 function FishingButtons.cast(screen: ScreenGui): TextButton
-	local button = mainButton(screen, "Pescar", "Pescar", COLORS.Fishing)
+	local button = mainButton(screen, "Pescar", "Pescar", COLORS.Fishing, "rod")
 	keyBadge(button, "E")
 	return button
 end
 
 -- Mismo lugar que Pescar: en la orilla del volcán no se pesca, se alimenta.
 function FishingButtons.feed(screen: ScreenGui): TextButton
-	local button = mainButton(screen, "Alimentar", "Alimentar", COLORS.Feeding)
-	local pulse = Instance.new("UIScale")
-	pulse.Parent = button
-	TweenService:Create(pulse, UIConfig.Tweens.Pulse, { Scale = 1.06 }):Play()
+	local button = mainButton(screen, "Alimentar", "Alimentar", COLORS.Feeding, "meat")
+	ActionButton.rings(button, COLORS.Feeding, 1.1)
+	keyBadge(button, "E")
 	return button
 end
 
 -- ¡TIRA!: su tamaño sale del alto de la pantalla (BITE_HEIGHT) con tope en
 -- 1.25 veces Pescar; la esquina de abajo a la derecha es la misma que la de Pescar.
 function FishingButtons.bite(screen: ScreenGui): TextButton
-	local button = roundButton(screen, "Tira", "¡TIRA!", COLORS.Bite)
+	local button = ActionButton.new(screen, "Tira", "¡TIRA!", COLORS.Bite, "fish")
 	button.Size = UDim2.fromScale(BITE_HEIGHT, BITE_HEIGHT)
 	local limit = Instance.new("UISizeConstraint")
 	limit.Parent = button
@@ -155,9 +139,7 @@ function FishingButtons.bite(screen: ScreenGui): TextButton
 		button.Position = where.position
 		limit.MaxSize = Vector2.one * math.floor(where.size * BITE_GROWTH)
 	end)
-	local pulse = Instance.new("UIScale")
-	pulse.Parent = button
-	TweenService:Create(pulse, UIConfig.Tweens.Pulse, { Scale = 1.08 }):Play()
+	ActionButton.rings(button, COLORS.Bite, 0.55)
 	keyBadge(button, "E")
 
 	return button
