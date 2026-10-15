@@ -17,7 +17,7 @@ export type FishingVisualState =
 	| "caught"
 	| "escaped"
 	| "training"
-export type FeedStatus = "ok" | "empty" | "full" | "resting"
+export type FeedStatus = "ok" | "empty" | "full" | "resting" | "evolving"
 -- Mejoras de la tienda (claves de Config.Shop y atributos del jugador con su nivel).
 export type UpgradeCategory = "Rod" | "Basket" | "Boots"
 -- Avisos al dueño (remote Notice).
@@ -127,6 +127,7 @@ local Protocol = {
 		RouletteBy = "RuletaComprador", -- quien lo compró ("" = salió al azar)
 		RouletteAt = "RuletaInicio", -- hora del servidor en que empezó a girar
 		TopShares = "TopAportes", -- JSON: los 3 que más aportaron [{n = nombre, s = 0..1}]
+		EvolvingUntil = "EvolucionHasta", -- hora del servidor en que termina de evolucionar (0 = no)
 	},
 
 	-- Folder en ReplicatedStorage con las plantillas de los gigantes (los anima el cliente, GiantView).

@@ -45,7 +45,7 @@ function GiantFill.add(fraction: number, buyer: Player)
 			"purchase",
 			if waiting and GiantService.isFeeding()
 				then "Hay otro llenado antes que el tuyo: va justo después"
-				else "El monstruo está descansando: se llenará en cuanto vuelva a comer"
+				else "El monstruo no está comiendo ahora: se llenará en cuanto vuelva a comer"
 		)
 	end
 end

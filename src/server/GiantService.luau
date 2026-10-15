@@ -35,6 +35,7 @@ local center = Vector3.zero
 local phase: Protocol.GiantPhase = "feeding"
 local phaseEndsAt = 0
 local filledListeners: { () -> () } = {}
+local evolvingUntil = 0 -- os.clock(): hasta entonces evoluciona y no come
 
 local function publish()
 	GiantPublish.set(ATTR.Id, currentDef.id)
@@ -45,6 +46,7 @@ local function publish()
 	GiantPublish.set(ATTR.Anger, GiantAnger.get())
 	GiantPublish.set(ATTR.Phase, phase)
 	GiantPublish.set(ATTR.PhaseEndsAt, phaseEndsAt)
+	GiantPublish.set(ATTR.EvolvingUntil, 0)
 	GiantPublish.progress(progress, true)
 end
 
@@ -75,14 +77,24 @@ function GiantService.isFull(): boolean
 	return progress >= 1
 end
 
--- Solo en la fase "feeding" se le puede dar de comer (y puede enojarse).
-function GiantService.isFeeding(): boolean
-	return phase == "feeding" and progress < 1
+-- Evolucionando: acaba de llenar un cuarto de barra y no come por unos segundos.
+function GiantService.isEvolving(): boolean
+	return os.clock() < evolvingUntil
 end
 
--- Comida que le falta para llenarse (FeedingService no saca más peces que esto).
+-- Solo en la fase "feeding" y sin evolucionar se le puede dar de comer (y puede enojarse).
+function GiantService.isFeeding(): boolean
+	return phase == "feeding" and progress < 1 and not GiantService.isEvolving()
+end
+
+-- Fin de la etapa actual (0.25, 0.5, 0.75 o 1).
+local function stageEnd(): number
+	return GIANTS.stageThresholds[GiantStages.stageFor(progress) + 1] or 1
+end
+
+-- Comida que le falta para terminar la etapa (FeedingService no saca más peces que esto).
 function GiantService.remainingFood(): number
-	return math.max(0, (1 - progress) * totalFood)
+	return math.max(0, (stageEnd() - progress) * totalFood)
 end
 
 function GiantService.getPhase(): Protocol.GiantPhase
@@ -107,6 +119,7 @@ function GiantService.reset(def: Config.GiantDef)
 	currentDef = def
 	progress = 0
 	totalFood = def.food
+	evolvingUntil = 0
 	GiantAnger.calm()
 	Contributions.reset()
 	publish()
@@ -124,12 +137,19 @@ GiantService.setAnger = GiantAnger.set
 GiantService.calm = GiantAnger.calm
 GiantService.secondsSinceFed = GiantAnger.secondsSinceFed
 
--- Avanza la barra (fracción de la comida total) y avisa si se llenó.
-local function advance(fraction: number, userId: number, food: number)
+-- Avanza la barra (fracción de la comida total) y avisa si se llenó. Comiendo
+-- peces no pasa del fin de la etapa (capped); al cruzar una etapa evoluciona.
+local function advance(fraction: number, userId: number, food: number, capped: boolean)
 	local stageBefore = GiantStages.stageFor(progress)
-	progress = math.min(1, progress + fraction)
-	if progress >= 1 - FULL_EPSILON then
-		progress = 1
+	local limit = if capped then stageEnd() else 1
+	progress = math.min(limit, progress + fraction)
+	if progress >= limit - FULL_EPSILON then
+		progress = limit
+	end
+	if progress < 1 and GiantStages.stageFor(progress) > stageBefore then
+		local seconds = GIANTS.cycle.evolveSeconds
+		evolvingUntil = os.clock() + seconds
+		GiantPublish.set(ATTR.EvolvingUntil, Workspace:GetServerTimeNow() + seconds)
 	end
 	Contributions.add(userId, food)
 	Contributions.publish(totalFood)
@@ -149,7 +169,7 @@ function GiantService.feed(food: number, feeder: Player, count: number, fishId: 
 		return
 	end
 	FedBroadcast.add(feeder.UserId, count, fishId)
-	advance(food / totalFood, feeder.UserId, food)
+	advance(food / totalFood, feeder.UserId, food, true)
 end
 
 -- Compra con Robux: llena esa parte de la barra de una vez (1 = entero).
@@ -158,7 +178,7 @@ function GiantService.fill(fraction: number, buyer: Player): boolean
 	if fraction <= 0 or not GiantService.isFeeding() then
 		return false
 	end
-	advance(fraction, buyer.UserId, fraction * totalFood)
+	advance(fraction, buyer.UserId, fraction * totalFood, false)
 	return true
 end
 

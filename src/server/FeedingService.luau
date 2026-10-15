@@ -49,7 +49,7 @@ local function onShore(player: Player): boolean
 end
 
 -- Entrega la canasta por lotes. Se corta si el jugador sale de la orilla, se
--- va o el gigante se llena; lo que quede sigue en la canasta. Devuelve
+-- va o el gigante se llena (si evoluciona, espera); lo que quede sigue en la canasta. Devuelve
 -- cuántos peces entregó y cuántas monedas cobró.
 local function deliver(player: Player, total: number): (number, number)
 	local steps = math.max(1, math.ceil(DELIVERY.maxDeliverySeconds / DELIVERY.stepSeconds))
@@ -57,7 +57,16 @@ local function deliver(player: Player, total: number): (number, number)
 	local fed, coins = 0, 0
 	-- Con mucha fuerza se cargan muchos peces: cada uno paga menos (FishingPower.coinScale).
 	local coinScale = FishingPower.coinScale(PlayerData.getPower(player))
-	while GiantService.isFeeding() and player.Parent and onShore(player) do
+	-- Si evoluciona a mitad de la entrega, espera esos segundos y sigue.
+	while
+		(GiantService.isFeeding() or GiantService.isEvolving())
+		and player.Parent
+		and onShore(player)
+	do
+		if GiantService.isEvolving() then
+			task.wait(0.25)
+			continue
+		end
 		local taken, count, food, baseCoins =
 			PlayerData.takeFishBatch(player, perStep, GiantService.remainingFood())
 		if count == 0 then
@@ -91,7 +100,11 @@ local function onFeed(player: Player)
 	end
 	lastRequestAt[player] = now
 	if not GiantService.isFeeding() then
-		send(player, if GiantService.getPhase() == "rest" then "resting" else "full", 0, 0)
+		local status: Protocol.FeedStatus = if GiantService.isEvolving()
+			then "evolving"
+			elseif GiantService.getPhase() == "rest" then "resting"
+			else "full"
+		send(player, status, 0, 0)
 		return
 	end
 	local total = PlayerData.getCarriedCount(player)

@@ -101,6 +101,7 @@ export type AngerConfig = {
 -- Lo que pasa al llenar a un gigante: despedida, descanso en el volcán y llegada del siguiente.
 export type CycleConfig = {
 	farewellSeconds: number, -- despedida: salta, gira y se sumerge
+	evolveSeconds: number, -- pausa sin comer al cruzar cada etapa (evoluciona)
 	restSeconds: number, -- descanso (máximo): dentro del volcán se entrena solo
 	restBaseSeconds: number, -- descanso = clamp(base + porJugador x jugadores, min, restSeconds)
 	restPerPlayerSeconds: number,

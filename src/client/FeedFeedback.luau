@@ -35,6 +35,11 @@ function FeedFeedback.start(toasts: Toasts.Toasts, screen: ScreenGui, coinLabel:
 			)
 		elseif status == "empty" then
 			toasts.show("No llevas peces: pesca en la orilla de la isla", COLORS.Fishing)
+		elseif status == "evolving" then
+			toasts.show(
+				`¡{GiantName.current(true)} está evolucionando! Espera unos segundos`,
+				COLORS.Power
+			)
 		elseif status == "resting" then
 			toasts.show("Está descansando: quédate en el volcán y entrena", COLORS.Power)
 		elseif status == "full" then
