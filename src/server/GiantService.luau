@@ -112,9 +112,9 @@ function GiantService.reset(def: Config.GiantDef)
 	publish()
 end
 
--- Quienes aportaron al menos minKillShare de la barra (se llevan la kill).
+-- Quienes le dieron algo (se llevan la kill; con un pez basta).
 function GiantService.getParticipants(): { number }
-	return Contributions.participants(totalFood)
+	return Contributions.participants()
 end
 
 -- Enojo (GiantMood lo decide; ver Feeding/GiantAnger). calm = enojo a cero y

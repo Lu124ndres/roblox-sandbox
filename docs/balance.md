@@ -11,7 +11,7 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | `food` de cada monstruo | Orca 500K · Minotauro 2.5M · Orca fantasma 5M · Dragón 12M · Zorro 50M | Comida **fija y escalonada** como las pirámides de «Construye la Pirámide». Un novato lleva ~1–4K de comida por viaje; alguien con 1B de poder ~1.4M (una canasta llena). La Orca es difícil solo con novatos; el Zorro pide un servidor fuerte. |
 | `rouletteWeight` | 50 / 30 / 15 / 5 | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Sin modelo propio usan la Orca teñida. |
 | Ritmo de un jugador | novato ~0.45 comida/s · pro ~1.9 · tope ~5 | Calculado con el ciclo de pesca (pique, minijuego, viaje al volcán) al ~80 % del tiempo. Con menos jugadores tarda más: 10 novatos ~35 min la Orca. |
-| `scaling.minKillShare` | 0.005 | Kill: el 0.5 % de la barra **o** el 80 % de una canasta tuya llena (`Feeding/Contributions`), así los novatos también cuentan. Debajo del panel: tu aporte y el top 3. |
+| Kill | — | Para **todos los que le dieron algo** (con un pez basta; `Feeding/Contributions`). Debajo del panel: tu aporte y el top 3. |
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
 | `delivery.maxDeliverySeconds` | 4 | Una canasta, por grande que sea, se entrega en 4 s. |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |

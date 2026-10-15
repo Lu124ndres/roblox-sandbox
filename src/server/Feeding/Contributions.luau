@@ -3,11 +3,8 @@
 	Contributions
 
 	Cuánta comida aportó cada jugador (por userId) al gigante actual, peces y
-	llenados con Robux. Al llenarse, la kill es para quien aportó al menos
-	scaling.minKillShare de la barra O una canasta suya casi llena
-	(BASKET_SHARE de su capacidad, contando 1 de comida por pez): con barras
-	de millones, un novato que entrega su canasta completa también cuenta.
-	Tirar un pez no alcanza.
+	llenados con Robux. Al llenarse, la kill es para TODOS los que le dieron
+	algo (con un solo pez basta): nadie se queda fuera de un monstruo.
 
 	publish: cada PUBLISH_SECONDS como mucho, el top 3 (atributo TopAportes
 	del gigante, JSON [{n = nombre, s = fracción}]) y el aporte de cada uno
@@ -19,13 +16,9 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Config = require(ReplicatedStorage.Shared.Config)
-local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local GiantPublish = require(script.Parent.GiantPublish)
 
-local SCALING = Config.Giants.scaling
-local BASKET_SHARE = 0.8
 local PUBLISH_SECONDS = 1
 local TOP = 3
 
@@ -48,16 +41,11 @@ function Contributions.reset()
 	GiantPublish.set(Protocol.GiantAttributes.TopShares, "[]")
 end
 
--- userIds que se llevan la kill (ver arriba).
-function Contributions.participants(totalFood: number): { number }
-	local needed = SCALING.minKillShare * totalFood
+-- userIds que se llevan la kill: todos los que aportaron algo.
+function Contributions.participants(): { number }
 	local list = {}
 	for userId, food in foodByUser do
-		local player = Players:GetPlayerByUserId(userId)
-		local basket = if player
-			then FishingPower.playerCapacity(player) * BASKET_SHARE
-			else math.huge
-		if food >= math.min(needed, basket) then
+		if food > 0 then
 			table.insert(list, userId)
 		end
 	end

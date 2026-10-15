@@ -109,9 +109,6 @@ export type CycleConfig = {
 	rouletteSeconds: number, -- la ruleta gira al final del descanso antes de que llegue
 }
 
-export type FoodScalingConfig = {
-	minKillShare: number, -- fracción de la barra que hay que aportar para la kill
-}
 export type DeliveryConfig = { -- entrega de peces al gigante, por lotes
 	stepSeconds: number, -- un lote de peces cada tanto
 	maxDeliverySeconds: number, -- una canasta entera se entrega en a lo sumo esto
@@ -125,7 +122,6 @@ export type GiantsConfig = {
 	stageHeightsInPlayers: { number }, -- alto del gigante en cada etapa, en jugadores
 	anger: AngerConfig,
 	cycle: CycleConfig,
-	scaling: FoodScalingConfig,
 	delivery: DeliveryConfig,
 }
 

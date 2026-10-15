@@ -8,8 +8,7 @@
 	el poder como fuerza (shared/FishingPower), un novato lleva ~1-4K de comida
 	por viaje y uno con 1B de poder ~1.4M: la Orca es difícil solo con
 	novatos y rápida con un par de fuertes; el Zorro necesita un servidor fuerte.
-	Kill: quien aportó al menos scaling.minKillShare de la barra o una canasta
-	suya casi llena (Feeding/Contributions): los novatos también cuentan.
+	Kill: para todos los que le dieron algo (con un pez basta; Feeding/Contributions).
 
 	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
 	stepSeconds (cada paso es un lote de peces). Los lotes se anuncian a los
@@ -122,9 +121,6 @@ local Giants: Types.GiantsConfig = {
 		restMinSeconds = 60,
 		arrivalSeconds = 6,
 		rouletteSeconds = 6,
-	},
-	scaling = {
-		minKillShare = 0.005,
 	},
 	delivery = {
 		stepSeconds = 0.25,

@@ -3,8 +3,8 @@
 	GiantCycle
 
 	Lo que pasa cuando la barra del gigante llega al 100 %:
-		0. Kill: +1 a cada jugador que sigue conectado y aportó al menos
-		   scaling.minKillShare de la barra (GiantService.getParticipants).
+		0. Kill: +1 a cada jugador que sigue conectado y le dio algo, aunque
+		   sea un pez (GiantService.getParticipants).
 		1. Despedida (farewell): los clientes lo ven saltar, girar y
 		   sumergirse en el lago.
 		2. Descanso (rest): emerge la guarida en el centro del lago (RestArena)
