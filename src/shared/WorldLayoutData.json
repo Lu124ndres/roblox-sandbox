@@ -40,15 +40,15 @@
 	"fishingBandOuter": 258,
 	"bridgeAngle": 90,
 	"bridgeStartRadius": 142,
-	"bridgeWidth": 22,
+	"bridgeWidth": 34,
 	"craterCenter": [
 		0,
 		450
 	],
 	"craterLakeRadius": 136,
 	"craterCliffRadius": 150,
-	"craterRimOuter": 170,
-	"craterBaseRadius": 210,
+	"craterRimOuter": 180,
+	"craterBaseRadius": 220,
 	"craterRimHeight": 30,
 	"craterFloor": -34,
 	"pedestalTop": 0.5,

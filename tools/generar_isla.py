@@ -763,9 +763,9 @@ def polar_crater(angulo, rho, y):
 
 
 def puente():
-    """Puente de piedra de una sola rampa lisa desde la isla hasta la puerta del cráter.
-    Misma geometría que WorldZones.bridgeEnds. Las flechas turquesa marcan la corriente
-    que acelera a quien camina sobre él (BridgeBoost en el cliente)."""
+    """Puente de piedra de una sola rampa lisa y ancha desde la isla hasta la puerta del
+    cráter. Misma geometría que WorldZones.bridgeEnds. Sobre él se camina más rápido
+    (BridgeBoost en el cliente)."""
     d = direccion(L["bridgeAngle"])
     inicio = polar(L["bridgeAngle"], L["bridgeStartRadius"], CUBIERTA_Y)
     fin = add(CRATER, d, -(L["craterRimOuter"] - 2))
@@ -784,21 +784,15 @@ def puente():
 
     hijos = [pieza("Cubierta", (ancho, 1.2, largo3d + 2), sobre(0, -0.6, 0), PIEDRA_PUENTE, "Cobblestone", r)]
     for lado in (-1, 1):
-        hijos.append(pieza(f"Bordillo{lado}", (1.2, 1.8, largo3d + 2), sobre(lado * (ancho / 2 - 0.6), 0.9, 0), variar(PIEDRA_PUENTE, 12), "Cobblestone", r))
+        hijos.append(pieza(f"Bordillo{lado}", (1.8, 2.6, largo3d + 2), sobre(lado * (ancho / 2 - 0.9), 1.3, 0), variar(PIEDRA_PUENTE, 12), "Cobblestone", r))
+        hijos.append(pieza(f"Remate{lado}", (2.2, 0.5, largo3d + 2), sobre(lado * (ancho / 2 - 0.9), 2.85, 0), variar(PIEDRA_PUENTE, 20), "Slate", r))
         hijos.append(pieza(f"Muro{lado}", (0.6, 8, largo3d + 2), sobre(lado * (ancho / 2 - 0.6), 4, 0), PIEDRA_PUENTE, r=r, **INVISIBLE))
-    flechas, paso = [], 7
-    n = int(largo3d / paso)
-    for i in range(n):
-        z = -largo3d / 2 + 4 + i * paso
-        for lado in (-1, 1):
-            flechas.append(pieza(f"Flecha{i}_{lado}", (0.8, 0.08, 4.2), sobre(lado * 1.3, 0.06, z), TURQUESA, "Neon",
-                                 mat(r, ry(lado * 35)), Transparency=0.35, **FANTASMA))
-    hijos.append(grupo("Corriente", flechas, "Folder"))
-    for k in range(1, 5):  # pilares hasta el fondo del mar
+    for k in range(1, 5):  # pilares hasta el fondo del mar, uno a cada lado
         t = k / 5
-        p = sobre(0, -1.2, -largo3d / 2 + largo3d * t)
-        hijos.append(pieza(f"Pilar{k}", (6, p[1] - L["seaFloorHeight"], 6), (p[0], (p[1] + L["seaFloorHeight"]) / 2, p[2]),
-                           variar(PIEDRA_PUENTE, 8), "Cobblestone", base_con_z(d)))
+        for lado in (-1, 1):
+            p = sobre(lado * (ancho / 2 - 4), -1.2, -largo3d / 2 + largo3d * t)
+            hijos.append(pieza(f"Pilar{k}_{lado}", (7, p[1] - L["seaFloorHeight"], 7), (p[0], (p[1] + L["seaFloorHeight"]) / 2, p[2]),
+                               variar(PIEDRA_PUENTE, 8), "Cobblestone", base_con_z(d)))
     for k in range(7):  # faroles: cálidos cerca de la isla, verdes y fríos cerca del cráter
         t = (k + 0.5) / 7
         tono = tuple(int(LUZ_CALIDA[c] + ((120, 255, 170)[c] - LUZ_CALIDA[c]) * t) for c in range(3))
@@ -1002,19 +996,19 @@ def crater():
         muros.append(muro(f"Muro{k}", (p0[0], p0[2]), (p1[0], p1[2]), RIM_Y, 8))
     hijos.append(grupo("Borde", muros, "Folder"))
     # Línea coral brillante en el borde: se alimenta desde cualquier punto de la orilla.
-    orilla, rho = [], L["craterCliffRadius"] + 1.6
+    orilla, rho = [], L["craterCliffRadius"] + 2
     for k in range(m):
         a0, a1 = k * 360 / m, (k + 1) * 360 / m
         p0, p1 = polar_crater(a0, rho, 0), polar_crater(a1, rho, 0)
         dx, dz = p1[0] - p0[0], p1[2] - p0[2]
         centro = ((p0[0] + p1[0]) / 2, RIM_Y + 0.05, (p0[2] + p1[2]) / 2)
-        orilla.append(pieza(f"Brillo{k}", (1.1, 0.1, math.hypot(dx, dz) + 0.3), centro, CORAL, "Neon",
+        orilla.append(pieza(f"Brillo{k}", (2.4, 0.1, math.hypot(dx, dz) + 0.3), centro, CORAL, "Neon",
                             ry(math.degrees(math.atan2(dx, dz))), Transparency=0.25, **FANTASMA))
     hijos.append(grupo("OrillaAlimentar", orilla, "Folder"))
     return grupo("Crater", hijos)
 
 
-def rampa(nombre, inicio, fin, ancho, rgb, material):
+def rampa(nombre, inicio, fin, ancho, rgb, material, borde=AZUL_PODER, material_borde="Neon"):
     """Rampa lisa de inicio a fin (como el puente), con paredes invisibles a los lados."""
     d = norm((fin[0] - inicio[0], 0, fin[2] - inicio[2]))
     largo = math.dist((inicio[0], inicio[2]), (fin[0], fin[2]))
@@ -1028,38 +1022,84 @@ def rampa(nombre, inicio, fin, ancho, rgb, material):
 
     hijos = [pieza("Piso", (ancho, 1, largo3d + 1), sobre(0, -0.5, 0), rgb, material, r)]
     for lado in (-1, 1):
-        hijos.append(pieza(f"Borde{lado}", (0.4, 0.4, largo3d), sobre(lado * (ancho / 2 - 0.2), 0.2, 0), AZUL_PODER, "Neon", r, **DECORADO))
+        hijos.append(pieza(f"Borde{lado}", (0.5, 0.4, largo3d), sobre(lado * (ancho / 2 - 0.25), 0.2, 0), borde, material_borde, r, **DECORADO))
         hijos.append(pieza(f"Muro{lado}", (0.6, 8, largo3d + 1), sobre(lado * (ancho / 2), 4, 0), rgb, r=r, **INVISIBLE))
     return grupo(nombre, hijos)
 
 
+LAVA = (255, 120, 40)
+OBSIDIANA = (26, 22, 30)
+
+
+def brasero(nombre, x, z, y):
+    """Brasero de basalto con fuego de lava: rodean la guarida."""
+    arriba = y + 3.2
+    fuego = pieza("Llama", (0.6, 0.6, 0.6), (x, arriba + 0.8, z), LAVA, **INVISIBLE, CanCollide=False)
+    fuego["children"] = [
+        {"name": "Fuego", "className": "Fire",
+         "properties": {"Size": 4, "Heat": 8, "Color": color((255, 140, 40)), "SecondaryColor": color((255, 60, 20))}},
+        luz(12, 1.1, LAVA),
+    ]
+    return grupo(nombre, [
+        pieza("Pilar", (1.8, 2.8, 1.8), (x, y + 1.4, z), BASALTO[1], "Basalt"),
+        pieza("Cuenco", (1, 3.4, 3.4), (x, arriba, z), BASALTO[0], "Basalt", VERTICAL, "Cylinder", **DECORADO),
+        pieza("Brasas", (0.2, 2.8, 2.8), (x, arriba + 0.5, z), LAVA, "Neon", VERTICAL, "Cylinder", **FANTASMA),
+        fuego,
+    ])
+
+
 def guarida_descanso():
-    """Plataforma que emerge en el centro del lago durante el descanso, con rampas desde la
-    punta de cada muelle. Vive en ServerStorage; RestArena la clona al derrotar al
-    monstruo. Solo en ella se gana poder en el descanso (WorldZones.isInRestArena)."""
+    """Santuario que emerge en el centro del lago durante el descanso: plataforma de
+    basalto con vetas de lava, aro de oro, piso de obsidiana con un anillo de losas y una
+    grieta de lava, braseros entre las rampas y, en el centro, un altar con el cristal del
+    poder flotando. Rampas de basalto con bordes de lava desde la punta de cada muelle.
+    Vive en ServerStorage; RestArena la clona al derrotar al monstruo. Solo en ella se
+    gana poder en el descanso (WorldZones.isInRestArena)."""
     R, top = L["restArenaRadius"], L["restArenaTop"]
     cx, cz = CRATER[0], CRATER[2]
     hijos = [
         pieza("Base", (8, R * 2, R * 2), (cx, top - 4.2, cz), BASALTO[0], "Basalt", VERTICAL, "Cylinder"),
-        pieza("Brillo", (0.4, R * 2 - 0.6, R * 2 - 0.6), (cx, top - 0.2, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder", **DECORADO),
-        pieza("Piso", (0.4, R * 2 - 3, R * 2 - 3), (cx, top - 0.1, cz), PIZARRA_OSCURA, "Slate", VERTICAL, "Cylinder"),
-        pieza("Sello", (0.1, 13, 13), (cx, top + 0.15, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder", **DECORADO, CanCollide=False),
-        pieza("SelloCentro", (0.12, 10, 10), (cx, top + 0.17, cz), PIZARRA_OSCURA, "Slate", VERTICAL, "Cylinder", **DECORADO, CanCollide=False),
+        # Aro de oro un poco más abajo que el piso: solo asoma en el borde.
+        pieza("Aro", (0.8, R * 2 + 0.6, R * 2 + 0.6), (cx, top - 0.5, cz), ORO, "Metal", VERTICAL, "Cylinder"),
+        pieza("Piso", (0.4, R * 2 - 2.4, R * 2 - 2.4), (cx, top - 0.1, cz), OBSIDIANA, "SmoothPlastic", VERTICAL, "Cylinder",
+              Reflectance=0.12),
     ]
-    for k in range(8):  # runas alrededor del sello
-        p = polar_crater(k * 45, 16, top + 0.12)
+    # Anillo de losas y grieta de lava en el piso.
+    hijos += anillo_tallado("Losa", cx, cz, R * 0.62, 24, R * 0.48, 0.2, top + 0.18, (BASALTO[1], (70, 58, 52)), "Slate")
+    hijos += anillo_tallado("Grieta", cx, cz, R - 2.6, 32, 0.5, 0.1, top + 0.16, LAVA, "Neon", Transparency=0.35, **FANTASMA)
+    # Vetas de lava por el costado de la base.
+    for k in range(16):
+        a = k * 22.5 + rng.uniform(-6, 6)
+        alto = rng.uniform(3, 6.5)
+        hijos.append(pieza(f"Veta{k}", (0.3, alto, 0.5), polar_crater(a, R + 0.05, top - 0.6 - alto / 2), LAVA, "Neon",
+                           mat(ry(-a), rx(rng.uniform(-12, 12))), Transparency=0.2, **FANTASMA))
+    # Altar central con el cristal del poder flotando y sus órbitas.
+    hijos.append(pieza("Altar", (1.4, 14, 14), (cx, top + 0.8, cz), BASALTO[2], "Basalt", VERTICAL, "Cylinder"))
+    # Banda azul alrededor del altar (no encima: de lejos se veía como un disco blanco).
+    hijos.append(pieza("AltarBrillo", (0.35, 14.4, 14.4), (cx, top + 0.8, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder", **FANTASMA))
+    cristal = pieza("CristalPoder", (2.8, 2.8, 2.8), (cx, top + 8, cz), AZUL_PODER, "Neon", mat(rx(45), rz(35)), **FANTASMA)
+    cristal["children"] = [luz(18, 1.2, AZUL_PODER)]
+    hijos.append(cristal)
+    for k in range(4):
+        p = polar_crater(k * 90 + 45, 4.5, top + 8)
+        hijos.append(pieza(f"Orbita{k}", (0.9, 0.9, 0.9), p, AZUL_PODER, "Neon", mat(rx(45), rz(35)), **FANTASMA))
+    for k in range(8):  # runas alrededor del altar
+        p = polar_crater(k * 45, 10, top + 0.14)
         hijos.append(pieza(f"Runa{k}", (1.4, 0.12, 3), p, AZUL_PODER, "Neon", ry(-k * 45), **DECORADO, CanCollide=False))
     n = L["craterPierCount"]
     angulos = [22.5 + k * 360 / n for k in range(n)]
+    for k in range(n):  # braseros entre las rampas
+        p = polar_crater(k * 360 / n, R - 2.6, 0)
+        hijos.append(brasero(f"Brasero{k + 1}", p[0], p[2], top + 0.1))
     for k, a in enumerate(angulos):
         inicio = polar_crater(a, L["craterPierTipRadius"] + 1, DECK_ABISMO)
         fin = polar_crater(a, R - 1.5, top)
-        hijos.append(rampa(f"Rampa{k + 1}", inicio, fin, 7, PIZARRA_OSCURA, "Slate"))
-    # Pared invisible al borde, con hueco en cada rampa.
+        hijos.append(rampa(f"Rampa{k + 1}", inicio, fin, 10, BASALTO[1], "Basalt", ORO, "Metal"))
+    # Pared invisible al borde, con hueco en cada rampa (más ancho: rampas de 10).
     muros, m = [], 48
     for k in range(m):
         a0, a1 = k * 360 / m, (k + 1) * 360 / m
-        if any(abs(((a0 + a1) / 2 - b + 180) % 360 - 180) <= 7 for b in angulos):
+        if any(abs(((a0 + a1) / 2 - b + 180) % 360 - 180) <= 10 for b in angulos):
             continue
         p0, p1 = polar_crater(a0, R + 0.2, 0), polar_crater(a1, R + 0.2, 0)
         muros.append(muro(f"Muro{k}", (p0[0], p0[2]), (p1[0], p1[2]), top, 8))
