@@ -14,6 +14,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
+local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Icons = require(script.Parent.Icons)
 local Style = require(script.Parent.Style)
 
@@ -109,7 +110,7 @@ function ShopParts.section(parent: Instance, order: number, text: string): Frame
 	holder.Size = UDim2.new(1, -8, 0, 40)
 	holder.Parent = parent
 	local label = Style.text(holder, "Titulo", 34, nil, 3)
-	label.Text = string.upper(text)
+	label.Text = TextCase.upper(text)
 	label.TextXAlignment = Enum.TextXAlignment.Left
 	label.AutomaticSize = Enum.AutomaticSize.X
 	label.TextScaled = false

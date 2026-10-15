@@ -16,6 +16,7 @@ local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Toasts = require(script.Parent.Parent.Toasts)
@@ -128,7 +129,7 @@ function Notices.start(toasts: Toasts.Toasts)
 			if fish then
 				Sounds.play("LegendaryCatch")
 				toasts.banner(
-					`¡{a} sacó un {fish.displayName} {string.upper(rarity.displayName)}!`,
+					`¡{a} sacó un {fish.displayName} {TextCase.upper(rarity.displayName)}!`,
 					UIConfig.RarityColors[rarity.id]
 				)
 			end

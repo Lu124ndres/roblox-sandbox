@@ -21,6 +21,7 @@ local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Titles = require(ReplicatedStorage.Shared.Titles)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local Icons = require(script.Parent.Icons)
 local OverheadLook = require(script.Parent.OverheadLook)
@@ -90,7 +91,7 @@ local function build(player: Player, head: BasePart): () -> ()
 		local index = if type(value) == "number" then value else 1
 		if index ~= shownIndex then
 			shownIndex = index
-			title.Text = string.upper(Titles.name(index))
+			title.Text = TextCase.upper(Titles.name(index))
 			gradient.Color, gradient.Rotation = OverheadLook.gradient(index)
 			if OverheadLook.animated(index) then
 				shimmering[gradient] = true

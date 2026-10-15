@@ -14,6 +14,7 @@ local Workspace = game:GetService("Workspace")
 
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local TextCase = require(ReplicatedStorage.Shared.TextCase)
 
 local LABEL_DISTANCE = 160 -- a qué distancia todavía se ve el cartel
 
@@ -58,7 +59,7 @@ function CatchLabels.billboard(
 	billboard.MaxDistance = LABEL_DISTANCE
 	billboard.LightInfluence = 0
 	local top =
-		text(billboard, `¡{string.upper(rarityName)}!`, color, 0, 0.5, UIConfig.Fonts.Title)
+		text(billboard, `¡{TextCase.upper(rarityName)}!`, color, 0, 0.5, UIConfig.Fonts.Title)
 	local name = if fish then fish.displayName else fishId
 	local bottom = text(
 		billboard,

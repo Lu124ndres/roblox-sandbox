@@ -15,6 +15,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Device = require(script.Parent.Parent.Interface.Device)
 local Style = require(script.Parent.Parent.Interface.Style)
@@ -101,7 +102,7 @@ function Window.create(
 	Style.border(panel, 5)
 
 	local heading = Style.text(frame, "Titulo", 64, nil, 4.5)
-	heading.Text = string.upper(title)
+	heading.Text = TextCase.upper(title)
 	heading.TextXAlignment = Enum.TextXAlignment.Left
 	heading.Position = UDim2.fromOffset(14, 0)
 	heading.Size = UDim2.new(0.7, 0, 0, TITLE_HEIGHT + 30)

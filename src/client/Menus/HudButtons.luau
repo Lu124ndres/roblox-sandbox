@@ -13,6 +13,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
@@ -85,7 +86,7 @@ function HudButtons.iconButton(
 	label.Size = UDim2.new(1, 4, 0, 22) -- casi el ancho del botón: no pisa al vecino
 	label.Active = false
 	label.Interactable = false
-	label.Text = string.upper(text)
+	label.Text = TextCase.upper(text)
 	return button
 end
 
