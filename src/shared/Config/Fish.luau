@@ -3,8 +3,8 @@
 	Peces y rarezas.
 
 	weight es el peso relativo en la tirada (no un porcentaje). Con estos
-	pesos (total 1,031): común 70 %, poco común 19 %, raro 7.8 %, épico 2.3 %,
-	legendario 0.6 % y mítico 0.05 % (1 de cada ~2,000 peces).
+	pesos (24 peces con Config/FishMore, total ~1,579): común 65 %, poco común
+	22 %, raro 10 %, épico 2.5 %, legendario 0.6 % y mítico 0.05 %.
 
 	Comida media por pez: 2.75. Monedas base medias: 4.57 (se multiplican por
 	el gigante actual). Ver docs/alcance.md, "Calibración".
@@ -113,5 +113,10 @@ local Fish: Types.EconomyConfig = {
 		},
 	},
 }
+
+-- Los peces nuevos de la colección (dos por rareza).
+for _, more in require(script.Parent.FishMore) do
+	table.insert(Fish.fish, more)
+end
 
 return Fish

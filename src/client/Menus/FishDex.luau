@@ -2,7 +2,7 @@
 --[[
 	FishDex
 
-	Colección de peces: las 12 especies en una cuadrícula. Las descubiertas
+	Colección de peces: todas las especies (24) en una cuadrícula. Las descubiertas
 	se ven en 3D girando, con su rareza y cuántas se han pescado; las que
 	faltan, como una silueta oscura con "???". Arriba, el avance (7/12) y el
 	premio por completarla. El botón Peces del HUD se marca cuando hay un

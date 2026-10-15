@@ -19,6 +19,18 @@ local FishColors = {
 		PezLuna = Color3.fromRGB(200, 205, 225),
 		PezDorado = Color3.fromRGB(255, 200, 40),
 		PezArcoiris = Color3.fromRGB(255, 110, 200),
+		Arenque = Color3.fromRGB(150, 185, 210),
+		Lenguado = Color3.fromRGB(170, 140, 105),
+		PezCirujano = Color3.fromRGB(40, 110, 230),
+		PezLoro = Color3.fromRGB(40, 200, 170),
+		PezLeon = Color3.fromRGB(230, 90, 60),
+		Barracuda = Color3.fromRGB(150, 165, 180),
+		Mantarraya = Color3.fromRGB(70, 85, 120),
+		TiburonMartillo = Color3.fromRGB(130, 145, 160),
+		PezVela = Color3.fromRGB(50, 100, 220),
+		Celacanto = Color3.fromRGB(90, 120, 210),
+		PezCristal = Color3.fromRGB(150, 240, 255),
+		PezGalaxia = Color3.fromRGB(150, 80, 255),
 	} :: { [string]: Color3 },
 
 	-- Por id de rareza: cartel, borde de la tarjeta, haz de luz y destellos.

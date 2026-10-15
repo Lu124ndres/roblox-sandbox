@@ -6,7 +6,7 @@
 	final se paga `tutorialBonus` (alcanza para la segunda caña).
 
 	Colección: la primera vez que se pesca cada especie paga según su rareza;
-	completar las 12 paga `collectionBonus`.
+	completar todas (24) paga `collectionBonus`.
 
 	Diario: racha de 7 días; si se salta un día vuelve al día 1. Después del
 	día 7 se repite el premio del día 7.
@@ -39,7 +39,7 @@ local Retention: Types.RetentionConfig = {
 		Legendario = 5000,
 		Mitico = 25000,
 	},
-	collectionBonus = 100000,
+	collectionBonus = 250000,
 	-- Monedas fijas al principio; cuando el juego avanza, una fracción del precio
 	-- de la siguiente caña (shared/RewardScale): siempre valen la pena.
 	daily = { 100, 200, 350, 500, 800, 1200, 2500 },
@@ -61,7 +61,7 @@ local Retention: Types.RetentionConfig = {
 		PrimerMitico = { name = "Mítico", description = "Pescaste el pez arcoíris" },
 		PrimeraKill = { name = "Primera kill", description = "Ayudaste a llenar a un monstruo" },
 		DiezKills = { name = "Cazagigantes", description = "10 monstruos llenados" },
-		Coleccion = { name = "Colección completa", description = "Pescaste las 12 especies" },
+		Coleccion = { name = "Colección completa", description = "Pescaste todas las especies" },
 		Tutorial = { name = "Pescador de verdad", description = "Terminaste el tutorial" },
 		EstanqueMaximo = {
 			name = "Maestro del estanque",
