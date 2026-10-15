@@ -976,69 +976,94 @@ def crater():
 
 LAVA = (255, 120, 40)
 OBSIDIANA = (26, 22, 30)
+MARMOL_NEGRO = ((34, 30, 38), (30, 27, 34))
 
 
-def brasero(nombre, x, z, y):
-    """Brasero de basalto con fuego de lava: rodean la guarida."""
-    arriba = y + 3.2
-    fuego = pieza("Llama", (0.6, 0.6, 0.6), (x, arriba + 0.8, z), LAVA, **INVISIBLE, CanCollide=False)
+def obelisco(nombre, angulo, radio, y):
+    """Obelisco de obsidiana sobre el muro, con bandas de oro, una veta de lava hacia
+    adentro y fuego en la punta."""
+    x, _, z = polar_crater(angulo, radio, 0)
+    giro = ry(-angulo)
+    alto = 9
+    fuego = pieza("Llama", (0.6, 0.6, 0.6), (x, y + alto + 1.3, z), LAVA, **INVISIBLE, CanCollide=False)
     fuego["children"] = [
         {"name": "Fuego", "className": "Fire",
-         "properties": {"Size": 4, "Heat": 8, "Color": color((255, 140, 40)), "SecondaryColor": color((255, 60, 20))}},
-        luz(9, 0.7, LAVA),  # suave: de noche ocho braseros teñían todo de rojo
+         "properties": {"Size": 3.5, "Heat": 7, "Color": color((255, 150, 50)), "SecondaryColor": color((255, 70, 20))}},
+        luz(10, 0.6, LAVA),  # suave: de noche no tiñe todo de rojo
     ]
+    adentro = polar_crater(angulo, radio - 1.21, 0)
     return grupo(nombre, [
-        pieza("Pilar", (1.8, 2.8, 1.8), (x, y + 1.4, z), BASALTO[1], "Basalt"),
-        pieza("Cuenco", (1, 3.4, 3.4), (x, arriba, z), BASALTO[0], "Basalt", VERTICAL, "Cylinder", **DECORADO),
-        pieza("Brasas", (0.2, 2.8, 2.8), (x, arriba + 0.5, z), LAVA, "Neon", VERTICAL, "Cylinder", **FANTASMA),
+        pieza("Zocalo", (3.2, 1.2, 3.2), (x, y + 0.6, z), MARMOL_NEGRO[1], "Marble", giro),
+        pieza("Fuste", (2.4, alto, 2.4), (x, y + alto / 2, z), MARMOL_NEGRO[0], "Marble", giro),
+        pieza("BandaBaja", (2.6, 0.3, 2.6), (x, y + 2.75, z), ORO, "Metal", giro, **DECORADO),
+        pieza("BandaAlta", (2.6, 0.3, 2.6), (x, y + alto - 0.6, z), ORO, "Metal", giro, **DECORADO),
+        pieza("Veta", (0.06, alto - 4.4, 0.35), (adentro[0], y + 2.9 + (alto - 4.4) / 2 + 0.2, adentro[2]), LAVA, "Neon", giro, **FANTASMA),
+        pieza("Cuenco", (0.8, 3.2, 3.2), (x, y + alto + 0.4, z), ORO, "Metal", VERTICAL, "Cylinder", **DECORADO),
+        pieza("Brasas", (0.15, 2.6, 2.6), (x, y + alto + 0.82, z), LAVA, "Neon", VERTICAL, "Cylinder", **FANTASMA),
         fuego,
     ])
 
 
+def linea(nombre, a, b, y, ancho, alto, rgb, material, **extra):
+    """Pieza recta del punto a al b (x, z) a la altura y (centro)."""
+    dx, dz = b[0] - a[0], b[1] - a[1]
+    return pieza(nombre, (ancho, alto, math.hypot(dx, dz)), ((a[0] + b[0]) / 2, y, (a[1] + b[1]) / 2), rgb, material,
+                 ry(math.degrees(math.atan2(dx, dz))), **extra)
+
+
 def guarida_descanso():
-    """Santuario que emerge en el centro del lago durante el descanso: un círculo grande de
-    basalto con vetas de lava, piso de obsidiana con un anillo de losas y una grieta de lava,
-    muro bajo de basalto con remate de oro (no te caes), braseros y, en el centro, un altar
-    con el cristal del poder flotando. No tiene rampas: se llega con el botón IR A LA GUARIDA.
-    Vive en ServerStorage; RestArena la clona al derrotar al monstruo. Solo en ella se gana
-    poder en el descanso (WorldZones.isInRestArena)."""
+    """Templo de obsidiana que emerge en el centro del lago durante el descanso: un círculo
+    grande de mármol negro pulido con incrustaciones de oro y finas líneas de lava, todo en
+    orden (anillos y radios como una brújula). Muro bajo con remate de oro (no te caes) y 8
+    obeliscos con fuego sobre él. En el centro, un estrado de dos escalones con el núcleo de
+    poder y el cristal flotando sobre un haz de luz. No tiene rampas: se llega con el botón
+    IR A LA GUARIDA. Vive en ServerStorage; RestArena la clona al derrotar al monstruo. Solo
+    en ella se gana poder en el descanso (WorldZones.isInRestArena)."""
     R, top = L["restArenaRadius"], L["restArenaTop"]
     cx, cz = CRATER[0], CRATER[2]
+    piso = top + 0.1  # cara de arriba del piso
     hijos = [
-        pieza("Base", (8, R * 2, R * 2), (cx, top - 4.2, cz), BASALTO[0], "Basalt", VERTICAL, "Cylinder"),
-        # Aro de oro un poco más abajo que el piso: solo asoma en el borde.
-        pieza("Aro", (0.8, R * 2 + 0.6, R * 2 + 0.6), (cx, top - 0.5, cz), ORO, "Metal", VERTICAL, "Cylinder"),
-        pieza("Piso", (0.4, R * 2 - 2.4, R * 2 - 2.4), (cx, top - 0.1, cz), OBSIDIANA, "SmoothPlastic", VERTICAL, "Cylinder",
-              Reflectance=0.12),
+        pieza("Cimiento", (7, (R - 7) * 2, (R - 7) * 2), (cx, top - 11.5, cz), BASALTO[2], "Basalt", VERTICAL, "Cylinder"),
+        pieza("Base", (8, R * 2, R * 2), (cx, top - 4.2, cz), MARMOL_NEGRO[0], "Marble", VERTICAL, "Cylinder"),
+        # Costado: una franja de oro arriba y una línea de lava más abajo, parejas.
+        pieza("Aro", (0.6, R * 2 + 0.5, R * 2 + 0.5), (cx, top - 0.9, cz), ORO, "Metal", VERTICAL, "Cylinder"),
+        pieza("LineaLava", (0.3, R * 2 + 0.3, R * 2 + 0.3), (cx, top - 3.4, cz), LAVA, "Neon", VERTICAL, "Cylinder", **FANTASMA),
+        pieza("Piso", (0.4, R * 2 - 0.6, R * 2 - 0.6), (cx, top - 0.1, cz), OBSIDIANA, "Marble", VERTICAL, "Cylinder",
+              Reflectance=0.1),
     ]
-    # Anillo de losas y grieta de lava en el piso.
-    hijos += anillo_tallado("Losa", cx, cz, R * 0.6, 32, R * 0.4, 0.2, top + 0.18, (BASALTO[1], (70, 58, 52)), "Slate")
-    hijos += anillo_tallado("Grieta", cx, cz, R - 4.2, 40, 0.5, 0.1, top + 0.16, LAVA, "Neon", Transparency=0.35, **FANTASMA)
-    # Muro bajo alrededor, con remate de oro (más la pared invisible alta, abajo).
-    hijos += anillo_tallado("Parapeto", cx, cz, R - 0.9, 48, 1.6, 2.6, top + 2.7, (BASALTO[1], BASALTO[0]), "Basalt")
-    hijos += anillo_tallado("Remate", cx, cz, R - 0.9, 48, 2, 0.35, top + 3, ORO, "Metal", **DECORADO)
-    # Vetas de lava por el costado de la base.
-    for k in range(24):
-        a = k * 15 + rng.uniform(-4, 4)
-        alto = rng.uniform(3, 6.5)
-        hijos.append(pieza(f"Veta{k}", (0.3, alto, 0.5), polar_crater(a, R + 0.05, top - 0.6 - alto / 2), LAVA, "Neon",
-                           mat(ry(-a), rx(rng.uniform(-12, 12))), Transparency=0.2, **FANTASMA))
-    # Altar central con el cristal del poder flotando y sus órbitas.
-    hijos.append(pieza("Altar", (1.4, 18, 18), (cx, top + 0.8, cz), BASALTO[2], "Basalt", VERTICAL, "Cylinder"))
-    # Banda azul alrededor del altar (no encima: de lejos se veía como un disco blanco).
-    hijos.append(pieza("AltarBrillo", (0.35, 18.4, 18.4), (cx, top + 0.8, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder", **FANTASMA))
+    # Incrustaciones del piso (apenas sobresalen): anillos de oro, radios y una línea de lava.
+    sobre = piso + 0.03
+    hijos += anillo_tallado("AnilloInterior", cx, cz, 16, 64, 0.5, 0.06, sobre + 0.03, ORO, "Metal", **FANTASMA)
+    hijos += anillo_tallado("AnilloMedio", cx, cz, 33, 96, 0.6, 0.06, sobre + 0.03, ORO, "Metal", **FANTASMA)
+    hijos += anillo_tallado("AnilloLava", cx, cz, R - 7, 120, 0.3, 0.06, sobre + 0.03, LAVA, "Neon", **FANTASMA)
+    for k in range(8):
+        a = k * 45
+        p0, p1 = polar_crater(a, 16.3, 0), polar_crater(a, 32.7, 0)
+        hijos.append(linea(f"Radio{k}", (p0[0], p0[2]), (p1[0], p1[2]), sobre, 0.4, 0.06, ORO, "Metal", **FANTASMA))
+        q = polar_crater(a + 22.5, 40, sobre)
+        hijos.append(pieza(f"Rombo{k}", (1.6, 0.06, 1.6), q, ORO, "Metal", ry(-(a + 22.5) + 45), **FANTASMA))
+    # Estrado central de dos escalones con labio de oro y el núcleo de poder.
+    for nivel, (radio, alto) in enumerate(((12, 0.7), (8, 1.4)), start=1):
+        hijos.append(pieza(f"Estrado{nivel}", (alto, radio * 2, radio * 2), (cx, piso + alto / 2, cz), MARMOL_NEGRO[nivel % 2],
+                           "Marble", VERTICAL, "Cylinder"))
+        hijos.append(pieza(f"Labio{nivel}", (0.2, radio * 2 + 0.5, radio * 2 + 0.5), (cx, piso + alto - 0.12, cz), ORO, "Metal",
+                           VERTICAL, "Cylinder", **DECORADO))
+    tope = piso + 1.4
+    hijos.append(pieza("NucleoOro", (0.1, 10, 10), (cx, tope + 0.04, cz), ORO, "Metal", VERTICAL, "Cylinder", **FANTASMA))
+    hijos.append(pieza("Nucleo", (0.12, 9, 9), (cx, tope + 0.07, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder", **FANTASMA))
+    hijos.append(pieza("Haz", (7, 1.6, 1.6), (cx, tope + 3.6, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder",
+                       Transparency=0.75, **FANTASMA))
     cristal = pieza("CristalPoder", (3.6, 3.6, 3.6), (cx, top + 9, cz), AZUL_PODER, "Neon", mat(rx(45), rz(35)), **FANTASMA)
     cristal["children"] = [luz(20, 1.2, AZUL_PODER)]
     hijos.append(cristal)
     for k in range(4):
         p = polar_crater(k * 90 + 45, 5.5, top + 9)
         hijos.append(pieza(f"Orbita{k}", (1, 1, 1), p, AZUL_PODER, "Neon", mat(rx(45), rz(35)), **FANTASMA))
-    for k in range(8):  # runas alrededor del altar
-        p = polar_crater(k * 45, 13, top + 0.14)
-        hijos.append(pieza(f"Runa{k}", (1.6, 0.12, 3.4), p, AZUL_PODER, "Neon", ry(-k * 45), **DECORADO, CanCollide=False))
-    for k in range(8):  # braseros junto al muro
-        p = polar_crater(k * 45 + 22.5, R - 5, 0)
-        hijos.append(brasero(f"Brasero{k + 1}", p[0], p[2], top + 0.1))
+    # Muro bajo alrededor, con remate de oro (más la pared invisible alta, abajo).
+    hijos += anillo_tallado("Parapeto", cx, cz, R - 0.9, 48, 1.6, 2.6, top + 2.7, (BASALTO[1], BASALTO[0]), "Basalt")
+    hijos += anillo_tallado("Remate", cx, cz, R - 0.9, 48, 2, 0.35, top + 3, ORO, "Metal", **DECORADO)
+    for k in range(8):  # obeliscos con fuego sobre el muro
+        hijos.append(obelisco(f"Obelisco{k + 1}", k * 45 + 22.5, R - 0.9, piso))
     # Pared invisible alta al borde, sin huecos: nadie se cae al lago.
     muros, m = [], 48
     for k in range(m):
