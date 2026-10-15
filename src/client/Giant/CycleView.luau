@@ -97,7 +97,7 @@ function CycleView.start(toasts: Toasts.Toasts)
 			reveal()
 			Sounds.play("StageUp")
 			toasts.banner(
-				`¡Descanso! Baja a la guarida del volcán: entrenamiento x{GiantPool.restMultiplier()} por {restLength(
+				`¡Descanso! Toca IR A LA GUARIDA: entrenamiento x{GiantPool.restMultiplier()} por {restLength(
 					stateFolder
 				)}`,
 				COLORS.Power

@@ -59,13 +59,6 @@ function WorldZones.pondRadius(index: number): number
 	return if index >= WorldZones.SACRED_POND then L.sacredPondRadius else L.trainingPondRadius
 end
 
--- Calderos junto a la puerta del cráter: alimentar apenas se llega.
-function WorldZones.gateCauldron(side: number): Vector3
-	local angle = math.rad(L.bridgeAngle + 180 + side * 12)
-	local offset = Vector3.new(math.cos(angle), 0, math.sin(angle)) * (L.craterCliffRadius + 7)
-	return WorldZones.craterCenter + offset + Vector3.new(0, L.craterRimHeight, 0)
-end
-
 -- Puente: del borde de la meseta a la puerta del cráter, en línea recta.
 -- Misma geometría que puente() en tools/generar_isla.py.
 function WorldZones.bridgeEnds(): (Vector3, Vector3)

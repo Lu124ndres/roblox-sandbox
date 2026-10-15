@@ -66992,21 +66992,21 @@
       "Size": [
        34,
        1.2,
-       134.197
+       118.499
       ],
       "CFrame": [
        -0.0,
-       18.01,
-       207.1089,
+       18.0129,
+       199.1236,
        1.0,
        -0.0,
        0.0,
        0.0,
-       0.9834,
-       0.1815,
+       0.9785,
+       0.206,
        -0.0,
-       -0.1815,
-       0.9834
+       -0.206,
+       0.9785
       ],
       "Color": [
        0.5882,
@@ -67026,21 +67026,21 @@
       "Size": [
        1.8,
        2.6,
-       134.197
+       118.499
       ],
       "CFrame": [
        -16.1,
-       19.8784,
-       206.764,
+       19.8721,
+       198.7322,
        1.0,
        -0.0,
        0.0,
        0.0,
-       0.9834,
-       0.1815,
+       0.9785,
+       0.206,
        -0.0,
-       -0.1815,
-       0.9834
+       -0.206,
+       0.9785
       ],
       "Color": [
        0.6235,
@@ -67060,21 +67060,21 @@
       "Size": [
        2.2,
        0.5,
-       134.197
+       118.499
       ],
       "CFrame": [
        -16.1,
-       21.4026,
-       206.4826,
+       21.3889,
+       198.4129,
        1.0,
        -0.0,
        0.0,
        0.0,
-       0.9834,
-       0.1815,
+       0.9785,
+       0.206,
        -0.0,
-       -0.1815,
-       0.9834
+       -0.206,
+       0.9785
       ],
       "Color": [
        0.5843,
@@ -67094,21 +67094,21 @@
       "Size": [
        0.6,
        8,
-       134.197
+       118.499
       ],
       "CFrame": [
        -16.4,
-       22.5335,
-       206.2738,
+       22.5142,
+       198.176,
        1.0,
        -0.0,
        0.0,
        0.0,
-       0.9834,
-       0.1815,
+       0.9785,
+       0.206,
        -0.0,
-       -0.1815,
-       0.9834
+       -0.206,
+       0.9785
       ],
       "Color": [
        0.5882,
@@ -67132,21 +67132,21 @@
       "Size": [
        1.8,
        2.6,
-       134.197
+       118.499
       ],
       "CFrame": [
        16.1,
-       19.8784,
-       206.764,
+       19.8721,
+       198.7322,
        1.0,
        -0.0,
        0.0,
        0.0,
-       0.9834,
-       0.1815,
+       0.9785,
+       0.206,
        -0.0,
-       -0.1815,
-       0.9834
+       -0.206,
+       0.9785
       ],
       "Color": [
        0.5804,
@@ -67166,21 +67166,21 @@
       "Size": [
        2.2,
        0.5,
-       134.197
+       118.499
       ],
       "CFrame": [
        16.1,
-       21.4026,
-       206.4826,
+       21.3889,
+       198.4129,
        1.0,
        -0.0,
        0.0,
        0.0,
-       0.9834,
-       0.1815,
+       0.9785,
+       0.206,
        -0.0,
-       -0.1815,
-       0.9834
+       -0.206,
+       0.9785
       ],
       "Color": [
        0.5608,
@@ -67200,21 +67200,21 @@
       "Size": [
        0.6,
        8,
-       134.197
+       118.499
       ],
       "CFrame": [
        16.4,
-       22.5335,
-       206.2738,
+       22.5142,
+       198.176,
        1.0,
        -0.0,
        0.0,
        0.0,
-       0.9834,
-       0.1815,
+       0.9785,
+       0.206,
        -0.0,
-       -0.1815,
-       0.9834
+       -0.206,
+       0.9785
       ],
       "Color": [
        0.5882,
@@ -67237,13 +67237,13 @@
       "Anchored": true,
       "Size": [
        7,
-       28.22,
+       28.226,
        7
       ],
       "CFrame": [
        -13.0,
-       -3.89,
-       168.2179,
+       -3.8871,
+       165.0472,
        1.0,
        -0.0,
        0.0,
@@ -67271,13 +67271,13 @@
       "Anchored": true,
       "Size": [
        7,
-       28.22,
+       28.226,
        7
       ],
       "CFrame": [
        13.0,
-       -3.89,
-       168.2179,
+       -3.8871,
+       165.0472,
        1.0,
        -0.0,
        0.0,
@@ -67305,13 +67305,13 @@
       "Anchored": true,
       "Size": [
        7,
-       33.02,
+       33.026,
        7
       ],
       "CFrame": [
        -13.0,
-       -1.49,
-       194.2179,
+       -1.4871,
+       187.8472,
        1.0,
        -0.0,
        0.0,
@@ -67339,13 +67339,13 @@
       "Anchored": true,
       "Size": [
        7,
-       33.02,
+       33.026,
        7
       ],
       "CFrame": [
        13.0,
-       -1.49,
-       194.2179,
+       -1.4871,
+       187.8472,
        1.0,
        -0.0,
        0.0,
@@ -67373,13 +67373,13 @@
       "Anchored": true,
       "Size": [
        7,
-       37.82,
+       37.826,
        7
       ],
       "CFrame": [
        -13.0,
-       0.91,
-       220.2179,
+       0.9129,
+       210.6472,
        1.0,
        -0.0,
        0.0,
@@ -67407,13 +67407,13 @@
       "Anchored": true,
       "Size": [
        7,
-       37.82,
+       37.826,
        7
       ],
       "CFrame": [
        13.0,
-       0.91,
-       220.2179,
+       0.9129,
+       210.6472,
        1.0,
        -0.0,
        0.0,
@@ -67441,13 +67441,13 @@
       "Anchored": true,
       "Size": [
        7,
-       42.62,
+       42.626,
        7
       ],
       "CFrame": [
        -13.0,
-       3.31,
-       246.2179,
+       3.3129,
+       233.4472,
        1.0,
        -0.0,
        0.0,
@@ -67475,13 +67475,13 @@
       "Anchored": true,
       "Size": [
        7,
-       42.62,
+       42.626,
        7
       ],
       "CFrame": [
        13.0,
-       3.31,
-       246.2179,
+       3.3129,
+       233.4472,
        1.0,
        -0.0,
        0.0,
@@ -67514,8 +67514,8 @@
       ],
       "CFrame": [
        -16.4,
-       12.3344,
-       150.9589,
+       12.3257,
+       149.772,
        0.0,
        -1.0,
        0,
@@ -67549,8 +67549,8 @@
       ],
       "CFrame": [
        -16.4,
-       15.0844,
-       150.9589,
+       15.0757,
+       149.772,
        1,
        0,
        0,
@@ -67601,8 +67601,8 @@
       ],
       "CFrame": [
        16.4,
-       12.3344,
-       150.9589,
+       12.3257,
+       149.772,
        0.0,
        -1.0,
        0,
@@ -67636,8 +67636,8 @@
       ],
       "CFrame": [
        16.4,
-       15.0844,
-       150.9589,
+       15.0757,
+       149.772,
        1,
        0,
        0,
@@ -67688,8 +67688,8 @@
       ],
       "CFrame": [
        -16.4,
-       15.7629,
-       169.5304,
+       15.7542,
+       166.0578,
        0.0,
        -1.0,
        0,
@@ -67723,8 +67723,8 @@
       ],
       "CFrame": [
        -16.4,
-       18.5129,
-       169.5304,
+       18.5042,
+       166.0578,
        1,
        0,
        0,
@@ -67775,8 +67775,8 @@
       ],
       "CFrame": [
        16.4,
-       15.7629,
-       169.5304,
+       15.7542,
+       166.0578,
        0.0,
        -1.0,
        0,
@@ -67810,8 +67810,8 @@
       ],
       "CFrame": [
        16.4,
-       18.5129,
-       169.5304,
+       18.5042,
+       166.0578,
        1,
        0,
        0,
@@ -67862,8 +67862,8 @@
       ],
       "CFrame": [
        -16.4,
-       19.1915,
-       188.1018,
+       19.1828,
+       182.3435,
        0.0,
        -1.0,
        0,
@@ -67897,8 +67897,8 @@
       ],
       "CFrame": [
        -16.4,
-       21.9415,
-       188.1018,
+       21.9328,
+       182.3435,
        1,
        0,
        0,
@@ -67949,8 +67949,8 @@
       ],
       "CFrame": [
        16.4,
-       19.1915,
-       188.1018,
+       19.1828,
+       182.3435,
        0.0,
        -1.0,
        0,
@@ -67984,8 +67984,8 @@
       ],
       "CFrame": [
        16.4,
-       21.9415,
-       188.1018,
+       21.9328,
+       182.3435,
        1,
        0,
        0,
@@ -68036,8 +68036,8 @@
       ],
       "CFrame": [
        -16.4,
-       22.6201,
-       206.6732,
+       22.6114,
+       198.6292,
        0.0,
        -1.0,
        0,
@@ -68071,8 +68071,8 @@
       ],
       "CFrame": [
        -16.4,
-       25.3701,
-       206.6732,
+       25.3614,
+       198.6292,
        1,
        0,
        0,
@@ -68123,8 +68123,8 @@
       ],
       "CFrame": [
        16.4,
-       22.6201,
-       206.6732,
+       22.6114,
+       198.6292,
        0.0,
        -1.0,
        0,
@@ -68158,8 +68158,8 @@
       ],
       "CFrame": [
        16.4,
-       25.3701,
-       206.6732,
+       25.3614,
+       198.6292,
        1,
        0,
        0,
@@ -68210,8 +68210,8 @@
       ],
       "CFrame": [
        -16.4,
-       26.0487,
-       225.2446,
+       26.04,
+       214.9149,
        0.0,
        -1.0,
        0,
@@ -68245,8 +68245,8 @@
       ],
       "CFrame": [
        -16.4,
-       28.7987,
-       225.2446,
+       28.79,
+       214.9149,
        1,
        0,
        0,
@@ -68297,8 +68297,8 @@
       ],
       "CFrame": [
        16.4,
-       26.0487,
-       225.2446,
+       26.04,
+       214.9149,
        0.0,
        -1.0,
        0,
@@ -68332,8 +68332,8 @@
       ],
       "CFrame": [
        16.4,
-       28.7987,
-       225.2446,
+       28.79,
+       214.9149,
        1,
        0,
        0,
@@ -68384,8 +68384,8 @@
       ],
       "CFrame": [
        -16.4,
-       29.4772,
-       243.8161,
+       29.4685,
+       231.2006,
        0.0,
        -1.0,
        0,
@@ -68419,8 +68419,8 @@
       ],
       "CFrame": [
        -16.4,
-       32.2272,
-       243.8161,
+       32.2185,
+       231.2006,
        1,
        0,
        0,
@@ -68471,8 +68471,8 @@
       ],
       "CFrame": [
        16.4,
-       29.4772,
-       243.8161,
+       29.4685,
+       231.2006,
        0.0,
        -1.0,
        0,
@@ -68506,8 +68506,8 @@
       ],
       "CFrame": [
        16.4,
-       32.2272,
-       243.8161,
+       32.2185,
+       231.2006,
        1,
        0,
        0,
@@ -68558,8 +68558,8 @@
       ],
       "CFrame": [
        -16.4,
-       32.9058,
-       262.3875,
+       32.8971,
+       247.4863,
        0.0,
        -1.0,
        0,
@@ -68593,8 +68593,8 @@
       ],
       "CFrame": [
        -16.4,
-       35.6558,
-       262.3875,
+       35.6471,
+       247.4863,
        1,
        0,
        0,
@@ -68645,8 +68645,8 @@
       ],
       "CFrame": [
        16.4,
-       32.9058,
-       262.3875,
+       32.8971,
+       247.4863,
        0.0,
        -1.0,
        0,
@@ -68680,8 +68680,8 @@
       ],
       "CFrame": [
        16.4,
-       35.6558,
-       262.3875,
+       35.6471,
+       247.4863,
        1,
        0,
        0,
@@ -71167,9 +71167,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -71316,78 +71313,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           80.3775,
-           32.3,
-           483.2935,
-           0.0,
-           0.3827,
-           -0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.9239,
-           -0.3827
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           80.3775,
-           33.8,
-           483.2935,
-           0.0,
-           0.3827,
-           -0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.9239,
-           -0.3827
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -73744,9 +73669,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -73893,78 +73815,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           33.2935,
-           32.3,
-           530.3775,
-           0.0,
-           0.9239,
-           -0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.3827,
-           -0.9239
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           33.2935,
-           33.8,
-           530.3775,
-           0.0,
-           0.9239,
-           -0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.3827,
-           -0.9239
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -76321,9 +76171,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -76470,78 +76317,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           -33.2935,
-           32.3,
-           530.3775,
-           0.0,
-           0.9239,
-           0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.3827,
-           -0.9239
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           -33.2935,
-           33.8,
-           530.3775,
-           0.0,
-           0.9239,
-           0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.3827,
-           -0.9239
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -78898,9 +78673,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -79047,78 +78819,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           -80.3775,
-           32.3,
-           483.2935,
-           0.0,
-           0.3827,
-           0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.9239,
-           -0.3827
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           -80.3775,
-           33.8,
-           483.2935,
-           0.0,
-           0.3827,
-           0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.9239,
-           -0.3827
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -81475,9 +81175,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -81624,78 +81321,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           -80.3775,
-           32.3,
-           416.7065,
-           0.0,
-           -0.3827,
-           0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.9239,
-           0.3827
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           -80.3775,
-           33.8,
-           416.7065,
-           0.0,
-           -0.3827,
-           0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.9239,
-           0.3827
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -84052,9 +83677,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -84201,78 +83823,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           -33.2935,
-           32.3,
-           369.6225,
-           0.0,
-           -0.9239,
-           0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.3827,
-           0.9239
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           -33.2935,
-           33.8,
-           369.6225,
-           0.0,
-           -0.9239,
-           0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           0.3827,
-           0.9239
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -86629,9 +86179,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -86778,78 +86325,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           33.2935,
-           32.3,
-           369.6225,
-           0.0,
-           -0.9239,
-           -0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.3827,
-           0.9239
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           33.2935,
-           33.8,
-           369.6225,
-           0.0,
-           -0.9239,
-           -0.3827,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.3827,
-           0.9239
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -89206,9 +88681,6 @@
           "CanQuery": false,
           "CanTouch": false,
           "CastShadow": false
-         },
-         "attributes": {
-          "AbreEnDescanso": true
          }
         },
         {
@@ -89355,78 +88827,6 @@
           "Material": "Metal",
           "TopSurface": "Smooth",
           "BottomSurface": "Smooth",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           3.4,
-           5,
-           5
-          ],
-          "CFrame": [
-           80.3775,
-           32.3,
-           416.7065,
-           0.0,
-           -0.3827,
-           -0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.9239,
-           0.3827
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.6,
-           5.6,
-           5.6
-          ],
-          "CFrame": [
-           80.3775,
-           33.8,
-           416.7065,
-           0.0,
-           -0.3827,
-           -0.9239,
-           1.0,
-           0.0,
-           0.0,
-           0.0,
-           -0.9239,
-           0.3827
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
           "CanQuery": false,
           "CanTouch": false
          }
@@ -89828,7 +89228,7 @@
         "CFrame": [
          19.5,
          35.0,
-         273.0,
+         257.0,
          -1.0,
          0.0,
          -0.0,
@@ -89862,7 +89262,7 @@
         "CFrame": [
          19.5,
          44.5,
-         273.0,
+         257.0,
          -0.9563,
          0.0,
          0.2924,
@@ -89896,7 +89296,7 @@
         "CFrame": [
          19.5,
          53.0,
-         273.0,
+         257.0,
          -0.829,
          0.0,
          0.5592,
@@ -89934,7 +89334,7 @@
           "CFrame": [
            19.5,
            59.5,
-           273.0,
+           257.0,
            1,
            0,
            0,
@@ -89969,7 +89369,7 @@
           "CFrame": [
            18.66,
            59.71,
-           271.236,
+           255.236,
            1,
            0,
            0,
@@ -90006,7 +89406,7 @@
           "CFrame": [
            20.34,
            59.71,
-           271.236,
+           255.236,
            1,
            0,
            0,
@@ -90059,7 +89459,7 @@
           "CFrame": [
            19.5,
            57.61,
-           272.58,
+           256.58,
            1,
            0,
            0,
@@ -90095,7 +89495,7 @@
         "CFrame": [
          -19.5,
          35.0,
-         273.0,
+         257.0,
          -1.0,
          0.0,
          -0.0,
@@ -90129,7 +89529,7 @@
         "CFrame": [
          -19.5,
          44.5,
-         273.0,
+         257.0,
          -0.9563,
          0.0,
          -0.2924,
@@ -90163,7 +89563,7 @@
         "CFrame": [
          -19.5,
          53.0,
-         273.0,
+         257.0,
          -0.829,
          0.0,
          -0.5592,
@@ -90201,7 +89601,7 @@
           "CFrame": [
            -19.5,
            59.5,
-           273.0,
+           257.0,
            1,
            0,
            0,
@@ -90236,7 +89636,7 @@
           "CFrame": [
            -20.34,
            59.71,
-           271.236,
+           255.236,
            1,
            0,
            0,
@@ -90273,7 +89673,7 @@
           "CFrame": [
            -18.66,
            59.71,
-           271.236,
+           255.236,
            1,
            0,
            0,
@@ -90326,7 +89726,7 @@
           "CFrame": [
            -19.5,
            57.61,
-           272.58,
+           256.58,
            1,
            0,
            0,
@@ -90362,7 +89762,7 @@
         "CFrame": [
          -0.0,
          54.0,
-         273.0,
+         257.0,
          -1.0,
          0.0,
          -0.0,
@@ -90396,7 +89796,7 @@
         "CFrame": [
          -0.0,
          51.4,
-         273.0,
+         257.0,
          -1.0,
          0.0,
          -0.0,
@@ -90485,7 +89885,7 @@
         "CFrame": [
          4.5,
          52.0,
-         272.2,
+         256.2,
          -1.0,
          0.0,
          -0.0,
@@ -90521,7 +89921,7 @@
         "CFrame": [
          4.5,
          50.7,
-         272.2,
+         256.2,
          0.0,
          0.0,
          -1.0,
@@ -90557,7 +89957,7 @@
         "CFrame": [
          4.5,
          49.4,
-         272.2,
+         256.2,
          -1.0,
          0.0,
          -0.0,
@@ -90593,7 +89993,7 @@
         "CFrame": [
          4.5,
          48.1,
-         272.2,
+         256.2,
          0.0,
          0.0,
          -1.0,
@@ -90629,7 +90029,7 @@
         "CFrame": [
          4.5,
          46.8,
-         272.2,
+         256.2,
          -1.0,
          0.0,
          -0.0,
@@ -90665,7 +90065,7 @@
         "CFrame": [
          4.5,
          45.5,
-         272.2,
+         256.2,
          0.0,
          0.0,
          -1.0,
@@ -90701,7 +90101,7 @@
         "CFrame": [
          -4.5,
          52.0,
-         272.2,
+         256.2,
          -1.0,
          0.0,
          -0.0,
@@ -90737,7 +90137,7 @@
         "CFrame": [
          -4.5,
          50.7,
-         272.2,
+         256.2,
          0.0,
          0.0,
          -1.0,
@@ -90773,7 +90173,7 @@
         "CFrame": [
          -4.5,
          49.4,
-         272.2,
+         256.2,
          -1.0,
          0.0,
          -0.0,
@@ -90809,7 +90209,7 @@
         "CFrame": [
          -4.5,
          48.1,
-         272.2,
+         256.2,
          0.0,
          0.0,
          -1.0,
@@ -90845,7 +90245,7 @@
         "CFrame": [
          -4.5,
          46.8,
-         272.2,
+         256.2,
          -1.0,
          0.0,
          -0.0,
@@ -90881,7 +90281,7 @@
         "CFrame": [
          -4.5,
          45.5,
-         272.2,
+         256.2,
          0.0,
          0.0,
          -1.0,
@@ -90907,614 +90307,6 @@
      ]
     },
     {
-     "name": "CalderosPuerta",
-     "className": "Model",
-     "children": [
-      {
-       "name": "Caldero-1",
-       "className": "Model",
-       "children": [
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           4.4,
-           7,
-           7
-          ],
-          "CFrame": [
-           -32.6421,
-           32.2,
-           296.4308,
-           0.0,
-           -1.0,
-           0,
-           1.0,
-           0.0,
-           0,
-           0,
-           0,
-           1
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.7,
-           7.8,
-           7.8
-          ],
-          "CFrame": [
-           -32.6421,
-           34.2,
-           296.4308,
-           0.0,
-           -1.0,
-           0,
-           1.0,
-           0.0,
-           0,
-           0,
-           0,
-           1
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "Patas",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           1.2,
-           8,
-           8
-          ],
-          "CFrame": [
-           -32.6421,
-           30.6,
-           296.4308,
-           0.0,
-           -1.0,
-           0,
-           1.0,
-           0.0,
-           0,
-           0,
-           0,
-           1
-          ],
-          "Color": [
-           0.2118,
-           0.2196,
-           0.2431
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "AntorchaA",
-         "className": "Model",
-         "children": [
-          {
-           "name": "Palo",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             6.5,
-             0.55,
-             0.55
-            ],
-            "CFrame": [
-             -27.6421,
-             33.25,
-             299.4308,
-             0.0,
-             -1.0,
-             0,
-             1.0,
-             0.0,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             0.6588,
-             0.4706,
-             0.298
-            ],
-            "Material": "Wood",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Shape": "Cylinder"
-           }
-          },
-          {
-           "name": "Amarre",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             0.5,
-             0.75,
-             0.75
-            ],
-            "CFrame": [
-             -27.6421,
-             35.3,
-             299.4308,
-             0.0,
-             -1.0,
-             0,
-             1.0,
-             0.0,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             0.8706,
-             0.7451,
-             0.4627
-            ],
-            "Material": "Fabric",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Shape": "Cylinder",
-            "CanQuery": false,
-            "CanTouch": false
-           }
-          },
-          {
-           "name": "Cuenco",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             1.1,
-             1.8,
-             1.8
-            ],
-            "CFrame": [
-             -27.6421,
-             36.65,
-             299.4308,
-             0.0,
-             -1.0,
-             0,
-             1.0,
-             0.0,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             0.4235,
-             0.298,
-             0.1961
-            ],
-            "Material": "Wood",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Shape": "Cylinder",
-            "CanQuery": false,
-            "CanTouch": false
-           }
-          },
-          {
-           "name": "Llama",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             0.6,
-             0.6,
-             0.6
-            ],
-            "CFrame": [
-             -27.6421,
-             37.1,
-             299.4308,
-             1,
-             0,
-             0,
-             0,
-             1,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             1.0,
-             0.7686,
-             0.4314
-            ],
-            "Material": "SmoothPlastic",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Transparency": 1,
-            "CanQuery": false,
-            "CanTouch": false,
-            "CastShadow": false,
-            "CanCollide": false
-           },
-           "children": [
-            {
-             "name": "Fuego",
-             "className": "Fire",
-             "properties": {
-              "Size": 3.2,
-              "Heat": 7,
-              "Color": [
-               0.2745,
-               0.5882,
-               1.0
-              ],
-              "SecondaryColor": [
-               0.6667,
-               0.902,
-               1.0
-              ]
-             }
-            },
-            {
-             "name": "Brillo",
-             "className": "PointLight",
-             "properties": {
-              "Brightness": 1.8,
-              "Range": 20,
-              "Color": [
-               0.4314,
-               0.6667,
-               1.0
-              ],
-              "Shadows": false
-             }
-            }
-           ]
-          }
-         ]
-        }
-       ]
-      },
-      {
-       "name": "Caldero1",
-       "className": "Model",
-       "children": [
-        {
-         "name": "PuntoDeAlimentar",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           4.4,
-           7,
-           7
-          ],
-          "CFrame": [
-           32.6421,
-           32.2,
-           296.4308,
-           0.0,
-           -1.0,
-           0,
-           1.0,
-           0.0,
-           0,
-           0,
-           0,
-           1
-          ],
-          "Color": [
-           0.2353,
-           0.2275,
-           0.251
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "Aro",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           0.7,
-           7.8,
-           7.8
-          ],
-          "CFrame": [
-           32.6421,
-           34.2,
-           296.4308,
-           0.0,
-           -1.0,
-           0,
-           1.0,
-           0.0,
-           0,
-           0,
-           0,
-           1
-          ],
-          "Color": [
-           1.0,
-           0.4784,
-           0.3922
-          ],
-          "Material": "Neon",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder",
-          "CanQuery": false,
-          "CanTouch": false
-         }
-        },
-        {
-         "name": "Patas",
-         "className": "Part",
-         "properties": {
-          "Anchored": true,
-          "Size": [
-           1.2,
-           8,
-           8
-          ],
-          "CFrame": [
-           32.6421,
-           30.6,
-           296.4308,
-           0.0,
-           -1.0,
-           0,
-           1.0,
-           0.0,
-           0,
-           0,
-           0,
-           1
-          ],
-          "Color": [
-           0.2118,
-           0.2196,
-           0.2431
-          ],
-          "Material": "Metal",
-          "TopSurface": "Smooth",
-          "BottomSurface": "Smooth",
-          "Shape": "Cylinder"
-         }
-        },
-        {
-         "name": "AntorchaA",
-         "className": "Model",
-         "children": [
-          {
-           "name": "Palo",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             6.5,
-             0.55,
-             0.55
-            ],
-            "CFrame": [
-             37.6421,
-             33.25,
-             299.4308,
-             0.0,
-             -1.0,
-             0,
-             1.0,
-             0.0,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             0.6588,
-             0.4706,
-             0.298
-            ],
-            "Material": "Wood",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Shape": "Cylinder"
-           }
-          },
-          {
-           "name": "Amarre",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             0.5,
-             0.75,
-             0.75
-            ],
-            "CFrame": [
-             37.6421,
-             35.3,
-             299.4308,
-             0.0,
-             -1.0,
-             0,
-             1.0,
-             0.0,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             0.8706,
-             0.7451,
-             0.4627
-            ],
-            "Material": "Fabric",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Shape": "Cylinder",
-            "CanQuery": false,
-            "CanTouch": false
-           }
-          },
-          {
-           "name": "Cuenco",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             1.1,
-             1.8,
-             1.8
-            ],
-            "CFrame": [
-             37.6421,
-             36.65,
-             299.4308,
-             0.0,
-             -1.0,
-             0,
-             1.0,
-             0.0,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             0.4235,
-             0.298,
-             0.1961
-            ],
-            "Material": "Wood",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Shape": "Cylinder",
-            "CanQuery": false,
-            "CanTouch": false
-           }
-          },
-          {
-           "name": "Llama",
-           "className": "Part",
-           "properties": {
-            "Anchored": true,
-            "Size": [
-             0.6,
-             0.6,
-             0.6
-            ],
-            "CFrame": [
-             37.6421,
-             37.1,
-             299.4308,
-             1,
-             0,
-             0,
-             0,
-             1,
-             0,
-             0,
-             0,
-             1
-            ],
-            "Color": [
-             1.0,
-             0.7686,
-             0.4314
-            ],
-            "Material": "SmoothPlastic",
-            "TopSurface": "Smooth",
-            "BottomSurface": "Smooth",
-            "Transparency": 1,
-            "CanQuery": false,
-            "CanTouch": false,
-            "CastShadow": false,
-            "CanCollide": false
-           },
-           "children": [
-            {
-             "name": "Fuego",
-             "className": "Fire",
-             "properties": {
-              "Size": 3.2,
-              "Heat": 7,
-              "Color": [
-               0.2745,
-               0.5882,
-               1.0
-              ],
-              "SecondaryColor": [
-               0.6667,
-               0.902,
-               1.0
-              ]
-             }
-            },
-            {
-             "name": "Brillo",
-             "className": "PointLight",
-             "properties": {
-              "Brightness": 1.8,
-              "Range": 20,
-              "Color": [
-               0.4314,
-               0.6667,
-               1.0
-              ],
-              "Shadows": false
-             }
-            }
-           ]
-          }
-         ]
-        }
-       ]
-      }
-     ]
-    },
-    {
      "name": "Agujas",
      "className": "Folder",
      "children": [
@@ -91533,9 +90325,9 @@
            5.058
           ],
           "CFrame": [
-           137.7022,
+           141.0932,
            33.2169,
-           368.9597,
+           366.9704,
            0.6727,
            0.0425,
            0.7386,
@@ -91567,9 +90359,9 @@
            3.346
           ],
           "CFrame": [
-           137.8828,
+           141.2739,
            41.6507,
-           369.3695,
+           367.3801,
            0.8844,
            0.0853,
            0.4589,
@@ -91607,9 +90399,9 @@
            4.891
           ],
           "CFrame": [
-           146.3211,
+           156.5835,
            32.1288,
-           359.4476,
+           353.1318,
            0.8446,
            -0.0208,
            0.5349,
@@ -91641,9 +90433,9 @@
            2.839
           ],
           "CFrame": [
-           146.5123,
+           156.7747,
            38.3863,
-           359.8208,
+           353.505,
            0.7639,
            -0.0845,
            0.6398,
@@ -91681,9 +90473,9 @@
            5.47
           ],
           "CFrame": [
-           -143.8078,
+           -155.7282,
            35.6868,
-           551.5544,
+           559.9337,
            0.7236,
            0.0197,
            0.69,
@@ -91715,9 +90507,9 @@
            3.406
           ],
           "CFrame": [
-           -143.676,
+           -155.5964,
            49.0603,
-           551.4564,
+           559.8357,
            0.9844,
            -0.1,
            0.1447,
@@ -91749,9 +90541,9 @@
            1.754
           ],
           "CFrame": [
-           -144.2074,
+           -156.1278,
            62.4338,
-           550.6915,
+           559.0708,
            0.3088,
            -0.0413,
            0.9502,
@@ -91789,9 +90581,9 @@
            6.107
           ],
           "CFrame": [
-           26.6066,
+           28.5132,
            32.4345,
-           279.5721,
+           267.1143,
            0.7585,
            0.0538,
            0.6495,
@@ -91823,9 +90615,9 @@
            3.233
           ],
           "CFrame": [
-           26.6076,
+           28.5142,
            39.3036,
-           278.9847,
+           266.5269,
            0.3489,
            0.0347,
            0.9365,
@@ -91863,9 +90655,9 @@
            5.186
           ],
           "CFrame": [
-           145.3429,
+           156.202,
            32.9834,
-           354.793,
+           347.7189,
            0.6204,
            0.0559,
            0.7823,
@@ -91897,9 +90689,9 @@
            2.763
           ],
           "CFrame": [
-           145.8232,
+           156.6824,
            40.9501,
-           354.9083,
+           347.8342,
            0.9789,
            0.0406,
            0.2003,
@@ -91937,9 +90729,9 @@
            4.157
           ],
           "CFrame": [
-           -124.818,
+           -131.1591,
            35.4483,
-           339.9383,
+           334.3575,
            0.6941,
            0.0938,
            0.7137,
@@ -91971,9 +90763,9 @@
            2.689
           ],
           "CFrame": [
-           -125.4846,
+           -131.8257,
            48.3448,
-           340.1048,
+           334.5241,
            0.3366,
            0.0056,
            0.9416,
@@ -92005,9 +90797,9 @@
            1.568
           ],
           "CFrame": [
-           -125.2205,
+           -131.5616,
            61.2414,
-           339.8792,
+           334.2984,
            0.0831,
            -0.0108,
            0.9965,
@@ -92045,9 +90837,9 @@
            4.081
           ],
           "CFrame": [
-           -139.1976,
+           -146.575,
            35.9863,
-           543.2336,
+           548.216,
            0.498,
            -0.0245,
            0.8668,
@@ -92079,9 +90871,9 @@
            3.247
           ],
           "CFrame": [
-           -138.3455,
+           -145.7229,
            49.959,
-           543.2112,
+           548.1936,
            0.7612,
            -0.0776,
            0.6438,
@@ -92113,9 +90905,9 @@
            1.99
           ],
           "CFrame": [
-           -138.7165,
+           -146.0939,
            63.9317,
-           543.4171,
+           548.3995,
            0.9814,
            -0.0746,
            0.1771,
@@ -92153,9 +90945,9 @@
            4.663
           ],
           "CFrame": [
-           107.8832,
+           116.2361,
            34.5961,
-           313.5443,
+           302.9234,
            0.38,
            -0.0484,
            0.9237,
@@ -92187,9 +90979,9 @@
            3.592
           ],
           "CFrame": [
-           107.7965,
+           116.1495,
            45.7884,
-           312.5237,
+           301.9027,
            0.9558,
            0.033,
            0.292,
@@ -92221,9 +91013,9 @@
            1.762
           ],
           "CFrame": [
-           107.5015,
+           115.8545,
            56.9807,
-           312.748,
+           302.127,
            0.7393,
            -0.029,
            0.6728,
@@ -92261,9 +91053,9 @@
            3.849
           ],
           "CFrame": [
-           -116.0553,
+           -117.2604,
            34.1086,
-           554.9661,
+           556.0634,
            0.9983,
            0.0103,
            0.0573,
@@ -92295,9 +91087,9 @@
            2.445
           ],
           "CFrame": [
-           -116.1499,
+           -117.355,
            44.3258,
-           554.7731,
+           555.8705,
            0.0198,
            0.0004,
            0.9998,
@@ -92329,9 +91121,9 @@
            1.55
           ],
           "CFrame": [
-           -115.8605,
+           -117.0655,
            54.543,
-           555.7222,
+           556.8196,
            0.114,
            0.0115,
            0.9934,
@@ -92369,9 +91161,9 @@
            5.59
           ],
           "CFrame": [
-           102.2927,
+           108.9076,
            33.4137,
-           586.8595,
+           595.7246,
            0.8752,
            -0.0707,
            0.4786,
@@ -92403,9 +91195,9 @@
            3.023
           ],
           "CFrame": [
-           102.603,
+           109.218,
            42.2412,
-           586.7596,
+           595.6248,
            0.9138,
            0.0796,
            0.3982,
@@ -92437,9 +91229,9 @@
            1.919
           ],
           "CFrame": [
-           101.9498,
+           108.5648,
            51.0686,
-           586.7924,
+           595.6575,
            0.9476,
            0.0443,
            0.3163,
@@ -92477,9 +91269,9 @@
            4.222
           ],
           "CFrame": [
-           136.4192,
+           145.5405,
            33.9041,
-           553.02,
+           559.8831,
            0.6919,
            -0.0143,
            0.7219,
@@ -92511,9 +91303,9 @@
            2.518
           ],
           "CFrame": [
-           137.2587,
+           146.38,
            43.7123,
-           553.4836,
+           560.3468,
            0.4411,
            -0.054,
            0.8958,
@@ -92551,9 +91343,9 @@
            3.661
           ],
           "CFrame": [
-           167.342,
+           177.7448,
            34.8831,
-           478.1659,
+           479.9282,
            0.9843,
            -0.1028,
            0.1436,
@@ -92585,9 +91377,9 @@
            2.099
           ],
           "CFrame": [
-           167.9005,
+           178.3034,
            46.6492,
-           478.3083,
+           480.0706,
            0.4107,
            0.03,
            0.9113,
@@ -92619,9 +91411,9 @@
            1.453
           ],
           "CFrame": [
-           167.4963,
+           177.8992,
            58.4154,
-           477.8419,
+           479.6042,
            0.1324,
            0.0123,
            0.9911,
@@ -92659,9 +91451,9 @@
            4.442
           ],
           "CFrame": [
-           129.4678,
+           133.7394,
            33.0923,
-           352.1112,
+           348.8813,
            0.3703,
            0.0142,
            0.9288,
@@ -92693,9 +91485,9 @@
            2.945
           ],
           "CFrame": [
-           129.3628,
+           133.6344,
            41.2769,
-           352.6483,
+           349.4185,
            0.7557,
            0.0204,
            0.6546,
@@ -92733,9 +91525,9 @@
            4.028
           ],
           "CFrame": [
-           36.4053,
+           39.4421,
            35.9943,
-           277.8822,
+           263.3172,
            0.5678,
            -0.0223,
            0.8228,
@@ -92767,9 +91559,9 @@
            2.503
           ],
           "CFrame": [
-           35.5787,
+           38.6156,
            49.9828,
-           277.2889,
+           262.7239,
            0.9986,
            -0.0078,
            0.0519,
@@ -92801,9 +91593,9 @@
            1.229
           ],
           "CFrame": [
-           35.8753,
+           38.9122,
            63.9714,
-           277.198,
+           262.6329,
            0.9763,
            0.0699,
            0.2051,
@@ -92841,9 +91633,9 @@
            4.253
           ],
           "CFrame": [
-           35.8195,
+           38.2657,
            34.9375,
-           282.3846,
+           271.1006,
            0.1605,
            -0.0186,
            0.9869,
@@ -92875,9 +91667,9 @@
            2.7
           ],
           "CFrame": [
-           36.1849,
+           38.6311,
            46.8126,
-           282.3079,
+           271.024,
            0.1732,
            0.0018,
            0.9849,
@@ -92909,9 +91701,9 @@
            1.87
           ],
           "CFrame": [
-           36.5249,
+           38.9711,
            58.6877,
-           282.9602,
+           271.6762,
            0.9774,
            0.1056,
            0.1833,
@@ -92949,9 +91741,9 @@
            4.944
           ],
           "CFrame": [
-           -162.5662,
+           -169.2351,
            32.1816,
-           428.6622,
+           427.7909,
            0.8291,
            0.0413,
            0.5575,
@@ -92983,9 +91775,9 @@
            3.641
           ],
           "CFrame": [
-           -162.2465,
+           -168.9154,
            38.5448,
-           429.1948,
+           428.3235,
            0.923,
            -0.089,
            0.3745,
@@ -93023,9 +91815,9 @@
            3.797
           ],
           "CFrame": [
-           8.9014,
+           9.5729,
            35.8627,
-           624.805,
+           638.7576,
            0.5094,
            -0.0629,
            0.8582,
@@ -93057,9 +91849,9 @@
            3.101
           ],
           "CFrame": [
-           9.0086,
+           9.6801,
            49.5882,
-           625.0279,
+           638.9806,
            0.2004,
            0.0073,
            0.9797,
@@ -93091,9 +91883,9 @@
            1.723
           ],
           "CFrame": [
-           8.4863,
+           9.1577,
            63.3137,
-           624.3479,
+           638.3006,
            0.523,
            0.0115,
            0.8522,
@@ -93131,9 +91923,9 @@
            4.172
           ],
           "CFrame": [
-           111.7972,
+           112.6206,
            33.5982,
-           558.4381,
+           559.2379,
            0.892,
            -0.0569,
            0.4485,
@@ -93165,9 +91957,9 @@
            1.896
           ],
           "CFrame": [
-           111.3125,
+           112.1359,
            42.7946,
-           558.4232,
+           559.223,
            0.7603,
            -0.0065,
            0.6495,
@@ -93199,9 +91991,9 @@
            1.234
           ],
           "CFrame": [
-           111.9368,
+           112.7603,
            51.9911,
-           558.1713,
+           558.971,
            0.8865,
            0.0112,
            0.4627,
@@ -93239,9 +92031,9 @@
            4.715
           ],
           "CFrame": [
-           107.7563,
+           115.4816,
            34.8827,
-           585.456,
+           595.1894,
            0.9944,
            0.0512,
            0.0925,
@@ -93273,9 +92065,9 @@
            3.68
           ],
           "CFrame": [
-           107.8047,
+           115.5299,
            46.6481,
-           584.6442,
+           594.3776,
            0.5411,
            -0.0299,
            0.8404,
@@ -93307,9 +92099,9 @@
            2.068
           ],
           "CFrame": [
-           107.3652,
+           115.0905,
            58.4134,
-           584.9084,
+           594.6419,
            0.0786,
            -0.0105,
            0.9969,
@@ -93347,9 +92139,9 @@
            5.009
           ],
           "CFrame": [
-           -94.8386,
+           -97.7143,
            35.0885,
-           319.8552,
+           315.8911,
            0.8577,
            -0.11,
            0.5022,
@@ -93381,9 +92173,9 @@
            3.707
           ],
           "CFrame": [
-           -94.8448,
+           -97.7205,
            47.2654,
-           319.0036,
+           315.0396,
            0.2146,
            0.0228,
            0.9764,
@@ -93415,9 +92207,9 @@
            2.233
           ],
           "CFrame": [
-           -95.0203,
+           -97.896,
            59.4423,
-           319.6645,
+           315.7005,
            0.7044,
            0.0403,
            0.7087,
@@ -93455,9 +92247,9 @@
            3.666
           ],
           "CFrame": [
-           -24.7047,
+           -26.5804,
            33.622,
-           621.9103,
+           634.6322,
            0.9572,
            0.0734,
            0.2798,
@@ -93489,9 +92281,9 @@
            1.967
           ],
           "CFrame": [
-           -25.0759,
+           -26.9516,
            42.8661,
-           621.3909,
+           634.1128,
            0.9861,
            -0.1154,
            0.1195,
@@ -93523,9 +92315,9 @@
            1.191
           ],
           "CFrame": [
-           -24.7883,
+           -26.6641,
            52.1102,
-           620.8441,
+           633.5659,
            0.6047,
            -0.0063,
            0.7964,
@@ -93563,9 +92355,9 @@
            4.094
           ],
           "CFrame": [
-           90.3692,
+           98.4605,
            33.4214,
-           603.0423,
+           616.629,
            0.9661,
            -0.1078,
            0.2346,
@@ -93597,9 +92389,9 @@
            2.445
           ],
           "CFrame": [
-           91.4343,
+           99.5256,
            42.2642,
-           602.7957,
+           616.3824,
            0.994,
            -0.1091,
            0.0042,
@@ -93637,9 +92429,9 @@
            3.696
           ],
           "CFrame": [
-           29.183,
+           31.6194,
            32.604,
-           277.041,
+           262.6913,
            0.5379,
            -0.0731,
            0.8399,
@@ -93671,9 +92463,9 @@
            2.982
           ],
           "CFrame": [
-           29.4713,
+           31.9077,
            39.812,
-           276.7611,
+           262.4115,
            0.3496,
            0.038,
            0.9361,
@@ -93705,9 +92497,9 @@
            1.663
           ],
           "CFrame": [
-           29.6354,
+           32.0718,
            47.0201,
-           276.7059,
+           262.3562,
            0.9185,
            -0.0555,
            0.3916,
@@ -93745,9 +92537,9 @@
            5.402
           ],
           "CFrame": [
-           -28.7546,
+           -29.4928,
            33.7208,
-           291.9599,
+           287.8712,
            0.0458,
            0.0057,
            0.9989,
@@ -93779,9 +92571,9 @@
            3.172
           ],
           "CFrame": [
-           -28.0114,
+           -28.7496,
            43.1624,
-           292.107,
+           288.0182,
            0.5769,
            -0.0175,
            0.8166,
@@ -93813,9 +92605,9 @@
            2.22
           ],
           "CFrame": [
-           -28.4637,
+           -29.2019,
            52.604,
-           292.5847,
+           288.4959,
            0.2213,
            0.0292,
            0.9748,
@@ -93853,9 +92645,9 @@
            4.995
           ],
           "CFrame": [
-           119.3399,
+           121.4872,
            34.1993,
-           553.6037,
+           555.4799,
            0.7838,
            -0.0429,
            0.6195,
@@ -93887,9 +92679,9 @@
            3.195
           ],
           "CFrame": [
-           119.4782,
+           121.6255,
            44.598,
-           554.4758,
+           556.3519,
            0.3604,
            0.0002,
            0.9328,
@@ -93921,9 +92713,9 @@
            1.875
           ],
           "CFrame": [
-           119.2047,
+           121.352,
            54.9966,
-           553.9936,
+           555.8697,
            0.925,
            0.0008,
            0.38,
@@ -93961,9 +92753,9 @@
            4.023
           ],
           "CFrame": [
-           -90.8266,
+           -95.9854,
            33.2727,
-           308.7084,
+           300.6905,
            0.0668,
            0.007,
            0.9977,
@@ -93995,9 +92787,9 @@
            2.752
           ],
           "CFrame": [
-           -90.9441,
+           -96.1029,
            41.818,
-           308.0253,
+           300.0074,
            0.3905,
            -0.0024,
            0.9206,
@@ -94029,9 +92821,9 @@
            1.833
           ],
           "CFrame": [
-           -91.661,
+           -96.8198,
            50.3634,
-           308.3557,
+           300.3378,
            0.6737,
            0.0772,
            0.7349,
@@ -94069,9 +92861,9 @@
            5.216
           ],
           "CFrame": [
-           -173.1378,
+           -187.874,
            35.8582,
-           481.1354,
+           483.7652,
            0.889,
            0.095,
            0.448,
@@ -94103,9 +92895,9 @@
            3.38
           ],
           "CFrame": [
-           -173.8071,
+           -188.5433,
            49.5746,
-           480.5036,
+           483.1335,
            0.9356,
            0.05,
            0.3494,
@@ -94137,9 +92929,9 @@
            2.156
           ],
           "CFrame": [
-           -173.2013,
+           -187.9375,
            63.291,
-           480.6624,
+           483.2923,
            0.9681,
            -0.023,
            0.2493,
@@ -94177,9 +92969,9 @@
            6.062
           ],
           "CFrame": [
-           172.1132,
+           183.9057,
            33.837,
-           443.9374,
+           443.5474,
            0.2166,
            -0.0265,
            0.9759,
@@ -94211,9 +93003,9 @@
            2.975
           ],
           "CFrame": [
-           171.459,
+           183.2515,
            43.5111,
-           443.7838,
+           443.3938,
            0.7897,
            0.056,
            0.611,
@@ -94245,9 +93037,9 @@
            2.264
           ],
           "CFrame": [
-           171.9695,
+           183.762,
            53.1851,
-           444.3009,
+           443.9109,
            0.8085,
            -0.0212,
            0.5881,
@@ -94285,9 +93077,9 @@
            3.769
           ],
           "CFrame": [
-           -163.2604,
+           -170.9876,
            34.1333,
-           478.3341,
+           479.6793,
            0.9953,
            0.0622,
            0.074,
@@ -94319,9 +93111,9 @@
            2.719
           ],
           "CFrame": [
-           -163.1636,
+           -170.8909,
            44.3998,
-           478.4537,
+           479.799,
            0.3948,
            -0.0013,
            0.9188,
@@ -94353,9 +93145,9 @@
            1.49
           ],
           "CFrame": [
-           -163.1295,
+           -170.8567,
            54.6663,
-           478.0921,
+           479.4373,
            0.9793,
            0.1217,
            0.1617,
@@ -94393,9 +93185,9 @@
            4.38
           ],
           "CFrame": [
-           -24.1658,
+           -25.8728,
            33.0282,
-           279.5885,
+           267.2764,
            0.2505,
            0.0035,
            0.9681,
@@ -94427,9 +93219,9 @@
            2.729
           ],
           "CFrame": [
-           -23.8513,
+           -25.5583,
            41.0845,
-           278.6985,
+           266.3864,
            0.1892,
            -0.0089,
            0.9819,
@@ -99970,14 +98762,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         151.7108,
+         152.3097,
          30.05,
-         456.6238,
+         456.65,
          0.999,
          0,
          -0.0436,
@@ -100009,14 +98801,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         150.5562,
+         151.1505,
          30.05,
-         469.8211,
+         469.8993,
          0.9914,
          0,
          -0.1305,
@@ -100048,14 +98840,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         148.2558,
+         148.841,
          30.05,
-         482.8675,
+         482.9972,
          0.9763,
          0,
          -0.2164,
@@ -100087,14 +98879,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         144.827,
+         145.3987,
          30.05,
-         495.6638,
+         495.844,
          0.9537,
          0,
          -0.3007,
@@ -100126,14 +98918,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         140.296,
+         140.8498,
          30.05,
-         508.1125,
+         508.3419,
          0.9239,
          0,
          -0.3827,
@@ -100165,14 +98957,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         134.6973,
+         135.229,
          30.05,
-         520.119,
+         520.3958,
          0.887,
          0,
          -0.4617,
@@ -100204,14 +98996,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         128.0735,
+         128.579,
          30.05,
-         531.5918,
+         531.9139,
          0.8434,
          0,
          -0.5373,
@@ -100243,14 +99035,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         120.4749,
+         120.9505,
          30.05,
-         542.4437,
+         542.8086,
          0.7934,
          0,
          -0.6088,
@@ -100282,14 +99074,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         111.9595,
+         112.4014,
          30.05,
-         552.592,
+         552.9969,
          0.7373,
          0,
          -0.6756,
@@ -100321,14 +99113,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         102.592,
+         102.9969,
          30.05,
-         561.9595,
+         562.4014,
          0.6756,
          0,
          -0.7373,
@@ -100360,14 +99152,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         92.4437,
+         92.8086,
          30.05,
-         570.4749,
+         570.9505,
          0.6088,
          0,
          -0.7934,
@@ -100399,14 +99191,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         81.5918,
+         81.9139,
          30.05,
-         578.0735,
+         578.579,
          0.5373,
          0,
          -0.8434,
@@ -100438,14 +99230,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         70.119,
+         70.3958,
          30.05,
-         584.6973,
+         585.229,
          0.4617,
          0,
          -0.887,
@@ -100477,14 +99269,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         58.1125,
+         58.3419,
          30.05,
-         590.296,
+         590.8498,
          0.3827,
          0,
          -0.9239,
@@ -100516,14 +99308,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         45.6638,
+         45.844,
          30.05,
-         594.827,
+         595.3987,
          0.3007,
          0,
          -0.9537,
@@ -100555,14 +99347,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         32.8675,
+         32.9972,
          30.05,
-         598.2558,
+         598.841,
          0.2164,
          0,
          -0.9763,
@@ -100594,14 +99386,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         19.8211,
+         19.8993,
          30.05,
-         600.5562,
+         601.1505,
          0.1305,
          0,
          -0.9914,
@@ -100633,14 +99425,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         6.6238,
+         6.65,
          30.05,
-         601.7108,
+         602.3097,
          0.0436,
          0,
          -0.999,
@@ -100672,14 +99464,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -6.6238,
+         -6.65,
          30.05,
-         601.7108,
+         602.3097,
          -0.0436,
          0,
          -0.999,
@@ -100711,14 +99503,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -19.8211,
+         -19.8993,
          30.05,
-         600.5562,
+         601.1505,
          -0.1305,
          0,
          -0.9914,
@@ -100750,14 +99542,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -32.8675,
+         -32.9972,
          30.05,
-         598.2558,
+         598.841,
          -0.2164,
          0,
          -0.9763,
@@ -100789,14 +99581,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -45.6638,
+         -45.844,
          30.05,
-         594.827,
+         595.3987,
          -0.3007,
          0,
          -0.9537,
@@ -100828,14 +99620,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -58.1125,
+         -58.3419,
          30.05,
-         590.296,
+         590.8498,
          -0.3827,
          0,
          -0.9239,
@@ -100867,14 +99659,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -70.119,
+         -70.3958,
          30.05,
-         584.6973,
+         585.229,
          -0.4617,
          0,
          -0.887,
@@ -100906,14 +99698,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -81.5918,
+         -81.9139,
          30.05,
-         578.0735,
+         578.579,
          -0.5373,
          0,
          -0.8434,
@@ -100945,14 +99737,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -92.4437,
+         -92.8086,
          30.05,
-         570.4749,
+         570.9505,
          -0.6088,
          0,
          -0.7934,
@@ -100984,14 +99776,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -102.592,
+         -102.9969,
          30.05,
-         561.9595,
+         562.4014,
          -0.6756,
          0,
          -0.7373,
@@ -101023,14 +99815,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -111.9595,
+         -112.4014,
          30.05,
-         552.592,
+         552.9969,
          -0.7373,
          0,
          -0.6756,
@@ -101062,14 +99854,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -120.4749,
+         -120.9505,
          30.05,
-         542.4437,
+         542.8086,
          -0.7934,
          0,
          -0.6088,
@@ -101101,14 +99893,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -128.0735,
+         -128.579,
          30.05,
-         531.5918,
+         531.9139,
          -0.8434,
          0,
          -0.5373,
@@ -101140,14 +99932,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -134.6973,
+         -135.229,
          30.05,
-         520.119,
+         520.3958,
          -0.887,
          0,
          -0.4617,
@@ -101179,14 +99971,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -140.296,
+         -140.8498,
          30.05,
-         508.1125,
+         508.3419,
          -0.9239,
          0,
          -0.3827,
@@ -101218,14 +100010,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -144.827,
+         -145.3987,
          30.05,
-         495.6638,
+         495.844,
          -0.9537,
          0,
          -0.3007,
@@ -101257,14 +100049,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -148.2558,
+         -148.841,
          30.05,
-         482.8675,
+         482.9972,
          -0.9763,
          0,
          -0.2164,
@@ -101296,14 +100088,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -150.5562,
+         -151.1505,
          30.05,
-         469.8211,
+         469.8993,
          -0.9914,
          0,
          -0.1305,
@@ -101335,14 +100127,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -151.7108,
+         -152.3097,
          30.05,
-         456.6238,
+         456.65,
          -0.999,
          0,
          -0.0436,
@@ -101374,14 +100166,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -151.7108,
+         -152.3097,
          30.05,
-         443.3762,
+         443.35,
          -0.999,
          0,
          0.0436,
@@ -101413,14 +100205,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -150.5562,
+         -151.1505,
          30.05,
-         430.1789,
+         430.1007,
          -0.9914,
          0,
          0.1305,
@@ -101452,14 +100244,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -148.2558,
+         -148.841,
          30.05,
-         417.1325,
+         417.0028,
          -0.9763,
          0,
          0.2164,
@@ -101491,14 +100283,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -144.827,
+         -145.3987,
          30.05,
-         404.3362,
+         404.156,
          -0.9537,
          0,
          0.3007,
@@ -101530,14 +100322,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -140.296,
+         -140.8498,
          30.05,
-         391.8875,
+         391.6581,
          -0.9239,
          0,
          0.3827,
@@ -101569,14 +100361,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -134.6973,
+         -135.229,
          30.05,
-         379.881,
+         379.6042,
          -0.887,
          0,
          0.4617,
@@ -101608,14 +100400,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -128.0735,
+         -128.579,
          30.05,
-         368.4082,
+         368.0861,
          -0.8434,
          0,
          0.5373,
@@ -101647,14 +100439,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -120.4749,
+         -120.9505,
          30.05,
-         357.5563,
+         357.1914,
          -0.7934,
          0,
          0.6088,
@@ -101686,14 +100478,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -111.9595,
+         -112.4014,
          30.05,
-         347.408,
+         347.0031,
          -0.7373,
          0,
          0.6756,
@@ -101725,14 +100517,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -102.592,
+         -102.9969,
          30.05,
-         338.0405,
+         337.5986,
          -0.6756,
          0,
          0.7373,
@@ -101764,14 +100556,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -92.4437,
+         -92.8086,
          30.05,
-         329.5251,
+         329.0495,
          -0.6088,
          0,
          0.7934,
@@ -101803,14 +100595,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -81.5918,
+         -81.9139,
          30.05,
-         321.9265,
+         321.421,
          -0.5373,
          0,
          0.8434,
@@ -101842,14 +100634,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -70.119,
+         -70.3958,
          30.05,
-         315.3027,
+         314.771,
          -0.4617,
          0,
          0.887,
@@ -101881,14 +100673,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -58.1125,
+         -58.3419,
          30.05,
-         309.704,
+         309.1502,
          -0.3827,
          0,
          0.9239,
@@ -101920,14 +100712,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -45.6638,
+         -45.844,
          30.05,
-         305.173,
+         304.6013,
          -0.3007,
          0,
          0.9537,
@@ -101959,14 +100751,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -32.8675,
+         -32.9972,
          30.05,
-         301.7442,
+         301.159,
          -0.2164,
          0,
          0.9763,
@@ -101998,14 +100790,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -19.8211,
+         -19.8993,
          30.05,
-         299.4438,
+         298.8495,
          -0.1305,
          0,
          0.9914,
@@ -102037,14 +100829,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         -6.6238,
+         -6.65,
          30.05,
-         298.2892,
+         297.6903,
          -0.0436,
          0,
          0.999,
@@ -102076,14 +100868,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         6.6238,
+         6.65,
          30.05,
-         298.2892,
+         297.6903,
          0.0436,
          0,
          0.999,
@@ -102115,14 +100907,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         19.8211,
+         19.8993,
          30.05,
-         299.4438,
+         298.8495,
          0.1305,
          0,
          0.9914,
@@ -102154,14 +100946,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         32.8675,
+         32.9972,
          30.05,
-         301.7442,
+         301.159,
          0.2164,
          0,
          0.9763,
@@ -102193,14 +100985,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         45.6638,
+         45.844,
          30.05,
-         305.173,
+         304.6013,
          0.3007,
          0,
          0.9537,
@@ -102232,14 +101024,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         58.1125,
+         58.3419,
          30.05,
-         309.704,
+         309.1502,
          0.3827,
          0,
          0.9239,
@@ -102271,14 +101063,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         70.119,
+         70.3958,
          30.05,
-         315.3027,
+         314.771,
          0.4617,
          0,
          0.887,
@@ -102310,14 +101102,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         81.5918,
+         81.9139,
          30.05,
-         321.9265,
+         321.421,
          0.5373,
          0,
          0.8434,
@@ -102349,14 +101141,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         92.4437,
+         92.8086,
          30.05,
-         329.5251,
+         329.0495,
          0.6088,
          0,
          0.7934,
@@ -102388,14 +101180,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         102.592,
+         102.9969,
          30.05,
-         338.0405,
+         337.5986,
          0.6756,
          0,
          0.7373,
@@ -102427,14 +101219,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         111.9595,
+         112.4014,
          30.05,
-         347.408,
+         347.0031,
          0.7373,
          0,
          0.6756,
@@ -102466,14 +101258,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         120.4749,
+         120.9505,
          30.05,
-         357.5563,
+         357.1914,
          0.7934,
          0,
          0.6088,
@@ -102505,14 +101297,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         128.0735,
+         128.579,
          30.05,
-         368.4082,
+         368.0861,
          0.8434,
          0,
          0.5373,
@@ -102544,14 +101336,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         134.6973,
+         135.229,
          30.05,
-         379.881,
+         379.6042,
          0.887,
          0,
          0.4617,
@@ -102583,14 +101375,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         140.296,
+         140.8498,
          30.05,
-         391.8875,
+         391.6581,
          0.9239,
          0,
          0.3827,
@@ -102622,14 +101414,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         144.827,
+         145.3987,
          30.05,
-         404.3362,
+         404.156,
          0.9537,
          0,
          0.3007,
@@ -102661,14 +101453,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         148.2558,
+         148.841,
          30.05,
-         417.1325,
+         417.0028,
          0.9763,
          0,
          0.2164,
@@ -102700,14 +101492,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         150.5562,
+         151.1505,
          30.05,
-         430.1789,
+         430.1007,
          0.9914,
          0,
          0.1305,
@@ -102739,14 +101531,14 @@
        "properties": {
         "Anchored": true,
         "Size": [
-         2.4,
+         3.6,
          0.1,
-         13.56
+         13.613
         ],
         "CFrame": [
-         151.7108,
+         152.3097,
          30.05,
-         443.3762,
+         443.35,
          0.999,
          0,
          0.0436,
@@ -202579,12 +201371,12 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       203.9333,
+       219.9333,
        2.08,
        450.0,
        0.0,
@@ -202618,14 +201410,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       203.6007,
+       219.5746,
        2.08,
-       461.6423,
+       462.5557,
        0.0571,
        -0.0,
        0.9984,
@@ -202657,14 +201449,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       202.604,
+       218.4997,
        2.08,
-       473.2466,
+       475.0705,
        0.114,
        -0.0,
        0.9935,
@@ -202696,14 +201488,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       200.9465,
+       216.7122,
        2.08,
-       484.7752,
+       487.5035,
        0.1705,
        -0.0,
        0.9854,
@@ -202735,14 +201527,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       198.6335,
+       214.2177,
        2.08,
-       496.1902,
+       499.8142,
        0.2265,
        -0.0,
        0.974,
@@ -202774,14 +201566,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       195.6726,
+       211.0245,
        2.08,
-       507.4547,
+       511.9624,
        0.2817,
        -0.0,
        0.9595,
@@ -202813,14 +201605,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       192.0735,
+       207.143,
        2.08,
-       518.5317,
+       523.9085,
        0.336,
        -0.0,
        0.9418,
@@ -202852,14 +201644,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       187.8478,
+       202.5858,
        2.08,
-       529.3852,
+       535.6135,
        0.3893,
        -0.0,
        0.9211,
@@ -202891,14 +201683,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       183.0095,
+       197.3678,
        2.08,
-       539.9797,
+       547.0392,
        0.4412,
        -0.0,
        0.8974,
@@ -202930,14 +201722,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       177.5741,
+       191.5061,
        2.08,
-       550.2807,
+       558.1485,
        0.4917,
        -0.0,
        0.8707,
@@ -202969,14 +201761,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       171.5596,
+       185.0197,
        2.08,
-       560.2547,
+       568.9049,
        0.5406,
        -0.0,
        0.8413,
@@ -203008,14 +201800,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       164.9855,
+       177.9298,
        2.08,
-       569.869,
+       579.2736,
        0.5878,
        -0.0,
        0.809,
@@ -203047,14 +201839,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       157.8733,
+       170.2595,
        2.08,
-       579.0923,
+       589.2205,
        0.633,
        -0.0,
        0.7741,
@@ -203086,14 +201878,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       150.2461,
+       162.0339,
        2.08,
-       587.8946,
+       598.7134,
        0.6762,
        -0.0,
        0.7367,
@@ -203125,14 +201917,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       142.1288,
+       153.2798,
        2.08,
-       596.2471,
+       607.7212,
        0.7171,
        -0.0,
        0.6969,
@@ -203164,14 +201956,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       133.5479,
+       144.0257,
        2.08,
-       604.1225,
+       616.2145,
        0.7557,
        -0.0,
        0.6549,
@@ -203203,14 +201995,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       124.5315,
+       134.3018,
        2.08,
-       611.4953,
+       624.1657,
        0.7919,
        -0.0,
        0.6106,
@@ -203242,14 +202034,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       115.1088,
+       124.1399,
        2.08,
-       618.3412,
+       631.5488,
        0.8255,
        -0.0,
        0.5644,
@@ -203281,14 +202073,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       105.3107,
+       113.573,
        2.08,
-       624.6381,
+       638.3397,
        0.8563,
        -0.0,
        0.5164,
@@ -203320,14 +202112,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       95.169,
+       102.6357,
        2.08,
-       630.3654,
+       644.5163,
        0.8844,
        -0.0,
        0.4667,
@@ -203359,14 +202151,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       84.717,
+       91.3636,
        2.08,
-       635.5043,
+       650.0584,
        0.9096,
        -0.0,
        0.4154,
@@ -203398,14 +202190,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       73.9886,
+       79.7935,
        2.08,
-       640.0381,
+       654.948,
        0.9319,
        -0.0,
        0.3628,
@@ -203437,14 +202229,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       63.0189,
+       67.9631,
        2.08,
-       643.9521,
+       659.169,
        0.9511,
        -0.0,
        0.309,
@@ -203476,14 +202268,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       51.8436,
+       55.9111,
        2.08,
-       647.2335,
+       662.7078,
        0.9671,
        -0.0,
        0.2542,
@@ -203515,14 +202307,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       40.4992,
+       43.6767,
        2.08,
-       649.8715,
+       665.5528,
        0.9801,
        -0.0,
        0.1986,
@@ -203554,14 +202346,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       29.0227,
+       31.2998,
        2.08,
-       651.8576,
+       667.6947,
        0.9898,
        -0.0,
        0.1423,
@@ -203593,14 +202385,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       17.4516,
+       18.8208,
        2.08,
-       653.1853,
+       669.1266,
        0.9963,
        -0.0,
        0.0856,
@@ -203632,14 +202424,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       5.8235,
+       6.2804,
        2.08,
-       653.8502,
+       669.8436,
        0.9996,
        -0.0,
        0.0286,
@@ -203671,14 +202463,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -5.8235,
+       -6.2804,
        2.08,
-       653.8502,
+       669.8436,
        0.9996,
        0.0,
        -0.0286,
@@ -203710,14 +202502,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -17.4516,
+       -18.8208,
        2.08,
-       653.1853,
+       669.1266,
        0.9963,
        0.0,
        -0.0856,
@@ -203749,14 +202541,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -29.0227,
+       -31.2998,
        2.08,
-       651.8576,
+       667.6947,
        0.9898,
        0.0,
        -0.1423,
@@ -203788,14 +202580,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -40.4992,
+       -43.6767,
        2.08,
-       649.8715,
+       665.5528,
        0.9801,
        0.0,
        -0.1986,
@@ -203827,14 +202619,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -51.8436,
+       -55.9111,
        2.08,
-       647.2335,
+       662.7078,
        0.9671,
        0.0,
        -0.2542,
@@ -203866,14 +202658,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -63.0189,
+       -67.9631,
        2.08,
-       643.9521,
+       659.169,
        0.9511,
        0.0,
        -0.309,
@@ -203905,14 +202697,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -73.9886,
+       -79.7935,
        2.08,
-       640.0381,
+       654.948,
        0.9319,
        0.0,
        -0.3628,
@@ -203944,14 +202736,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -84.717,
+       -91.3636,
        2.08,
-       635.5043,
+       650.0584,
        0.9096,
        0.0,
        -0.4154,
@@ -203983,14 +202775,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -95.169,
+       -102.6357,
        2.08,
-       630.3654,
+       644.5163,
        0.8844,
        0.0,
        -0.4667,
@@ -204022,14 +202814,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -105.3107,
+       -113.573,
        2.08,
-       624.6381,
+       638.3397,
        0.8563,
        0.0,
        -0.5164,
@@ -204061,14 +202853,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -115.1088,
+       -124.1399,
        2.08,
-       618.3412,
+       631.5488,
        0.8255,
        0.0,
        -0.5644,
@@ -204100,14 +202892,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -124.5315,
+       -134.3018,
        2.08,
-       611.4953,
+       624.1657,
        0.7919,
        0.0,
        -0.6106,
@@ -204139,14 +202931,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -133.5479,
+       -144.0257,
        2.08,
-       604.1225,
+       616.2145,
        0.7557,
        0.0,
        -0.6549,
@@ -204178,14 +202970,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -142.1288,
+       -153.2798,
        2.08,
-       596.2471,
+       607.7212,
        0.7171,
        0.0,
        -0.6969,
@@ -204217,14 +203009,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -150.2461,
+       -162.0339,
        2.08,
-       587.8946,
+       598.7134,
        0.6762,
        0.0,
        -0.7367,
@@ -204256,14 +203048,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -157.8733,
+       -170.2595,
        2.08,
-       579.0923,
+       589.2205,
        0.633,
        0.0,
        -0.7741,
@@ -204295,14 +203087,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -164.9855,
+       -177.9298,
        2.08,
-       569.869,
+       579.2736,
        0.5878,
        0.0,
        -0.809,
@@ -204334,14 +203126,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -171.5596,
+       -185.0197,
        2.08,
-       560.2547,
+       568.9049,
        0.5406,
        0.0,
        -0.8413,
@@ -204373,14 +203165,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -177.5741,
+       -191.5061,
        2.08,
-       550.2807,
+       558.1485,
        0.4917,
        0.0,
        -0.8707,
@@ -204412,14 +203204,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -183.0095,
+       -197.3678,
        2.08,
-       539.9797,
+       547.0392,
        0.4412,
        0.0,
        -0.8974,
@@ -204451,14 +203243,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -187.8478,
+       -202.5858,
        2.08,
-       529.3852,
+       535.6135,
        0.3893,
        0.0,
        -0.9211,
@@ -204490,14 +203282,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -192.0735,
+       -207.143,
        2.08,
-       518.5317,
+       523.9085,
        0.336,
        0.0,
        -0.9418,
@@ -204529,14 +203321,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -195.6726,
+       -211.0245,
        2.08,
-       507.4547,
+       511.9624,
        0.2817,
        0.0,
        -0.9595,
@@ -204568,14 +203360,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -198.6335,
+       -214.2177,
        2.08,
-       496.1902,
+       499.8142,
        0.2265,
        0.0,
        -0.974,
@@ -204607,14 +203399,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -200.9465,
+       -216.7122,
        2.08,
-       484.7752,
+       487.5035,
        0.1705,
        0.0,
        -0.9854,
@@ -204646,14 +203438,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -202.604,
+       -218.4997,
        2.08,
-       473.2466,
+       475.0705,
        0.114,
        0.0,
        -0.9935,
@@ -204685,14 +203477,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -203.6007,
+       -219.5746,
        2.08,
-       461.6423,
+       462.5557,
        0.0571,
        0.0,
        -0.9984,
@@ -204724,12 +203516,12 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -203.9333,
+       -219.9333,
        2.08,
        450.0,
        0.0,
@@ -204763,14 +203555,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -203.6007,
+       -219.5746,
        2.08,
-       438.3577,
+       437.4443,
        -0.0571,
        0.0,
        -0.9984,
@@ -204802,14 +203594,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -202.604,
+       -218.4997,
        2.08,
-       426.7534,
+       424.9295,
        -0.114,
        0.0,
        -0.9935,
@@ -204841,14 +203633,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -200.9465,
+       -216.7122,
        2.08,
-       415.2248,
+       412.4965,
        -0.1705,
        0.0,
        -0.9854,
@@ -204880,14 +203672,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -198.6335,
+       -214.2177,
        2.08,
-       403.8098,
+       400.1858,
        -0.2265,
        0.0,
        -0.974,
@@ -204919,14 +203711,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -195.6726,
+       -211.0245,
        2.08,
-       392.5453,
+       388.0376,
        -0.2817,
        0.0,
        -0.9595,
@@ -204958,14 +203750,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -192.0735,
+       -207.143,
        2.08,
-       381.4683,
+       376.0915,
        -0.336,
        0.0,
        -0.9418,
@@ -204997,14 +203789,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -187.8478,
+       -202.5858,
        2.08,
-       370.6148,
+       364.3865,
        -0.3893,
        0.0,
        -0.9211,
@@ -205036,14 +203828,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -183.0095,
+       -197.3678,
        2.08,
-       360.0203,
+       352.9608,
        -0.4412,
        0.0,
        -0.8974,
@@ -205075,14 +203867,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -177.5741,
+       -191.5061,
        2.08,
-       349.7193,
+       341.8515,
        -0.4917,
        0.0,
        -0.8707,
@@ -205114,14 +203906,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -171.5596,
+       -185.0197,
        2.08,
-       339.7453,
+       331.0951,
        -0.5406,
        0.0,
        -0.8413,
@@ -205153,14 +203945,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -164.9855,
+       -177.9298,
        2.08,
-       330.131,
+       320.7264,
        -0.5878,
        0.0,
        -0.809,
@@ -205192,14 +203984,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -157.8733,
+       -170.2595,
        2.08,
-       320.9077,
+       310.7795,
        -0.633,
        0.0,
        -0.7741,
@@ -205231,14 +204023,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -150.2461,
+       -162.0339,
        2.08,
-       312.1054,
+       301.2866,
        -0.6762,
        0.0,
        -0.7367,
@@ -205270,14 +204062,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -142.1288,
+       -153.2798,
        2.08,
-       303.7529,
+       292.2788,
        -0.7171,
        0.0,
        -0.6969,
@@ -205309,14 +204101,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -133.5479,
+       -144.0257,
        2.08,
-       295.8775,
+       283.7855,
        -0.7557,
        0.0,
        -0.6549,
@@ -205348,14 +204140,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -124.5315,
+       -134.3018,
        2.08,
-       288.5047,
+       275.8343,
        -0.7919,
        0.0,
        -0.6106,
@@ -205387,14 +204179,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -115.1088,
+       -124.1399,
        2.08,
-       281.6588,
+       268.4512,
        -0.8255,
        0.0,
        -0.5644,
@@ -205426,14 +204218,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -105.3107,
+       -113.573,
        2.08,
-       275.3619,
+       261.6603,
        -0.8563,
        0.0,
        -0.5164,
@@ -205465,14 +204257,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -95.169,
+       -102.6357,
        2.08,
-       269.6346,
+       255.4837,
        -0.8844,
        0.0,
        -0.4667,
@@ -205504,14 +204296,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -84.717,
+       -91.3636,
        2.08,
-       264.4957,
+       249.9416,
        -0.9096,
        0.0,
        -0.4154,
@@ -205543,14 +204335,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -73.9886,
+       -79.7935,
        2.08,
-       259.9619,
+       245.052,
        -0.9319,
        0.0,
        -0.3628,
@@ -205582,14 +204374,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -63.0189,
+       -67.9631,
        2.08,
-       256.0479,
+       240.831,
        -0.9511,
        0.0,
        -0.309,
@@ -205621,14 +204413,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -51.8436,
+       -55.9111,
        2.08,
-       252.7665,
+       237.2922,
        -0.9671,
        0.0,
        -0.2542,
@@ -205660,14 +204452,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -40.4992,
+       -43.6767,
        2.08,
-       250.1285,
+       234.4472,
        -0.9801,
        0.0,
        -0.1986,
@@ -205699,14 +204491,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -29.0227,
+       -31.2998,
        2.08,
-       248.1424,
+       232.3053,
        -0.9898,
        0.0,
        -0.1423,
@@ -205738,14 +204530,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -17.4516,
+       -18.8208,
        2.08,
-       246.8147,
+       230.8734,
        -0.9963,
        0.0,
        -0.0856,
@@ -205777,14 +204569,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       -5.8235,
+       -6.2804,
        2.08,
-       246.1498,
+       230.1564,
        -0.9996,
        0.0,
        -0.0286,
@@ -205816,14 +204608,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       5.8235,
+       6.2804,
        2.08,
-       246.1498,
+       230.1564,
        -0.9996,
        0.0,
        0.0286,
@@ -205855,14 +204647,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       17.4516,
+       18.8208,
        2.08,
-       246.8147,
+       230.8734,
        -0.9963,
        0.0,
        0.0856,
@@ -205894,14 +204686,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       29.0227,
+       31.2998,
        2.08,
-       248.1424,
+       232.3053,
        -0.9898,
        0.0,
        0.1423,
@@ -205933,14 +204725,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       40.4992,
+       43.6767,
        2.08,
-       250.1285,
+       234.4472,
        -0.9801,
        0.0,
        0.1986,
@@ -205972,14 +204764,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       51.8436,
+       55.9111,
        2.08,
-       252.7665,
+       237.2922,
        -0.9671,
        0.0,
        0.2542,
@@ -206011,14 +204803,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       63.0189,
+       67.9631,
        2.08,
-       256.0479,
+       240.831,
        -0.9511,
        0.0,
        0.309,
@@ -206050,14 +204842,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       73.9886,
+       79.7935,
        2.08,
-       259.9619,
+       245.052,
        -0.9319,
        0.0,
        0.3628,
@@ -206089,14 +204881,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       84.717,
+       91.3636,
        2.08,
-       264.4957,
+       249.9416,
        -0.9096,
        0.0,
        0.4154,
@@ -206128,14 +204920,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       95.169,
+       102.6357,
        2.08,
-       269.6346,
+       255.4837,
        -0.8844,
        0.0,
        0.4667,
@@ -206167,14 +204959,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       105.3107,
+       113.573,
        2.08,
-       275.3619,
+       261.6603,
        -0.8563,
        0.0,
        0.5164,
@@ -206206,14 +204998,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       115.1088,
+       124.1399,
        2.08,
-       281.6588,
+       268.4512,
        -0.8255,
        0.0,
        0.5644,
@@ -206245,14 +205037,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       124.5315,
+       134.3018,
        2.08,
-       288.5047,
+       275.8343,
        -0.7919,
        0.0,
        0.6106,
@@ -206284,14 +205076,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       133.5479,
+       144.0257,
        2.08,
-       295.8775,
+       283.7855,
        -0.7557,
        0.0,
        0.6549,
@@ -206323,14 +205115,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       142.1288,
+       153.2798,
        2.08,
-       303.7529,
+       292.2788,
        -0.7171,
        0.0,
        0.6969,
@@ -206362,14 +205154,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       150.2461,
+       162.0339,
        2.08,
-       312.1054,
+       301.2866,
        -0.6762,
        0.0,
        0.7367,
@@ -206401,14 +205193,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       157.8733,
+       170.2595,
        2.08,
-       320.9077,
+       310.7795,
        -0.633,
        0.0,
        0.7741,
@@ -206440,14 +205232,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       164.9855,
+       177.9298,
        2.08,
-       330.131,
+       320.7264,
        -0.5878,
        0.0,
        0.809,
@@ -206479,14 +205271,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       171.5596,
+       185.0197,
        2.08,
-       339.7453,
+       331.0951,
        -0.5406,
        0.0,
        0.8413,
@@ -206518,14 +205310,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       177.5741,
+       191.5061,
        2.08,
-       349.7193,
+       341.8515,
        -0.4917,
        0.0,
        0.8707,
@@ -206557,14 +205349,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       183.0095,
+       197.3678,
        2.08,
-       360.0203,
+       352.9608,
        -0.4412,
        0.0,
        0.8974,
@@ -206596,14 +205388,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       187.8478,
+       202.5858,
        2.08,
-       370.6148,
+       364.3865,
        -0.3893,
        0.0,
        0.9211,
@@ -206635,14 +205427,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       192.0735,
+       207.143,
        2.08,
-       381.4683,
+       376.0915,
        -0.336,
        0.0,
        0.9418,
@@ -206674,14 +205466,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       195.6726,
+       211.0245,
        2.08,
-       392.5453,
+       388.0376,
        -0.2817,
        0.0,
        0.9595,
@@ -206713,14 +205505,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       198.6335,
+       214.2177,
        2.08,
-       403.8098,
+       400.1858,
        -0.2265,
        0.0,
        0.974,
@@ -206752,14 +205544,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       200.9465,
+       216.7122,
        2.08,
-       415.2248,
+       412.4965,
        -0.1705,
        0.0,
        0.9854,
@@ -206791,14 +205583,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       202.604,
+       218.4997,
        2.08,
-       426.7534,
+       424.9295,
        -0.114,
        0.0,
        0.9935,
@@ -206830,14 +205622,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       11.947,
+       12.861,
        0.12,
        2.4
       ],
       "CFrame": [
-       203.6007,
+       219.5746,
        2.08,
-       438.3577,
+       437.4443,
        -0.0571,
        0.0,
        0.9984,
@@ -206869,14 +205661,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       206.4491,
+       222.4426,
        2.1,
-       455.8978,
+       456.3547,
        0.0286,
        -0.0,
        0.9996,
@@ -206908,14 +205700,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       205.7757,
+       221.717,
        2.1,
-       467.6741,
+       469.0433,
        0.0856,
        -0.0,
        0.9963,
@@ -206947,14 +205739,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       204.4311,
+       220.2683,
        2.1,
-       479.3928,
+       481.6698,
        0.1423,
        -0.0,
        0.9898,
@@ -206986,14 +205778,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       202.4197,
+       218.101,
        2.1,
-       491.0156,
+       494.193,
        0.1986,
        -0.0,
        0.9801,
@@ -207025,14 +205817,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       199.7481,
+       215.2224,
        2.1,
-       502.5046,
+       506.5721,
        0.2542,
        -0.0,
        0.9671,
@@ -207064,14 +205856,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       196.4249,
+       211.6418,
        2.1,
-       513.8223,
+       518.7666,
        0.309,
        -0.0,
        0.9511,
@@ -207103,14 +205895,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       192.461,
+       207.3708,
        2.1,
-       524.9319,
+       530.7368,
        0.3628,
        -0.0,
        0.9319,
@@ -207142,14 +205934,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       187.8693,
+       202.4234,
        2.1,
-       535.797,
+       542.4437,
        0.4154,
        -0.0,
        0.9096,
@@ -207181,14 +205973,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       182.6649,
+       196.8158,
        2.1,
-       546.3824,
+       553.849,
        0.4667,
        -0.0,
        0.8844,
@@ -207220,14 +206012,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       176.8646,
+       190.5662,
        2.1,
-       556.6533,
+       564.9156,
        0.5164,
        -0.0,
        0.8563,
@@ -207259,14 +206051,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       170.4875,
+       183.695,
        2.1,
-       566.5763,
+       575.6074,
        0.5644,
        -0.0,
        0.8255,
@@ -207298,14 +206090,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       163.5542,
+       176.2246,
        2.1,
-       576.1191,
+       585.8895,
        0.6106,
        -0.0,
        0.7919,
@@ -207337,14 +206129,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       156.0875,
+       168.1795,
        2.1,
-       585.2506,
+       595.7283,
        0.6549,
        -0.0,
        0.7557,
@@ -207376,14 +206168,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       148.1116,
+       159.5857,
        2.1,
-       593.9408,
+       605.0918,
        0.6969,
        -0.0,
        0.7171,
@@ -207415,14 +206207,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       139.6527,
+       150.4715,
        2.1,
-       602.1616,
+       613.9495,
        0.7367,
        -0.0,
        0.6762,
@@ -207454,14 +206246,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       130.7382,
+       140.8664,
        2.1,
-       609.886,
+       622.2723,
        0.7741,
        -0.0,
        0.633,
@@ -207493,14 +206285,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       121.3972,
+       130.8018,
        2.1,
-       617.089,
+       630.0332,
        0.809,
        -0.0,
        0.5878,
@@ -207532,14 +206324,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       111.6604,
+       120.3106,
        2.1,
-       623.7469,
+       637.207,
        0.8413,
        -0.0,
        0.5406,
@@ -207571,14 +206363,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       101.5592,
+       109.427,
        2.1,
-       629.8381,
+       643.77,
        0.8707,
        -0.0,
        0.4917,
@@ -207610,14 +206402,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       91.1269,
+       98.1864,
        2.1,
-       635.3427,
+       649.7011,
        0.8974,
        -0.0,
        0.4412,
@@ -207649,14 +206441,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       80.3973,
+       86.6256,
        2.1,
-       640.2427,
+       654.9807,
        0.9211,
        -0.0,
        0.3893,
@@ -207688,14 +206480,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       69.4054,
+       74.7822,
        2.1,
-       644.5223,
+       659.5918,
        0.9418,
        -0.0,
        0.336,
@@ -207727,14 +206519,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       58.1872,
+       62.6949,
        2.1,
-       648.1673,
+       663.5192,
        0.9595,
        -0.0,
        0.2817,
@@ -207766,14 +206558,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       46.7791,
+       50.4031,
        2.1,
-       651.1659,
+       666.7501,
        0.974,
        -0.0,
        0.2265,
@@ -207805,14 +206597,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       35.2185,
+       37.9469,
        2.1,
-       653.5084,
+       669.2741,
        0.9854,
        -0.0,
        0.1705,
@@ -207844,14 +206636,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       23.543,
+       25.3669,
        2.1,
-       655.1871,
+       671.0828,
        0.9935,
        -0.0,
        0.114,
@@ -207883,14 +206675,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       11.7907,
+       12.7042,
        2.1,
-       656.1965,
+       672.1704,
        0.9984,
        -0.0,
        0.0571,
@@ -207922,14 +206714,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
        0.0,
        2.1,
-       656.5333,
+       672.5333,
        1.0,
        -0.0,
        0.0,
@@ -207961,14 +206753,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -11.7907,
+       -12.7042,
        2.1,
-       656.1965,
+       672.1704,
        0.9984,
        0.0,
        -0.0571,
@@ -208000,14 +206792,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -23.543,
+       -25.3669,
        2.1,
-       655.1871,
+       671.0828,
        0.9935,
        0.0,
        -0.114,
@@ -208039,14 +206831,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -35.2185,
+       -37.9469,
        2.1,
-       653.5084,
+       669.2741,
        0.9854,
        0.0,
        -0.1705,
@@ -208078,14 +206870,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -46.7791,
+       -50.4031,
        2.1,
-       651.1659,
+       666.7501,
        0.974,
        0.0,
        -0.2265,
@@ -208117,14 +206909,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -58.1872,
+       -62.6949,
        2.1,
-       648.1673,
+       663.5192,
        0.9595,
        0.0,
        -0.2817,
@@ -208156,14 +206948,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -69.4054,
+       -74.7822,
        2.1,
-       644.5223,
+       659.5918,
        0.9418,
        0.0,
        -0.336,
@@ -208195,14 +206987,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -80.3973,
+       -86.6256,
        2.1,
-       640.2427,
+       654.9807,
        0.9211,
        0.0,
        -0.3893,
@@ -208234,14 +207026,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -91.1269,
+       -98.1864,
        2.1,
-       635.3427,
+       649.7011,
        0.8974,
        0.0,
        -0.4412,
@@ -208273,14 +207065,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -101.5592,
+       -109.427,
        2.1,
-       629.8381,
+       643.77,
        0.8707,
        0.0,
        -0.4917,
@@ -208312,14 +207104,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -111.6604,
+       -120.3106,
        2.1,
-       623.7469,
+       637.207,
        0.8413,
        0.0,
        -0.5406,
@@ -208351,14 +207143,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -121.3972,
+       -130.8018,
        2.1,
-       617.089,
+       630.0332,
        0.809,
        0.0,
        -0.5878,
@@ -208390,14 +207182,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -130.7382,
+       -140.8664,
        2.1,
-       609.886,
+       622.2723,
        0.7741,
        0.0,
        -0.633,
@@ -208429,14 +207221,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -139.6527,
+       -150.4715,
        2.1,
-       602.1616,
+       613.9495,
        0.7367,
        0.0,
        -0.6762,
@@ -208468,14 +207260,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -148.1116,
+       -159.5857,
        2.1,
-       593.9408,
+       605.0918,
        0.6969,
        0.0,
        -0.7171,
@@ -208507,14 +207299,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -156.0875,
+       -168.1795,
        2.1,
-       585.2506,
+       595.7283,
        0.6549,
        0.0,
        -0.7557,
@@ -208546,14 +207338,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -163.5542,
+       -176.2246,
        2.1,
-       576.1191,
+       585.8895,
        0.6106,
        0.0,
        -0.7919,
@@ -208585,14 +207377,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -170.4875,
+       -183.695,
        2.1,
-       566.5763,
+       575.6074,
        0.5644,
        0.0,
        -0.8255,
@@ -208624,14 +207416,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -176.8646,
+       -190.5662,
        2.1,
-       556.6533,
+       564.9156,
        0.5164,
        0.0,
        -0.8563,
@@ -208663,14 +207455,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -182.6649,
+       -196.8158,
        2.1,
-       546.3824,
+       553.849,
        0.4667,
        0.0,
        -0.8844,
@@ -208702,14 +207494,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -187.8693,
+       -202.4234,
        2.1,
-       535.797,
+       542.4437,
        0.4154,
        0.0,
        -0.9096,
@@ -208741,14 +207533,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -192.461,
+       -207.3708,
        2.1,
-       524.9319,
+       530.7368,
        0.3628,
        0.0,
        -0.9319,
@@ -208780,14 +207572,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -196.4249,
+       -211.6418,
        2.1,
-       513.8223,
+       518.7666,
        0.309,
        0.0,
        -0.9511,
@@ -208819,14 +207611,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -199.7481,
+       -215.2224,
        2.1,
-       502.5046,
+       506.5721,
        0.2542,
        0.0,
        -0.9671,
@@ -208858,14 +207650,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -202.4197,
+       -218.101,
        2.1,
-       491.0156,
+       494.193,
        0.1986,
        0.0,
        -0.9801,
@@ -208897,14 +207689,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -204.4311,
+       -220.2683,
        2.1,
-       479.3928,
+       481.6698,
        0.1423,
        0.0,
        -0.9898,
@@ -208936,14 +207728,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -205.7757,
+       -221.717,
        2.1,
-       467.6741,
+       469.0433,
        0.0856,
        0.0,
        -0.9963,
@@ -208975,14 +207767,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -206.4491,
+       -222.4426,
        2.1,
-       455.8978,
+       456.3547,
        0.0286,
        0.0,
        -0.9996,
@@ -209014,14 +207806,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -206.4491,
+       -222.4426,
        2.1,
-       444.1022,
+       443.6453,
        -0.0286,
        0.0,
        -0.9996,
@@ -209053,14 +207845,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -205.7757,
+       -221.717,
        2.1,
-       432.3259,
+       430.9567,
        -0.0856,
        0.0,
        -0.9963,
@@ -209092,14 +207884,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -204.4311,
+       -220.2683,
        2.1,
-       420.6072,
+       418.3302,
        -0.1423,
        0.0,
        -0.9898,
@@ -209131,14 +207923,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -202.4197,
+       -218.101,
        2.1,
-       408.9844,
+       405.807,
        -0.1986,
        0.0,
        -0.9801,
@@ -209170,14 +207962,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -199.7481,
+       -215.2224,
        2.1,
-       397.4954,
+       393.4279,
        -0.2542,
        0.0,
        -0.9671,
@@ -209209,14 +208001,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -196.4249,
+       -211.6418,
        2.1,
-       386.1777,
+       381.2334,
        -0.309,
        0.0,
        -0.9511,
@@ -209248,14 +208040,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -192.461,
+       -207.3708,
        2.1,
-       375.0681,
+       369.2632,
        -0.3628,
        0.0,
        -0.9319,
@@ -209287,14 +208079,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -187.8693,
+       -202.4234,
        2.1,
-       364.203,
+       357.5563,
        -0.4154,
        0.0,
        -0.9096,
@@ -209326,14 +208118,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -182.6649,
+       -196.8158,
        2.1,
-       353.6176,
+       346.151,
        -0.4667,
        0.0,
        -0.8844,
@@ -209365,14 +208157,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -176.8646,
+       -190.5662,
        2.1,
-       343.3467,
+       335.0844,
        -0.5164,
        0.0,
        -0.8563,
@@ -209404,14 +208196,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -170.4875,
+       -183.695,
        2.1,
-       333.4237,
+       324.3926,
        -0.5644,
        0.0,
        -0.8255,
@@ -209443,14 +208235,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -163.5542,
+       -176.2246,
        2.1,
-       323.8809,
+       314.1105,
        -0.6106,
        0.0,
        -0.7919,
@@ -209482,14 +208274,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -156.0875,
+       -168.1795,
        2.1,
-       314.7494,
+       304.2717,
        -0.6549,
        0.0,
        -0.7557,
@@ -209521,14 +208313,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -148.1116,
+       -159.5857,
        2.1,
-       306.0592,
+       294.9082,
        -0.6969,
        0.0,
        -0.7171,
@@ -209560,14 +208352,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -139.6527,
+       -150.4715,
        2.1,
-       297.8384,
+       286.0505,
        -0.7367,
        0.0,
        -0.6762,
@@ -209599,14 +208391,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -130.7382,
+       -140.8664,
        2.1,
-       290.114,
+       277.7277,
        -0.7741,
        0.0,
        -0.633,
@@ -209638,14 +208430,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -121.3972,
+       -130.8018,
        2.1,
-       282.911,
+       269.9668,
        -0.809,
        0.0,
        -0.5878,
@@ -209677,14 +208469,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -111.6604,
+       -120.3106,
        2.1,
-       276.2531,
+       262.793,
        -0.8413,
        0.0,
        -0.5406,
@@ -209716,14 +208508,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -101.5592,
+       -109.427,
        2.1,
-       270.1619,
+       256.23,
        -0.8707,
        0.0,
        -0.4917,
@@ -209755,14 +208547,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -91.1269,
+       -98.1864,
        2.1,
-       264.6573,
+       250.2989,
        -0.8974,
        0.0,
        -0.4412,
@@ -209794,14 +208586,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -80.3973,
+       -86.6256,
        2.1,
-       259.7573,
+       245.0193,
        -0.9211,
        0.0,
        -0.3893,
@@ -209833,14 +208625,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -69.4054,
+       -74.7822,
        2.1,
-       255.4777,
+       240.4082,
        -0.9418,
        0.0,
        -0.336,
@@ -209872,14 +208664,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -58.1872,
+       -62.6949,
        2.1,
-       251.8327,
+       236.4808,
        -0.9595,
        0.0,
        -0.2817,
@@ -209911,14 +208703,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -46.7791,
+       -50.4031,
        2.1,
-       248.8341,
+       233.2499,
        -0.974,
        0.0,
        -0.2265,
@@ -209950,14 +208742,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -35.2185,
+       -37.9469,
        2.1,
-       246.4916,
+       230.7259,
        -0.9854,
        0.0,
        -0.1705,
@@ -209989,14 +208781,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -23.543,
+       -25.3669,
        2.1,
-       244.8129,
+       228.9172,
        -0.9935,
        0.0,
        -0.114,
@@ -210028,14 +208820,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       -11.7907,
+       -12.7042,
        2.1,
-       243.8035,
+       227.8296,
        -0.9984,
        0.0,
        -0.0571,
@@ -210067,14 +208859,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
        -0.0,
        2.1,
-       243.4667,
+       227.4667,
        -1.0,
        0.0,
        -0.0,
@@ -210106,14 +208898,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       11.7907,
+       12.7042,
        2.1,
-       243.8035,
+       227.8296,
        -0.9984,
        0.0,
        0.0571,
@@ -210145,14 +208937,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       23.543,
+       25.3669,
        2.1,
-       244.8129,
+       228.9172,
        -0.9935,
        0.0,
        0.114,
@@ -210184,14 +208976,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       35.2185,
+       37.9469,
        2.1,
-       246.4916,
+       230.7259,
        -0.9854,
        0.0,
        0.1705,
@@ -210223,14 +209015,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       46.7791,
+       50.4031,
        2.1,
-       248.8341,
+       233.2499,
        -0.974,
        0.0,
        0.2265,
@@ -210262,14 +209054,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       58.1872,
+       62.6949,
        2.1,
-       251.8327,
+       236.4808,
        -0.9595,
        0.0,
        0.2817,
@@ -210301,14 +209093,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       69.4054,
+       74.7822,
        2.1,
-       255.4777,
+       240.4082,
        -0.9418,
        0.0,
        0.336,
@@ -210340,14 +209132,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       80.3973,
+       86.6256,
        2.1,
-       259.7573,
+       245.0193,
        -0.9211,
        0.0,
        0.3893,
@@ -210379,14 +209171,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       91.1269,
+       98.1864,
        2.1,
-       264.6573,
+       250.2989,
        -0.8974,
        0.0,
        0.4412,
@@ -210418,14 +209210,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       101.5592,
+       109.427,
        2.1,
-       270.1619,
+       256.23,
        -0.8707,
        0.0,
        0.4917,
@@ -210457,14 +209249,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       111.6604,
+       120.3106,
        2.1,
-       276.2531,
+       262.793,
        -0.8413,
        0.0,
        0.5406,
@@ -210496,14 +209288,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       121.3972,
+       130.8018,
        2.1,
-       282.911,
+       269.9668,
        -0.809,
        0.0,
        0.5878,
@@ -210535,14 +209327,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       130.7382,
+       140.8664,
        2.1,
-       290.114,
+       277.7277,
        -0.7741,
        0.0,
        0.633,
@@ -210574,14 +209366,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       139.6527,
+       150.4715,
        2.1,
-       297.8384,
+       286.0505,
        -0.7367,
        0.0,
        0.6762,
@@ -210613,14 +209405,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       148.1116,
+       159.5857,
        2.1,
-       306.0592,
+       294.9082,
        -0.6969,
        0.0,
        0.7171,
@@ -210652,14 +209444,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       156.0875,
+       168.1795,
        2.1,
-       314.7494,
+       304.2717,
        -0.6549,
        0.0,
        0.7557,
@@ -210691,14 +209483,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       163.5542,
+       176.2246,
        2.1,
-       323.8809,
+       314.1105,
        -0.6106,
        0.0,
        0.7919,
@@ -210730,14 +209522,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       170.4875,
+       183.695,
        2.1,
-       333.4237,
+       324.3926,
        -0.5644,
        0.0,
        0.8255,
@@ -210769,14 +209561,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       176.8646,
+       190.5662,
        2.1,
-       343.3467,
+       335.0844,
        -0.5164,
        0.0,
        0.8563,
@@ -210808,14 +209600,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       182.6649,
+       196.8158,
        2.1,
-       353.6176,
+       346.151,
        -0.4667,
        0.0,
        0.8844,
@@ -210847,14 +209639,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       187.8693,
+       202.4234,
        2.1,
-       364.203,
+       357.5563,
        -0.4154,
        0.0,
        0.9096,
@@ -210886,14 +209678,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       192.461,
+       207.3708,
        2.1,
-       375.0681,
+       369.2632,
        -0.3628,
        0.0,
        0.9319,
@@ -210925,14 +209717,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       196.4249,
+       211.6418,
        2.1,
-       386.1777,
+       381.2334,
        -0.309,
        0.0,
        0.9511,
@@ -210964,14 +209756,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       199.7481,
+       215.2224,
        2.1,
-       397.4954,
+       393.4279,
        -0.2542,
        0.0,
        0.9671,
@@ -211003,14 +209795,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       202.4197,
+       218.101,
        2.1,
-       408.9844,
+       405.807,
        -0.1986,
        0.0,
        0.9801,
@@ -211042,14 +209834,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       204.4311,
+       220.2683,
        2.1,
-       420.6072,
+       418.3302,
        -0.1423,
        0.0,
        0.9898,
@@ -211081,14 +209873,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       205.7757,
+       221.717,
        2.1,
-       432.3259,
+       430.9567,
        -0.0856,
        0.0,
        0.9963,
@@ -211120,14 +209912,14 @@
      "properties": {
       "Anchored": true,
       "Size": [
-       12.096,
+       13.009,
        0.12,
        1.8
       ],
       "CFrame": [
-       206.4491,
+       222.4426,
        2.1,
-       444.1022,
+       443.6453,
        -0.0286,
        0.0,
        0.9996,

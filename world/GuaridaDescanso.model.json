@@ -8,8 +8,8 @@
     "Anchored": true,
     "Size": [
      8,
-     68,
-     68
+     108,
+     108
     ],
     "CFrame": [
      0,
@@ -43,8 +43,8 @@
     "Anchored": true,
     "Size": [
      0.8,
-     68.6,
-     68.6
+     108.6,
+     108.6
     ],
     "CFrame": [
      0,
@@ -78,8 +78,8 @@
     "Anchored": true,
     "Size": [
      0.4,
-     65.6,
-     65.6
+     105.6,
+     105.6
     ],
     "CFrame": [
      0,
@@ -113,12 +113,12 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     21.08,
+     32.4,
      3.58,
      450.0,
      1.0,
@@ -147,23 +147,23 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     20.3617,
+     31.7774,
      3.58,
-     455.4559,
-     0.9659,
+     456.3209,
+     0.9808,
      0,
-     -0.2588,
+     -0.1951,
      0,
      1,
      0,
-     0.2588,
+     0.1951,
      0,
-     0.9659
+     0.9808
     ],
     "Color": [
      0.2745,
@@ -181,23 +181,23 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     18.2558,
+     29.9337,
      3.58,
-     460.54,
-     0.866,
+     462.3989,
+     0.9239,
      0,
-     -0.5,
+     -0.3827,
      0,
      1,
      0,
-     0.5,
+     0.3827,
      0,
-     0.866
+     0.9239
     ],
     "Color": [
      0.1882,
@@ -215,23 +215,23 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     14.9058,
+     26.9396,
      3.58,
-     464.9058,
-     0.7071,
+     468.0005,
+     0.8315,
      0,
-     -0.7071,
+     -0.5556,
      0,
      1,
      0,
-     0.7071,
+     0.5556,
      0,
-     0.7071
+     0.8315
     ],
     "Color": [
      0.2745,
@@ -249,23 +249,23 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     10.54,
+     22.9103,
      3.58,
-     468.2558,
-     0.5,
+     472.9103,
+     0.7071,
      0,
-     -0.866,
+     -0.7071,
      0,
      1,
      0,
-     0.866,
+     0.7071,
      0,
-     0.5
+     0.7071
     ],
     "Color": [
      0.1882,
@@ -283,23 +283,23 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     5.4559,
+     18.0005,
      3.58,
-     470.3617,
-     0.2588,
+     476.9396,
+     0.5556,
      0,
-     -0.9659,
+     -0.8315,
      0,
      1,
      0,
-     0.9659,
+     0.8315,
      0,
-     0.2588
+     0.5556
     ],
     "Color": [
      0.2745,
@@ -317,14 +317,82 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
+    ],
+    "CFrame": [
+     12.3989,
+     3.58,
+     479.9337,
+     0.3827,
+     0,
+     -0.9239,
+     0,
+     1,
+     0,
+     0.9239,
+     0,
+     0.3827
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa7",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     6.3209,
+     3.58,
+     481.7774,
+     0.1951,
+     0,
+     -0.9808,
+     0,
+     1,
+     0,
+     0.9808,
+     0,
+     0.1951
+    ],
+    "Color": [
+     0.2745,
+     0.2275,
+     0.2039
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa8",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
     ],
     "CFrame": [
      0.0,
      3.58,
-     471.08,
+     482.4,
      0.0,
      0,
      -1.0,
@@ -346,96 +414,28 @@
    }
   },
   {
-   "name": "Losa7",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     16.32,
-     0.2,
-     5.639
-    ],
-    "CFrame": [
-     -5.4559,
-     3.58,
-     470.3617,
-     -0.2588,
-     0,
-     -0.9659,
-     0,
-     1,
-     0,
-     0.9659,
-     0,
-     -0.2588
-    ],
-    "Color": [
-     0.2745,
-     0.2275,
-     0.2039
-    ],
-    "Material": "Slate",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth"
-   }
-  },
-  {
-   "name": "Losa8",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     16.32,
-     0.2,
-     5.639
-    ],
-    "CFrame": [
-     -10.54,
-     3.58,
-     468.2558,
-     -0.5,
-     0,
-     -0.866,
-     0,
-     1,
-     0,
-     0.866,
-     0,
-     -0.5
-    ],
-    "Color": [
-     0.1882,
-     0.1725,
-     0.2118
-    ],
-    "Material": "Slate",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth"
-   }
-  },
-  {
    "name": "Losa9",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     -14.9058,
+     -6.3209,
      3.58,
-     464.9058,
-     -0.7071,
+     481.7774,
+     -0.1951,
      0,
-     -0.7071,
+     -0.9808,
      0,
      1,
      0,
-     0.7071,
+     0.9808,
      0,
-     -0.7071
+     -0.1951
     ],
     "Color": [
      0.2745,
@@ -453,23 +453,23 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     -18.2558,
+     -12.3989,
      3.58,
-     460.54,
-     -0.866,
+     479.9337,
+     -0.3827,
      0,
-     -0.5,
+     -0.9239,
      0,
      1,
      0,
-     0.5,
+     0.9239,
      0,
-     -0.866
+     -0.3827
     ],
     "Color": [
      0.1882,
@@ -487,23 +487,23 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     -20.3617,
+     -18.0005,
      3.58,
-     455.4559,
-     -0.9659,
+     476.9396,
+     -0.5556,
      0,
-     -0.2588,
+     -0.8315,
      0,
      1,
      0,
-     0.2588,
+     0.8315,
      0,
-     -0.9659
+     -0.5556
     ],
     "Color": [
      0.2745,
@@ -521,12 +521,148 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     -21.08,
+     -22.9103,
+     3.58,
+     472.9103,
+     -0.7071,
+     0,
+     -0.7071,
+     0,
+     1,
+     0,
+     0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa13",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -26.9396,
+     3.58,
+     468.0005,
+     -0.8315,
+     0,
+     -0.5556,
+     0,
+     1,
+     0,
+     0.5556,
+     0,
+     -0.8315
+    ],
+    "Color": [
+     0.2745,
+     0.2275,
+     0.2039
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa14",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -29.9337,
+     3.58,
+     462.3989,
+     -0.9239,
+     0,
+     -0.3827,
+     0,
+     1,
+     0,
+     0.3827,
+     0,
+     -0.9239
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa15",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -31.7774,
+     3.58,
+     456.3209,
+     -0.9808,
+     0,
+     -0.1951,
+     0,
+     1,
+     0,
+     0.1951,
+     0,
+     -0.9808
+    ],
+    "Color": [
+     0.2745,
+     0.2275,
+     0.2039
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa16",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -32.4,
      3.58,
      450.0,
      -1.0,
@@ -550,164 +686,28 @@
    }
   },
   {
-   "name": "Losa13",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     16.32,
-     0.2,
-     5.639
-    ],
-    "CFrame": [
-     -20.3617,
-     3.58,
-     444.5441,
-     -0.9659,
-     0,
-     0.2588,
-     0,
-     1,
-     0,
-     -0.2588,
-     0,
-     -0.9659
-    ],
-    "Color": [
-     0.2745,
-     0.2275,
-     0.2039
-    ],
-    "Material": "Slate",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth"
-   }
-  },
-  {
-   "name": "Losa14",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     16.32,
-     0.2,
-     5.639
-    ],
-    "CFrame": [
-     -18.2558,
-     3.58,
-     439.46,
-     -0.866,
-     0,
-     0.5,
-     0,
-     1,
-     0,
-     -0.5,
-     0,
-     -0.866
-    ],
-    "Color": [
-     0.1882,
-     0.1725,
-     0.2118
-    ],
-    "Material": "Slate",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth"
-   }
-  },
-  {
-   "name": "Losa15",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     16.32,
-     0.2,
-     5.639
-    ],
-    "CFrame": [
-     -14.9058,
-     3.58,
-     435.0942,
-     -0.7071,
-     0,
-     0.7071,
-     0,
-     1,
-     0,
-     -0.7071,
-     0,
-     -0.7071
-    ],
-    "Color": [
-     0.2745,
-     0.2275,
-     0.2039
-    ],
-    "Material": "Slate",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth"
-   }
-  },
-  {
-   "name": "Losa16",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     16.32,
-     0.2,
-     5.639
-    ],
-    "CFrame": [
-     -10.54,
-     3.58,
-     431.7442,
-     -0.5,
-     0,
-     0.866,
-     0,
-     1,
-     0,
-     -0.866,
-     0,
-     -0.5
-    ],
-    "Color": [
-     0.1882,
-     0.1725,
-     0.2118
-    ],
-    "Material": "Slate",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth"
-   }
-  },
-  {
    "name": "Losa17",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     -5.4559,
+     -31.7774,
      3.58,
-     429.6383,
-     -0.2588,
+     443.6791,
+     -0.9808,
      0,
-     0.9659,
+     0.1951,
      0,
      1,
      0,
-     -0.9659,
+     -0.1951,
      0,
-     -0.2588
+     -0.9808
     ],
     "Color": [
      0.2745,
@@ -725,14 +725,218 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
+    ],
+    "CFrame": [
+     -29.9337,
+     3.58,
+     437.6011,
+     -0.9239,
+     0,
+     0.3827,
+     0,
+     1,
+     0,
+     -0.3827,
+     0,
+     -0.9239
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa19",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -26.9396,
+     3.58,
+     431.9995,
+     -0.8315,
+     0,
+     0.5556,
+     0,
+     1,
+     0,
+     -0.5556,
+     0,
+     -0.8315
+    ],
+    "Color": [
+     0.2745,
+     0.2275,
+     0.2039
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa20",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -22.9103,
+     3.58,
+     427.0897,
+     -0.7071,
+     0,
+     0.7071,
+     0,
+     1,
+     0,
+     -0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa21",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -18.0005,
+     3.58,
+     423.0604,
+     -0.5556,
+     0,
+     0.8315,
+     0,
+     1,
+     0,
+     -0.8315,
+     0,
+     -0.5556
+    ],
+    "Color": [
+     0.2745,
+     0.2275,
+     0.2039
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa22",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -12.3989,
+     3.58,
+     420.0663,
+     -0.3827,
+     0,
+     0.9239,
+     0,
+     1,
+     0,
+     -0.9239,
+     0,
+     -0.3827
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa23",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     -6.3209,
+     3.58,
+     418.2226,
+     -0.1951,
+     0,
+     0.9808,
+     0,
+     1,
+     0,
+     -0.9808,
+     0,
+     -0.1951
+    ],
+    "Color": [
+     0.2745,
+     0.2275,
+     0.2039
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa24",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
     ],
     "CFrame": [
      -0.0,
      3.58,
-     428.92,
+     417.6,
      -0.0,
      0,
      1.0,
@@ -754,28 +958,28 @@
    }
   },
   {
-   "name": "Losa19",
+   "name": "Losa25",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     5.4559,
+     6.3209,
      3.58,
-     429.6383,
-     0.2588,
+     418.2226,
+     0.1951,
      0,
-     0.9659,
+     0.9808,
      0,
      1,
      0,
-     -0.9659,
+     -0.9808,
      0,
-     0.2588
+     0.1951
     ],
     "Color": [
      0.2745,
@@ -788,28 +992,28 @@
    }
   },
   {
-   "name": "Losa20",
+   "name": "Losa26",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     10.54,
+     12.3989,
      3.58,
-     431.7442,
-     0.5,
+     420.0663,
+     0.3827,
      0,
-     0.866,
+     0.9239,
      0,
      1,
      0,
-     -0.866,
+     -0.9239,
      0,
-     0.5
+     0.3827
     ],
     "Color": [
      0.1882,
@@ -822,19 +1026,53 @@
    }
   },
   {
-   "name": "Losa21",
+   "name": "Losa27",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     14.9058,
+     18.0005,
      3.58,
-     435.0942,
+     423.0604,
+     0.5556,
+     0,
+     0.8315,
+     0,
+     1,
+     0,
+     -0.8315,
+     0,
+     0.5556
+    ],
+    "Color": [
+     0.2745,
+     0.2275,
+     0.2039
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa28",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     22.9103,
+     3.58,
+     427.0897,
      0.7071,
      0,
      0.7071,
@@ -846,6 +1084,40 @@
      0.7071
     ],
     "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Slate",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Losa29",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     21.6,
+     0.2,
+     6.482
+    ],
+    "CFrame": [
+     26.9396,
+     3.58,
+     431.9995,
+     0.8315,
+     0,
+     0.5556,
+     0,
+     1,
+     0,
+     -0.5556,
+     0,
+     0.8315
+    ],
+    "Color": [
      0.2745,
      0.2275,
      0.2039
@@ -856,28 +1128,28 @@
    }
   },
   {
-   "name": "Losa22",
+   "name": "Losa30",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     18.2558,
+     29.9337,
      3.58,
-     439.46,
-     0.866,
+     437.6011,
+     0.9239,
      0,
-     0.5,
+     0.3827,
      0,
      1,
      0,
-     -0.5,
+     -0.3827,
      0,
-     0.866
+     0.9239
     ],
     "Color": [
      0.1882,
@@ -890,28 +1162,28 @@
    }
   },
   {
-   "name": "Losa23",
+   "name": "Losa31",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     16.32,
+     21.6,
      0.2,
-     5.639
+     6.482
     ],
     "CFrame": [
-     20.3617,
+     31.7774,
      3.58,
-     444.5441,
-     0.9659,
+     443.6791,
+     0.9808,
      0,
-     0.2588,
+     0.1951,
      0,
      1,
      0,
-     -0.2588,
+     -0.1951,
      0,
-     0.9659
+     0.9808
     ],
     "Color": [
      0.2745,
@@ -931,10 +1203,10 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     31.4,
+     49.8,
      3.61,
      450.0,
      1.0,
@@ -970,21 +1242,21 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     30.7967,
+     49.1869,
      3.61,
-     456.1258,
-     0.9808,
+     457.7904,
+     0.9877,
      0,
-     -0.1951,
+     -0.1564,
      0,
      1,
      0,
-     0.1951,
+     0.1564,
      0,
-     0.9808
+     0.9877
     ],
     "Color": [
      1.0,
@@ -1009,21 +1281,21 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     29.0098,
+     47.3626,
      3.61,
-     462.0163,
-     0.9239,
+     465.389,
+     0.9511,
      0,
-     -0.3827,
+     -0.309,
      0,
      1,
      0,
-     0.3827,
+     0.309,
      0,
-     0.9239
+     0.9511
     ],
     "Color": [
      1.0,
@@ -1048,21 +1320,21 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     26.1081,
+     44.3721,
      3.61,
-     467.4449,
-     0.8315,
+     472.6087,
+     0.891,
      0,
-     -0.5556,
+     -0.454,
      0,
      1,
      0,
-     0.5556,
+     0.454,
      0,
-     0.8315
+     0.891
     ],
     "Color": [
      1.0,
@@ -1087,12 +1359,51 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     22.2032,
+     40.289,
      3.61,
-     472.2032,
+     479.2717,
+     0.809,
+     0,
+     -0.5878,
+     0,
+     1,
+     0,
+     0.5878,
+     0,
+     0.809
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta5",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     35.2139,
+     3.61,
+     485.2139,
      0.7071,
      0,
      -0.7071,
@@ -1119,45 +1430,6 @@
    }
   },
   {
-   "name": "Grieta5",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     0.5,
-     0.1,
-     6.285
-    ],
-    "CFrame": [
-     17.4449,
-     3.61,
-     476.1081,
-     0.5556,
-     0,
-     -0.8315,
-     0,
-     1,
-     0,
-     0.8315,
-     0,
-     0.5556
-    ],
-    "Color": [
-     1.0,
-     0.4706,
-     0.1569
-    ],
-    "Material": "Neon",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
-    "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
-   }
-  },
-  {
    "name": "Grieta6",
    "className": "Part",
    "properties": {
@@ -1165,21 +1437,21 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     12.0163,
+     29.2717,
      3.61,
-     479.0098,
-     0.3827,
+     490.289,
+     0.5878,
      0,
-     -0.9239,
+     -0.809,
      0,
      1,
      0,
-     0.9239,
+     0.809,
      0,
-     0.3827
+     0.5878
     ],
     "Color": [
      1.0,
@@ -1204,21 +1476,21 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     6.1258,
+     22.6087,
      3.61,
-     480.7967,
-     0.1951,
+     494.3721,
+     0.454,
      0,
-     -0.9808,
+     -0.891,
      0,
      1,
      0,
-     0.9808,
+     0.891,
      0,
-     0.1951
+     0.454
     ],
     "Color": [
      1.0,
@@ -1243,12 +1515,90 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
+    ],
+    "CFrame": [
+     15.389,
+     3.61,
+     497.3626,
+     0.309,
+     0,
+     -0.9511,
+     0,
+     1,
+     0,
+     0.9511,
+     0,
+     0.309
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta9",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     7.7904,
+     3.61,
+     499.1869,
+     0.1564,
+     0,
+     -0.9877,
+     0,
+     1,
+     0,
+     0.9877,
+     0,
+     0.1564
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta10",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
     ],
     "CFrame": [
      0.0,
      3.61,
-     481.4,
+     499.8,
      0.0,
      0,
      -1.0,
@@ -1275,84 +1625,6 @@
    }
   },
   {
-   "name": "Grieta9",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     0.5,
-     0.1,
-     6.285
-    ],
-    "CFrame": [
-     -6.1258,
-     3.61,
-     480.7967,
-     -0.1951,
-     0,
-     -0.9808,
-     0,
-     1,
-     0,
-     0.9808,
-     0,
-     -0.1951
-    ],
-    "Color": [
-     1.0,
-     0.4706,
-     0.1569
-    ],
-    "Material": "Neon",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
-    "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
-   }
-  },
-  {
-   "name": "Grieta10",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     0.5,
-     0.1,
-     6.285
-    ],
-    "CFrame": [
-     -12.0163,
-     3.61,
-     479.0098,
-     -0.3827,
-     0,
-     -0.9239,
-     0,
-     1,
-     0,
-     0.9239,
-     0,
-     -0.3827
-    ],
-    "Color": [
-     1.0,
-     0.4706,
-     0.1569
-    ],
-    "Material": "Neon",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
-    "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
-   }
-  },
-  {
    "name": "Grieta11",
    "className": "Part",
    "properties": {
@@ -1360,21 +1632,21 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -17.4449,
+     -7.7904,
      3.61,
-     476.1081,
-     -0.5556,
+     499.1869,
+     -0.1564,
      0,
-     -0.8315,
+     -0.9877,
      0,
      1,
      0,
-     0.8315,
+     0.9877,
      0,
-     -0.5556
+     -0.1564
     ],
     "Color": [
      1.0,
@@ -1399,12 +1671,129 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -22.2032,
+     -15.389,
      3.61,
-     472.2032,
+     497.3626,
+     -0.309,
+     0,
+     -0.9511,
+     0,
+     1,
+     0,
+     0.9511,
+     0,
+     -0.309
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta13",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -22.6087,
+     3.61,
+     494.3721,
+     -0.454,
+     0,
+     -0.891,
+     0,
+     1,
+     0,
+     0.891,
+     0,
+     -0.454
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta14",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -29.2717,
+     3.61,
+     490.289,
+     -0.5878,
+     0,
+     -0.809,
+     0,
+     1,
+     0,
+     0.809,
+     0,
+     -0.5878
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta15",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -35.2139,
+     3.61,
+     485.2139,
      -0.7071,
      0,
      -0.7071,
@@ -1431,123 +1820,6 @@
    }
   },
   {
-   "name": "Grieta13",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     0.5,
-     0.1,
-     6.285
-    ],
-    "CFrame": [
-     -26.1081,
-     3.61,
-     467.4449,
-     -0.8315,
-     0,
-     -0.5556,
-     0,
-     1,
-     0,
-     0.5556,
-     0,
-     -0.8315
-    ],
-    "Color": [
-     1.0,
-     0.4706,
-     0.1569
-    ],
-    "Material": "Neon",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
-    "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
-   }
-  },
-  {
-   "name": "Grieta14",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     0.5,
-     0.1,
-     6.285
-    ],
-    "CFrame": [
-     -29.0098,
-     3.61,
-     462.0163,
-     -0.9239,
-     0,
-     -0.3827,
-     0,
-     1,
-     0,
-     0.3827,
-     0,
-     -0.9239
-    ],
-    "Color": [
-     1.0,
-     0.4706,
-     0.1569
-    ],
-    "Material": "Neon",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
-    "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
-   }
-  },
-  {
-   "name": "Grieta15",
-   "className": "Part",
-   "properties": {
-    "Anchored": true,
-    "Size": [
-     0.5,
-     0.1,
-     6.285
-    ],
-    "CFrame": [
-     -30.7967,
-     3.61,
-     456.1258,
-     -0.9808,
-     0,
-     -0.1951,
-     0,
-     1,
-     0,
-     0.1951,
-     0,
-     -0.9808
-    ],
-    "Color": [
-     1.0,
-     0.4706,
-     0.1569
-    ],
-    "Material": "Neon",
-    "TopSurface": "Smooth",
-    "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
-    "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
-   }
-  },
-  {
    "name": "Grieta16",
    "className": "Part",
    "properties": {
@@ -1555,10 +1827,166 @@
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -31.4,
+     -40.289,
+     3.61,
+     479.2717,
+     -0.809,
+     0,
+     -0.5878,
+     0,
+     1,
+     0,
+     0.5878,
+     0,
+     -0.809
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta17",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -44.3721,
+     3.61,
+     472.6087,
+     -0.891,
+     0,
+     -0.454,
+     0,
+     1,
+     0,
+     0.454,
+     0,
+     -0.891
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta18",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -47.3626,
+     3.61,
+     465.389,
+     -0.9511,
+     0,
+     -0.309,
+     0,
+     1,
+     0,
+     0.309,
+     0,
+     -0.9511
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta19",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -49.1869,
+     3.61,
+     457.7904,
+     -0.9877,
+     0,
+     -0.1564,
+     0,
+     1,
+     0,
+     0.1564,
+     0,
+     -0.9877
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta20",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -49.8,
      3.61,
      450.0,
      -1.0,
@@ -1587,28 +2015,28 @@
    }
   },
   {
-   "name": "Grieta17",
+   "name": "Grieta21",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -30.7967,
+     -49.1869,
      3.61,
-     443.8742,
-     -0.9808,
+     442.2096,
+     -0.9877,
      0,
-     0.1951,
+     0.1564,
      0,
      1,
      0,
-     -0.1951,
+     -0.1564,
      0,
-     -0.9808
+     -0.9877
     ],
     "Color": [
      1.0,
@@ -1626,28 +2054,28 @@
    }
   },
   {
-   "name": "Grieta18",
+   "name": "Grieta22",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -29.0098,
+     -47.3626,
      3.61,
-     437.9837,
-     -0.9239,
+     434.611,
+     -0.9511,
      0,
-     0.3827,
+     0.309,
      0,
      1,
      0,
-     -0.3827,
+     -0.309,
      0,
-     -0.9239
+     -0.9511
     ],
     "Color": [
      1.0,
@@ -1665,28 +2093,28 @@
    }
   },
   {
-   "name": "Grieta19",
+   "name": "Grieta23",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -26.1081,
+     -44.3721,
      3.61,
-     432.5551,
-     -0.8315,
+     427.3913,
+     -0.891,
      0,
-     0.5556,
+     0.454,
      0,
      1,
      0,
-     -0.5556,
+     -0.454,
      0,
-     -0.8315
+     -0.891
     ],
     "Color": [
      1.0,
@@ -1704,19 +2132,58 @@
    }
   },
   {
-   "name": "Grieta20",
+   "name": "Grieta24",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -22.2032,
+     -40.289,
      3.61,
-     427.7968,
+     420.7283,
+     -0.809,
+     0,
+     0.5878,
+     0,
+     1,
+     0,
+     -0.5878,
+     0,
+     -0.809
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta25",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     -35.2139,
+     3.61,
+     414.7861,
      -0.7071,
      0,
      0.7071,
@@ -1743,28 +2210,28 @@
    }
   },
   {
-   "name": "Grieta21",
+   "name": "Grieta26",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -17.4449,
+     -29.2717,
      3.61,
-     423.8919,
-     -0.5556,
+     409.711,
+     -0.5878,
      0,
-     0.8315,
+     0.809,
      0,
      1,
      0,
-     -0.8315,
+     -0.809,
      0,
-     -0.5556
+     -0.5878
     ],
     "Color": [
      1.0,
@@ -1782,28 +2249,28 @@
    }
   },
   {
-   "name": "Grieta22",
+   "name": "Grieta27",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -12.0163,
+     -22.6087,
      3.61,
-     420.9902,
-     -0.3827,
+     405.6279,
+     -0.454,
      0,
-     0.9239,
+     0.891,
      0,
      1,
      0,
-     -0.9239,
+     -0.891,
      0,
-     -0.3827
+     -0.454
     ],
     "Color": [
      1.0,
@@ -1821,28 +2288,28 @@
    }
   },
   {
-   "name": "Grieta23",
+   "name": "Grieta28",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     -6.1258,
+     -15.389,
      3.61,
-     419.2033,
-     -0.1951,
+     402.6374,
+     -0.309,
      0,
-     0.9808,
+     0.9511,
      0,
      1,
      0,
-     -0.9808,
+     -0.9511,
      0,
-     -0.1951
+     -0.309
     ],
     "Color": [
      1.0,
@@ -1860,19 +2327,58 @@
    }
   },
   {
-   "name": "Grieta24",
+   "name": "Grieta29",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
+    ],
+    "CFrame": [
+     -7.7904,
+     3.61,
+     400.8131,
+     -0.1564,
+     0,
+     0.9877,
+     0,
+     1,
+     0,
+     -0.9877,
+     0,
+     -0.1564
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta30",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
     ],
     "CFrame": [
      -0.0,
      3.61,
-     418.6,
+     400.2,
      -0.0,
      0,
      1.0,
@@ -1899,28 +2405,28 @@
    }
   },
   {
-   "name": "Grieta25",
+   "name": "Grieta31",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     6.1258,
+     7.7904,
      3.61,
-     419.2033,
-     0.1951,
+     400.8131,
+     0.1564,
      0,
-     0.9808,
+     0.9877,
      0,
      1,
      0,
-     -0.9808,
+     -0.9877,
      0,
-     0.1951
+     0.1564
     ],
     "Color": [
      1.0,
@@ -1938,28 +2444,28 @@
    }
   },
   {
-   "name": "Grieta26",
+   "name": "Grieta32",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     12.0163,
+     15.389,
      3.61,
-     420.9902,
-     0.3827,
+     402.6374,
+     0.309,
      0,
-     0.9239,
+     0.9511,
      0,
      1,
      0,
-     -0.9239,
+     -0.9511,
      0,
-     0.3827
+     0.309
     ],
     "Color": [
      1.0,
@@ -1977,28 +2483,28 @@
    }
   },
   {
-   "name": "Grieta27",
+   "name": "Grieta33",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     17.4449,
+     22.6087,
      3.61,
-     423.8919,
-     0.5556,
+     405.6279,
+     0.454,
      0,
-     0.8315,
+     0.891,
      0,
      1,
      0,
-     -0.8315,
+     -0.891,
      0,
-     0.5556
+     0.454
     ],
     "Color": [
      1.0,
@@ -2016,19 +2522,58 @@
    }
   },
   {
-   "name": "Grieta28",
+   "name": "Grieta34",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     22.2032,
+     29.2717,
      3.61,
-     427.7968,
+     409.711,
+     0.5878,
+     0,
+     0.809,
+     0,
+     1,
+     0,
+     -0.809,
+     0,
+     0.5878
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta35",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     35.2139,
+     3.61,
+     414.7861,
      0.7071,
      0,
      0.7071,
@@ -2055,28 +2600,28 @@
    }
   },
   {
-   "name": "Grieta29",
+   "name": "Grieta36",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     26.1081,
+     40.289,
      3.61,
-     432.5551,
-     0.8315,
+     420.7283,
+     0.809,
      0,
-     0.5556,
+     0.5878,
      0,
      1,
      0,
-     -0.5556,
+     -0.5878,
      0,
-     0.8315
+     0.809
     ],
     "Color": [
      1.0,
@@ -2094,19 +2639,3388 @@
    }
   },
   {
-   "name": "Grieta30",
+   "name": "Grieta37",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
      0.5,
      0.1,
-     6.285
+     7.943
     ],
     "CFrame": [
-     29.0098,
+     44.3721,
      3.61,
-     437.9837,
+     427.3913,
+     0.891,
+     0,
+     0.454,
+     0,
+     1,
+     0,
+     -0.454,
+     0,
+     0.891
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta38",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     47.3626,
+     3.61,
+     434.611,
+     0.9511,
+     0,
+     0.309,
+     0,
+     1,
+     0,
+     -0.309,
+     0,
+     0.9511
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Grieta39",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.5,
+     0.1,
+     7.943
+    ],
+    "CFrame": [
+     49.1869,
+     3.61,
+     442.2096,
+     0.9877,
+     0,
+     0.1564,
+     0,
+     1,
+     0,
+     -0.1564,
+     0,
+     0.9877
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.35,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Parapeto0",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     53.1,
+     4.9,
+     450.0,
+     1.0,
+     0,
+     -0.0,
+     0,
+     1,
+     0,
+     0.0,
+     0,
+     1.0
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto1",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     52.6457,
+     4.9,
+     456.9309,
+     0.9914,
+     0,
+     -0.1305,
+     0,
+     1,
+     0,
+     0.1305,
+     0,
+     0.9914
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto2",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     51.2907,
+     4.9,
+     463.7433,
+     0.9659,
+     0,
+     -0.2588,
+     0,
+     1,
+     0,
+     0.2588,
+     0,
+     0.9659
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto3",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     49.058,
+     4.9,
+     470.3205,
+     0.9239,
+     0,
+     -0.3827,
+     0,
+     1,
+     0,
+     0.3827,
+     0,
+     0.9239
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto4",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     45.9859,
+     4.9,
+     476.55,
+     0.866,
+     0,
+     -0.5,
+     0,
+     1,
+     0,
+     0.5,
+     0,
+     0.866
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto5",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     42.1271,
+     4.9,
+     482.3252,
+     0.7934,
+     0,
+     -0.6088,
+     0,
+     1,
+     0,
+     0.6088,
+     0,
+     0.7934
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto6",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     37.5474,
+     4.9,
+     487.5474,
+     0.7071,
+     0,
+     -0.7071,
+     0,
+     1,
+     0,
+     0.7071,
+     0,
+     0.7071
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto7",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     32.3252,
+     4.9,
+     492.1271,
+     0.6088,
+     0,
+     -0.7934,
+     0,
+     1,
+     0,
+     0.7934,
+     0,
+     0.6088
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto8",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     26.55,
+     4.9,
+     495.9859,
+     0.5,
+     0,
+     -0.866,
+     0,
+     1,
+     0,
+     0.866,
+     0,
+     0.5
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto9",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     20.3205,
+     4.9,
+     499.058,
+     0.3827,
+     0,
+     -0.9239,
+     0,
+     1,
+     0,
+     0.9239,
+     0,
+     0.3827
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto10",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     13.7433,
+     4.9,
+     501.2907,
+     0.2588,
+     0,
+     -0.9659,
+     0,
+     1,
+     0,
+     0.9659,
+     0,
+     0.2588
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto11",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     6.9309,
+     4.9,
+     502.6457,
+     0.1305,
+     0,
+     -0.9914,
+     0,
+     1,
+     0,
+     0.9914,
+     0,
+     0.1305
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto12",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     0.0,
+     4.9,
+     503.1,
+     0.0,
+     0,
+     -1.0,
+     0,
+     1,
+     0,
+     1.0,
+     0,
+     0.0
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto13",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -6.9309,
+     4.9,
+     502.6457,
+     -0.1305,
+     0,
+     -0.9914,
+     0,
+     1,
+     0,
+     0.9914,
+     0,
+     -0.1305
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto14",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -13.7433,
+     4.9,
+     501.2907,
+     -0.2588,
+     0,
+     -0.9659,
+     0,
+     1,
+     0,
+     0.9659,
+     0,
+     -0.2588
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto15",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -20.3205,
+     4.9,
+     499.058,
+     -0.3827,
+     0,
+     -0.9239,
+     0,
+     1,
+     0,
+     0.9239,
+     0,
+     -0.3827
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto16",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -26.55,
+     4.9,
+     495.9859,
+     -0.5,
+     0,
+     -0.866,
+     0,
+     1,
+     0,
+     0.866,
+     0,
+     -0.5
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto17",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -32.3252,
+     4.9,
+     492.1271,
+     -0.6088,
+     0,
+     -0.7934,
+     0,
+     1,
+     0,
+     0.7934,
+     0,
+     -0.6088
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto18",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -37.5474,
+     4.9,
+     487.5474,
+     -0.7071,
+     0,
+     -0.7071,
+     0,
+     1,
+     0,
+     0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto19",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -42.1271,
+     4.9,
+     482.3252,
+     -0.7934,
+     0,
+     -0.6088,
+     0,
+     1,
+     0,
+     0.6088,
+     0,
+     -0.7934
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto20",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -45.9859,
+     4.9,
+     476.55,
+     -0.866,
+     0,
+     -0.5,
+     0,
+     1,
+     0,
+     0.5,
+     0,
+     -0.866
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto21",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -49.058,
+     4.9,
+     470.3205,
+     -0.9239,
+     0,
+     -0.3827,
+     0,
+     1,
+     0,
+     0.3827,
+     0,
+     -0.9239
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto22",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -51.2907,
+     4.9,
+     463.7433,
+     -0.9659,
+     0,
+     -0.2588,
+     0,
+     1,
+     0,
+     0.2588,
+     0,
+     -0.9659
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto23",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -52.6457,
+     4.9,
+     456.9309,
+     -0.9914,
+     0,
+     -0.1305,
+     0,
+     1,
+     0,
+     0.1305,
+     0,
+     -0.9914
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto24",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -53.1,
+     4.9,
+     450.0,
+     -1.0,
+     0,
+     -0.0,
+     0,
+     1,
+     0,
+     0.0,
+     0,
+     -1.0
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto25",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -52.6457,
+     4.9,
+     443.0691,
+     -0.9914,
+     0,
+     0.1305,
+     0,
+     1,
+     0,
+     -0.1305,
+     0,
+     -0.9914
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto26",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -51.2907,
+     4.9,
+     436.2567,
+     -0.9659,
+     0,
+     0.2588,
+     0,
+     1,
+     0,
+     -0.2588,
+     0,
+     -0.9659
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto27",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -49.058,
+     4.9,
+     429.6795,
+     -0.9239,
+     0,
+     0.3827,
+     0,
+     1,
+     0,
+     -0.3827,
+     0,
+     -0.9239
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto28",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -45.9859,
+     4.9,
+     423.45,
+     -0.866,
+     0,
+     0.5,
+     0,
+     1,
+     0,
+     -0.5,
+     0,
+     -0.866
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto29",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -42.1271,
+     4.9,
+     417.6748,
+     -0.7934,
+     0,
+     0.6088,
+     0,
+     1,
+     0,
+     -0.6088,
+     0,
+     -0.7934
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto30",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -37.5474,
+     4.9,
+     412.4526,
+     -0.7071,
+     0,
+     0.7071,
+     0,
+     1,
+     0,
+     -0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto31",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -32.3252,
+     4.9,
+     407.8729,
+     -0.6088,
+     0,
+     0.7934,
+     0,
+     1,
+     0,
+     -0.7934,
+     0,
+     -0.6088
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto32",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -26.55,
+     4.9,
+     404.0141,
+     -0.5,
+     0,
+     0.866,
+     0,
+     1,
+     0,
+     -0.866,
+     0,
+     -0.5
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto33",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -20.3205,
+     4.9,
+     400.942,
+     -0.3827,
+     0,
+     0.9239,
+     0,
+     1,
+     0,
+     -0.9239,
+     0,
+     -0.3827
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto34",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -13.7433,
+     4.9,
+     398.7093,
+     -0.2588,
+     0,
+     0.9659,
+     0,
+     1,
+     0,
+     -0.9659,
+     0,
+     -0.2588
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto35",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -6.9309,
+     4.9,
+     397.3543,
+     -0.1305,
+     0,
+     0.9914,
+     0,
+     1,
+     0,
+     -0.9914,
+     0,
+     -0.1305
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto36",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     -0.0,
+     4.9,
+     396.9,
+     -0.0,
+     0,
+     1.0,
+     0,
+     1,
+     0,
+     -1.0,
+     0,
+     -0.0
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto37",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     6.9309,
+     4.9,
+     397.3543,
+     0.1305,
+     0,
+     0.9914,
+     0,
+     1,
+     0,
+     -0.9914,
+     0,
+     0.1305
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto38",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     13.7433,
+     4.9,
+     398.7093,
+     0.2588,
+     0,
+     0.9659,
+     0,
+     1,
+     0,
+     -0.9659,
+     0,
+     0.2588
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto39",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     20.3205,
+     4.9,
+     400.942,
+     0.3827,
+     0,
+     0.9239,
+     0,
+     1,
+     0,
+     -0.9239,
+     0,
+     0.3827
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto40",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     26.55,
+     4.9,
+     404.0141,
+     0.5,
+     0,
+     0.866,
+     0,
+     1,
+     0,
+     -0.866,
+     0,
+     0.5
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto41",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     32.3252,
+     4.9,
+     407.8729,
+     0.6088,
+     0,
+     0.7934,
+     0,
+     1,
+     0,
+     -0.7934,
+     0,
+     0.6088
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto42",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     37.5474,
+     4.9,
+     412.4526,
+     0.7071,
+     0,
+     0.7071,
+     0,
+     1,
+     0,
+     -0.7071,
+     0,
+     0.7071
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto43",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     42.1271,
+     4.9,
+     417.6748,
+     0.7934,
+     0,
+     0.6088,
+     0,
+     1,
+     0,
+     -0.6088,
+     0,
+     0.7934
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto44",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     45.9859,
+     4.9,
+     423.45,
+     0.866,
+     0,
+     0.5,
+     0,
+     1,
+     0,
+     -0.5,
+     0,
+     0.866
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto45",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     49.058,
+     4.9,
+     429.6795,
+     0.9239,
+     0,
+     0.3827,
+     0,
+     1,
+     0,
+     -0.3827,
+     0,
+     0.9239
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto46",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     51.2907,
+     4.9,
+     436.2567,
+     0.9659,
+     0,
+     0.2588,
+     0,
+     1,
+     0,
+     -0.2588,
+     0,
+     0.9659
+    ],
+    "Color": [
+     0.1882,
+     0.1725,
+     0.2118
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Parapeto47",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     1.6,
+     2.6,
+     7.071
+    ],
+    "CFrame": [
+     52.6457,
+     4.9,
+     443.0691,
+     0.9914,
+     0,
+     0.1305,
+     0,
+     1,
+     0,
+     -0.1305,
+     0,
+     0.9914
+    ],
+    "Color": [
+     0.149,
+     0.1333,
+     0.1647
+    ],
+    "Material": "Basalt",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth"
+   }
+  },
+  {
+   "name": "Remate0",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     53.1,
+     6.325,
+     450.0,
+     1.0,
+     0,
+     -0.0,
+     0,
+     1,
+     0,
+     0.0,
+     0,
+     1.0
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate1",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     52.6457,
+     6.325,
+     456.9309,
+     0.9914,
+     0,
+     -0.1305,
+     0,
+     1,
+     0,
+     0.1305,
+     0,
+     0.9914
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate2",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     51.2907,
+     6.325,
+     463.7433,
+     0.9659,
+     0,
+     -0.2588,
+     0,
+     1,
+     0,
+     0.2588,
+     0,
+     0.9659
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate3",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     49.058,
+     6.325,
+     470.3205,
+     0.9239,
+     0,
+     -0.3827,
+     0,
+     1,
+     0,
+     0.3827,
+     0,
+     0.9239
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate4",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     45.9859,
+     6.325,
+     476.55,
+     0.866,
+     0,
+     -0.5,
+     0,
+     1,
+     0,
+     0.5,
+     0,
+     0.866
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate5",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     42.1271,
+     6.325,
+     482.3252,
+     0.7934,
+     0,
+     -0.6088,
+     0,
+     1,
+     0,
+     0.6088,
+     0,
+     0.7934
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate6",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     37.5474,
+     6.325,
+     487.5474,
+     0.7071,
+     0,
+     -0.7071,
+     0,
+     1,
+     0,
+     0.7071,
+     0,
+     0.7071
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate7",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     32.3252,
+     6.325,
+     492.1271,
+     0.6088,
+     0,
+     -0.7934,
+     0,
+     1,
+     0,
+     0.7934,
+     0,
+     0.6088
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate8",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     26.55,
+     6.325,
+     495.9859,
+     0.5,
+     0,
+     -0.866,
+     0,
+     1,
+     0,
+     0.866,
+     0,
+     0.5
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate9",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     20.3205,
+     6.325,
+     499.058,
+     0.3827,
+     0,
+     -0.9239,
+     0,
+     1,
+     0,
+     0.9239,
+     0,
+     0.3827
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate10",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     13.7433,
+     6.325,
+     501.2907,
+     0.2588,
+     0,
+     -0.9659,
+     0,
+     1,
+     0,
+     0.9659,
+     0,
+     0.2588
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate11",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     6.9309,
+     6.325,
+     502.6457,
+     0.1305,
+     0,
+     -0.9914,
+     0,
+     1,
+     0,
+     0.9914,
+     0,
+     0.1305
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate12",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     0.0,
+     6.325,
+     503.1,
+     0.0,
+     0,
+     -1.0,
+     0,
+     1,
+     0,
+     1.0,
+     0,
+     0.0
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate13",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -6.9309,
+     6.325,
+     502.6457,
+     -0.1305,
+     0,
+     -0.9914,
+     0,
+     1,
+     0,
+     0.9914,
+     0,
+     -0.1305
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate14",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -13.7433,
+     6.325,
+     501.2907,
+     -0.2588,
+     0,
+     -0.9659,
+     0,
+     1,
+     0,
+     0.9659,
+     0,
+     -0.2588
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate15",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -20.3205,
+     6.325,
+     499.058,
+     -0.3827,
+     0,
+     -0.9239,
+     0,
+     1,
+     0,
+     0.9239,
+     0,
+     -0.3827
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate16",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -26.55,
+     6.325,
+     495.9859,
+     -0.5,
+     0,
+     -0.866,
+     0,
+     1,
+     0,
+     0.866,
+     0,
+     -0.5
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate17",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -32.3252,
+     6.325,
+     492.1271,
+     -0.6088,
+     0,
+     -0.7934,
+     0,
+     1,
+     0,
+     0.7934,
+     0,
+     -0.6088
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate18",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -37.5474,
+     6.325,
+     487.5474,
+     -0.7071,
+     0,
+     -0.7071,
+     0,
+     1,
+     0,
+     0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate19",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -42.1271,
+     6.325,
+     482.3252,
+     -0.7934,
+     0,
+     -0.6088,
+     0,
+     1,
+     0,
+     0.6088,
+     0,
+     -0.7934
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate20",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -45.9859,
+     6.325,
+     476.55,
+     -0.866,
+     0,
+     -0.5,
+     0,
+     1,
+     0,
+     0.5,
+     0,
+     -0.866
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate21",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -49.058,
+     6.325,
+     470.3205,
+     -0.9239,
+     0,
+     -0.3827,
+     0,
+     1,
+     0,
+     0.3827,
+     0,
+     -0.9239
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate22",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -51.2907,
+     6.325,
+     463.7433,
+     -0.9659,
+     0,
+     -0.2588,
+     0,
+     1,
+     0,
+     0.2588,
+     0,
+     -0.9659
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate23",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -52.6457,
+     6.325,
+     456.9309,
+     -0.9914,
+     0,
+     -0.1305,
+     0,
+     1,
+     0,
+     0.1305,
+     0,
+     -0.9914
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate24",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -53.1,
+     6.325,
+     450.0,
+     -1.0,
+     0,
+     -0.0,
+     0,
+     1,
+     0,
+     0.0,
+     0,
+     -1.0
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate25",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -52.6457,
+     6.325,
+     443.0691,
+     -0.9914,
+     0,
+     0.1305,
+     0,
+     1,
+     0,
+     -0.1305,
+     0,
+     -0.9914
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate26",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -51.2907,
+     6.325,
+     436.2567,
+     -0.9659,
+     0,
+     0.2588,
+     0,
+     1,
+     0,
+     -0.2588,
+     0,
+     -0.9659
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate27",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -49.058,
+     6.325,
+     429.6795,
+     -0.9239,
+     0,
+     0.3827,
+     0,
+     1,
+     0,
+     -0.3827,
+     0,
+     -0.9239
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate28",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -45.9859,
+     6.325,
+     423.45,
+     -0.866,
+     0,
+     0.5,
+     0,
+     1,
+     0,
+     -0.5,
+     0,
+     -0.866
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate29",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -42.1271,
+     6.325,
+     417.6748,
+     -0.7934,
+     0,
+     0.6088,
+     0,
+     1,
+     0,
+     -0.6088,
+     0,
+     -0.7934
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate30",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -37.5474,
+     6.325,
+     412.4526,
+     -0.7071,
+     0,
+     0.7071,
+     0,
+     1,
+     0,
+     -0.7071,
+     0,
+     -0.7071
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate31",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -32.3252,
+     6.325,
+     407.8729,
+     -0.6088,
+     0,
+     0.7934,
+     0,
+     1,
+     0,
+     -0.7934,
+     0,
+     -0.6088
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate32",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -26.55,
+     6.325,
+     404.0141,
+     -0.5,
+     0,
+     0.866,
+     0,
+     1,
+     0,
+     -0.866,
+     0,
+     -0.5
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate33",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -20.3205,
+     6.325,
+     400.942,
+     -0.3827,
+     0,
+     0.9239,
+     0,
+     1,
+     0,
+     -0.9239,
+     0,
+     -0.3827
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate34",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -13.7433,
+     6.325,
+     398.7093,
+     -0.2588,
+     0,
+     0.9659,
+     0,
+     1,
+     0,
+     -0.9659,
+     0,
+     -0.2588
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate35",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -6.9309,
+     6.325,
+     397.3543,
+     -0.1305,
+     0,
+     0.9914,
+     0,
+     1,
+     0,
+     -0.9914,
+     0,
+     -0.1305
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate36",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     -0.0,
+     6.325,
+     396.9,
+     -0.0,
+     0,
+     1.0,
+     0,
+     1,
+     0,
+     -1.0,
+     0,
+     -0.0
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate37",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     6.9309,
+     6.325,
+     397.3543,
+     0.1305,
+     0,
+     0.9914,
+     0,
+     1,
+     0,
+     -0.9914,
+     0,
+     0.1305
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate38",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     13.7433,
+     6.325,
+     398.7093,
+     0.2588,
+     0,
+     0.9659,
+     0,
+     1,
+     0,
+     -0.9659,
+     0,
+     0.2588
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate39",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     20.3205,
+     6.325,
+     400.942,
+     0.3827,
+     0,
+     0.9239,
+     0,
+     1,
+     0,
+     -0.9239,
+     0,
+     0.3827
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate40",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     26.55,
+     6.325,
+     404.0141,
+     0.5,
+     0,
+     0.866,
+     0,
+     1,
+     0,
+     -0.866,
+     0,
+     0.5
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate41",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     32.3252,
+     6.325,
+     407.8729,
+     0.6088,
+     0,
+     0.7934,
+     0,
+     1,
+     0,
+     -0.7934,
+     0,
+     0.6088
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate42",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     37.5474,
+     6.325,
+     412.4526,
+     0.7071,
+     0,
+     0.7071,
+     0,
+     1,
+     0,
+     -0.7071,
+     0,
+     0.7071
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate43",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     42.1271,
+     6.325,
+     417.6748,
+     0.7934,
+     0,
+     0.6088,
+     0,
+     1,
+     0,
+     -0.6088,
+     0,
+     0.7934
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate44",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     45.9859,
+     6.325,
+     423.45,
+     0.866,
+     0,
+     0.5,
+     0,
+     1,
+     0,
+     -0.5,
+     0,
+     0.866
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate45",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     49.058,
+     6.325,
+     429.6795,
      0.9239,
      0,
      0.3827,
@@ -2119,56 +6033,86 @@
     ],
     "Color": [
      1.0,
-     0.4706,
-     0.1569
+     0.7843,
+     0.2745
     ],
-    "Material": "Neon",
+    "Material": "Metal",
     "TopSurface": "Smooth",
     "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
     "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
+    "CanTouch": false
    }
   },
   {
-   "name": "Grieta31",
+   "name": "Remate46",
    "className": "Part",
    "properties": {
     "Anchored": true,
     "Size": [
-     0.5,
-     0.1,
-     6.285
+     2,
+     0.35,
+     7.071
     ],
     "CFrame": [
-     30.7967,
-     3.61,
-     443.8742,
-     0.9808,
+     51.2907,
+     6.325,
+     436.2567,
+     0.9659,
      0,
-     0.1951,
+     0.2588,
      0,
      1,
      0,
-     -0.1951,
+     -0.2588,
      0,
-     0.9808
+     0.9659
     ],
     "Color": [
      1.0,
-     0.4706,
-     0.1569
+     0.7843,
+     0.2745
     ],
-    "Material": "Neon",
+    "Material": "Metal",
     "TopSurface": "Smooth",
     "BottomSurface": "Smooth",
-    "Transparency": 0.35,
-    "CanCollide": false,
     "CanQuery": false,
-    "CanTouch": false,
-    "CastShadow": false
+    "CanTouch": false
+   }
+  },
+  {
+   "name": "Remate47",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     2,
+     0.35,
+     7.071
+    ],
+    "CFrame": [
+     52.6457,
+     6.325,
+     443.0691,
+     0.9914,
+     0,
+     0.1305,
+     0,
+     1,
+     0,
+     -0.1305,
+     0,
+     0.9914
+    ],
+    "Color": [
+     1.0,
+     0.7843,
+     0.2745
+    ],
+    "Material": "Metal",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "CanQuery": false,
+    "CanTouch": false
    }
   },
   {
@@ -2182,18 +6126,18 @@
      0.5
     ],
     "CFrame": [
-     33.9205,
+     53.9586,
      -0.0928,
-     452.9666,
-     0.9962,
-     0.0062,
-     -0.0869,
+     453.1416,
+     0.9983,
+     0.0042,
+     -0.058,
      0,
      0.9974,
      0.0716,
-     0.0871,
-     -0.0714,
-     0.9936
+     0.0581,
+     -0.0715,
+     0.9957
     ],
     "Color": [
      1.0,
@@ -2221,18 +6165,18 @@
      0.5
     ],
     "CFrame": [
-     31.4782,
+     52.2227,
      -0.153,
-     462.9818,
-     0.9245,
-     0.0004,
-     -0.3813,
+     463.9354,
+     0.9662,
+     0.0003,
+     -0.2578,
      0,
      1.0,
      0.0012,
-     0.3813,
+     0.2578,
      -0.0011,
-     0.9245
+     0.9662
     ],
     "Color": [
      1.0,
@@ -2260,18 +6204,18 @@
      0.5
     ],
     "CFrame": [
-     21.5026,
+     44.866,
      0.3533,
-     476.4015,
-     0.6315,
-     0.0984,
-     -0.7691,
+     480.1404,
+     0.8301,
+     0.0708,
+     -0.5531,
      0,
      0.9919,
      0.1269,
-     0.7754,
-     -0.0802,
-     0.6264
+     0.5576,
+     -0.1054,
+     0.8234
     ],
     "Color": [
      1.0,
@@ -2299,18 +6243,18 @@
      0.5
     ],
     "CFrame": [
-     13.6477,
+     38.7179,
      0.0588,
-     481.1953,
-     0.4008,
-     0.1753,
-     -0.8992,
+     487.7138,
+     0.7163,
+     0.1335,
+     -0.6849,
      0,
      0.9815,
      0.1913,
-     0.9162,
-     -0.0767,
-     0.3934
+     0.6978,
+     -0.1371,
+     0.7031
     ],
     "Color": [
      1.0,
@@ -2338,18 +6282,18 @@
      0.5
     ],
     "CFrame": [
-     -2.1229,
+     25.0554,
      -0.0091,
-     483.9838,
-     -0.0623,
-     -0.1374,
-     -0.9886,
+     497.8919,
+     0.4636,
+     -0.122,
+     -0.8776,
      0,
      0.9905,
      -0.1377,
-     0.9981,
-     -0.0086,
-     -0.0618
+     0.8861,
+     0.0638,
+     0.4591
     ],
     "Color": [
      1.0,
@@ -2377,18 +6321,18 @@
      0.5
     ],
     "CFrame": [
-     -12.742,
+     14.3074,
      1.325,
-     481.576,
-     -0.3742,
-     -0.0901,
-     -0.923,
+     502.122,
+     0.2647,
+     -0.0937,
+     -0.9598,
      0,
      0.9953,
      -0.0972,
-     0.9273,
-     -0.0364,
-     -0.3724
+     0.9643,
+     0.0257,
+     0.2635
     ],
     "Color": [
      1.0,
@@ -2416,18 +6360,18 @@
      0.5
     ],
     "CFrame": [
-     -21.8561,
+     3.1851,
      0.461,
-     476.1096,
-     -0.6419,
-     0.1498,
-     -0.752,
+     503.9561,
+     0.0589,
+     0.195,
+     -0.979,
      0,
      0.9807,
      0.1954,
-     0.7668,
-     0.1254,
-     -0.6295
+     0.9983,
+     -0.0115,
+     0.0578
     ],
     "Color": [
      1.0,
@@ -2455,18 +6399,18 @@
      0.5
     ],
     "CFrame": [
-     -29.9486,
+     -10.3675,
      1.0051,
-     466.2013,
-     -0.8795,
-     -0.0281,
-     -0.475,
+     503.0464,
+     -0.1918,
+     -0.0579,
+     -0.9797,
      0,
      0.9983,
      -0.059,
-     0.4758,
-     -0.0519,
-     -0.878
+     0.9814,
+     -0.0113,
+     -0.1915
     ],
     "Color": [
      1.0,
@@ -2494,18 +6438,18 @@
      0.5
     ],
     "CFrame": [
-     -33.9997,
+     -28.7026,
      0.4337,
-     448.1507,
-     -0.9985,
-     -0.0112,
-     0.0531,
+     495.7992,
+     -0.531,
+     0.1749,
+     -0.8291,
      0,
      0.9785,
      0.2064,
-     -0.0543,
-     0.2061,
-     -0.977
+     0.8473,
+     0.1096,
+     -0.5196
     ],
     "Color": [
      1.0,
@@ -2533,18 +6477,18 @@
      0.5
     ],
     "CFrame": [
-     -32.1091,
+     -36.8339,
      0.0988,
-     438.6682,
-     -0.943,
-     -0.0067,
-     0.3327,
+     489.5559,
+     -0.6815,
+     0.0148,
+     -0.7317,
      0,
      0.9998,
      0.0203,
-     -0.3328,
-     0.0191,
-     -0.9428
+     0.7318,
+     0.0138,
+     -0.6813
     ],
     "Color": [
      1.0,
@@ -2572,18 +6516,18 @@
      0.5
     ],
     "CFrame": [
-     -24.6055,
+     -46.4036,
      0.0339,
-     426.4634,
-     -0.7226,
-     0.0057,
-     0.6912,
+     477.7147,
+     -0.8585,
+     -0.0042,
+     -0.5127,
      0,
      1.0,
      -0.0083,
-     -0.6912,
-     -0.006,
-     -0.7226
+     0.5128,
+     -0.0071,
+     -0.8585
     ],
     "Color": [
      1.0,
@@ -2611,18 +6555,18 @@
      0.5
     ],
     "CFrame": [
-     -9.7368,
+     -53.043,
      1.2582,
-     417.3718,
-     -0.286,
-     0.024,
-     0.9579,
+     460.3848,
+     -0.9814,
+     -0.0048,
+     -0.1921,
      0,
      0.9997,
      -0.0251,
-     -0.9582,
-     -0.0072,
-     -0.2859
+     0.1921,
+     -0.0246,
+     -0.9811
     ],
     "Color": [
      1.0,
@@ -2650,18 +6594,18 @@
      0.5
     ],
     "CFrame": [
-     -1.2059,
+     -54.0349,
      1.3409,
-     415.9714,
-     -0.0354,
-     0.0931,
-     0.995,
+     451.2763,
+     -0.9997,
+     -0.0022,
+     -0.0235,
      0,
      0.9957,
      -0.0931,
-     -0.9994,
-     -0.0033,
-     -0.0353
+     0.0236,
+     -0.0931,
+     -0.9954
     ],
     "Color": [
      1.0,
@@ -2689,18 +6633,18 @@
      0.5
     ],
     "CFrame": [
-     13.661,
+     -52.0159,
      0.2584,
-     418.8106,
-     0.4012,
-     -0.1772,
-     0.8987,
+     435.3115,
+     -0.9624,
+     -0.0526,
+     0.2666,
      0,
      0.9811,
      0.1935,
-     -0.916,
-     -0.0776,
-     0.3936
+     -0.2718,
+     0.1862,
+     -0.9442
     ],
     "Color": [
      1.0,
@@ -2728,18 +6672,18 @@
      0.5
     ],
     "CFrame": [
-     25.3218,
+     -45.8221,
      -0.3215,
-     427.2358,
-     0.7437,
-     -0.0166,
-     0.6683,
+     421.334,
+     -0.8478,
+     -0.0132,
+     0.5302,
      0,
      0.9997,
      0.0248,
-     -0.6686,
-     -0.0185,
-     0.7434
+     -0.5304,
+     0.021,
+     -0.8475
     ],
     "Color": [
      1.0,
@@ -2767,18 +6711,330 @@
      0.5
     ],
     "CFrame": [
-     30.0504,
+     -40.6059,
      1.0077,
-     433.9882,
-     0.8825,
-     0.0298,
-     0.4693,
+     414.327,
+     -0.7513,
+     0.0418,
+     0.6587,
      0,
      0.998,
      -0.0634,
-     -0.4702,
-     0.0559,
-     0.8808
+     -0.66,
+     -0.0476,
+     -0.7498
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta16",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     4.03,
+     0.5
+    ],
+    "CFrame": [
+     -25.4716,
+     0.8851,
+     402.3282,
+     -0.4713,
+     -0.0088,
+     0.882,
+     0,
+     1.0,
+     0.01,
+     -0.882,
+     0.0047,
+     -0.4712
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta17",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     6.102,
+     0.5
+    ],
+    "CFrame": [
+     -14.5741,
+     -0.1508,
+     397.952,
+     -0.2696,
+     0.1065,
+     0.957,
+     0,
+     0.9939,
+     -0.1106,
+     -0.963,
+     -0.0298,
+     -0.268
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta18",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     6.112,
+     0.5
+    ],
+    "CFrame": [
+     3.4181,
+     -0.1558,
+     396.0582,
+     0.0632,
+     -0.0244,
+     0.9977,
+     0,
+     0.9997,
+     0.0244,
+     -0.998,
+     -0.0015,
+     0.0632
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta19",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     3.323,
+     0.5
+    ],
+    "CFrame": [
+     10.9371,
+     1.2387,
+     397.0681,
+     0.2024,
+     -0.163,
+     0.9657,
+     0,
+     0.9861,
+     0.1664,
+     -0.9793,
+     -0.0337,
+     0.1995
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta20",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     5.24,
+     0.5
+    ],
+    "CFrame": [
+     24.4525,
+     0.28,
+     401.7976,
+     0.4524,
+     -0.1094,
+     0.8851,
+     0,
+     0.9924,
+     0.1227,
+     -0.8918,
+     -0.0555,
+     0.449
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta21",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     3.439,
+     0.5
+    ],
+    "CFrame": [
+     38.9019,
+     1.1805,
+     412.4761,
+     0.7197,
+     0.1042,
+     0.6864,
+     0,
+     0.9887,
+     -0.1501,
+     -0.6942,
+     0.108,
+     0.7116
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta22",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     5.414,
+     0.5
+    ],
+    "CFrame": [
+     44.9869,
+     0.1932,
+     420.0403,
+     0.8323,
+     0.0686,
+     0.55,
+     0,
+     0.9923,
+     -0.1237,
+     -0.5543,
+     0.103,
+     0.8259
+    ],
+    "Color": [
+     1.0,
+     0.4706,
+     0.1569
+    ],
+    "Material": "Neon",
+    "TopSurface": "Smooth",
+    "BottomSurface": "Smooth",
+    "Transparency": 0.2,
+    "CanCollide": false,
+    "CanQuery": false,
+    "CanTouch": false,
+    "CastShadow": false
+   }
+  },
+  {
+   "name": "Veta23",
+   "className": "Part",
+   "properties": {
+    "Anchored": true,
+    "Size": [
+     0.3,
+     4.927,
+     0.5
+    ],
+    "CFrame": [
+     52.8502,
+     0.4366,
+     438.675,
+     0.9778,
+     0.0218,
+     0.2084,
+     0,
+     0.9946,
+     -0.1042,
+     -0.2095,
+     0.1019,
+     0.9725
     ],
     "Color": [
      1.0,
@@ -2802,8 +7058,8 @@
     "Anchored": true,
     "Size": [
      1.4,
-     14,
-     14
+     18,
+     18
     ],
     "CFrame": [
      0,
@@ -2837,8 +7093,8 @@
     "Anchored": true,
     "Size": [
      0.35,
-     14.4,
-     14.4
+     18.4,
+     18.4
     ],
     "CFrame": [
      0,
@@ -2875,13 +7131,13 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     2.8,
-     2.8,
-     2.8
+     3.6,
+     3.6,
+     3.6
     ],
     "CFrame": [
      0,
-     11.5,
+     12.5,
      450,
      0.8192,
      -0.5736,
@@ -2912,7 +7168,7 @@
      "className": "PointLight",
      "properties": {
       "Brightness": 1.2,
-      "Range": 18,
+      "Range": 20,
       "Color": [
        0.5882,
        0.7843,
@@ -2929,14 +7185,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     0.9,
-     0.9,
-     0.9
+     1,
+     1,
+     1
     ],
     "CFrame": [
-     3.182,
-     11.5,
-     453.182,
+     3.8891,
+     12.5,
+     453.8891,
      0.8192,
      -0.5736,
      0,
@@ -2967,14 +7223,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     0.9,
-     0.9,
-     0.9
+     1,
+     1,
+     1
     ],
     "CFrame": [
-     -3.182,
-     11.5,
-     453.182,
+     -3.8891,
+     12.5,
+     453.8891,
      0.8192,
      -0.5736,
      0,
@@ -3005,14 +7261,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     0.9,
-     0.9,
-     0.9
+     1,
+     1,
+     1
     ],
     "CFrame": [
-     -3.182,
-     11.5,
-     446.818,
+     -3.8891,
+     12.5,
+     446.1109,
      0.8192,
      -0.5736,
      0,
@@ -3043,14 +7299,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     0.9,
-     0.9,
-     0.9
+     1,
+     1,
+     1
     ],
     "CFrame": [
-     3.182,
-     11.5,
-     446.818,
+     3.8891,
+     12.5,
+     446.1109,
      0.8192,
      -0.5736,
      0,
@@ -3081,12 +7337,12 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
-     10.0,
+     13.0,
      3.64,
      450.0,
      1.0,
@@ -3118,14 +7374,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
-     7.0711,
+     9.1924,
      3.64,
-     457.0711,
+     459.1924,
      0.7071,
      0,
      -0.7071,
@@ -3155,14 +7411,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
      0.0,
      3.64,
-     460.0,
+     463.0,
      0.0,
      0,
      -1.0,
@@ -3192,14 +7448,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
-     -7.0711,
+     -9.1924,
      3.64,
-     457.0711,
+     459.1924,
      -0.7071,
      0,
      -0.7071,
@@ -3229,12 +7485,12 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
-     -10.0,
+     -13.0,
      3.64,
      450.0,
      -1.0,
@@ -3266,14 +7522,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
-     -7.0711,
+     -9.1924,
      3.64,
-     442.9289,
+     440.8076,
      -0.7071,
      0,
      0.7071,
@@ -3303,14 +7559,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
      -0.0,
      3.64,
-     440.0,
+     437.0,
      -0.0,
      0,
      1.0,
@@ -3340,14 +7596,14 @@
    "properties": {
     "Anchored": true,
     "Size": [
-     1.4,
+     1.6,
      0.12,
-     3
+     3.4
     ],
     "CFrame": [
-     7.0711,
+     9.1924,
      3.64,
-     442.9289,
+     440.8076,
      0.7071,
      0,
      0.7071,
@@ -3386,9 +7642,9 @@
        1.8
       ],
       "CFrame": [
-       31.4,
+       45.2701,
        5.0,
-       450.0,
+       468.7515,
        1,
        0,
        0,
@@ -3420,9 +7676,9 @@
        3.4
       ],
       "CFrame": [
-       31.4,
+       45.2701,
        6.8,
-       450.0,
+       468.7515,
        0.0,
        -1.0,
        0,
@@ -3457,9 +7713,9 @@
        2.8
       ],
       "CFrame": [
-       31.4,
+       45.2701,
        7.3,
-       450.0,
+       468.7515,
        0.0,
        -1.0,
        0,
@@ -3496,9 +7752,9 @@
        0.6
       ],
       "CFrame": [
-       31.4,
+       45.2701,
        7.6,
-       450.0,
+       468.7515,
        1,
        0,
        0,
@@ -3546,8 +7802,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -3575,9 +7831,9 @@
        1.8
       ],
       "CFrame": [
-       22.2032,
+       18.7515,
        5.0,
-       472.2032,
+       495.2701,
        1,
        0,
        0,
@@ -3609,9 +7865,9 @@
        3.4
       ],
       "CFrame": [
-       22.2032,
+       18.7515,
        6.8,
-       472.2032,
+       495.2701,
        0.0,
        -1.0,
        0,
@@ -3646,9 +7902,9 @@
        2.8
       ],
       "CFrame": [
-       22.2032,
+       18.7515,
        7.3,
-       472.2032,
+       495.2701,
        0.0,
        -1.0,
        0,
@@ -3685,9 +7941,9 @@
        0.6
       ],
       "CFrame": [
-       22.2032,
+       18.7515,
        7.6,
-       472.2032,
+       495.2701,
        1,
        0,
        0,
@@ -3735,8 +7991,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -3764,9 +8020,9 @@
        1.8
       ],
       "CFrame": [
-       0.0,
+       -18.7515,
        5.0,
-       481.4,
+       495.2701,
        1,
        0,
        0,
@@ -3798,9 +8054,9 @@
        3.4
       ],
       "CFrame": [
-       0.0,
+       -18.7515,
        6.8,
-       481.4,
+       495.2701,
        0.0,
        -1.0,
        0,
@@ -3835,9 +8091,9 @@
        2.8
       ],
       "CFrame": [
-       0.0,
+       -18.7515,
        7.3,
-       481.4,
+       495.2701,
        0.0,
        -1.0,
        0,
@@ -3874,9 +8130,9 @@
        0.6
       ],
       "CFrame": [
-       0.0,
+       -18.7515,
        7.6,
-       481.4,
+       495.2701,
        1,
        0,
        0,
@@ -3924,8 +8180,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -3953,9 +8209,9 @@
        1.8
       ],
       "CFrame": [
-       -22.2032,
+       -45.2701,
        5.0,
-       472.2032,
+       468.7515,
        1,
        0,
        0,
@@ -3987,9 +8243,9 @@
        3.4
       ],
       "CFrame": [
-       -22.2032,
+       -45.2701,
        6.8,
-       472.2032,
+       468.7515,
        0.0,
        -1.0,
        0,
@@ -4024,9 +8280,9 @@
        2.8
       ],
       "CFrame": [
-       -22.2032,
+       -45.2701,
        7.3,
-       472.2032,
+       468.7515,
        0.0,
        -1.0,
        0,
@@ -4063,9 +8319,9 @@
        0.6
       ],
       "CFrame": [
-       -22.2032,
+       -45.2701,
        7.6,
-       472.2032,
+       468.7515,
        1,
        0,
        0,
@@ -4113,8 +8369,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -4142,9 +8398,9 @@
        1.8
       ],
       "CFrame": [
-       -31.4,
+       -45.2701,
        5.0,
-       450.0,
+       431.2485,
        1,
        0,
        0,
@@ -4176,9 +8432,9 @@
        3.4
       ],
       "CFrame": [
-       -31.4,
+       -45.2701,
        6.8,
-       450.0,
+       431.2485,
        0.0,
        -1.0,
        0,
@@ -4213,9 +8469,9 @@
        2.8
       ],
       "CFrame": [
-       -31.4,
+       -45.2701,
        7.3,
-       450.0,
+       431.2485,
        0.0,
        -1.0,
        0,
@@ -4252,9 +8508,9 @@
        0.6
       ],
       "CFrame": [
-       -31.4,
+       -45.2701,
        7.6,
-       450.0,
+       431.2485,
        1,
        0,
        0,
@@ -4302,8 +8558,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -4331,9 +8587,9 @@
        1.8
       ],
       "CFrame": [
-       -22.2032,
+       -18.7515,
        5.0,
-       427.7968,
+       404.7299,
        1,
        0,
        0,
@@ -4365,9 +8621,9 @@
        3.4
       ],
       "CFrame": [
-       -22.2032,
+       -18.7515,
        6.8,
-       427.7968,
+       404.7299,
        0.0,
        -1.0,
        0,
@@ -4402,9 +8658,9 @@
        2.8
       ],
       "CFrame": [
-       -22.2032,
+       -18.7515,
        7.3,
-       427.7968,
+       404.7299,
        0.0,
        -1.0,
        0,
@@ -4441,9 +8697,9 @@
        0.6
       ],
       "CFrame": [
-       -22.2032,
+       -18.7515,
        7.6,
-       427.7968,
+       404.7299,
        1,
        0,
        0,
@@ -4491,8 +8747,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -4520,9 +8776,9 @@
        1.8
       ],
       "CFrame": [
-       -0.0,
+       18.7515,
        5.0,
-       418.6,
+       404.7299,
        1,
        0,
        0,
@@ -4554,9 +8810,9 @@
        3.4
       ],
       "CFrame": [
-       -0.0,
+       18.7515,
        6.8,
-       418.6,
+       404.7299,
        0.0,
        -1.0,
        0,
@@ -4591,9 +8847,9 @@
        2.8
       ],
       "CFrame": [
-       -0.0,
+       18.7515,
        7.3,
-       418.6,
+       404.7299,
        0.0,
        -1.0,
        0,
@@ -4630,9 +8886,9 @@
        0.6
       ],
       "CFrame": [
-       -0.0,
+       18.7515,
        7.6,
-       418.6,
+       404.7299,
        1,
        0,
        0,
@@ -4680,8 +8936,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -4709,9 +8965,9 @@
        1.8
       ],
       "CFrame": [
-       22.2032,
+       45.2701,
        5.0,
-       427.7968,
+       431.2485,
        1,
        0,
        0,
@@ -4743,9 +8999,9 @@
        3.4
       ],
       "CFrame": [
-       22.2032,
+       45.2701,
        6.8,
-       427.7968,
+       431.2485,
        0.0,
        -1.0,
        0,
@@ -4780,9 +9036,9 @@
        2.8
       ],
       "CFrame": [
-       22.2032,
+       45.2701,
        7.3,
-       427.7968,
+       431.2485,
        0.0,
        -1.0,
        0,
@@ -4819,9 +9075,9 @@
        0.6
       ],
       "CFrame": [
-       22.2032,
+       45.2701,
        7.6,
-       427.7968,
+       431.2485,
        1,
        0,
        0,
@@ -4869,8 +9125,8 @@
        "name": "Brillo",
        "className": "PointLight",
        "properties": {
-        "Brightness": 1.1,
-        "Range": 12,
+        "Brightness": 0.7,
+        "Range": 9,
         "Color": [
          1.0,
          0.4706,
@@ -4880,1510 +9136,6 @@
        }
       }
      ]
-    }
-   ]
-  },
-  {
-   "name": "Rampa1",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       51.7389,
-       16.618,
-       471.4309,
-       -0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       53.231,
-       17.2228,
-       466.9076,
-       -0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       51.5589,
-       20.5059,
-       465.9444,
-       -0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       49.5955,
-       17.2228,
-       475.6845,
-       -0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       47.7321,
-       20.5059,
-       475.1832,
-       -0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    }
-   ]
-  },
-  {
-   "name": "Rampa2",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       21.4309,
-       16.618,
-       501.7389,
-       -0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       25.6845,
-       17.2228,
-       499.5955,
-       -0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       25.1832,
-       20.5059,
-       497.7321,
-       -0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       16.9076,
-       17.2228,
-       503.231,
-       -0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       15.9444,
-       20.5059,
-       501.5589,
-       -0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    }
-   ]
-  },
-  {
-   "name": "Rampa3",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       -21.4309,
-       16.618,
-       501.7389,
-       -0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -16.9076,
-       17.2228,
-       503.231,
-       -0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -15.9444,
-       20.5059,
-       501.5589,
-       -0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -25.6845,
-       17.2228,
-       499.5955,
-       -0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -25.1832,
-       20.5059,
-       497.7321,
-       -0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       -0.4652,
-       -0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    }
-   ]
-  },
-  {
-   "name": "Rampa4",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       -51.7389,
-       16.618,
-       471.4309,
-       -0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -49.5955,
-       17.2228,
-       475.6845,
-       -0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -47.7321,
-       20.5059,
-       475.1832,
-       -0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -53.231,
-       17.2228,
-       466.9076,
-       -0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -51.5589,
-       20.5059,
-       465.9444,
-       -0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       -0.1927,
-       -0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    }
-   ]
-  },
-  {
-   "name": "Rampa5",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       -51.7389,
-       16.618,
-       428.5691,
-       0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -53.231,
-       17.2228,
-       433.0924,
-       0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -51.5589,
-       20.5059,
-       434.0556,
-       0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -49.5955,
-       17.2228,
-       424.3155,
-       0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -47.7321,
-       20.5059,
-       424.8168,
-       0.3827,
-       0.4652,
-       0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    }
-   ]
-  },
-  {
-   "name": "Rampa6",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       -21.4309,
-       16.618,
-       398.2611,
-       0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -25.6845,
-       17.2228,
-       400.4045,
-       0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -25.1832,
-       20.5059,
-       402.2679,
-       0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       -16.9076,
-       17.2228,
-       396.769,
-       0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       -15.9444,
-       20.5059,
-       398.4411,
-       0.9239,
-       0.1927,
-       0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       -0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    }
-   ]
-  },
-  {
-   "name": "Rampa7",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       21.4309,
-       16.618,
-       398.2611,
-       0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       16.9076,
-       17.2228,
-       396.769,
-       0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       15.9444,
-       20.5059,
-       398.4411,
-       0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       25.6845,
-       17.2228,
-       400.4045,
-       0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       25.1832,
-       20.5059,
-       402.2679,
-       0.9239,
-       -0.1927,
-       -0.3306,
-       0.0,
-       0.864,
-       -0.5035,
-       0.3827,
-       0.4652,
-       0.7982
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    }
-   ]
-  },
-  {
-   "name": "Rampa8",
-   "className": "Model",
-   "children": [
-    {
-     "name": "Piso",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       10,
-       1,
-       54.821
-      ],
-      "CFrame": [
-       51.7389,
-       16.618,
-       428.5691,
-       0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "Basalt",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth"
-     }
-    },
-    {
-     "name": "Borde-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       49.5955,
-       17.2228,
-       424.3155,
-       0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro-1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       47.7321,
-       20.5059,
-       424.8168,
-       0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
-    },
-    {
-     "name": "Borde1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.5,
-       0.4,
-       53.821
-      ],
-      "CFrame": [
-       53.231,
-       17.2228,
-       433.0924,
-       0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       1.0,
-       0.7843,
-       0.2745
-      ],
-      "Material": "Metal",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "CanQuery": false,
-      "CanTouch": false
-     }
-    },
-    {
-     "name": "Muro1",
-     "className": "Part",
-     "properties": {
-      "Anchored": true,
-      "Size": [
-       0.6,
-       8,
-       54.821
-      ],
-      "CFrame": [
-       51.5589,
-       20.5059,
-       434.0556,
-       0.3827,
-       -0.4652,
-       -0.7982,
-       0.0,
-       0.864,
-       -0.5035,
-       0.9239,
-       0.1927,
-       0.3306
-      ],
-      "Color": [
-       0.1882,
-       0.1725,
-       0.2118
-      ],
-      "Material": "SmoothPlastic",
-      "TopSurface": "Smooth",
-      "BottomSurface": "Smooth",
-      "Transparency": 1,
-      "CanQuery": false,
-      "CanTouch": false,
-      "CastShadow": false
-     }
     }
    ]
   },
@@ -6399,12 +9151,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       34.0537,
+       53.9682,
        7.5,
-       452.232,
+       453.5373,
        0.9979,
        0,
        -0.0654,
@@ -6437,12 +9189,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       33.471,
+       53.0447,
        7.5,
-       456.6578,
+       460.5513,
        0.9808,
        0,
        -0.1951,
@@ -6468,6 +9220,82 @@
      }
     },
     {
+     "name": "Muro2",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       51.2137,
+       7.5,
+       467.3847,
+       0.9469,
+       0,
+       -0.3214,
+       0,
+       1,
+       0,
+       0.3214,
+       0,
+       0.9469
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro3",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       48.5064,
+       7.5,
+       473.9207,
+       0.8969,
+       0,
+       -0.4423,
+       0,
+       1,
+       0,
+       0.4423,
+       0,
+       0.8969
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro4",
      "className": "Part",
      "properties": {
@@ -6475,12 +9303,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       28.3754,
+       44.9692,
        7.5,
-       468.9598,
+       480.0474,
        0.8315,
        0,
        -0.5556,
@@ -6513,12 +9341,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       25.6579,
+       40.6625,
        7.5,
-       472.5013,
+       485.66,
        0.7518,
        0,
        -0.6593,
@@ -6551,12 +9379,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       22.5013,
+       35.66,
        7.5,
-       475.6579,
+       490.6625,
        0.6593,
        0,
        -0.7518,
@@ -6589,12 +9417,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       18.9598,
+       30.0474,
        7.5,
-       478.3754,
+       494.9692,
        0.5556,
        0,
        -0.8315,
@@ -6620,6 +9448,82 @@
      }
     },
     {
+     "name": "Muro8",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       23.9207,
+       7.5,
+       498.5064,
+       0.4423,
+       0,
+       -0.8969,
+       0,
+       1,
+       0,
+       0.8969,
+       0,
+       0.4423
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro9",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       17.3847,
+       7.5,
+       501.2137,
+       0.3214,
+       0,
+       -0.9469,
+       0,
+       1,
+       0,
+       0.9469,
+       0,
+       0.3214
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro10",
      "className": "Part",
      "properties": {
@@ -6627,12 +9531,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       6.6578,
+       10.5513,
        7.5,
-       483.471,
+       503.0447,
        0.1951,
        0,
        -0.9808,
@@ -6665,12 +9569,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       2.232,
+       3.5373,
        7.5,
-       484.0537,
+       503.9682,
        0.0654,
        0,
        -0.9979,
@@ -6703,12 +9607,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -2.232,
+       -3.5373,
        7.5,
-       484.0537,
+       503.9682,
        -0.0654,
        0,
        -0.9979,
@@ -6741,12 +9645,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -6.6578,
+       -10.5513,
        7.5,
-       483.471,
+       503.0447,
        -0.1951,
        0,
        -0.9808,
@@ -6772,6 +9676,82 @@
      }
     },
     {
+     "name": "Muro14",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -17.3847,
+       7.5,
+       501.2137,
+       -0.3214,
+       0,
+       -0.9469,
+       0,
+       1,
+       0,
+       0.9469,
+       0,
+       -0.3214
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro15",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -23.9207,
+       7.5,
+       498.5064,
+       -0.4423,
+       0,
+       -0.8969,
+       0,
+       1,
+       0,
+       0.8969,
+       0,
+       -0.4423
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro16",
      "className": "Part",
      "properties": {
@@ -6779,12 +9759,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -18.9598,
+       -30.0474,
        7.5,
-       478.3754,
+       494.9692,
        -0.5556,
        0,
        -0.8315,
@@ -6817,12 +9797,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -22.5013,
+       -35.66,
        7.5,
-       475.6579,
+       490.6625,
        -0.6593,
        0,
        -0.7518,
@@ -6855,12 +9835,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -25.6579,
+       -40.6625,
        7.5,
-       472.5013,
+       485.66,
        -0.7518,
        0,
        -0.6593,
@@ -6893,12 +9873,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -28.3754,
+       -44.9692,
        7.5,
-       468.9598,
+       480.0474,
        -0.8315,
        0,
        -0.5556,
@@ -6924,6 +9904,82 @@
      }
     },
     {
+     "name": "Muro20",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -48.5064,
+       7.5,
+       473.9207,
+       -0.8969,
+       0,
+       -0.4423,
+       0,
+       1,
+       0,
+       0.4423,
+       0,
+       -0.8969
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro21",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -51.2137,
+       7.5,
+       467.3847,
+       -0.9469,
+       0,
+       -0.3214,
+       0,
+       1,
+       0,
+       0.3214,
+       0,
+       -0.9469
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro22",
      "className": "Part",
      "properties": {
@@ -6931,12 +9987,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -33.471,
+       -53.0447,
        7.5,
-       456.6578,
+       460.5513,
        -0.9808,
        0,
        -0.1951,
@@ -6969,12 +10025,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -34.0537,
+       -53.9682,
        7.5,
-       452.232,
+       453.5373,
        -0.9979,
        0,
        -0.0654,
@@ -7007,12 +10063,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -34.0537,
+       -53.9682,
        7.5,
-       447.768,
+       446.4627,
        -0.9979,
        0,
        0.0654,
@@ -7045,12 +10101,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -33.471,
+       -53.0447,
        7.5,
-       443.3422,
+       439.4487,
        -0.9808,
        0,
        0.1951,
@@ -7076,6 +10132,82 @@
      }
     },
     {
+     "name": "Muro26",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -51.2137,
+       7.5,
+       432.6153,
+       -0.9469,
+       0,
+       0.3214,
+       0,
+       1,
+       0,
+       -0.3214,
+       0,
+       -0.9469
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro27",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -48.5064,
+       7.5,
+       426.0793,
+       -0.8969,
+       0,
+       0.4423,
+       0,
+       1,
+       0,
+       -0.4423,
+       0,
+       -0.8969
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro28",
      "className": "Part",
      "properties": {
@@ -7083,12 +10215,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -28.3754,
+       -44.9692,
        7.5,
-       431.0402,
+       419.9526,
        -0.8315,
        0,
        0.5556,
@@ -7121,12 +10253,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -25.6579,
+       -40.6625,
        7.5,
-       427.4987,
+       414.34,
        -0.7518,
        0,
        0.6593,
@@ -7159,12 +10291,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -22.5013,
+       -35.66,
        7.5,
-       424.3421,
+       409.3375,
        -0.6593,
        0,
        0.7518,
@@ -7197,12 +10329,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -18.9598,
+       -30.0474,
        7.5,
-       421.6246,
+       405.0308,
        -0.5556,
        0,
        0.8315,
@@ -7228,6 +10360,82 @@
      }
     },
     {
+     "name": "Muro32",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -23.9207,
+       7.5,
+       401.4936,
+       -0.4423,
+       0,
+       0.8969,
+       0,
+       1,
+       0,
+       -0.8969,
+       0,
+       -0.4423
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro33",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       -17.3847,
+       7.5,
+       398.7863,
+       -0.3214,
+       0,
+       0.9469,
+       0,
+       1,
+       0,
+       -0.9469,
+       0,
+       -0.3214
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro34",
      "className": "Part",
      "properties": {
@@ -7235,12 +10443,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -6.6578,
+       -10.5513,
        7.5,
-       416.529,
+       396.9553,
        -0.1951,
        0,
        0.9808,
@@ -7273,12 +10481,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       -2.232,
+       -3.5373,
        7.5,
-       415.9463,
+       396.0318,
        -0.0654,
        0,
        0.9979,
@@ -7311,12 +10519,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       2.232,
+       3.5373,
        7.5,
-       415.9463,
+       396.0318,
        0.0654,
        0,
        0.9979,
@@ -7349,12 +10557,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       6.6578,
+       10.5513,
        7.5,
-       416.529,
+       396.9553,
        0.1951,
        0,
        0.9808,
@@ -7380,6 +10588,82 @@
      }
     },
     {
+     "name": "Muro38",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       17.3847,
+       7.5,
+       398.7863,
+       0.3214,
+       0,
+       0.9469,
+       0,
+       1,
+       0,
+       -0.9469,
+       0,
+       0.3214
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro39",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       23.9207,
+       7.5,
+       401.4936,
+       0.4423,
+       0,
+       0.8969,
+       0,
+       1,
+       0,
+       -0.8969,
+       0,
+       0.4423
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro40",
      "className": "Part",
      "properties": {
@@ -7387,12 +10671,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       18.9598,
+       30.0474,
        7.5,
-       421.6246,
+       405.0308,
        0.5556,
        0,
        0.8315,
@@ -7425,12 +10709,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       22.5013,
+       35.66,
        7.5,
-       424.3421,
+       409.3375,
        0.6593,
        0,
        0.7518,
@@ -7463,12 +10747,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       25.6579,
+       40.6625,
        7.5,
-       427.4987,
+       414.34,
        0.7518,
        0,
        0.6593,
@@ -7501,12 +10785,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       28.3754,
+       44.9692,
        7.5,
-       431.0402,
+       419.9526,
        0.8315,
        0,
        0.5556,
@@ -7532,6 +10816,82 @@
      }
     },
     {
+     "name": "Muro44",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       48.5064,
+       7.5,
+       426.0793,
+       0.8969,
+       0,
+       0.4423,
+       0,
+       1,
+       0,
+       -0.4423,
+       0,
+       0.8969
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
+     "name": "Muro45",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       0.6,
+       8,
+       7.09
+      ],
+      "CFrame": [
+       51.2137,
+       7.5,
+       432.6153,
+       0.9469,
+       0,
+       0.3214,
+       0,
+       1,
+       0,
+       -0.3214,
+       0,
+       0.9469
+      ],
+      "Color": [
+       0.7686,
+       0.5804,
+       0.3843
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false
+     }
+    },
+    {
      "name": "Muro46",
      "className": "Part",
      "properties": {
@@ -7539,12 +10899,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       33.471,
+       53.0447,
        7.5,
-       443.3422,
+       439.4487,
        0.9808,
        0,
        0.1951,
@@ -7577,12 +10937,12 @@
       "Size": [
        0.6,
        8,
-       4.474
+       7.09
       ],
       "CFrame": [
-       34.0537,
+       53.9682,
        7.5,
-       447.768,
+       446.4627,
        0.9979,
        0,
        0.0654,
