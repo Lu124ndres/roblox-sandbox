@@ -25,6 +25,8 @@ local HudButtons = require(script.Parent.HudButtons)
 local OfferCard = require(script.Parent.OfferCard)
 local Purchases = require(script.Parent.Purchases)
 local RobuxOffers = require(script.Parent.RobuxOffers)
+local GiantPortrait = require(script.Parent.Parent.Giant.GiantPortrait)
+local RouletteParts = require(script.Parent.Parent.Giant.RouletteParts)
 local Window = require(script.Parent.Window)
 
 type Offer = RobuxOffers.Offer
@@ -34,12 +36,7 @@ local CARD_HEIGHT = 260
 local TWO_COLUMNS_BELOW = 540 -- ancho del contenido (antes de escalar) para pasar a 2 columnas
 local THREE_COLUMNS = UDim2.new(1 / 3, -10, 0, CARD_HEIGHT)
 local TWO_COLUMNS = UDim2.new(0.5, -6, 0, CARD_HEIGHT)
-local GIANT_COLORS: { [string]: Color3 } = {
-	Orca = CARDS.Blue,
-	Minotauro = CARDS.Red,
-	DragonMarino = CARDS.Purple,
-	ZorroDeAgua = CARDS.Cyan,
-}
+local GIANT_COLORS = RouletteParts.COLORS -- mismos colores que en la ruleta
 
 local RobuxShop = {}
 
@@ -153,7 +150,7 @@ function RobuxShop.start(screen: ScreenGui)
 		for _, def in Config.Giants.chain do
 			add(
 				GIANT_COLORS[def.id] or CARDS.Red,
-				RobuxOffers.GIANT_ICONS[def.id] or "fang",
+				GiantPortrait.iconFor(def.id),
 				RobuxOffers.choose(def)
 			)
 		end

@@ -9,6 +9,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 
@@ -28,13 +29,6 @@ export type Offer = {
 }
 
 local RobuxOffers = {}
-
-RobuxOffers.GIANT_ICONS = {
-	Orca = "orca",
-	Minotauro = "minotaur",
-	DragonMarino = "dragon",
-	ZorroDeAgua = "fox",
-} :: { [string]: string }
 
 -- Pack de inicio: una sola vez (el atributo PackInicio dice si ya lo compró).
 function RobuxOffers.starter(player: Player): () -> Offer
@@ -156,16 +150,17 @@ function RobuxOffers.choose(def: Config.GiantDef): () -> Offer
 		local folder = ReplicatedStorage:FindFirstChild(Protocol.BoostFolder)
 		local queued = folder and giantName(folder:GetAttribute(BOOST_ATTR.NextGiant))
 		local by = folder and folder:GetAttribute(BOOST_ATTR.NextGiantBy)
+		local open = GiantPool.available(def) -- los de evento, solo en sus fechas
 		return {
-			title = def.displayName,
-			description = if not def.inRoulette
-				then "Próximamente"
+			title = `{def.displayName} · x{def.multiplier}`,
+			description = if not open
+				then (if def.season then "Evento: todavía no empieza" else "Próximamente")
 				elseif queued then `Ya eligió {by}: {queued}. El tuyo sale después`
-				else "Sale después del próximo descanso",
+				else `x{def.multiplier} monedas por pez. Sale después del próximo descanso`,
 			key = `Choose{def.id}`,
 			isPass = false,
 			robux = MONETIZATION.chooseGiant[def.id] or 0,
-			blocked = if def.inRoulette then nil else "Pronto",
+			blocked = if open then nil else "Pronto",
 		}
 	end
 end

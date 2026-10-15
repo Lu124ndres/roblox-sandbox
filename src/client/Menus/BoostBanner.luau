@@ -51,7 +51,7 @@ function BoostBanner.new(
 	jump.Position = UDim2.new(0.2, 8, 0.36, 0)
 	jump.Size = UDim2.new(0.56, -8, 0.32, 0)
 
-	local timer = Style.text(banner, "Tiempo", 22, PALETTE.Timer, 2.5)
+	local timer = Style.text(banner, "Tiempo", 22, Color3.fromRGB(255, 235, 110), 2.5) -- amarillo: se lee sobre el verde
 	timer.TextXAlignment = Enum.TextXAlignment.Left
 	timer.Position = UDim2.new(0.2, 8, 0.7, 0)
 	timer.Size = UDim2.new(0.56, -8, 0.22, 0)

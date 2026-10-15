@@ -175,6 +175,11 @@ function Window.create(
 		end,
 	}
 	closeButton.Activated:Connect(window.close)
+	-- Para probar en Studio desde la barra de comandos: <ventana>.Abrir:Fire().
+	local opener = Instance.new("BindableEvent")
+	opener.Name = "Abrir"
+	opener.Event:Connect(window.open)
+	opener.Parent = frame
 	-- Si la pantalla cambia con la ventana abierta (girar el teléfono), se reacomoda.
 	Device.onResize(function()
 		if frame.Visible then
