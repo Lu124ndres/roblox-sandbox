@@ -2,7 +2,8 @@
 --[[
 	FishDex
 
-	Colección de peces: todas las especies (24) en una cuadrícula. Las descubiertas
+	Colección de peces: todas las especies (36) en una cuadrícula ordenada por
+	rareza, con pestañas por categoría (FishDexTabs). Las descubiertas
 	se ven en 3D girando, con su rareza y cuántas se han pescado; las que
 	faltan, como una silueta oscura con "???". Arriba, el avance (7/12) y el
 	premio por completarla. El botón Peces del HUD se marca cuando hay un
@@ -24,11 +25,22 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local FishDexCard = require(script.Parent.FishDexCard)
+local FishDexTabs = require(script.Parent.FishDexTabs)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
 
 local FISH = Config.Economy.fish
 local PREFIX = Protocol.PlayerAttributes.FishPrefix
+
+-- Orden en la cuadrícula: por rareza y, dentro de ella, como en Config.
+local ORDER: { [string]: number } = {}
+for index, fish in FISH do
+	for rank, rarity in Config.Economy.rarities do
+		if rarity.id == fish.rarity then
+			ORDER[fish.id] = rank * 1000 + index
+		end
+	end
+end
 
 type Card = FishDexCard.Card
 
@@ -60,7 +72,7 @@ end
 
 function FishDex.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local window = Window.create(screen, "Coleccion", "Colección de peces", Vector2.new(620, 460))
+	local window = Window.create(screen, "Coleccion", "Colección de peces", Vector2.new(660, 500))
 	local hud = HudButtons.top("Peces", "fish", window.toggle)
 
 	-- Arriba: barra de especies descubiertas y el premio por completarla.
@@ -72,11 +84,27 @@ function FishDex.start(screen: ScreenGui)
 	prize.Position = UDim2.new(1, -4, 0, 2)
 	prize.Size = UDim2.new(0.35, 0, 0, 44)
 	prizeText.Text = `+{NumberFormat.short(Config.Retention.collectionBonus)} monedas`
+	local filter = FishDexTabs.ALL
 	local grid = Instance.new("ScrollingFrame")
+	local cards: { [string]: Card } = {}
+	local function applyFilter()
+		for _, fish in FISH do
+			local card = cards[fish.id]
+			if card then
+				card.box.Visible = filter == FishDexTabs.ALL or fish.rarity == filter
+			end
+		end
+	end
+	local tabs = FishDexTabs.mount(window.content, 50, function(id: string)
+		filter = id
+		applyFilter()
+		grid.CanvasPosition = Vector2.zero
+	end)
+	local gridTop = 52 + tabs.height
 	grid.BackgroundTransparency = 1
 	grid.BorderSizePixel = 0
-	grid.Position = UDim2.fromOffset(0, 54)
-	grid.Size = UDim2.new(1, 0, 1, -54)
+	grid.Position = UDim2.fromOffset(0, gridTop)
+	grid.Size = UDim2.new(1, 0, 1, -gridTop)
 	grid.ScrollBarThickness = 6
 	grid.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	grid.CanvasSize = UDim2.new()
@@ -90,16 +118,19 @@ function FishDex.start(screen: ScreenGui)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
 	layout.Parent = grid
 
-	local cards: { [string]: Card } = {}
 	local pending: { [string]: boolean } = {} -- tarjetas por (re)hacer al abrir
 	for _, fish in FISH do
 		pending[fish.id] = true
 	end
 	local function render()
 		local found = 0
-		for index, fish in FISH do
+		local byRarity: { [string]: number } = {}
+		local totals: { [string]: number } = { [FishDexTabs.ALL] = #FISH }
+		for _, fish in FISH do
 			local amount = caught(player, fish.id)
 			found += if amount > 0 then 1 else 0
+			totals[fish.rarity] = (totals[fish.rarity] or 0) + 1
+			byRarity[fish.rarity] = (byRarity[fish.rarity] or 0) + (if amount > 0 then 1 else 0)
 			local existing = cards[fish.id]
 			if pending[fish.id] and existing and existing.known and amount > 0 then
 				existing.info.Text = FishDexCard.infoText(fish.id, amount) -- solo cambió la cantidad
@@ -107,10 +138,13 @@ function FishDex.start(screen: ScreenGui)
 				if existing then
 					existing.box:Destroy()
 				end
-				cards[fish.id] = FishDexCard.build(grid, fish.id, amount, index)
+				cards[fish.id] = FishDexCard.build(grid, fish.id, amount, ORDER[fish.id])
 			end
 			pending[fish.id] = nil
 		end
+		byRarity[FishDexTabs.ALL] = found
+		tabs.counts(byRarity, totals)
+		applyFilter()
 		bar.set(found / #FISH, `Descubiertos {found} / {#FISH}`)
 	end
 	local spin: RBXScriptConnection? = nil

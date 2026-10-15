@@ -3,10 +3,10 @@
 	Peces y rarezas.
 
 	weight es el peso relativo en la tirada (no un porcentaje). Con estos
-	pesos (24 peces con Config/FishMore, total ~1,579): común 65 %, poco común
-	22 %, raro 10 %, épico 2.5 %, legendario 0.6 % y mítico 0.05 %.
+	pesos (36 peces con Config/FishMore, total ~2,091): común 62 %, poco común
+	23 %, raro 12 %, épico 2.5 %, legendario 0.6 % y mítico 0.06 %.
 
-	Comida media por pez: 2.75. Monedas base medias: 4.57 (se multiplican por
+	Comida media por pez: ~3.4. Monedas base medias: ~6.1 (se multiplican por
 	el gigante actual). Ver docs/alcance.md, "Calibración".
 ]]
 

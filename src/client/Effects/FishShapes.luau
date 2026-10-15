@@ -127,8 +127,10 @@ local FishShapes: { [string]: Shape } = {
 }
 
 -- Los peces nuevos de la colección (Config/FishMore).
-for id, shape in require(script.Parent.FishShapesMore) do
-	FishShapes[id] = shape :: Shape
+for _, more in { require(script.Parent.FishShapesMore), require(script.Parent.FishShapesMore2) } do
+	for id, shape in more do
+		FishShapes[id] = shape :: Shape
+	end
 end
 
 return FishShapes

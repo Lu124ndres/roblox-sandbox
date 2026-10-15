@@ -6,7 +6,7 @@
 	final se paga `tutorialBonus` (alcanza para la segunda caña).
 
 	Colección: la primera vez que se pesca cada especie paga según su rareza;
-	completar todas (24) paga `collectionBonus`.
+	completar todas (36) paga `collectionBonus`.
 
 	Diario: racha de 7 días; si se salta un día vuelve al día 1. Después del
 	día 7 se repite el premio del día 7.
