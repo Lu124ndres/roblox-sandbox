@@ -3,7 +3,7 @@
 	FeedController
 
 	Alimentar desde cualquier punto de la orilla del volcán (el borde del
-	cráter, marcado con una línea coral, y los muelles del abismo). Cuando el
+	cráter, marcado con una línea coral sobre el paseo). Cuando el
 	jugador está ahí y lleva peces aparece el botón Alimentar (E o F en PC, X
 	en consola). Solo pide FeedRequest: el servidor valida dónde está y cuánto
 	lleva, y FeedFeedback muestra el resultado.

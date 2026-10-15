@@ -62,8 +62,6 @@ export type WorldLayout = {
 	craterRimHeight: number,
 	craterFloor: number,
 	pedestalTop: number,
-	craterPierCount: number,
-	craterPierTipRadius: number,
 	craterDeckHeight: number,
 	restArenaRadius: number, -- guarida del descanso en el centro del lago
 	restArenaTop: number, -- altura de su piso

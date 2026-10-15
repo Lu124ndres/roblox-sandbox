@@ -52,8 +52,6 @@
 	"craterRimHeight": 30,
 	"craterFloor": -34,
 	"pedestalTop": 0.5,
-	"craterPierCount": 8,
-	"craterPierTipRadius": 78,
 	"craterDeckHeight": 30.6,
 	"restArenaRadius": 54,
 	"restArenaTop": 3.5,

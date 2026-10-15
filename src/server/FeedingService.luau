@@ -2,8 +2,8 @@
 --[[
 	FeedingService
 
-	Alimentar al gigante desde cualquier punto de la orilla del volcán: el
-	borde del cráter y los muelles del abismo. En PC con E (o F) y en móvil
+	Alimentar al gigante desde cualquier punto de la orilla del volcán (el
+	borde del cráter, con su paseo de obsidiana). En PC con E (o F) y en móvil
 	con el botón Alimentar, el cliente manda FeedRequest. Los peces se
 	entregan por lotes: un lote cada delivery.stepSeconds, y la canasta
 	entera en a lo sumo delivery.maxDeliverySeconds sin importar su tamaño.

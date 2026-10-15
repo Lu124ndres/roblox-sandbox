@@ -86,8 +86,8 @@ function WorldZones.isOnBridge(position: Vector3): boolean
 	return lateral <= L.bridgeWidth / 2 and math.abs(position.Y - deckY) < 8
 end
 
--- Orilla del volcán: el borde del cráter y los muelles del abismo (todo lo que está
--- a la altura del borde y dentro de su anillo exterior). Desde aquí se alimenta.
+-- Orilla del volcán: el borde del cráter (todo lo que está a la altura del borde y
+-- dentro de su anillo exterior). Desde aquí se alimenta.
 function WorldZones.isOnCraterShore(position: Vector3): boolean
 	return WorldZones.distanceToCrater(position) <= L.craterRimOuter + 2
 		and position.Y >= L.craterRimHeight - 4
@@ -102,11 +102,11 @@ function WorldZones.isInRestArena(position: Vector3): boolean
 		and position.Y <= L.restArenaTop + 10
 end
 
--- Debajo del nivel de los muelles dentro del cráter (guarida y rampas): al terminar
--- el descanso, quien siga ahí sube a la punta de un muelle.
-function WorldZones.isBelowPiers(position: Vector3): boolean
-	return WorldZones.distanceToCrater(position) < L.craterPierTipRadius + 2
-		and position.Y < L.craterDeckHeight - 2
+-- Dentro del cráter, por debajo del borde (la guarida): al terminar el descanso,
+-- quien siga ahí sube al borde.
+function WorldZones.isInCraterPit(position: Vector3): boolean
+	return WorldZones.distanceToCrater(position) < L.craterCliffRadius
+		and position.Y < L.craterRimHeight - 2
 end
 
 return table.freeze(WorldZones)

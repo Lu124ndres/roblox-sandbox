@@ -9,8 +9,8 @@
 	de golpe al llenar un monstruo). Al empezar el descanso aparece en su
 	lugar con un solo movimiento, tapada por la ola que dibuja CycleView
 	(antes subía en 30 pasos y mandaba ~85 piezas cada vez: trababa el juego).
-	Al terminar, quien siga abajo sube a la punta del muelle más cercano y la
-	guarida vuelve a guardarse.
+	Al terminar, quien siga abajo sube al punto más cercano del borde del
+	cráter y la guarida vuelve a guardarse.
 ]]
 
 local Players = game:GetService("Players")
@@ -33,15 +33,13 @@ local final: CFrame
 local up = false
 local rng = Random.new()
 
--- Punta del muelle más cercano a una posición, sobre la cubierta.
-local function nearestPierTip(position: Vector3): CFrame
+-- Punto del borde del cráter más cercano a una posición, sobre el paseo.
+local function nearestShore(position: Vector3): CFrame
 	local offset = position - WorldZones.craterCenter
-	local angle = math.deg(math.atan2(offset.Z, offset.X))
-	local step = 360 / WorldLayout.craterPierCount
-	local pier = math.rad(math.round((angle - 22.5) / step) * step + 22.5)
+	local angle = math.atan2(offset.Z, offset.X)
 	local spot = WorldZones.craterCenter
-		+ Vector3.new(math.cos(pier), 0, math.sin(pier)) * (WorldLayout.craterPierTipRadius + 8)
-		+ Vector3.new(0, WorldLayout.craterDeckHeight + 3, 0)
+		+ Vector3.new(math.cos(angle), 0, math.sin(angle)) * (WorldLayout.craterCliffRadius + 6)
+		+ Vector3.new(0, WorldLayout.craterRimHeight + 3, 0)
 	return CFrame.lookAt(
 		spot,
 		Vector3.new(WorldZones.craterCenter.X, spot.Y, WorldZones.craterCenter.Z)
@@ -67,7 +65,7 @@ function RestArena.show()
 	arena:PivotTo(final)
 end
 
--- Termina el descanso: todos arriba, se cierran los muelles y la guarida se guarda.
+-- Termina el descanso: todos arriba, al borde, y la guarida se guarda.
 function RestArena.hide()
 	if not up then
 		return
@@ -76,8 +74,8 @@ function RestArena.hide()
 	for _, player in Players:GetPlayers() do
 		local root = Proximity.getRoot(player)
 		local character = player.Character
-		if root and character and WorldZones.isBelowPiers(root.Position) then
-			character:PivotTo(nearestPierTip(root.Position))
+		if root and character and WorldZones.isInCraterPit(root.Position) then
+			character:PivotTo(nearestShore(root.Position))
 		end
 	end
 	task.delay(SINK_SECONDS, function()
