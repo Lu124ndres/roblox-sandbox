@@ -48,6 +48,8 @@ local Products: { [string]: number } = {
 	ChooseMinotauro = 3718642266, -- R$ 99
 	ChooseDragonMarino = 3718642325, -- R$ 265
 	ChooseZorroDeAgua = 3718642377, -- R$ 408
+	-- Más descanso en el volcán (+1 min para todo el servidor)
+	RestTime = 0, -- R$ 25
 	-- Estanques para siempre
 	Pond2 = 0, -- R$ 25
 	Pond3 = 0, -- R$ 49

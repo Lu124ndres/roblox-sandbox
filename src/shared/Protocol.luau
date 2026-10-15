@@ -33,6 +33,7 @@ export type NoticeKind =
 	| "boost" -- (buyerName, multiplier) alguien subió el entrenamiento de todo el servidor
 	| "choose" -- (buyerName, giantId) alguien eligió el siguiente monstruo
 	| "fill" -- (buyerName, percent) alguien llenó parte del monstruo con Robux
+	| "restTime" -- (buyerName, seconds) alguien compró más descanso
 	| "purchase" -- (text) compra propia aplicada (estanque, pase)
 	| "rare" -- (playerName, fishId) alguien del servidor sacó un pez legendario o mejor
 	| "code" -- (status: "ok" | "invalid" | "used" | "expired", text?) resultado de un código

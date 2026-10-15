@@ -7,6 +7,8 @@
 		- un botón por monstruo con su ícono y su precio en Robux: comprarlo
 		  hace que salga ese al terminar el descanso (producto Choose<id>);
 		  el que ya está elegido se marca en dorado;
+		- junto a la barra, "+1 MIN DESCANSO" con su precio: alarga el descanso
+		  de todo el servidor (producto RestTime);
 		- el botón grande "IR A LA GUARIDA (xN)", con el multiplicador del
 		  monstruo que se llenó: lleva directo a la
 		  plataforma del lago (RestEnter). Se esconde si ya estás en ella.
@@ -86,6 +88,25 @@ function RestChips.mount(panel: Frame)
 		chips[def.id] = chip
 	end
 
+	local restTime = Config.Monetization.restTime
+	local more =
+		Style.button(panel, "MasDescanso", CARDS.Green, `+{restTime.seconds // 60} MIN DESCANSO`)
+	more.AnchorPoint = Vector2.new(0, 0.5)
+	more.Position = UDim2.new(1, 14, 0, 37)
+	more.Size = UDim2.fromOffset(112, 50)
+	more.Visible = false
+	local moreText = more:FindFirstChild("Texto") :: TextLabel
+	moreText.TextWrapped = true
+	moreText.Position = UDim2.fromOffset(6, 12) -- deja lugar al precio de arriba
+	moreText.Size = UDim2.new(1, -12, 1, -16)
+	local morePrice = Style.robuxBadge(more, restTime.robux)
+	task.spawn(function()
+		morePrice.Text = tostring(Purchases.price("RestTime", false, restTime.robux))
+	end)
+	more.Activated:Connect(function()
+		Purchases.promptProduct("RestTime")
+	end)
+
 	local go = Style.button(panel, "IrGuarida", Style.PALETTE.Buy, "IR A LA GUARIDA (x2)")
 	go.AnchorPoint = Vector2.new(0.5, 0)
 	go.Position = UDim2.new(0.5, 0, 0, HungerPanel.CHIPS_TOP + CHIP_HEIGHT + 14)
@@ -112,6 +133,7 @@ function RestChips.mount(panel: Frame)
 		local resting = state:GetAttribute(Protocol.GiantAttributes.Phase) == "rest"
 			and not spinning()
 		row.Visible = resting
+		more.Visible = resting
 		go.Visible = resting and not onArena()
 		goText.Text = `IR A LA GUARIDA (x{GiantPool.restMultiplier()})`
 		for _, def in Config.Giants.chain do

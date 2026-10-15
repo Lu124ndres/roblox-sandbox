@@ -12,6 +12,7 @@
 		giant                 id: si está comiendo lo cambia ya; si no, es el siguiente
 		fill                  fracción 0..1 de la barra del monstruo
 		skipRest              termina el descanso del volcán
+		restTime              +1 min de descanso (como el producto RestTime)
 		event                 id: lanza ya ese evento del servidor (Config/Events)
 		pass                  clave: pone o quita ese pase (prueba trajes y ventajas)
 		playtime              minutos: adelanta los regalos por tiempo
@@ -30,6 +31,7 @@ local EventScheduler = require(script.Parent.Parent.Social.EventScheduler)
 local GiantCycle = require(script.Parent.Parent.GiantCycle)
 local GiantService = require(script.Parent.Parent.GiantService)
 local PlayerData = require(script.Parent.Parent.PlayerData)
+local RestTime = require(script.Parent.Parent.Monetization.RestTime)
 
 local ATTR = Protocol.PlayerAttributes
 local MAX_VALUE = 1e15
@@ -153,6 +155,10 @@ local HANDLERS: { [string]: Handler } = {
 	skipRest = function()
 		GiantCycle.skipRest()
 		return "Descanso terminado"
+	end,
+	restTime = function(player)
+		RestTime.add(player)
+		return "+1 min de descanso"
 	end,
 	pass = function(player, value)
 		assert(type(value) == "string" and Config.Monetization.passes[value], "ese pase no existe")

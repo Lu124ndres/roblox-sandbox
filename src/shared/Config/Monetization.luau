@@ -19,6 +19,7 @@
 	Si tiene los dos, de cada ventaja vale la mejor.
 	Fill25/50/75: llena esa parte de la barra del monstruo actual.
 	Choose<idGigante>: elige el monstruo que sale después del descanso.
+	RestTime: +1 minuto de descanso en el volcán para todo el servidor.
 	Pond2..Pond10: desbloquea ese estanque para siempre. Pond11: el estanque
 	sagrado del centro (x250), que solo se abre así.
 	Rod<n>, Basket<n>, Boots<n>: el nivel n de MEJORAS sin juntar monedas
@@ -58,6 +59,7 @@ export type MonetizationConfig = {
 	serverBoost: { name: string, minutes: number, robux: { number } },
 	fills: { [string]: FillDef },
 	chooseGiant: { [string]: number }, -- precio por id de gigante
+	restTime: { seconds: number, robux: number }, -- producto RestTime: más descanso
 	pondRobux: { [number]: number }, -- precio de cada estanque (2..11)
 	upgradeRobux: { [string]: { number } }, -- MEJORAS en Robux: Rod/Basket/Boots, por nivel
 	passGifts: { [string]: number }, -- precio del producto Gift<pase>
@@ -126,6 +128,7 @@ local Monetization: MonetizationConfig = {
 		ZorroDeAgua = 408,
 		OrcaFantasma = 149,
 	},
+	restTime = { seconds = 60, robux = 25 },
 	pondRobux = {
 		[2] = 25,
 		[3] = 49,

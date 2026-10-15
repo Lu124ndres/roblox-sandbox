@@ -86,6 +86,12 @@ function Notices.start(toasts: Toasts.Toasts)
 		elseif kind == "choose" and type(a) == "string" and type(b) == "string" then
 			Sounds.play("StageUp")
 			toasts.banner(`¡{a} eligió el siguiente monstruo: {giantName(b)}!`, COLORS.Robux)
+		elseif kind == "restTime" and type(a) == "string" and type(b) == "number" then
+			Sounds.play("StageUp")
+			toasts.banner(
+				`¡{a} compró +{math.floor(b / 60)} min de descanso para todos!`,
+				COLORS.Robux
+			)
 		elseif kind == "fill" and type(a) == "string" and type(b) == "number" then
 			Sounds.play("StageUp")
 			toasts.banner(`¡{a} llenó {b}% de {GiantName.current(false)}!`, COLORS.Robux)

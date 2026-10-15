@@ -9,6 +9,7 @@
 
 		Fill25/50/75      llenar al monstruo actual (avisa GiantFill)
 		Choose<gigante>   elegir el siguiente monstruo (avisa GiantChoice)
+		RestTime          +1 min de descanso para todos (avisa RestTime)
 		ServerBoost<n>    entrenamiento para todos (avisa ServerBoost)
 		Power<n>/Coins<n> sube esa mejora a x2^n (o un nivel más si ya lo tenía)
 		Pond<n>           estanque abierto para siempre
@@ -21,6 +22,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Config = require(ReplicatedStorage.Shared.Config)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local PlayerData = require(script.Parent.Parent.PlayerData)
+local RestTime = require(script.Parent.RestTime)
 local GiantChoice = require(script.Parent.GiantChoice)
 local GiantFill = require(script.Parent.GiantFill)
 local Passes = require(script.Parent.Passes)
@@ -79,6 +81,8 @@ end
 function Grants.grant(player: Player, key: string): (boolean, string?)
 	if key == "PackInicio" then
 		return true, starterPack(player)
+	elseif key == "RestTime" then
+		return RestTime.add(player), nil
 	end
 	local fill = MONETIZATION.fills[key]
 	if fill then

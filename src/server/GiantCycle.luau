@@ -8,7 +8,8 @@
 		1. Despedida (farewell): los clientes lo ven saltar, girar y
 		   sumergirse en el lago.
 		2. Descanso (rest): emerge la guarida en el centro del lago (RestArena)
-		   y durante el descanso (más largo con más jugadores: restLength),
+		   y durante el descanso (más largo con más jugadores: restLength, y
+		   con los minutos que alguien compre: Monetization/RestTime),
 		   cada segundo, todo jugador sobre ella gana
 		   poder sin hacer nada:
 		   powerPerTick x su mejor estanque desbloqueado x el multiplicador del
@@ -41,6 +42,7 @@ local RateLimit = require(script.Parent.RateLimit)
 local Remotes = require(script.Parent.Remotes)
 local RestArena = require(script.Parent.RestArena)
 local GiantChoice = require(script.Parent.Monetization.GiantChoice)
+local RestTime = require(script.Parent.Monetization.RestTime)
 
 local CYCLE = Config.Giants.cycle
 local ATTRS = Protocol.GiantAttributes
@@ -127,6 +129,11 @@ local function cycle()
 	while os.clock() < finish and not skipRest do
 		task.wait(TRAINING.tickSeconds)
 		restTick()
+		local extra = RestTime.take() -- descanso comprado con Robux (RestTime)
+		if extra > 0 then
+			finish += extra
+			GiantService.setPhase("rest", finish - os.clock())
+		end
 	end
 
 	RestArena.hide()
