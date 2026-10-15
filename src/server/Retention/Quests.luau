@@ -18,6 +18,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Config = require(ReplicatedStorage.Shared.Config)
 local QUESTS = require(ReplicatedStorage.Shared.Config.Quests)
 local Perks = require(ReplicatedStorage.Shared.Perks)
+local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local SaveExtra = require(script.Parent.Parent.Save.SaveExtra)
 local PlayerData = require(script.Parent.Parent.PlayerData)
@@ -54,7 +55,7 @@ end
 
 local function pay(player: Player, title: string, coins: number, boostMinutes: number?)
 	local reward = {
-		coins = math.floor(coins * Perks.coinMultiplier(player)),
+		coins = math.floor(coins * Perks.coinMultiplier(player) * RewardScale.of(player)),
 		boostMinutes = boostMinutes,
 	}
 	Rewards.give(player, reward)
@@ -108,7 +109,7 @@ local function publish(player: Player)
 			progress = save.quests.progress[quest.id] or 0,
 			goal = quest.goal,
 			done = save.quests.done[quest.id] == true,
-			coins = math.floor(quest.coins * Perks.coinMultiplier(player)),
+			coins = math.floor(quest.coins * Perks.coinMultiplier(player) * RewardScale.of(player)),
 			boost = quest.boostMinutes or 0,
 		})
 	end

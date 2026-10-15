@@ -16,6 +16,7 @@ local Workspace = game:GetService("Workspace")
 local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
@@ -40,10 +41,13 @@ local function clock(seconds: number): string
 	return string.format("%d:%02d", s // 60, s % 60)
 end
 
-local function rewardText(gift: Config.PlaytimeGift): string
+local function rewardText(player: Player, gift: Config.PlaytimeGift): string
 	local parts = {}
 	if gift.coins then
-		table.insert(parts, `{NumberFormat.short(gift.coins)} monedas`)
+		table.insert(
+			parts,
+			`{NumberFormat.short(RewardScale.share(player, gift.coins, gift.share))} monedas`
+		)
 	end
 	if gift.boostMinutes then
 		table.insert(parts, `x2 poder {gift.boostMinutes} min`)
@@ -99,7 +103,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 		return (if ready then "ready" else "waiting") :: State
 	end
 
-	type Card = { box: TextButton, status: TextLabel, check: TextLabel }
+	type Card = { box: TextButton, status: TextLabel, check: TextLabel, reward: TextLabel }
 	local cards: { Card } = {}
 	for index, gift in GIFTS do
 		local box = Instance.new("TextButton")
@@ -121,7 +125,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 		picture.Position = UDim2.fromScale(0.5, 0.2)
 		picture.Size = UDim2.fromScale(0.7, 0.36)
 		local reward = Style.text(box, "Premio", 18, UIConfig.Colors.Coins, 2)
-		reward.Text = rewardText(gift)
+		reward.Text = rewardText(player, gift)
 		reward.Position = UDim2.fromScale(0.04, 0.56)
 		reward.Size = UDim2.fromScale(0.92, 0.22)
 		local status = Style.text(box, "Estado", 20, nil, 2.5)
@@ -137,7 +141,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 				claimRemote:FireServer(index)
 			end
 		end)
-		cards[index] = { box = box, status = status, check = check }
+		cards[index] = { box = box, status = status, check = check, reward = reward }
 	end
 
 	local shown: { [number]: string } = {}
@@ -160,6 +164,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 					then Style.PALETTE.Buy
 					else UIConfig.Colors.Text
 			end
+			card.reward.Text = rewardText(player, GIFTS[index]) -- crece con la caña
 			local left = GIFTS[index].minutes * 60 - elapsed()
 			card.status.Text = if state == "claimed"
 				then "Cobrado"

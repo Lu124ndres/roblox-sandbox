@@ -13,6 +13,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
+local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
@@ -32,7 +33,9 @@ local function claim(player: Player)
 		return -- ya cobró hoy (o no cargó)
 	end
 	local streak = if save.daily.lastDay == today - 1 then save.daily.streak + 1 else 1
-	local coins = DAILY[math.min(streak, #DAILY)] * Perks.dailyMultiplier(player)
+	local day = math.min(streak, #DAILY)
+	local coins = RewardScale.share(player, DAILY[day], Config.Retention.dailyShare[day])
+		* Perks.dailyMultiplier(player)
 	PlayerData.edit(player, function(data)
 		data.daily.lastDay = today
 		data.daily.streak = streak

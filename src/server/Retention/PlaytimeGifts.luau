@@ -15,6 +15,7 @@ local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
@@ -47,7 +48,8 @@ local function claim(player: Player, index: unknown)
 		return -- todavía no
 	end
 	player:SetAttribute(ATTR.PlaytimeClaimed, claimed + bit)
-	local reward = { coins = gift.coins, boostMinutes = gift.boostMinutes }
+	local coins = if gift.coins then RewardScale.share(player, gift.coins, gift.share) else nil
+	local reward = { coins = coins, boostMinutes = gift.boostMinutes }
 	Rewards.give(player, reward)
 	local text = Rewards.describe(reward, Config.Social.personalBoostMultiplier)
 	Remotes.Notice:FireClient(player, "playtime", index, text)

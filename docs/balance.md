@@ -54,10 +54,24 @@ Legendario ~3.8 s, Mítico ~5.5 s. Cada nivel de caña da +10 % de fuerza. Pases
 traje: Rey del Mar (x2 fuerza, pique x2) y Dios del Volcán (un toque, pique x3).
 Desde Legendario se anuncia a todo el servidor (`announceFromRarity`).
 
+## Entrenamiento (`Config/init.luau` → `Gameplay.training`)
+
+Cada **0.6 s** (`tickSeconds`) se gana `powerPerTick` x estanque x caña x multiplicadores,
+en los estanques y en la guarida del descanso.
+
 ## Premios y social
 
 - Premio diario, logros y misiones del tutorial: `Config/Retention.luau`.
 - Regalos por tiempo jugado (`Retention.playtime`): 5, 10, 20, 30, 45, 60, 90 y 120 min; monedas y minutos de x2 poder. Se reinician al volver a entrar.
+- **Los premios crecen con el jugador** (`shared/RewardScale.luau`): el diario y los regalos
+  por tiempo pagan lo mayor entre sus monedas fijas y una fracción (`share`, `dailyShare`)
+  del precio de la **siguiente caña** (regalo de 2 h = 3 cañas, día 7 = 0.6). Las misiones
+  se multiplican por precio de la siguiente caña / 3,000. Así siguen valiendo la pena al final.
+- **Títulos** (`Config/Social.luau`): 26, de Novato (0) a Más Allá del Infinito (1e21 de poder).
+  Se calculan con el **poder máximo** (`bestPower` en el guardado): al renacer no bajan. Desde
+  Dios del Mar el brillo recorre el texto. Al subir, aviso grande "¡Nuevo título!".
+- **Siguiente meta** (`client/Menus/NextGoal.luau`): al terminar el tutorial, un panel muestra
+  siempre la meta más cercana (estanque, caña, título o renacer) con su barra.
 - Impulso de amigos (+10 % cada uno, máx. 5), regalo del grupo, títulos: `Config/Social.luau`.
 - Códigos: `src/server/Social/CodeList.luau` (solo servidor, para que nadie los lea).
 
@@ -65,9 +79,9 @@ Desde Legendario se anuncia a todo el servidor (`announceFromRarity`).
 
 | Producto | Precios actuales (R$) |
 |---|---|
-| Poder / Monedas x2 → x1024 (10 niveles) | 3, 7, 15, 36, 74, 114, 205, 349, 599, 999 |
+| Poder / Monedas x2 → x1024 (10 niveles) | 3, 7, 15, 32, 76, 128, 229, 599, 999, (10: por definir) |
 | VIP (pase) / regalar VIP | 299 / 299 |
-| Entrenamiento del servidor 15 min, x2 → x64 | 60, 150, 359, 629, 849, 1139 |
+| Entrenamiento del servidor 15 min, x2 → x64 | 60, 129, 239, 416, 678, 880 |
 | Llenar 25 / 50 / 75 % | 49 / 89 / 129 |
 | Elegir siguiente monstruo | Orca 25, Minotauro 99, Dragón 265, Zorro 408 (se oculta con un solo monstruo) |
 | Estanques 2–10 | 25 … 999 |

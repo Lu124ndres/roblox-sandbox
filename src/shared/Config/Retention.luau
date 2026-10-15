@@ -40,16 +40,19 @@ local Retention: Types.RetentionConfig = {
 		Mitico = 25000,
 	},
 	collectionBonus = 100000,
+	-- Monedas fijas al principio; cuando el juego avanza, una fracción del precio
+	-- de la siguiente caña (shared/RewardScale): siempre valen la pena.
 	daily = { 100, 200, 350, 500, 800, 1200, 2500 },
+	dailyShare = { 0.05, 0.08, 0.12, 0.16, 0.22, 0.3, 0.6 },
 	playtime = {
-		{ minutes = 5, coins = 500 },
+		{ minutes = 5, coins = 500, share = 0.15 },
 		{ minutes = 10, boostMinutes = 10 },
-		{ minutes = 20, coins = 2500 },
+		{ minutes = 20, coins = 2500, share = 0.4 },
 		{ minutes = 30, boostMinutes = 15 },
-		{ minutes = 45, coins = 10000 },
-		{ minutes = 60, coins = 5000, boostMinutes = 30 },
-		{ minutes = 90, coins = 40000 },
-		{ minutes = 120, coins = 100000, boostMinutes = 60 },
+		{ minutes = 45, coins = 10000, share = 0.8 },
+		{ minutes = 60, coins = 5000, share = 0.6, boostMinutes = 30 },
+		{ minutes = 90, coins = 40000, share = 1.5 },
+		{ minutes = 120, coins = 100000, share = 3, boostMinutes = 60 },
 	},
 	badges = {
 		PrimerPez = { name = "Primer pez", description = "Pescaste tu primer pez" },
