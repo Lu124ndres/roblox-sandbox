@@ -7,12 +7,14 @@
 		- un botón por monstruo con su ícono y su precio en Robux: comprarlo
 		  hace que salga ese al terminar el descanso (producto Choose<id>);
 		  el que ya está elegido se marca en dorado;
-		- el botón grande "IR A LA GUARIDA" (x2 poder): lleva directo a la
+		- el botón grande "IR A LA GUARIDA (xN)", con el multiplicador del
+		  monstruo que se llenó: lleva directo a la
 		  plataforma del lago (RestEnter). Se esconde si ya estás en ella.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
@@ -65,6 +67,12 @@ function RestChips.mount(panel: Frame)
 		icon.AnchorPoint = Vector2.new(0.5, 0.5)
 		icon.Position = UDim2.fromScale(0.5, 0.5)
 		icon.Size = UDim2.fromScale(1.05, 1.05)
+		local multiplier = Style.text(chip, "Multiplicador", 18, Color3.fromRGB(120, 255, 120), 2.5)
+		multiplier.Text = `x{def.multiplier}`
+		multiplier.AnchorPoint = Vector2.new(0, 1)
+		multiplier.Position = UDim2.new(0, -4, 1, 6)
+		multiplier.Size = UDim2.fromOffset(40, 20)
+		multiplier.ZIndex = 4
 		local price = Style.robuxBadge(chip, robux)
 		local badge = price.Parent :: Frame
 		badge.Position = UDim2.new(1, 10, 0, 0)
@@ -83,6 +91,7 @@ function RestChips.mount(panel: Frame)
 	go.Position = UDim2.new(0.5, 0, 0, HungerPanel.CHIPS_TOP + CHIP_HEIGHT + 14)
 	go.Size = UDim2.fromOffset(260, BUTTON_HEIGHT)
 	go.Visible = false
+	local goText = go:FindFirstChild("Texto") :: TextLabel
 	go.Activated:Connect(function()
 		enter:FireServer()
 	end)
@@ -92,10 +101,19 @@ function RestChips.mount(panel: Frame)
 		return character ~= nil and WorldZones.isInRestArena(character:GetPivot().Position)
 	end
 
+	-- Mientras gira la ruleta la guarida ya se fue y el siguiente ya está elegido.
+	local function spinning(): boolean
+		local at = state:GetAttribute(Protocol.GiantAttributes.RouletteAt)
+		return type(at) == "number"
+			and Workspace:GetServerTimeNow() - at < Config.Giants.cycle.rouletteSeconds + 1
+	end
+
 	local function refresh()
 		local resting = state:GetAttribute(Protocol.GiantAttributes.Phase) == "rest"
+			and not spinning()
 		row.Visible = resting
 		go.Visible = resting and not onArena()
+		goText.Text = `IR A LA GUARIDA (x{GiantPool.restMultiplier()})`
 		for _, def in Config.Giants.chain do
 			local chip = chips[def.id]
 			if chip then
@@ -111,6 +129,7 @@ function RestChips.mount(panel: Frame)
 		end
 	end
 	state:GetAttributeChangedSignal(Protocol.GiantAttributes.Phase):Connect(refresh)
+	state:GetAttributeChangedSignal(Protocol.GiantAttributes.RouletteAt):Connect(refresh)
 	boosts:GetAttributeChangedSignal(Protocol.BoostAttributes.NextGiant):Connect(refresh)
 	task.spawn(function()
 		while true do

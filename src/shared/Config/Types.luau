@@ -105,7 +105,6 @@ export type CycleConfig = {
 	restBaseSeconds: number, -- descanso = clamp(base + porJugador x jugadores, min, restSeconds)
 	restPerPlayerSeconds: number,
 	restMinSeconds: number,
-	restTrainingMultiplier: number, -- x sobre el mejor estanque desbloqueado del jugador
 	arrivalSeconds: number, -- llegada del siguiente gigante antes de poder alimentarlo
 	rouletteSeconds: number, -- la ruleta gira al final del descanso antes de que llegue
 }

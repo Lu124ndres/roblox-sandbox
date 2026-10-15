@@ -17,6 +17,7 @@ local Workspace = game:GetService("Workspace")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
@@ -96,7 +97,7 @@ function CycleView.start(toasts: Toasts.Toasts)
 			reveal()
 			Sounds.play("StageUp")
 			toasts.banner(
-				`¡Descanso! Baja a la guarida del volcán: entrenamiento x{CYCLE.restTrainingMultiplier} por {restLength(
+				`¡Descanso! Baja a la guarida del volcán: entrenamiento x{GiantPool.restMultiplier()} por {restLength(
 					stateFolder
 				)}`,
 				COLORS.Power

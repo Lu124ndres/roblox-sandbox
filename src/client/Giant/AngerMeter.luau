@@ -13,8 +13,11 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
+local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
@@ -93,12 +96,17 @@ function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
 		label.Size = if resting then UDim2.new(1, -LEFT - 4, 0, 15) else UDim2.new(0.34, 0, 0, 15)
 		if resting then
 			local player = Players.LocalPlayer
+			local rest = GiantPool.restMultiplier()
 			local perSecond = Config.Gameplay.training.powerPerTick
 				* Perks.bestPondMultiplier(player)
 				* Perks.powerMultiplier(player)
-				* Config.Giants.cycle.restTrainingMultiplier
-			label.Text = if phase == "rest"
-				then `En la guarida del volcán: +{perSecond} poder/s (x{Config.Giants.cycle.restTrainingMultiplier})`
+				* rest
+			local spinAt = stateFolder:GetAttribute(Protocol.GiantAttributes.RouletteAt)
+			local spinning = type(spinAt) == "number"
+				and Workspace:GetServerTimeNow() - spinAt
+					< Config.Giants.cycle.rouletteSeconds + 1
+			label.Text = if phase == "rest" and not spinning
+				then `En la guarida del volcán: +{NumberFormat.short(perSecond)} poder/s (x{rest})`
 				else ""
 			label.TextColor3 = COLORS.Power
 			label.TextTransparency = 0

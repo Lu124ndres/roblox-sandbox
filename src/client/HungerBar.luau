@@ -23,6 +23,7 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
@@ -47,6 +48,7 @@ local WATCHED: { [string]: boolean } = {
 	[ATTR.Progress] = true,
 	[ATTR.Phase] = true,
 	[ATTR.PhaseEndsAt] = true,
+	[ATTR.RouletteAt] = true,
 	[FOOD_ATTRIBUTE] = true,
 }
 
@@ -103,9 +105,17 @@ function HungerBar.mount(
 			then math.max(0, endsAt - Workspace:GetServerTimeNow())
 			else 0
 		local fraction, color = 0, UIConfig.Colors.Power
-		if phase == "rest" then
+		local spinAt = stateFolder:GetAttribute(ATTR.RouletteAt)
+		local spinning = type(spinAt) == "number"
+			and Workspace:GetServerTimeNow() - spinAt < Config.Giants.cycle.rouletteSeconds + 1
+		if phase == "rest" and spinning then
+			title.Text = "¡Ruleta de monstruos!"
+			detail.Text = ""
+			amount.Text = "..."
+			fraction = 1
+		elseif phase == "rest" then
 			title.Text = "Descanso del volcán"
-			detail.Text = "x2 entrenando"
+			detail.Text = `x{GiantPool.restMultiplier()} entrenando`
 			amount.Text = string.format("%d:%02d", left // 60, math.floor(left % 60))
 			restTotal = math.max(restTotal, left)
 			fraction = left / math.max(restTotal, 1)

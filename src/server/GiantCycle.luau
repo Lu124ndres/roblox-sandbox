@@ -11,7 +11,8 @@
 		   y durante el descanso (más largo con más jugadores: restLength),
 		   cada segundo, todo jugador sobre ella gana
 		   poder sin hacer nada:
-		   powerPerTick x su mejor estanque desbloqueado x restTrainingMultiplier.
+		   powerPerTick x su mejor estanque desbloqueado x el multiplicador del
+		   monstruo que se llenó (Orca x2, Minotauro x4, Dragón x10, Zorro x20).
 		   Se ve como en los estanques ("+N poder").
 		3. Ruleta: el que alguien eligió con Robux o, si nadie, al azar entre
 		   los gigantes con inRoulette (por ahora solo la Orca).
@@ -92,7 +93,7 @@ local function restTick()
 			local gained = math.round(
 				TRAINING.powerPerTick
 					* best
-					* CYCLE.restTrainingMultiplier
+					* GiantService.getCurrent().multiplier
 					* rod
 					* Perks.powerMultiplier(player)
 			)

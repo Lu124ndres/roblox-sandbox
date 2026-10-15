@@ -69,6 +69,11 @@ function RouletteParts.card(parent: Instance, index: number, def: Config.GiantDe
 	chance.Text = percent
 	chance.Position = UDim2.fromOffset(4, STRIP_HEIGHT - 40)
 	chance.Size = UDim2.fromOffset(CELL - 8, 22)
+	-- Multiplicador del monstruo (monedas por pez y guarida del descanso).
+	local multiplier = ShopParts.tag(box, `x{def.multiplier}`, CARDS.Green)
+	local tag = multiplier.Parent :: Frame
+	tag.Position = UDim2.fromOffset(-6, -4)
+	tag.Size = UDim2.fromOffset(46, 26)
 end
 
 function RouletteParts.build(screen: ScreenGui): Parts

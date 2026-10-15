@@ -29,8 +29,8 @@
 	Ciclo: al llenarse se despide (farewellSeconds) y empieza el descanso:
 	clamp(restBaseSeconds + restPerPlayerSeconds x jugadores, restMinSeconds,
 	restSeconds) segundos (restSeconds es el máximo). En el centro del lago emerge la guarida del descanso y
-	todo el que esté sobre ella gana poder solo, a restTrainingMultiplier x
-	su mejor estanque desbloqueado. Quien le dio de comer suma +1 kill. Al terminar
+	todo el que esté sobre ella gana poder solo, a su mejor estanque
+	desbloqueado x el multiplicador del monstruo que se llenó. Quien le dio de comer suma +1 kill. Al terminar
 	gira la ruleta (rouletteSeconds, todos la ven): sale el que alguien compró o,
 	si nadie, uno al azar entre los inRoulette según rouletteWeight (Orca 50 %,
 	Minotauro 30 %, Dragón 15 %, Zorro 5 %), y llega (arrivalSeconds).
@@ -121,7 +121,6 @@ local Giants: Types.GiantsConfig = {
 		restBaseSeconds = 60,
 		restPerPlayerSeconds = 1.2,
 		restMinSeconds = 60,
-		restTrainingMultiplier = 2,
 		arrivalSeconds = 6,
 		rouletteSeconds = 6,
 	},

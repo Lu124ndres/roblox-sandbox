@@ -5,12 +5,15 @@
 	Qué monstruos pueden salir ahora en la ruleta (y comprarse para el
 	siguiente): los que tienen inRoulette y, si son de evento (season), solo
 	entre sus fechas. Lo usan el servidor (GiantCycle, GiantChoice) y el
-	cliente (RouletteView, RestChips).
+	cliente (RouletteView, RestChips). restMultiplier: cuánto multiplica el
+	entrenamiento de la guarida en el descanso (el del monstruo que se llenó).
 ]]
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(script.Parent.Config)
+local Protocol = require(script.Parent.Protocol)
 
 local GiantPool = {}
 
@@ -36,6 +39,14 @@ function GiantPool.candidates(): ({ Config.GiantDef }, number)
 		end
 	end
 	return list, total
+end
+
+-- En el cliente: el multiplicador del monstruo actual, que durante el descanso
+-- sigue siendo el que se llenó (el siguiente se publica al terminar la ruleta).
+function GiantPool.restMultiplier(): number
+	local state = ReplicatedStorage:FindFirstChild(Protocol.GiantStateFolder)
+	local value = state and state:GetAttribute(Protocol.GiantAttributes.Multiplier)
+	return if type(value) == "number" then value else Config.Giants.chain[1].multiplier
 end
 
 return GiantPool
