@@ -87,9 +87,9 @@ local function goals(player: Player): { Goal }
 	if coins >= cost then
 		table.insert(list, {
 			icon = "arrow",
-			text = `¡Puedes RENACER! Pasas a x{RebirthMath.multiplier(
+			text = `¡Puedes RENACER! Alimentas x{RebirthMath.feedMultiplier(
 				RebirthMath.count(player) + 1
-			)}`,
+			)} más rápido`,
 			fraction = 1,
 			ready = true,
 		})

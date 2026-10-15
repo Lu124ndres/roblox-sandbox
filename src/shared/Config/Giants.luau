@@ -10,9 +10,11 @@
 	novatos y rápida con un par de fuertes; el Zorro necesita un servidor fuerte.
 	Kill: para todos los que le dieron algo (con un pez basta; Feeding/Contributions).
 
-	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
-	stepSeconds (cada paso es un lote de peces). Los lotes se anuncian a los
-	clientes y el progreso se publica a lo sumo cada broadcastSeconds.
+	delivery: se alimenta manteniendo E: fishPerSecond peces por segundo sin
+	renacer (x Rebirth.feedGrowth por renacimiento), en pasos de stepSeconds.
+	Tope por persona: nunca más de 1/minSoloSeconds de la barra por segundo
+	(una sola persona tarda al menos 5 min; varios, menos). Los lotes se
+	anuncian a los clientes y el progreso se publica a lo sumo cada broadcastSeconds.
 
 	Crecen por etapas: cada etapa empieza en stageThresholds[i] de la barra y
 	mide stageHeightsInPlayers[i] veces el alto de un jugador. Con un jugador
@@ -125,7 +127,8 @@ local Giants: Types.GiantsConfig = {
 	},
 	delivery = {
 		stepSeconds = 0.25,
-		maxDeliverySeconds = 4,
+		fishPerSecond = 3, -- un pez cada 0.33 s sin renacer
+		minSoloSeconds = 300, -- una persona sola tarda al menos esto en llenar un monstruo
 		broadcastSeconds = 0.25,
 	},
 }

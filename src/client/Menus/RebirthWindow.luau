@@ -3,8 +3,8 @@
 	RebirthWindow
 
 	Renacer (botón RENACER de la columna derecha) con el estilo de la TIENDA:
-	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada), con el
-	multiplicador de monedas y poder; la barra de monedas que faltan; qué se
+	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada), con los
+	peces por segundo al alimentar (lo único que da renacer); la barra de monedas que faltan; qué se
 	reinicia (tarjeta roja) y qué se queda (verde); y el botón grande. El
 	botón del HUD lleva un punto rojo cuando ya alcanza. Lo decide el
 	servidor (remote Rebirth, Retention/Rebirth).
@@ -28,8 +28,9 @@ local CARDS = Style.PALETTE.Cards
 
 local RebirthWindow = {}
 
-local function multiplierText(value: number): string
-	return if value % 1 == 0 then `x{value}` else string.format("x%.1f", value)
+local function speedText(rebirths: number): string
+	local perSecond = RebirthMath.fishPerSecond(rebirths)
+	return `{NumberFormat.short(perSecond)}/s`
 end
 
 -- Tarjeta de multiplicador: título arriba, número grande y nota abajo.
@@ -45,7 +46,7 @@ local function multiplierCard(parent: Instance, title: string, color: Color3, x:
 	value.Position = UDim2.fromScale(0, 0.26)
 	value.Size = UDim2.fromScale(1, 0.48)
 	local note = Style.text(card, "Nota", 18, nil, 2)
-	note.Text = "monedas y poder"
+	note.Text = "peces al alimentar"
 	note.Position = UDim2.fromScale(0, 0.76)
 	note.Size = UDim2.fromScale(1, 0.18)
 	return value
@@ -112,8 +113,8 @@ function RebirthWindow.start(screen: ScreenGui)
 		local cost = RebirthMath.cost(rebirths)
 		local coins = player:GetAttribute(ATTR.Coins)
 		local have = if type(coins) == "number" then coins else 0
-		nowValue.Text = multiplierText(RebirthMath.multiplier(rebirths))
-		afterValue.Text = multiplierText(RebirthMath.multiplier(rebirths + 1))
+		nowValue.Text = speedText(rebirths)
+		afterValue.Text = speedText(rebirths + 1)
 		count.Text = `Has renacido {rebirths} {if rebirths == 1 then "vez" else "veces"}`
 		bar.set(have / cost, `{NumberFormat.short(have)} / {NumberFormat.short(cost)} monedas`)
 		local ready = have >= cost

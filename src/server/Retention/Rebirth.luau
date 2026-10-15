@@ -4,8 +4,8 @@
 
 	Renacer (Config/Rebirth, cuentas en Shared/RebirthMath): con monedas
 	suficientes, el remote Rebirth reinicia monedas, poder, mejoras de la
-	tienda y canasta, y suma un renacimiento (multiplica monedas y poder
-	para siempre, ver Perks). Se avisa a todo el servidor.
+	tienda y canasta, y suma un renacimiento (alimenta x2 más rápido para
+	siempre, ver RebirthMath). Se avisa a todo el servidor.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

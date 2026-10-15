@@ -112,7 +112,8 @@ export type CycleConfig = {
 
 export type DeliveryConfig = { -- entrega de peces al gigante, por lotes
 	stepSeconds: number, -- un lote de peces cada tanto
-	maxDeliverySeconds: number, -- una canasta entera se entrega en a lo sumo esto
+	fishPerSecond: number, -- peces por segundo sin renacer (los renacimientos lo multiplican)
+	minSoloSeconds: number, -- tope por persona: 1/minSoloSeconds de la barra por segundo
 	broadcastSeconds: number, -- lotes a los clientes y progreso, a lo sumo cada tanto
 }
 
