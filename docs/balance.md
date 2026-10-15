@@ -8,10 +8,10 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 | Perilla | Valor | Qué hace |
 |---|---|---|
-| `food` de cada monstruo | Orca 14,500 · Minotauro 20,500 · Dragón 32,400 · Zorro 45,900 · Orca fantasma 25,100 | Comida **fija** = 14.5K × raíz(multiplicador / 2). Con 45 novatos y 5 pros: Orca ~8 min, Minotauro ~11, Dragón ~18, Zorro ~26. Solo novatos: 11 / 15 / 24 / 34 min. |
+| `food` de cada monstruo | Orca 500K · Minotauro 2.5M · Orca fantasma 5M · Dragón 12M · Zorro 50M | Comida **fija y escalonada** como las pirámides de «Construye la Pirámide». Un novato lleva ~1–4K de comida por viaje; alguien con 1B de poder ~1.4M (una canasta llena). La Orca es difícil solo con novatos; el Zorro pide un servidor fuerte. |
 | `rouletteWeight` | 50 / 30 / 15 / 5 | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Sin modelo propio usan la Orca teñida. |
 | Ritmo de un jugador | novato ~0.45 comida/s · pro ~1.9 · tope ~5 | Calculado con el ciclo de pesca (pique, minijuego, viaje al volcán) al ~80 % del tiempo. Con menos jugadores tarda más: 10 novatos ~35 min la Orca. |
-| `scaling.minKillShare` | 0.005 | Hay que dar al menos el 0.5 % de la barra para ganar la kill. |
+| `scaling.minKillShare` | 0.005 | Kill: el 0.5 % de la barra **o** el 80 % de una canasta tuya llena (`Feeding/Contributions`), así los novatos también cuentan. Debajo del panel: tu aporte y el top 3. |
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
 | `delivery.maxDeliverySeconds` | 4 | Una canasta, por grande que sea, se entrega en 4 s. |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
@@ -21,8 +21,14 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 ## Poder de pesca (`Config/Progression.luau` + `Shared/FishingPower.luau`)
 
-Peces por pique = 1 + floor((poder / 1000)^0.25): 1K → 2, 16K → 3, 81K → 4, 1M → 6, 100M → 18, 5B → 48.
-Crece despacio a propósito: la comida es fija y un pro no debe llenar solo al monstruo.
+El poder es la **fuerza**, como en «Construye la Pirámide» (`Shared/FishingPower.luau`):
+
+- Capacidad = (20 + 2 × √poder) × canasta: 1K → 83, 100K → 652, 1M → 2,020, 1B → 63K, 5B → 141K, 60T → 15.5M.
+- Peces por pique = capacidad / tiros para llenarla (`castsToFill`: 16 con la caña 1, −0.5 por caña, mínimo 6).
+- Monedas: cada pez paga × `coinScale`, así **una canasta llena paga lo mismo que con la fórmula vieja** y
+  los precios de la tienda siguen sirviendo. La comida sí crece (barras grandes).
+- Misiones de pescar y entregar cuentan **piques y viajes**, no peces.
+- El destello azul sale en hitos de peces por pique: 2, 5, 10, 20, 50, 100…
 
 ## Estanques (`Config/Progression.luau`)
 

@@ -3,14 +3,13 @@
 	Gigantes: la cadena del servidor, cuánta comida piden y cuánto miden.
 
 	Comida para llenar la barra: FIJA (food), no cambia con los jugadores, y
-	crece con el multiplicador: food = 14.5K x raíz(multiplicador / 2). Un
-	novato da ~0.45 de comida/s y un pro (poder ~80K, caña 6, canasta 4)
-	~1.9/s. Con 45 novatos y 5 pros (~30/s):
-		Orca          ~8 min   (novatos solos ~11)
-		Minotauro     ~11 min  (novatos solos ~15)
-		Dragón marino ~18 min  (novatos solos ~24)
-		Zorro de agua ~26 min  (novatos solos ~34)
-	Solo se lleva la kill quien aportó al menos scaling.minKillShare de la barra.
+	escalonada como las pirámides de «Construye la Pirámide» (Básica → Gema):
+	Orca 500K, Minotauro 2.5M, Orca fantasma 5M, Dragón 12M, Zorro 50M. Con
+	el poder como fuerza (shared/FishingPower), un novato lleva ~1-4K de comida
+	por viaje y uno con 1B de poder ~1.4M: la Orca es difícil solo con
+	novatos y rápida con un par de fuertes; el Zorro necesita un servidor fuerte.
+	Kill: quien aportó al menos scaling.minKillShare de la barra o una canasta
+	suya casi llena (Feeding/Contributions): los novatos también cuentan.
 
 	delivery: cada entrega dura a lo sumo maxDeliverySeconds, en pasos de
 	stepSeconds (cada paso es un lote de peces). Los lotes se anuncian a los
@@ -45,7 +44,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca",
 			article = "la",
 			multiplier = 2,
-			food = 14500,
+			food = 500000,
 			modelBase = "Orca",
 			rouletteWeight = 50,
 			released = true,
@@ -56,7 +55,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Minotauro",
 			article = "el",
 			multiplier = 4,
-			food = 20500,
+			food = 2500000,
 			modelBase = "Minotauro",
 			rouletteWeight = 30,
 			released = true,
@@ -67,7 +66,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Dragón marino",
 			article = "el",
 			multiplier = 10,
-			food = 32400,
+			food = 12000000,
 			modelBase = "DragonMarino",
 			rouletteWeight = 15,
 			released = false,
@@ -78,7 +77,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Zorro de agua",
 			article = "el",
 			multiplier = 20,
-			food = 45900,
+			food = 50000000,
 			modelBase = "ZorroDeAgua",
 			rouletteWeight = 5,
 			released = false,
@@ -90,7 +89,7 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca fantasma",
 			article = "la",
 			multiplier = 6,
-			food = 25100,
+			food = 5000000,
 			modelBase = "OrcaFantasma",
 			rouletteWeight = 35,
 			released = true,

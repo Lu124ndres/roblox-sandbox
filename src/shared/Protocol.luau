@@ -4,7 +4,6 @@
 
 	Nombres compartidos entre servidor y cliente: RemoteEvents, atributos
 	replicados, estados de pesca y nombres de piezas del mapa.
-
 ]]
 
 -- Resultado que ve el dueño de la caña (avisos y botón TIRA).
@@ -127,10 +126,10 @@ local Protocol = {
 		RouletteResult = "RuletaResultado", -- id del gigante que salió en la última ruleta
 		RouletteBy = "RuletaComprador", -- quien lo compró ("" = salió al azar)
 		RouletteAt = "RuletaInicio", -- hora del servidor en que empezó a girar
+		TopShares = "TopAportes", -- JSON: los 3 que más aportaron [{n = nombre, s = 0..1}]
 	},
 
-	-- Folder en ReplicatedStorage con las plantillas de los gigantes. El cliente
-	-- los dibuja y anima localmente (ver GiantView).
+	-- Folder en ReplicatedStorage con las plantillas de los gigantes (los anima el cliente, GiantView).
 	GiantModelsFolder = "ModelosGigantes",
 	GiantModelAttributes = {
 		BaseHeight = "BaseHeight", -- alto en studs a escala 1
@@ -161,6 +160,7 @@ local Protocol = {
 		IsAdmin = "EsAdmin", -- true para los administradores (ven el panel de pruebas)
 		Rebirths = "Renacimientos", -- veces que renació
 		Title = "Titulo", -- índice del título (Config.Social.titles) por su poder máximo
+		Share = "Aporte", -- fracción de la barra del monstruo actual que aportó (0..1)
 		StarterPack = "PackInicio", -- ya compró el pack de inicio
 		Quests = "Misiones", -- JSON con las misiones del día y su avance
 		Settings = "Settings", -- ajustes del jugador (JSON)

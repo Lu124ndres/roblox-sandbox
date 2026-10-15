@@ -132,6 +132,7 @@ local function advance(fraction: number, userId: number, food: number)
 		progress = 1
 	end
 	Contributions.add(userId, food)
+	Contributions.publish(totalFood)
 	GiantAnger.calm()
 	GiantPublish.progress(progress, progress >= 1 or GiantStages.stageFor(progress) > stageBefore)
 	if progress >= 1 then
