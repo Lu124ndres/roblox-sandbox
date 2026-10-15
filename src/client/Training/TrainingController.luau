@@ -3,17 +3,15 @@
 	TrainingController
 
 	Lado cliente del entrenamiento del jugador local: lo gira hacia el
-	estanque al empezar, muestra "+N poder" flotando sobre su cabeza en cada
-	tick (y en la pantalla: Effects/PowerGainFx) y avisa si el estanque está
-	bloqueado. El poder lo suma el servidor.
+	estanque al empezar, muestra "+N" grande sobre su cabeza en cada tick
+	(GainPopup; en la pantalla, Effects/PowerGainFx) y avisa si el estanque
+	está bloqueado. El poder lo suma el servidor.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TweenService = game:GetService("TweenService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
@@ -21,43 +19,11 @@ local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Toasts = require(script.Parent.Parent.Toasts)
 local Purchases = require(script.Parent.Parent.Menus.Purchases)
 local PowerGainFx = require(script.Parent.Parent.Effects.PowerGainFx)
+local GainPopup = require(script.Parent.GainPopup)
 
 local COLORS = UIConfig.Colors
 
 local TrainingController = {}
-
-local function floatingGain(character: Model, text: string, color: Color3)
-	local head = character:FindFirstChild("Head")
-	if not head then
-		return
-	end
-	local billboard = Instance.new("BillboardGui")
-	billboard.Size = UDim2.fromOffset(120, 40)
-	billboard.StudsOffset = Vector3.new(math.random(-10, 10) / 10, 2.5, 0)
-	billboard.AlwaysOnTop = true
-	billboard.LightInfluence = 0
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.fromScale(1, 1)
-	label.BackgroundTransparency = 1
-	label.Text = text
-	label.TextScaled = true
-	label.FontFace = UIConfig.Fonts.Title
-	label.TextColor3 = color
-	label.TextStrokeColor3 = COLORS.TextStroke
-	label.TextStrokeTransparency = 0.1
-	label.Parent = billboard
-	billboard.Parent = head
-	local info = TweenInfo.new(1.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-	TweenService
-		:Create(billboard, info, { StudsOffset = billboard.StudsOffset + Vector3.new(0, 3, 0) })
-		:Play()
-	local fade =
-		TweenService:Create(label, info, { TextTransparency = 1, TextStrokeTransparency = 1 })
-	fade.Completed:Once(function()
-		billboard:Destroy()
-	end)
-	fade:Play()
-end
 
 local function facePond(player: Player, pond: number)
 	local character = player.Character
@@ -88,7 +54,7 @@ function TrainingController.start(toasts: Toasts.Toasts)
 	tick.OnClientEvent:Connect(function(gained: unknown)
 		local character = player.Character
 		if character and type(gained) == "number" then
-			floatingGain(character, `+{NumberFormat.short(gained)} poder`, COLORS.Power)
+			GainPopup.show(character, gained)
 			Sounds.play("PowerTick")
 			PowerGainFx.gain(gained)
 		end
