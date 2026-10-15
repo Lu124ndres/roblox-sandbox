@@ -4,9 +4,11 @@
 
 	Ciclo de día y noche con el reloj del servidor (GetServerTimeNow): todos
 	ven el mismo cielo. El día dura más que la noche; luz, bruma y tono
-	cambian: mañana, mediodía, atardecer y noche estrellada. Lighting se
-	escribe cada SkyUpdateSeconds (UIConfig.Performance) o si la hora o la
-	mezcla del cráter cambian de más. Workspace.HoraFija congela la hora.
+	cambian: mañana, mediodía, atardecer y noche estrellada (SkyMoods).
+	Encima se mezclan el ambiente del cráter (ZoneMood) y el amanecer del
+	descanso (RestDawn: al llenar al monstruo sale el sol). Lighting se
+	escribe cada SkyUpdateSeconds (UIConfig.Performance) o si la hora o las
+	mezclas cambian de más. Workspace.HoraFija congela la hora.
 ]]
 
 local Lighting = game:GetService("Lighting")
@@ -16,109 +18,17 @@ local Workspace = game:GetService("Workspace")
 
 local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local RestDawn = require(script.Parent.RestDawn)
+local SkyMoods = require(script.Parent.SkyMoods)
 local ZoneMood = require(script.Parent.ZoneMood)
 
 local EFFECTS = UIConfig.Effects
 local DAY_SHARE = 0.75 -- fracción del ciclo que es de día (6:00 a 19:00)
+local MOODS = SkyMoods.day
+local CRATER = SkyMoods.crater
+local DAWN = SkyMoods.dawn
 
-type Mood = {
-	hour: number,
-	brightness: number,
-	atmosphere: Color3,
-	decay: Color3,
-	density: number,
-	tint: Color3,
-	ambient: Color3,
-}
-
--- Momentos del día; entre dos momentos se interpola.
-local MOODS: { Mood } = {
-	{
-		hour = 0,
-		brightness = 1.2,
-		atmosphere = Color3.fromRGB(70, 82, 130),
-		decay = Color3.fromRGB(24, 30, 60),
-		density = 0.34,
-		tint = Color3.fromRGB(200, 214, 255),
-		ambient = Color3.fromRGB(80, 90, 130),
-	},
-	{
-		hour = 5.6,
-		brightness = 1.4,
-		atmosphere = Color3.fromRGB(110, 110, 160),
-		decay = Color3.fromRGB(60, 50, 90),
-		density = 0.34,
-		tint = Color3.fromRGB(220, 214, 255),
-		ambient = Color3.fromRGB(100, 100, 140),
-	},
-	{
-		hour = 6.8,
-		brightness = 1.9,
-		atmosphere = Color3.fromRGB(255, 196, 170),
-		decay = Color3.fromRGB(200, 120, 110),
-		density = 0.32,
-		tint = Color3.fromRGB(255, 236, 222),
-		ambient = Color3.fromRGB(150, 130, 130),
-	},
-	{
-		hour = 9,
-		brightness = 2.2,
-		atmosphere = Color3.fromRGB(200, 222, 238),
-		decay = Color3.fromRGB(108, 143, 174),
-		density = 0.28,
-		tint = Color3.fromRGB(255, 251, 245),
-		ambient = Color3.fromRGB(116, 118, 130),
-	},
-	{
-		hour = 16.5,
-		brightness = 2.2,
-		atmosphere = Color3.fromRGB(200, 222, 238),
-		decay = Color3.fromRGB(108, 143, 174),
-		density = 0.28,
-		tint = Color3.fromRGB(255, 251, 245),
-		ambient = Color3.fromRGB(116, 118, 130),
-	},
-	{
-		hour = 18.4,
-		brightness = 1.8,
-		atmosphere = Color3.fromRGB(255, 176, 130),
-		decay = Color3.fromRGB(196, 96, 92),
-		density = 0.33,
-		tint = Color3.fromRGB(255, 226, 205),
-		ambient = Color3.fromRGB(160, 120, 120),
-	},
-	{
-		hour = 19.6,
-		brightness = 1.4,
-		atmosphere = Color3.fromRGB(120, 96, 150),
-		decay = Color3.fromRGB(60, 40, 80),
-		density = 0.34,
-		tint = Color3.fromRGB(214, 206, 255),
-		ambient = Color3.fromRGB(100, 92, 130),
-	},
-	{
-		hour = 24,
-		brightness = 1.2,
-		atmosphere = Color3.fromRGB(70, 82, 130),
-		decay = Color3.fromRGB(24, 30, 60),
-		density = 0.34,
-		tint = Color3.fromRGB(200, 214, 255),
-		ambient = Color3.fromRGB(80, 90, 130),
-	},
-}
-
--- Ambiente del cráter: se mezcla encima del momento del día según ZoneMood.
-local CRATER: Mood = {
-	hour = 0,
-	brightness = 1.9, -- claro para jugar, pero con bruma y luz de lava (peligro)
-	atmosphere = Color3.fromRGB(255, 120, 70),
-	decay = Color3.fromRGB(200, 60, 30),
-	density = 0.42,
-	tint = Color3.fromRGB(255, 212, 182),
-	ambient = Color3.fromRGB(180, 105, 80),
-}
-local CRATER_SATURATION = 0.12
-local CRATER_CONTRAST = 0.12
+type Mood = SkyMoods.Mood
 
 local SkyCycle = {}
 
@@ -140,8 +50,13 @@ function SkyCycle.currentHour(): number
 	return SkyCycle.hourAt(fraction)
 end
 
--- 0 de día, 1 de noche cerrada (para luces, faro y estrellas).
+-- 0 de día, 1 de noche cerrada (para luces, faro y estrellas). Con el
+-- amanecer del descanso cuenta la hora que se ve (el sol ya salió).
 function SkyCycle.nightness(hour: number): number
+	local dawn = RestDawn.blend()
+	if dawn > 0 then
+		hour = (hour + ((SkyMoods.dawnHour - hour) % 24) * dawn) % 24
+	end
 	if hour >= 7 and hour <= 18 then
 		return 0
 	elseif hour > 18 and hour < 20 then
@@ -162,37 +77,51 @@ local function moodAt(hour: number): (Mood, Mood, number)
 	return MOODS[1], MOODS[1], 0
 end
 
+local function mix(x: number, y: number, t: number): number
+	return x + (y - x) * t
+end
+
 function SkyCycle.start()
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
 	local correction = Lighting:FindFirstChildOfClass("ColorCorrectionEffect")
 	local baseSaturation = if correction then correction.Saturation else 0
 	local baseContrast = if correction then correction.Contrast else 0
-	local lastHour, lastZone, sinceWrite = -1, -1, math.huge
+	local lastHour, lastZone, lastDawn, sinceWrite = -1, -1, -1, math.huge
 	RunService.RenderStepped:Connect(function(dt: number)
 		sinceWrite += dt
 		local hour = SkyCycle.currentHour()
-		local zone = ZoneMood.blend()
+		local dawn = RestDawn.blend()
+		-- Con el amanecer del descanso la lava pierde fuerza: manda el sol.
+		local zone = ZoneMood.blend() * (1 - 0.8 * dawn)
 		local moved = math.abs(hour - lastHour) > Performance.SkyClockStep
 			or math.abs(zone - lastZone) > Performance.SkyZoneStep
+			or math.abs(dawn - lastDawn) > Performance.SkyZoneStep
 		if sinceWrite < Performance.SkyUpdateSeconds and not moved then
 			return
 		end
-		sinceWrite, lastHour, lastZone = 0, hour, zone
+		sinceWrite, lastHour, lastZone, lastDawn = 0, hour, zone, dawn
 		local a, b, t = moodAt(hour)
-		local brightness = a.brightness + (b.brightness - a.brightness) * t
-		Lighting.ClockTime = hour
-		Lighting.Brightness = brightness + (CRATER.brightness - brightness) * zone
-		Lighting.OutdoorAmbient = a.ambient:Lerp(b.ambient, t):Lerp(CRATER.ambient, zone)
+		local brightness = mix(mix(a.brightness, b.brightness, t), CRATER.brightness, zone)
+		-- El sol avanza hacia la mañana (nunca para atrás) mientras amanece.
+		Lighting.ClockTime = (hour + ((SkyMoods.dawnHour - hour) % 24) * dawn) % 24
+		Lighting.Brightness = mix(brightness, DAWN.brightness, dawn)
+		Lighting.OutdoorAmbient =
+			a.ambient:Lerp(b.ambient, t):Lerp(CRATER.ambient, zone):Lerp(DAWN.ambient, dawn)
 		if atmosphere then
-			local density = a.density + (b.density - a.density) * t
-			atmosphere.Color = a.atmosphere:Lerp(b.atmosphere, t):Lerp(CRATER.atmosphere, zone)
-			atmosphere.Decay = a.decay:Lerp(b.decay, t):Lerp(CRATER.decay, zone)
-			atmosphere.Density = density + (CRATER.density - density) * zone
+			local density = mix(mix(a.density, b.density, t), CRATER.density, zone)
+			atmosphere.Color = a.atmosphere
+				:Lerp(b.atmosphere, t)
+				:Lerp(CRATER.atmosphere, zone)
+				:Lerp(DAWN.atmosphere, dawn)
+			atmosphere.Decay =
+				a.decay:Lerp(b.decay, t):Lerp(CRATER.decay, zone):Lerp(DAWN.decay, dawn)
+			atmosphere.Density = mix(density, DAWN.density, dawn)
 		end
 		if correction then
-			correction.TintColor = a.tint:Lerp(b.tint, t):Lerp(CRATER.tint, zone)
-			correction.Saturation = baseSaturation + (CRATER_SATURATION - baseSaturation) * zone
-			correction.Contrast = baseContrast + (CRATER_CONTRAST - baseContrast) * zone
+			correction.TintColor =
+				a.tint:Lerp(b.tint, t):Lerp(CRATER.tint, zone):Lerp(DAWN.tint, dawn)
+			correction.Saturation = mix(baseSaturation, SkyMoods.craterSaturation, zone)
+			correction.Contrast = mix(baseContrast, SkyMoods.craterContrast, zone)
 		end
 	end)
 end
