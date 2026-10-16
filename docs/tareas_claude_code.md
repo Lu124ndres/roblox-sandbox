@@ -139,8 +139,14 @@ personaje (-X en Roblox).
       con `Sugerido` y probados en el cráter (play, colocados como dice "Contrato de hábitats").
       Script `tools/blender/habitats*.py`, FBX/JSON/vistas en `assets/blender/habitats/`,
       paleta `Assets.Textures.Habitats`.
-- [ ] **W3. Importar la orca y el dragón nuevos** (pedido del usuario, urgente; ver "Pedidos
-      para Cowork"). Desbloquea C5.
+- [x] **W3. Importar la orca y el dragón nuevos** (pedido del usuario, urgente; ver "Pedidos
+      para Cowork"). Desbloquea C5. Hecho: los 8 en `ServerStorage` con "Mantener huesos de
+      influencia cero" (orca 17 huesos con `Boca` y `Espiraculo`, dragón 32), mismo pivote que
+      los viejos y la misma SurfaceAppearance de antes (las UV no cambiaron); los viejos en
+      `Respaldos` como `<nombre>_rigviejo`. `OrcaFantasmaE1..E4` rehechas sobre las orcas nuevas
+      (textura fantasma, 12% de transparencia). Mallas nuevas en `Assets.Meshes`. Probado en
+      play: `OrcaFantasma:3` nada y `DragonMarino:2` vuela sin errores; Claude Code ajusta el
+      resto (C5). Ojo: la MeshPart del dragón ahora se llama `DragonMarinoE<n>` (antes `DragonE<n>`).
 - [ ] **W2.** Zorro de agua E1..E4 (hoy es la orca teñida).
 
 ## Pedidos para Cowork

@@ -83,10 +83,10 @@ local Assets: Assets = {
 		-- Orca en 4 etapas (modelos de Meshy reducidos y con huesos para nadar y abrir la
 		-- boca: tools/blender/procesar_meshy.py y rig_orca.py). Fuente: assets/blender/OrcaE*.fbx.
 		-- Los Model están en ServerStorage.OrcaE1..E4 (viven en el .rbxl).
-		OrcaE1 = "rbxassetid://129807151713126", -- bebé (7,840 triángulos)
-		OrcaE2 = "rbxassetid://110833679153524", -- joven (11,760)
-		OrcaE3 = "rbxassetid://119056308763073", -- adulta (15,680)
-		OrcaE4 = "rbxassetid://131514620036527", -- anciana (19,110)
+		OrcaE1 = "rbxassetid://76881950583956", -- bebé (7,840 triángulos)
+		OrcaE2 = "rbxassetid://82096879151924", -- joven (11,760)
+		OrcaE3 = "rbxassetid://92524573839860", -- adulta (15,680)
+		OrcaE4 = "rbxassetid://130326642022252", -- anciana (19,110)
 		-- Minotauro bebé con huesos (tools/blender/minotauro_e1.py + rig_minotauro_e1.py, 18k
 		-- triángulos). Model en ServerStorage.MinotauroE1; se anima con Shared.Minotauro.
 		MinotauroE1 = "rbxassetid://138675592345337",
@@ -99,10 +99,10 @@ local Assets: Assets = {
 		TrajeMarinero = "rbxassetid://75806050701803",
 		TrajeDiosDelVolcan = "rbxassetid://137998127570612",
 		TrajeReyDelMar = "rbxassetid://137608233485403",
-		DragonMarinoE1 = "rbxassetid://93227317182170", -- cría (15,679 triángulos)
-		DragonMarinoE2 = "rbxassetid://127430445743010", -- joven (17,639)
-		DragonMarinoE3 = "rbxassetid://111211189301600", -- adulto (18,619)
-		DragonMarinoE4 = "rbxassetid://124386917827503", -- anciano (19,109)
+		DragonMarinoE1 = "rbxassetid://122661699655092", -- cría (15,679 triángulos)
+		DragonMarinoE2 = "rbxassetid://110887980669740", -- joven (17,639)
+		DragonMarinoE3 = "rbxassetid://115962400260493", -- adulto (18,619)
+		DragonMarinoE4 = "rbxassetid://79052568964105", -- anciano (19,109)
 	},
 
 	-- SurfaceAppearance (color, normales, rugosidad, metal) de cada modelo: ver Textures.luau.
