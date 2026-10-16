@@ -58,15 +58,15 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       ruleta, comprar en la tienda de monedas) y revisar la consola. Arreglar errores y
       advertencias nuestras (no las de CorePackages).
       → `dab58ee`, ver devlog (10). Sin errores nuestros; falta el modelo de la Orca fantasma (pedido abajo).
-- [~] **C5. Orca y dragón: rig, animación y VFX desde cero** (pedido directo del usuario,
+- [x] **C5. Orca y dragón: rig, animación y VFX desde cero** (pedido directo del usuario,
       2026-10-16). Claude Code rehace huesos y pesos de OrcaE1..E4 y DragonMarinoE1..E4 en
       Blender (toca `tools/blender/rig_orca.py`, `rig_dragon.py` y los FBX de la orca y el
       dragón en `assets/blender/`) y su animación y efectos en `src/`. **Cowork: no tocar esos
       archivos mientras esté en curso.** Los nombres de huesos actuales se mantienen.
       Hecho: rigs nuevos en `assets/blender/` (`968a9e6`, `e2ccb31`) y animación + VFX en
-      `src/` (`9c07280`, funciona con los modelos viejos y los nuevos). **Falta:** que el
-      usuario importe los 8 FBX en Studio; después Claude Code los pasa a `ServerStorage`,
-      rehace las copias `OrcaFantasmaE1..E4` sobre las orcas nuevas, prueba y ajusta.
+      `src/` (`9c07280`, `4fd7355`); Cowork los importó (W3, `4506599`). Probadas las 12
+      combinaciones (E1..E4 de Orca, DragonMarino y OrcaFantasma) y ajustado: perfil de la
+      fantasma por etapa, tope a las aletas de la cola, planeo del dragón por lado → `d85d9a5`.
 
 - [x] **C6. Hábitats dentro del volcán** (pedido del usuario, 2026-10-16). Cada monstruo tiene
       su zona decorada en el cráter. Cowork modela los props en Blender y los deja en
