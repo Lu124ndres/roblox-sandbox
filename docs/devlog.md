@@ -1354,3 +1354,25 @@ en pantalla; el Pack ya no corta el texto de abajo.
 
 **Qué queda:** en el A06 (338 px de alto) algunos rótulos decorativos siguen chicos (cinta
 "¡SIGUIENTE!" de Mejoras, "Nv 1/20" de las pestañas, "¡SOLO UNA VEZ!"), pero se leen.
+
+
+---
+
+## 2026-10-16 (10) — Revisión de errores (5 min de juego por MCP)
+
+**Qué se jugó** (un "bot" en el cliente que usa los mismos remotes que la UI): pescar en el
+muelle (31 piques, 31 capturas, canasta llena 4 veces), alimentar desde el volcán (barra al
+30%), premio diario, ruleta (salió x2 monedas 15 min), comprar caña, canasta y botas, renacer
+con monedas y poder del panel admin, y argumentos basura a `BuyUpgrade`, `ClaimPlaytime` y
+`Rebirth` (el servidor los rechaza sin errores).
+
+**Consola:** ningún error nuestro. Lo que queda:
+
+- `GiantTemplates: no hay modelos "OrcaFantasmaE1..E4"`: es real (el evento de Halloween
+  empieza el 17/10 y falta el modelo); el texto decía "marcador" y en verdad el cliente usa la
+  orca teñida de violeta. Se corrigió el texto y se pidió el modelo a Cowork.
+- `rbxassetid://203785492 ... Asset type does not match` y los avisos de `UIBlox
+  FoundationProvider`: vienen de Roblox (CoreGui/CorePackages), no de `src/` ni del lugar.
+
+**Qué se rompió:** nada. `selene src` sigue con 29 avisos de estilo viejos (`UDim2.fromScale`,
+etc.), ninguno en los archivos tocados hoy.

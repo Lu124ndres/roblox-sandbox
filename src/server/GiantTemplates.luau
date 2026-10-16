@@ -11,7 +11,7 @@
 	cuernos, armadura...).
 
 	Si falta el modelo de una etapa, el cliente usa el de la etapa anterior;
-	si no hay ninguno, dibuja un marcador de primitivas.
+	si no hay ninguno, usa la orca teñida (o un marcador si tampoco hay orca).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -93,7 +93,7 @@ function GiantTemplates.publish()
 		end
 		if found == 0 and def.released then
 			warn(
-				`GiantTemplates: no hay modelos "{def.modelBase}E1..E4" en ServerStorage; el cliente usará un marcador`
+				`GiantTemplates: no hay modelos "{def.modelBase}E1..E4" en ServerStorage; el cliente usará la orca teñida`
 			)
 		end
 	end

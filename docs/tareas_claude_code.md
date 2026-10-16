@@ -48,15 +48,16 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       que los eventos (stomp, roar, land, flex, happy) suenen y salpiquen. Arreglar lo que falle.
       → `80c21fb`. Todo anda; se arregló la etapa al bajar, el gruñido grave del becerro y
       scripts duplicados en el lugar.
-- [~] **C3. Ventanas en teléfono.** En el emulador de Studio (iPhone XR y un Android chico):
+- [x] **C3. Ventanas en teléfono.** En el emulador de Studio (iPhone XR y un Android chico):
       el Pack de inicio (`Menus/StarterOffer.luau`) cortaba el texto de abajo; en Misiones
       (forma ancha) los textos largos quedan muy chicos; en Renacer el pez tapa el número de la
       tarjeta "AL RENACER". Revisar también Tienda, Mejoras, Colección y Ajustes. Usar
       `Menus/WindowLayout.luau` (forma ancha en táctil).
-      → `@@C3@@`. Probado en iPhone XR y Galaxy A06. Ver devlog.
-- [ ] **C4. Revisión de errores.** Jugar 5 minutos por MCP (pescar, alimentar, renacer,
+      → `54c3f76`. Probado en iPhone XR y Galaxy A06. Ver devlog.
+- [x] **C4. Revisión de errores.** Jugar 5 minutos por MCP (pescar, alimentar, renacer,
       ruleta, comprar en la tienda de monedas) y revisar la consola. Arreglar errores y
       advertencias nuestras (no las de CorePackages).
+      → ver devlog (10). Sin errores nuestros; falta el modelo de la Orca fantasma (pedido abajo).
 
 ## Contrato de huesos del minotauro (lo respeta Cowork en cada etapa)
 
@@ -75,6 +76,11 @@ personaje (-X en Roblox).
 ## Pedidos para Cowork
 
 (Claude Code escribe aquí lo que necesite de modelos, texturas, íconos o IDs.)
+
+- **OrcaFantasmaE1..E4** (urgente: el evento de Halloween empieza el 2026-10-17). `Config/Giants`
+  ya la tiene `released = true`; sin modelos el cliente usa la orca común teñida de violeta y el
+  servidor avisa en la consola en cada arranque. Mismos huesos y escala que `OrcaE1..E4`
+  (así la anima `OrcaSwim` sin cambios de código).
 
 ## Notas de Claude Code
 
