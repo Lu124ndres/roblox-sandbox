@@ -139,10 +139,10 @@ local Giants: Types.GiantsConfig = {
 	},
 	delivery = {
 		stepSeconds = 0.25,
-		fishPerSecond = 3, -- un pez cada 0.33 s sin renacer
-		minSoloSeconds = 300, -- una persona sola tarda al menos esto en llenar un monstruo
+		fishPerSecond = 6, -- un pez cada 0.17 s sin renacer (al principio no se siente lento)
+		minSoloSeconds = 180, -- una persona sola tarda al menos esto en llenar un monstruo
 		broadcastSeconds = 0.25,
-		basketSeconds = 8, -- una canasta llena se vacía en 8 s como mucho
+		basketSeconds = 5, -- una canasta llena se vacía en 5 s como mucho
 	},
 	sizing = {
 		activeShare = 0.6, -- el resto del tiempo entrena, compra o pasea

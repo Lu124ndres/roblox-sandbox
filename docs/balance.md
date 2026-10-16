@@ -13,8 +13,8 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | `rouletteWeight` | 50 / 30 / 15 / 5 (Orca fantasma 35 en Halloween) | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Todos están en la ruleta, también el Zorro. |
 | Kill | — | Para **todos los que le dieron algo** (con un pez basta; `Feeding/Contributions`). Debajo del panel: tu aporte y el top 3. |
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
-| `delivery.fishPerSecond` / `basketSeconds` | 3 / 8 s | Se alimenta **manteniendo E**: 3 peces/s × 1.35 por renacimiento o, si es más rápido, **la canasta llena en 8 s** (`RebirthMath.deliveryPerSecond`). Así el poder y la canasta sí aceleran al monstruo. |
-| `delivery.minSoloSeconds` | 300 | Tope por persona: nunca más de 1/300 de la barra por segundo: una persona sola tarda al menos 5 min. |
+| `delivery.fishPerSecond` / `basketSeconds` | 6 / 5 s | Se alimenta **manteniendo E**: 6 peces/s × 1.35 por renacimiento o, si es más rápido, **la canasta llena en 5 s** (`RebirthMath.deliveryPerSecond`). Así el poder y la canasta sí aceleran al monstruo. |
+| `delivery.minSoloSeconds` | 180 | Tope por persona: nunca más de 1/180 de la barra por segundo: una persona sola tarda al menos 3 min. |
 | Renacer (`Config/Rebirth.luau`) | monedas 40K x 2.4^n · poder 3K x 2.6^n | Pide monedas **y** poder: 40K/3K, 96K/7.8K, 230K/20K, 550K/53K, 1.3M/140K… (dos cifras). Da, para siempre, alimentar x1.35 y **monedas y poder x1.25** por renacimiento (`bonusGrowth`, se multiplica). |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
 | `cycle.evolveSeconds` | 3 s | Al llenar cada cuarto de barra evoluciona: no come esos segundos (la entrega espera y sigue). |

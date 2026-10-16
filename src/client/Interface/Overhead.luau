@@ -67,7 +67,7 @@ local function build(player: Player, head: BasePart): () -> ()
 	local character = head.Parent :: Instance -- los trajes altos (Shared.Trajes) suben el cartel
 	local function lift()
 		local extra = character:GetAttribute(Trajes.EXTRA_HEIGHT)
-		gui.StudsOffset = Vector3.new(0, 2.9 + (tonumber(extra) or 0), 0)
+		gui.StudsOffset = Vector3.new(0, 3.7 + (tonumber(extra) or 0), 0)
 	end
 	character:GetAttributeChangedSignal(Trajes.EXTRA_HEIGHT):Connect(lift)
 	lift()
