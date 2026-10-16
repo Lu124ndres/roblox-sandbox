@@ -1490,8 +1490,9 @@ no la del juego: la orden `giant` "funciona" pero no cambia nada y pisa los atri
 
 **Probado por MCP:** Orca (20 props), `Minotauro:1` (19, 4 fuegos), `Minotauro:4` (no se
 rehace), `DragonMarino:2` (13), `OrcaFantasma:1` y `:3` (20, 11 luces), `ZorroDeAgua` (vacío).
-El Neon late (transparencia 0.05 → 0.39). Sin errores nuestros en la consola. El cambio a modo
-rápido no se probó en Play (la ventana de Ajustes no se tocó por MCP).
+El Neon late (transparencia 0.05 → 0.39). Sin errores nuestros en la consola. Modo rápido
+(atributo `Settings` del jugador desde el servidor): el Minotauro pasa de 4 Fire a 0 con las 4
+luces intactas, el dragón armado en modo rápido llega sin fuego y al quitarlo vuelven los 3.
 
 **Qué se rompió:** nada. El cliente avisaba "Infinite yield" esperando `Workspace.Habitat`
 (el servidor la crea después del terreno); ahora espera sin plazo.

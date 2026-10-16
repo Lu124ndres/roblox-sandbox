@@ -87,7 +87,7 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
          rápido / gráficos bajos (sin Fire).
       4. Probar por MCP con `giant Minotauro:1..4`, `Orca`, `DragonMarino`, `OrcaFantasma`.
       → `23951c1`. Probados los 4 hábitats y el Zorro (cráter vacío); el fuego y el latido
-      del Neon van en el cliente (`Ambient/HabitatFx`). Falta probar en Play el cambio a modo rápido.
+      del Neon van en el cliente (`Ambient/HabitatFx`). Modo rápido probado: quita y devuelve el fuego.
 
 - [~] **C7. Zorro de agua E4, versión de Claude Code** (prueba del usuario: Code contra
       Cowork, gana el mejor). Modelo, texturas, rig y animación hechos por Claude Code:
