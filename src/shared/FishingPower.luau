@@ -101,7 +101,7 @@ end
 function FishingPower.pondRequirement(pond: Config.PondDef, short: boolean?): string
 	local power = NumberFormat.short(pond.requiredPower)
 	if short then
-		return `{pond.requiredKills} kills o {power} poder`
+		return `{pond.requiredKills} {if pond.requiredKills == 1 then "kill" else "kills"} o {power} poder`
 	end
 	local kills =
 		`{pond.requiredKills} {if pond.requiredKills == 1 then "monstruo" else "monstruos"}`
