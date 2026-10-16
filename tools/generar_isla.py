@@ -157,6 +157,22 @@ def grupo(nombre, hijos, clase="Model"):
     return {"name": nombre, "className": clase, "children": hijos}
 
 
+def ancla(prop, base, tam, r=I3, ajuste="alto", reemplaza=""):
+    """Pieza invisible que server/World/PropDresser cambia por el modelo 3D `prop` de
+    ServerStorage.PropsMapa (Blender), apoyado en `base`; borra las piezas cuyo nombre
+    empieza con algún prefijo de `reemplaza`. Sin el modelo quedan las primitivas."""
+    centro = add(base, aplicar(r, (0, tam[1] / 2, 0)))
+    nodo = pieza("Ancla", tam, centro, (255, 255, 255), "SmoothPlastic", r, **INVISIBLE, CanCollide=False)
+    nodo["attributes"] = {"Prop": prop, "Ajuste": ajuste, "Reemplaza": reemplaza}
+    return nodo
+
+
+def con_prop(nodo, prop, ajuste="caja"):
+    """La pieza misma se cambia por el modelo 3D `prop` (rocas)."""
+    nodo["attributes"] = {"Prop": prop, "Ajuste": ajuste}
+    return nodo
+
+
 def mover(nodo, r, p):
     """Lleva un grupo construido en coordenadas locales al mundo: mundo = (r, p) * local."""
     props = nodo.get("properties", {})
@@ -319,6 +335,9 @@ def estanque(i):
         for k in range(6 if sagrado else 3):
             p = add((cx, 0, cz), polar(k * (60 if sagrado else 120), 7 if sagrado else 2.6, 0))
             hijos.append(pieza(f"Orbita{k + 1}", (0.6, 0.6, 0.6), (p[0], agua + 3.6, p[2]), tono, "Neon", mat(rx(45), rz(35)), **FANTASMA))
+    # Modelo 3D del borde con su losa y filo de oro (BordeEstanque / BordeSagrado de Blender).
+    hijos.append(ancla("BordeSagrado" if sagrado else "BordeEstanque", (cx, y - 2.2, cz), (2 * losa_fuera, 3.4, 2 * losa_fuera),
+                       I3, "ancho", "Losa,FiloLosa,Borde,Oro"))
     # Bolardos sobre la losa.
     cuantos = 8 if sagrado else 4
     for k in range(cuantos):
@@ -625,6 +644,13 @@ def palmera(nombre, base, yaw, inclinacion=4.5, segmentos=6):
     for i in range(3):
         ang = math.radians(i * 120 + 20)
         hijos.append(pieza(f"Coco{i}", (1.2, 1.2, 1.2), add(punta, (math.cos(ang) * 0.8, -0.9, math.sin(ang) * 0.8)), COCO, forma="Ball", **DECORADO))
+    # Modelo 3D: tronco curvo hacia `yaw` (en Blender se inclina hacia +X). Variante por número.
+    variante = 1 + int("".join(c for c in nombre if c.isdigit()) or 0) % 3
+    alto = segmentos * 3.2 + 2.5
+    hijos.append(ancla(f"Palmera{variante}", base, (4, alto, 4), ry(-yaw), "alto", "Tronco,Hoja,Coco"))
+    # Choque del tronco (el modelo 3D no choca): un cilindro invisible al pie.
+    hijos.append(pieza("Colision", (alto * 0.55, 1.6, 1.6), add(base, (0, alto * 0.27, 0)), TRONCO[0], "Wood", VERTICAL, "Cylinder",
+                       **INVISIBLE))
     return grupo(nombre, hijos)
 
 
@@ -651,6 +677,8 @@ def arbusto(nombre, pos):
     for i in range(5):
         p = add(pos, (rng.uniform(-2.2, 2.2), rng.uniform(1.2, 2.4), rng.uniform(-2.2, 2.2)))
         hijos.append(pieza(f"Flor{i}", (0.7, 0.7, 0.7), p, FLORES[rng.randrange(4)], "SmoothPlastic", forma="Ball", **DECORADO, CanCollide=False))
+    variante = 1 + int("".join(c for c in nombre if c.isdigit()) or 0) % 2
+    hijos.append(ancla(f"Arbusto{variante}", pos, (5, 3.8, 5), ry(int("".join(c for c in nombre if c.isdigit()) or 0) * 47), "alto", "Hojas,Flor"))
     return grupo(nombre, hijos)
 
 
@@ -660,7 +688,8 @@ def rocas(nombre, centro, cantidad, escala=1.0):
         s = escala * rng.uniform(2, 5)
         p = (centro[0] + rng.uniform(-4, 4) * escala, altura_terreno(math.hypot(*centro)) + s * 0.15, centro[1] + rng.uniform(-4, 4) * escala)
         r = mat(ry(rng.uniform(0, 360)), mat(rx(rng.uniform(-14, 14)), rz(rng.uniform(-14, 14))))
-        hijos.append(pieza(f"Roca{i}", (s * rng.uniform(1, 1.4), s * rng.uniform(0.6, 0.9), s), p, ROCA[i % 3], "Slate", r))
+        hijos.append(con_prop(pieza(f"Roca{i}", (s * rng.uniform(1, 1.4), s * rng.uniform(0.6, 0.9), s), p, ROCA[i % 3], "Slate", r),
+                              f"Roca{1 + i % 3}"))
     return grupo(nombre, hijos)
 
 
@@ -981,7 +1010,18 @@ def cresta(nombre, angulo, rho, humo=False):
     for k in range(rng.randint(1, 2)):  # rocas sueltas al pie
         s = rng.uniform(4, 7)
         q = add(base, polar(rng.uniform(0, 360), rng.uniform(7, 10), altura_crater(rho + 5, angulo) - 1 + s * 0.3))
-        hijos.append(pieza(f"Roca{k}", (s * 1.3, s, s), q, BASALTO[(k + 1) % 3], "Basalt", mat(ry(rng.uniform(0, 90)), rx(rng.uniform(-15, 15)))))
+        hijos.append(con_prop(pieza(f"Roca{k}", (s * 1.3, s, s), q, BASALTO[(k + 1) % 3], "Basalt", mat(ry(rng.uniform(0, 90)), rx(rng.uniform(-15, 15)))),
+                              f"Roca{1 + k % 2}"))
+    # Modelo 3D del pico (Cresta1/2 de Blender) en lugar de los bloques; el humo va aparte.
+    n = int("".join(c for c in nombre if c.isdigit()) or 0)
+    hijos.append(ancla(f"Cresta{1 + n % 2}", (base[0], altura_crater(rho + 5, angulo) - 2, base[2]), (12, alto_total + 2, 12),
+                       ry(n * 37), "alto", "Pico"))
+    if humo:
+        hijos.append({"name": "Humo", "className": "Part", "properties": {
+            **pieza("Humo", (2, 2, 2), (base[0], altura_crater(rho + 5, angulo) - 2 + alto_total, base[2]), BASALTO[0], **INVISIBLE,
+                    CanCollide=False)["properties"]},
+            "children": [{"name": "Humo", "className": "Smoke", "properties": {
+                "Color": color((70, 62, 62)), "Opacity": 0.14, "RiseVelocity": 7, "Size": 16}}]})
     return grupo(nombre, hijos)
 
 

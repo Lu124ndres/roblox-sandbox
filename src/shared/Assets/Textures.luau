@@ -51,6 +51,11 @@ local Textures: { [string]: { string } } = {
 		"rbxassetid://132643107983072",
 		"rbxassetid://96859161440502",
 	},
+	-- Paleta de los props del mapa (palmeras, arbustos, rocas, crestas, bordes de estanque):
+	-- ServerStorage.PropsMapa, de tools/blender/props_mapa.py. Solo color.
+	PropsMapa = {
+		"rbxassetid://89441442365011",
+	},
 	DragonMarinoE1 = {
 		"rbxassetid://84201486554941",
 		"rbxassetid://121296317760278",

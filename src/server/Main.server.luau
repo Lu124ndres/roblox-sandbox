@@ -39,6 +39,7 @@ local Receipts = require(script.Parent.Monetization.Receipts)
 local SaveService = require(script.Parent.Save.SaveService)
 local SettingsService = require(script.Parent.Retention.SettingsService)
 local ShopService = require(script.Parent.ShopService)
+local PropDresser = require(script.Parent.World.PropDresser)
 local TerrainBuilder = require(script.Parent.World.TerrainBuilder)
 local TrainingService = require(script.Parent.TrainingService)
 
@@ -76,3 +77,4 @@ PlayerCollision.init()
 -- El terreno al final: tarda unos segundos y nada de lo anterior lo necesita (se aparece
 -- en la pieza de aparición). Así EstadoGigante y los remotes existen desde el principio.
 TerrainBuilder.build()
+PropDresser.dress()
