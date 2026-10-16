@@ -58,4 +58,19 @@ function Upgrades.describe(category: Category, def: Config.UpgradeDef): string
 	return `Velocidad {def.value}`
 end
 
+export type Stat = { label: string, value: string }
+
+-- Lo que da un nivel, dato por dato (para comparar "ahora → siguiente" en MEJORAS).
+function Upgrades.stats(category: Category, def: Config.UpgradeDef): { Stat }
+	if category == "Rod" then
+		return {
+			{ label = "Poder", value = `x{times(def.value)}` },
+			{ label = "Suerte", value = `+{math.round((def.luck or 0) * 100)}%` },
+		}
+	elseif category == "Basket" then
+		return { { label = "Capacidad", value = `x{times(def.value)}` } }
+	end
+	return { { label = "Velocidad", value = times(def.value) } }
+end
+
 return Upgrades

@@ -55,7 +55,10 @@ function ShopController.start(screen: ScreenGui, player: Player, toasts: Toasts.
 			local def = Upgrades.list(category :: any)[level]
 			Sounds.play("LegendaryCatch")
 			Sounds.play("Coins")
-			toasts.banner(`¡Compraste {def.name}!`, COLORS.Coins)
+			local icon = (
+				{ Rod = "rod", Basket = "basket", Boots = "boots" } :: { [string]: string }
+			)[category :: string]
+			toasts.banner(def.name, COLORS.Coins, icon, "¡MEJORA COMPRADA!")
 		elseif status == "poor" and Upgrades.isCategory(category) and type(level) == "number" then
 			local def = Upgrades.list(category :: any)[level + 1]
 			local wallet = player:GetAttribute(ATTR.Coins)
