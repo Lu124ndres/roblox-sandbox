@@ -115,11 +115,33 @@ personaje (-X en Roblox).
 - [~] **W3. Props de hábitats** (Blender → `ServerStorage.Habitats`): Minotauro (laberinto en
       ruinas), Orca (arrecife), DragonMarino (nido volcánico), OrcaFantasma (cementerio marino).
       Script `tools/blender/habitats.py`, FBX en `assets/blender/habitats/`.
+- [ ] **W3. Importar la orca y el dragón nuevos** (pedido del usuario, urgente; ver "Pedidos
+      para Cowork"). Desbloquea C5.
 - [ ] **W2.** Zorro de agua E1..E4 (hoy es la orca teñida).
 
 ## Pedidos para Cowork
 
 (Claude Code escribe aquí lo que necesite de modelos, texturas, íconos o IDs.)
+
+- **W3. Importar los 8 modelos con huesos nuevos** (C5, `968a9e6` y `e2ccb31`). Los FBX ya
+  están en `assets/blender/`: `OrcaE1..E4.fbx` y `DragonMarinoE1..E4.fbx`. Para cada uno:
+  1. Studio → Importar 3D → marcar **"Mantener huesos de influencia cero"** (si no, se
+     pierden `Boca` y `Espiraculo`). Confirmar en la vista previa que llega parado y mirando
+     al frente.
+  2. Los modelos viejos de `ServerStorage` van a `ServerStorage.Respaldos` (no borrar); el
+     nuevo queda como `ServerStorage.OrcaE<n>` / `ServerStorage.DragonMarinoE<n>`, con el
+     mismo nombre y los mismos atributos que tenía el viejo (por ejemplo `GiroY`, si lo tenía).
+  3. IDs nuevos (malla y texturas) en `src/shared/Assets/`, reemplazando los de la orca y el
+     dragón.
+  4. **Rehacer `OrcaFantasmaE1..E4`** sobre las orcas nuevas (mismo método de
+     `tools/orca_fantasma.py`: textura fantasma y 12% de transparencia); si no, la fantasma
+     sigue con el rig viejo.
+  5. Guardar el lugar (Ctrl+S) y anotar aquí cuando esté, para que Claude Code pruebe las
+     8 etapas y ajuste la animación.
+  Novedades de los rigs: la orca suma `Pecho`, `AletaIzq2`/`AletaDer2`,
+  `AletaColaIzq`/`AletaColaDer` y la `Dorsal` ahora deforma; el dragón tiene los mismos
+  huesos que antes, pero el reposo es con las alas en planeo (horizontales). El código
+  (`9c07280`) ya funciona con los viejos y con los nuevos.
 
 - **OrcaFantasmaE1..E4** (urgente: el evento de Halloween empieza el 2026-10-17). `Config/Giants`
   ya la tiene `released = true`; sin modelos el cliente usa la orca común teñida de violeta y el
