@@ -63,6 +63,10 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       Blender (toca `tools/blender/rig_orca.py`, `rig_dragon.py` y los FBX de la orca y el
       dragón en `assets/blender/`) y su animación y efectos en `src/`. **Cowork: no tocar esos
       archivos mientras esté en curso.** Los nombres de huesos actuales se mantienen.
+      Hecho: rigs nuevos en `assets/blender/` (`968a9e6`, `e2ccb31`) y animación + VFX en
+      `src/` (`9c07280`, funciona con los modelos viejos y los nuevos). **Falta:** que el
+      usuario importe los 8 FBX en Studio; después Claude Code los pasa a `ServerStorage`,
+      rehace las copias `OrcaFantasmaE1..E4` sobre las orcas nuevas, prueba y ajusta.
 
 - [ ] **C6. Hábitats dentro del volcán** (pedido del usuario, 2026-10-16). Cada monstruo tiene
       su zona decorada en el cráter. Cowork modela los props en Blender y los deja en
