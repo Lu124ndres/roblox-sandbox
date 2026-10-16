@@ -103,9 +103,12 @@ SkyMoods.day = {
 	),
 }
 
--- Cráter: claro para jugar, pero con bruma y luz de lava (peligro).
+-- Cráter: claro para jugar, pero con bruma y luz de lava (peligro). Tiene su
+-- propia hora (craterHour): sol de tarde aunque en la isla sea de noche, si no
+-- de noche solo queda la luz ambiente y no se ve al monstruo.
 SkyMoods.crater =
-	mood(0, 1.9, rgb(255, 120, 70), rgb(200, 60, 30), 0.3, rgb(255, 228, 210), rgb(180, 105, 80))
+	mood(0, 2.1, rgb(255, 130, 80), rgb(200, 70, 40), 0.24, rgb(255, 232, 214), rgb(205, 140, 115))
+SkyMoods.craterHour = 15.5
 SkyMoods.craterSaturation = 0.12
 SkyMoods.craterContrast = 0.12
 

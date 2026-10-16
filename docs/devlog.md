@@ -1529,3 +1529,28 @@ en el volcán de la cabeza. Nada de fuego encima del cuerpo.
 
 **Qué se rompió:** nada. Probado en juego: `Minotauro:2` camina al oeste hasta x = -159 y
 come; `fill 1` → la guarida sube a -136 mientras se vacía el lago; `skipRest` → baja a -176.
+
+---
+
+## 2026-10-16 (15) — Guarida más arriba, volcán más rápido y con luz
+
+**Qué se hizo (pedido del usuario):**
+
+- La guarida del descanso sube mucho más: el piso pasa de -136 a -60 y el radio de 90 a 119
+  (a esa altura el pozo es más ancho y la guarida sigue tocando la pared). Queda enterrada 104
+  studs (antes 40): con menos, el cristal del centro asomaba sobre el fondo del lago.
+  `generar_isla.py` suma un anillo de oro (`AnilloBorde`) para la franja de afuera.
+  `ServerStorage.GuaridaDescanso` se reemplazó con el JSON nuevo (la anterior en
+  `Respaldos.GuaridaDescanso_r90`).
+- El volcán se vacía en 3 s (antes 8) y se llena en 2 s (antes 6); la guarida sube en esos 3 s.
+- Luz del volcán: de noche solo quedaba la luz ambiente con bruma naranja y no se veía al
+  monstruo (en el descanso sí, porque el "amanecer" adelanta el reloj). Ahora el cráter tiene
+  su propia hora de sol (`SkyMoods.craterHour`, 15:30): al cruzar el puente el cielo va
+  hacia esa hora junto con el resto del ambiente. Algo más de luz ambiente y menos bruma.
+
+**Probado por MCP (de noche, `HoraFija = 0`):** el cráter se ve claro; `fill 1` → el lago se
+vacía y la guarida llega a -60, con el borde calzado contra la pared; `skipRest` → el agua
+vuelve en 2.0 s y la guarida queda en -164 (lo más alto, el cristal, a -152: bajo el fondo).
+Consola limpia.
+
+**Qué se rompió:** nada.

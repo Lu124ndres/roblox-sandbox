@@ -102,8 +102,11 @@ function SkyCycle.start()
 		sinceWrite, lastHour, lastZone, lastDawn = 0, hour, zone, dawn
 		local a, b, t = moodAt(hour)
 		local brightness = mix(mix(a.brightness, b.brightness, t), CRATER.brightness, zone)
-		-- El sol avanza hacia la mañana (nunca para atrás) mientras amanece.
-		Lighting.ClockTime = (hour + ((SkyMoods.dawnHour - hour) % 24) * dawn) % 24
+		-- En el cráter el sol va a su hora (por el camino corto); con el amanecer,
+		-- avanza hacia la mañana (nunca para atrás).
+		local toCrater = (SkyMoods.craterHour - hour + 12) % 24 - 12
+		local shown = (hour + toCrater * zone) % 24
+		Lighting.ClockTime = (shown + ((SkyMoods.dawnHour - shown) % 24) * dawn) % 24
 		Lighting.Brightness = mix(brightness, DAWN.brightness, dawn)
 		Lighting.OutdoorAmbient =
 			a.ambient:Lerp(b.ambient, t):Lerp(CRATER.ambient, zone):Lerp(DAWN.ambient, dawn)

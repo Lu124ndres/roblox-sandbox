@@ -551,3 +551,11 @@ para todos y es barata); el Fire y el latido del Neon los crea `Ambient/HabitatF
 cliente, que no crea fuego en modo rápido y lo quita al activarlo. Cada prop va con
 `ModelStreamingMode = Atomic`: con streaming, el cliente lo recibe entero (con `Llama` y
 `Brillo`) o no lo recibe.
+
+## 2026-10-16 — El volcán tiene su propia hora de sol
+
+**Contexto:** el cráter mezclaba su luz de lava con la del ciclo de día y noche, pero
+`ClockTime` seguía la hora de la isla. De noche el sol está abajo: solo quedaba la luz ambiente
+y la bruma, y no se veía al monstruo. **Decisión:** `SkyCycle` lleva el reloj hacia
+`SkyMoods.craterHour` (por el camino corto) según `ZoneMood.blend()`, igual que el amanecer del
+descanso lo lleva a la mañana. La isla conserva su noche; el volcán siempre se juega con luz.
