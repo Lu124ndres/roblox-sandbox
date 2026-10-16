@@ -93,8 +93,31 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
 `OrcaFantasma`). Dentro, un Model por prop (nombre = `prop` de `Config/Habitats`), PrimaryPart
 con pivote en el centro de la base, frente a -Z, tamaño real (1 unidad de Blender = 1 stud,
 pensado para estar a escala con el gigante E1..E4). Atributos del Model: `Efecto` (opcional),
-`ColorLuz` (Color3, opcional), `Colision` (bool, opcional). La carpeta tiene `Sugerido`
-(JSON con la distribución inicial).
+`ColorLuz` (Color3, opcional), `Colision` (bool, opcional), `Alto` (studs, a escala 1). La
+carpeta tiene `Sugerido` (JSON con la distribución inicial).
+
+Lo que hay (W4):
+- **Minotauro** (laberinto en ruinas): Columna, ColumnaRota, Muro (franja roja con greca de
+  oro), Arco (clave con cabeza de toro), Brasero (`fuego`), CraneoToro, Estandarte.
+- **Orca** (arrecife): CoralRama, CoralRamaNaranja, CoralCerebro, CoralAbanico, Alga,
+  Almeja (perla `brillo`), RocaPercebes.
+- **DragonMarino** (nido volcánico): Obsidiana (vetas `brillo`), CristalLava (`luz`), Nido
+  (huevos), Costillar, Fumarola (`fuego`).
+- **OrcaFantasma** (cementerio marino de Halloween): Calabaza (cara `luz`), Lapida, LapidaCruz,
+  BarcoHundido (farol y ventanas `luz`), FarolFantasma (`luz` cian), ArbolSeco, Ataud (`luz`).
+
+Detalles para el código:
+- Cada Model tiene la malla principal (PrimaryPart, SmoothPlastic con la paleta) y, si brilla,
+  una MeshPart `Brillo` en Neon con su color. `Llama` (Attachment en la PrimaryPart) marca dónde
+  van el fuego o la luz. Están en el origen con `WorldPivot` = identidad.
+- `Sugerido`: `angulo` en grados desde +X del cráter (x = cos, z = sin), `radio` en studs,
+  `escala` para `Model:ScaleTo`, `giro` en grados extra sobre "el frente mira hacia afuera, a los
+  jugadores del borde". Radio 158-178: repisa bajo el agua; radio 194-197: ladera del
+  acantilado, junto al camino (props altos y finos).
+- Colocación que se probó y se ve bien: `ScaleTo(escala)`; raycast solo contra Terrain con
+  `IgnoreWater = true` en el centro y en 4 puntos a 0.3 del ancho (en la ladera, usar la altura
+  MÁS BAJA, si no flotan); base 0.5 studs más abajo;
+  `CFrame.lookAt(base, base + afuera) * CFrame.Angles(0, math.rad(giro), 0)`.
 
 ## Contrato de huesos del minotauro (lo respeta Cowork en cada etapa)
 
@@ -112,9 +135,10 @@ personaje (-X en Roblox).
       textura fantasma (violeta, vientre lila, marcas cian, oro a naranja calabaza) y 12% de
       transparencia; mismos huesos, `OrcaSwim` las mueve. Texturas en `assets/textures/` y
       `tools/orca_fantasma.py`. Probado: `OrcaFantasma:1` y `:4` nadan.
-- [~] **W3. Props de hábitats** (Blender → `ServerStorage.Habitats`): Minotauro (laberinto en
-      ruinas), Orca (arrecife), DragonMarino (nido volcánico), OrcaFantasma (cementerio marino).
-      Script `tools/blender/habitats.py`, FBX en `assets/blender/habitats/`.
+- [x] **W4. Props de hábitats** (Blender → `ServerStorage.Habitats`): 26 props en 4 carpetas,
+      con `Sugerido` y probados en el cráter (play, colocados como dice "Contrato de hábitats").
+      Script `tools/blender/habitats*.py`, FBX/JSON/vistas en `assets/blender/habitats/`,
+      paleta `Assets.Textures.Habitats`.
 - [ ] **W3. Importar la orca y el dragón nuevos** (pedido del usuario, urgente; ver "Pedidos
       para Cowork"). Desbloquea C5.
 - [ ] **W2.** Zorro de agua E1..E4 (hoy es la orca teñida).

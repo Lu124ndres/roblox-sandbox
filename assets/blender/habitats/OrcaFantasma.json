@@ -1,0 +1,309 @@
+{
+ "habitat": "OrcaFantasma",
+ "ancla": [
+  -30.0,
+  0.0,
+  0.5
+ ],
+ "props": [
+  {
+   "nombre": "Calabaza",
+   "origen": [
+    8.5,
+    0,
+    0
+   ],
+   "tris": 992,
+   "alto": 14.0,
+   "ancho": 17.0,
+   "fondo": 17.0,
+   "brillo": "Calabaza_Brillo",
+   "colorBrillo": [
+    255,
+    150,
+    50
+   ],
+   "trisBrillo": 84,
+   "efecto": "luz",
+   "colorLuz": [
+    255,
+    150,
+    50
+   ],
+   "llama": [
+    0,
+    2,
+    5.5
+   ]
+  },
+  {
+   "nombre": "Lapida",
+   "origen": [
+    31.921449184417725,
+    0,
+    0
+   ],
+   "tris": 200,
+   "alto": 9.73,
+   "ancho": 9.62,
+   "fondo": 6.62
+  },
+  {
+   "nombre": "LapidaCruz",
+   "origen": [
+    51.51700687408447,
+    0,
+    0
+   ],
+   "tris": 346,
+   "alto": 12.09,
+   "ancho": 9.1,
+   "fondo": 6.91
+  },
+  {
+   "nombre": "BarcoHundido",
+   "origen": [
+    80.38916301727295,
+    0,
+    0
+   ],
+   "tris": 1092,
+   "alto": 24.34,
+   "ancho": 28.85,
+   "fondo": 49.4,
+   "brillo": "BarcoHundido_Brillo",
+   "colorBrillo": [
+    110,
+    230,
+    255
+   ],
+   "trisBrillo": 48,
+   "efecto": "luz",
+   "colorLuz": [
+    110,
+    230,
+    255
+   ],
+   "llama": [
+    10.002653121948242,
+    -20.23036003112793,
+    18.95759391784668
+   ],
+   "colision": true
+  },
+  {
+   "nombre": "FarolFantasma",
+   "origen": [
+    106.3754460811615,
+    0,
+    0
+   ],
+   "tris": 254,
+   "alto": 18.06,
+   "ancho": 6.26,
+   "fondo": 3.6,
+   "brillo": "FarolFantasma_Brillo",
+   "colorBrillo": [
+    110,
+    230,
+    255
+   ],
+   "trisBrillo": 20,
+   "efecto": "luz",
+   "colorLuz": [
+    110,
+    230,
+    255
+   ],
+   "llama": [
+    3.4000000953674316,
+    0.0,
+    14.399999618530273
+   ]
+  },
+  {
+   "nombre": "ArbolSeco",
+   "origen": [
+    129.69766879081726,
+    0,
+    0
+   ],
+   "tris": 660,
+   "alto": 35.78,
+   "ancho": 19.6,
+   "fondo": 20.2
+  },
+  {
+   "nombre": "Ataud",
+   "origen": [
+    154.41985845565796,
+    0,
+    0
+   ],
+   "tris": 76,
+   "alto": 3.17,
+   "ancho": 10.29,
+   "fondo": 12.63,
+   "brillo": "Ataud_Brillo",
+   "colorBrillo": [
+    130,
+    255,
+    150
+   ],
+   "trisBrillo": 16,
+   "efecto": "luz",
+   "colorLuz": [
+    130,
+    255,
+    150
+   ],
+   "llama": [
+    0,
+    0,
+    3
+   ]
+  }
+ ],
+ "sugerido": [
+  {
+   "prop": "BarcoHundido",
+   "angulo": 205,
+   "radio": 168,
+   "escala": 1.8,
+   "giro": 75
+  },
+  {
+   "prop": "Calabaza",
+   "angulo": 20,
+   "radio": 168,
+   "escala": 2.4,
+   "giro": 0
+  },
+  {
+   "prop": "Calabaza",
+   "angulo": 120,
+   "radio": 170,
+   "escala": 1.8,
+   "giro": 20
+  },
+  {
+   "prop": "Calabaza",
+   "angulo": 300,
+   "radio": 165,
+   "escala": 2.0,
+   "giro": -20
+  },
+  {
+   "prop": "Calabaza",
+   "angulo": 245,
+   "radio": 175,
+   "escala": 1.5,
+   "giro": 0
+  },
+  {
+   "prop": "Lapida",
+   "angulo": 95,
+   "radio": 160,
+   "escala": 2.4,
+   "giro": -5
+  },
+  {
+   "prop": "LapidaCruz",
+   "angulo": 103,
+   "radio": 168,
+   "escala": 2.2,
+   "giro": 10
+  },
+  {
+   "prop": "Lapida",
+   "angulo": 110,
+   "radio": 158,
+   "escala": 2.0,
+   "giro": 15
+  },
+  {
+   "prop": "Lapida",
+   "angulo": 280,
+   "radio": 162,
+   "escala": 2.2,
+   "giro": -10
+  },
+  {
+   "prop": "LapidaCruz",
+   "angulo": 140,
+   "radio": 160,
+   "escala": 2.4,
+   "giro": 5
+  },
+  {
+   "prop": "LapidaCruz",
+   "angulo": 330,
+   "radio": 165,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "Ataud",
+   "angulo": 345,
+   "radio": 160,
+   "escala": 2.2,
+   "giro": 30
+  },
+  {
+   "prop": "Ataud",
+   "angulo": 175,
+   "radio": 165,
+   "escala": 2.0,
+   "giro": -40
+  },
+  {
+   "prop": "ArbolSeco",
+   "angulo": 70,
+   "radio": 196,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "ArbolSeco",
+   "angulo": 255,
+   "radio": 196,
+   "escala": 2.0,
+   "giro": -90
+  },
+  {
+   "prop": "ArbolSeco",
+   "angulo": 150,
+   "radio": 196,
+   "escala": 1.8,
+   "giro": 40
+  },
+  {
+   "prop": "FarolFantasma",
+   "angulo": 45,
+   "radio": 197,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "FarolFantasma",
+   "angulo": 165,
+   "radio": 197,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "FarolFantasma",
+   "angulo": 330,
+   "radio": 197,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "FarolFantasma",
+   "angulo": 280,
+   "radio": 197,
+   "escala": 2.2,
+   "giro": 0
+  }
+ ]
+}

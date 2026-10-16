@@ -1,0 +1,255 @@
+{
+ "habitat": "Orca",
+ "ancla": [
+  -30.0,
+  0.0,
+  0.5
+ ],
+ "props": [
+  {
+   "nombre": "CoralRama",
+   "origen": [
+    5.005596160888672,
+    0,
+    0
+   ],
+   "tris": 1676,
+   "alto": 20.36,
+   "ancho": 11.24,
+   "fondo": 9.17
+  },
+  {
+   "nombre": "CoralRamaNaranja",
+   "origen": [
+    26.624741554260254,
+    0,
+    0
+   ],
+   "tris": 1676,
+   "alto": 18.34,
+   "ancho": 15.25,
+   "fondo": 8.37
+  },
+  {
+   "nombre": "CoralCerebro",
+   "origen": [
+    54.040316581726074,
+    0,
+    0
+   ],
+   "tris": 340,
+   "alto": 6.43,
+   "ancho": 14.63,
+   "fondo": 13.96
+  },
+  {
+   "nombre": "CoralAbanico",
+   "origen": [
+    81.57058620452881,
+    0,
+    0
+   ],
+   "tris": 432,
+   "alto": 11.44,
+   "ancho": 17.4,
+   "fondo": 9.37
+  },
+  {
+   "nombre": "Alga",
+   "origen": [
+    105.50534534454346,
+    0,
+    0
+   ],
+   "tris": 1360,
+   "alto": 30.47,
+   "ancho": 14.34,
+   "fondo": 14.91
+  },
+  {
+   "nombre": "Almeja",
+   "origen": [
+    132.28089094161987,
+    0,
+    0
+   ],
+   "tris": 476,
+   "alto": 8.76,
+   "ancho": 18.41,
+   "fondo": 17.49,
+   "brillo": "Almeja_Brillo",
+   "colorBrillo": [
+    250,
+    238,
+    255
+   ],
+   "trisBrillo": 80,
+   "efecto": "brillo",
+   "colorLuz": [
+    255,
+    230,
+    255
+   ],
+   "llama": [
+    0,
+    0.4,
+    6.04
+   ]
+  },
+  {
+   "nombre": "RocaPercebes",
+   "origen": [
+    159.86720418930054,
+    0,
+    0
+   ],
+   "tris": 960,
+   "alto": 9.01,
+   "ancho": 17.92,
+   "fondo": 15.12,
+   "colision": true
+  }
+ ],
+ "sugerido": [
+  {
+   "prop": "Almeja",
+   "angulo": 90,
+   "radio": 162,
+   "escala": 2.6,
+   "giro": 0
+  },
+  {
+   "prop": "RocaPercebes",
+   "angulo": 30,
+   "radio": 168,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "RocaPercebes",
+   "angulo": 215,
+   "radio": 165,
+   "escala": 2.4,
+   "giro": -60
+  },
+  {
+   "prop": "CoralRama",
+   "angulo": 60,
+   "radio": 165,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "CoralRama",
+   "angulo": 170,
+   "radio": 170,
+   "escala": 2.0,
+   "giro": -90
+  },
+  {
+   "prop": "CoralRama",
+   "angulo": 300,
+   "radio": 160,
+   "escala": 2.4,
+   "giro": 20
+  },
+  {
+   "prop": "CoralRamaNaranja",
+   "angulo": 120,
+   "radio": 160,
+   "escala": 2.2,
+   "giro": 40
+  },
+  {
+   "prop": "CoralRamaNaranja",
+   "angulo": 250,
+   "radio": 172,
+   "escala": 2.2,
+   "giro": 10
+  },
+  {
+   "prop": "CoralRamaNaranja",
+   "angulo": 5,
+   "radio": 160,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "CoralCerebro",
+   "angulo": 140,
+   "radio": 166,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "CoralCerebro",
+   "angulo": 330,
+   "radio": 170,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "CoralCerebro",
+   "angulo": 200,
+   "radio": 175,
+   "escala": 1.8,
+   "giro": 0
+  },
+  {
+   "prop": "CoralAbanico",
+   "angulo": 10,
+   "radio": 178,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "CoralAbanico",
+   "angulo": 195,
+   "radio": 178,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "CoralAbanico",
+   "angulo": 270,
+   "radio": 175,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "Alga",
+   "angulo": 45,
+   "radio": 194,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "Alga",
+   "angulo": 160,
+   "radio": 194,
+   "escala": 1.8,
+   "giro": 70
+  },
+  {
+   "prop": "Alga",
+   "angulo": 275,
+   "radio": 194,
+   "escala": 2.0,
+   "giro": -40
+  },
+  {
+   "prop": "Alga",
+   "angulo": 100,
+   "radio": 194,
+   "escala": 1.8,
+   "giro": 0
+  },
+  {
+   "prop": "Alga",
+   "angulo": 340,
+   "radio": 194,
+   "escala": 1.9,
+   "giro": 0
+  }
+ ]
+}

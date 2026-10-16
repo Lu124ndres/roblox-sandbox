@@ -173,3 +173,21 @@ lugar, color y material (RodBuilder: mango, carrete y anillas; BasketBuilder: cu
 3. Studio → Importar 3D → "Mantener huesos de influencia cero". Llega mirando a -Z (sin GiroY).
    Mover el Model a `ServerStorage.MinotauroE1` y anotar los IDs en `Assets`.
 4. Se anima por código: `src/shared/Minotauro` (Rig, Pose, Trucos) y `client/Giant/MinoStand`.
+
+
+## Hábitats del volcán (props por monstruo)
+
+1. `tools/blender/habitats.py`: biblioteca común. Paleta compartida de 512x512 (celdas de 32 px,
+   `COLORES`) en `assets/textures/Habitats_color.png`, clase `Malla` (torno, tubo, caja, esfera,
+   roca, placa) y salida. 1 unidad = 1 stud, frente a +Y de Blender, origen en la base.
+2. Un archivo por hábitat (`habitats_minotauro.py`, `habitats_orca.py`, `habitats_dragon.py`,
+   `habitats_orcafantasma.py`) con `PROPS` (nombre → función que devuelve la malla, la malla
+   `Brillo` opcional y efecto/llama/colores) y `SUGERIDO` (distribución en el cráter).
+3. `python3 tools/blender/habitats_construir.py <Habitat> [render]` (Blender 5.2 como módulo,
+   o `blender -b -P ... -- <Habitat>`): exporta `assets/blender/habitats/<Habitat>.fbx` (props
+   en fila + cubo `Ancla`), `.json` y la vista previa `.png`.
+4. Studio → Importar 3D (cada FBX llega a Workspace). Ojo: el FBX llega girado 180° (+X de
+   Blender = -X de Roblox y +Y de Blender = +Z de Roblox); el armado lo corrige con el `Ancla`:
+   origen = ancla + (-dx, dz, dy) y pivote girado 180° para que el frente quede en -Z.
+   Un script por MCP arma `ServerStorage.Habitats.<GiantId>` (Model por prop, `Brillo` en Neon,
+   Attachment `Llama`, atributos y `Sugerido`) y pone la paleta (`Assets.Textures.Habitats`).

@@ -63,6 +63,11 @@ local Textures: { [string]: { string } } = {
 	PropsMapa = {
 		"rbxassetid://89441442365011",
 	},
+	-- Paleta de los hábitats del volcán (tools/blender/habitats.py): todas las MeshPart de
+	-- ServerStorage.Habitats la usan como TextureID.
+	Habitats = {
+		"rbxassetid://134456250874584",
+	},
 	-- Faro (tools/blender/faro.py): ServerStorage.PropsMapa.Faro, malla 93817126470443.
 	Faro = {
 		"rbxassetid://87535138846026",

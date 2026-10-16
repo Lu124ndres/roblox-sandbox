@@ -1,0 +1,220 @@
+{
+ "habitat": "DragonMarino",
+ "ancla": [
+  -30.0,
+  0.0,
+  0.5
+ ],
+ "props": [
+  {
+   "nombre": "Obsidiana",
+   "origen": [
+    10.975977897644043,
+    0,
+    0
+   ],
+   "tris": 368,
+   "alto": 25.5,
+   "ancho": 21.99,
+   "fondo": 22.7,
+   "brillo": "Obsidiana_Brillo",
+   "colorBrillo": [
+    255,
+    110,
+    40
+   ],
+   "trisBrillo": 316,
+   "efecto": "brillo",
+   "colorLuz": [
+    255,
+    110,
+    40
+   ],
+   "llama": [
+    0,
+    0,
+    3
+   ],
+   "colision": true
+  },
+  {
+   "nombre": "CristalLava",
+   "origen": [
+    39.283658027648926,
+    0,
+    0
+   ],
+   "tris": 20,
+   "alto": 3.18,
+   "ancho": 13.1,
+   "fondo": 12.9,
+   "brillo": "CristalLava_Brillo",
+   "colorBrillo": [
+    255,
+    100,
+    60
+   ],
+   "trisBrillo": 198,
+   "efecto": "luz",
+   "colorLuz": [
+    255,
+    90,
+    60
+   ],
+   "llama": [
+    0,
+    0,
+    9
+   ]
+  },
+  {
+   "nombre": "Nido",
+   "origen": [
+    66.55854082107544,
+    0,
+    0
+   ],
+   "tris": 960,
+   "alto": 8.3,
+   "ancho": 22.86,
+   "fondo": 22.64,
+   "colision": true
+  },
+  {
+   "nombre": "Costillar",
+   "origen": [
+    98.87906503677368,
+    0,
+    0
+   ],
+   "tris": 2732,
+   "alto": 14.5,
+   "ancho": 22.49,
+   "fondo": 58.95,
+   "colision": true
+  },
+  {
+   "nombre": "Fumarola",
+   "origen": [
+    132.30874586105347,
+    0,
+    0
+   ],
+   "tris": 260,
+   "alto": 10.0,
+   "ancho": 23.36,
+   "fondo": 20.97,
+   "brillo": "Fumarola_Brillo",
+   "colorBrillo": [
+    255,
+    110,
+    40
+   ],
+   "trisBrillo": 226,
+   "efecto": "fuego",
+   "colorLuz": [
+    255,
+    110,
+    40
+   ],
+   "llama": [
+    0,
+    0,
+    10.5
+   ]
+  }
+ ],
+ "sugerido": [
+  {
+   "prop": "Nido",
+   "angulo": 90,
+   "radio": 164,
+   "escala": 2.4,
+   "giro": 0
+  },
+  {
+   "prop": "Costillar",
+   "angulo": 240,
+   "radio": 168,
+   "escala": 1.8,
+   "giro": 95
+  },
+  {
+   "prop": "Obsidiana",
+   "angulo": 30,
+   "radio": 170,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "Obsidiana",
+   "angulo": 150,
+   "radio": 172,
+   "escala": 1.8,
+   "giro": 70
+  },
+  {
+   "prop": "Obsidiana",
+   "angulo": 310,
+   "radio": 168,
+   "escala": 2.2,
+   "giro": -40
+  },
+  {
+   "prop": "Fumarola",
+   "angulo": 0,
+   "radio": 160,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "Fumarola",
+   "angulo": 180,
+   "radio": 158,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "Fumarola",
+   "angulo": 275,
+   "radio": 172,
+   "escala": 1.8,
+   "giro": 0
+  },
+  {
+   "prop": "CristalLava",
+   "angulo": 60,
+   "radio": 196,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "CristalLava",
+   "angulo": 120,
+   "radio": 196,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "CristalLava",
+   "angulo": 200,
+   "radio": 196,
+   "escala": 2.2,
+   "giro": 0
+  },
+  {
+   "prop": "CristalLava",
+   "angulo": 345,
+   "radio": 196,
+   "escala": 2.0,
+   "giro": 0
+  },
+  {
+   "prop": "CristalLava",
+   "angulo": 280,
+   "radio": 196,
+   "escala": 1.8,
+   "giro": 0
+  }
+ ]
+}
