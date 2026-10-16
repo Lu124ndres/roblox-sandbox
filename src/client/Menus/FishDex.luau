@@ -5,8 +5,8 @@
 	Colección de peces: todas las especies (36) en una cuadrícula ordenada por
 	rareza, con pestañas por categoría (FishDexTabs). Las descubiertas
 	se ven en 3D girando, con su rareza y cuántas se han pescado; las que
-	faltan, como una silueta oscura con "???". Arriba, el avance (7/12) y el
-	premio por completarla. El botón Peces del HUD se marca cuando hay un
+	faltan, como una silueta oscura con "???". Arriba, el avance (7/36) y el
+	siguiente premio (cada 6 especies, shared/Collection; con todas, el grande). El botón Peces del HUD se marca cuando hay un
 	pez nuevo sin mirar. Los datos vienen de los atributos Pez_<id>.
 
 	Los peces solo giran con la ventana abierta (un único RenderStepped), y
@@ -18,8 +18,10 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local Collection = require(ReplicatedStorage.Shared.Collection)
 local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
+local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
@@ -83,7 +85,6 @@ function FishDex.start(screen: ScreenGui)
 	prize.AnchorPoint = Vector2.new(1, 0)
 	prize.Position = UDim2.new(1, -4, 0, 2)
 	prize.Size = UDim2.new(0.35, 0, 0, 44)
-	prizeText.Text = `+{NumberFormat.short(Config.Retention.collectionBonus)} monedas`
 	local filter = FishDexTabs.ALL
 	local grid = Instance.new("ScrollingFrame")
 	local cards: { [string]: Card } = {}
@@ -145,7 +146,18 @@ function FishDex.start(screen: ScreenGui)
 		byRarity[FishDexTabs.ALL] = found
 		tabs.counts(byRarity, totals)
 		applyFilter()
-		bar.set(found / #FISH, `Descubiertos {found} / {#FISH}`)
+		local nextStep = Collection.nextMilestone(found)
+		bar.set(
+			found / #FISH,
+			if nextStep
+				then `Descubiertos {found} / {#FISH} · premio con {nextStep}`
+				else `¡Colección completa! {found} / {#FISH}`
+		)
+		prizeText.Text = if nextStep
+			then `+{NumberFormat.short(
+				Collection.reward(player, nextStep) * Perks.coinMultiplier(player)
+			)} monedas`
+			else "¡Cobrado!"
 	end
 	local spin: RBXScriptConnection? = nil
 	window.onOpen(function()

@@ -8,8 +8,8 @@
 	del estanque x su caña (tienda). Vuelve a apretar E, se aleja o se pone a pescar en el mar y
 	deja de entrenar.
 
-	Los estanques mejores piden un mínimo de poder (Config.Progression.ponds)
-	o comprarlos con Robux; los pases y el x2 del servidor multiplican (Perks).
+	Los estanques mejores piden monstruos llenados o un mínimo de poder
+	(Config.Progression.ponds), o comprarlos con Robux; los pases y el x2 del servidor multiplican (Perks).
 	Caben todos los que quieran en el mismo estanque (servidores de 40-50):
 	cada uno lanza su corcho hacia el agua frente a él, no al mismo punto.
 	El poder hace pescar más peces y más rápido (Shared/FishingPower).
@@ -24,6 +24,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
@@ -140,11 +141,9 @@ function TrainingService.init(map: Instance)
 			if def then
 				local requirement = if def.robuxOnly
 					then "Estanque sagrado · solo con Robux"
-					elseif
-						def.requiredKills > 0
-					then `Requiere {def.requiredKills} {if def.requiredKills == 1
-						then "monstruo llenado"
-						else "monstruos llenados"}`
+					elseif def.requiredKills > 0 then `Requiere {FishingPower.pondRequirement(
+						def
+					)}`
 					else "Poder de pesca"
 				local prompt = Proximity.makePrompt(
 					descendant,

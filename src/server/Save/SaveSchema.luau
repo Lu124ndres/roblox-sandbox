@@ -45,14 +45,15 @@ export type SaveData = {
 	rebirths: number, -- veces que renació (v8, ver SaveExtra)
 	quests: SaveExtra.QuestsSave, -- misiones del día (v8)
 	starterPack: boolean, -- ya compró el pack de inicio (v8)
+	spinAt: number, -- unix en que vuelve a tocar la ruleta gratis (v9, ver SaveExtra)
 }
 
 local SaveSchema = {}
 
 -- 2: kills; 3: mejoras de la tienda; 4: tutorial, diario, ajustes, insignias;
 -- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie;
--- 8: renacer, misiones diarias, pack de inicio (SaveExtra)
-SaveSchema.VERSION = 8
+-- 8: renacer, misiones, pack de inicio; 9: ruleta gratis (los dos en SaveExtra)
+SaveSchema.VERSION = 9
 
 function SaveSchema.default(): SaveData
 	return {
@@ -79,6 +80,7 @@ function SaveSchema.default(): SaveData
 		rebirths = 0,
 		quests = SaveExtra.quests(),
 		starterPack = false,
+		spinAt = 0,
 	}
 end
 

@@ -2,16 +2,12 @@
 --[[
 	Perks
 
-	Lo que cambian las compras con Robux, leído de atributos que solo pone el
-	servidor (así servidor y cliente calculan igual y el cliente no puede
-	hacer trampa):
-		Pase_<clave> en el jugador          pases (Config.Monetization.passes)
-		Nivel<Power|Coins> en el jugador    mejoras que se acumulan (x2^nivel)
-		Estanque_<i> en el jugador          estanques comprados
-		MembershipType (Roblox Premium)     x premiumMultiplier poder y monedas
-		ReplicatedStorage.Impulsos          entrenamiento de todo el servidor (x2^nivel)
-	Lo usan el entrenamiento, el descanso, la entrega, la pesca, el premio diario,
-	los carteles de los estanques y la tienda.
+	Lo que cambian las compras con Robux y los renacimientos, leído de
+	atributos que solo pone el servidor (servidor y cliente calculan igual):
+		Pase_<clave> / Nivel<Power|Coins> / Estanque_<i>   pases, x2^nivel, estanques
+		MembershipType (Premium) / Renacimientos           x1.2 / x1.25^n poder y monedas
+		ReplicatedStorage.Impulsos                         entrenamiento del servidor (x2^nivel)
+	Lo usan el entrenamiento, el descanso, la entrega, la pesca, el diario y la tienda.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -19,6 +15,7 @@ local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local RebirthMath = require(script.Parent.RebirthMath)
 local ServerEvents = require(script.Parent.ServerEvents)
 
 local MONETIZATION = Config.Monetization
@@ -102,6 +99,7 @@ function Perks.powerMultiplier(player: Player): number
 		* personal
 		* Perks.premiumMultiplier(player)
 		* Perks.friendMultiplier(player)
+		* RebirthMath.bonusMultiplier(RebirthMath.count(player))
 		* ServerEvents.value("power", 1)
 end
 
@@ -109,6 +107,7 @@ function Perks.coinMultiplier(player: Player): number
 	return 2 ^ Perks.level(player, "Coins")
 		* Perks.premiumMultiplier(player)
 		* Perks.friendMultiplier(player)
+		* RebirthMath.bonusMultiplier(RebirthMath.count(player))
 		* ServerEvents.value("coins", 1)
 end
 
@@ -164,7 +163,7 @@ function Perks.ownsPond(player: Player, index: number): boolean
 	return player:GetAttribute(`{ATTR.PondPrefix}{index}`) == true
 end
 
--- Puede entrenar ahí: tiene el poder pedido o lo compró.
+-- Puede entrenar ahí: llenó los monstruos pedidos, tiene el poder pedido o lo compró.
 function Perks.pondOpen(player: Player, index: number): boolean
 	local pond = PONDS[index]
 	if not pond then
@@ -173,14 +172,17 @@ function Perks.pondOpen(player: Player, index: number): boolean
 	if pond.robuxOnly then
 		return Perks.ownsPond(player, index)
 	end
-	local kills = player:GetAttribute(ATTR.Kills)
+	local kills, power = player:GetAttribute(ATTR.Kills), player:GetAttribute(ATTR.Power)
 	return (type(kills) == "number" and kills >= pond.requiredKills)
+		or (type(power) == "number" and power >= pond.requiredPower)
 		or Perks.ownsPond(player, index)
 end
 
--- ¿Este atributo del jugador cambia qué estanques tiene abiertos? (poder o compra)
+-- ¿Este atributo del jugador cambia qué estanques tiene abiertos? (kills, poder o compra)
 function Perks.affectsPonds(attribute: string): boolean
-	return attribute == ATTR.Kills or string.sub(attribute, 1, #ATTR.PondPrefix) == ATTR.PondPrefix
+	return attribute == ATTR.Kills
+		or attribute == ATTR.Power
+		or string.sub(attribute, 1, #ATTR.PondPrefix) == ATTR.PondPrefix
 end
 
 -- Multiplicador del mejor estanque abierto (para el descanso del volcán).

@@ -2,9 +2,10 @@
 --[[
 	GiantCycle
 
-	Lo que pasa cuando la barra del gigante llega al 100 %:
+	Lo que pasa cuando la barra del gigante llega al 100 % (o cuando se
+	cansa de esperar: Feeding/GiantTimeout, tras cycle.maxFeedMinutes):
 		0. Kill: +1 a cada jugador que sigue conectado y le dio algo, aunque
-		   sea un pez (GiantService.getParticipants).
+		   sea un pez (GiantRewards.payKills). Si se cansó, todos ven el aviso.
 		1. Despedida (farewell): los clientes lo ven saltar, girar y
 		   sumergirse en el lago.
 		2. Descanso (rest): el volcán se vacía y la guarida queda en el fondo (RestArena)
@@ -16,7 +17,7 @@
 		   monstruo que se llenó (Orca x2, Minotauro x4, Dragón x10, Zorro x20).
 		   Se ve como en los estanques ("+N poder").
 		3. Ruleta: el que alguien eligió con Robux o, si nadie, al azar entre
-		   los gigantes con inRoulette (por ahora solo la Orca).
+		   los gigantes con inRoulette según su rouletteWeight.
 		4. Llegada (arriving): sale del agua con la barra en cero y, al
 		   terminar, se le puede volver a dar de comer (feeding).
 	Los peces que cada uno lleva en la canasta se conservan durante todo el ciclo.
@@ -27,17 +28,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
-local Perks = require(ReplicatedStorage.Shared.Perks)
-local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local GiantPublish = require(script.Parent.Feeding.GiantPublish)
+local GiantRewards = require(script.Parent.GiantRewards)
+local GiantTimeout = require(script.Parent.Feeding.GiantTimeout)
 local GiantService = require(script.Parent.GiantService)
-local PlayerData = require(script.Parent.PlayerData)
-local Quests = require(script.Parent.Retention.Quests)
-local Milestones = require(script.Parent.Retention.Milestones)
-local Proximity = require(script.Parent.Proximity)
 local RateLimit = require(script.Parent.RateLimit)
 local Remotes = require(script.Parent.Remotes)
 local RestArena = require(script.Parent.RestArena)
@@ -86,36 +82,18 @@ local function restLength(): number
 	return math.clamp(seconds, CYCLE.restMinSeconds, CYCLE.restSeconds)
 end
 
-local function restTick()
-	for _, player in Players:GetPlayers() do
-		local root = Proximity.getRoot(player)
-		if root and PlayerData.isLoaded(player) and WorldZones.isInRestArena(root.Position) then
-			local best = Perks.bestPondMultiplier(player)
-			local rod = Upgrades.current(player, "Rod").value
-			local gained = math.round(
-				TRAINING.powerPerTick
-					* best
-					* GiantService.getCurrent().multiplier
-					* rod
-					* Perks.powerMultiplier(player)
+-- Despedida, descanso y llegada del siguiente. tired = se cansó de esperar (GiantTimeout).
+local function cycle(tired: boolean)
+	local current = GiantService.getCurrent()
+	local paid = GiantRewards.payKills(current.id) -- +1 kill a los que le dieron algo
+	if tired then
+		for _, player in Players:GetPlayers() do
+			Remotes.Notice:FireClient(
+				player,
+				"giantLeft",
+				current.displayName,
+				paid[player.UserId] == true
 			)
-			PlayerData.addPower(player, gained)
-			Remotes.TrainingTick:FireClient(player, gained)
-			Quests.add(player, "train", TRAINING.tickSeconds)
-		end
-	end
-end
-
--- Despedida, descanso y llegada del siguiente.
-local function cycle()
-	-- +1 kill a los que aportaron lo suficiente y siguen en el servidor.
-	local giantId = GiantService.getCurrent().id
-	for _, userId in GiantService.getParticipants() do
-		local player = Players:GetPlayerByUserId(userId)
-		if player then
-			PlayerData.addKill(player, giantId)
-			Milestones.killed(player)
-			Quests.add(player, "kill", 1)
 		end
 	end
 	GiantService.setPhase("farewell", CYCLE.farewellSeconds)
@@ -128,7 +106,7 @@ local function cycle()
 	skipRest = false
 	while os.clock() < finish and not skipRest do
 		task.wait(TRAINING.tickSeconds)
-		restTick()
+		GiantRewards.restTick()
 		local extra = RestTime.take() -- descanso comprado con Robux (RestTime)
 		if extra > 0 then
 			finish += extra
@@ -152,12 +130,12 @@ end
 
 -- Si algo falla a mitad del ciclo, el servidor no puede quedar sin monstruo:
 -- se trae el siguiente y se vuelve a comer.
-local function run()
+local function run(tired: boolean?)
 	if running then
 		return
 	end
 	running = true
-	local ok, problem: any = pcall(cycle)
+	local ok, problem: any = pcall(cycle, tired == true)
 	if not ok then
 		warn(`GiantCycle: falló el ciclo ({problem}); se trae el siguiente monstruo`)
 		pcall(RestArena.hide)
@@ -189,6 +167,9 @@ function GiantCycle.init(map: Instance)
 		end)
 	)
 	GiantService.onFilled(run)
+	GiantTimeout.start(function()
+		run(true)
+	end)
 end
 
 return GiantCycle

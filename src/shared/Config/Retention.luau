@@ -6,7 +6,8 @@
 	final se paga `tutorialBonus` (alcanza para la segunda caña).
 
 	Colección: la primera vez que se pesca cada especie paga según su rareza;
-	completar todas (36) paga `collectionBonus`.
+	cada `collectionMilestone.every` especies hay un premio extra y completar
+	todas (36) paga `collectionBonus`.
 
 	Diario: racha de 7 días; si se salta un día vuelve al día 1. Después del
 	día 7 se repite el premio del día 7.
@@ -40,10 +41,13 @@ local Retention: Types.RetentionConfig = {
 		Mitico = 25000,
 	},
 	collectionBonus = 250000,
+	-- Cada 6 especies nuevas: lo mayor entre 1,500 x hito (1.5K, 3K, 4.5K...) y
+	-- 0.4 de la siguiente caña (shared/Collection). Al llegar a 36 paga collectionBonus.
+	collectionMilestone = { every = 6, coins = 1500, share = 0.4 },
 	-- Monedas fijas al principio; cuando el juego avanza, una fracción del precio
 	-- de la siguiente caña (shared/RewardScale): siempre valen la pena.
 	daily = { 100, 200, 350, 500, 800, 1200, 2500 },
-	dailyShare = { 0.05, 0.08, 0.12, 0.16, 0.22, 0.3, 0.6 },
+	dailyShare = { 0.05, 0.08, 0.12, 0.16, 0.22, 0.3, 0.4 },
 	playtime = {
 		{ minutes = 5, coins = 500, share = 0.15 },
 		{ minutes = 10, boostMinutes = 10 },
@@ -52,7 +56,7 @@ local Retention: Types.RetentionConfig = {
 		{ minutes = 45, coins = 10000, share = 0.8 },
 		{ minutes = 60, coins = 5000, share = 0.6, boostMinutes = 30 },
 		{ minutes = 90, coins = 40000, share = 1.5 },
-		{ minutes = 120, coins = 100000, share = 3, boostMinutes = 60 },
+		{ minutes = 120, coins = 100000, share = 1.5, boostMinutes = 60 },
 	},
 	badges = {
 		PrimerPez = { name = "Primer pez", description = "Pescaste tu primer pez" },

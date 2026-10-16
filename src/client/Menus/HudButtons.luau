@@ -25,7 +25,7 @@ local SIDE_SIZE = Layout.BUTTON_SIZE
 local TOP_DARK = Color3.fromRGB(28, 30, 38)
 -- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
 local TOP_ORDER: { [string]: number } =
-	{ Premio = 1, Peces = 2, ["Códigos"] = 3, Grupo = 4, Ajustes = 5, Admin = 6 }
+	{ Ruleta = 1, Premio = 2, Peces = 3, ["Códigos"] = 4, Grupo = 5, Ajustes = 6, Admin = 7 }
 
 export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
 

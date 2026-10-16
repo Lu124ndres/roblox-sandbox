@@ -2,16 +2,19 @@
 --[[
 	Gigantes: la cadena del servidor, cuánta comida piden y cuánto miden.
 
-	Comida para llenar la barra: FIJA (food), no cambia con los jugadores, y
-	escalonada como las pirámides de «Construye la Pirámide» (Básica → Gema):
-	Orca 500K, Minotauro 2.5M, Orca fantasma 5M, Dragón 12M, Zorro 50M. Con
-	el poder como fuerza (shared/FishingPower), un novato lleva ~1-4K de comida
-	por viaje y uno con 1B de poder ~1.4M: la Orca es difícil solo con
-	novatos y rápida con un par de fuertes; el Zorro necesita un servidor fuerte.
-	Kill: para todos los que le dieron algo (con un pez basta; Feeding/Contributions).
+	Comida para llenar la barra: se calcula al llegar cada monstruo según
+	quiénes están en el servidor (server/Feeding/GiantFood): lo que el
+	servidor come por segundo (cada jugador según su canasta, su poder y sus
+	renacimientos, x sizing.activeShare) por targetMinutes. Así tarda lo
+	mismo con 1 novato que con 40 fuertes: Orca ~6 min, Minotauro ~10, Orca
+	fantasma ~10, Dragón ~15, Zorro ~25. `food` es el mínimo (servidor vacío).
+	Si no se llena en cycle.maxFeedMinutes, se cansa y se va: la kill es igual
+	para todos los que le dieron algo (con un pez basta; Feeding/Contributions).
 
 	delivery: se alimenta manteniendo E: fishPerSecond peces por segundo sin
-	renacer (x Rebirth.feedGrowth por renacimiento), en pasos de stepSeconds.
+	renacer (x Rebirth.feedGrowth por renacimiento) o, si es más rápido, la
+	canasta llena en basketSeconds (RebirthMath.deliveryPerSecond), en pasos
+	de stepSeconds.
 	Tope por persona: nunca más de 1/minSoloSeconds de la barra por segundo
 	(una sola persona tarda al menos 5 min; varios, menos). Los lotes se
 	anuncian a los clientes y el progreso se publica a lo sumo cada broadcastSeconds.
@@ -45,7 +48,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca",
 			article = "la",
 			multiplier = 2,
-			food = 500000,
+			food = 400, -- mínimo
+			targetMinutes = 6,
 			modelBase = "Orca",
 			rouletteWeight = 50,
 			released = true,
@@ -56,7 +60,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Minotauro",
 			article = "el",
 			multiplier = 4,
-			food = 2500000,
+			food = 600,
+			targetMinutes = 10,
 			modelBase = "Minotauro",
 			rouletteWeight = 30,
 			released = true,
@@ -67,7 +72,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Dragón marino",
 			article = "el",
 			multiplier = 10,
-			food = 12000000,
+			food = 900,
+			targetMinutes = 15,
 			modelBase = "DragonMarino",
 			rouletteWeight = 15,
 			released = true,
@@ -79,7 +85,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Zorro de agua",
 			article = "el",
 			multiplier = 20,
-			food = 50000000,
+			food = 1500,
+			targetMinutes = 25,
 			modelBase = "ZorroDeAgua",
 			rouletteWeight = 5,
 			released = false,
@@ -91,7 +98,8 @@ local Giants: Types.GiantsConfig = {
 			displayName = "Orca fantasma",
 			article = "la",
 			multiplier = 6,
-			food = 5000000,
+			food = 600,
+			targetMinutes = 10,
 			modelBase = "OrcaFantasma",
 			rouletteWeight = 35,
 			released = true,
@@ -127,12 +135,19 @@ local Giants: Types.GiantsConfig = {
 		rouletteSeconds = 6,
 		drainSeconds = 8, -- el agua del volcán baja hasta el fondo al empezar el descanso
 		refillSeconds = 6, -- y vuelve a subir con el siguiente monstruo
+		maxFeedMinutes = 20, -- si no se llena en esto, se va (y paga la kill igual)
 	},
 	delivery = {
 		stepSeconds = 0.25,
 		fishPerSecond = 3, -- un pez cada 0.33 s sin renacer
 		minSoloSeconds = 300, -- una persona sola tarda al menos esto en llenar un monstruo
 		broadcastSeconds = 0.25,
+		basketSeconds = 8, -- una canasta llena se vacía en 8 s como mucho
+	},
+	sizing = {
+		activeShare = 0.6, -- el resto del tiempo entrena, compra o pasea
+		castOverheadSeconds = 1.6, -- lanzar + recoger (~1 s) + volver a lanzar
+		tripSeconds = 12, -- orilla -> volcán -> orilla (el puente lleva rápido)
 	},
 }
 

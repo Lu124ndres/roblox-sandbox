@@ -4,7 +4,8 @@
 
 	Renacer (botón RENACER de la columna derecha) con el estilo de la TIENDA:
 	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada, con "+N%"),
-	con los peces por segundo al alimentar (lo único que da renacer); las
+	con los peces por segundo al alimentar y el bono para siempre de monedas
+	y poder (x1.25 por renacimiento, RebirthMath.bonusMultiplier); las
 	barras con ícono de monedas y poder que pide (verdes al alcanzar); qué se
 	reinicia (roja) y qué te quedas (verde) con íconos; y el botón grande,
 	que late cuando ya alcanza (piezas en RebirthParts). El botón del HUD
@@ -45,8 +46,9 @@ function RebirthWindow.start(screen: ScreenGui)
 	local hud = HudButtons.side("Renacer", "arrow", window.toggle)
 	local content = window.content
 
-	local nowValue = RebirthParts.speedCard(content, "AHORA", CARDS.Blue, 0.04)
-	local afterValue, gain = RebirthParts.speedCard(content, "AL RENACER", CARDS.Yellow, 0.56)
+	local nowValue, _, nowNote = RebirthParts.speedCard(content, "AHORA", CARDS.Blue, 0.04)
+	local afterValue, gain, afterNote =
+		RebirthParts.speedCard(content, "AL RENACER", CARDS.Yellow, 0.56)
 	local arrow = Icons.view(content, "arrow")
 	arrow.AnchorPoint = Vector2.new(0.5, 0.5)
 	arrow.Position = UDim2.new(0.5, 0, 0, 69)
@@ -89,6 +91,8 @@ function RebirthWindow.start(screen: ScreenGui)
 		local strength = if type(power) == "number" then power else 0
 		nowValue.Text = speedText(rebirths)
 		afterValue.Text = speedText(rebirths + 1)
+		nowNote.Text = `peces/s · {RebirthMath.bonusText(rebirths)} monedas y poder`
+		afterNote.Text = `peces/s · {RebirthMath.bonusText(rebirths + 1)} monedas y poder`
 		local before, after =
 			RebirthMath.fishPerSecond(rebirths), RebirthMath.fishPerSecond(rebirths + 1)
 		gain.Visible = after > before

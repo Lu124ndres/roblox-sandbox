@@ -7,7 +7,7 @@
 	Progress con freno, al instante al cruzar una etapa o llenarse).
 
 	El hambre es un progreso (0..1): cada lote avanza comida / total. El total
-	(atributo Food) es la comida fija de cada gigante (Config). Lo comido se anuncia
+	(atributo Food) se calcula al llegar según el servidor (Feeding/GiantFood). Lo comido se anuncia
 	por lotes (Feeding/FedBroadcast) y se anota por jugador (Contributions).
 ]]
 
@@ -19,6 +19,7 @@ local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Contributions = require(script.Parent.Feeding.Contributions)
 local FedBroadcast = require(script.Parent.Feeding.FedBroadcast)
+local GiantFood = require(script.Parent.Feeding.GiantFood)
 local GiantAnger = require(script.Parent.Feeding.GiantAnger)
 local GiantPublish = require(script.Parent.Feeding.GiantPublish)
 
@@ -52,10 +53,7 @@ end
 
 function GiantService.init(map: Instance)
 	local anchor = map:FindFirstChild(Protocol.Map.GiantAnchor, true)
-	assert(
-		anchor and anchor:IsA("BasePart"),
-		"GiantService: falta la guarida del gigante en el mapa"
-	)
+	assert(anchor and anchor:IsA("BasePart"), "GiantService: falta la guarida")
 	center = anchor.Position
 	currentDef = GIANTS.chain[1]
 	progress = 0
@@ -71,6 +69,11 @@ end
 -- Centro de la laguna: FeedingService valida distancias contra este punto.
 function GiantService.getCenter(): Vector3
 	return center
+end
+
+-- Comida total que pide la barra del monstruo actual.
+function GiantService.getFood(): number
+	return totalFood
 end
 
 function GiantService.isFull(): boolean
@@ -114,12 +117,11 @@ function GiantService.onFilled(listener: () -> ())
 	table.insert(filledListeners, listener)
 end
 
--- Llega un gigante nuevo (o vuelve el mismo) con su comida fija y la barra en cero
--- (o al inicio de la etapa `stage`: el panel admin lo pone directo en esa etapa).
+-- Llega un gigante con su comida (GiantFood) y la barra en cero (o en la etapa `stage`: admin).
 function GiantService.reset(def: Config.GiantDef, stage: number?)
 	currentDef = def
 	progress = GIANTS.stageThresholds[stage or 1] or 0
-	totalFood = def.food
+	totalFood = GiantFood.forGiant(def)
 	evolvingUntil = 0
 	GiantAnger.calm()
 	Contributions.reset()
@@ -131,8 +133,7 @@ function GiantService.getParticipants(): { number }
 	return Contributions.participants()
 end
 
--- Enojo (GiantMood lo decide; ver Feeding/GiantAnger). calm = enojo a cero y
--- la cuenta del hambre empieza de nuevo (servidor vacío, gigante lleno, comió).
+-- Enojo (GiantMood lo decide; Feeding/GiantAnger). calm = enojo a cero y hambre de nuevo.
 GiantService.getAnger = GiantAnger.get
 GiantService.setAnger = GiantAnger.set
 GiantService.calm = GiantAnger.calm
@@ -173,8 +174,7 @@ function GiantService.feed(food: number, feeder: Player, count: number, fishId: 
 	advance(food / totalFood, feeder.UserId, food, true)
 end
 
--- Compra con Robux: llena esa parte de la barra de una vez (1 = entero).
--- Devuelve false si ahora no está comiendo (GiantFill lo deja para después).
+-- Robux o ruleta: llena esa parte de la barra (false si no come; GiantFill espera).
 function GiantService.fill(fraction: number, buyer: Player): boolean
 	if fraction <= 0 or not GiantService.isFeeding() then
 		return false

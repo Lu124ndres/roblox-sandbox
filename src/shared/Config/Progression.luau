@@ -2,10 +2,12 @@
 --[[
 	Progresión: estanques de entrenamiento y poder de pesca.
 
-	En un estanque se entrena sin hacer nada (AFK): cada segundo suma
-	powerPerTick x multiplicador del estanque. Los mejores estanques piden un
-	mínimo de poder. Valores propuestos, a ajustar: con el estanque anterior,
-	desbloquear el siguiente toma de 2.5 a ~100 minutos (~5.5 h en total).
+	En un estanque se entrena sin hacer nada (AFK): cada tick suma
+	powerPerTick x multiplicador del estanque x caña. Cada estanque se abre
+	con monstruos llenados (requiredKills, para siempre) O con poder
+	(requiredPower; el poder se reinicia al renacer, las kills no). Con la
+	caña al día, entrenar en el anterior lleva ~10-25 min hasta el poder del
+	siguiente; con kills, un monstruo sale cada ~6-25 min.
 
 	El poder es la FUERZA (como en «Construye la Pirámide»): cuántos peces
 	cargas (fórmulas en Shared/FishingPower):
@@ -21,22 +23,23 @@ local Types = require(script.Parent.Types)
 
 local Progression: Types.ProgressionConfig = {
 	ponds = {
-		{ multiplier = 1, requiredKills = 0 },
-		{ multiplier = 2, requiredKills = 1 },
-		{ multiplier = 3, requiredKills = 2 },
-		{ multiplier = 5, requiredKills = 4 },
-		{ multiplier = 8, requiredKills = 7 },
-		{ multiplier = 12, requiredKills = 12 },
-		{ multiplier = 20, requiredKills = 20 },
-		{ multiplier = 35, requiredKills = 35 },
-		{ multiplier = 60, requiredKills = 60 },
-		{ multiplier = 100, requiredKills = 100 },
-		{ multiplier = 250, requiredKills = 0, robuxOnly = true }, -- sagrado, en el centro
+		{ multiplier = 1, requiredKills = 0, requiredPower = 0 },
+		{ multiplier = 2, requiredKills = 1, requiredPower = 2000 },
+		{ multiplier = 3, requiredKills = 2, requiredPower = 8000 },
+		{ multiplier = 5, requiredKills = 3, requiredPower = 25000 },
+		{ multiplier = 8, requiredKills = 5, requiredPower = 75000 },
+		{ multiplier = 12, requiredKills = 8, requiredPower = 200000 },
+		{ multiplier = 20, requiredKills = 12, requiredPower = 600000 },
+		{ multiplier = 35, requiredKills = 18, requiredPower = 2000000 },
+		{ multiplier = 60, requiredKills = 25, requiredPower = 6000000 },
+		{ multiplier = 100, requiredKills = 35, requiredPower = 20000000 },
+		{ multiplier = 250, requiredKills = 0, requiredPower = 0, robuxOnly = true }, -- sagrado, en el centro
 	},
 	biteSpeedDivisor = 40,
 	capacityPerRoot = 2,
 	castsToFill = { start = 16, perRod = 0.5, min = 6 },
 	minBiteDelaySeconds = 0.4,
+	coinScale = { step = 1000, exponent = 0.5 }, -- canasta llena: 20 x (1 + sqrt(poder / 1000)) peces pagados
 }
 
 return Progression

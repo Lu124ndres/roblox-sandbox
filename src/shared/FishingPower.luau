@@ -13,18 +13,20 @@
 		velocidad       = 1 + sqrt(poder) / biteSpeedDivisor
 		espera de pique = espera base / velocidad (nunca menos de minBiteDelaySeconds)
 
-	coinScale: cada pez paga menos cuanto más cargas, para que una canasta
-	llena pague lo mismo que con la fórmula vieja (raíz cuarta) y los precios
-	de la tienda sigan sirviendo. La comida de los monstruos sí crece.
+	coinScale: cada pez paga menos cuanto más cargas: una canasta llena paga
+	como carryCapacity x (1 + (poder / step)^exponent) peces (Config
+	Progression.coinScale, raíz cuadrada), así pescar con más poder paga más
+	sin que los precios de la tienda se rompan. La comida sí crece entera.
 ]]
 
 local Config = require(script.Parent.Config)
+local NumberFormat = require(script.Parent.NumberFormat)
 local Upgrades = require(script.Parent.Upgrades)
 
 local PROGRESSION = Config.Progression
 local FISHING = Config.Gameplay.fishing
 local CASTS = PROGRESSION.castsToFill
-local LEGACY_STEP, LEGACY_EXPONENT = 1000, 0.25 -- fórmula vieja: solo para coinScale
+local COIN_SCALE = PROGRESSION.coinScale -- canasta llena = carryCapacity x (1 + (poder/step)^exponent)
 
 local FishingPower = {}
 
@@ -73,10 +75,10 @@ function FishingPower.playerFishPerCatch(player: Player): number
 	)
 end
 
--- Cuánto paga cada pez (0..1): una canasta llena paga como con la fórmula vieja.
+-- Cuánto paga cada pez (0..1): una canasta llena paga como carryCapacity x paidPerFish.
 function FishingPower.coinScale(power: number): number
-	local legacyPerCatch = 1 + math.floor((math.max(0, power) / LEGACY_STEP) ^ LEGACY_EXPONENT)
-	return math.min(1, FISHING.carryCapacity * legacyPerCatch / FishingPower.capacity(power))
+	local paidPerFish = 1 + math.floor((math.max(0, power) / COIN_SCALE.step) ^ COIN_SCALE.exponent)
+	return math.min(1, FISHING.carryCapacity * paidPerFish / FishingPower.capacity(power))
 end
 
 -- Espera hasta el pique para una tirada base (en segundos) de la tabla.
@@ -84,15 +86,26 @@ function FishingPower.biteDelay(baseSeconds: number, power: number): number
 	return math.max(PROGRESSION.minBiteDelaySeconds, baseSeconds / FishingPower.speed(power))
 end
 
--- Multiplicador del mejor estanque que se abre con `kills` monstruos llenados.
-function FishingPower.bestPondMultiplier(kills: number): number
+-- Multiplicador del mejor estanque que se abre con `kills` monstruos llenados o `power`.
+function FishingPower.bestPondMultiplier(kills: number, power: number): number
 	local best = 1
 	for _, pond in PROGRESSION.ponds do
-		if kills >= pond.requiredKills then
+		if not pond.robuxOnly and (kills >= pond.requiredKills or power >= pond.requiredPower) then
 			best = math.max(best, pond.multiplier)
 		end
 	end
 	return best
+end
+
+-- Qué pide un estanque: "3 monstruos o 25K de poder" (short: "3 kills o 25K poder").
+function FishingPower.pondRequirement(pond: Config.PondDef, short: boolean?): string
+	local power = NumberFormat.short(pond.requiredPower)
+	if short then
+		return `{pond.requiredKills} kills o {power} poder`
+	end
+	local kills =
+		`{pond.requiredKills} {if pond.requiredKills == 1 then "monstruo" else "monstruos"}`
+	return `{kills} o {power} de poder`
 end
 
 return FishingPower

@@ -98,9 +98,13 @@ function PondFx.start()
 	local map = Workspace:WaitForChild(Protocol.Map.Root)
 	local ponds = collect(map)
 
-	local function refreshLocks()
+	-- force: pintar todo (al empezar); si no, solo los que cambiaron (el poder sube cada tick).
+	local function refreshLocks(force: boolean?)
 		for _, pond in ponds do
 			local open = Perks.pondOpen(player, pond.index)
+			if not force and open == pond.open then
+				continue
+			end
 			pond.crystal.Color = pond.color
 			pond.crystal.Material = if open then Enum.Material.Neon else LOCKED_MATERIAL
 			pond.open = open
@@ -116,7 +120,7 @@ function PondFx.start()
 			refreshLocks()
 		end
 	end)
-	refreshLocks()
+	refreshLocks(true)
 
 	RunService.RenderStepped:Connect(function()
 		local camera = Workspace.CurrentCamera

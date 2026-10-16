@@ -12,6 +12,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
@@ -60,7 +61,7 @@ function TrainingController.start(toasts: Toasts.Toasts)
 		end
 	end)
 
-	denied.OnClientEvent:Connect(function(status: unknown, required: unknown, pond: unknown)
+	denied.OnClientEvent:Connect(function(status: unknown, _required: unknown, pond: unknown)
 		local def = if type(pond) == "number" then Config.Progression.ponds[pond] else nil
 		if status == "locked" and def and def.robuxOnly then
 			toasts.show(
@@ -68,9 +69,9 @@ function TrainingController.start(toasts: Toasts.Toasts)
 				COLORS.Warning
 			)
 			Purchases.promptProduct(`Pond{pond}`)
-		elseif status == "locked" and type(required) == "number" then
+		elseif status == "locked" and def then
 			toasts.show(
-				`Llena {required} {if required == 1 then "monstruo" else "monstruos"} para abrirlo, o desbloquéalo con Robux`,
+				`Ábrelo con {FishingPower.pondRequirement(def)}, o desbloquéalo con Robux`,
 				COLORS.Warning
 			)
 			if type(pond) == "number" then

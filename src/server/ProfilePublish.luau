@@ -137,6 +137,7 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.Rebirths, save.rebirths)
 	stat(player, Protocol.Leaderstats.Rebirths, save.rebirths)
 	player:SetAttribute(ATTR.StarterPack, save.starterPack)
+	player:SetAttribute(ATTR.SpinAt, save.spinAt)
 	for key, level in save.levels do
 		player:SetAttribute(`{ATTR.LevelPrefix}{key}`, level)
 	end

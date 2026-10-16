@@ -4,13 +4,14 @@
 
 	Punto único al que los servicios del juego avisan lo que hace cada
 	jugador (pescó, alimentó, entrenó, compró, llenó a un monstruo). Desde
-	aquí se reparte a lo que le interesa: tutorial, colección de peces y
-	logros. Así la pesca o la tienda no necesitan saber de la retención.
+	aquí se reparte a lo que le interesa: tutorial, colección de peces (y sus
+	hitos cada 6 especies, shared/Collection) y logros. Así la pesca o la tienda no necesitan saber de la retención.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Collection = require(ReplicatedStorage.Shared.Collection)
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
@@ -46,14 +47,22 @@ function Milestones.caught(player: Player, fishId: string, added: number, firstT
 	if not save then
 		return
 	end
+	local found = 0
 	for _, fish in Config.Economy.fish do
-		if (save.species[fish.id] or 0) == 0 then
-			return
-		end
+		found += if (save.species[fish.id] or 0) > 0 then 1 else 0
 	end
-	PlayerData.addCoins(player, RETENTION.collectionBonus)
-	Remotes.Notice:FireClient(player, "collection", RETENTION.collectionBonus)
-	Badges.award(player, "Coleccion")
+	if not Collection.isMilestone(found) then
+		return
+	end
+	-- Hito de la colección (cada 6 especies) o la colección completa.
+	local prize = math.floor(Collection.reward(player, found) * Perks.coinMultiplier(player))
+	PlayerData.addCoins(player, prize)
+	if found >= Collection.total then
+		Remotes.Notice:FireClient(player, "collection", prize)
+		Badges.award(player, "Coleccion")
+	else
+		Remotes.Notice:FireClient(player, "collectionStep", found, prize)
+	end
 end
 
 function Milestones.fed(player: Player, fishCount: number)

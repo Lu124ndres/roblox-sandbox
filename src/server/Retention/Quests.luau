@@ -6,9 +6,11 @@
 	de la lista, iguales para todos (sorteadas con el día como semilla). El
 	avance vive en el guardado (save.quests, SaveExtra) y se reinicia al
 	cambiar el día. Los sistemas avisan con Quests.add(jugador, tipo,
-	cantidad); al llegar a la meta se paga sola (monedas x su multiplicador
-	de monedas e impulso de poder) y, con las tres, el cofre. El cliente ve
-	todo en el atributo Misiones (JSON), que se publica a lo sumo cada segundo.
+	cantidad); al llegar a la meta se paga sola (monedas x RewardScale, sin el
+	multiplicador de monedas de Robux, e impulso de poder) y, con las tres,
+	el cofre. Además sale una EXTRA (QUESTS.extra, llenar monstruos) que paga
+	igual pero el cofre no la pide: se puede jugar solo. El cliente ve todo en
+	el atributo Misiones (JSON), que se publica a lo sumo cada segundo.
 ]]
 
 local HttpService = game:GetService("HttpService")
@@ -17,7 +19,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local QUESTS = require(ReplicatedStorage.Shared.Config.Quests)
-local Perks = require(ReplicatedStorage.Shared.Perks)
 local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local SaveExtra = require(script.Parent.Parent.Save.SaveExtra)
@@ -35,7 +36,8 @@ local function today(): number
 	return os.time() // 86400
 end
 
--- Las misiones de un día: las mismas para todos.
+-- Las misiones de un día (las mismas para todos): perDay de la lista y, al
+-- final, una extra que no cuenta para el cofre (índice > perDay).
 local function todays(day: number): { QUESTS.QuestDef }
 	local pool = table.clone(QUESTS.pool)
 	local rng = Random.new(day * 7919 + 13)
@@ -43,7 +45,15 @@ local function todays(day: number): { QUESTS.QuestDef }
 		local other = rng:NextInteger(1, index)
 		pool[index], pool[other] = pool[other], pool[index]
 	end
-	return { table.unpack(pool, 1, math.min(QUESTS.perDay, #pool)) }
+	local list = { table.unpack(pool, 1, math.min(QUESTS.perDay, #pool)) }
+	if #QUESTS.extra > 0 then
+		table.insert(list, QUESTS.extra[rng:NextInteger(1, #QUESTS.extra)])
+	end
+	return list
+end
+
+local function coinsFor(player: Player, coins: number): number
+	return math.floor(coins * RewardScale.of(player))
 end
 
 local function ensure(save: any)
@@ -55,7 +65,7 @@ end
 
 local function pay(player: Player, title: string, coins: number, boostMinutes: number?)
 	local reward = {
-		coins = math.floor(coins * Perks.coinMultiplier(player) * RewardScale.of(player)),
+		coins = coinsFor(player, coins),
 		boostMinutes = boostMinutes,
 	}
 	Rewards.give(player, reward)
@@ -85,8 +95,8 @@ function Quests.add(player: Player, kind: string, amount: number)
 	end
 	if not state.bonus then
 		local all = true
-		for _, quest in list do
-			all = all and state.done[quest.id] == true
+		for index, quest in list do
+			all = all and (index > QUESTS.perDay or state.done[quest.id] == true)
 		end
 		if all then
 			state.bonus = true
@@ -102,20 +112,26 @@ local function publish(player: Player)
 	end
 	ensure(save)
 	local list = {}
-	for _, quest in todays(save.quests.day) do
+	for index, quest in todays(save.quests.day) do
 		table.insert(list, {
 			text = quest.text,
 			kind = quest.kind,
 			progress = save.quests.progress[quest.id] or 0,
 			goal = quest.goal,
 			done = save.quests.done[quest.id] == true,
-			coins = math.floor(quest.coins * Perks.coinMultiplier(player) * RewardScale.of(player)),
+			coins = coinsFor(player, quest.coins),
 			boost = quest.boostMinutes or 0,
+			extra = index > QUESTS.perDay,
 		})
 	end
 	player:SetAttribute(
 		Protocol.PlayerAttributes.Quests,
-		HttpService:JSONEncode({ day = save.quests.day, list = list, bonus = save.quests.bonus })
+		HttpService:JSONEncode({
+			day = save.quests.day,
+			list = list,
+			bonus = save.quests.bonus,
+			bonusCoins = coinsFor(player, QUESTS.bonus.coins),
+		})
 	)
 end
 

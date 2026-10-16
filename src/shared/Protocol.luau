@@ -22,6 +22,9 @@ export type UpgradeCategory = "Rod" | "Basket" | "Boots"
 export type NoticeKind =
 	"newFish" -- (fishId, coins) primera vez que pesca esa especie
 	| "collection" -- (coins) completó la colección
+	| "collectionStep" -- (found, coins) llegó a un hito de la colección (cada 6 especies)
+	| "giantLeft" -- (displayName, gotKill) el monstruo se cansó de esperar y se fue
+	| "spin" -- (prizeIndex, text) giró la ruleta gratis (Config/Spin)
 	| "tutorial" -- (stepIndex, coins) completó un paso; stepIndex > total = terminó
 	| "badge" -- (badgeKey) logro nuevo
 	| "daily" -- (day, coins) cobró la recompensa diaria
@@ -44,6 +47,8 @@ export type ShopStatus = "ok" | "poor" | "max" | "invalid"
 export type GiantFedEntry = { userId: number, count: number, fishId: string }
 -- Momento del ciclo del gigante (atributo Phase de EstadoGigante).
 export type GiantPhase = "feeding" | "farewell" | "rest" | "arriving"
+
+local ProtocolMap = require(script.Parent.ProtocolMap)
 
 local Protocol = {
 	RemotesFolder = "Remotes",
@@ -86,6 +91,7 @@ local Protocol = {
 		SaveSettings = "SaveSettings",
 		RedeemCode = "RedeemCode", -- cliente -> servidor: (code: string) canjear un código
 		ClaimGroup = "ClaimGroup", -- cliente -> servidor: reclamar el regalo del grupo
+		ClaimSpin = "ClaimSpin", -- cliente -> servidor: girar la ruleta gratis (si ya toca)
 		ChooseOutfit = "ElegirTraje", -- cliente -> servidor: (passKey) ponerse/quitarse ese traje
 		-- cliente -> servidor: (productKey: string, targetUserId: number). La próxima
 		-- compra de ese producto (en 2 min) es un regalo para ese jugador.
@@ -173,6 +179,7 @@ local Protocol = {
 		BoostUntil = "ImpulsoHasta", -- hora (unix) en que termina el impulso personal de poder
 		GroupClaimed = "GrupoReclamado", -- ya reclamó el regalo del grupo
 		JoinedAt = "EntroEn", -- GetServerTimeNow() al entrar (para los 15 min del grupo)
+		SpinAt = "RuletaListaEn", -- unix en que vuelve a tocar la ruleta gratis (0 = ya)
 	},
 
 	Leaderstats = { -- tabla de jugadores (Tab), en este orden
@@ -182,19 +189,7 @@ local Protocol = {
 		Rebirths = "Renacimientos",
 	},
 
-	-- Piezas de world/Isla.model.json que el código busca por nombre.
-	Map = {
-		Root = "Isla",
-		ShopCounter = "Mostrador", -- mostrador de la cabaña: ahí se abre la tienda (E)
-		Lighthouse = "Faro",
-		LighthouseBeam = "Haz",
-		TrainingPond = "Estanque", -- pieza del estanque; atributo "Indice" = 1..N
-		PondIndexAttribute = "Indice",
-		GiantAnchor = "GuaridaGigante",
-		RestArena = "GuaridaDescanso", -- modelo en ServerStorage: la plataforma del descanso
-		Buoys = "Boyas",
-		Foam = "Espuma",
-	},
+	Map = ProtocolMap, -- piezas del mapa que el código busca por nombre (ProtocolMap)
 }
 
 return table.freeze(Protocol)

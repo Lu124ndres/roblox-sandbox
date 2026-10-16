@@ -10,8 +10,9 @@
 		Basket  multiplica la capacidad de la canasta.
 		Boots   velocidad al caminar (la normal de Roblox es 16).
 
-	Precios propuestos: un jugador nuevo gana ~37 monedas/min con la Orca; la
-	segunda caña llega en ~4 min y cada nivel cuesta 3-5 veces el anterior.
+	Precios: un jugador nuevo gana ~200 monedas/min pescando con la Orca (más
+	con poder, canasta y monstruos mejores; ver docs/balance.md); la segunda
+	caña llega en el primer minuto y cada nivel cuesta 2.5-4 veces el anterior.
 ]]
 
 local Types = require(script.Parent.Types)

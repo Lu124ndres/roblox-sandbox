@@ -4,6 +4,7 @@
 	los usen sin requerir init.luau, que es quien las junta.
 ]]
 
+local GiantTypes = require(script.Parent.GiantTypes)
 local Monetization = require(script.Parent.Monetization)
 local Social = require(script.Parent.Social)
 
@@ -23,24 +24,11 @@ export type FishDef = {
 	coins: number, -- monedas base; se multiplican por el gigante actual
 }
 
--- Un gigante de la cadena del servidor.
-export type GiantDef = {
-	id: string,
-	displayName: string,
-	article: string, -- "la" o "el": para textos como "alimenta a la Orca"
-	multiplier: number, -- monedas por pez = fish.coins * multiplier
-	food: number, -- comida para llenar la barra (fija)
-	modelBase: string, -- nombre base de sus modelos: <base>E1..E4 en ServerStorage (uno por etapa)
-	released: boolean, -- false = llega en una actualización (evento), no en la v1
-	rouletteWeight: number, -- peso en la ruleta (probabilidad = peso / suma de los que pueden salir)
-	inRoulette: boolean, -- puede salir en la ruleta al terminar el descanso (requiere su modelo)
-	season: { from: number, to: number }?, -- de evento: solo sale entre esas fechas (unix UTC)
-	lava: boolean?, -- con él el cráter se llena de lava en vez de agua (vuela: el dragón)
-}
 -- Un estanque de la zona de entrenamiento.
 export type PondDef = {
 	multiplier: number, -- poder por segundo = powerPerTick * multiplier
-	requiredKills: number, -- monstruos llenados (kills) para usarlo
+	requiredKills: number, -- monstruos llenados (kills) para usarlo...
+	requiredPower: number, -- ...o este poder de pesca (lo que llegue primero)
 	robuxOnly: boolean?, -- solo se abre comprándolo (el estanque sagrado del centro)
 }
 
@@ -83,51 +71,8 @@ export type GameplayConfig = {
 	training: TrainingConfig,
 }
 
-export type AngerConfig = {
-	graceSeconds: number, -- segundos sin comer antes de empezar a enojarse
-	smallServerPlayers: number, -- con estos jugadores o menos...
-	smallServerGraceSeconds: number, -- ...la espera es esta (un viaje solo tarda ~2 min)
-	rampSeconds: number, -- segundos para pasar de 0 a furioso
-	angryThreshold: number, -- desde este enojo la barra baja sola
-	hungerDecayPerSecond: number, -- fracción de la barra que pierde por segundo enojado
-	attackIntervalSeconds: number, -- cada cuánto ataca estando furioso
-	telegraphSeconds: number, -- aviso visible antes de que caiga el golpe
-	attackRadiusStuds: number,
-	hitMarginStuds: number, -- margen a favor del jugador en el borde del círculo
-	attackRangeStuds: number, -- distancia máxima al cráter de los jugadores que puede atacar
-	knockbackSpeed: number, -- studs/s del empujón (lo aplica el cliente)
-}
-
--- Lo que pasa al llenar a un gigante: despedida, descanso en el volcán y llegada del siguiente.
-export type CycleConfig = {
-	farewellSeconds: number, -- despedida: salta, gira y se sumerge
-	evolveSeconds: number, -- pausa sin comer al cruzar cada etapa (evoluciona)
-	restSeconds: number, -- descanso (máximo): dentro del volcán se entrena solo
-	restBaseSeconds: number, -- descanso = clamp(base + porJugador x jugadores, min, restSeconds)
-	restPerPlayerSeconds: number,
-	restMinSeconds: number,
-	arrivalSeconds: number, -- llegada del siguiente gigante antes de poder alimentarlo
-	rouletteSeconds: number, -- la ruleta gira al final del descanso antes de que llegue
-	drainSeconds: number, -- se vacía el volcán (el descanso es en su fondo)
-	refillSeconds: number, -- vuelve el agua
-}
-
-export type DeliveryConfig = { -- entrega de peces al gigante, por lotes
-	stepSeconds: number, -- un lote de peces cada tanto
-	fishPerSecond: number, -- peces por segundo sin renacer (los renacimientos lo multiplican)
-	minSoloSeconds: number, -- tope por persona: 1/minSoloSeconds de la barra por segundo
-	broadcastSeconds: number, -- lotes a los clientes y progreso, a lo sumo cada tanto
-}
-
-export type GiantsConfig = {
-	chain: { GiantDef }, -- orden de aparición en el servidor
-	stageThresholds: { number }, -- fracción de la barra donde EMPIEZA cada etapa
-	playerHeightStuds: number, -- alto de referencia de un personaje
-	stageHeightsInPlayers: { number }, -- alto del gigante en cada etapa, en jugadores
-	anger: AngerConfig,
-	cycle: CycleConfig,
-	delivery: DeliveryConfig,
-}
+export type GiantDef = GiantTypes.GiantDef
+export type GiantsConfig = GiantTypes.GiantsConfig
 
 export type ProgressionConfig = {
 	ponds: { PondDef }, -- uno por estanque, en orden alrededor de la plaza
@@ -135,6 +80,8 @@ export type ProgressionConfig = {
 	capacityPerRoot: number, -- capacidad = (carryCapacity + esto x sqrt(poder)) x canasta
 	castsToFill: { start: number, perRod: number, min: number }, -- lanzamientos para llenarla
 	minBiteDelaySeconds: number, -- la espera hasta el pique nunca baja de esto
+	-- Monedas por pez: una canasta llena paga como carryCapacity x (1 + (poder/step)^exponent)
+	coinScale: { step: number, exponent: number },
 }
 
 -- Un nivel de una mejora de la tienda (ver Config/Shop.luau).
@@ -166,6 +113,8 @@ export type RetentionConfig = {
 	tutorialBonus: number, -- monedas extra al terminar el tutorial
 	discoveryCoins: { [string]: number }, -- por rareza: primera vez que se pesca una especie
 	collectionBonus: number, -- monedas al completar la colección
+	-- Premio cada `every` especies: lo mayor entre coins x hito y share x la siguiente caña
+	collectionMilestone: { every: number, coins: number, share: number },
 	daily: { number }, -- monedas de cada día de la racha (1..7)
 	dailyShare: { number }, -- o esta fracción de la siguiente caña, lo que sea mayor
 	playtime: { PlaytimeGift }, -- regalos por minutos jugados (share: ver RewardScale)

@@ -20,14 +20,15 @@ export type Requirement = { set: (have: number, need: number, text: string) -> (
 
 local RebirthParts = {}
 
--- Tarjeta de peces por segundo: título, pez + número grande y nota.
--- Devuelve el número y la etiqueta "+N%" (solo la usa AL RENACER).
+-- Tarjeta de peces por segundo: título, pez + número grande y nota (el bono
+-- de monedas y poder). Devuelve el número, la etiqueta "+N%" (solo la usa AL
+-- RENACER) y la nota.
 function RebirthParts.speedCard(
 	parent: Instance,
 	title: string,
 	color: Color3,
 	x: number
-): (TextLabel, TextLabel)
+): (TextLabel, TextLabel, TextLabel)
 	local card = CardParts.card(parent, title, color, 18)
 	card.Position = UDim2.fromScale(x, 0)
 	card.Size = UDim2.new(0.4, 0, 0, 138)
@@ -54,7 +55,7 @@ function RebirthParts.speedCard(
 	chip.Rotation = 10
 	chip.ZIndex = 4
 	chip.Visible = false
-	return value, chip
+	return value, chip, note
 end
 
 -- Barra de un requisito con su ícono a la izquierda; se vuelve verde al alcanzarlo.

@@ -5,13 +5,16 @@
 	Misiones diarias: cada día (UTC) salen `perDay` misiones de la lista,
 	las mismas para todos (así se comentan entre jugadores). Se cumplen solas
 	al llegar a la meta y pagan al momento; cumplir las tres da además el
-	cofre (`bonus`). Las monedas crecen con el multiplicador de monedas y con
-	el avance (shared/RewardScale), así valen la pena todo el juego.
+	cofre (`bonus`). Además sale una misión EXTRA de `extra` (llenar
+	monstruos): paga igual, pero el cofre no la pide (se puede jugar solo).
+	Las monedas crecen con el avance (shared/RewardScale), así valen la pena
+	todo el juego; el multiplicador de monedas (Robux) no las toca.
 	Qué cuenta cada tipo (`kind`) — piques y viajes, no peces (con mucha
 	fuerza se sacan cientos de peces por pique):
 		catch       piques (veces que pescó)   feed   viajes al monstruo con peces
 		rare        peces raros o mejores      kill   monstruos llenados (kills)
 		train       segundos entrenando        eventCatch  piques durante un evento
+		food        % de la barra de un monstruo que aportó (suma entre monstruos)
 ]]
 
 export type QuestDef = {
@@ -26,6 +29,7 @@ export type QuestDef = {
 export type QuestsConfig = {
 	perDay: number,
 	pool: { QuestDef },
+	extra: { QuestDef }, -- se sortea una por día; no cuenta para el cofre
 	bonus: { coins: number, boostMinutes: number },
 }
 
@@ -63,12 +67,18 @@ local Quests: QuestsConfig = {
 			coins = 6000,
 			boostMinutes = 15,
 		},
-		{ id = "kill1", text = "Ayuda a llenar 1 monstruo", kind = "kill", goal = 1, coins = 2500 },
 		{
-			id = "kill3",
-			text = "Ayuda a llenar 3 monstruos",
-			kind = "kill",
-			goal = 3,
+			id = "aporte5",
+			text = "Aporta el 5% de la barra de un monstruo",
+			kind = "food",
+			goal = 5,
+			coins = 2500,
+		},
+		{
+			id = "aporte25",
+			text = "Aporta el 25% de las barras de los monstruos",
+			kind = "food",
+			goal = 25,
 			coins = 8000,
 			boostMinutes = 20,
 		},
@@ -81,7 +91,18 @@ local Quests: QuestsConfig = {
 			coins = 3500,
 		},
 	},
-	bonus = { coins = 10000, boostMinutes = 30 },
+	extra = {
+		{ id = "kill1", text = "Ayuda a llenar 1 monstruo", kind = "kill", goal = 1, coins = 2500 },
+		{
+			id = "kill3",
+			text = "Ayuda a llenar 3 monstruos",
+			kind = "kill",
+			goal = 3,
+			coins = 8000,
+			boostMinutes = 20,
+		},
+	},
+	bonus = { coins = 3000, boostMinutes = 30 },
 }
 
 return Quests

@@ -4,8 +4,9 @@
 
 	Cuentas del renacer (Config/Rebirth), compartidas por el servidor (que
 	decide) y el HUD (que muestra): cuántas monedas y cuánto poder pide el
-	siguiente y qué tan rápido alimenta con los que ya tiene (atributo
-	Rebirths del jugador). Los precios se redondean a dos cifras.
+	siguiente, qué tan rápido alimenta con los que ya tiene (atributo
+	Rebirths del jugador) y cuánto multiplica sus monedas y su poder. Los
+	precios se redondean a dos cifras.
 ]]
 
 local Giants = require(script.Parent.Config.Giants)
@@ -48,6 +49,27 @@ end
 -- Peces por segundo que entrega al monstruo (sin contar el tope de una persona).
 function RebirthMath.fishPerSecond(rebirths: number): number
 	return Giants.delivery.fishPerSecond * RebirthMath.feedMultiplier(rebirths)
+end
+
+-- Peces por segundo que entrega con esa canasta: los de renacer o, si es más
+-- rápido, la canasta llena en Giants.delivery.basketSeconds.
+function RebirthMath.deliveryPerSecond(rebirths: number, capacity: number): number
+	return math.max(RebirthMath.fishPerSecond(rebirths), capacity / Giants.delivery.basketSeconds)
+end
+
+-- Multiplicador permanente de monedas y poder con `rebirths` renacimientos (x1.25 cada uno).
+function RebirthMath.bonusMultiplier(rebirths: number): number
+	return Rebirth.bonusGrowth ^ rebirths
+end
+
+-- "x1.25" / "x2" para la ventana de renacer.
+function RebirthMath.bonusText(rebirths: number): string
+	local value = RebirthMath.bonusMultiplier(rebirths)
+	if value >= 100 then
+		return `x{NumberFormat.short(value)}`
+	end
+	local text = string.gsub(string.format("%.2f", value), "0+$", "")
+	return `x{(string.gsub(text, "%.$", ""))}`
 end
 
 -- Peces por segundo para mostrar: con un decimal mientras son pocos ("4.1", "10").

@@ -8,14 +8,14 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 
 | Perilla | Valor | Qué hace |
 |---|---|---|
-| `food` de cada monstruo | Orca 500K · Minotauro 2.5M · Orca fantasma 5M · Dragón 12M · Zorro 50M | Comida **fija y escalonada** como las pirámides de «Construye la Pirámide». Un novato lleva ~1–4K de comida por viaje; alguien con 1B de poder ~1.4M (una canasta llena). La Orca es difícil solo con novatos; el Zorro pide un servidor fuerte. |
-| `rouletteWeight` | 50 / 30 / 15 / 5 | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Sin modelo propio usan la Orca teñida. |
-| Ritmo de un jugador | novato ~0.45 comida/s · pro ~1.9 · tope ~5 | Calculado con el ciclo de pesca (pique, minijuego, viaje al volcán) al ~80 % del tiempo. Con menos jugadores tarda más: 10 novatos ~35 min la Orca. |
+| `food` / `targetMinutes` | mínimo Orca 400 · Minotauro 600 · Orca fantasma 600 · Dragón 900 · Zorro 1,500; objetivo 6 / 10 / 10 / 15 / 25 min | La comida **se calcula al llegar cada monstruo** (`server/Feeding/GiantFood`): lo que el servidor puede darle por segundo (cada jugador según canasta, poder y renacimientos, con las fórmulas de la pesca) × `sizing.activeShare` (0.6) × `targetMinutes`. Tarda lo mismo con 1 novato que con 40 fuertes; `food` es el mínimo (servidor vacío). |
+| `cycle.maxFeedMinutes` | 20 | Si no se llena en 20 min (contando solo con gente en el servidor) **se cansa y se va**: despedida, descanso y ruleta normales, y la kill para todos los que le dieron algo (aviso `giantLeft`). |
+| `rouletteWeight` | 50 / 30 / 15 / 5 (Orca fantasma 35 en Halloween) | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Todos están en la ruleta, también el Zorro. |
 | Kill | — | Para **todos los que le dieron algo** (con un pez basta; `Feeding/Contributions`). Debajo del panel: tu aporte y el top 3. |
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
-| `delivery.fishPerSecond` | 3 | Se alimenta **manteniendo E**: un pez cada 0.33 s sin renacer; cada renacimiento lo multiplica por 1.35 (`Rebirth.feedGrowth`): 3, 4, 5.5, 7.4, 10… peces/s. Con los peces medios (~3.4 de comida) la Orca (500K) tarda ~14 h a una persona sin renacer: obliga a renacer y a jugar en grupo. |
-| `delivery.minSoloSeconds` | 300 | Tope por persona: nunca más de 1/300 de la barra por segundo. Aunque tenga todos los peces y renacimientos, una persona sola tarda al menos 5 min; varias, menos. |
-| Renacer (`Config/Rebirth.luau`) | monedas 20K x 2.4^n · poder 3K x 2.6^n | Pide monedas **y** poder: 20K/3K, 48K/7.8K, 120K/20K, 280K/53K, 660K/140K… (dos cifras). Los primeros salen rápido; cada uno cuesta más de lo que acelera el anterior. Solo da velocidad de alimentar (x1.35 por vez). |
+| `delivery.fishPerSecond` / `basketSeconds` | 3 / 8 s | Se alimenta **manteniendo E**: 3 peces/s × 1.35 por renacimiento o, si es más rápido, **la canasta llena en 8 s** (`RebirthMath.deliveryPerSecond`). Así el poder y la canasta sí aceleran al monstruo. |
+| `delivery.minSoloSeconds` | 300 | Tope por persona: nunca más de 1/300 de la barra por segundo: una persona sola tarda al menos 5 min. |
+| Renacer (`Config/Rebirth.luau`) | monedas 40K x 2.4^n · poder 3K x 2.6^n | Pide monedas **y** poder: 40K/3K, 96K/7.8K, 230K/20K, 550K/53K, 1.3M/140K… (dos cifras). Da, para siempre, alimentar x1.35 y **monedas y poder x1.25** por renacimiento (`bonusGrowth`, se multiplica). |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
 | `cycle.evolveSeconds` | 3 s | Al llenar cada cuarto de barra evoluciona: no come esos segundos (la entrega espera y sigue). |
 | `cycle.restSeconds` (máx.), `restBaseSeconds`, `restPerPlayerSeconds` | 120 · 60 · 1.2 | Descanso = 60 s + 1.2 s por jugador, máximo 120. |
@@ -28,8 +28,9 @@ El poder es la **fuerza**, como en «Construye la Pirámide» (`Shared/FishingPo
 
 - Capacidad = (20 + 2 × √poder) × canasta: 1K → 83, 100K → 652, 1M → 2,020, 1B → 63K, 5B → 141K, 60T → 15.5M.
 - Peces por pique = capacidad / tiros para llenarla (`castsToFill`: 16 con la caña 1, −0.5 por caña, mínimo 6).
-- Monedas: cada pez paga × `coinScale`, así **una canasta llena paga lo mismo que con la fórmula vieja** y
-  los precios de la tienda siguen sirviendo. La comida sí crece (barras grandes).
+- Monedas: cada pez paga × `coinScale`: una canasta llena paga como 20 × (1 + √(poder / 1000)) peces
+  (`Progression.coinScale`, exponente 0.5), × canasta. Pescar con más poder **sí paga más**
+  (antes la raíz cuarta y la entrega fija hacían que pagara menos). La comida crece entera.
 - Misiones de pescar y entregar cuentan **piques y viajes**, no peces.
 - El destello azul sale en hitos de peces por pique: 2, 5, 10, 20, 50, 100…
 
@@ -37,23 +38,26 @@ El poder es la **fuerza**, como en «Construye la Pirámide» (`Shared/FishingPo
 
 | Estanque | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Multiplicador | x1 | x2 | x4 | x10 | x15 | x25 | x40 | x75 | x100 | x200 |
-| Monstruos llenados (`requiredKills`) | 0 | 1 | 2 | 4 | 7 | 12 | 20 | 35 | 60 | 100 |
+| Multiplicador | x1 | x2 | x3 | x5 | x8 | x12 | x20 | x35 | x60 | x100 |
+| Monstruos llenados (`requiredKills`) | 0 | 1 | 2 | 3 | 5 | 8 | 12 | 18 | 25 | 35 |
+| **o** poder (`requiredPower`) | 0 | 2K | 8K | 25K | 75K | 200K | 600K | 2M | 6M | 20M |
 
-Desde el 2026-10-14 los estanques se abren con **monstruos llenados** (kills), no con
-poder. Un monstruo dura ~5–10 min más el descanso: el estanque 10 llega en ~15–20 h de
-juego. También se pueden abrir con Robux (`pondRobux`).
+Cada estanque se abre con **monstruos llenados o con poder**, lo que llegue primero (las kills
+no se pierden al renacer; el poder sí). Con un monstruo cada ~7–12 min, el estanque 5 llega
+en ~35–60 min y el 9 en ~3 h de juego. El sagrado (x250) solo con Robux (`pondRobux`).
 
 ## Tienda de monedas — MEJORAS (`Config/Shop.luau`)
 
 Cañas (precio → poder): 0 → x1, 150 → x1.5, 750 → x2, 3K → x3, 12K → x5, 45K → x8,
-150K → x12, **300K** → x20, **800K** → x35, **2M** → x60 (las tres últimas bajaron:
-con solo la Orca en la ruleta tardaban 20–40 h). Canastas y botas en el mismo archivo.
+150K → x12, 300K → x20, 800K → x35, 2M → x60 … hasta 16B → x6,500 (20 niveles).
+Canastas (14) y botas (14) en el mismo archivo. Monedas por minuto pescando con la Orca
+(simulación del 2026-10-16): novato ~200, poder 1K ~550, 10K con 1 renacer
+~2.5K, 50K con 2 renacimientos ~10K.
 
 ## Peces (`Config/Fish.luau`)
 
-Rareza, peso (probabilidad), comida y monedas de cada pez. Promedio actual: 2.75 de
-comida y ~4.6 monedas por pez.
+Rareza, peso (probabilidad), comida y monedas de cada pez (36 especies con `FishMore`).
+Promedio actual: ~3.4 de comida y ~6.1 monedas por pez.
 
 ## Recoger el pez — minijuego (`Config/Reel.luau`)
 
@@ -71,10 +75,19 @@ en los estanques y en la guarida del descanso.
 ## Premios y social
 
 - Premio diario, logros y misiones del tutorial: `Config/Retention.luau`.
+- **Colección** (`Retention.collectionMilestone`, `shared/Collection`): cada 6 especies, lo mayor entre
+  1,500 × hito y 0.4 de la siguiente caña; con las 36, `collectionBonus` (250K). La ventana Peces
+  muestra el siguiente premio.
+- **Ruleta gratis** (`Config/Spin.luau`, `Retention/SpinWheel`): un giro cada 4 h (guardado). Casillas:
+  monedas (lo mayor entre 300–5K y 10–120 % de la siguiente caña), 10 o 30 min de x2 poder, o
+  llenar 5 % del monstruo para todos. Botón "Ruleta" arriba con punto rojo cuando toca.
+- **Misiones** (`Config/Quests.luau`): 3 del día + 1 EXTRA (llenar monstruos) que paga pero no hace
+  falta para el cofre (3K × escala). Tipo `food`: aportar un % de la barra. No las multiplica la
+  mejora de Monedas de Robux.
 - Regalos por tiempo jugado (`Retention.playtime`): 5, 10, 20, 30, 45, 60, 90 y 120 min; monedas y minutos de x2 poder. Se reinician al volver a entrar.
 - **Los premios crecen con el jugador** (`shared/RewardScale.luau`): el diario y los regalos
   por tiempo pagan lo mayor entre sus monedas fijas y una fracción (`share`, `dailyShare`)
-  del precio de la **siguiente caña** (regalo de 2 h = 3 cañas, día 7 = 0.6). Las misiones
+  del precio de la **siguiente caña** (regalo de 2 h = 1.5 cañas, día 7 = 0.4). Las misiones
   se multiplican por precio de la siguiente caña / 3,000. Así siguen valiendo la pena al final.
 - **Títulos** (`Config/Social.luau`): 25, por **monstruos llenados** (kills): Aprendiz 1, Capitán 10,
   Dios del Mar 100, Coloso Abisal 650, Más Allá del Infinito 5,000. Las kills no se pierden al

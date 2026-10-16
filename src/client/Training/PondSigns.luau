@@ -12,6 +12,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
@@ -79,7 +80,6 @@ function PondSigns.start()
 	end
 	local function refresh()
 		for index, sign in signs do
-			local needed = PONDS[index].requiredKills
 			if Perks.pondOpen(player, index) then
 				sign.requirement.Text = "Entrenar [E]"
 				sign.requirement.TextColor3 = UIConfig.Colors.Success
@@ -89,7 +89,7 @@ function PondSigns.start()
 				sign.requirement.TextColor3 = UIConfig.Colors.Warning
 				sign.multiplier.TextTransparency = 0.2
 			else
-				sign.requirement.Text = `{needed} monstruos · [E] R$`
+				sign.requirement.Text = `{FishingPower.pondRequirement(PONDS[index], true)} · R$`
 				sign.requirement.TextColor3 = UIConfig.Colors.Warning
 				sign.multiplier.TextTransparency = 0.45
 			end
