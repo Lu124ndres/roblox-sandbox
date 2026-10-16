@@ -17,6 +17,8 @@ export type Fx = {
 	height: number, -- alto del traje en studs
 	socket: (bone: string, offset: Vector3) -> Bone?, -- punto pegado al hueso (offset en altos del traje)
 	emitter: (emitter: ParticleEmitter) -> (), -- respeta el modo de efectos reducidos
+	aura: (size: Vector3, lift: number) -> BasePart, -- pieza invisible del cuerpo (en altos)
+	highlight: (fill: Color3, outline: Color3, fillTransparency: number) -> (),
 }
 export type Style = {
 	arms: number, -- amplitud del balanceo de brazos (1 = la animación de Roblox)

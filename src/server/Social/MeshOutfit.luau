@@ -82,6 +82,7 @@ function MeshOutfit.build(character: Model, key: string): Model?
 	weld.Parent = mesh
 	costume.Name = Trajes.FOLDER
 	costume:SetAttribute("Outfit", key)
+	costume:SetAttribute(Trajes.BONE_COUNT, Trajes.countBones(mesh))
 	costume.Parent = character
 	hideBody(character)
 	-- Cuánto más alto que el cuerpo queda el traje (para subir el cartel de la cabeza).

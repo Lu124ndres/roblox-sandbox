@@ -5,42 +5,23 @@
 	Pesado y amenazante: brazos y piernas con menos vaivén, el cuerpo se
 	inclina hacia adelante al caminar, respira hondo y mira despacio a los
 	lados. En la vitrina saca músculo con los dos brazos y ruge.
-	Efectos: humo y chispas del volcán de la cabeza, brillo de lava en el
-	pecho y gotas de lava en las manos.
+	Efectos: aura de fuego (Trajes/Aura), humo y chispas del volcán de la
+	cabeza, brillo de lava en el pecho y gotas de lava en las manos.
 ]]
 
 local Tipos = require(script.Parent.Parent.Tipos)
 
-local PARTICLES = {
-	Mist = "rbxasset://textures/particles/smoke_main.dds",
-	Spark = "rbxasset://textures/particles/fire_sparks_main.dds",
-}
-local LAVA = Color3.fromRGB(255, 120, 30)
+local Aura = require(script.Parent.Parent.Aura)
+local Particulas = require(script.Parent.Parent.Particulas)
+
+local T = Particulas.Textures
+local rgb = Color3.fromRGB
+local LAVA = rgb(255, 120, 30)
+local WHITE = rgb(255, 255, 255)
 
 local function pulse(now: number, every: number, length: number): number
 	local t = now % every
 	return if t < length then math.sin(math.pi * t / length) ^ 0.6 else 0
-end
-
-local function emitter(
-	texture: string,
-	color: ColorSequence,
-	size: number,
-	rate: number
-): ParticleEmitter
-	local e = Instance.new("ParticleEmitter")
-	e.Texture = texture
-	e.Color = color
-	e.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, size),
-		NumberSequenceKeypoint.new(1, size * 2.2),
-	})
-	e.Transparency =
-		NumberSequence.new({ NumberSequenceKeypoint.new(0, 0.3), NumberSequenceKeypoint.new(1, 1) })
-	e.Rate = rate
-	e.LightEmission = 0.4
-	e.LockedToPart = false
-	return e
 end
 
 local style: Tipos.Style = {
@@ -70,44 +51,114 @@ local style: Tipos.Style = {
 	end,
 	effects = function(fx: Tipos.Fx)
 		local h = fx.height
+		-- Aura de fuego: lenguas de fuego por todo el cuerpo y a sus pies,
+		-- brasas que suben, halo naranja y una onda de calor en el piso.
+		Aura.build(fx, {
+			tongues = {
+				texture = T.Fuego,
+				colors = { WHITE, rgb(255, 215, 190) },
+				size = { 0.2, 0.28, 0.24 },
+				alpha = { 0.7, 0.05, 0.15, 1 },
+				life = { 0.8, 1.2 },
+				speed = { 0.02, 0.05 },
+				accel = Vector3.new(0, 0.45, 0),
+				rate = 32,
+				light = 0.45,
+				bright = 1.6,
+				tilt = 10,
+				z = 0.3,
+				flip = true,
+			},
+			feet = {
+				texture = T.Fuego,
+				colors = { WHITE },
+				size = { 0.18, 0.25, 0.16 },
+				alpha = { 0.6, 0.05, 0.2, 1 },
+				life = { 0.6, 0.9 },
+				speed = { 0.01, 0.03 },
+				accel = Vector3.new(0, 0.6, 0),
+				rate = 50,
+				light = 0.45,
+				bright = 1.6,
+				tilt = 8,
+				z = 0.2,
+				flip = true,
+			},
+			motes = {
+				texture = T.Brasa,
+				colors = { rgb(255, 235, 160), LAVA, rgb(200, 40, 0) },
+				size = { 0.03, 0.022, 0 },
+				alpha = { 0, 0.1, 1 },
+				life = { 1.4, 2.4 },
+				speed = { 0.1, 0.3 },
+				accel = Vector3.new(0, 0.35, 0),
+				rate = 30,
+				light = 1,
+				bright = 2,
+				spread = 70,
+				drag = 0.8,
+				z = 0.5,
+			},
+			glints = {
+				texture = T.Chispa,
+				colors = { rgb(255, 240, 200), LAVA },
+				size = { 0.07, 0 },
+				alpha = { 0, 1 },
+				life = { 0.4, 0.7 },
+				rate = 6,
+				light = 1,
+				bright = 2,
+				spin = { -90, 90 },
+				z = 0.6,
+			},
+			glow = rgb(255, 110, 20),
+			ring = { rgb(255, 220, 120), rgb(255, 70, 0) },
+			outline = rgb(255, 150, 40),
+		})
+		-- Volcán de la cabeza: humo y chispas.
 		local top = fx.socket("Cabeza", Vector3.new(0, 0.36, 0))
-		if top then
-			local smoke =
-				emitter(PARTICLES.Mist, ColorSequence.new(Color3.fromRGB(70, 60, 58)), 0.12 * h, 6)
-			smoke.Lifetime = NumberRange.new(1.4, 2.4)
-			smoke.Speed = NumberRange.new(0.25 * h, 0.4 * h)
-			smoke.SpreadAngle = Vector2.new(12, 12)
-			smoke.LightEmission = 0
-			smoke.Parent = top
-			fx.emitter(smoke)
-			local sparks = emitter(PARTICLES.Spark, ColorSequence.new(LAVA), 0.03 * h, 5)
-			sparks.Lifetime = NumberRange.new(0.6, 1.1)
-			sparks.Speed = NumberRange.new(0.3 * h, 0.55 * h)
-			sparks.SpreadAngle = Vector2.new(25, 25)
-			sparks.Acceleration = Vector3.new(0, -0.6 * h, 0)
-			sparks.LightEmission = 1
-			sparks.Parent = top
-			fx.emitter(sparks)
-		end
+		Aura.add(fx, top, {
+			texture = T.Smoke,
+			colors = { rgb(70, 60, 58) },
+			size = { 0.12, 0.26 },
+			alpha = { 0.3, 1 },
+			life = { 1.4, 2.4 },
+			speed = { 0.25, 0.4 },
+			rate = 6,
+			spread = 12,
+		})
+		Aura.add(fx, top, {
+			texture = T.Brasa,
+			colors = { rgb(255, 220, 120), LAVA },
+			size = { 0.025, 0 },
+			life = { 0.6, 1.1 },
+			speed = { 0.3, 0.55 },
+			accel = Vector3.new(0, -0.6, 0),
+			rate = 8,
+			light = 1,
+			bright = 2,
+			spread = 25,
+		})
 		local chest = fx.socket("Pecho", Vector3.new(0, 0.08, -0.1))
 		if chest then
 			local light = Instance.new("PointLight")
 			light.Color = LAVA
-			light.Brightness = 1.6
-			light.Range = 1.6 * h
+			light.Brightness = 3
+			light.Range = 2.2 * h
 			light.Parent = chest
 		end
 		for _, side in { "Izq", "Der" } do
-			local hand = fx.socket("Mano" .. side, Vector3.new(0, -0.03, 0))
-			if hand then
-				local drip = emitter(PARTICLES.Spark, ColorSequence.new(LAVA), 0.025 * h, 3)
-				drip.Lifetime = NumberRange.new(0.5, 0.9)
-				drip.Speed = NumberRange.new(0, 0.05 * h)
-				drip.Acceleration = Vector3.new(0, -1.2 * h, 0)
-				drip.LightEmission = 1
-				drip.Parent = hand
-				fx.emitter(drip)
-			end
+			Aura.add(fx, fx.socket("Mano" .. side, Vector3.new(0, -0.03, 0)), {
+				texture = T.Brasa,
+				colors = { rgb(255, 200, 80), LAVA },
+				size = { 0.025, 0 },
+				life = { 0.5, 0.9 },
+				speed = { 0, 0.05 },
+				accel = Vector3.new(0, -1.2, 0),
+				rate = 4,
+				light = 1,
+				bright = 2,
+			})
 		end
 	end,
 }

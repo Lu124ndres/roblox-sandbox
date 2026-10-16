@@ -61,7 +61,7 @@ local hooks: OrcaFx.Hooks = {
 
 -- template: el modelo de la etapa 1 del gigante; center: el centro del lago.
 function OrcaSwim.attach(template: Model?, center: Vector3): Swim?
-	if not template or not template:FindFirstChild("Raiz", true) then
+	if not template or not template:FindFirstChild("Espiraculo", true) then -- el dragón también tiene Raiz
 		return nil
 	end
 	local motion = OrcaMotion.new(center)

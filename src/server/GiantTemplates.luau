@@ -18,6 +18,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Dragon = require(ReplicatedStorage.Shared.Dragon)
 local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 
@@ -70,7 +71,10 @@ local function prepare(name: string): Model?
 	if main then
 		main.PivotOffset = main.CFrame:ToObjectSpace(pivot) -- con PrimaryPart manda su PivotOffset
 	end
-	model:SetAttribute(Protocol.GiantModelAttributes.BaseHeight, size.Y)
+	-- Los que vuelan (con alas) se miden a lo largo: su largo es Dragon.LENGTH x el alto de la etapa.
+	local flies = model:FindFirstChild("AlaIzq1", true) ~= nil
+	local base = if flies then math.max(size.X, size.Y, size.Z) / Dragon.LENGTH else size.Y
+	model:SetAttribute(Protocol.GiantModelAttributes.BaseHeight, base)
 	model.Name = name
 	return model
 end

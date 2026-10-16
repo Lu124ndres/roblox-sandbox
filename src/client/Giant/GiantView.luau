@@ -6,8 +6,7 @@
 		- al comer: le llegan los peces volando (FeedThrow), gira hacia quien
 		  lo alimentó y rebota (la orca muerde), salpica, suelta corazones;
 		- al llenarse, en el descanso y al volver: GiantCycleFx;
-		- al pasar de etapa: ruge, la cámara tiembla y crece hasta su nuevo
-		  tamaño (3, 8, 15 y 25 veces un jugador) entre olas y espuma;
+		- al pasar de etapa: ruge, tiembla la cámara y crece (3, 8, 15, 30 jugadores);
 		- cada tanto: gruñe y echa un chorro (la orca, al respirar). Todo local.
 ]]
 
@@ -28,8 +27,7 @@ local FeedThrow = require(script.Parent.FeedThrow)
 local GiantBody = require(script.Parent.GiantBody)
 local GiantCycleFx = require(script.Parent.GiantCycleFx)
 
-local ATTR = Protocol.GiantAttributes
-local EFFECTS = UIConfig.Effects
+local ATTR, EFFECTS = Protocol.GiantAttributes, UIConfig.Effects
 
 -- Centro del cráter, mirando hacia el puente (-Z). Sale del layout y no del
 -- mapa para no depender de que la pieza ya haya llegado al cliente.
@@ -85,7 +83,7 @@ local function onFed(body: GiantBody.Body, character: Model)
 	Sounds.play("Chomp", top)
 	Fx.hearts(top, 4)
 	Fx.sparkle(top, UIConfig.Colors.Coins, 16)
-	for _ = 1, 3 do
+	for _ = 1, if body.flies then 0 else 3 do
 		Fx.splash(waterAround(body, 0.3), 1.4 * math.sqrt(scale))
 	end
 end
@@ -188,6 +186,8 @@ function GiantView.start()
 		if body then
 			onFed(body, character)
 		end
+	end, function()
+		return if body then body.height() else 20 -- tamaño de la onda al morder
 	end)
 	ambientLoop(function() -- sin gruñidos ni chorros mientras está sumergido
 		return if body and body.model.Parent then body else nil

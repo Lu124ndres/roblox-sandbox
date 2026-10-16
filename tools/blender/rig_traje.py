@@ -4,9 +4,10 @@ juego mueve copiando el esqueleto R15 escondido del jugador (client/Outfits):
     Raiz > Cadera > Pecho > Cabeza
                   > Pecho > BrazoIzq > CodoIzq > ManoIzq   (y Der)
           Cadera > PiernaIzq > RodillaIzq > PieIzq          (y Der)
-Los pesos salen por zonas (brazos fuera del ancho del torso, piernas bajo la
-cadera) y, dentro de cada brazo o pierna, del segmento más cercano con mezcla
-suave en codos y rodillas. Un objeto en la mano (el tridente) va entero a la mano.
+Piezas rígidas, como un avatar R15: la malla se corta con planos en cada
+articulación (hombro, codo, muñeca, cadera, rodilla, tobillo, cintura, cuello),
+cada pieza va entera a su hueso y los cortes se tapan. Así nada se estira.
+Un objeto en la mano (el tridente) va entero a la mano; un faldón, a la cadera.
 Uso: python3 -I rig_traje.py -- <modelo.blend> <salida.fbx> <params.json> <Nombre>
 """
 import bpy, json, sys, math, os, mathutils
@@ -61,47 +62,59 @@ def seg_dist(p, a, b):
     ab = b - a; t = clamp((p - a).dot(ab) / max(ab.length_squared, 1e-9))
     return (p - (a + ab * t)).length
 
-def soft(p, segs, sharp=0.025):
-    d = {n: seg_dist(p, a, b) for n, (a, b) in segs.items()}
-    m = min(d.values())
-    w = {n: math.exp(-(dv - m) / sharp) for n, dv in d.items()}
-    t = sum(w.values()); return {n: val / t for n, val in w.items()}
-
-def add(w, part, k):
-    for n, val in part.items(): w[n] = w.get(n, 0) + val * k
-
-prop = P.get("prop")
-def in_prop(p):
-    if not prop: return False
-    a, b = V(prop["a"]), V(prop["b"])
-    r = prop["headR"] if p.z > prop["headZ"] else prop["r"]
-    return p.z > a.z - 0.05 and seg_dist(p, a, b) < r
-
-arm_bottom = {s: min(ARMS[s][3].z, P["handBottom"]) - 0.05 for s in ("Izq", "Der")}
 import bmesh
-bm = bmesh.new(); bm.from_mesh(o.data); bm.verts.ensure_lookup_table()
-# El objeto en la mano: se llena desde las puntas por la malla, cerca de su eje,
-# más las islas sueltas que estén cerca (remolinos de agua).
+bm = bmesh.new(); bm.from_mesh(o.data)
+
+# Planos de corte de cada cadena: en cada articulación, normal hacia la punta.
+def joint_planes(chain):
+    planes = []
+    for i in (1, 2):
+        d = (chain[i] - chain[i - 1]).normalized() + (chain[i + 1] - chain[i]).normalized()
+        planes.append((chain[i].copy(), d.normalized()))
+    return planes
+PLANES = {}
+for s in ("Izq", "Der"):
+    PLANES["arm" + s] = joint_planes(ARMS[s])
+    PLANES["leg" + s] = joint_planes(LEGS[s])
+hip = LEGS["Izq"][0].z
+arm_low = min(min(ARMS[s][3].z for s in ARMS), P["handBottom"]) - 0.05
+# Cada plano corta solo la zona donde separa piezas (si no, se multiplican los triángulos).
+def zone(zmin, zmax, xmin=-9, xmax=9):
+    return lambda p: zmin - 0.02 <= p.z <= zmax + 0.02 and xmin - 0.02 <= abs(p.x - x0) <= xmax + 0.02
+Z = V((0, 0, 1)); X = V((1, 0, 0))
+cuts = [((V((0, 0, hip)), Z), zone(hip, hip, 0, P["tw"])),
+        ((V((0, 0, P["waist"])), Z), zone(P["waist"], P["waist"], 0, P["tw"])),
+        ((V((0, 0, P["neck"])), Z), zone(P["neck"], P["neck"], 0, P["padInner"])),
+        ((V((0, 0, P["shoulderCut"])), Z), zone(P["shoulderCut"], P["shoulderCut"], P["padInner"], P["tw"])),
+        ((V((x0, 0, 0)), X), zone(-1, hip))]
+for sg in (1, -1):
+    cuts.append(((V((x0 + sg * P["tw"], 0, 0)), X), zone(arm_low, P["shoulderCut"])))
+    cuts.append(((V((x0 + sg * P["padInner"], 0, 0)), X), zone(P["shoulderCut"], P["armTop"])))
+skirt = P.get("skirt")
+if skirt:
+    for sg in (1, -1):
+        cuts.append(((V((0, y0 + sg * skirt["depth"], 0)), V((0, 1, 0))), zone(skirt["low"], hip)))
+for s_ in ("Izq", "Der"):
+    for plane in PLANES["arm" + s_]:
+        cuts.append((plane, lambda p: abs(p.x - x0) > P["tw"] - 0.03 and p.z < P["armTop"]))
+    for plane in PLANES["leg" + s_]:
+        cuts.append((plane, lambda p: p.z < hip + 0.03))
+for (co, no), inside in cuts:
+    faces = [f for f in bm.faces if inside(f.calc_center_median())]
+    edges = list({e for f in faces for e in f.edges}); verts = list({v for f in faces for v in f.verts})
+    if faces:
+        bmesh.ops.bisect_plane(bm, geom=verts + edges + faces, plane_co=co, plane_no=no)
+bmesh.ops.triangulate(bm, faces=bm.faces[:])
+bm.verts.ensure_lookup_table(); bm.faces.ensure_lookup_table()
+
+# El objeto en la mano: desde la punta por la malla, cerca de su eje.
+prop = P.get("prop")
 held = set()
 if prop:
     a, b = V(prop["a"]), V(prop["b"])
-    def near(p, extra=0.0):
-        r = (prop["headR"] if p.z > prop["headZ"] else prop["r"]) + extra
+    def near(p):
+        r = prop["headR"] if p.z > prop["headZ"] else prop["r"]
         return p.z > a.z - 0.05 and seg_dist(p, a, b) < r
-    seen = set(); islands = []
-    for v in bm.verts:
-        if v.index in seen: continue
-        st = [v]; comp = []; seen.add(v.index)
-        while st:
-            q = st.pop(); comp.append(q)
-            for e in q.link_edges:
-                r = e.other_vert(q)
-                if r.index not in seen: seen.add(r.index); st.append(r)
-        islands.append(comp)
-    islands.sort(key=len, reverse=True)
-    for comp in islands[1:]:
-        c = sum((q.co for q in comp), V()) / len(comp)
-        if near(c, 0.15): held.update(q.index for q in comp)
     tip = max((q for q in bm.verts if near(q.co)), key=lambda q: q.co.z)
     st = [tip]; held.add(tip.index)
     while st:
@@ -112,55 +125,70 @@ if prop:
                 held.add(r.index); st.append(r)
     print("HELD", len(held))
 
-def arm_weight(p, xr):
-    ax = abs(xr)
+def chain_part(p, planes, names):
+    (c1, n1), (c2, n2) = planes
+    if (p - c2).dot(n2) > 0: return names[2]
+    if (p - c1).dot(n1) > 0: return names[1]
+    return names[0]
+
+def region(p, fallback_held=False):
+    xr = p.x - x0; s = "Izq" if xr > 0 else "Der"; ax = abs(xr)
+    arm = False
     if p.z > P["armTop"]:
-        if p.z < P.get("armTop2", 0) and ax > P.get("headHalf", 9):
-            return 1.0
-        return 0.0
-    if p.z > P["shoulderCut"]:  # hombreras: todo lo de afuera del cuello va con el brazo
-        return smooth((ax - P["padInner"] + 0.015) / 0.03)
-    if p.z < arm_bottom["Izq" if xr > 0 else "Der"]:
-        return 0.0
-    return smooth((ax - P["tw"] + 0.02) / 0.04)
+        arm = P.get("armTop2", 0) > p.z and ax > P.get("headHalf", 9)
+    elif p.z > P["shoulderCut"]:
+        arm = ax > P["padInner"]
+    elif p.z > min(ARMS[s][3].z, P["handBottom"]) - 0.05:
+        arm = ax > P["tw"]
+    if arm:
+        return chain_part(p, PLANES["arm" + s], ("Brazo" + s, "Codo" + s, "Mano" + s))
+    if p.z < hip:
+        if skirt and p.z > skirt["low"] and abs(p.y - y0) > skirt["depth"]:
+            return "Cadera"
+        return chain_part(p, PLANES["leg" + s], ("Pierna" + s, "Rodilla" + s, "Pie" + s))
+    if p.z > P["neck"]: return "Cabeza"
+    if p.z > P["waist"]: return "Pecho"
+    return "Cadera"
 
-skirt = P.get("skirt")
-groups = {n: o.vertex_groups.new(name=n) for n in B if n != "Raiz"}
-stats = {}
-hip = LEGS["Izq"][0].z
-for v in o.data.vertices:
-    p = v.co; xr = p.x - x0; s = "Izq" if xr > 0 else "Der"
-    w = {}
-    if v.index in held:
-        w = {"ManoDer": 1.0}
+names = [n for n in B if n != "Raiz"]
+layer = bm.faces.layers.int.new("hueso")
+for f in bm.faces:
+    if held and all(v.index in held for v in f.verts):
+        f[layer] = names.index("ManoDer")
     else:
-        warm = arm_weight(p, xr)
-        a = ARMS[s]
-        if warm > 0:
-            add(w, soft(p, {"Brazo" + s: (a[0], a[1]), "Codo" + s: (a[1], a[2]), "Mano" + s: (a[2], a[3])}), warm)
-        rest = 1 - warm
-        if rest > 0:
-            wleg = smooth((hip + 0.05 - p.z) / 0.1)
-            if skirt and skirt["low"] < p.z and abs(p.y - y0) > skirt["depth"]:
-                wleg *= 0.2  # faldón: cuelga de la cadera, apenas sigue a las piernas
-            if wleg > 0:
-                side_w = smooth(xr / 0.06 * 0.5 + 0.5)
-                for side, k in (("Izq", side_w), ("Der", 1 - side_w)):
-                    if k > 0:
-                        l = LEGS[side]
-                        add(w, soft(p, {"Pierna" + side: (l[0], l[1]), "Rodilla" + side: (l[1], l[2]), "Pie" + side: (l[2], l[3])}), rest * wleg * k)
-            body = rest * (1 - wleg)
-            if body > 0:
-                wh = smooth((p.z - P["neck"] + 0.03) / 0.06)
-                wp = smooth((p.z - P["waist"] + 0.05) / 0.1) * (1 - wh)
-                add(w, {"Cabeza": wh, "Pecho": wp, "Cadera": 1 - wh - wp}, body)
-    top = sorted(w.items(), key=lambda kv: -kv[1])[:4]
-    t = sum(val for _, val in top)
-    for n, val in top:
-        if val / t > 0.01:
-            groups[n].add([v.index], val / t, 'REPLACE'); stats[n] = stats.get(n, 0) + 1
-print("STATS", json.dumps(stats))
-
+        f[layer] = names.index(region(f.calc_center_median()))
+cut = [e for e in bm.edges if len(e.link_faces) == 2 and e.link_faces[0][layer] != e.link_faces[1][layer]]
+def key(e):
+    return frozenset(tuple(round(c, 5) for c in v.co) for v in e.verts)
+before = {key(e) for e in bm.edges if len(e.link_faces) == 1}  # bordes que ya traía la malla
+bmesh.ops.split_edges(bm, edges=cut)
+uv = bm.loops.layers.uv.active
+holes = [e for e in bm.edges if len(e.link_faces) == 1 and key(e) not in before]
+filled = bmesh.ops.holes_fill(bm, edges=holes, sides=0)["faces"]
+for f in filled:
+    ring = [l for e in f.edges for l in e.link_loops if l.face is not f]
+    if ring:
+        mu = sum((l[uv].uv for l in ring), mathutils.Vector((0, 0))) / len(ring)
+        for l in f.loops: l[uv].uv = mu
+        f[layer] = ring[0].face[layer]
+bmesh.ops.triangulate(bm, faces=filled)
+print("TAPAS", len(filled))
+bm.to_mesh(o.data); o.data.update(); bm.free()
+o.vertex_groups.clear()
+groups = {n: o.vertex_groups.new(name=n) for n in names}
+attr = o.data.attributes["hueso"]
+votes = {}
+for poly in o.data.polygons:
+    n = names[attr.data[poly.index].value]
+    for vi in poly.vertices:
+        votes.setdefault(vi, {}); votes[vi][n] = votes[vi].get(n, 0) + 1
+stats = {}
+for vi, vv in votes.items():
+    n = max(vv, key=vv.get)
+    groups[n].add([vi], 1.0, 'REPLACE'); stats[n] = stats.get(n, 0) + 1
+o.data.attributes.remove(attr)
+tris = sum(len(p.vertices) - 2 for p in o.data.polygons)
+print("STATS", tris, json.dumps(stats))
 arm_data = bpy.data.armatures.new("Rig" + NAME)
 arm = bpy.data.objects.new("Rig" + NAME, arm_data)
 bpy.context.scene.collection.objects.link(arm)

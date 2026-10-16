@@ -17,6 +17,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local Cuerpo = require(ReplicatedStorage.Shared.Trajes.Cuerpo)
+local Efectos = require(script.Parent.Efectos)
 
 type Link = {
 	bone: Bone,
@@ -38,22 +39,6 @@ export type Rig = {
 }
 
 local Rig = {}
-
-local function socketMaker(rig: Rig, bones: { [string]: Bone }, frame: CFrame)
-	return function(name: string, offset: Vector3): Bone?
-		local bone = bones[name]
-		if not bone then
-			return nil
-		end
-		local target = bone.WorldPosition + frame:VectorToWorldSpace(offset * rig.height)
-		local socket = Instance.new("Bone")
-		socket.Name = "Efecto"
-		socket.CFrame = bone.WorldCFrame:ToObjectSpace(CFrame.new(target) * frame.Rotation)
-		socket.Parent = bone
-		table.insert(rig.extras, socket)
-		return socket
-	end
-end
 
 -- character = nil para una vitrina.
 function Rig.bind(
@@ -122,12 +107,7 @@ function Rig.bind(
 		end
 	end
 	local ok, err = pcall(function()
-		style.effects({
-			bones = bones,
-			height = height,
-			socket = socketMaker(rig, bones, frame),
-			emitter = emitter,
-		})
+		style.effects(Efectos.make(mesh, bones, frame, height, rig.extras, emitter))
 	end)
 	if not ok then
 		warn(`Trajes: efectos de {key}: {err}`)

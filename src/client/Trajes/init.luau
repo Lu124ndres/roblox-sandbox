@@ -36,10 +36,29 @@ local function release(holder: Instance)
 	end
 end
 
+-- Un modelo grande puede replicarse por partes: espera la malla y todos sus
+-- huesos (el servidor anota cuántos son) antes de armar el rig.
+local function ready(holder: Instance): MeshPart?
+	local deadline = os.clock() + BIND_WAIT
+	while holder.Parent do
+		local mesh = Trajes.mesh(holder)
+		local want = holder:GetAttribute(Trajes.BONE_COUNT)
+		if mesh and (type(want) ~= "number" or Trajes.countBones(mesh) >= want) then
+			return mesh
+		end
+		if os.clock() > deadline then
+			warn(`Trajes: {holder:GetFullName()} llegó sin su malla o sin todos sus huesos`)
+			return nil
+		end
+		task.wait(0.1)
+	end
+	return nil
+end
+
 -- holder: el Model "Traje" del personaje, o el de la vitrina.
 local function bind(holder: Instance, key: string, character: Model?)
 	release(holder)
-	local mesh = Trajes.mesh(holder)
+	local mesh = ready(holder)
 	if not mesh then
 		return
 	end

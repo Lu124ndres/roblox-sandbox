@@ -70,8 +70,9 @@ local Giants: Types.GiantsConfig = {
 			food = 12000000,
 			modelBase = "DragonMarino",
 			rouletteWeight = 15,
-			released = false,
+			released = true,
 			inRoulette = true,
+			lava = true, -- vuela sobre el volcán con el cráter lleno de lava (CraterDrain)
 		},
 		{
 			id = "ZorroDeAgua",

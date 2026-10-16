@@ -69,6 +69,17 @@ Trajes.FOLDER = "Traje" -- Model dentro del personaje
 Trajes.WELD = "TrajeSoldadura" -- Weld del traje al HumanoidRootPart
 Trajes.CHOSEN = "TrajeElegido" -- atributo del jugador: traje que eligió en la vitrina
 Trajes.EXTRA_HEIGHT = "TrajeAlto" -- atributo del personaje: studs que el traje pasa a la cabeza
+Trajes.BONE_COUNT = "TrajeHuesos" -- atributo del Model del traje: huesos que trae la malla
+
+function Trajes.countBones(mesh: MeshPart): number
+	local count = 0
+	for _, descendant in mesh:GetDescendants() do
+		if descendant:IsA("Bone") then
+			count += 1
+		end
+	end
+	return count
+end
 
 function Trajes.templateName(key: string): string
 	return `Traje{key}`

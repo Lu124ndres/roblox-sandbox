@@ -19,7 +19,7 @@
 					Las de mesh van con sufijo de canal: Color, Normal, Roughness.
 		Sounds      Efectos y ambiente. Los "rbxasset://sounds/..." vienen instalados con
 					Roblox (no hay que subirlos). Las claves en MISSING no suenan.
-		Particles   Texturas de partículas que trae Roblox (rbxasset://textures/particles).
+		Particles   Texturas de partículas: las que trae Roblox y las propias (assets/particulas).
 		Animations  Reservado. Este proyecto anima por código (TweenService/CFrame);
 					solo se usaría si una decisión en docs/decisiones.md lo cambia.
 
@@ -27,6 +27,7 @@
 ]]
 
 local Products = require(script.Products)
+local Textures = require(script.Textures)
 
 export type AssetMap = { [string]: string }
 
@@ -72,59 +73,20 @@ local Assets: Assets = {
 		OrcaE4 = "rbxassetid://131514620036527", -- anciana (19,110)
 		-- Pendiente de modelar. Mientras falte, el juego usa un marcador de primitivas.
 		MinotauroE1 = "rbxassetid://0",
-		-- Trajes del personaje con huesos (tools/blender/rig_traje.py, Shared.Trajes). Fuente:
-		-- assets/blender/Traje*.fbx; los Model están en ServerStorage.Traje<clave> (.rbxl).
-		TrajeMarinero = "rbxassetid://140399842062180", -- 5,880 triángulos
-		TrajeDiosDelVolcan = "rbxassetid://88041119912433", -- 11,760
-		TrajeReyDelMar = "rbxassetid://121886162860571", -- 11,759
+		-- Trajes del personaje (rig_traje.py, piezas rígidas) y dragón (rig_dragon.py, en pose
+		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
+		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.
+		TrajeMarinero = "rbxassetid://83830844529752",
+		TrajeDiosDelVolcan = "rbxassetid://95937648548247",
+		TrajeReyDelMar = "rbxassetid://87925923644162",
+		DragonMarinoE1 = "rbxassetid://93227317182170", -- cría (15,679 triángulos)
+		DragonMarinoE2 = "rbxassetid://127430445743010", -- joven (17,639)
+		DragonMarinoE3 = "rbxassetid://111211189301600", -- adulto (18,619)
+		DragonMarinoE4 = "rbxassetid://124386917827503", -- anciano (19,109)
 	},
 
-	-- SurfaceAppearance de cada etapa de la orca y de los trajes: color, normales, rugosidad, metal.
-	-- Fuente: assets/textures/OrcaE*_*.png.
-	Textures = {
-		OrcaE1 = {
-			"rbxassetid://71957072265867",
-			"rbxassetid://96425004406950",
-			"rbxassetid://136742021496638",
-			"rbxassetid://124811014431361",
-		},
-		OrcaE2 = {
-			"rbxassetid://115410241013048",
-			"rbxassetid://77696394182660",
-			"rbxassetid://79855472680358",
-			"rbxassetid://138965288650521",
-		},
-		OrcaE3 = {
-			"rbxassetid://128239156725457",
-			"rbxassetid://111345670740047",
-			"rbxassetid://106258607441741",
-			"rbxassetid://81140731876410",
-		},
-		OrcaE4 = {
-			"rbxassetid://94834853518339",
-			"rbxassetid://116198259641181",
-			"rbxassetid://85563111169953",
-			"rbxassetid://87177939844055",
-		},
-		TrajeMarinero = {
-			"rbxassetid://131464968832070",
-			"rbxassetid://129553047119039",
-			"rbxassetid://71558812691456",
-			"rbxassetid://72022835279811",
-		},
-		TrajeDiosDelVolcan = {
-			"rbxassetid://89365455568650",
-			"rbxassetid://104543477403666",
-			"rbxassetid://125877581449053",
-			"rbxassetid://76444688203661",
-		},
-		TrajeReyDelMar = {
-			"rbxassetid://77999236305334",
-			"rbxassetid://88672425053098",
-			"rbxassetid://124672998971355",
-			"rbxassetid://80130162568865",
-		},
-	},
+	-- SurfaceAppearance (color, normales, rugosidad, metal) de cada modelo: ver Textures.luau.
+	Textures = Textures,
 
 	Sounds = {
 		-- Ambiente
@@ -169,6 +131,15 @@ local Assets: Assets = {
 		Sparkle = "rbxasset://textures/particles/sparkles_main.dds",
 		Mist = "rbxasset://textures/particles/smoke_main.dds",
 		Spark = "rbxasset://textures/particles/fire_sparks_main.dds",
+		-- Propias (tools/particulas/gen.py → assets/particulas, subidas con la cola de
+		-- importación; IDs comprobados por nombre con GetProductInfo). Flip = hoja 4x4.
+		FuegoFlip = "rbxassetid://127083091944283", -- lengua de fuego que sube y se rompe
+		AguaFlip = "rbxassetid://72827308650589", -- medialuna de agua que gira
+		Brasa = "rbxassetid://80818306008631", -- punto brillante
+		Halo = "rbxassetid://137612863537144", -- brillo suave
+		Anillo = "rbxassetid://117172895853116", -- aro de onda expansiva
+		Chispa = "rbxassetid://107302182061265", -- estrella de 4 puntas
+		Burbuja = "rbxassetid://79211346188373",
 	},
 
 	Animations = {},

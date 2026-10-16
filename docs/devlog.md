@@ -933,3 +933,41 @@ trajes, caminar, vitrinas, Ponerte/Quitarte/Comprar; 0 errores.
 
 **Qué sigue:** crear los pases en el Creator Dashboard y poner sus IDs en `Assets.GamePasses`
 (con ID 0 la vitrina avisa que estará disponible al publicar).
+
+---
+
+## 2026-10-15 — Trajes sin estirarse, auras, dragón que vuela y volcán de lava
+
+**Qué se hizo:**
+
+- Texturas de los trajes y del dragón hechas de nuevo (`tools/blender/hornear.py`): UVs
+  nuevas y horneado desde el modelo original (color, rugosidad, metal y normales). Las de
+  antes se rompían al reducir la malla.
+- Trajes sin estirarse: cada pedazo sigue a un solo hueso, con cortes planos en las
+  articulaciones y tapas solo en los huecos nuevos (`rig_traje.py`).
+- Auras de los trajes de pase (`Shared/Trajes/Aura`): Dios del Volcán envuelto en lenguas de
+  fuego animadas, brasas, halo naranja y onda de calor en el piso; Rey del Mar con medialunas
+  de agua que giran, burbujas, destellos, fuentecitas y halo azul. Contorno brillante sin
+  relleno. Texturas de partículas propias (`tools/particulas/gen.py`, IDs en
+  `Assets.Particles`): las de Roblox (fire_main) casi no se veían.
+- Dragón marino (4 etapas) con huesos de alas, patas, cuello, cola y mandíbula
+  (`rig_dragon.py`) y vuelo por código (`Shared/Dragon`): aletea, se ladea en las curvas,
+  planea, ruge, escupe fuego, hace picadas y volteretas; para comer se queda flotando frente
+  a quien lo alimenta y muerde. Cada etapa aletea distinto (la cría rápido, el anciano lento
+  y pesado).
+- Volcán de lava para el dragón (`CraterLava`): el lago es lava con costra, luz, brasas,
+  burbujas y humo; baja en el descanso y sube cuando llega.
+- Alimentar más satisfactorio (`FeedPop`): estela del color de la rareza, onda y destellos
+  en la boca, "¡ÑAM! xN" que cambia y salta con el combo, mordida más aguda y temblor en los
+  combos altos.
+
+**Qué se rompió:** el traje del jugador a veces llegaba por partes y se quedaba sin rig ni
+efectos: el servidor anota cuántos huesos trae (`TrajeHuesos`) y el cliente espera a
+tenerlos. El fuego del dragón quedaba atrás (vuela más rápido que el chorro): ahora viaja
+pegado a la boca. Cinco IDs de `Assets` leídos a ojo estaban mal: corregidos y comprobados
+contra ServerStorage. Probado en Studio: los tres trajes, las 4 etapas volando, alimentar,
+descanso y llegada con la lava; 0 errores nuestros.
+
+**Qué sigue:** guardar el lugar en Studio (los modelos nuevos están en ServerStorage) y
+crear los pases en el Creator Dashboard.
+

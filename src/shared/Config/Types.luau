@@ -35,8 +35,8 @@ export type GiantDef = {
 	rouletteWeight: number, -- peso en la ruleta (probabilidad = peso / suma de los que pueden salir)
 	inRoulette: boolean, -- puede salir en la ruleta al terminar el descanso (requiere su modelo)
 	season: { from: number, to: number }?, -- de evento: solo sale entre esas fechas (unix UTC)
+	lava: boolean?, -- con él el cráter se llena de lava en vez de agua (vuela: el dragón)
 }
-
 -- Un estanque de la zona de entrenamiento.
 export type PondDef = {
 	multiplier: number, -- poder por segundo = powerPerTick * multiplier

@@ -81,15 +81,46 @@ confirmar en la vista previa de "Importar 3D" que esté parado y mirando al fren
 
 ## Trajes del personaje con huesos (Marinero, Dios del Volcán, Rey del Mar)
 
-1. `procesar_meshy.py` igual que la orca (Marinero 6,000 triángulos; los de pase 12,000).
+1. Texturas nuevas: el atlas de Meshy viene en cientos de pedacitos y al reducir la malla
+   se rompe (manchas y costuras). `python3 -I tools/blender/hornear.py -- <fbx de Meshy> <salida.blend> <Nombre> <triángulos> <tamaño>`
+   reduce, hace UVs nuevas (smart project) y hornea desde el modelo original color,
+   rugosidad, metal (como emisión) y normales a 1024; deja `tex/<Nombre>_*.png` y el
+   material con las 4 texturas para que Studio las tome.
 2. Medir hombros, codos, muñecas, cadera, rodillas, tobillos, cuello y cintura en renders de
    frente con cuadrícula y anotarlos en `tools/blender/trajes.json` (más el objeto en la mano,
    como el tridente: segmento `prop`, y el faldón: `skirt`).
 3. `python3 -I tools/blender/rig_traje.py -- <modelo.blend> <salida.fbx> tools/blender/trajes.json <Nombre>`:
    huesos Raiz, Cadera, Pecho, Cabeza, Brazo/Codo/Mano y Pierna/Rodilla/Pie (Izq/Der).
-   Probar posando los huesos en Blender antes de exportar.
+   **Sin estirarse:** cada pedazo es rígido (peso 1 a un solo hueso). La malla se corta con
+   planos en las articulaciones (`bisect_plane`, solo en esa zona para no sumar
+   triángulos), se separa en los bordes entre huesos y se tapan solo los huecos nuevos
+   (tapa con el color promedio del borde). Probar posando los huesos antes de exportar.
 4. Studio → Importar 3D → "Mantener huesos de influencia cero" (la Raiz no tiene pesos),
    tipo de rig "Personalizar". Mover el Model a `ServerStorage.Traje<clave>` (Marinero,
    DiosDelVolcan, ReyDelMar) y anotar los IDs en `Assets`. El tamaño no importa: el juego lo
    escala para que la cadera coincida con la del cuerpo.
 5. Cómo se mueve y brilla cada uno: `src/shared/Trajes/Estilos/<clave>.luau`.
+6. El aura de los trajes de pase: `src/shared/Trajes/Aura.luau` (lenguas de fuego o agua,
+   motas, destellos, halo, onda en el piso y contorno) con texturas propias (abajo).
+
+## Dragón marino (4 etapas que vuelan)
+
+1. `hornear.py` como los trajes (E1..E4 entre 15,600 y 19,100 triángulos).
+2. `tools/blender/dragon_E<n>.json`: puntas de cada miembro (alas, patas, cola, cuello).
+   `dragon_centro.py` saca la línea central de cada miembro (Dijkstra desde la punta, los
+   vértices por distancia, el centro de cada tramo) y pone las articulaciones a lo largo.
+   Lo que no sale bien (el cuello, la pelvis) se corrige a mano en `dragon_E<n>_huesos.json`.
+3. `rig_dragon.py`: huesos Raiz, Cadera, Pecho, Cuello1-2, Cabeza, Mandibula, Boca (punto),
+   Cola1..6 y por lado Ala1-3, Brazo/Antebrazo/Mano, Muslo/Pierna/Pie. Pesos por calor
+   (Blender) con respaldo al segmento más cercano, 4 influencias como máximo. Deja las alas
+   abiertas en pose de vuelo como reposo y exporta.
+4. Studio igual que la orca. Cómo vuela: `src/shared/Dragon/` (Vuelo = recorrido,
+   Rumbo = giros con resorte, Trucos = rugido/fuego/picada/voltereta/planeo, Cuerpo = aleteo,
+   Pose = huesos; perfiles por etapa en `Etapas.luau`).
+
+## Texturas de partículas propias
+
+`python3 tools/particulas/gen.py assets/particulas` genera FuegoFlip y AguaFlip (hojas 4x4
+animadas, colores horneados), Brasa, Halo, Anillo, Chispa y Burbuja (blancas, se tiñen con
+Color). Se suben con la cola de importación de Studio (Importar 3D acepta PNG) y sus IDs
+van en `Assets.Particles`; comprobarlos con `MarketplaceService:GetProductInfo(id).Name`.

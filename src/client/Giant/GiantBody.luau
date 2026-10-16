@@ -2,12 +2,11 @@
 --[[
 	GiantBody
 
-	El cuerpo del gigante en el cliente: crece hacia el alto de su etapa
-	(GiantStages) con el modelo de esa etapa (<base>E1..E4), respira, se mece y
-	mira alrededor, con un contorno rojo que late con el enojo (GiantOutline).
-	Las "palancas" (salto, giro, atención) animan momentos puntuales. ScaleTo
-	solo se llama cuando la escala cambia más de GiantScaleStep (al crecer).
-	Un modelo con huesos de orca nada por el lago y abre la boca (OrcaSwim).
+	El cuerpo del gigante en el cliente: crece hacia el alto de su etapa con el
+	modelo de esa etapa (<base>E1..E4), respira, se mece y mira alrededor, con un
+	contorno que late con el enojo (GiantOutline). "Palancas": salto, giro, atención.
+	ScaleTo solo al cambiar la escala más de GiantScaleStep. Con huesos de orca
+	nada por el lago (OrcaSwim); con alas, vuela sobre el volcán (DragonFly).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -23,10 +22,10 @@ local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local GiantOutline = require(script.Parent.GiantOutline)
 local OrcaSwim = require(script.Parent.OrcaSwim)
+local DragonFly = require(script.Parent.DragonFly)
 local GiantTemplates = require(script.Parent.GiantTemplates)
 
-local EFFECTS = UIConfig.Effects
-local TURN_SHARPNESS = 6 -- qué tan rápido gira hacia su objetivo (1/s)
+local EFFECTS, TURN_SHARPNESS = UIConfig.Effects, 6 -- giro hacia su objetivo (1/s)
 
 export type Body = {
 	model: Model,
@@ -40,15 +39,15 @@ export type Body = {
 	mouth: () -> Vector3, -- adonde vuelan los peces
 	water: () -> Vector3, -- el agua justo bajo el gigante
 	bite: () -> (), -- muerde (la orca cierra la boca un instante)
-	swims: boolean,
+	swims: boolean, -- se mueve solo (orca o dragón): muerde en vez de saltar
+	flies: boolean, -- vuela (dragón): sin salpicaduras al comer
 	destroy: () -> (),
 }
 
 local GiantBody = {}
 
 local function angleTowards(from: Vector3, to: Vector3): number
-	local d = to - from
-	-- El modelo mira a -Z: Angles(0, y, 0) lo apunta a (-sin y, 0, -cos y).
+	local d = to - from -- el modelo mira a -Z: Angles(0, y, 0) apunta a (-sin y, 0, -cos y)
 	return math.deg(math.atan2(-d.X, -d.Z))
 end
 
@@ -91,8 +90,8 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 		shownScale = 0 -- otro alto base: hay que reescalar
 	end
 	dress(1)
-	local swim = OrcaSwim.attach(GiantTemplates.templateFor(folder, def, 1), base.Position)
-
+	local first = GiantTemplates.templateFor(folder, def, 1)
+	local swim = OrcaSwim.attach(first, base.Position) or DragonFly.attach(first, base.Position)
 	local outline = GiantOutline.attach(model)
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 
@@ -185,6 +184,7 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 			end,
 		bite = if swim then swim.bite else function() end,
 		swims = swim ~= nil,
+		flies = first ~= nil and first:FindFirstChild("AlaIzq1", true) ~= nil,
 		destroy = function()
 			connection:Disconnect()
 			if swim then

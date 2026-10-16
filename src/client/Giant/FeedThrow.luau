@@ -22,9 +22,9 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
-local Fx = require(script.Parent.Parent.Effects.Fx)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local FeedFlights = require(script.Parent.FeedFlights)
+local FeedPop = require(script.Parent.FeedPop)
 
 local EFFECTS = UIConfig.Effects
 local BITE_SECONDS = 0.45
@@ -41,11 +41,20 @@ local queued = 0 -- vuelos programados que todavía no despegan
 
 -- Un pez (de la especie entregada) vuela girando desde la mano hasta la boca
 -- (target se pide cada cuadro: la boca de la orca se mueve).
-function FeedThrow.throw(from: Vector3, target: () -> Vector3, fishId: string, onArrive: () -> ())
+function FeedThrow.throw(
+	from: Vector3,
+	target: () -> Vector3,
+	fishId: string,
+	onArrive: () -> (),
+	isLocal: boolean?,
+	size: number?
+)
 	local distance = (target() - from).Magnitude
 	local height = math.clamp(distance * 0.3, 6, 40)
 	Sounds.play("Whoosh", from, rng:NextNumber(0.9, 1.15))
 	local model = FishModel.build(if FishCatalog.get(fishId) then fishId else "Sardina", 1.4)
+	local color = FeedPop.color(fishId)
+	FeedPop.trail(model, color)
 	model.Parent = Workspace
 	local spread = Vector3.new(rng:NextNumber(-2, 2), 0, rng:NextNumber(-2, 2))
 	local start = from + Vector3.new(0, 2, 0)
@@ -54,7 +63,7 @@ function FeedThrow.throw(from: Vector3, target: () -> Vector3, fishId: string, o
 	end
 	FeedFlights.launch(model, start, aim, height, EFFECTS.FeedThrowSeconds, 1, function()
 		model:Destroy()
-		Fx.sparkle(aim(), UIConfig.Colors.Coins, 6)
+		FeedPop.chomp(aim(), color, size or 20, isLocal == true)
 		onArrive()
 	end)
 end
@@ -71,7 +80,11 @@ end
 -- Escucha GiantFed (un lote cada ~0.25 s). getMouth da la boca del gigante (nil
 -- si aún no existe). El gigante reacciona a lo sumo cada BITE_SECONDS: con
 -- muchos peces seguidos se ve una mordida tras otra, no una ráfaga de efectos.
-function FeedThrow.listen(getMouth: () -> Vector3?, onArrive: (character: Model) -> ())
+function FeedThrow.listen(
+	getMouth: () -> Vector3?,
+	onArrive: (character: Model) -> (),
+	getSize: () -> number
+)
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local giantFed = remotes:WaitForChild(Protocol.Remotes.GiantFed) :: RemoteEvent
 	local lastBite = 0
@@ -86,12 +99,13 @@ function FeedThrow.listen(getMouth: () -> Vector3?, onArrive: (character: Model)
 			last = getMouth() or last
 			return last
 		end
+		local isLocal = character == Players.LocalPlayer.Character
 		FeedThrow.throw(character:GetPivot().Position, target, fishId, function()
 			if os.clock() - lastBite >= BITE_SECONDS then
 				lastBite = os.clock()
 				onArrive(character)
 			end
-		end)
+		end, isLocal, getSize())
 	end
 
 	local function show(entry: { [any]: any })
