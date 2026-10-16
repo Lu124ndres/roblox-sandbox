@@ -61,8 +61,10 @@ local Products: { [string]: number } = {
 	Pond9 = 0, -- R$ 649
 	Pond10 = 0, -- R$ 999
 	Pond11 = 3718642542, -- R$ 799 · estanque sagrado x250 (solo Robux)
-	-- Regalar el pase VIP a otro jugador
+	-- Regalar un pase a otro jugador
 	GiftVIP = 0, -- R$ 299
+	GiftReyDelMar = 0, -- R$ 149
+	GiftDiosDelVolcan = 0, -- R$ 399
 	-- MEJORAS en Robux (el nivel 1 es gratis): cañas
 	Rod2 = 0, -- R$ 5
 	Rod3 = 0, -- R$ 15

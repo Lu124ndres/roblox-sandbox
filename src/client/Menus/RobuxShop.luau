@@ -4,6 +4,7 @@
 
 	La TIENDA (botón del HUD con el cofre): todo lo de Robux, estilo simulador.
 		Banner         entrenamiento para todo el servidor (x2 → x4, tiempo)
+		Personajes     los trajes de pase en tarjetas anchas (OutfitCard)
 		Para siempre   Poder y Monedas (x2, x4, x8...) y VIP
 		Monstruo       llenarlo 25/50/75 % (para todos)
 		Siguiente      elegir el monstruo que sale después del descanso
@@ -23,6 +24,7 @@ local BoostBanner = require(script.Parent.BoostBanner)
 local GiftPicker = require(script.Parent.GiftPicker)
 local HudButtons = require(script.Parent.HudButtons)
 local OfferCard = require(script.Parent.OfferCard)
+local OutfitCard = require(script.Parent.OutfitCard)
 local Purchases = require(script.Parent.Purchases)
 local RobuxOffers = require(script.Parent.RobuxOffers)
 local GiantPortrait = require(script.Parent.Parent.Giant.GiantPortrait)
@@ -39,27 +41,6 @@ local TWO_COLUMNS = UDim2.new(0.5, -6, 0, CARD_HEIGHT)
 local GIANT_COLORS = RouletteParts.COLORS -- mismos colores que en la ruleta
 
 local RobuxShop = {}
-
-local function scroller(parent: Instance): ScrollingFrame
-	local list = Instance.new("ScrollingFrame")
-	list.BackgroundTransparency = 1
-	list.BorderSizePixel = 0
-	list.Size = UDim2.fromScale(1, 1)
-	list.ScrollBarThickness = 8
-	list.AutomaticCanvasSize = Enum.AutomaticSize.Y
-	list.CanvasSize = UDim2.new()
-	list.Parent = parent
-	local layout = Instance.new("UIListLayout")
-	layout.SortOrder = Enum.SortOrder.LayoutOrder
-	layout.Padding = UDim.new(0, 10)
-	layout.Parent = list
-	local padding = Instance.new("UIPadding")
-	padding.PaddingTop = UDim.new(0, 6)
-	padding.PaddingLeft = UDim.new(0, 4)
-	padding.PaddingBottom = UDim.new(0, 10)
-	padding.Parent = list
-	return list
-end
 
 -- ¿Hay al menos dos monstruos que pueden salir? Si no, elegir no sirve de nada.
 local function rouletteHasChoice(): boolean
@@ -90,10 +71,10 @@ end
 
 function RobuxShop.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local window = Window.create(screen, "TiendaRobux", "Tienda", Vector2.new(760, 520))
+	local window = Window.create(screen, "TiendaRobux", "Tienda", Vector2.new(1000, 580))
 	HudButtons.side("Tienda", "chest", window.toggle)
 	local picker = GiftPicker.mount(screen)
-	local list = scroller(window.content)
+	local list = ShopParts.scroller(window.content)
 	local painters: { () -> () } = {}
 	local order = 0
 	local cards: Frame = list :: any
@@ -124,13 +105,25 @@ function RobuxShop.start(screen: ScreenGui)
 	order += 1
 	table.insert(painters, BoostBanner.new(list, order, buy, Purchases.price))
 
+	order += 1
+	ShopParts.section(list, order, "Personajes")
+	order += 1
+	table.insert(
+		painters,
+		OutfitCard.mount(list, order, actions, function()
+			return window.scale.Scale
+		end)
+	)
+
 	section("Para siempre")
 	add(CARDS.Pink, "giftPink", RobuxOffers.starter(player))
 	add(CARDS.Blue, "crystal", RobuxOffers.level(player, "Power"))
 	add(CARDS.Yellow, "coin", RobuxOffers.level(player, "Coins"))
 	add(CARDS.Cyan, "pond", RobuxOffers.pond(player, #Config.Progression.ponds)) -- sagrado
 	for _, key in MONETIZATION.passOrder do
-		add(CARDS.Purple, "crown", RobuxOffers.pass(player, key))
+		if not MONETIZATION.passes[key].outfit then -- los trajes van en Personajes
+			add(CARDS.Purple, "crown", RobuxOffers.pass(player, key))
+		end
 	end
 
 	section("Llenar al monstruo")

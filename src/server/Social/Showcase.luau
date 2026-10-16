@@ -16,11 +16,11 @@ local ServerStorage = game:GetService("ServerStorage")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local Perks = require(ReplicatedStorage.Shared.Perks)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local Proximity = require(script.Parent.Parent.Proximity)
 local RateLimit = require(script.Parent.Parent.RateLimit)
+local OutfitChoice = require(script.Parent.OutfitChoice)
 
 local L = WorldLayout
 local PASSES = Config.Monetization.passes
@@ -118,14 +118,10 @@ local function display(outfit: string, top: Vector3, look: Vector3): Model?
 	return model
 end
 
-local function onTriggered(player: Player, passKey: string, outfit: string)
-	if not limiter(player) or not Perks.hasPass(player, passKey) then
-		return -- sin el pase, el cliente abre la compra
+local function onTriggered(player: Player, passKey: string)
+	if limiter(player) then
+		OutfitChoice.toggle(player, passKey) -- sin el pase, el cliente abre la compra
 	end
-	local character = player.Character
-	local current = character and character:FindFirstChild(Trajes.FOLDER)
-	local wearing = current and current:GetAttribute("Outfit") == outfit
-	player:SetAttribute(Trajes.CHOSEN, if wearing then Trajes.SAILOR else outfit)
 end
 
 local function build(folder: Folder, passKey: string, side: number)
@@ -179,7 +175,7 @@ local function build(folder: Folder, passKey: string, side: number)
 	local prompt = Proximity.makePrompt(base, "Comprar", PASSES[passKey].name, PROMPT_DISTANCE)
 	prompt.Name = "Comprar"
 	prompt.Triggered:Connect(function(player: Player)
-		onTriggered(player, passKey, outfit)
+		onTriggered(player, passKey)
 	end)
 	model.Parent = folder
 end

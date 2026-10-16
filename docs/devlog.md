@@ -1020,3 +1020,26 @@ peces y reiniciar al otro jugador, traerlo, monstruo en etapa 3, ir al volcán.
 
 **Qué sigue:** la tienda con la foto de referencia.
 
+---
+
+## 2026-10-16 — Insignias en un solo marco y PERSONAJES en la TIENDA
+
+**Qué se hizo:**
+
+- Cartel de la cabeza: monstruos llenados, VIP y Premium ahora van todos dentro de una
+  sola placa (azul noche, marco de oro y brillo) separados por líneas finas; la placa se
+  ajusta a lo que se muestra.
+- TIENDA más ancha con la sección PERSONAJES arriba (como la referencia): una tarjeta ancha
+  por traje de pase (Dios del Volcán naranja, Rey del Mar azul) con rayos, el personaje en
+  3D a la izquierda saliendo por arriba (copia de su vitrina), nombre grande, ventajas en
+  dos líneas sacadas del pase, etiqueta inclinada "x2 Kills", botón verde con el precio o
+  Equipar/Desequipar si ya lo tiene, y el regalo rosa. VIP sigue en "Para siempre".
+- `Social/OutfitChoice` + remote `ElegirTraje`: ponerse o quitarse el traje desde la
+  tienda (las vitrinas usan lo mismo).
+- Los dos trajes se pueden regalar (`GiftReyDelMar`, `GiftDiosDelVolcan`; crear los
+  productos en el Creator Dashboard y poner sus IDs en `Assets.Products`).
+
+**Qué se rompió:** el personaje de la tarjeta salía acostado o vacío: ahora espera a que la
+malla de la vitrina llegue y la pone de pie con el marco medido por los huesos. Probado en
+Studio: cartel con VIP y Premium, tienda, Equipar/Desequipar.
+

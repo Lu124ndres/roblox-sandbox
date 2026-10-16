@@ -2,13 +2,14 @@
 --[[
 	OverheadBadges
 
-	Fila de insignias del cartel sobre la cabeza (Overhead), cada una en su
-	pastilla redonda con fondo en degradado, marco y un brillo arriba; el
-	ícono sobresale un poco por la izquierda:
-		Monstruos  monstruo panzón (Icons "fed") y cuántos llenó, fondo azul noche y marco de oro
-		VIP        corona y "VIP" sobre oro (solo si tiene el pase)
-		Premium    el ícono de Roblox Premium sobre fondo oscuro (solo si es Premium)
-	Las pastillas que no se usan se ocultan y las demás quedan centradas.
+	Insignias del cartel sobre la cabeza (Overhead), todas dentro de un solo
+	marco: una placa redonda azul noche con degradado, marco de oro y un brillo
+	arriba. Adentro, separados por líneas finas:
+		Monstruos  monstruo panzón (Icons "fed") y cuántos llenó
+		VIP        corona y "VIP" en oro (solo si tiene el pase)
+		Premium    el ícono de Roblox Premium (solo si es Premium)
+	La placa se ajusta al ancho de lo que se muestra y queda centrada; los
+	íconos sobresalen un poco del marco.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -24,12 +25,12 @@ export type Badges = {
 
 local rgb = Color3.fromRGB
 local WHITE = Color3.new(1, 1, 1)
+local GOLD = rgb(255, 214, 80)
+-- Ancho de cada parte (fracción del ancho del cartel) y el margen de la placa.
+local WIDTH = { kills = 0.27, vip = 0.21, premium = 0.11, line = 0.012 }
+local SIDES = 0.05
 
 local OverheadBadges = {}
-
-local function sequence(colors: { Color3 }): ColorSequence
-	return ColorSequence.new(colors[1], colors[2])
-end
 
 local function round(parent: GuiObject)
 	local corner = Instance.new("UICorner")
@@ -37,118 +38,151 @@ local function round(parent: GuiObject)
 	corner.Parent = parent
 end
 
--- Pastilla: fondo con degradado vertical, marco con degradado y brillo arriba.
-local function pill(
-	parent: Instance,
-	name: string,
-	width: number,
-	order: number,
-	fill: { Color3 },
-	frame: { Color3 }
-): Frame
+local function gradient(parent: Instance, top: Color3, bottom: Color3)
+	local fill = Instance.new("UIGradient")
+	fill.Rotation = 90
+	fill.Color = ColorSequence.new(top, bottom)
+	fill.Parent = parent
+end
+
+local function plate(row: Frame): (Frame, Frame)
 	local back = Instance.new("Frame")
-	back.Name = name
-	back.LayoutOrder = order
-	back.Size = UDim2.fromScale(width, 0.84)
+	back.Name = "Placa"
+	back.AnchorPoint = Vector2.new(0.5, 0.5)
+	back.Position = UDim2.fromScale(0.5, 0.52)
 	back.BackgroundColor3 = WHITE
 	back.BorderSizePixel = 0
 	round(back)
-	local gradient = Instance.new("UIGradient")
-	gradient.Rotation = 90
-	gradient.Color = sequence(fill)
-	gradient.Parent = back
+	gradient(back, rgb(54, 72, 150), rgb(16, 20, 50))
 	local border = Instance.new("UIStroke")
 	border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	border.Color = WHITE
 	border.Thickness = 4
 	border.Parent = back
-	local shade = Instance.new("UIGradient")
-	shade.Rotation = 90
-	shade.Color = sequence(frame)
-	shade.Parent = border
+	gradient(border, rgb(255, 240, 150), rgb(200, 120, 10))
 	local shine = Instance.new("Frame")
 	shine.Name = "Brillo"
 	shine.BackgroundColor3 = WHITE
-	shine.BackgroundTransparency = 0.8
+	shine.BackgroundTransparency = 0.82
 	shine.BorderSizePixel = 0
-	shine.Position = UDim2.fromScale(0.1, 0.08)
-	shine.Size = UDim2.fromScale(0.8, 0.3)
+	shine.Position = UDim2.fromScale(0.06, 0.07)
+	shine.Size = UDim2.fromScale(0.88, 0.3)
 	round(shine)
 	shine.Parent = back
-	back.Parent = parent
-	return back
-end
-
--- Ícono cuadrado que sobresale por la izquierda (medido con el alto de la pastilla).
-local function icon(parent: Instance, kind: string, size: number): GuiObject
-	local image = Icons.view(parent, kind)
-	image.SizeConstraint = Enum.SizeConstraint.RelativeYY
-	image.AnchorPoint = Vector2.new(0.5, 0.5)
-	image.Position = UDim2.fromScale(0.02, 0.48)
-	image.Size = UDim2.fromScale(size, size)
-	image.ZIndex = 3
-	return image
-end
-
-local function label(parent: Instance, text: string, color: Color3, outline: Color3): TextLabel
-	local value = Style.text(parent, "Texto", 90, color, 2.5)
-	value.Text = text
-	value.Position = UDim2.fromScale(0.3, 0.1)
-	value.Size = UDim2.fromScale(0.64, 0.8)
-	value.ZIndex = 3
-	local stroke = value:FindFirstChildOfClass("UIStroke")
-	if stroke then
-		stroke.Color = outline
-	end
-	return value
-end
-
-function OverheadBadges.build(row: Frame, player: Player): Badges
+	back.Parent = row
+	-- Las partes van en su propio cuadro (el brillo no entra en la fila).
+	local inside = Instance.new("Frame")
+	inside.Name = "Contenido"
+	inside.BackgroundTransparency = 1
+	inside.Size = UDim2.fromScale(1, 1)
+	inside.Parent = back
 	local list = Instance.new("UIListLayout")
 	list.FillDirection = Enum.FillDirection.Horizontal
 	list.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	list.VerticalAlignment = Enum.VerticalAlignment.Center
-	list.Padding = UDim.new(0.07, 0)
 	list.SortOrder = Enum.SortOrder.LayoutOrder
-	list.Parent = row
+	list.Parent = inside
+	return back, inside
+end
 
-	local kills = pill(row, "Monstruos", 0.3, 1, { rgb(52, 70, 140), rgb(18, 22, 54) }, {
-		rgb(255, 236, 140),
-		rgb(214, 140, 20),
-	})
-	icon(kills, "fed", 1.5)
-	local count = label(kills, "0", rgb(255, 240, 200), rgb(20, 16, 40))
+local function part(parent: Instance, name: string, order: number): Frame
+	local frame = Instance.new("Frame")
+	frame.Name = name
+	frame.LayoutOrder = order
+	frame.BackgroundTransparency = 1
+	frame.Parent = parent
+	return frame
+end
 
-	local vip = pill(row, "VIP", 0.25, 2, { rgb(255, 226, 90), rgb(240, 130, 10) }, {
-		rgb(255, 250, 220),
-		rgb(130, 60, 0),
-	})
-	icon(vip, "crown", 1.35)
-	label(vip, "VIP", WHITE, rgb(110, 50, 0))
+local function divider(parent: Instance, order: number): Frame
+	local holder = part(parent, "Linea", order)
+	local line = Instance.new("Frame")
+	line.AnchorPoint = Vector2.new(0.5, 0.5)
+	line.Position = UDim2.fromScale(0.5, 0.5)
+	line.Size = UDim2.new(0, 2, 0.6, 0)
+	line.BackgroundColor3 = GOLD
+	line.BackgroundTransparency = 0.25
+	line.BorderSizePixel = 0
+	line.Parent = holder
+	return holder
+end
 
-	local premium = pill(row, "Premium", 0.15, 3, { rgb(70, 74, 92), rgb(20, 22, 30) }, {
-		rgb(255, 255, 255),
-		rgb(150, 156, 175),
-	})
+local function icon(parent: Instance, kind: string, size: number, x: number)
+	local image = Icons.view(parent, kind)
+	image.SizeConstraint = Enum.SizeConstraint.RelativeYY
+	image.AnchorPoint = Vector2.new(0.5, 0.5)
+	image.Position = UDim2.fromScale(x, 0.46)
+	image.Size = UDim2.fromScale(size, size)
+	image.ZIndex = 3
+end
+
+local function label(parent: Instance, text: string, color: Color3, x: number): TextLabel
+	local value = Style.text(parent, "Texto", 90, color, 2.5)
+	value.Text = text
+	value.Position = UDim2.fromScale(x, 0.12)
+	value.Size = UDim2.fromScale(0.96 - x, 0.76)
+	value.ZIndex = 3
+	return value
+end
+
+function OverheadBadges.build(row: Frame, player: Player): Badges
+	local back, inside = plate(row)
+	local kills = part(inside, "Monstruos", 1)
+	icon(kills, "fed", 1.45, 0.2)
+	local count = label(kills, "0", rgb(255, 244, 214), 0.44)
+	local lineVip = divider(inside, 2)
+	local vip = part(inside, "VIP", 3)
+	icon(vip, "crown", 1.25, 0.26)
+	label(vip, "VIP", GOLD, 0.5)
+	local linePremium = divider(inside, 4)
+	local premium = part(inside, "Premium", 5)
 	local glyph = Instance.new("TextLabel")
 	glyph.Name = "Icono"
 	glyph.BackgroundTransparency = 1
-	glyph.Position = UDim2.fromScale(0.15, 0.12)
-	glyph.Size = UDim2.fromScale(0.7, 0.76)
+	glyph.Position = UDim2.fromScale(0.12, 0.16)
+	glyph.Size = UDim2.fromScale(0.76, 0.68)
 	glyph.FontFace = Font.fromEnum(Enum.Font.BuilderSansBold)
 	glyph.Text = utf8.char(0xE001) -- el ícono de Premium que dibuja Roblox
 	glyph.TextScaled = true
 	glyph.TextColor3 = WHITE
 	glyph.ZIndex = 3
 	glyph.Parent = premium
-	premium.Visible = player.MembershipType == Enum.MembershipType.Premium
+
+	local hasVip = false
+	local isPremium = player.MembershipType == Enum.MembershipType.Premium
+	-- Ancho de la placa según lo que se ve; cada parte, en proporción.
+	local function layout()
+		type Entry = { frame: Frame, width: number, on: boolean }
+		local shown: { Entry } = {
+			{ frame = kills, width = WIDTH.kills, on = true },
+			{ frame = lineVip, width = WIDTH.line, on = hasVip },
+			{ frame = vip, width = WIDTH.vip, on = hasVip },
+			{ frame = linePremium, width = WIDTH.line, on = isPremium },
+			{ frame = premium, width = WIDTH.premium, on = isPremium },
+		}
+		local total = SIDES
+		for _, entry in shown do
+			if entry.on then
+				total += entry.width
+			end
+		end
+		back.Size = UDim2.fromScale(total, 0.84)
+		for _, entry in shown do
+			entry.frame.Visible = entry.on
+			entry.frame.Size = UDim2.fromScale(entry.width / total, 1)
+		end
+	end
+	layout()
 
 	return {
 		setKills = function(value: number)
 			count.Text = NumberFormat.short(value)
 		end,
 		setVip = function(on: boolean)
-			vip.Visible = on
+			if on ~= hasVip then
+				hasVip = on
+				layout()
+			end
 		end,
 	}
 end

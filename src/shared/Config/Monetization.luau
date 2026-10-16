@@ -146,7 +146,7 @@ local Monetization: MonetizationConfig = {
 		Basket = { 0, 9, 25, 49, 129, 299 },
 		Boots = { 0, 5, 19, 39, 79, 199 },
 	},
-	passGifts = { VIP = 299 },
+	passGifts = { VIP = 299, ReyDelMar = 149, DiosDelVolcan = 399 },
 	starterPack = { robux = 49, coins = 15000, boostMinutes = 60, rod = 4, basket = 3 },
 	sellPonds = false,
 	receiptHistory = 50,

@@ -8,6 +8,7 @@
 		gift      botón rosa cuadrado con el regalo
 		section   título de sección con una línea a la derecha
 		tag       etiqueta inclinada ("¡Mejor oferta!", "x4")
+		scroller  lista con scroll para secciones y tarjetas
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -145,6 +146,28 @@ function ShopParts.tag(parent: Instance, text: string, color: Color3): TextLabel
 	label.Text = text
 	tag.Parent = parent
 	return label
+end
+
+-- Lista con scroll de las tiendas (secciones y tarjetas una debajo de otra).
+function ShopParts.scroller(parent: Instance): ScrollingFrame
+	local list = Instance.new("ScrollingFrame")
+	list.BackgroundTransparency = 1
+	list.BorderSizePixel = 0
+	list.Size = UDim2.fromScale(1, 1)
+	list.ScrollBarThickness = 8
+	list.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	list.CanvasSize = UDim2.new()
+	list.Parent = parent
+	local layout = Instance.new("UIListLayout")
+	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	layout.Padding = UDim.new(0, 10)
+	layout.Parent = list
+	local padding = Instance.new("UIPadding")
+	padding.PaddingTop = UDim.new(0, 6)
+	padding.PaddingLeft = UDim.new(0, 4)
+	padding.PaddingBottom = UDim.new(0, 10)
+	padding.Parent = list
+	return list
 end
 
 return ShopParts

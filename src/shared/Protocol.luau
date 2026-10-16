@@ -84,9 +84,9 @@ local Protocol = {
 		Rebirth = "Rebirth", -- cliente -> servidor: renacer (si le alcanzan las monedas)
 		-- cliente -> servidor: (settings: { [string]: boolean }). Guardar ajustes.
 		SaveSettings = "SaveSettings",
-		-- cliente -> servidor: (code: string) canjear un código / reclamar el regalo del grupo
-		RedeemCode = "RedeemCode",
-		ClaimGroup = "ClaimGroup",
+		RedeemCode = "RedeemCode", -- cliente -> servidor: (code: string) canjear un código
+		ClaimGroup = "ClaimGroup", -- cliente -> servidor: reclamar el regalo del grupo
+		ChooseOutfit = "ElegirTraje", -- cliente -> servidor: (passKey) ponerse/quitarse ese traje
 		-- cliente -> servidor: (productKey: string, targetUserId: number). La próxima
 		-- compra de ese producto (en 2 min) es un regalo para ese jugador.
 		SetGift = "SetGift",

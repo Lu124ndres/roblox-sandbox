@@ -65,6 +65,8 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `Pond10` | Estanque 10 | 999 | Estanques para siempre | |
 | `Pond11` | Estanque sagrado x250 | 799 | Solo con Robux (centro de la isla) | |
 | `GiftVIP` | Regalar VIP | 299 | Regalar el pase VIP a otro jugador | |
+| `GiftReyDelMar` | Regalar Rey del Mar | 149 | Regalar el traje Rey del Mar a otro jugador | |
+| `GiftDiosDelVolcan` | Regalar Dios del Volcán | 399 | Regalar el traje Dios del Volcán a otro jugador | |
 | `Rod2` | Caña nivel 2 | 5 | MEJORAS en Robux (el nivel 1 es gratis): cañas | |
 | `Rod3` | Caña nivel 3 | 15 | MEJORAS en Robux (el nivel 1 es gratis): cañas | |
 | `Rod4` | Caña nivel 4 | 29 | MEJORAS en Robux (el nivel 1 es gratis): cañas | |
