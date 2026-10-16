@@ -130,6 +130,8 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			Enum.KeyCode.Space,
 			Enum.KeyCode.E,
 			Enum.KeyCode.ButtonA,
+			Enum.KeyCode.ButtonX, -- con el mando se recoge con el mismo botón que se lanza
+			Enum.KeyCode.ButtonR2,
 			Enum.UserInputType.MouseButton1
 		)
 	end
@@ -142,7 +144,7 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			return Enum.ContextActionResult.Sink
 		end
 		return Enum.ContextActionResult.Pass
-	end, false, Enum.KeyCode.E, Enum.KeyCode.F, Enum.KeyCode.ButtonX)
+	end, false, Enum.KeyCode.E, Enum.KeyCode.F, Enum.KeyCode.ButtonX, Enum.KeyCode.ButtonR2)
 
 	task.spawn(function()
 		while true do

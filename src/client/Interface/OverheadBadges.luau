@@ -6,7 +6,7 @@
 	marco: una placa redonda azul noche con degradado, marco de oro y un brillo
 	arriba. Adentro, separados por líneas finas:
 		Monstruos  monstruo panzón (Icons "fed") y cuántos llenó
-		VIP        corona y "VIP" en oro (solo si tiene el pase)
+		VIP        "VIP" en oro con degradado (solo si tiene el pase)
 		Premium    el ícono de Roblox Premium (solo si es Premium)
 	La placa se ajusta al ancho de lo que se muestra y queda centrada; los
 	íconos sobresalen un poco del marco.
@@ -27,7 +27,7 @@ local rgb = Color3.fromRGB
 local WHITE = Color3.new(1, 1, 1)
 local GOLD = rgb(255, 214, 80)
 -- Ancho de cada parte (fracción del ancho del cartel) y el margen de la placa.
-local WIDTH = { kills = 0.27, vip = 0.21, premium = 0.11, line = 0.012 }
+local WIDTH = { kills = 0.27, vip = 0.17, premium = 0.11, line = 0.012 }
 local SIDES = 0.05
 
 local OverheadBadges = {}
@@ -132,8 +132,15 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 	local count = label(kills, "0", rgb(255, 244, 214), 0.44)
 	local lineVip = divider(inside, 2)
 	local vip = part(inside, "VIP", 3)
-	icon(vip, "crown", 1.25, 0.26)
-	label(vip, "VIP", GOLD, 0.5)
+	local vipText = label(vip, "VIP", WHITE, 0.08)
+	vipText.Size = UDim2.fromScale(0.84, 0.86)
+	vipText.Position = UDim2.fromScale(0.08, 0.07)
+	gradient(vipText, rgb(255, 250, 190), rgb(255, 150, 0)) -- oro: claro arriba, naranja abajo
+	local outline = vipText:FindFirstChildOfClass("UIStroke")
+	if outline then
+		outline.Color = rgb(90, 40, 0)
+		outline.Thickness = 3
+	end
 	local linePremium = divider(inside, 4)
 	local premium = part(inside, "Premium", 5)
 	local glyph = Instance.new("TextLabel")

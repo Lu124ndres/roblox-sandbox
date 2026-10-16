@@ -1043,3 +1043,26 @@ peces y reiniciar al otro jugador, traerlo, monstruo en etapa 3, ir al volcán.
 malla de la vitrina llegue y la pone de pie con el marco medido por los huesos. Probado en
 Studio: cartel con VIP y Premium, tienda, Equipar/Desequipar.
 
+---
+
+## 2026-10-16 — VIP dorado y juego con mando (Xbox / PlayStation) y móvil
+
+**Qué se hizo:**
+
+- Cartel de la cabeza: sin corona; "VIP" en oro con degradado (claro arriba, naranja
+  abajo) y contorno café.
+- `Interface/InputHints`: sabe si se juega con teclado, mando o táctil (lo último que se
+  tocó) y nombra los botones: E en PC, X en Xbox, Cuadrado en PlayStation. Las insignias de
+  Pescar/Alimentar/¡TIRA! muestran la tecla o el dibujo del botón del mando (lo da Roblox,
+  de Xbox o de PlayStation) y no se ven en táctil. Los avisos y la misión del tutorial dicen
+  el botón correcto (en táctil no se dice tecla).
+- Mando en el juego: lanzar y alimentar con X (Cuadrado) o R2; recoger con X, A o R2.
+- `Menus/GamepadNav`: Y (Triángulo) entra al menú del HUD y la marca dorada recorre los
+  botones (Tienda, Mejoras, Misiones...); A aprieta; B (Círculo) cierra la ventana o sale.
+  Al abrirse una ventana la marca entra a su primer botón y no se sale de ella; al cerrarla
+  vuelve al botón del HUD. Con mando, arriba de la columna derecha dice "Y Menú".
+- `Window.onAnyChange` y `HudButtons.all` para que el mando sepa qué hay en pantalla.
+
+**Qué se rompió:** nada. Probado en Studio: VIP dorado, marco dorado de la selección, Y del
+emulador de mandos. Falta probar con un mando real y en un teléfono.
+

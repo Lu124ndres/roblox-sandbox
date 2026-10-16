@@ -28,6 +28,7 @@ export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
 local HudButtons = {}
 
 local order = 0
+local registered: { TextButton } = {} -- todos, en orden: los recorre el mando (GamepadNav)
 local sideRow: Frame? = nil
 local sideCount = 0 -- botones grandes ya puestos (van de dos en dos por fila)
 
@@ -110,6 +111,7 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 	sideCount += 1
 	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE)
 	button.LayoutOrder = order
+	table.insert(registered, button)
 	press(button, onClick)
 	local dot = alertDot(button)
 	return {
@@ -136,6 +138,7 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	corner.CornerRadius = UDim.new(1, 0)
 	corner.Parent = button
 	button.Parent = bar
+	table.insert(registered, button)
 	local view = Icons.view(button, icon)
 	view.AnchorPoint = Vector2.new(0.5, 0.5)
 	view.Position = UDim2.fromScale(0.5, 0.5)
@@ -148,6 +151,11 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 			dot.Visible = on
 		end,
 	}
+end
+
+-- Los botones del HUD (primero los de la columna derecha), para el mando.
+function HudButtons.all(): { TextButton }
+	return registered
 end
 
 return HudButtons

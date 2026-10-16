@@ -11,15 +11,15 @@
 		teléfono  justo a la izquierda del botón de saltar de Roblox
 		tablet    igual, más grande (el botón de saltar también lo es)
 		PC        en la esquina; todo se hace con E (los botones muestran la tecla)
+		mando     igual que PC; X (Cuadrado en PlayStation) o R2, y lo muestran
 	Se reacomodan si cambia la pantalla (girar el teléfono, ventana en PC).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Ui = require(script.Parent.Parent.Ui)
 local Device = require(script.Parent.Parent.Interface.Device)
+local InputHints = require(script.Parent.Parent.Interface.InputHints)
 local ActionButton = require(script.Parent.ActionButton)
 
 local COLORS = UIConfig.Colors
@@ -71,29 +71,9 @@ local function addPlacer(placer: () -> ())
 	end
 end
 
--- Insignia con la tecla (solo si hay teclado): en PC no hace falta hacer clic.
-local function keyBadge(button: TextButton, key: string)
-	if not UserInputService.KeyboardEnabled then
-		return
-	end
-	local badge = Instance.new("TextLabel")
-	badge.Name = "Tecla"
-	badge.AnchorPoint = Vector2.new(0.5, 0.5)
-	badge.Position = UDim2.fromScale(0.84, 0.14)
-	badge.Size = UDim2.fromScale(0.3, 0.3)
-	badge.BackgroundColor3 = Color3.fromRGB(18, 26, 40)
-	badge.Text = key
-	badge.TextScaled = true
-	badge.FontFace = UIConfig.Fonts.Title
-	badge.TextColor3 = COLORS.Text
-	badge.ZIndex = button.ZIndex + 2
-	Ui.corner(badge, 8)
-	Ui.stroke(badge, COLORS.Text, 2, 0)
-	local padding = Instance.new("UIPadding")
-	padding.PaddingTop = UDim.new(0.14, 0)
-	padding.PaddingBottom = UDim.new(0.14, 0)
-	padding.Parent = badge
-	badge.Parent = button
+-- Insignia con la tecla (E en PC, X/Cuadrado en el mando; nada en táctil).
+local function keyBadge(button: TextButton)
+	InputHints.badge(button, InputHints.ACTION_KEY, InputHints.ACTION_PAD)
 end
 
 -- Pescar y Alimentar: tamaño fijo en píxeles, en el lugar del pulgar.
@@ -115,7 +95,7 @@ end
 
 function FishingButtons.cast(screen: ScreenGui): TextButton
 	local button = mainButton(screen, "Pescar", "Pescar", COLORS.Fishing, "rod")
-	keyBadge(button, "E")
+	keyBadge(button)
 	return button
 end
 
@@ -123,7 +103,7 @@ end
 function FishingButtons.feed(screen: ScreenGui): TextButton
 	local button = mainButton(screen, "Alimentar", "Alimentar", COLORS.Feeding, "meat")
 	ActionButton.rings(button, COLORS.Feeding, 1.1)
-	keyBadge(button, "E")
+	keyBadge(button)
 	return button
 end
 
@@ -140,7 +120,7 @@ function FishingButtons.bite(screen: ScreenGui): TextButton
 		limit.MaxSize = Vector2.one * math.floor(where.size * BITE_GROWTH)
 	end)
 	ActionButton.rings(button, COLORS.Bite, 0.55)
-	keyBadge(button, "E")
+	keyBadge(button)
 
 	return button
 end

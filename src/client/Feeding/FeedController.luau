@@ -4,8 +4,8 @@
 
 	Alimentar desde cualquier punto de la orilla del volcán (el borde del
 	cráter, marcado con una línea coral sobre el paseo). Cuando el
-	jugador está ahí y lleva peces aparece el botón Alimentar (E o F en PC, X
-	en consola): se alimenta MIENTRAS se mantiene apretado. Solo avisa
+	jugador está ahí y lleva peces aparece el botón Alimentar (E o F en PC, X o
+	R2 en el mando): se alimenta MIENTRAS se mantiene apretado. Solo avisa
 	FeedRequest(true) al apretar y FeedRequest(false) al soltar: el servidor
 	valida dónde está y cuánto lleva, y FeedFeedback muestra el resultado.
 ]]
@@ -20,6 +20,7 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local FishingButtons = require(script.Parent.Parent.Fishing.FishingButtons)
 local GiantName = require(script.Parent.Parent.GiantName)
+local InputHints = require(script.Parent.Parent.Interface.InputHints)
 local Toasts = require(script.Parent.Parent.Toasts)
 
 local FEED_ACTION = "Alimentar"
@@ -87,7 +88,7 @@ function FeedController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			return Enum.ContextActionResult.Sink
 		end
 		return Enum.ContextActionResult.Pass
-	end, false, Enum.KeyCode.E, Enum.KeyCode.F, Enum.KeyCode.ButtonX)
+	end, false, Enum.KeyCode.E, Enum.KeyCode.F, Enum.KeyCode.ButtonX, Enum.KeyCode.ButtonR2)
 
 	task.spawn(function()
 		while true do
@@ -100,7 +101,7 @@ function FeedController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			end
 			if there and not wasThere then
 				toasts.show(
-					`Mantén E (o el botón) para alimentar a {GiantName.current()}`,
+					`Mantén {InputHints.action()} para alimentar a {GiantName.current()}`,
 					UIConfig.Colors.Feeding
 				)
 			end

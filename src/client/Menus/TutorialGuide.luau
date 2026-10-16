@@ -22,6 +22,7 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Ui = require(script.Parent.Parent.Ui)
+local InputHints = require(script.Parent.Parent.Interface.InputHints)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
@@ -129,11 +130,16 @@ function TutorialGuide.start(screen: ScreenGui)
 			then ` ({if type(count) == "number" then count else 0}/{current.goal})`
 			else ""
 		title.Text = `Misión {index}/{#STEPS}`
-		text.Text = current.text .. progress
+		-- Las tres primeras se hacen con el botón de acción: se dice cuál.
+		local key = if index <= 3 and InputHints.mode() ~= "touch"
+			then ` ({InputHints.action()})`
+			else ""
+		text.Text = current.text .. key .. progress
 	end
 	for _, attribute in { ATTR.Tutorial, ATTR.TutorialCount, ATTR.DataLoaded } do
 		player:GetAttributeChangedSignal(attribute):Connect(refresh)
 	end
+	InputHints.onChange(refresh)
 	refresh()
 
 	RunService.Heartbeat:Connect(function()

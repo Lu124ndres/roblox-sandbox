@@ -20,14 +20,14 @@ local Types = require(script.Parent.Types)
 
 local Retention: Types.RetentionConfig = {
 	tutorial = {
-		{ id = "pescar", text = "Pesca 5 peces en la orilla (E)", goal = 5, coins = 25 },
+		{ id = "pescar", text = "Pesca 5 peces en la orilla", goal = 5, coins = 25 },
 		{
 			id = "alimentar",
-			text = "Cruza el puente y alimenta a la Orca (E)",
+			text = "Cruza el puente y alimenta a la Orca",
 			goal = 1,
 			coins = 50,
 		},
-		{ id = "entrenar", text = "Entrena en un estanque de la plaza (E)", goal = 1, coins = 50 },
+		{ id = "entrenar", text = "Entrena en un estanque de la plaza", goal = 1, coins = 50 },
 		{ id = "comprar", text = "Compra una mejora en la tienda", goal = 1, coins = 100 },
 	},
 	tutorialBonus = 200,

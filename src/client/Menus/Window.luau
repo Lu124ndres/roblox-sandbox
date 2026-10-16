@@ -7,8 +7,8 @@
 	una X roja en la esquina derecha. Solo una ventana del menú está abierta
 	a la vez: abrir una cierra la otra. La usan la TIENDA, MEJORAS, la
 	colección, el premio diario, los ajustes, los códigos y el grupo.
-	En pantallas táctiles la ventana ocupa casi toda la pantalla y se ve más
-	grande (los dedos necesitan botones más grandes que el mouse).
+	En táctil ocupa casi toda la pantalla. `onAnyChange` avisa de toda ventana
+	que se abre o cierra (GamepadNav lleva el mando adentro).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -44,9 +44,13 @@ export type Window = {
 local Window = {}
 
 local current: Window? = nil
+local changeListeners: { (window: Window, opened: boolean) -> () } = {}
 
--- Escala para que las ventanas se vean del mismo tamaño en cualquier
--- pantalla (en una de 1440 px de alto, el doble que en una de 720).
+function Window.onAnyChange(listener: (window: Window, opened: boolean) -> ())
+	table.insert(changeListeners, listener)
+end
+
+-- Escala para verse del mismo tamaño en toda pantalla (1440 px de alto: el doble que 720).
 function Window.fit(): number
 	local height = Device.viewport().Y
 	if Device.touch() then
@@ -78,8 +82,6 @@ function Window.create(
 	frame.Name = name
 	frame.BackgroundTransparency = 1
 	frame.AnchorPoint = Vector2.new(0.5, 0.5)
-	frame.Position = UDim2.fromScale(0.5, 0.53)
-	frame.Size = UDim2.fromScale(0.94, 0.84)
 	frame.Visible = false
 	frame.ZIndex = 10
 	frame.Parent = screen
@@ -88,7 +90,6 @@ function Window.create(
 	limit.Parent = frame
 	local scale = Instance.new("UIScale")
 	scale.Parent = frame
-
 	local panel = Instance.new("Frame")
 	panel.Name = "Panel"
 	panel.BackgroundColor3 = panelColor or PALETTE.Panel
@@ -115,7 +116,6 @@ function Window.create(
 	closeButton.Size = UDim2.fromOffset(CLOSE_SIZE, CLOSE_SIZE)
 	closeButton.ZIndex = 4
 	closeButton.Rotation = 4
-
 	local content = Instance.new("Frame")
 	content.Name = "Contenido"
 	content.BackgroundTransparency = 1
@@ -145,6 +145,9 @@ function Window.create(
 			frame.Visible = true
 			scale.Scale = fit * 0.85
 			TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = fit }):Play()
+			for _, listener in changeListeners do
+				task.spawn(listener, window, true)
+			end
 		end,
 		close = function()
 			if not frame.Visible then
@@ -156,6 +159,9 @@ function Window.create(
 			end
 			for _, callback in closeCallbacks do
 				callback()
+			end
+			for _, listener in changeListeners do
+				task.spawn(listener, window, false)
 			end
 		end,
 		toggle = function()
@@ -176,9 +182,8 @@ function Window.create(
 		end,
 	}
 	closeButton.Activated:Connect(window.close)
-	-- Para probar en Studio desde la barra de comandos: <ventana>.Abrir:Fire().
 	local opener = Instance.new("BindableEvent")
-	opener.Name = "Abrir"
+	opener.Name = "Abrir" -- para probar en Studio: <ventana>.Abrir:Fire()
 	opener.Event:Connect(window.open)
 	opener.Parent = frame
 	-- Si la pantalla cambia con la ventana abierta (girar el teléfono), se reacomoda.
