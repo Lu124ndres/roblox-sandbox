@@ -18,7 +18,7 @@ local Protocol = require(script.Parent.Protocol)
 local GiantPool = {}
 
 function GiantPool.available(def: Config.GiantDef): boolean
-	if not def.inRoulette then
+	if not def.inRoulette or not def.released then -- los que no salieron aún no entran
 		return false
 	end
 	local season = def.season

@@ -1102,3 +1102,29 @@ producto PackInicio en 19 R$ en el panel de Roblox.
 **Qué sigue:** rediseñar las ventanas de premios diarios y regalos por jugar con la foto de
 referencia.
 
+
+---
+
+## 2026-10-16 — Retratos de Orca y Dragón, panel de hambre nuevo y botones arriba a la derecha
+
+**Qué se hizo:**
+
+- Íconos nuevos de la Orca y el Dragón marino hechos en Canva describiendo sus modelos 3D
+  (orca azul noche con marcas cian y corona de coral; dragón azul con cuernos blancos y
+  bigotes). Reemplazan sus celdas en la hoja 2 (nuevo ID): se ven en el retrato del panel de
+  hambre y en la tienda (elegir el siguiente monstruo).
+- Panel de hambre rehecho: placa azul noche con marco dorado (`Interface/HungerLook`),
+  medalla redonda del retrato con aro del color de la etapa, "Etapa 2/4", barra con brillo y
+  carne. Los botones +25/+50/+75% llevan el precio en Robux adentro (sin insignia suelta).
+- Los botones redondos (Premio, Peces, Códigos, Grupo, Ajustes, Admin) pasaron a la esquina
+  derecha de la barra de Roblox y son más chicos (36 px en PC, 30 en táctil); el panel de
+  hambre sube a la barra si cabe entre los botones de Roblox y los nuestros.
+- Arreglo: el Zorro de agua (`released = false`) podía salir en la ruleta y venderse en
+  "elegir el siguiente"; `GiantPool.available` ahora lo deja fuera.
+- Revisión de balance y retención (simulación de un jugador nuevo); los hallazgos y
+  propuestas quedan para decidir (entrega por canasta, comida según jugadores, estanques
+  por poder, misiones jugables solo).
+
+**Qué se rompió:** nada. Probado en Studio en PC y con el simulador de iPhone XR.
+
+**Qué sigue:** decidir los cambios de balance propuestos.
