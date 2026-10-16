@@ -1509,3 +1509,23 @@ alto que la cabeza, dos llamas chicas en los hombros, contorno y halo de lava, u
 en el volcán de la cabeza. Nada de fuego encima del cuerpo.
 
 **Qué se rompió:** nada. Probado en juego (plaza y borde del volcán).
+
+
+---
+
+## 2026-10-16 (14) — El minotauro camina para comer y guarida nueva
+
+**Qué se hizo:**
+
+- El minotauro solo giraba en el centro al ser alimentado (su código nunca lo movía). Ahora
+  camina hasta la orilla de quien lo alimenta (`Minotauro/Caminar`: se para según su tamaño,
+  acelera y frena), con piernas y brazos alternados (`Pose.walk`) y una salpicadura y una
+  onda en cada pisada; come al llegar y vuelve caminando al centro. `adb42da`.
+- Guarida del descanso: radio 90 (llena el fondo del pozo de pared a pared), base hasta el
+  fondo, otro anillo de oro y 12 obeliscos. Queda enterrada 40 studs (`restArenaSink`)
+  mientras se alimenta al monstruo; al vaciarse el lago sube con retumbo y brasas
+  (`Ambient/GuaridaSube`, animada en el cliente con BulkMoveTo; el servidor la mueve de una
+  vez) y al terminar el descanso se hunde. `30f4f37`.
+
+**Qué se rompió:** nada. Probado en juego: `Minotauro:2` camina al oeste hasta x = -159 y
+come; `fill 1` → la guarida sube a -136 mientras se vacía el lago; `skipRest` → baja a -176.
