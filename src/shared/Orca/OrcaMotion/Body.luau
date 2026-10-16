@@ -151,7 +151,9 @@ function Body.step(body: Body, dt: number, input: Input)
 			flap = p.swim.flap,
 			head = 0.12 * input.close + (trick.head or 0) * w,
 			tail = (trick.tail or 0) * w,
-		})
+			pitchSpeed = body.pitchSpeed,
+			rollSpeed = body.rollSpeed,
+		}, dt)
 	end
 end
 

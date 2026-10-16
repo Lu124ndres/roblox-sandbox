@@ -58,6 +58,7 @@ function Dragon.new(lakeCenter: Vector3): Motion
 		feeding = 0,
 		fire = false,
 		phase = 0,
+		fold = 0,
 		hidden = false,
 		voice = 1,
 		fireSize = 1,
@@ -142,7 +143,7 @@ function Dragon.new(lakeCenter: Vector3): Motion
 			trick = t,
 			biting = os.clock() < biteUntil,
 		})
-		state.fire, state.phase = t.fire == true, wings.phase
+		state.fire, state.phase, state.fold = t.fire == true, wings.phase, wings.fold
 
 		local rig = state.rig
 		if rig then
@@ -151,7 +152,6 @@ function Dragon.new(lakeCenter: Vector3): Motion
 				now = now,
 				phase = wings.phase,
 				amp = wings.amp,
-				neutral = profile.neutral,
 				fold = wings.fold,
 				turn = rumbo.yawRate,
 				climb = climb,
@@ -159,7 +159,7 @@ function Dragon.new(lakeCenter: Vector3): Motion
 				headPitch = (t.head or 0) - 0.15 * w,
 				headYaw = 0,
 				hover = wings.hover,
-			})
+			}, dt)
 		end
 
 		local bob = -math.cos(wings.phase) * L * 0.02 * wings.amp

@@ -8,6 +8,7 @@
 		Estela    espuma en la superficie donde el lomo corta el agua.
 		Cristal   la aleta dorsal brilla (luz que late y destellos aguamarina).
 		Boca      destellos dorados mientras come.
+		Remolinos estela en las aletas de la cola al nadar rápido (Remolinos).
 	La cantidad sigue la velocidad y el modo rápido (fxScale = 0 no emite).
 ]]
 
@@ -16,6 +17,7 @@ local Workspace = game:GetService("Workspace")
 local Assets = require(script.Parent.Parent.Parent.Assets)
 local WorldLayout = require(script.Parent.Parent.Parent.WorldLayout)
 local Rig = require(script.Parent.Parent.OrcaMotion.Rig)
+local Remolinos = require(script.Parent.Remolinos)
 
 local WATER = WorldLayout.waterLevel
 local BASE_HEIGHT = 16.5 -- etapa 1: tamaño 1 de los efectos
@@ -36,6 +38,7 @@ export type Trails = {
 	shimmer: ParticleEmitter?,
 	glow: PointLight?,
 	crumbs: ParticleEmitter?,
+	swirls: Remolinos.Remolinos?,
 	sizedFor: number,
 }
 export type Status = { center: Vector3, height: number, speed: number, feeding: number }
@@ -134,6 +137,7 @@ function Trails.attach(rig: Rig.Rig): Trails
 		shimmer = shimmer,
 		glow = glow,
 		crumbs = crumbs,
+		swirls = Remolinos.attach(rig, Colors.Teal),
 		sizedFor = 0,
 	}
 	return trails
@@ -161,10 +165,16 @@ function Trails.update(trails: Trails, status: Status, fxScale: number, visible:
 	if trails.crumbs then
 		trails.crumbs.Rate = if status.feeding > 0.5 then 16 * rate else 0
 	end
+	if trails.swirls then
+		Remolinos.update(trails.swirls, status.speed, height, fxScale, visible)
+	end
 end
 
 function Trails.destroy(trails: Trails)
 	trails.wakeAnchor:Destroy()
+	if trails.swirls then
+		Remolinos.destroy(trails.swirls)
+	end
 	for _, item in { trails.bubbles, trails.shimmer, trails.glow, trails.crumbs } :: { Instance? } do
 		if item then
 			item:Destroy()

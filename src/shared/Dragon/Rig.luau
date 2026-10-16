@@ -3,13 +3,17 @@
 	Dragon/Rig
 
 	Los huesos del dragón (tools/blender/rig_dragon.py) y sus ejes. El modelo
-	llega en pose de vuelo (cola estirada, patas recogidas, alas arriba). Al
+	llega en pose de vuelo (cola estirada, patas recogidas); las alas, en
+	planeo (los modelos nuevos) o arriba (los viejos): `neutral` mide cuánto hay
+	que bajarlas para que queden en planeo, así sirve cualquiera de los dos. Al
 	enlazar se miden los ejes del CUERPO con los huesos: adelante (de la cadera
 	a la cabeza), derecha (de la raíz del ala izquierda a la derecha) y arriba,
 	y se pasan al espacio de cada hueso: así no importa cómo los orientó el
 	exportador. turn() gira un hueso con cabeceo (+ = punta arriba), giro
 	(+ = a la izquierda) y alabeo alrededor del eje largo del cuerpo.
 ]]
+
+local Resorte = require(script.Parent.Parent.Resorte)
 
 export type Axes = { pitch: Vector3, yaw: Vector3, roll: Vector3 }
 export type Rig = {
@@ -20,7 +24,11 @@ export type Rig = {
 	right: Vector3, -- ejes del cuerpo en el espacio del pivote
 	up: Vector3,
 	root: Bone,
+	neutral: number, -- cuánto bajar el ala desde el reposo para planear (rad)
+	springs: { [string]: Resorte.Resorte }, -- inercia de cola, cuello y alas (Pose)
 }
+
+local DIHEDRAL = 0.1 -- al planear las alas quedan apenas arriba de la horizontal (rad)
 
 local Rig = {}
 
@@ -56,6 +64,15 @@ function Rig.bind(model: Model): Rig?
 		local offset = (at(bone) - at(root)):Dot(right)
 		side[name] = if math.abs(offset) < 1e-3 then 0 else math.sign(offset)
 	end
+	-- Ángulo del ala en reposo sobre la horizontal: del hombro a la mano.
+	local elevation = 0
+	for _, s in { "Izq", "Der" } do
+		local hand = bones[`Ala{s}3`] or bones[`Ala{s}2`]
+		local span = if hand then at(hand) - at(bones[`Ala{s}1`]) else Vector3.zero
+		if span.Magnitude > 1e-3 then
+			elevation += math.asin(math.clamp(span.Unit:Dot(up), -1, 1)) / 2
+		end
+	end
 	return {
 		model = model,
 		bones = bones,
@@ -64,6 +81,8 @@ function Rig.bind(model: Model): Rig?
 		right = right,
 		up = up,
 		root = root,
+		neutral = elevation - DIHEDRAL,
+		springs = {},
 	}
 end
 

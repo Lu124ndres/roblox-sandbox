@@ -12,6 +12,7 @@ export type State = {
 	feeding: number,
 	fire: boolean,
 	phase: number, -- fase del aleteo (rad): DragonFx suena cada aletazo
+	fold: number, -- 0..1 alas plegadas (picada): estelas en las puntas
 	hidden: boolean,
 	voice: number,
 	fireSize: number,

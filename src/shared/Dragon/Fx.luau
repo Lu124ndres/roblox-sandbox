@@ -6,12 +6,14 @@
 		fuego     chorro de llamas desde la boca hacia adelante de la cabeza,
 		          con chispas y una luz que ilumina todo (trucos de fuego)
 		roar      rugido con la voz de su etapa y temblor de cámara cerca
+		estelas   aire en las puntas de las alas al ir rápido o picar (Estelas)
 		whoosh    el aire al pasar rápido (picadas, volteretas)
 		aletazos  cada bajada del ala suena (los grandes, más grave y fuerte)
 	Los sonidos y destellos son los del juego (hooks): respetan volumen,
 	alcance y el modo de efectos reducidos.
 ]]
 
+local Estelas = require(script.Parent.Estelas)
 local Tipos = require(script.Parent.Tipos)
 
 export type Hooks = {
@@ -36,7 +38,7 @@ type Breath = {
 	length: number,
 }
 
-local function build(rig: any, length: number): Breath?
+local function build(rig: any): Breath?
 	local boca, cabeza = rig.bones.Boca, rig.bones.Cabeza
 	if not boca or not cabeza then
 		return nil
@@ -101,6 +103,7 @@ end
 
 function DragonFx.new(motion: Tipos.Motion, hooks: Hooks): Fx
 	local breath: Breath? = nil
+	local trails: Estelas.Estelas? = nil
 	local boundTo: any = nil
 	local lastStroke = 0
 	local firing = false
@@ -111,8 +114,15 @@ function DragonFx.new(motion: Tipos.Motion, hooks: Hooks): Fx
 			if breath then
 				breath.socket:Destroy()
 			end
+			if trails then
+				Estelas.destroy(trails)
+			end
 			boundTo = state.rig
-			breath = if state.rig then build(state.rig, state.length) else nil
+			breath = if state.rig then build(state.rig) else nil
+			trails = if state.rig then Estelas.build(state.rig) else nil
+		end
+		if trails then
+			Estelas.step(trails, state, hooks.fxScale())
 		end
 		local b = breath
 		if b and math.abs(b.length - state.length) > b.length * 0.08 then
@@ -152,6 +162,9 @@ function DragonFx.new(motion: Tipos.Motion, hooks: Hooks): Fx
 		destroy = function()
 			if breath then
 				breath.socket:Destroy()
+			end
+			if trails then
+				Estelas.destroy(trails)
 			end
 		end,
 	}

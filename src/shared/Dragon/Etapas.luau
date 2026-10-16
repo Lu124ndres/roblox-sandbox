@@ -6,8 +6,6 @@
 		beat       aletazos por segundo (la cría aletea rápido, el anciano lento
 		           y poderoso)
 		amplitude  cuánto baja y sube el ala (rad)
-		neutral    cuánto hay que bajar el ala desde la pose del modelo para
-		           que quede horizontal (las crías la tienen levantada)
 		glide      fracción del vuelo que planea sin aletear
 		speed      velocidad de crucero (multiplica la de su tamaño)
 		bank       cuánto se ladea en las curvas
@@ -18,7 +16,6 @@
 export type Profile = {
 	beat: number,
 	amplitude: number,
-	neutral: number,
 	glide: number,
 	speed: number,
 	bank: number,
@@ -32,7 +29,6 @@ local PROFILES: { [number]: Profile } = {
 	{ -- cría: juguetona, aletea rápido, da volteretas
 		beat = 2.6,
 		amplitude = 0.8,
-		neutral = 0.8,
 		glide = 0.12,
 		speed = 1.2,
 		bank = 1.1,
@@ -44,7 +40,6 @@ local PROFILES: { [number]: Profile } = {
 	{ -- joven: ágil, picadas y volteretas
 		beat = 1.8,
 		amplitude = 0.72,
-		neutral = 0.75,
 		glide = 0.28,
 		speed = 1.05,
 		bank = 0.95,
@@ -56,7 +51,6 @@ local PROFILES: { [number]: Profile } = {
 	{ -- adulto: poderoso, planea más
 		beat = 1.35,
 		amplitude = 0.66,
-		neutral = 0.72,
 		glide = 0.4,
 		speed = 0.95,
 		bank = 0.8,
@@ -68,7 +62,6 @@ local PROFILES: { [number]: Profile } = {
 	{ -- anciano: alas enormes, aletazos lentos que mueven el aire
 		beat = 0.95,
 		amplitude = 0.58,
-		neutral = 0.05,
 		glide = 0.5,
 		speed = 0.85,
 		bank = 0.7,
