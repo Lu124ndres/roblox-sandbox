@@ -78,7 +78,10 @@ Para agregar un ícono: generarlo con el mismo prompt base, recortarlo, armar ot
 ### Hoja 2 (tiendas)
 
 `assets/ui/iconos/iconos_hoja2.png` (4x4 de 256 px), `Assets.UI.IconSheet2 =
-97933580602007`. Mismo prompt base. Las celdas 12 y 13 no son íconos: son los rayos
+127258628735083` (antes 97933580602007). Mismo prompt base. La orca (5) y el dragón (7) se
+rehicieron en Canva describiendo sus modelos 3D (orca azul noche con marcas cian y corona
+de coral; dragón marino azul con cuernos blancos y bigotes): `orca_modelo.png`,
+`dragon_modelo.png`. Las celdas 12 y 13 no son íconos: son los rayos
 blancos (sunburst) que `ShopParts.sunburst` tiñe y hace girar detrás de las tarjetas, y
 un brillo redondo; se dibujaron con Python (PIL), no con IA.
 
@@ -89,7 +92,7 @@ un brillo redondo; se dibujaron con Python (PIL), no con IA.
 | 2 | crown | corona.png | Tarjeta VIP |
 | 3 | pond | estanque.png | Tarjetas de estanques |
 | 4 | bolt | rayo.png | Banner del entrenamiento del servidor |
-| 5–8 | orca, minotaur, dragon, fox | orca/minotauro/dragon/zorro.png | Elegir el siguiente monstruo |
+| 5–8 | orca, minotaur, dragon, fox | orca_modelo/minotauro/dragon_modelo/zorro.png | Retrato del panel de hambre y elegir el siguiente monstruo |
 | 9 | giftPink | regalo.png | Botón rosa de regalar |
 | 10 | arrow | flecha.png | (libre: subir de nivel) |
 | 11 | meat | carne.png | Llenar al monstruo |

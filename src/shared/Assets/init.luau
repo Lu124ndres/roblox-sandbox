@@ -61,8 +61,9 @@ local Assets: Assets = {
 		IconSheet = "rbxassetid://134398496257992",
 		-- Hoja 2 (assets/ui/iconos/iconos_hoja2.png), por filas: caña, botas, corona,
 		-- estanque / rayo, orca, minotauro, dragón / zorro, regalo rosa, flecha,
-		-- carne / rayos de fondo (sunburst), brillo redondo.
-		IconSheet2 = "rbxassetid://97933580602007",
+		-- carne / rayos de fondo (sunburst), brillo redondo. La orca y el dragón se
+		-- rehicieron igual a sus modelos 3D (orca_modelo.png, dragon_modelo.png).
+		IconSheet2 = "rbxassetid://127258628735083",
 		-- Hoja 3 (assets/ui/iconos/iconos_hoja3.png): monstruo panzón (monstruos llenados).
 		IconSheet3 = "rbxassetid://99850577116916",
 		-- Equipo de la tienda (Canva, recortado): un ícono por nivel, 5 columnas de 200 px,
