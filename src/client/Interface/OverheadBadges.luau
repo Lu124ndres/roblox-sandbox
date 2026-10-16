@@ -14,6 +14,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Assets = require(ReplicatedStorage.Shared.Assets)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Icons = require(script.Parent.Icons)
 local Style = require(script.Parent.Style)
@@ -143,15 +144,15 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 	end
 	local linePremium = divider(inside, 4)
 	local premium = part(inside, "Premium", 5)
-	local glyph = Instance.new("TextLabel")
+	local glyph = Instance.new("ImageLabel")
 	glyph.Name = "Icono"
 	glyph.BackgroundTransparency = 1
-	glyph.Position = UDim2.fromScale(0.12, 0.16)
-	glyph.Size = UDim2.fromScale(0.76, 0.68)
-	glyph.FontFace = Font.fromEnum(Enum.Font.BuilderSansBold)
-	glyph.Text = utf8.char(0xE001) -- el ícono de Premium que dibuja Roblox
-	glyph.TextScaled = true
-	glyph.TextColor3 = WHITE
+	glyph.AnchorPoint = Vector2.new(0.5, 0.5)
+	glyph.Position = UDim2.fromScale(0.5, 0.5)
+	glyph.Size = UDim2.fromScale(0.62, 0.62)
+	glyph.SizeConstraint = Enum.SizeConstraint.RelativeYY
+	glyph.Image = Assets.UI.PremiumIcon -- el ícono de Premium que trae Roblox
+	glyph.ScaleType = Enum.ScaleType.Fit
 	glyph.ZIndex = 3
 	glyph.Parent = premium
 

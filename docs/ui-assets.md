@@ -105,6 +105,21 @@ un brillo redondo; se dibujaron con Python (PIL), no con IA.
 | 12 | sunburst | (dibujado) | Rayos de fondo |
 | 13 | glow | (dibujado) | Brillo |
 
+### Equipo de MEJORAS (un ícono por nivel)
+
+Canva (IA, "icono 3D estilo juego") por cada caña, canasta y botas, fondo quitado en
+Canva y juntados en hojas de 5 columnas con celdas de 200 px; la celda es nivel - 1 por
+filas. Los usa `Interface/GearIcons` (MEJORAS, pestañas, pack de inicio).
+
+| Hoja | Archivo | Niveles | `Assets.UI` |
+|---|---|---|---|
+| Cañas | `assets/ui/iconos/equipo_rod.png` (1000x800) | 20 | EquipoRod = 79873240212746 |
+| Canastas | `assets/ui/iconos/equipo_basket.png` (1000x600) | 14 | EquipoBasket = 125162908853974 |
+| Botas | `assets/ui/iconos/equipo_boots.png` (1000x600) | 14 | EquipoBoots = 122825125598846 |
+
+El ícono de Roblox Premium del cartel de la cabeza es el que trae Roblox
+(`rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png`, `Assets.UI.PremiumIcon`).
+
 ## Sonidos
 
 Audio público de la Tienda de creadores (se buscó en Studio y se copió el ID) o sonidos

@@ -51,6 +51,8 @@ local Assets: Assets = {
 	UI = {
 		-- Ícono de Robux que trae Roblox instalado (no hay que subirlo).
 		RobuxIcon = "rbxasset://textures/ui/common/robux.png",
+		-- Ícono de Roblox Premium que trae Roblox instalado.
+		PremiumIcon = "rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png",
 		-- Íconos del HUD: imágenes estilo 3D generadas con IA (Canva), recortadas a fondo
 		-- transparente y juntadas en una hoja de 4x4 (256 px cada uno), subida con el
 		-- Gestor de recursos. Fuentes y hoja en assets/ui/iconos/ (iconos_hud_v3.png).
@@ -63,6 +65,11 @@ local Assets: Assets = {
 		IconSheet2 = "rbxassetid://97933580602007",
 		-- Hoja 3 (assets/ui/iconos/iconos_hoja3.png): monstruo panzón (monstruos llenados).
 		IconSheet3 = "rbxassetid://99850577116916",
+		-- Equipo de la tienda (Canva, recortado): un ícono por nivel, 5 columnas de 200 px,
+		-- celda = nivel - 1 por filas. Fuentes en assets/ui/iconos/equipo_*.png.
+		EquipoRod = "rbxassetid://79873240212746", -- 20 cañas
+		EquipoBasket = "rbxassetid://125162908853974", -- 14 canastas
+		EquipoBoots = "rbxassetid://122825125598846", -- 14 botas
 	},
 
 	Meshes = {
