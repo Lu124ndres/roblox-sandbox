@@ -99,11 +99,13 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       Cuello2 > Cabeza > Mandibula, Boca, Oreja<lado>; Pecho > Hombro > Brazo > Antebrazo >
       Mano; Cadera > Muslo > Pierna > Tobillo > Pie; Cadera > Cola<n>_1.._4 (n = 1..9).
 
-- [~] **C8. Nombre "Feed the Giants" y códigos en inglés** (pedido del usuario, 2026-10-16). El
+- [x] **C8. Nombre "Feed the Giants" y códigos en inglés** (pedido del usuario, 2026-10-16). El
       juego se publica como "Feed the Giants" / "Alimenta a los Gigantes" (página en inglés y
       español, ver `publicar/tienda/LEEME_publicar.md`). Agregar en `CodeList` alias en inglés de los
       códigos actuales (por ejemplo GIANTS = GIGANTES y LAUNCH = LANZAMIENTO; HALLOWEEN ya sirve) y
       revisar que los textos visibles con el nombre del juego digan "Feed the Giants".
+      → `7b165cb`. GIANTS y LAUNCH son alias (`aliasOf`): cuentan como el original, no se cobran
+      dos veces. Ningún texto del juego lo nombra (dicen "el juego"); el README sí.
 
 ## Contrato de hábitats (Cowork ↔ Claude Code)
 
