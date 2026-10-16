@@ -9,6 +9,10 @@
 ]]
 
 local Textures: { [string]: { string } } = {
+	MinotauroE1 = { -- color y normales (rig_minotauro_e1.py)
+		"rbxassetid://100759657454248",
+		"rbxassetid://109198970088136",
+	},
 	OrcaE1 = {
 		"rbxassetid://71957072265867",
 		"rbxassetid://96425004406950",

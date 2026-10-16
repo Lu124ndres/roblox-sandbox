@@ -1,12 +1,10 @@
 --!strict
 --[[
-	GiantBody
-
-	El cuerpo del gigante en el cliente: crece hacia el alto de su etapa con el
+	GiantBody: el gigante en el cliente crece hacia el alto de su etapa con el
 	modelo de esa etapa (<base>E1..E4), respira, se mece y mira alrededor, con un
 	contorno que late con el enojo (GiantOutline). "Palancas": salto, giro, atención.
-	ScaleTo solo al cambiar la escala más de GiantScaleStep. Con huesos de orca
-	nada por el lago (OrcaSwim); con alas, vuela sobre el volcán (DragonFly).
+	ScaleTo solo al cambiar la escala más de GiantScaleStep. Con huesos: la orca nada
+	(OrcaSwim), el dragón vuela (DragonFly) y el minotauro se anima (MinoStand).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -23,6 +21,7 @@ local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local GiantOutline = require(script.Parent.GiantOutline)
 local OrcaSwim = require(script.Parent.OrcaSwim)
 local DragonFly = require(script.Parent.DragonFly)
+local MinoStand = require(script.Parent.MinoStand)
 local GiantTemplates = require(script.Parent.GiantTemplates)
 
 local EFFECTS, TURN_SHARPNESS = UIConfig.Effects, 6 -- giro hacia su objetivo (1/s)
@@ -39,7 +38,7 @@ export type Body = {
 	mouth: () -> Vector3, -- adonde vuelan los peces
 	water: () -> Vector3, -- el agua justo bajo el gigante
 	bite: () -> (), -- muerde (la orca cierra la boca un instante)
-	swims: boolean, -- se mueve solo (orca o dragón): muerde en vez de saltar
+	swims: boolean, -- se anima solo (orca, dragón, minotauro): muerde en vez de saltar
 	flies: boolean, -- vuela (dragón): sin salpicaduras al comer
 	destroy: () -> (),
 }
@@ -52,8 +51,7 @@ local function angleTowards(from: Vector3, to: Vector3): number
 end
 
 function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
-	local folder = ReplicatedStorage:WaitForChild(Protocol.GiantModelsFolder)
-	-- Contenedor fijo: adentro va el modelo de la etapa actual, que cambia al crecer.
+	local folder = ReplicatedStorage:WaitForChild(Protocol.GiantModelsFolder) -- adentro: la etapa actual
 	local model = Instance.new("Model")
 	model.Name = def.id
 	model.WorldPivot = base
@@ -91,7 +89,9 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 	end
 	dress(1)
 	local first = GiantTemplates.templateFor(folder, def, 1)
-	local swim = OrcaSwim.attach(first, base.Position) or DragonFly.attach(first, base.Position)
+	local swim = OrcaSwim.attach(first, base.Position)
+		or DragonFly.attach(first, base.Position)
+		or MinoStand.attach(first, base.Position)
 	local outline = GiantOutline.attach(model)
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 

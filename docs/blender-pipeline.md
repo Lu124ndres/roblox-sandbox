@@ -156,3 +156,20 @@ los cilindros de Roblox) y sin textura. En Studio van a `ReplicatedStorage.Model
 `client/Effects/MeshKit.swap` cambia la pieza de primitivas por la 3D con el mismo tamaño,
 lugar, color y material (RodBuilder: mango, carrete y anillas; BasketBuilder: cuerpo y borde).
 
+
+## Minotauro etapa 1 (modelado por código, con huesos)
+
+1. `tools/blender/minotauro_e1.py` (con `criaturas.py`): becerro chibi al estilo de la orca y
+   el dragón. Bloques fusionados por vóxeles para el cuerpo y piezas aparte (ojos, cuernos,
+   orejas, mechón, mandíbula, aros, cinturón, faldón, pezuñas, borla). Cada pieza guarda en
+   `obj["hueso"]` el hueso al que sigue entera ("" = el cuerpo, pesos por calor). `PUNTOS`
+   tiene las articulaciones. Se arma con Blender 5.2 como módulo (`pip install bpy`, sin
+   ventana) o por el MCP; tarda ~9 min con vóxel 0.016 y se guarda como `alto.blend`.
+2. `python3 -I tools/blender/rig_minotauro_e1.py -- alto.blend <salida.fbx> <carpeta tex>`:
+   copia reducida (~18k triángulos), UVs nuevas, color y normales horneados a 1024 (el
+   color con más luz y calidez: en Roblox se veía oscuro), esqueleto (Raiz, Cadera, Columna,
+   Pecho, Cuello, Cabeza, Mandibula, Boca, Oreja, Brazo/Antebrazo/Mano, Muslo/Pierna/Pie,
+   Cola1..3) y FBX.
+3. Studio → Importar 3D → "Mantener huesos de influencia cero". Llega mirando a -Z (sin GiroY).
+   Mover el Model a `ServerStorage.MinotauroE1` y anotar los IDs en `Assets`.
+4. Se anima por código: `src/shared/Minotauro` (Rig, Pose, Trucos) y `client/Giant/MinoStand`.

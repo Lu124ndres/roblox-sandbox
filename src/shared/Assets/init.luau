@@ -87,8 +87,9 @@ local Assets: Assets = {
 		OrcaE2 = "rbxassetid://110833679153524", -- joven (11,760)
 		OrcaE3 = "rbxassetid://119056308763073", -- adulta (15,680)
 		OrcaE4 = "rbxassetid://131514620036527", -- anciana (19,110)
-		-- Pendiente de modelar. Mientras falte, el juego usa un marcador de primitivas.
-		MinotauroE1 = "rbxassetid://0",
+		-- Minotauro bebé con huesos (tools/blender/minotauro_e1.py + rig_minotauro_e1.py, 18k
+		-- triángulos). Model en ServerStorage.MinotauroE1; se anima con Shared.Minotauro.
+		MinotauroE1 = "rbxassetid://138675592345337",
 		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.

@@ -1270,3 +1270,25 @@ pasarme los IDs; poner el ID del grupo en `Config/Social`.
 
 **Qué se rompió:** nada. Falta probarlo con un mando de verdad (el simulador de Studio no
 manda el botón Select).
+
+
+---
+
+## 2026-10-16 (6) — Minotauro bebé nuevo con huesos y animaciones
+
+**Qué se hizo:**
+
+- `tools/blender/minotauro_e1.py`: becerro chibi al estilo de la orca y el dragón: cabeza
+  grande, ojos ámbar enormes con brillos, mechón, cuernitos de marfil con anillos de oro, aro
+  en la nariz, orejas rosadas, panza y hocico crema, marcas doradas en los hombros, cinturón
+  con hebilla de oro, faldón de tiras con remaches, brazaletes, pezuñas y cola con borla.
+- `tools/blender/rig_minotauro_e1.py`: malla de 18k triángulos, color y normales horneados,
+  24 huesos (cuerpo por calor, piezas rígidas a su hueso). `ServerStorage.MinotauroE1`
+  (el anterior quedó en `Respaldos`). IDs en `Assets`.
+- `Shared/Minotauro` + `client/Giant/MinoStand`: respira, se mece, mira alrededor, mueve
+  cola y orejas, se da vuelta con pasitos; al comer gira hacia quien le da, se inclina,
+  estira los brazos y mastica; trucos sincronizados cada 11 s: pisotón (ola y temblor),
+  rugido, músculo (destellos), baile (corazones), rascarse y salto (salpica al caer).
+
+**Qué se rompió:** nada. Probado en Studio (reposo, rugido y comer). Las etapas 2-4 siguen
+con el modelo viejo (sin huesos): giran y saltan, pero no se animan.
