@@ -54,6 +54,10 @@ local Assets: Assets = {
 		-- Viñeta blanca (bordes opacos, centro transparente) que se tiñe con ImageColor3:
 		-- el brillo azul de los bordes al entrenar (assets/ui/Vineta.png).
 		Vineta = "rbxassetid://94536198570437",
+		-- Ruleta: la rueda de 8 casillas (gris claro/oscuro, aro azul noche con remaches;
+		-- la casilla 1 arriba) y la flecha roja que marca el premio (assets/ui/).
+		RuedaRuleta = "rbxassetid://73843801719045",
+		PunteroRuleta = "rbxassetid://104047378525377",
 		-- Ícono de Roblox Premium que trae Roblox instalado.
 		PremiumIcon = "rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png",
 		-- Íconos del HUD: imágenes estilo 3D generadas con IA (Canva), recortadas a fondo

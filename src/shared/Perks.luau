@@ -7,7 +7,8 @@
 		Pase_<clave> / Nivel<Power|Coins> / Estanque_<i>   pases, x2^nivel, estanques
 		MembershipType (Premium) / Renacimientos           x1.2 / x1.25^n poder y monedas
 		ReplicatedStorage.Impulsos                         entrenamiento del servidor (x2^nivel)
-	Lo usan el entrenamiento, el descanso, la entrega, la pesca, el diario y la tienda.
+		racha del diario / x2 monedas de la ruleta         RetentionBonus
+	Lo usan entrenamiento, descanso, entrega, pesca, diario y tienda.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -16,6 +17,7 @@ local Workspace = game:GetService("Workspace")
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(script.Parent.RebirthMath)
+local RetentionBonus = require(script.Parent.RetentionBonus)
 local ServerEvents = require(script.Parent.ServerEvents)
 
 local MONETIZATION = Config.Monetization
@@ -91,15 +93,13 @@ function Perks.premiumMultiplier(player: Player): number
 end
 
 function Perks.powerMultiplier(player: Player): number
-	local personal = if Perks.personalBoostSeconds(player) > 0
-		then SOCIAL.personalBoostMultiplier
-		else 1
 	return 2 ^ Perks.level(player, "Power")
 		* 2 ^ Perks.serverBoostLevel()
-		* personal
+		* (if Perks.personalBoostSeconds(player) > 0 then SOCIAL.personalBoostMultiplier else 1)
 		* Perks.premiumMultiplier(player)
 		* Perks.friendMultiplier(player)
 		* RebirthMath.bonusMultiplier(RebirthMath.count(player))
+		* RetentionBonus.powerMultiplier(player)
 		* ServerEvents.value("power", 1)
 end
 
@@ -108,6 +108,7 @@ function Perks.coinMultiplier(player: Player): number
 		* Perks.premiumMultiplier(player)
 		* Perks.friendMultiplier(player)
 		* RebirthMath.bonusMultiplier(RebirthMath.count(player))
+		* RetentionBonus.coinMultiplier(player)
 		* ServerEvents.value("coins", 1)
 end
 

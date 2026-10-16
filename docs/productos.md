@@ -64,6 +64,8 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `Pond9` | Estanque 9 | 649 | Estanques para siempre | |
 | `Pond10` | Estanque 10 | 999 | Estanques para siempre | |
 | `Pond11` | Estanque sagrado x250 | 799 | Solo con Robux (centro de la isla) | |
+| `Spin1` | 1 giro de ruleta | 24 | Giros de la ruleta (se guardan; no se regalan) | |
+| `Spin5` | 5 giros de ruleta | 80 | Giros de la ruleta (se guardan; no se regalan) | |
 | `GiftVIP` | Regalar VIP | 299 | Regalar el pase VIP a otro jugador | |
 | `GiftReyDelMar` | Regalar Rey del Mar | 149 | Regalar el traje Rey del Mar a otro jugador | |
 | `GiftDiosDelVolcan` | Regalar Dios del Volcán | 399 | Regalar el traje Dios del Volcán a otro jugador | |

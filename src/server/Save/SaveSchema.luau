@@ -46,14 +46,17 @@ export type SaveData = {
 	quests: SaveExtra.QuestsSave, -- misiones del día (v8)
 	starterPack: boolean, -- ya compró el pack de inicio (v8)
 	spinAt: number, -- unix en que vuelve a tocar la ruleta gratis (v9, ver SaveExtra)
+	spins: number, -- giros de ruleta guardados (v10)
+	coinBoostUntil: number, -- unix en que termina el x2 monedas de la ruleta (v10)
 }
 
 local SaveSchema = {}
 
 -- 2: kills; 3: mejoras de la tienda; 4: tutorial, diario, ajustes, insignias;
 -- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie;
--- 8: renacer, misiones, pack de inicio; 9: ruleta gratis (los dos en SaveExtra)
-SaveSchema.VERSION = 9
+-- 8: renacer, misiones, pack de inicio; 9: ruleta gratis; 10: giros guardados y
+-- x2 monedas (8 a 10 en SaveExtra; lo que falta en un guardado viejo queda en 0)
+SaveSchema.VERSION = 10
 
 function SaveSchema.default(): SaveData
 	return {
@@ -81,16 +84,12 @@ function SaveSchema.default(): SaveData
 		quests = SaveExtra.quests(),
 		starterPack = false,
 		spinAt = 0,
+		spins = 0,
+		coinBoostUntil = 0,
 	}
 end
 
-local function count(value: unknown): number
-	return if type(value) == "number"
-			and value == value
-			and value >= 0
-		then math.floor(value)
-		else 0
-end
+local count = SaveExtra.count
 
 -- Copia profunda (para guardar sin que el juego la cambie mientras se escribe).
 function SaveSchema.copy<T>(value: T): T

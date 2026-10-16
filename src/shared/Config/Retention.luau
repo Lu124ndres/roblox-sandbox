@@ -10,7 +10,9 @@
 	todas (36) paga `collectionBonus`.
 
 	Diario: racha de 7 días; si se salta un día vuelve al día 1. Después del
-	día 7 se repite el premio del día 7.
+	día 7 se repite el premio del día 7. Cada cobro da también giros de
+	ruleta (`dailySpins`, por día) y la racha da `streakBonus.perDay` más de
+	monedas y poder por día seguido (hasta `maxDays`), mientras no se corte.
 
 	Regalos por tiempo: 8 regalos según los minutos que lleva en el servidor
 	(se reinician al entrar de nuevo); el último a las 2 horas. Dan monedas
@@ -48,6 +50,8 @@ local Retention: Types.RetentionConfig = {
 	-- de la siguiente caña (shared/RewardScale): siempre valen la pena.
 	daily = { 100, 200, 350, 500, 800, 1200, 2500 },
 	dailyShare = { 0.05, 0.08, 0.12, 0.16, 0.22, 0.3, 0.4 },
+	dailySpins = { 1, 1, 1, 1, 1, 1, 3 }, -- giros guardados de cada día (el 7 da 3)
+	streakBonus = { perDay = 0.1, maxDays = 10 }, -- +10% por día de racha, hasta +100%
 	playtime = {
 		{ minutes = 5, coins = 500, share = 0.15 },
 		{ minutes = 10, boostMinutes = 10 },

@@ -5,7 +5,8 @@
 	Más carteles del remote Notice (Notices le pasa los que no conoce): hito
 	de la colección (cada 6 especies), el monstruo que se cansó de esperar y
 	se fue (con la kill igual para quien le dio algo) y el premio de la
-	ruleta gratis (después de que la ventana termina de girar). Solo muestra.
+	ruleta (después de que la ventana termina de girar) y los giros guardados
+	que gana por jugar o con el diario. Solo muestra.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -48,8 +49,20 @@ function NoticesMore.handle(toasts: Toasts.Toasts, kind: unknown, a: unknown, b:
 	elseif kind == "spin" and type(b) == "string" then
 		task.delay(SPIN.spinSeconds, function()
 			Sounds.play("LegendaryCatch")
-			toasts.banner(b, COLORS.Coins, "chest", "¡RULETA GRATIS!")
+			toasts.banner(b, COLORS.Coins, "chest", "¡RULETA!")
 		end)
+		return true
+	elseif kind == "spinsGained" and type(a) == "number" then
+		Sounds.play("Coins")
+		local spins = if a == 1 then "+1 giro" else `+{a} giros`
+		toasts.banner(
+			if b == "play"
+				then `¡{spins} de ruleta por jugar!`
+				else `¡{spins} de ruleta por tu racha!`,
+			COLORS.Coins,
+			"ticket",
+			"¡GIRO GRATIS!"
+		)
 		return true
 	end
 	return false

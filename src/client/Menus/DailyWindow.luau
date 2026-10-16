@@ -4,7 +4,8 @@
 
 	Recompensa diaria: 7 tarjetas de regalo (día 1 a 7) con rayos y sus
 	monedas; las de la racha ya cobrada en verde con ✓, la de hoy dorada y
-	el botón grande ¡RECLAMAR!. Se
+	el botón grande ¡RECLAMAR!. Debajo, la racha (+10% de monedas y poder
+	por día, shared/RetentionBonus) y lo que trae volver mañana. Se
 	abre sola al entrar si hoy todavía no se cobró, y el botón Premio del
 	HUD lleva un punto rojo mientras tanto. El servidor decide (ClaimDaily).
 ]]
@@ -17,6 +18,7 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local RetentionBonus = require(ReplicatedStorage.Shared.RetentionBonus)
 local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Icons = require(script.Parent.Parent.Interface.Icons)
@@ -28,6 +30,7 @@ local Window = require(script.Parent.Window)
 local CARDS = Style.PALETTE.Cards
 local ATTR = Protocol.PlayerAttributes
 local DAILY = Config.Retention.daily
+local STREAK = Config.Retention.streakBonus
 
 local DailyWindow = {}
 
@@ -41,6 +44,19 @@ local function today(): number
 	return math.floor(Workspace:GetServerTimeNow() / 86400)
 end
 
+local function dayCoins(player: Player, day: number): number
+	return RewardScale.share(player, DAILY[day], Config.Retention.dailyShare[day])
+		* Perks.dailyMultiplier(player)
+end
+
+-- "1.2K monedas y +1 giro" del día `day` de la racha (después del 7, el 7).
+local function dayReward(player: Player, day: number): string
+	local index = math.clamp(day, 1, #DAILY)
+	local spins = Config.Retention.dailySpins[index] or 0
+	local coins = `{NumberFormat.short(dayCoins(player, index))} monedas`
+	return if spins > 0 then `{coins} y +{spins} giro{if spins == 1 then "" else "s"}` else coins
+end
+
 function DailyWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
@@ -50,7 +66,7 @@ function DailyWindow.start(screen: ScreenGui)
 
 	local row = Instance.new("Frame")
 	row.BackgroundTransparency = 1
-	row.Size = UDim2.new(1, 0, 0.62, 0)
+	row.Size = UDim2.new(1, 0, 0.56, 0)
 	row.Parent = window.content
 	local layout = Instance.new("UIGridLayout")
 	layout.CellSize = UDim2.new(1 / 7, -8, 1, 0)
@@ -63,6 +79,12 @@ function DailyWindow.start(screen: ScreenGui)
 	claim.Position = UDim2.fromScale(0.5, 1)
 	claim.Size = UDim2.new(0.46, 0, 0.26, 0)
 	local claimText = claim:FindFirstChild("Texto") :: TextLabel
+	local streakLine = Style.text(window.content, "Racha", 26, UIConfig.Colors.Coins, 2.5)
+	streakLine.Position = UDim2.fromScale(0, 0.575)
+	streakLine.Size = UDim2.fromScale(1, 0.08)
+	local tomorrowLine = Style.text(window.content, "Manana", 22, nil, 2.5)
+	tomorrowLine.Position = UDim2.fromScale(0, 0.655)
+	tomorrowLine.Size = UDim2.fromScale(1, 0.07)
 
 	local function available(): boolean
 		return player:GetAttribute(ATTR.DataLoaded) == true
@@ -106,10 +128,7 @@ function DailyWindow.start(screen: ScreenGui)
 			gift.Position = UDim2.fromScale(0.5, 0.24)
 			gift.Size = UDim2.fromScale(0.85, 0.45)
 			local coins = Style.text(box, "Monedas", 24, UIConfig.Colors.Coins, 2.5)
-			coins.Text = NumberFormat.short(
-				RewardScale.share(player, DAILY[day], Config.Retention.dailyShare[day])
-					* Perks.dailyMultiplier(player)
-			)
+			coins.Text = NumberFormat.short(dayCoins(player, day))
 			coins.Position = UDim2.fromScale(0.04, 0.72)
 			coins.Size = UDim2.fromScale(0.92, 0.22)
 			if claimed then
@@ -124,6 +143,15 @@ function DailyWindow.start(screen: ScreenGui)
 			end
 		end
 		local ready = available()
+		local days = RetentionBonus.streakDays(player)
+		local percent = math.round(RetentionBonus.streakBonus(days) * 100)
+		streakLine.Text =
+			`Racha: {days} día{if days == 1 then "" else "s"} · +{percent}% monedas y poder`
+		local more = if days >= STREAK.maxDays
+			then " (racha al máximo: ¡no la cortes!)"
+			else ` y +{math.round(STREAK.perDay * 100)}% más`
+		local label = if ready then "Hoy" else "Mañana" -- el próximo cobro es el día days + 1
+		tomorrowLine.Text = `{label}: {dayReward(player, days + 1)}{more}`
 		claimText.Text = if ready then "¡RECLAMAR!" else "Vuelve mañana"
 		local tint = if ready then Style.PALETTE.Buy else Style.PALETTE.Disabled
 		claim.BackgroundColor3 = tint

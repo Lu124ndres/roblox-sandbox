@@ -24,6 +24,7 @@
 	sagrado del centro (x250), que solo se abre así.
 	Rod<n>, Basket<n>, Boots<n>: el nivel n de MEJORAS sin juntar monedas
 	(upgradeRobux[categoría][n]; el 1 es el gratis).
+	Spin1/Spin5: +1 / +5 giros guardados de la ruleta (no se regalan).
 	Gift<pase>: regalar un pase a otro jugador (los pases no se pueden
 	regalar directo en Roblox, así que es un producto con el mismo precio).
 	Regalos: Power<n>, Coins<n>, Pond<n> y Gift<pase> se pueden comprar para
@@ -63,6 +64,7 @@ export type MonetizationConfig = {
 	pondRobux: { [number]: number }, -- precio de cada estanque (2..11)
 	upgradeRobux: { [string]: { number } }, -- MEJORAS en Robux: Rod/Basket/Boots, por nivel
 	passGifts: { [string]: number }, -- precio del producto Gift<pase>
+	spinProducts: { [string]: { robux: number, spins: number } }, -- Spin<n>: giros de ruleta
 	-- Pack de inicio (producto PackInicio): una sola vez, mucho valor por poco.
 	starterPack: {
 		robux: number,
@@ -154,6 +156,7 @@ local Monetization: MonetizationConfig = {
 		Boots = { 0, 5, 19, 39, 79, 199 },
 	},
 	passGifts = { VIP = 299, ReyDelMar = 149, DiosDelVolcan = 399 },
+	spinProducts = { Spin1 = { robux = 24, spins = 1 }, Spin5 = { robux = 80, spins = 5 } },
 	-- 19 R$: el producto PackInicio tiene que tener ese precio en el panel de Roblox.
 	starterPack = { robux = 19, coins = 15000, boostMinutes = 60, rod = 4, basket = 3, boots = 4 },
 	sellPonds = false,

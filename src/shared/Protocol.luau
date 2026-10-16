@@ -1,8 +1,5 @@
 --!strict
---[[
-	Protocol: nombres compartidos entre servidor y cliente: RemoteEvents,
-	atributos replicados, estados de pesca y nombres de piezas del mapa.
-]]
+-- Protocol: nombres compartidos entre servidor y cliente (remotes, atributos, estados, mapa).
 
 -- Resultado que ve el dueño de la caña (avisos y botón TIRA).
 export type FishingState = "waiting" | "bite" | "caught" | "escaped" | "cancelled" | "full"
@@ -24,7 +21,8 @@ export type NoticeKind =
 	| "collection" -- (coins) completó la colección
 	| "collectionStep" -- (found, coins) llegó a un hito de la colección (cada 6 especies)
 	| "giantLeft" -- (displayName, gotKill) el monstruo se cansó de esperar y se fue
-	| "spin" -- (prizeIndex, text) giró la ruleta gratis (Config/Spin)
+	| "spin" -- (prizeIndex, text) giró la ruleta (Config/Spin)
+	| "spinsGained" -- (spins, reason: "play" | "daily") ganó giros guardados de la ruleta
 	| "tutorial" -- (stepIndex, coins) completó un paso; stepIndex > total = terminó
 	| "badge" -- (badgeKey) logro nuevo
 	| "daily" -- (day, coins) cobró la recompensa diaria
@@ -91,7 +89,7 @@ local Protocol = {
 		SaveSettings = "SaveSettings",
 		RedeemCode = "RedeemCode", -- cliente -> servidor: (code: string) canjear un código
 		ClaimGroup = "ClaimGroup", -- cliente -> servidor: reclamar el regalo del grupo
-		ClaimSpin = "ClaimSpin", -- cliente -> servidor: girar la ruleta gratis (si ya toca)
+		ClaimSpin = "ClaimSpin", -- cliente -> servidor: girar (el gratis si toca, si no uno guardado)
 		ChooseOutfit = "ElegirTraje", -- cliente -> servidor: (passKey) ponerse/quitarse ese traje
 		-- cliente -> servidor: (productKey: string, targetUserId: number). La próxima
 		-- compra de ese producto (en 2 min) es un regalo para ese jugador.
@@ -134,6 +132,8 @@ local Protocol = {
 		TopShares = "TopAportes", -- JSON: los 3 que más aportaron [{n = nombre, s = 0..1}]
 		EvolvingUntil = "EvolucionHasta", -- hora del servidor en que termina de evolucionar (0 = no)
 		Drained = "VolcanVacio", -- true en el descanso: el agua del cráter se va y queda la guarida
+		RestFrom = "DescansoDesde", -- hora del servidor en que empieza a contar el descanso
+		Refilling = "VolcanLlenando", -- true: el cráter se llena (agua o lava) antes de que llegue
 	},
 
 	-- Folder en ReplicatedStorage con las plantillas de los gigantes (los anima el cliente, GiantView).
@@ -180,6 +180,9 @@ local Protocol = {
 		GroupClaimed = "GrupoReclamado", -- ya reclamó el regalo del grupo
 		JoinedAt = "EntroEn", -- GetServerTimeNow() al entrar (para los 15 min del grupo)
 		SpinAt = "RuletaListaEn", -- unix en que vuelve a tocar la ruleta gratis (0 = ya)
+		Spins = "GirosGuardados", -- giros de ruleta guardados (se gastan si no toca el gratis)
+		SpinTimeAt = "GiroPorTiempoEn", -- unix del próximo giro por jugar (0 = ya no hay más)
+		CoinBoostUntil = "MonedasX2Hasta", -- unix en que termina el x2 monedas de la ruleta
 	},
 
 	Leaderstats = { -- tabla de jugadores (Tab), en este orden

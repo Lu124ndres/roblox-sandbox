@@ -15,6 +15,7 @@
 		Pond<n>           estanque abierto para siempre
 		Rod/Basket/Boots<n>  nivel n de MEJORAS (nunca baja)
 		Gift<pase>        el pase, regalado (queda en el guardado)
+		Spin1/Spin5       giros guardados de la ruleta (avisa aquí mismo)
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -26,6 +27,7 @@ local RestTime = require(script.Parent.RestTime)
 local GiantChoice = require(script.Parent.GiantChoice)
 local GiantFill = require(script.Parent.GiantFill)
 local Passes = require(script.Parent.Passes)
+local Remotes = require(script.Parent.Parent.Remotes)
 local ServerBoost = require(script.Parent.ServerBoost)
 
 local MONETIZATION = Config.Monetization
@@ -78,12 +80,26 @@ local function starterPack(player: Player): string
 	return "Pack de inicio"
 end
 
+-- Giros guardados de la ruleta (Retention/SpinWheel los gasta).
+local function addSpins(player: Player, spins: number)
+	PlayerData.edit(player, function(save)
+		save.spins += spins
+	end)
+	local text = if spins == 1 then "¡+1 giro de ruleta!" else `¡+{spins} giros de ruleta!`
+	Remotes.Notice:FireClient(player, "purchase", text)
+end
+
 -- Entrega `key` a `player`. (ok, nombre de lo recibido si es algo propio).
 function Grants.grant(player: Player, key: string): (boolean, string?)
 	if key == "PackInicio" then
 		return true, starterPack(player)
 	elseif key == "RestTime" then
 		return RestTime.add(player), nil
+	end
+	local spin = MONETIZATION.spinProducts[key]
+	if spin then
+		addSpins(player, spin.spins)
+		return true, nil
 	end
 	local fill = MONETIZATION.fills[key]
 	if fill then

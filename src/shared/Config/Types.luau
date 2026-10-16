@@ -117,6 +117,9 @@ export type RetentionConfig = {
 	collectionMilestone: { every: number, coins: number, share: number },
 	daily: { number }, -- monedas de cada día de la racha (1..7)
 	dailyShare: { number }, -- o esta fracción de la siguiente caña, lo que sea mayor
+	dailySpins: { number }, -- giros de ruleta guardados que da cada día (1..7)
+	-- Racha: x(1 + perDay x días seguidos, hasta maxDays) monedas y poder (shared/StreakBonus)
+	streakBonus: { perDay: number, maxDays: number },
 	playtime: { PlaytimeGift }, -- regalos por minutos jugados (share: ver RewardScale)
 	badges: { [string]: BadgeDef }, -- clave = Assets.Badges[clave]
 }

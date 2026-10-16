@@ -78,9 +78,17 @@ en los estanques y en la guarida del descanso.
 - **Colección** (`Retention.collectionMilestone`, `shared/Collection`): cada 6 especies, lo mayor entre
   1,500 × hito y 0.4 de la siguiente caña; con las 36, `collectionBonus` (250K). La ventana Peces
   muestra el siguiente premio.
-- **Ruleta gratis** (`Config/Spin.luau`, `Retention/SpinWheel`): un giro cada 4 h (guardado). Casillas:
-  monedas (lo mayor entre 300–5K y 10–120 % de la siguiente caña), 10 o 30 min de x2 poder, o
-  llenar 5 % del monstruo para todos. Botón "Ruleta" arriba con punto rojo cuando toca.
+- **Ruleta** (`Config/Spin.luau`, `Retention/SpinWheel`): 8 casillas con su % a la vista (los
+  pesos suman 100). Un giro **gratis cada 6 h** (`cooldownHours`) y **giros guardados**
+  (`save.spins`): +1 cada 15 min conectado (máx. 4 por sesión, `playSpins`, `Retention/SpinTimer`),
+  +1 por cobrar el diario (+3 el día 7, `Retention.dailySpins`), la casilla "+1 giro" y con Robux
+  (`Spin1` 24 R$ = 1, `Spin5` 80 R$ = 5). Al girar se usa primero el gratis. Casillas:
+  monedas 300 / 5 % de la siguiente caña (30 %), 10 min x2 poder (20 %), +1 giro (8 %),
+  cofre 1.5K / 20 % (15 %), JACKPOT 10K / 100 % de la siguiente caña (2 %), llenar 5 % del
+  monstruo (10 %), 15 min x2 monedas (5 %, `coinBoostMultiplier`), 30 min x2 poder (10 %).
+- **Racha del diario** (`Retention.streakBonus`, `shared/RetentionBonus`): +10 % de monedas y
+  poder por cada día seguido cobrado, hasta +100 % (día 10). Si se salta un día se corta (0 %
+  hasta volver a cobrar). La ventana del diario muestra la racha y lo que da mañana.
 - **Misiones** (`Config/Quests.luau`): 3 del día + 1 EXTRA (llenar monstruos) que paga pero no hace
   falta para el cofre (3K × escala). Tipo `food`: aportar un % de la barra. No las multiplica la
   mejora de Monedas de Robux.
@@ -108,6 +116,7 @@ en los estanques y en la guarida del descanso.
 | VIP (pase) / regalar VIP | 299 / 299 |
 | Entrenamiento del servidor 15 min, x2 → x64 | 60, 129, 239, 416, 678, 880 |
 | Llenar 25 / 50 / 75 % | 49 / 89 / 129 |
+| Giros de ruleta: `Spin1` (+1) / `Spin5` (+5) | 24 / 80 |
 | Elegir siguiente monstruo | Orca 25, Minotauro 99, Dragón 265, Zorro 408 (se oculta con un solo monstruo) |
 | Estanques 2–10 | 25 … 999 |
 | MEJORAS en Robux | cañas 5 … 999, canastas 9 … 299, botas 5 … 199 |
