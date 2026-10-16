@@ -212,3 +212,6 @@ personaje (-X en Roblox).
   dos instancias con el mismo nombre en `ReplicatedStorage.Shared` o en `Client`, avisar.
 - `MinotauroE2..E4`: el código ya elige el perfil por el nombre (`MinotauroE<n>`); basta con
   respetar el contrato de huesos y el nombre del modelo.
+- `rbxassetid://203785492 ... Asset type does not match` (nota de Cowork): no está en `src/`
+  (tampoco en `Assets`) ni en ninguna instancia del lugar, ni en Edit ni en Play. Viene de
+  Roblox (CoreGui o la apariencia del avatar); no hay nada que corregir de nuestro lado.

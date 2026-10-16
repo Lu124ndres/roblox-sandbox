@@ -525,3 +525,19 @@ Pedido del usuario: el progreso de estanques sigue a los monstruos que ayudaste 
 llenar (kills, con al menos 0.5 % de la barra), no al poder. Premia jugar en equipo y
 evita que entrenar solo en un estanque abra el siguiente. Umbrales en
 `Config/Progression.luau` (`requiredKills`).
+
+## 2026-10-16 — El dragón descansa con las alas en planeo
+
+**Contexto:** el rig anterior dejaba de reposo las alas arriba (arriba del aleteo). Al planear,
+que es lo que más hace, el ala estaba en su pose más forzada y la membrana se estiraba.
+**Decisión:** `rig_dragon.py` posa las alas horizontales (con un poco de diedro) y hornea esa
+pose como reposo; el aleteo sube y baja simétrico alrededor. El código no guarda un ángulo por
+etapa: `Dragon/Rig` mide al enlazar cuánto hay que bajar el ala (`neutral`), así funciona con
+modelos viejos y nuevos.
+
+## 2026-10-16 — Un monstruo con una sola etapa modelada la usa en todas
+
+**Contexto:** el zorro de agua solo tiene E4. `GiantBody` elige la animación con el modelo de
+la etapa 1: con la orca teñida de reemplazo, al crecer le habría puesto la animación de orca.
+**Decisión:** `GiantTemplates.ownTemplate` busca la etapa pedida, las anteriores y después las
+siguientes; la orca teñida solo aparece si el monstruo no tiene ningún modelo propio.

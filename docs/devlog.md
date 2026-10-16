@@ -1395,3 +1395,51 @@ etc.), ninguno en los archivos tocados hoy.
 - Trabajo repartido con Claude Code (`docs/tareas_claude_code.md`).
 
 **Qué se rompió:** nada. Probado por MCP: las 4 etapas del minotauro y la orca fantasma.
+
+
+---
+
+## 2026-10-16 (11) — Orca y dragón: huesos, animación y efectos nuevos (C5, Claude Code)
+
+**Qué se hizo:**
+
+- `tools/blender/rig_orca.py` desde cero: `Raiz > Pecho > Cabeza > Mandibula`, cola de 4 huesos
+  más cortos hacia la punta, `AletaColaIzq/Der`, pectorales con codo (`AletaIzq2/Der2`) y la
+  `Dorsal` ahora deforma. Pesos por calor, suavizados y en 4 influencias; la mandíbula se corta
+  por la línea de los labios (ahora abre de verdad). `968a9e6`.
+- `tools/blender/rig_dragon.py`: el reposo pasa a ser con las alas en planeo (ver decisiones);
+  pesos recalculados en esa pose. La boca ahora cierra del todo. `e2ccb31`.
+- `Shared/Resorte`: un número que persigue a otro con peso. Orca: aletas de la cola que reman
+  contra la onda, pectorales con látigo, dorsal que se mece, cola que se dobla tarde en las
+  curvas. Dragón: el ángulo de planeo del ala se mide del modelo (`Rig.neutral`), cola,
+  cuello y patas con resortes. `9c07280`.
+- VFX: estelas finas en las puntas de las alas del dragón al ir rápido o picar (`4fd7355`) y
+  remolinos en las aletas de la cola de la orca bajo el agua.
+- Cowork importó los 8 modelos (`4506599`); probado en juego `Orca:2` y `DragonMarino:3`.
+
+**Qué se rompió:** las estelas del dragón salían como rayos (anchas como media ala): se
+afinaron. Las pruebas de E1/E4 y la Orca fantasma las sigue otra sesión.
+
+
+---
+
+## 2026-10-16 (12) — Zorro de agua E4, versión de Claude Code (C7)
+
+**Qué se hizo:**
+
+- Prueba del usuario (Claude Code contra Cowork). Modelo por código en Blender
+  (`zorro_e4_code.py`), siguiendo la referencia del usuario pasada a agua: kitsune parado,
+  nueve colas en S con punta de espuma, pechera y gola blancas, orejas grandes, medias azul
+  marino, marcas cian que brillan, gema en la frente y oro.
+- Pintura por vértice con capa de brillo (`zorro_e4_pintura.py`) y `rig_zorro_e4_code.py`:
+  17.8k triángulos, color/normales/rugosidad/metal horneados a 1024, 65 huesos (cada cola con
+  4 propios, el cuerpo por calor sin los huesos de las colas).
+- `Shared/Zorro` + `ZorroStand` + `ZorroFx`: parado sobre el agua; respira, pasa el peso,
+  colas que ondulan como llamas con inercia, pasos cruzados al girar, come y muerde; trucos
+  aullido, abanico, salto, sacudida, reverencia y fuegos fatuos, con luz en la gema, bruma
+  en las colas, ondas al pisar y orbes. `49ae047`.
+- `GiantTemplates`: un monstruo con una sola etapa modelada usa ese modelo en todas.
+
+**Qué falta:** importarlo en Studio como `ServerStorage.ZorroDeAguaE4_code` y probarlo.
+Aprendido: piezas de bmesh con caras al revés restan volumen al fundir por vóxeles, y una
+esfera de `masa()` guarda escala y giro en el objeto (pintar en coordenadas del mundo).
