@@ -41,7 +41,7 @@ pintar_zorro_e4(altos)
 for o in altos:
     o["hueso"] = partes.get(o, "")
 
-TOPE = {"Cuerpo": 8200, "Cola": 880, "Oreja": 260, "OrejaPelo": 90, "Ojo": 160, "Nariz": 80, "Gema": 80,
+TOPE = {"Cuerpo": 8200, "Cola": 880, "Oreja": 520, "OrejaPelo": 90, "Ojo": 160, "Nariz": 80, "Gema": 80,
         "Aro": 64, "Medallon": 96, "MedallonBorde": 160, "GemaMedallon": 80}
 
 
@@ -298,9 +298,9 @@ hornear("EMIT", "metalness")
 # Color final = color + brillo (las marcas cian se ven encendidas en Roblox) y un poco más vivo.
 px = np.array(imgs["color"].pixels[:], dtype=np.float32).reshape(-1, 4)
 br = np.array(imgs["brillo"].pixels[:], dtype=np.float32).reshape(-1, 4)
-rgb = px[:, :3] * 1.08 + br[:, :3] * 0.9
+rgb = px[:, :3] * 1.02 + br[:, :3] * 0.9
 gris = rgb.mean(axis=1, keepdims=True)
-rgb = gris + (rgb - gris) * 1.1
+rgb = gris + (rgb - gris) * 1.25  # más vivo: en Roblox la luz del cráter lo apaga
 px[:, :3] = np.clip(rgb, 0, 1)
 imgs["color"].pixels[:] = px.ravel()
 imgs["color"].update()
@@ -334,5 +334,6 @@ bpy.ops.export_scene.fbx(filepath=OUT, use_selection=True, apply_scale_options="
 print("FBX", OUT)
 if VISTA:
     estudio(3.0, distancia=8, angulo=35, fondo=(0.55, 0.62, 0.7))
+    scn.view_settings.exposure = -0.6  # la misma que los renders del detallado: se comparan
     scn.cycles.samples = 32
     renderizar(VISTA, 800, 800, muestras=32, motor="CYCLES")

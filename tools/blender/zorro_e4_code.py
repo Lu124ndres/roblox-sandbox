@@ -221,8 +221,10 @@ def construir_zorro_e4():
     # Orejas grandes, anchas y cóncavas, con aros de oro.
     for s, n in ((1, "Izq"), (-1, "Der")):
         base, punta = lado(P["oreja"], s), lado(P["oreja_punta"], s)
-        out.append(rigido(cono(f"Oreja{n}", base, punta, 0.19, 0.12, (0.3 * s, -1, 0.1),
-                               hueco=0.35, curva=0.05, anillos=14, lados=24), f"Oreja{n}"))
+        oreja = cono(f"Oreja{n}", base, punta, 0.19, 0.12, (0.3 * s, -1, 0.1),
+                     hueco=0.35, curva=0.05, anillos=14, lados=24)
+        # Fundida y suavizada como el cuerpo: bordes redondeados en vez de filo de cartón.
+        out.append(rigido(fusionar(f"Oreja{n}", [oreja], voxel=VOXEL * 0.8, suavizado=12), f"Oreja{n}"))
         # Pelo blanco adentro de la oreja.
         adentro = base.lerp(punta, 0.08) + V((0.02 * s, -0.05, 0))
         pelo_oreja = cono(f"OrejaPelo{n}", adentro, base.lerp(punta, 0.55) + V((-0.02 * s, -0.06, 0)),
