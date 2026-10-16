@@ -1310,3 +1310,24 @@ con el modelo viejo (sin huesos): giran y saltan, pero no se animan.
 **Qué se rompió:** nada. Probado en Studio: los 6 trucos sobre el rig de E1 con los perfiles
 de E1 y E4, cambio a `Minotauro:4` sin errores en la consola. Rojo no estaba conectado en
 Studio: los scripts se copiaron a mano con el mismo contenido (verificado por largo).
+
+
+---
+
+## 2026-10-16 (8) — Minotauro probado por MCP
+
+**Qué se probó (Minotauro:1):** gira hacia quien le da de comer (desde el oeste: mira a -X) y
+vuelve a mirar alrededor al terminar; muerde cada pez que llega (12 mordidas y 13 "Chomp" en
+7 s); los 6 trucos corren sin errores y sus eventos suenan y salpican: pisotón (salpicón y
+ondas), rugido (agudo, 1.37), salto (salpicón al caer), músculo (destellos) y baile (corazones).
+
+**Qué se arregló:**
+
+- `GiantView`: si la etapa baja con el mismo monstruo (panel de admin, o el mismo monstruo de
+  nuevo) el cliente se quedaba con el modelo grande; ahora rehace el cuerpo.
+- `GiantView`: el gruñido de ambiente (tono fijo 0.8) ya no suena en los gigantes animados
+  (orca, dragón, minotauro), que rugen con la voz de su etapa. Antes el becerro gruñía grave.
+- En Studio había 10 scripts duplicados (restos de Rojo); el cliente usaba el `Minotauro`
+  viejo. Se quitaron las copias y se verificó que todos los scripts coinciden con `src/`.
+
+**Qué se rompió:** nada. Nota: para simular comida hace falta `count` y `fishId` en GiantFed.

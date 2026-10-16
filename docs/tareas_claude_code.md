@@ -25,7 +25,8 @@ Antes de empezar, leer `CLAUDE.md` (reglas: `--!strict`, módulos ≤ 200 línea
 - **Pruebas por MCP:** `start_stop_play`, y en el cliente
   `game.ReplicatedStorage.Remotes.AdminCommand:FireServer('giant', 'Minotauro:1')` pone ese
   monstruo y etapa. Para simular que alguien le da de comer, en el servidor:
-  `Remotes.GiantFed:FireAllClients({{userId = <id del jugador>}})` cada 0.25 s.
+  `Remotes.GiantFed:FireAllClients({{userId = <id>, count = 3, fishId = "PezAngel"}})` cada
+  0.25 s (sin `count` y `fishId` gira hacia el jugador pero no vuelan peces ni muerde).
 - **Lint antes de cada commit:** `stylua src`, `rojo sourcemap default.project.json -o sourcemap.json`
   y `luau-lsp analyze` (o `selene src`), y que ningún `.luau` pase de 200 líneas.
 
@@ -33,7 +34,7 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
 
 ## Tareas de Claude Code
 
-- [~] **C1. Minotauro por etapa (código).** Hoy `src/shared/Minotauro` (Rig, Pose, Trucos) y
+- [x] **C1. Minotauro por etapa (código).** Hoy `src/shared/Minotauro` (Rig, Pose, Trucos) y
       `src/client/Giant/MinoStand.luau` animan a `MinotauroE1` (becerro). Cowork va a modelar
       E2 (joven), E3 (adulto) y E4 (forma final) **con los mismos nombres de huesos** (abajo).
       Crear `src/shared/Minotauro/Etapas.luau` (como `src/shared/Dragon/Etapas.luau`): por
@@ -41,7 +42,8 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       (E1 agudo 1.35 → E4 grave 0.7), fuerza del pisotón (temblor y ola), qué trucos hace y
       cada cuántos segundos (E1 baila y salta; E4 ruge y pisa más, sin bailar). Elegir el perfil
       por el nombre del modelo (`MinotauroE<n>`), como hace el dragón.
-- [ ] **C2. Probar al minotauro por MCP.** Con `Minotauro:1`: que gire hacia quien le da de
+      → `1d6b45d`. Perfiles en `Minotauro/Etapas`; E3 ya no baila y E4 tampoco salta.
+- [~] **C2. Probar al minotauro por MCP.** Con `Minotauro:1`: que gire hacia quien le da de
       comer (simular GiantFed), que muerda, que los 6 trucos corran sin errores en la consola y
       que los eventos (stomp, roar, land, flex, happy) suenen y salpiquen. Arreglar lo que falle.
 - [ ] **C3. Ventanas en teléfono.** En el emulador de Studio (iPhone XR y un Android chico):
@@ -74,3 +76,10 @@ personaje (-X en Roblox).
 ## Notas de Claude Code
 
 (Lo que Cowork tiene que saber: cambios de contrato, problemas, ideas.)
+
+- 2026-10-16: el lugar tenía scripts duplicados (dos `Shared.Minotauro`, dos `MinoStand` y
+  otros 8 módulos repetidos, restos de una sincronización vieja de Rojo); el cliente cargaba
+  la copia vieja. Se quitaron las copias (todas están en git). Si al importar algo aparecen
+  dos instancias con el mismo nombre en `ReplicatedStorage.Shared` o en `Client`, avisar.
+- `MinotauroE2..E4`: el código ya elige el perfil por el nombre (`MinotauroE<n>`); basta con
+  respetar el contrato de huesos y el nombre del modelo.

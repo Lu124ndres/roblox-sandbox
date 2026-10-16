@@ -135,7 +135,7 @@ local function ambientLoop(getBody: () -> GiantBody.Body?)
 		while true do
 			task.wait(math.random(GROWL_MIN_SECONDS, GROWL_MAX_SECONDS))
 			local body = getBody()
-			if body and nearness() > 0.2 then
+			if body and not body.swims and nearness() > 0.2 then -- los animados rugen con su voz
 				Sounds.play("Roar", body.top(), 0.8)
 				CameraShake.shake(0.25 * nearness(), 0.8)
 			end
@@ -157,7 +157,7 @@ function GiantView.start()
 			return
 		end
 		local stage = GiantStages.stageFor(progress)
-		if id ~= currentId then
+		if id ~= currentId or stage < lastStage then -- otro monstruo, o volvió a empezar
 			local def = defsById[id]
 			if not def then
 				return
