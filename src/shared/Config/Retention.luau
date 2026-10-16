@@ -73,7 +73,7 @@ local Retention: Types.RetentionConfig = {
 		Tutorial = { name = "Pescador de verdad", description = "Terminaste el tutorial" },
 		EstanqueMaximo = {
 			name = "Maestro del estanque",
-			description = "Entrenaste en el estanque x100",
+			description = "Entrenaste en el estanque más alto (x25)",
 		},
 	},
 }

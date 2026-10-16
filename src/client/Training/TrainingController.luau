@@ -65,7 +65,7 @@ function TrainingController.start(toasts: Toasts.Toasts)
 		local def = if type(pond) == "number" then Config.Progression.ponds[pond] else nil
 		if status == "locked" and def and def.robuxOnly then
 			toasts.show(
-				"Estanque sagrado x250: desbloquéalo con Robux para siempre",
+				`Estanque sagrado x{def.multiplier}: desbloquéalo con Robux para siempre`,
 				COLORS.Warning
 			)
 			Purchases.promptProduct(`Pond{pond}`)

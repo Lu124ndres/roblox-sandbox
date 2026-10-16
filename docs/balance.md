@@ -15,7 +15,7 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
 | `delivery.fishPerSecond` / `basketSeconds` | 6 / 5 s | Se alimenta **manteniendo E**: 6 peces/s × 1.35 por renacimiento o, si es más rápido, **la canasta llena en 5 s** (`RebirthMath.deliveryPerSecond`). Así el poder y la canasta sí aceleran al monstruo. |
 | `delivery.minSoloSeconds` | 180 | Tope por persona: nunca más de 1/180 de la barra por segundo: una persona sola tarda al menos 3 min. |
-| Renacer (`Config/Rebirth.luau`) | monedas 40K x 2.4^n · poder 3K x 2.6^n | Pide monedas **y** poder: 40K/3K, 96K/7.8K, 230K/20K, 550K/53K, 1.3M/140K… (dos cifras). Da, para siempre, alimentar x1.35 y **monedas y poder x1.25** por renacimiento (`bonusGrowth`, se multiplica). |
+| Renacer (`Config/Rebirth.luau`) | monedas 40K x 2.8^n · poder 3K x 3^n | Pide monedas **y** poder: 40K/3K, 110K/9K, 310K/27K, 880K/81K, 2.5M/240K… (dos cifras). El 1º llega a los ~16 min; ~12 renacimientos en la primera semana (antes ~15). Da, para siempre, alimentar x1.35 y **monedas y poder x1.25** por renacimiento (`bonusGrowth`, se multiplica). |
 | `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
 | `cycle.evolveSeconds` | 3 s | Al llenar cada cuarto de barra evoluciona: no come esos segundos (la entrega espera y sigue). |
 | `cycle.restSeconds` (máx.), `restBaseSeconds`, `restPerPlayerSeconds` | 120 · 60 · 1.2 | Descanso = 60 s + 1.2 s por jugador, máximo 120. |
@@ -38,13 +38,20 @@ El poder es la **fuerza**, como en «Construye la Pirámide» (`Shared/FishingPo
 
 | Estanque | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Multiplicador | x1 | x2 | x3 | x5 | x8 | x12 | x20 | x35 | x60 | x100 |
-| Monstruos llenados (`requiredKills`) | 0 | 1 | 2 | 3 | 5 | 8 | 12 | 18 | 25 | 35 |
-| **o** poder (`requiredPower`) | 0 | 2K | 8K | 25K | 75K | 200K | 600K | 2M | 6M | 20M |
+| Multiplicador | x1 | x1.5 | x2 | x3 | x4 | x6 | x8 | x12 | x16 | x25 |
+| Monstruos llenados (`requiredKills`) | 0 | 1 | 3 | 6 | 9 | 15 | 22 | 40 | 62 | 95 |
+| **o** poder (`requiredPower`) | 0 | 3K | 15K | 150K | 1M | 20M | 500M | 50B | 1T | 20T |
+| Llega (simulación, mediana) | — | ~7 min | ~30 min | día 2 | día 3 | día 5 | día 7 | día 12 | día 19 | día 29 |
 
-Cada estanque se abre con **monstruos llenados o con poder**, lo que llegue primero (las kills
-no se pierden al renacer; el poder sí). Con un monstruo cada ~7–12 min, el estanque 5 llega
-en ~35–60 min y el 9 en ~3 h de juego. El sagrado (x250) solo con Robux (`pondRobux`).
+Cada estanque se abre con **monstruos llenados o con poder**, lo que llegue primero. Las kills
+son el camino principal (no se pierden al renacer); el poder es el atajo de quien entrena mucho
+sin renacer (se reinicia al renacer). El sagrado (x50, el doble del 10) solo con Robux (`pondRobux`).
+
+Simulación (2026-10-16, `~/sim/sim3.py` en la VM): jugador de ~45 min al día que cobra el diario,
+gira la ruleta (gratis cada 6 h, diario y +1 cada 15 min), aporta a ~85 % de los monstruos (uno cada
+~11.5 min con el descanso: ~3.3 kills por día), entrena ~30 % del tiempo y renace en cuanto puede.
+Con la tabla anterior (x2…x100, 1–35 kills, 2K–20M de poder) el 10 llegaba el **día 4**; el poder
+abría casi todo. Un jugador menos constante (aporta a ~65 %) llega al 9 hacia el día 24.
 
 ## Tienda de monedas — MEJORAS (`Config/Shop.luau`)
 

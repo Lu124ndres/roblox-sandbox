@@ -9,7 +9,7 @@
 		Monstruo       llenarlo 25/50/75 % (para todos)
 		Siguiente      elegir el monstruo que sale después del descanso
 		Estanques      abrirlos para siempre
-	Pack de inicio y estanque sagrado (x250) en "Para siempre"; los demás
+	Pack de inicio y estanque sagrado en "Para siempre"; los demás
 	estanques solo si sellPonds. Se repintan cada segundo; Poder, Monedas,
 	VIP y estanques se pueden regalar (botón rosa).
 ]]

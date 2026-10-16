@@ -60,7 +60,7 @@ local Products: { [string]: number } = {
 	Pond8 = 0, -- R$ 449
 	Pond9 = 0, -- R$ 649
 	Pond10 = 0, -- R$ 999
-	Pond11 = 3718642542, -- R$ 799 · estanque sagrado x250 (solo Robux)
+	Pond11 = 3718642542, -- R$ 799 · estanque sagrado x50 (solo Robux)
 	-- Giros de la ruleta (guardados)
 	Spin1 = 0, -- R$ 24  +1 giro
 	Spin5 = 0, -- R$ 80  +5 giros
