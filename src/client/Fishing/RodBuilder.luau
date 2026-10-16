@@ -6,12 +6,14 @@
 	contera, mango con amarres, portacarrete, carrete con platos y manivela,
 	tres tramos que se afinan con virolas, anillas que se achican hacia la
 	punta y puntera. Después RodOrnaments agrega los adornos de su estilo.
-	El mango queda en el origen y la punta hacia -Z.
+	El mango queda en el origen y la punta hacia -Z. El mango de corcho, el
+	carrete y las anillas son piezas 3D de Blender (MeshKit) si están.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local MeshKit = require(script.Parent.Parent.Effects.MeshKit)
 local RodOrnaments = require(script.Parent.RodOrnaments)
 local RodParts = require(script.Parent.RodParts)
 
@@ -54,6 +56,7 @@ local function reel(model: Model, look: UIConfig.RodLook)
 		Enum.Material.Metal
 	)
 	spool.Shape = Enum.PartType.Cylinder
+	MeshKit.swap(spool, "CarreteBobina") -- hilo enrollado (Blender)
 	for side = -1, 1, 2 do
 		local plate = p(
 			model,
@@ -64,6 +67,7 @@ local function reel(model: Model, look: UIConfig.RodLook)
 			Enum.Material.Metal
 		)
 		plate.Shape = Enum.PartType.Cylinder
+		MeshKit.swap(plate, "CarretePlato")
 	end
 	p(
 		model,
@@ -97,7 +101,10 @@ function RodBuilder.build(look: UIConfig.RodLook): Built
 
 	-- Mango: contera, corcho con amarres y portacarrete.
 	RodParts.ball(model, "Contera", Vector3.new(0, 0, 0.85), 0.42, look.accent, Enum.Material.Metal)
-	local grip = RodParts.shaft(model, "Mango", 1.5, 0.4, 0.75, CORK, Enum.Material.Fabric)
+	local grip = MeshKit.swap(
+		RodParts.shaft(model, "Mango", 1.5, 0.4, 0.75, CORK, Enum.Material.Fabric),
+		"MangoCorcho"
+	) :: Part
 	RodParts.ring(model, "AmarreMango1", 0.45, 0.44, look.accent)
 	RodParts.ring(model, "AmarreMango2", -0.45, 0.44, look.accent)
 	RodParts.shaft(model, "Portacarrete", 0.5, 0.34, -0.65, METAL, Enum.Material.Metal)
@@ -132,6 +139,7 @@ function RodBuilder.build(look: UIConfig.RodLook): Built
 			Enum.Material.Metal
 		)
 		ring.Shape = Enum.PartType.Cylinder
+		MeshKit.swap(ring, "Anilla")
 		z -= length
 	end
 	local point = RodParts.ball(

@@ -1151,3 +1151,24 @@ referencia.
 Hay que guardar el lugar en Studio para que los trajes nuevos queden en ServerStorage.
 
 **Qué sigue:** modelos 3D del mapa y del equipo.
+
+---
+
+## 2026-10-16 — Mapa y equipo con modelos 3D de Blender
+
+**Qué se hizo:**
+
+- `tools/blender/props_mapa.py`: palmeras (3), arbustos con flores (2), rocas (3), crestas de
+  basalto del volcán (2) y los bordes de mármol con losa y filo de oro de los estanques (normal
+  y sagrado), low-poly con una textura de paleta. En Studio: `ServerStorage.PropsMapa`.
+- `server/World/PropDresser` + anclas en `generar_isla.py`: al empezar, 411 piezas del mapa se
+  cambian por los modelos 3D (las primitivas quedan de respaldo si falta el modelo).
+- `tools/blender/equipo_base.py` + `client/Effects/MeshKit`: la caña de la mano lleva mango de
+  corcho, carrete con hilo y platos con rayos y anillas redondas; las canastas, cuerpo y borde
+  redondeados. En Studio: `ReplicatedStorage.ModelosEquipo`.
+
+**Qué se rompió:** nada. Probado en Studio.
+
+**Qué sigue:** guardar el lugar en Studio (los modelos viven en el .rbxl). Las botas no se
+ven en el personaje (el traje las tapa), así que no llevan modelo.
+

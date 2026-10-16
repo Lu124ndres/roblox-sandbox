@@ -130,3 +130,28 @@ confirmar en la vista previa de "Importar 3D" que esté parado y mirando al fren
 animadas, colores horneados), Brasa, Halo, Anillo, Chispa y Burbuja (blancas, se tiñen con
 Color). Se suben con la cola de importación de Studio (Importar 3D acepta PNG) y sus IDs
 van en `Assets.Particles`; comprobarlos con `MarketplaceService:GetProductInfo(id).Name`.
+
+## Props del mapa (palmeras, arbustos, rocas, crestas, bordes de estanque)
+
+`tools/blender/props_mapa.py` (por el MCP de Blender, con `RAIZ` y `EXPORTAR = True`) arma todo
+por código, low-poly con una textura de paleta (cada cara toma un cuadrito de color de
+`assets/textures/PropsMapa_color.png`) y exporta `assets/blender/PropsMapa.fbx` con los
+objetos Palmera1-3, Arbusto1-2, Roca1-3, Cresta1-2, BordeEstanque y BordeSagrado, cada uno con
+el origen en el centro de su base.
+
+1. Studio → Importar 3D → el Model `PropsMapa` (pivote en el origen = la base) va a
+   `ServerStorage.PropsMapa`. Si cambia la textura, subir el PNG con la cola de importación y
+   poner su ID en `TextureID` de cada MeshPart (`Assets.Textures.PropsMapa`).
+2. `tools/generar_isla.py` deja una pieza invisible `Ancla` (atributos Prop, Ajuste,
+   Reemplaza) en cada palmera, arbusto, cresta y estanque; las rocas llevan Prop en la pieza.
+3. `server/World/PropDresser` cambia cada ancla por el modelo y borra las primitivas que
+   reemplaza. Sin `PropsMapa` el mapa queda con las primitivas.
+
+## Piezas 3D del equipo (caña y canasta)
+
+`tools/blender/equipo_base.py` exporta `assets/blender/EquipoBase.fbx`: MangoCorcho,
+CarreteBobina, CarretePlato, Anilla y CajaRedondeada, de 1 x 1 x 1 con el eje largo en X (como
+los cilindros de Roblox) y sin textura. En Studio van a `ReplicatedStorage.ModelosEquipo`;
+`client/Effects/MeshKit.swap` cambia la pieza de primitivas por la 3D con el mismo tamaño,
+lugar, color y material (RodBuilder: mango, carrete y anillas; BasketBuilder: cuerpo y borde).
+

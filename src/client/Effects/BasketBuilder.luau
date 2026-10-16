@@ -25,6 +25,7 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local BasketStyles = require(script.Parent.BasketStyles)
 local BasketStyles2 = require(script.Parent.BasketStyles2)
 local BasketStyles3 = require(script.Parent.BasketStyles3)
+local MeshKit = require(script.Parent.MeshKit)
 
 export type Basket = {
 	folder: Folder,
@@ -96,6 +97,17 @@ function BasketBuilder.build(character: Model, level: number): Basket?
 	local p = maker(folder, torso, back)
 	-- El estilo crea todo en trim; después cuerpo y borde vuelven a la canasta.
 	local body, rim, rimColor, rimMaterial, top = style(maker(trim, torso, back), scale)
+	-- Cuerpo y borde con bordes redondeados (pieza 3D de Blender) si son cajas.
+	for _, piece in { body, rim } do
+		if piece:IsA("Part") and piece.Shape == Enum.PartType.Block then
+			local round = MeshKit.swap(piece, "CajaRedondeada")
+			if piece == body then
+				body = round
+			else
+				rim = round
+			end
+		end
+	end
 	body.Parent, rim.Parent = folder, folder
 	for side = -1, 1, 2 do -- correas sobre los hombros
 		p(
