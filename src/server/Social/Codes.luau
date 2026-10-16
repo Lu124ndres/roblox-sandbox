@@ -3,7 +3,7 @@
 	Codes
 
 	Canje de códigos (remote RedeemCode). El texto se normaliza (mayúsculas,
-	sin espacios), se busca en CodeList, se revisa que no haya vencido ni se
+	sin espacios), se busca en CodeList (un alias cuenta como su original), se revisa que no haya vencido ni se
 	haya usado, se guarda como usado y se entrega el premio. El resultado
 	llega al jugador como Notice "code".
 ]]
@@ -27,6 +27,10 @@ local function redeem(player: Player, raw: unknown)
 	end
 	local key = string.upper((string.gsub(raw, "%s", "")))
 	local code = CodeList[key]
+	if code and code.aliasOf then -- GIANTS es GIGANTES: se anota y se paga como el original
+		key = code.aliasOf
+		code = CodeList[key]
+	end
 	local save = PlayerData.read(player)
 	if not save then
 		return

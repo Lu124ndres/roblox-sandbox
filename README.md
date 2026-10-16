@@ -132,7 +132,8 @@ Pendiente.
 
 ## Estado del proyecto
 
-Juego cooperativo de pesca en una isla: los jugadores pescan desde la orilla y alimentan
+**Feed the Giants** (en español, *Alimenta a los Gigantes*): juego cooperativo de pesca en
+una isla. Los jugadores pescan desde la orilla y alimentan
 a una cadena de gigantes marinos que crecen mientras comen (diseño en [`docs/alcance.md`](docs/alcance.md), versiones en
 [`docs/roadmap.md`](docs/roadmap.md)). Primer hito jugable en curso: pescar, llevar el
 pez a la Orca, ganar monedas y ver subir la barra de hambre

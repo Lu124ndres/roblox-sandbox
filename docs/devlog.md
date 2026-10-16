@@ -1570,3 +1570,18 @@ juego. El cliente solo carga el terreno hasta unos 1000 studs de donde está (st
 Roblox): el borde que se ve en el horizonte ahora es ese límite, no el fin del mar.
 
 **Qué se rompió:** nada.
+
+---
+
+## 2026-10-16 (17) — Feed the Giants: códigos en inglés (C8)
+
+**Qué se hizo (tarea de Cowork):** el juego se publica como "Feed the Giants" / "Alimenta a
+los Gigantes". `CodeList` suma alias en inglés: GIANTS (= GIGANTES) y LAUNCH (= LANZAMIENTO);
+ORCA y HALLOWEEN sirven igual en los dos idiomas. Un alias (`aliasOf`) se anota y se paga como
+su original, así quien canjeó GIGANTES no cobra de nuevo con GIANTS. Ningún texto del juego
+nombra al juego (dicen "el juego"); el README ahora lo nombra.
+
+**Probado por MCP:** `giants` → +500 monedas y después `GIGANTES` → "ya usado"; ` Launch ` →
++1000 y 10 min de x2, después `LANZAMIENTO` → "ya usado"; un código que no existe → inválido.
+
+**Qué se rompió:** nada.
