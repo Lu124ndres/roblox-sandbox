@@ -18,6 +18,7 @@
 	apply() la pasa a los huesos con Rig.turn.
 ]]
 
+local Etapas = require(script.Parent.Etapas)
 local Rig = require(script.Parent.Rig)
 
 export type Pose = { [string]: number }
@@ -43,16 +44,17 @@ local function flick(t: number, period: number): number
 	return if u < 1 then math.sin(math.pi * u) else 0
 end
 
-function Pose.idle(t: number): Pose
-	local tail = 2.2
+-- El ritmo de la respiración y la cola y cuánto se mece dependen de la etapa.
+function Pose.idle(t: number, profile: Etapas.Profile): Pose
+	local tail, breath, k = profile.tail, profile.breathe, profile.sway
 	return {
-		breathe = 0.035 * wave(t, 3.2),
-		sway = 0.04 * wave(t, 4.1),
+		breathe = 0.035 * k * wave(t, breath),
+		sway = 0.04 * k * wave(t, breath * 1.28),
 		lookYaw = 0.35 * wave(t, 9),
 		lookPitch = 0.05 * wave(t, 5.3),
 		tilt = 0.1 * wave(t, 6.3),
-		armL = 0.07 * wave(t, 3.2, 0.5),
-		armR = 0.07 * wave(t, 3.2, 2.1),
+		armL = 0.07 * k * wave(t, breath, 0.5),
+		armR = 0.07 * k * wave(t, breath, 2.1),
 		outL = 0.1,
 		outR = 0.1,
 		elbowL = 0.15,

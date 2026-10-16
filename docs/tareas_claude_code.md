@@ -33,7 +33,7 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
 
 ## Tareas de Claude Code
 
-- [ ] **C1. Minotauro por etapa (código).** Hoy `src/shared/Minotauro` (Rig, Pose, Trucos) y
+- [~] **C1. Minotauro por etapa (código).** Hoy `src/shared/Minotauro` (Rig, Pose, Trucos) y
       `src/client/Giant/MinoStand.luau` animan a `MinotauroE1` (becerro). Cowork va a modelar
       E2 (joven), E3 (adulto) y E4 (forma final) **con los mismos nombres de huesos** (abajo).
       Crear `src/shared/Minotauro/Etapas.luau` (como `src/shared/Dragon/Etapas.luau`): por

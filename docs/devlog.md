@@ -1292,3 +1292,21 @@ manda el botón Select).
 
 **Qué se rompió:** nada. Probado en Studio (reposo, rugido y comer). Las etapas 2-4 siguen
 con el modelo viejo (sin huesos): giran y saltan, pero no se animan.
+
+
+---
+
+## 2026-10-16 (7) — Minotauro por etapa
+
+**Qué se hizo:**
+
+- `Shared/Minotauro/Etapas` (como el del dragón): por etapa, ritmo de respiración y cola,
+  velocidad de giro, cuánto se mece, voz del rugido (E1 1.35 → E4 0.7), fuerza del pisotón y
+  la caída (temblor y ola) y qué trucos hace y cada cuánto (E1 baila y salta cada 11 s; E4 ruge
+  y pisa cada 14 s, sin bailar ni saltar). Se elige por el nombre del modelo (`MinotauroE<n>`).
+- `Pose.idle`, `Trucos.current` y `MinoStand` usan el perfil; se fueron las constantes fijas
+  del becerro (`EVERY`, `ORDER`, `TURN_SPEED`, `VOICE`).
+
+**Qué se rompió:** nada. Probado en Studio: los 6 trucos sobre el rig de E1 con los perfiles
+de E1 y E4, cambio a `Minotauro:4` sin errores en la consola. Rojo no estaba conectado en
+Studio: los scripts se copiaron a mano con el mismo contenido (verificado por largo).

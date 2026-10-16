@@ -3,7 +3,8 @@
 	Minotauro/Trucos
 
 	Los trucos del minotauro, sincronizados por la hora del servidor (todos los
-	ven a la vez): cada EVERY segundos puede empezar uno. pose(u) da, para el
+	ven a la vez): cada trickEvery segundos de la etapa (Minotauro/Etapas) puede
+	empezar uno de los suyos. pose(u) da, para el
 	avance u (0..1), lo que se suma a su pose (Minotauro/Pose):
 		pisoton   levanta una pata y la estampa: ola y temblor
 		rugido    se echa atrás, abre los brazos y ruge con la boca abierta
@@ -14,6 +15,7 @@
 	events: momentos con sonido o efecto (stomp, roar, flex, happy, land).
 ]]
 
+local Etapas = require(script.Parent.Etapas)
 local Pose = require(script.Parent.Pose)
 
 export type Trick = {
@@ -22,9 +24,6 @@ export type Trick = {
 	events: { { at: number, kind: string } },
 	pose: (u: number) -> Pose.Pose,
 }
-
-local EVERY = 11 -- segundos entre trucos
-local ORDER = { "pisoton", "rugido", "baile", "musculo", "rascarse", "salto", "pisoton", "baile" }
 
 local function smooth(t: number): number
 	t = math.clamp(t, 0, 1)
@@ -178,14 +177,15 @@ local TRICKS: { [string]: Trick } = {
 local Trucos = {}
 
 -- Truco que está haciendo ahora (o nil), su avance 0..1 y el tramo (para los eventos).
-function Trucos.current(now: number): (Trick?, number, number)
-	local slot = math.floor(now / EVERY)
+function Trucos.current(now: number, profile: Etapas.Profile): (Trick?, number, number)
+	local every = profile.trickEvery
+	local slot = math.floor(now / every)
 	local hash = (slot * 2654435761) % 1000 / 1000
 	if hash < 0.2 then
 		return nil, 0, slot -- este tramo sin truco
 	end
-	local trick = TRICKS[ORDER[slot % #ORDER + 1]]
-	local u = (now - slot * EVERY - EVERY * 0.3) / trick.seconds
+	local trick = TRICKS[profile.tricks[slot % #profile.tricks + 1]]
+	local u = (now - slot * every - every * 0.3) / trick.seconds
 	if u < 0 or u > 1 then
 		return nil, 0, slot
 	end

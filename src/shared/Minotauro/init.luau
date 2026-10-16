@@ -10,8 +10,9 @@
 		  los brazos y mastica; cada pez que llega lo muerde (bite);
 		- entre comidas hace trucos sincronizados (Trucos): pisotón, rugido,
 		  músculo, baile, rascarse y salto.
-	Solo anima huesos si el modelo de la etapa los tiene (MinotauroE1); las
-	otras etapas solo giran y saltan. step devuelve el pivote (base, -Z al frente).
+	El ritmo, la voz, la fuerza y los trucos salen de la etapa (Etapas, por el
+	nombre del modelo). Solo anima huesos si el modelo los tiene; si no, solo
+	gira y salta. step devuelve el pivote (base, -Z al frente).
 	state.events: lo que MinoStand convierte en sonido y efectos.
 ]]
 
@@ -21,16 +22,22 @@ local Workspace = game:GetService("Workspace")
 local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
+local Etapas = require(script.Etapas)
 local Pose = require(script.Pose)
 local Rig = require(script.Rig)
 local Trucos = require(script.Trucos)
 
-local TURN_SPEED = 1.1 -- rad/s como mucho al darse vuelta
 local LOOK_EVERY = 16 -- segundos entre vueltas para mirar a otro lado
 local BITE_SECONDS = 0.16
 
 export type Event = { kind: string }
-export type State = { events: { Event }, rig: Rig.Rig?, height: number, center: Vector3 }
+export type State = {
+	events: { Event },
+	rig: Rig.Rig?,
+	profile: Etapas.Profile,
+	height: number,
+	center: Vector3,
+}
 export type Info = { height: number, lift: number, spin: number, anger: number, inner: Model? }
 export type Motion = {
 	state: State,
@@ -51,7 +58,8 @@ end
 function Minotauro.new(center: Vector3): Motion
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local feeders = Feeders.watch(Vector3.new(center.X, 0, center.Z))
-	local state: State = { events = {}, rig = nil, height = 10, center = center }
+	local state: State =
+		{ events = {}, rig = nil, profile = Etapas.forModel(nil), height = 10, center = center }
 	local rigFor: Model? = nil
 	local yaw, stepPhase, feeding = 0, 0, 0
 	local biteUntil = 0
@@ -63,7 +71,10 @@ function Minotauro.new(center: Vector3): Motion
 		if info.inner ~= rigFor then
 			rigFor = info.inner
 			state.rig = if info.inner then Rig.bind(info.inner) else nil
+			state.profile = Etapas.forModel(if info.inner then info.inner.Name else nil)
 		end
+		local profile = state.profile
+		local turnSpeed = profile.turnSpeed
 		local phaseName = stateFolder:GetAttribute(Protocol.GiantAttributes.Phase)
 		local active = phaseName == nil or phaseName == "feeding"
 		local direction = if active then feeders.direction() else nil
@@ -79,12 +90,12 @@ function Minotauro.new(center: Vector3): Motion
 			target = ((slot * 2654435761) % 1000) / 1000 * math.pi * 2
 		end
 		local delta = (target - yaw + math.pi) % (math.pi * 2) - math.pi
-		local turn = math.clamp(delta * 3, -TURN_SPEED, TURN_SPEED) * dt
+		local turn = math.clamp(delta * 3, -turnSpeed, turnSpeed) * dt
 		yaw += turn
-		local turning = math.clamp(math.abs(turn / dt) / TURN_SPEED * 1.6, 0, 1)
+		local turning = math.clamp(math.abs(turn / dt) / turnSpeed * 1.6, 0, 1)
 		stepPhase += dt * 7 * (if turning > 0.05 then 1 else 0)
 
-		local pose = Pose.idle(now)
+		local pose = Pose.idle(now, profile)
 		Pose.add(pose, Pose.feeding(w, now, os.clock() < biteUntil))
 		Pose.add(pose, Pose.steps(stepPhase, turning))
 		Pose.add(
@@ -93,7 +104,7 @@ function Minotauro.new(center: Vector3): Motion
 		)
 		local trick, u, slot = nil, 0, -1
 		if active and w < 0.05 and turning < 0.1 then
-			trick, u, slot = Trucos.current(now)
+			trick, u, slot = Trucos.current(now, profile)
 		end
 		if trick then
 			if slot ~= lastSlot then
