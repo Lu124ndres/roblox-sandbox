@@ -1194,3 +1194,25 @@ ven en el personaje (el traje las tapa), así que no llevan modelo.
 **Qué se rompió:** el lugar abierto era una recuperación automática sin publicar (sin
 DataStore): se guardó como `respaldo_lugar_2026-10-16.rbxl` (fuera de git) y hay que
 publicarlo sobre el juego real. Ver `docs/lanzamiento.md`.
+
+
+---
+
+## 2026-10-16 (2) — Progresión más larga, ventanas para teléfono e íconos de productos
+
+**Qué se hizo:**
+
+- Estanques rebalanceados (`Config/Progression`): x1 → x1.5 → x2 → x3 → x4 → x6 → x8 → x12
+  → x16 → x25 (sagrado x50), con kills y poder que suben más rápido. Simulado: estanque 2 a
+  los ~7 min, 4 el día 2, 6 el día 5, 8 el día 12 y 10 cerca del día 29. Renacer más caro
+  (crece x2.8 en monedas y x3 en poder). Detalle en `docs/balance.md`.
+- Ventanas: la escala nunca deja que se salgan de la pantalla (`WindowLayout`); en táctil
+  Renacer, Misiones y Grupo son anchas en dos columnas. Probado en el simulador iPhone XR
+  (también Diario y Tienda ya caben).
+- 73 íconos 512x512 para productos y pases en `assets/ui/productos/` (estilo Canva de la
+  orca/zorro, con rayos de color y etiqueta). Script: `tools/productos/build.py`.
+
+**Qué se rompió:** nada.
+
+**Qué sigue:** publicar el lugar, crear los productos en el Creator Hub con sus íconos y
+pasarme los IDs; poner el ID del grupo en `Config/Social`.
