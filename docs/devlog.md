@@ -1066,3 +1066,39 @@ Studio: cartel con VIP y Premium, tienda, Equipar/Desequipar.
 **Qué se rompió:** nada. Probado en Studio: VIP dorado, marco dorado de la selección, Y del
 emulador de mandos. Falta probar con un mando real y en un teléfono.
 
+---
+
+## 2026-10-16 — MEJORAS nueva con íconos, avisos sin amontonarse, pack de 19 R$ y Renacer
+
+**Qué se hizo:**
+
+- 48 íconos de equipo hechos en Canva (20 cañas, 14 canastas, 14 botas), en tres hojas
+  subidas a Roblox; `Interface/GearIcons` pinta el de cada nivel y da su color de rareza.
+- MEJORAS rehecha: pestañas con el ícono de lo que tienes y "Nv 3/20"; a la izquierda el
+  panel grande del nivel elegido (`UpgradeDetail`: ícono sobre rayos, ahora → siguiente,
+  barra de cuánto falta, botones de monedas y Robux); a la derecha la cuadrícula de todos
+  los niveles (`UpgradeCard`: equipada, tienes, ¡SIGUIENTE! que late, bloqueada con
+  precio). Tocar una tarjeta la muestra; solo se compra la siguiente. `Upgrades.stats`.
+  Las miniaturas 3D viejas (RodPreview, GearPreview) quedaron sin uso y se movieron a
+  `_to_delete/` (fuera del repo).
+- Avisos: las tarjetas grandes (`ToastBanner`) ya no salen en medio de la pantalla sobre el
+  cartel de la cabeza; van arriba bajo el panel de hambre, de a una y en fila, con ícono
+  sobre rayos, brillo que cruza, chispas y desvanecido. Máximo dos cosas a la vez. "Nuevo
+  en tu colección" junta el pez y las monedas en una sola tarjeta. Efectos en `ToastFx`.
+- Cartel de la cabeza: el ícono de Premium ahora es la imagen que trae Roblox (el carácter
+  de la fuente no se dibujaba).
+- Pack de inicio a 19 R$ y con botas nivel 4 (también en `Grants`). Ventana nueva: regalo,
+  sello de descuento que se mece (sale de los precios en Robux de MEJORAS: 93 R$ el equipo
+  por separado), cinco tarjetas con los íconos del equipo, precio tachado y botón que late.
+- Regalos por jugar: botón grande en la columna izquierda (`PlaytimeEntry`), rosa con la
+  cuenta regresiva; listo se pone verde, late y el regalo se sacude.
+- Renacer: tarjetas con pez y "+35%", barras con ícono que se ponen verdes, qué se
+  reinicia y qué te quedas con íconos, y el botón late cuando alcanza (`RebirthParts`).
+
+**Qué se rompió:** nada. Probado en Studio: MEJORAS (compra de la caña 2 incluida), avisos
+en fila, Premium, pack de inicio, Renacer y el botón de regalos. Hay que poner el precio del
+producto PackInicio en 19 R$ en el panel de Roblox.
+
+**Qué sigue:** rediseñar las ventanas de premios diarios y regalos por jugar con la foto de
+referencia.
+

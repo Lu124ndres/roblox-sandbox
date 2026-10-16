@@ -3,29 +3,33 @@
 	RebirthWindow
 
 	Renacer (botón RENACER de la columna derecha) con el estilo de la TIENDA:
-	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada), con los
-	peces por segundo al alimentar (lo único que da renacer); las barras de
-	monedas y de poder que pide; qué se reinicia (tarjeta roja) y qué se
-	queda (verde); y el botón grande. El
-	botón del HUD lleva un punto rojo cuando ya alcanza. Lo decide el
+	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada, con "+N%"),
+	con los peces por segundo al alimentar (lo único que da renacer); las
+	barras con ícono de monedas y poder que pide (verdes al alcanzar); qué se
+	reinicia (roja) y qué te quedas (verde) con íconos; y el botón grande,
+	que late cuando ya alcanza (piezas en RebirthParts). El botón del HUD
+	lleva un punto rojo cuando ya alcanza. Lo decide el
 	servidor (remote Rebirth, Retention/Rebirth).
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(ReplicatedStorage.Shared.RebirthMath)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
+local RebirthParts = require(script.Parent.RebirthParts)
 local Window = require(script.Parent.Window)
 
 local ATTR = Protocol.PlayerAttributes
 local CARDS = Style.PALETTE.Cards
+local PULSE = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+local NUDGE = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 
 local RebirthWindow = {}
 
@@ -33,84 +37,49 @@ local function speedText(rebirths: number): string
 	return `{RebirthMath.speedText(rebirths)}/s`
 end
 
--- Tarjeta de multiplicador: título arriba, número grande y nota abajo.
-local function multiplierCard(parent: Instance, title: string, color: Color3, x: number): TextLabel
-	local card = CardParts.card(parent, title, color, 16)
-	card.Position = UDim2.fromScale(x, 0)
-	card.Size = UDim2.new(0.4, 0, 0, 132)
-	local head = Style.text(card, "Titulo", 24, nil, 2.5)
-	head.Text = title
-	head.Position = UDim2.fromScale(0, 0.06)
-	head.Size = UDim2.fromScale(1, 0.2)
-	local value = Style.text(card, "Valor", 64, UIConfig.Colors.Coins, 4)
-	value.Position = UDim2.fromScale(0, 0.26)
-	value.Size = UDim2.fromScale(1, 0.48)
-	local note = Style.text(card, "Nota", 18, nil, 2)
-	note.Text = "peces al alimentar"
-	note.Position = UDim2.fromScale(0, 0.76)
-	note.Size = UDim2.fromScale(1, 0.18)
-	return value
-end
-
--- Tarjeta chica con título y una línea de texto.
-local function infoCard(parent: Instance, title: string, text: string, color: Color3, x: number)
-	local card = CardParts.card(parent, title, color, 12)
-	card.Position = UDim2.new(x, 0, 0, 220)
-	card.Size = UDim2.new(0.48, 0, 0, 84)
-	local head = Style.text(card, "Titulo", 22, nil, 2.5)
-	head.Text = title
-	head.Position = UDim2.fromScale(0.04, 0.06)
-	head.Size = UDim2.fromScale(0.92, 0.3)
-	local body = Style.text(card, "Texto", 18, nil, 2)
-	body.Text = text
-	body.Position = UDim2.fromScale(0.04, 0.4)
-	body.Size = UDim2.fromScale(0.92, 0.52)
-end
-
 function RebirthWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local remote = remotes:WaitForChild(Protocol.Remotes.Rebirth) :: RemoteEvent
-	local window = Window.create(screen, "Renacer", "Renacer", Vector2.new(720, 500))
+	local window = Window.create(screen, "Renacer", "Renacer", Vector2.new(760, 540))
 	local hud = HudButtons.side("Renacer", "arrow", window.toggle)
 	local content = window.content
 
-	local nowValue = multiplierCard(content, "AHORA", CARDS.Blue, 0.04)
-	local afterValue = multiplierCard(content, "AL RENACER", CARDS.Yellow, 0.56)
+	local nowValue = RebirthParts.speedCard(content, "AHORA", CARDS.Blue, 0.04)
+	local afterValue, gain = RebirthParts.speedCard(content, "AL RENACER", CARDS.Yellow, 0.56)
 	local arrow = Icons.view(content, "arrow")
 	arrow.AnchorPoint = Vector2.new(0.5, 0.5)
-	arrow.Position = UDim2.new(0.5, 0, 0, 66)
-	arrow.Size = UDim2.fromOffset(72, 72)
+	arrow.Position = UDim2.new(0.5, 0, 0, 69)
+	arrow.Size = UDim2.fromOffset(80, 80)
 	arrow.Rotation = 90
-	local count = Style.text(content, "Veces", 22, nil, 2)
-	count.Position = UDim2.fromOffset(0, 140)
-	count.Size = UDim2.new(1, 0, 0, 26)
-	-- Lo que pide: monedas y poder, una barra para cada uno.
-	local bar = CardParts.bar(content, UIConfig.Colors.Coins, 22)
-	bar.track.Position = UDim2.new(0.04, 0, 0, 172)
-	bar.track.Size = UDim2.new(0.45, 0, 0, 36)
-	local powerBar = CardParts.bar(content, UIConfig.Colors.Power, 22)
-	powerBar.track.Position = UDim2.new(0.51, 0, 0, 172)
-	powerBar.track.Size = UDim2.new(0.45, 0, 0, 36)
-	infoCard(
-		content,
-		"SE REINICIAN",
-		"Monedas, poder, mejoras de la tienda y canasta",
-		CARDS.Red,
-		0.01
-	)
-	infoCard(
-		content,
-		"TE QUEDAS",
-		"Títulos, kills, estanques, colección, pases y compras",
-		CARDS.Green,
-		0.51
-	)
+	TweenService:Create(arrow, NUDGE, { Position = UDim2.new(0.5, 8, 0, 69) }):Play()
+	local count = Style.text(content, "Veces", 24, Color3.fromRGB(255, 236, 200), 2)
+	count.Position = UDim2.fromOffset(0, 146)
+	count.Size = UDim2.new(1, 0, 0, 28)
+	-- Lo que pide: monedas y poder, una barra con ícono para cada uno.
+	local coinsNeed = RebirthParts.requirement(content, "coin", UIConfig.Colors.Coins, 0.02, 186)
+	local powerNeed = RebirthParts.requirement(content, "crystal", UIConfig.Colors.Power, 0.52, 186)
+	RebirthParts.listCard(content, "SE REINICIAN", CARDS.Red, 0.01, 244, {
+		{ icon = "coin", label = "Monedas" },
+		{ icon = "crystal", label = "Poder" },
+		{ icon = "rod", label = "Mejoras" },
+		{ icon = "basketFish", label = "Canasta" },
+	})
+	RebirthParts.listCard(content, "TE QUEDAS", CARDS.Green, 0.51, 244, {
+		{ icon = "crown", label = "Títulos" },
+		{ icon = "fed", label = "Kills" },
+		{ icon = "pond", label = "Estanques" },
+		{ icon = "fish", label = "Colección" },
+		{ icon = "ticket", label = "Pases" },
+	})
 	local button = Style.button(content, "Renacer", Style.PALETTE.Buy, "¡RENACER!")
 	button.AnchorPoint = Vector2.new(0.5, 1)
-	button.Position = UDim2.fromScale(0.5, 1)
-	button.Size = UDim2.new(0.5, 0, 0, 64)
+	button.Position = UDim2.new(0.5, 0, 1, -4)
+	button.Size = UDim2.new(0.52, 0, 0, 70)
 	local buttonText = button:FindFirstChild("Texto") :: TextLabel
+	local beat = Instance.new("UIScale")
+	beat.Parent = button
+	local pulse = TweenService:Create(beat, PULSE, { Scale = 1.06 })
 
 	local function render()
 		local rebirths = RebirthMath.count(player)
@@ -120,11 +89,18 @@ function RebirthWindow.start(screen: ScreenGui)
 		local strength = if type(power) == "number" then power else 0
 		nowValue.Text = speedText(rebirths)
 		afterValue.Text = speedText(rebirths + 1)
-		count.Text = `Has renacido {rebirths} {if rebirths == 1 then "vez" else "veces"}`
-		bar.set(have / cost, `{NumberFormat.short(have)} / {NumberFormat.short(cost)} monedas`)
-		powerBar.set(
-			strength / powerCost,
-			`{NumberFormat.short(strength)} / {NumberFormat.short(powerCost)} poder`
+		local before, after =
+			RebirthMath.fishPerSecond(rebirths), RebirthMath.fishPerSecond(rebirths + 1)
+		gain.Visible = after > before
+		gain.Text = `+{math.round((after / math.max(before, 0.001) - 1) * 100)}%`
+		count.Text = if rebirths == 0
+			then "¡Tu primer renacimiento!"
+			else `Renacimiento {rebirths} → {rebirths + 1}`
+		coinsNeed.set(have, cost, `{NumberFormat.short(have)} / {NumberFormat.short(cost)}`)
+		powerNeed.set(
+			strength,
+			powerCost,
+			`{NumberFormat.short(strength)} / {NumberFormat.short(powerCost)}`
 		)
 		local ready = RebirthMath.canRebirth(have, strength, rebirths)
 		buttonText.Text = if ready
@@ -139,6 +115,12 @@ function RebirthWindow.start(screen: ScreenGui)
 		end
 		Style.gradient(button, tint)
 		hud.setAlert(ready)
+		if ready then
+			pulse:Play()
+		else
+			pulse:Cancel()
+			beat.Scale = 1
+		end
 	end
 
 	button.Activated:Connect(function()

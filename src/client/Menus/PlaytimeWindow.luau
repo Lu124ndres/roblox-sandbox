@@ -20,14 +20,13 @@ local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
-local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
+local PlaytimeEntry = require(script.Parent.PlaytimeEntry)
 local Window = require(script.Parent.Window)
 
 local GIFTS = Config.Retention.playtime
 local ATTR = Protocol.PlayerAttributes
 local CARDS = Style.PALETTE.Cards
-local ROW_HEIGHT = 40
 
 type State = "claimed" | "ready" | "waiting"
 
@@ -61,22 +60,8 @@ function PlaytimeWindow.start(screen: ScreenGui)
 	local claimRemote = remotes:WaitForChild(Protocol.Remotes.ClaimPlaytime) :: RemoteEvent
 	local window = Window.create(screen, "Regalos", "Regalos por jugar", Vector2.new(760, 420))
 
-	-- Aviso en la columna izquierda (abre la ventana).
-	local entry = Instance.new("TextButton")
-	entry.Name = "RegalosTiempo"
-	entry.Text = ""
-	entry.BackgroundTransparency = 1
-	entry.LayoutOrder = 16
-	entry.Size = UDim2.fromOffset(Layout.statWidth(), ROW_HEIGHT)
-	entry.Parent = Layout.left()
-	local icon = Icons.view(entry, "giftPink")
-	icon.Size = UDim2.fromOffset(ROW_HEIGHT + 4, ROW_HEIGHT)
-	icon.Active = false
-	local label = Style.text(entry, "Texto", 24, nil, 2.5)
-	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Position = UDim2.fromOffset(ROW_HEIGHT + 8, 4)
-	label.Size = UDim2.new(1, -ROW_HEIGHT - 8, 0, ROW_HEIGHT - 8)
-	entry.Activated:Connect(window.toggle)
+	-- Botón grande en la columna izquierda (abre la ventana).
+	local entry = PlaytimeEntry.build(16, window.toggle)
 
 	local grid = Instance.new("Frame")
 	grid.BackgroundTransparency = 1
@@ -175,12 +160,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 				nextWait = left
 			end
 		end
-		entry.Visible = anyReady or nextWait ~= nil
-		label.Text = if anyReady
-			then "¡Regalo listo!"
-			elseif nextWait then `Regalo en {clock(nextWait)}`
-			else ""
-		label.TextColor3 = if anyReady then Style.PALETTE.Buy else UIConfig.Colors.Text
+		entry.set(anyReady, if nextWait then `en {clock(nextWait)}` else nil)
 	end
 
 	player:GetAttributeChangedSignal(ATTR.PlaytimeClaimed):Connect(render)
