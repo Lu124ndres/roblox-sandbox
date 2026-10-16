@@ -90,6 +90,28 @@ function Pose.feeding(w: number, t: number, biting: boolean): Pose
 	}
 end
 
+-- Caminar: las piernas se alternan (la que va adelante dobla la rodilla al
+-- levantarse), los brazos van al revés que las piernas, el tronco se inclina un
+-- poco, se mece y sube y baja con cada paso; la cola acompaña.
+function Pose.walk(phase: number, amount: number): Pose
+	local s, c = math.sin(phase), math.cos(phase)
+	return {
+		legL = 0.55 * s * amount,
+		legR = -0.55 * s * amount,
+		kneeL = 0.75 * math.max(0, c) * amount,
+		kneeR = 0.75 * math.max(0, -c) * amount,
+		armL = -0.45 * s * amount,
+		armR = 0.45 * s * amount,
+		elbowL = 0.25 * amount,
+		elbowR = 0.25 * amount,
+		lean = -0.07 * amount,
+		sway = 0.05 * s * amount,
+		dy = 0.012 * math.abs(c) * amount,
+		tail1 = 0.25 * s * amount,
+		tail2 = 0.3 * s * amount,
+	}
+end
+
 -- Pasitos mientras gira en el lugar: un pie y después el otro.
 function Pose.steps(phase: number, amount: number): Pose
 	local left, right = math.max(0, math.sin(phase)), math.max(0, -math.sin(phase))

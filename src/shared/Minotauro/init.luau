@@ -6,8 +6,9 @@
 		- respira, se mece, mueve la cola y las orejas y mira alrededor (Pose);
 		- cada tanto se da vuelta con pasitos para mirar a otro lado (todos los
 		  clientes lo ven igual: sale de la hora del servidor);
-		- cuando alguien le da de comer gira hacia esa orilla, se inclina, estira
-		  los brazos y mastica; cada pez que llega lo muerde (bite);
+		- cuando alguien le da de comer CAMINA hasta esa orilla (Caminar), se
+		  inclina, estira los brazos y mastica; cada pez que llega lo muerde (bite);
+		  cuando dejan de darle vuelve caminando al centro; cada pisada salpica;
 		- entre comidas hace trucos sincronizados (Trucos): pisotón, rugido,
 		  músculo, baile, rascarse y salto.
 	El ritmo, la voz, la fuerza y los trucos salen de la etapa (Etapas, por el
@@ -22,6 +23,7 @@ local Workspace = game:GetService("Workspace")
 local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
+local Caminar = require(script.Caminar)
 local Etapas = require(script.Etapas)
 local Pose = require(script.Pose)
 local Rig = require(script.Rig)
@@ -62,6 +64,7 @@ function Minotauro.new(center: Vector3): Motion
 		{ events = {}, rig = nil, profile = Etapas.forModel(nil), height = 10, center = center }
 	local rigFor: Model? = nil
 	local yaw, stepPhase, feeding = 0, 0, 0
+	local walk = Caminar.new()
 	local biteUntil = 0
 	local lastSlot, lastU = -1, 0
 
@@ -81,9 +84,19 @@ function Minotauro.new(center: Vector3): Motion
 		feeding += ((if direction then 1 else 0) - feeding) * (1 - math.exp(-dt * 2.5))
 		local w = feeding * feeding * (3 - 2 * feeding)
 
-		-- Hacia dónde mira: quien le da de comer o, cada tanto, otro lado del lago.
+		-- Camina: hasta la orilla de quien le da de comer, o de vuelta al centro.
+		local goal = if direction then Caminar.standFor(direction, info.height) else Vector3.zero
+		local moving, heading, stepped = Caminar.update(walk, dt, goal, info.height)
+		if stepped then
+			table.insert(state.events, { kind = "step" })
+		end
+		w *= 1 - moving -- come cuando llega, no mientras camina
+
+		-- Hacia dónde mira: adonde camina, quien le da de comer o, cada tanto, otro lado.
 		local target: number
-		if direction then
+		if heading and moving > 0.15 then
+			target = angleTowards(heading)
+		elseif direction then
 			target = angleTowards(direction)
 		else
 			local slot = math.floor(now / LOOK_EVERY)
@@ -97,13 +110,14 @@ function Minotauro.new(center: Vector3): Motion
 
 		local pose = Pose.idle(now, profile)
 		Pose.add(pose, Pose.feeding(w, now, os.clock() < biteUntil))
-		Pose.add(pose, Pose.steps(stepPhase, turning))
+		Pose.add(pose, Pose.steps(stepPhase, turning * (1 - moving)))
+		Pose.add(pose, Pose.walk(walk.phase, moving))
 		Pose.add(
 			pose,
 			{ lean = -0.12 * info.anger, earL = -0.5 * info.anger, earR = -0.5 * info.anger }
 		)
 		local trick, u, slot = nil, 0, -1
-		if active and w < 0.05 and turning < 0.1 then
+		if active and w < 0.05 and turning < 0.1 and moving < 0.05 then
 			trick, u, slot = Trucos.current(now, profile)
 		end
 		if trick then
@@ -124,7 +138,7 @@ function Minotauro.new(center: Vector3): Motion
 		end
 		state.height = info.height
 		local dy = (pose.dy or 0) * info.height
-		state.center = center + Vector3.new(0, info.lift + dy, 0)
+		state.center = center + walk.offset + Vector3.new(0, info.lift + dy, 0)
 		return CFrame.new(state.center) * CFrame.Angles(0, yaw + math.rad(info.spin), 0)
 	end
 
@@ -144,7 +158,7 @@ function Minotauro.new(center: Vector3): Motion
 			return point("Boca") or state.center + Vector3.new(0, state.height * 0.7, 0)
 		end,
 		water = function(): Vector3
-			return Vector3.new(center.X, WorldLayout.waterLevel, center.Z)
+			return Vector3.new(state.center.X, WorldLayout.waterLevel, state.center.Z)
 		end,
 		bite = function()
 			biteUntil = os.clock() + BITE_SECONDS

@@ -9,6 +9,7 @@
 		stomp  pisotón: golpe de agua, ola y temblor (más fuerte cerca)
 		roar   rugido (agudo en el becerro, grave en la forma final) y temblor
 		land   cae de un salto: salpica
+		step   pisada al caminar por el lago: salpicadura chica y una onda
 		flex   destellos dorados alrededor
 		happy  corazones sobre la cabeza
 	Solo los modelos con huesos de minotauro (OrejaIzq y BrazoIzq, sin alas).
@@ -59,6 +60,10 @@ local function play(motion: Minotauro.Motion, kind: string)
 		Fx.splash(water, 2 * size)
 		Fx.ring(water, height * 0.8 * force, 1.4)
 		shake(water, 0.4 * force, 0.5)
+	elseif kind == "step" then
+		Fx.splash(water, 0.6 * size)
+		Fx.ring(water, height * 0.18, 0.9)
+		Sounds.play("Plop", water, 0.45)
 	elseif kind == "flex" then
 		Fx.sparkle(motion.top(), UIConfig.Colors.Coins, 24)
 	elseif kind == "happy" then
