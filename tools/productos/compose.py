@@ -56,11 +56,22 @@ def background(kind):
     return bg.convert("RGBA")
 
 
+HD = os.path.join(SRC, "hd")  # fuentes x4 con ESRGAN (tools/productos/upscale.js)
+
+
+def hd(name):
+    path = os.path.join(HD, name.replace(".png", "_x4.png"))
+    return Image.open(path).convert("RGBA") if os.path.exists(path) else None
+
+
 def load(name):
-    return Image.open(os.path.join(SRC, name)).convert("RGBA")
+    return hd(name) or Image.open(os.path.join(SRC, name)).convert("RGBA")
 
 
 def cell(sheet, level, cols=5, size=200):
+    big = hd(f"{sheet.replace('.png', '')}_{level}.png")
+    if big:
+        return big
     i = level - 1
     x, y = (i % cols) * size, (i // cols) * size
     return load(sheet).crop((x, y, x + size, y + size))
@@ -75,7 +86,7 @@ def place(canvas, im, box_size, center, shadow=True):
     im = trim(im)
     k = box_size / max(im.size)
     im = im.resize((max(1, int(im.width * k)), max(1, int(im.height * k))), Image.LANCZOS)
-    im = im.filter(ImageFilter.UnsharpMask(radius=2, percent=70, threshold=2))
+    im = im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=40, threshold=2))
     x, y = int(center[0] - im.width / 2), int(center[1] - im.height / 2)
     if shadow:
         a = im.getchannel("A").point(lambda v: int(v * 0.45))

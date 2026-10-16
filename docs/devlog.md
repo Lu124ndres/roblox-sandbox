@@ -1216,3 +1216,23 @@ publicarlo sobre el juego real. Ver `docs/lanzamiento.md`.
 
 **Qué sigue:** publicar el lugar, crear los productos en el Creator Hub con sus íconos y
 pasarme los IDs; poner el ID del grupo en `Config/Social`.
+
+
+---
+
+## 2026-10-16 (3) — Lugar guardado, íconos nítidos y pases más fuertes
+
+**Qué se hizo:**
+
+- El lugar más nuevo (el que estaba abierto como `respaldo_lugar_2026-10-16.rbxl`) se guardó
+  como `PescaYAlimentaGigantes.rbxl` en la carpeta del proyecto (fuera de git).
+- Íconos de productos rehechos desde fuentes escaladas x4 con ESRGAN (`assets/ui/iconos/hd/`,
+  `tools/productos/upscale.js`): ya no se ven pixeleados.
+- Lo pixeleado en Studio con el simulador de teléfono es del simulador: dibuja a la
+  resolución lógica del aparato (iPhone XR 896x414) y la estira. En "Dispositivo actual" y en
+  un teléfono de verdad las letras se ven nítidas.
+- Pases: Rey del Mar pesca x2 (y x2 de fuerza), alimenta x2 y da x2 kills. Dios del Volcán
+  pesca ultrarrápida (pican x5 y de un toque), alimenta x4 y da x4 kills
+  (`feedSpeed` en `Config/Monetization`, `Perks.feedMultiplier`, `FeedingService`).
+
+**Qué se rompió:** nada; lint limpio.
