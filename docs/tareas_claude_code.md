@@ -68,7 +68,7 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       usuario importe los 8 FBX en Studio; después Claude Code los pasa a `ServerStorage`,
       rehace las copias `OrcaFantasmaE1..E4` sobre las orcas nuevas, prueba y ajusta.
 
-- [ ] **C6. Hábitats dentro del volcán** (pedido del usuario, 2026-10-16). Cada monstruo tiene
+- [x] **C6. Hábitats dentro del volcán** (pedido del usuario, 2026-10-16). Cada monstruo tiene
       su zona decorada en el cráter. Cowork modela los props en Blender y los deja en
       `ServerStorage.Habitats.<GiantId>` (ver "Contrato de hábitats"). Claude Code:
       1. `src/shared/Config/Habitats.luau`: por `GiantId` la lista de props
@@ -86,6 +86,8 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
          `"brillo"` (las partes con material Neon laten suave en el cliente). Respetar el modo
          rápido / gráficos bajos (sin Fire).
       4. Probar por MCP con `giant Minotauro:1..4`, `Orca`, `DragonMarino`, `OrcaFantasma`.
+      → `23951c1`. Probados los 4 hábitats y el Zorro (cráter vacío); el fuego y el latido
+      del Neon van en el cliente (`Ambient/HabitatFx`). Falta probar en Play el cambio a modo rápido.
 
 - [~] **C7. Zorro de agua E4, versión de Claude Code** (prueba del usuario: Code contra
       Cowork, gana el mejor). Modelo, texturas, rig y animación hechos por Claude Code:
