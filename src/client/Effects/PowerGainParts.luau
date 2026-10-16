@@ -2,40 +2,42 @@
 --[[
 	PowerGainParts
 
-	Las piezas de interfaz de PowerGainFx: el marco azul degradado de cada
-	borde de la pantalla y el cristalito de energía (un rombo claro con halo).
+	Las piezas de interfaz de PowerGainFx: la viñeta azul de los bordes de la
+	pantalla y el cristalito de energía (un rombo claro con halo).
 ]]
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Assets = require(ReplicatedStorage.Shared.Assets)
 
 local BLUE = Color3.fromRGB(90, 175, 255)
 local LIGHT = Color3.fromRGB(215, 240, 255)
 
 local PowerGainParts = {}
 
-function PowerGainParts.edge(
-	parent: Instance,
-	size: UDim2,
-	position: UDim2,
-	rotation: number
-): Frame
-	local frame = Instance.new("Frame")
-	frame.Name = "Borde"
-	frame.BorderSizePixel = 0
-	frame.BackgroundColor3 = BLUE
-	frame.BackgroundTransparency = 1
-	frame.Size = size
-	frame.Position = position
-	frame.ZIndex = 0
-	frame.Active = false
-	local gradient = Instance.new("UIGradient")
-	gradient.Rotation = rotation
-	gradient.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0),
-		NumberSequenceKeypoint.new(0.4, 0.55),
-		NumberSequenceKeypoint.new(1, 1),
-	})
-	gradient.Parent = frame
-	frame.Parent = parent
-	return frame
+-- Brillo azul en los bordes de la pantalla: una viñeta (Assets.UI.Vineta) en su propia
+-- ScreenGui que ignora la barra de Roblox, así cubre toda la pantalla de forma pareja
+-- (antes eran 4 franjas que dejaban un hueco arriba y se pisaban en las esquinas).
+function PowerGainParts.vignette(playerGui: Instance): ImageLabel
+	local layer = Instance.new("ScreenGui")
+	layer.Name = "BrilloEntrenar"
+	layer.IgnoreGuiInset = true
+	layer.ResetOnSpawn = false
+	layer.DisplayOrder = 0 -- debajo del HUD
+	layer.ScreenInsets = Enum.ScreenInsets.None
+	local image = Instance.new("ImageLabel")
+	image.Name = "Vineta"
+	image.BackgroundTransparency = 1
+	image.Size = UDim2.fromScale(1, 1)
+	image.Image = Assets.UI.Vineta
+	image.ImageColor3 = BLUE
+	image.ImageTransparency = 1
+	image.ScaleType = Enum.ScaleType.Stretch
+	image.Active = false
+	image.Interactable = false
+	image.Parent = layer
+	layer.Parent = playerGui
+	return image
 end
 
 function PowerGainParts.orb(parent: Instance): (Frame, UIScale)

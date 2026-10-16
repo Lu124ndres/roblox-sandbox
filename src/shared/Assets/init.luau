@@ -51,6 +51,9 @@ local Assets: Assets = {
 	UI = {
 		-- Ícono de Robux que trae Roblox instalado (no hay que subirlo).
 		RobuxIcon = "rbxasset://textures/ui/common/robux.png",
+		-- Viñeta blanca (bordes opacos, centro transparente) que se tiñe con ImageColor3:
+		-- el brillo azul de los bordes al entrenar (assets/ui/Vineta.png).
+		Vineta = "rbxassetid://94536198570437",
 		-- Ícono de Roblox Premium que trae Roblox instalado.
 		PremiumIcon = "rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png",
 		-- Íconos del HUD: imágenes estilo 3D generadas con IA (Canva), recortadas a fondo

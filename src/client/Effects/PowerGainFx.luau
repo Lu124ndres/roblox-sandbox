@@ -6,8 +6,8 @@
 		· Cristalitos de energía que aparecen en distintos puntos de la pantalla
 		  y vuelan en curva hasta el contador de poder (pocos por tick y con
 		  tope, para que nunca tapen el juego).
-		· Un marco azul muy suave en los bordes de la pantalla mientras sigan
-		  llegando ticks; se apaga solo al dejar de entrenar.
+		· Un brillo azul suave en los bordes de toda la pantalla (viñeta) mientras
+		  sigan llegando ticks; se apaga solo al dejar de entrenar.
 		· "+1.6M" junto al contador que va sumando lo ganado en los últimos
 		  segundos (un solo número, no una lluvia de textos).
 	Con "efectos reducidos" salen menos cristales por tick.
@@ -20,6 +20,7 @@ local TweenService = game:GetService("TweenService")
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
+local Device = require(script.Parent.Parent.Interface.Device)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 local PowerGainParts = require(script.Parent.PowerGainParts)
@@ -27,8 +28,8 @@ local PowerGainParts = require(script.Parent.PowerGainParts)
 local LIGHT = Color3.fromRGB(215, 240, 255)
 local ORBS_PER_TICK, MAX_ORBS = 4, 16
 local FLY_SECONDS = 0.75
-local EDGE_ON, EDGE_PULSE = 0.4, 0.62 -- transparencia del marco (1 = invisible)
-local EDGE_SIZE = 0.16 -- grosor del marco, en fracción de la pantalla
+local EDGE_ON, EDGE_PULSE = 0.35, 0.6 -- transparencia de la viñeta (1 = invisible)
+local EDGE_TOUCH = 0.2 -- en el teléfono, más suave (la pantalla es chica)
 local IDLE_SECONDS = 1.4 -- sin ticks este tiempo: se apaga el marco y se borra la suma
 
 type Orb = { frame: Frame, scale: UIScale, from: Vector2, bend: Vector2, born: number }
@@ -37,7 +38,7 @@ local PowerGainFx = {}
 
 local rng = Random.new()
 local screenGui: ScreenGui? = nil
-local edges: { Frame } = {}
+local vignette: ImageLabel? = nil
 local orbs: { Orb } = {}
 local sumLabel: TextLabel? = nil
 local sumScale: UIScale? = nil
@@ -106,21 +107,18 @@ local function step()
 				TweenService:Create(stroke, TweenInfo.new(0.4), { Transparency = 1 }):Play()
 			end
 		end
-		for _, frame in edges do
-			TweenService:Create(frame, TweenInfo.new(0.6), { BackgroundTransparency = 1 }):Play()
+		if vignette then
+			TweenService:Create(vignette, TweenInfo.new(0.6), { ImageTransparency = 1 }):Play()
 		end
 	end
 end
 
 function PowerGainFx.mount(screen: ScreenGui)
 	screenGui = screen
-	local h, v = UDim2.new(1, 0, EDGE_SIZE, 0), UDim2.new(EDGE_SIZE * 0.6, 0, 1, 0)
-	edges = {
-		PowerGainParts.edge(screen, h, UDim2.fromScale(0, 0), 90),
-		PowerGainParts.edge(screen, h, UDim2.fromScale(0, 1 - EDGE_SIZE), -90),
-		PowerGainParts.edge(screen, v, UDim2.fromScale(0, 0), 0),
-		PowerGainParts.edge(screen, v, UDim2.fromScale(1 - EDGE_SIZE * 0.6, 0), 180),
-	}
+	local playerGui = screen.Parent
+	if playerGui then
+		vignette = PowerGainParts.vignette(playerGui)
+	end
 	task.spawn(function()
 		local row = Layout.left():WaitForChild("Stat2", 30)
 		local value = row and row:WaitForChild("Valor", 10)
@@ -157,9 +155,11 @@ function PowerGainFx.gain(gained: number)
 	for k = 1, if low then 2 else ORBS_PER_TICK do
 		spawnOrb(screen, (k - 1) * 0.08)
 	end
-	for _, frame in edges do
-		frame.BackgroundTransparency = EDGE_ON
-		TweenService:Create(frame, TweenInfo.new(0.5), { BackgroundTransparency = EDGE_PULSE })
+	local glow = vignette
+	if glow then
+		local soft = if Device.touch() then EDGE_TOUCH else 0
+		glow.ImageTransparency = EDGE_ON + soft
+		TweenService:Create(glow, TweenInfo.new(0.5), { ImageTransparency = EDGE_PULSE + soft })
 			:Play()
 	end
 	local label, scale = sumLabel, sumScale
