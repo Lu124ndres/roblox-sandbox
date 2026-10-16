@@ -1236,3 +1236,20 @@ pasarme los IDs; poner el ID del grupo en `Config/Social`.
   (`feedSpeed` en `Config/Monetization`, `Perks.feedMultiplier`, `FeedingService`).
 
 **Qué se rompió:** nada; lint limpio.
+
+
+---
+
+## 2026-10-16 (4) — Faro nuevo en 3D
+
+**Qué se hizo:**
+
+- `tools/blender/faro.py`: faro caricatura low-poly (2654 triángulos, 39 de alto): zócalo de
+  piedra con rocas, torre a franjas rojas y blancas con rebordes, ventanas, puerta de madera
+  con escalón, balcón con ménsulas y baranda, linterna abierta y cúpula roja con punta de oro.
+  En Studio: `ServerStorage.PropsMapa.Faro` (malla 93817126470443, textura 87535138846026).
+- `generar_isla.py`: ancla "Faro" (girada 180° para que la puerta mire a la isla) que
+  reemplaza la torre de primitivas; la Lampara y el Haz siguen y se ven por la linterna.
+- Alrededor del faro el terreno es adoquín (antes pasto alto que tapaba la puerta).
+
+**Qué se rompió:** nada. Probado en Studio y lugar guardado (`PescaYAlimentaGigantes.rbxl`).

@@ -56,6 +56,10 @@ local Textures: { [string]: { string } } = {
 	PropsMapa = {
 		"rbxassetid://89441442365011",
 	},
+	-- Faro (tools/blender/faro.py): ServerStorage.PropsMapa.Faro, malla 93817126470443.
+	Faro = {
+		"rbxassetid://87535138846026",
+	},
 	DragonMarinoE1 = {
 		"rbxassetid://84201486554941",
 		"rbxassetid://121296317760278",

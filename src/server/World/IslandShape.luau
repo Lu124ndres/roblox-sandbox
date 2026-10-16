@@ -112,7 +112,7 @@ local function mainIsland(point: Vector2): (number, Enum.Material, number)
 		local top = L.waterLevel - 3 + t * (L.lighthouseBaseHeight - L.waterLevel + 3)
 		if top > height then
 			height = top
-			material = if fromLighthouse < 9 then MATERIAL.Grass else MATERIAL.Rock
+			material = if fromLighthouse < 10 then MATERIAL.Cobblestone else MATERIAL.Rock -- sin pasto alto: se ve la puerta
 		end
 	end
 

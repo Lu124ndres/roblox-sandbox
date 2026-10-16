@@ -797,8 +797,9 @@ def faro():
     for i, (alto, d) in enumerate(((1.4, diam + 0.6), (1.2, diam - 1.6), (1.1, diam - 3.6), (1.0, 1.4))):
         hijos.append(pieza(f"Techo{i}", (alto, d, d), (x, altura + 5.8 + i * 1.15, z), ROJO_FARO, "SmoothPlastic", VERTICAL, "Cylinder"))
     # Modelo 3D de Blender (tools/blender/faro.py, 39.25 de alto, linterna a 31.65 del piso,
-    # puerta a +X): reemplaza la torre de primitivas; la Lampara y el Haz quedan.
-    hijos.append(ancla("Faro", (x, y - 0.15, z), (17, 39.25, 17), ajuste="alto",
+    # puerta a +X en Blender, que en Roblox queda en -X: se gira 180° para que mire a la isla):
+    # reemplaza la torre de primitivas; la Lampara y el Haz quedan.
+    hijos.append(ancla("Faro", (x, y - 0.15, z), (17, 39.25, 17), ry(180), ajuste="alto",
                        reemplaza="Base,Torre,Puerta,Balcon,Baranda,Linterna,Techo"))
     return grupo("Faro", hijos)
 
