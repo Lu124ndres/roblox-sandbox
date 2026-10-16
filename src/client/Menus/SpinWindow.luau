@@ -15,20 +15,19 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
-local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local SPIN = require(ReplicatedStorage.Shared.Config.Spin)
+local Device = require(script.Parent.Parent.Interface.Device)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local HudButtons = require(script.Parent.HudButtons)
-local Purchases = require(script.Parent.Purchases)
 local SpinOffers = require(script.Parent.SpinOffers)
+local SpinParts = require(script.Parent.SpinParts)
 local SpinWheelView = require(script.Parent.SpinWheelView)
 local Window = require(script.Parent.Window)
 
 local ATTR = Protocol.PlayerAttributes
 local PALETTE = Style.PALETTE
-local PRODUCTS = Config.Monetization.spinProducts
 
 local SpinWindow = {}
 
@@ -43,56 +42,26 @@ local function clock(seconds: number): string
 	return string.format("%d:%02d", s // 60, s % 60)
 end
 
-local function paint(button: TextButton, color: Color3)
-	if button.BackgroundColor3 == color then
-		return
-	end
-	button.BackgroundColor3 = color
-	local old = button:FindFirstChildOfClass("UIGradient")
-	if old then
-		old:Destroy()
-	end
-	Style.gradient(button, color)
-end
-
-local function buyButton(parent: Instance, key: string, color: Color3, x: number): TextButton
-	local def = PRODUCTS[key]
-	local spins = if def then def.spins else 1
-	local button = Style.button(parent, `Comprar{spins}`, color, "")
-	button.AnchorPoint = Vector2.new(x, 0)
-	button.Position = UDim2.fromScale(x, 0)
-	button.Size = UDim2.fromScale(0.3, 1)
-	local title = button:FindFirstChild("Texto") :: TextLabel
-	title.Text = `Comprar {spins}`
-	title.Size = UDim2.fromScale(0.94, 0.5)
-	title.Position = UDim2.fromScale(0.03, 0.05)
-	local price = Style.robuxBadge(button, if def then def.robux else nil)
-	local badge = price.Parent :: Frame
-	badge.AnchorPoint = Vector2.new(0.5, 0)
-	badge.Position = UDim2.fromScale(0.5, 0.58)
-	badge.Size = UDim2.fromScale(0.6, 0.36)
-	task.spawn(function()
-		price.Text = tostring(Purchases.price(key, false, if def then def.robux else 0))
-	end)
-	button.Activated:Connect(function()
-		Purchases.promptProduct(key)
-	end)
-	return button
-end
-
 function SpinWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local claimRemote = remotes:WaitForChild(Protocol.Remotes.ClaimSpin) :: RemoteEvent
 	local notice = remotes:WaitForChild(Protocol.Remotes.Notice) :: RemoteEvent
-	local window = Window.create(screen, "Ruleta", "Ruleta", Vector2.new(620, 640))
+	-- En el teléfono (pantalla baja) la rueda va a la izquierda y los botones a la derecha.
+	local wide = Device.touch()
+	local window = Window.create(
+		screen,
+		"Ruleta",
+		"Ruleta",
+		if wide then Vector2.new(900, 520) else Vector2.new(620, 640)
+	)
 	local hud = HudButtons.top("Ruleta", "chest", window.toggle)
 	SpinWindow.open = window.open
 	local content = window.content
 
 	local holder = Instance.new("Frame")
 	holder.BackgroundTransparency = 1
-	holder.Size = UDim2.fromScale(1, 0.74)
+	holder.Size = if wide then UDim2.fromScale(0.56, 1) else UDim2.fromScale(1, 0.74)
 	holder.Parent = content
 	local wheel = SpinWheelView.build(holder)
 	wheel.root.AnchorPoint = Vector2.new(0.5, 0)
@@ -100,19 +69,23 @@ function SpinWindow.start(screen: ScreenGui)
 
 	local row = Instance.new("Frame")
 	row.BackgroundTransparency = 1
-	row.Position = UDim2.fromScale(0, 0.76)
-	row.Size = UDim2.fromScale(1, 0.15)
+	row.Position = if wide then UDim2.fromScale(0.58, 0.5) else UDim2.fromScale(0, 0.76)
+	row.Size = if wide then UDim2.fromScale(0.42, 0.22) else UDim2.fromScale(1, 0.15)
 	row.Parent = content
-	buyButton(row, "Spin1", PALETTE.Cards.Blue, 0)
-	buyButton(row, "Spin5", PALETTE.Cards.Yellow, 1)
-	local spinButton = Style.button(row, "Girar", PALETTE.Buy, "")
+	local buy1 = SpinParts.buyButton(row, "Spin1", PALETTE.Cards.Blue, 0)
+	local buy5 = SpinParts.buyButton(row, "Spin5", PALETTE.Cards.Yellow, 1)
+	local spinButton = Style.button(if wide then content else row, "Girar", PALETTE.Buy, "")
 	spinButton.AnchorPoint = Vector2.new(0.5, 0)
-	spinButton.Position = UDim2.fromScale(0.5, 0)
-	spinButton.Size = UDim2.fromScale(0.36, 1)
+	spinButton.Position = if wide then UDim2.fromScale(0.79, 0.12) else UDim2.fromScale(0.5, 0)
+	spinButton.Size = if wide then UDim2.fromScale(0.42, 0.3) else UDim2.fromScale(0.36, 1)
+	if wide then
+		buy1.Size, buy5.Size = UDim2.fromScale(0.48, 1), UDim2.fromScale(0.48, 1)
+	end
 	local spinText = spinButton:FindFirstChild("Texto") :: TextLabel
 	local nextText = Style.text(content, "Proximo", 22, nil, 2)
-	nextText.Position = UDim2.fromScale(0, 0.92)
-	nextText.Size = UDim2.fromScale(1, 0.075)
+	nextText.Position = if wide then UDim2.fromScale(0.58, 0.76) else UDim2.fromScale(0, 0.92)
+	nextText.Size = if wide then UDim2.fromScale(0.42, 0.2) else UDim2.fromScale(1, 0.075)
+	nextText.TextWrapped = wide
 	local spinning = false
 
 	local function now(): number
@@ -134,7 +107,7 @@ function SpinWindow.start(screen: ScreenGui)
 		local count = available()
 		local can = count > 0 and not spinning
 		spinText.Text = if spinning then "Girando..." else `¡Girar! ({count})`
-		paint(spinButton, if can then PALETTE.Buy else PALETTE.Disabled)
+		SpinParts.paint(spinButton, if can then PALETTE.Buy else PALETTE.Disabled)
 		local lines = {}
 		local free = freeLeft()
 		table.insert(
@@ -145,7 +118,7 @@ function SpinWindow.start(screen: ScreenGui)
 		if type(playAt) == "number" and playAt > 0 then
 			table.insert(lines, `+1 giro por jugar en {clock(playAt - now())}`)
 		end
-		nextText.Text = table.concat(lines, "   ·   ")
+		nextText.Text = table.concat(lines, if wide then "\n" else "   ·   ")
 		hud.setAlert(count > 0)
 	end
 

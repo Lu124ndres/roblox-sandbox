@@ -2,11 +2,8 @@
 --[[
 	Window
 
-	Ventana estilo simulador: panel oscuro (o de madera) con borde negro
-	grueso, el título enorme con contorno encima de la esquina izquierda y
-	una X roja en la esquina derecha. Solo una ventana del menú está abierta
-	a la vez: abrir una cierra la otra. La usan la TIENDA, MEJORAS, la
-	colección, el premio diario, los ajustes, los códigos y el grupo.
+	Ventana estilo simulador: panel oscuro (o de madera), borde negro grueso,
+	título enorme arriba a la izquierda y X roja. Solo una abierta a la vez.
 	En táctil ocupa casi toda la pantalla. `onAnyChange` avisa de toda ventana
 	que se abre o cierra (GamepadNav lleva el mando adentro).
 ]]
@@ -50,7 +47,6 @@ function Window.onAnyChange(listener: (window: Window, opened: boolean) -> ())
 	table.insert(changeListeners, listener)
 end
 
--- Escala para verse del mismo tamaño en toda pantalla (1440 px de alto: el doble que 720).
 function Window.fit(): number
 	local height = Device.viewport().Y
 	if Device.touch() then
@@ -123,6 +119,7 @@ function Window.create(
 	content.Size = UDim2.new(1, -32, 1, -54)
 	content.Parent = panel
 
+	local pop = TweenService:Create(scale, UIConfig.Tweens.Pop, {})
 	local openCallbacks: { () -> () } = {}
 	local closeCallbacks: { () -> () } = {}
 	local window: Window
@@ -144,7 +141,8 @@ function Window.create(
 			resize(frame, fit)
 			frame.Visible = true
 			scale.Scale = fit * 0.85
-			TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = fit }):Play()
+			pop = TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = fit })
+			pop:Play()
 			for _, listener in changeListeners do
 				task.spawn(listener, window, true)
 			end
@@ -186,9 +184,11 @@ function Window.create(
 	opener.Name = "Abrir" -- para probar en Studio: <ventana>.Abrir:Fire()
 	opener.Event:Connect(window.open)
 	opener.Parent = frame
-	-- Si la pantalla cambia con la ventana abierta (girar el teléfono), se reacomoda.
+	-- Si la pantalla cambia con la ventana abierta (girar el teléfono, o el teléfono
+	-- termina de arrancar), se reacomoda; se corta el rebote, que si no la agranda.
 	Device.onResize(function()
 		if frame.Visible then
+			pop:Cancel()
 			local fit = Window.fit()
 			resize(frame, fit)
 			scale.Scale = fit

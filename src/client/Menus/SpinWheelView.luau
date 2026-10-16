@@ -82,7 +82,7 @@ function SpinWheelView.build(parent: Instance, textScale: number?): Wheel
 		label.ZIndex = 3
 		labels[index] = label
 		local percent = Style.text(rotor, "Probabilidad", math.floor(28 * big), nil, 2.5)
-		place(percent, angle, RIM * 0.28, 0.1)
+		place(percent, angle, RIM * 0.31, 0.1)
 		percent.Size = UDim2.fromScale(0.12, 0.06)
 		local value = SpinOffers.percent(index)
 		percent.Text = if value < 1 then string.format("%.1f%%", value) else `{math.round(value)}%`
