@@ -134,7 +134,8 @@ local Giants: Types.GiantsConfig = {
 		arrivalSeconds = 6,
 		rouletteSeconds = 6,
 		drainSeconds = 8, -- el agua del volcán baja hasta el fondo al empezar el descanso
-		refillSeconds = 6, -- y vuelve a subir con el siguiente monstruo
+		restDelaySeconds = 5, -- con la guarida ya a la vista, esto antes de empezar a contar
+		refillSeconds = 6, -- después de la ruleta se llena (agua o lava) y recién llega el monstruo
 		maxFeedMinutes = 20, -- si no se llena en esto, se va (y paga la kill igual)
 	},
 	delivery = {

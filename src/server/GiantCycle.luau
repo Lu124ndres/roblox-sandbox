@@ -99,9 +99,14 @@ local function cycle(tired: boolean)
 	GiantService.setPhase("farewell", CYCLE.farewellSeconds)
 	task.wait(CYCLE.farewellSeconds)
 
+	-- El volcán se vacía; con la guarida a la vista se esperan unos segundos y
+	-- recién ahí empieza a contar el descanso (DescansoDesde).
 	local restSeconds = restLength()
-	GiantService.setPhase("rest", restSeconds)
+	local delay = CYCLE.drainSeconds + CYCLE.restDelaySeconds
+	GiantPublish.set(ATTRS.RestFrom, Workspace:GetServerTimeNow() + delay)
+	GiantService.setPhase("rest", delay + restSeconds)
 	RestArena.show()
+	task.wait(delay)
 	local finish = os.clock() + restSeconds
 	skipRest = false
 	while os.clock() < finish and not skipRest do
@@ -120,8 +125,12 @@ local function cycle(tired: boolean)
 	GiantPublish.set(ATTRS.RouletteResult, nextDef.id)
 	GiantPublish.set(ATTRS.RouletteBy, buyer)
 	GiantPublish.set(ATTRS.RouletteAt, Workspace:GetServerTimeNow())
-	GiantService.setPhase("rest", CYCLE.rouletteSeconds)
+	GiantService.setPhase("rest", CYCLE.rouletteSeconds + CYCLE.refillSeconds)
 	task.wait(CYCLE.rouletteSeconds)
+	-- Primero se llena el cráter (agua o lava, según el que sale) y después llega.
+	GiantPublish.set(ATTRS.Refilling, true)
+	task.wait(CYCLE.refillSeconds)
+	GiantPublish.set(ATTRS.Refilling, false)
 	GiantService.reset(nextDef)
 	GiantService.setPhase("arriving", CYCLE.arrivalSeconds)
 	task.wait(CYCLE.arrivalSeconds)

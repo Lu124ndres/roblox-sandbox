@@ -6,8 +6,9 @@
 	EstadoGigante.VolcanVacio (lo publica RestArena):
 		- al empezar el descanso el agua baja hasta el fondo en drainSeconds,
 		  con remolinos y retumbos, y queda a la vista la guarida del fondo;
-		- vacío también en la ruleta: cuando llega el siguiente monstruo sube el
-		  agua en refillSeconds, o la lava si es el dragón (CraterLava).
+		- vacío también en la ruleta; después (VolcanLlenando) sube el agua en
+		  refillSeconds, o la lava si salió el dragón (CraterLava), y recién
+		  entonces llega el monstruo.
 	El agua es de cada cliente (los personajes se simulan en su propio
 	cliente), así que se cambia aquí, por capas, con Terrain:ReplaceMaterial.
 	Quien entra con el volcán vacío lo ve vacío al instante. onShown avisa a
@@ -147,13 +148,19 @@ function CraterDrain.start(onShown: (boolean) -> ())
 	local mode: Mode = "water" -- así lo deja TerrainBuilder
 	-- Vacío en el descanso y en la ruleta: se llena cuando llega el siguiente.
 	local function wanted(): Mode
+		local refilling = stateFolder:GetAttribute(ATTR.Refilling) == true
 		if
-			stateFolder:GetAttribute(ATTR.Drained) == true
-			or stateFolder:GetAttribute(ATTR.Phase) == "rest"
+			not refilling
+			and (
+				stateFolder:GetAttribute(ATTR.Drained) == true
+				or stateFolder:GetAttribute(ATTR.Phase) == "rest"
+			)
 		then
 			return "empty"
 		end
-		local def = defs[stateFolder:GetAttribute(ATTR.Id) :: any]
+		-- Al llenarse antes de que llegue, el agua o la lava es la del que salió en la ruleta.
+		local id = stateFolder:GetAttribute(if refilling then ATTR.RouletteResult else ATTR.Id)
+		local def = defs[id :: any]
 		return if def and def.lava then "lava" else "water"
 	end
 	local function apply(instant: boolean)
@@ -175,7 +182,7 @@ function CraterDrain.start(onShown: (boolean) -> ())
 			CraterLava.rise(instant)
 		end
 	end
-	for _, attribute in { ATTR.Drained, ATTR.Phase, ATTR.Id } do
+	for _, attribute in { ATTR.Drained, ATTR.Phase, ATTR.Id, ATTR.Refilling } do
 		stateFolder:GetAttributeChangedSignal(attribute):Connect(function()
 			apply(false)
 		end)

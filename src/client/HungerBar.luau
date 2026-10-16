@@ -2,17 +2,11 @@
 --[[
 	HungerBar
 
-	Barra de hambre del gigante actual, arriba al centro y compacta: la comida
-	que lleva sobre el total en grande, el nombre y la etapa. Lee el estado de
-	ReplicatedStorage.EstadoGigante (atributos que publica el servidor).
-
-	La barra muestra solo la etapa actual ("450 / 2,000"), con un color por
-	etapa (también el aro del retrato y "Etapa 2/4"); avisa al crecer y al
-	llenarse, y fuera de la comida cuenta la despedida, el descanso del volcán
-	y la llegada del siguiente. La comida total la publica el servidor (Food);
-	si aún no llegó, se usa la de Config. Se repinta como mucho 10 veces por
-	segundo y la barra solo se anima si algo cambió.
-	Las piezas del panel las arma Interface/HungerPanel.
+	Barra de hambre del gigante actual (EstadoGigante): la etapa actual
+	("450 / 2,000") con un color por etapa, el nombre y "Etapa 2/4"; avisa al
+	crecer y al llenarse, y fuera de la comida cuenta la despedida, el agua que
+	baja, el descanso, la ruleta, el llenado del volcán y la llegada. Se repinta
+	como mucho 10 veces por segundo. Las piezas las arma Interface/HungerPanel.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -46,6 +40,7 @@ local WATCHED: { [string]: boolean } = {
 	[ATTR.Phase] = true,
 	[ATTR.PhaseEndsAt] = true,
 	[ATTR.RouletteAt] = true,
+	[ATTR.Refilling] = true,
 	[FOOD_ATTRIBUTE] = true,
 }
 
@@ -106,11 +101,16 @@ function HungerBar.mount(
 		local spinAt = stateFolder:GetAttribute(ATTR.RouletteAt)
 		local spinning = type(spinAt) == "number"
 			and Workspace:GetServerTimeNow() - spinAt < Config.Giants.cycle.rouletteSeconds + 1
-		if phase == "rest" and spinning then
-			title.Text = "¡Ruleta de monstruos!"
-			detail.Text = ""
-			amount.Text = "..."
-			fraction = 1
+		local from = stateFolder:GetAttribute(ATTR.RestFrom)
+		local wait = if type(from) == "number" then from - Workspace:GetServerTimeNow() else 0
+		if phase == "rest" and stateFolder:GetAttribute(ATTR.Refilling) == true then
+			title.Text, detail.Text, amount.Text = "¡Se llena el volcán!", "", "..."
+			fraction, color = 1, UIConfig.Colors.Feeding
+		elseif phase == "rest" and spinning then
+			title.Text, detail.Text, amount.Text, fraction = "¡Ruleta de monstruos!", "", "...", 1
+		elseif phase == "rest" and wait > 0 then -- el agua baja: todavía no cuenta
+			title.Text, detail.Text = "¡Baja el agua del volcán!", "La guarida abre en"
+			amount.Text, fraction = `{math.ceil(wait)}`, 1
 		elseif phase == "rest" then
 			title.Text = "Descanso del volcán"
 			detail.Text = `x{GiantPool.restMultiplier()} entrenando`

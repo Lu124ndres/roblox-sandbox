@@ -46,6 +46,7 @@ export type CycleConfig = {
 	arrivalSeconds: number, -- llegada del siguiente gigante antes de poder alimentarlo
 	rouletteSeconds: number, -- la ruleta gira al final del descanso antes de que llegue
 	drainSeconds: number, -- se vacía el volcán (el descanso es en su fondo)
+	restDelaySeconds: number, -- con la guarida a la vista, espera antes de contar el descanso
 	refillSeconds: number, -- vuelve el agua
 	maxFeedMinutes: number, -- si no se llena en esto, se va y paga la kill a quien le dio algo
 }
