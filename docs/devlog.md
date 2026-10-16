@@ -1554,3 +1554,19 @@ vuelve en 2.0 s y la guarida queda en -164 (lo más alto, el cristal, a -152: ba
 Consola limpia.
 
 **Qué se rompió:** nada.
+
+---
+
+## 2026-10-16 (16) — Mar más grande
+
+**Qué se hizo (pedido del usuario):** el mar pasa de ±840 a ±1536 studs (antes el volcán
+llegaba justo al borde y de ese lado se acababa el agua) y el muro invisible de 560 a 1000 studs
+del centro, así se puede nadar mucho más lejos. En `TerrainBuilder`, los bloques de mar abierto
+solo llevan una capa de fondo bajo el agua (antes, roca desde -40 que nadie ve): casi la mitad
+de vóxeles en el mar nuevo.
+
+**Probado por MCP:** el servidor tiene agua hasta ±1536 y el terreno queda listo a los 10 s de
+juego. El cliente solo carga el terreno hasta unos 1000 studs de donde está (streaming de
+Roblox): el borde que se ve en el horizonte ahora es ese límite, no el fin del mar.
+
+**Qué se rompió:** nada.

@@ -1,7 +1,7 @@
 {
 	"_comentario": "Geometría del mundo. Fuente única para el terreno (server/World), el generador de piezas (tools/generar_isla.py) y las validaciones del servidor. Distancias en studs; ángulos en grados sobre XZ (0 = +X, 90 = +Z). La isla principal está centrada en el origen; el cráter del gigante en craterCenter (x, z). shoreRadius = plateau + (beachEnd - plateau) * (plateauHeight - waterLevel) / (plateauHeight - beachEndHeight).",
 	"waterLevel": 2,
-	"oceanHalfSize": 840,
+	"oceanHalfSize": 1536,
 	"seaFloorHeight": -18,
 	"plateauRadius": 150,
 	"plateauHeight": 6,
@@ -67,7 +67,7 @@
 		0,
 		225
 	],
-	"boundaryRadius": 560,
+	"boundaryRadius": 1000,
 	"hills": [
 		[
 			-125.0,

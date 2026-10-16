@@ -61,6 +61,7 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 	-- Primero las alturas: el piso de este bloque baja hasta su punto más hondo.
 	local samples: { { Sample } } = {}
 	local yMin, yMax = Y_MIN, Y_MAX
+	local openSea = true -- todo el bloque es fondo de mar plano (lejos de la isla y el volcán)
 	for ix = 1, columns do
 		samples[ix] = {}
 		for iz = 1, columns do
@@ -69,7 +70,14 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 			samples[ix][iz] = { height = height, material = material, water = waterTop }
 			yMin = math.min(yMin, math.floor(height / VOXEL) * VOXEL - VOXEL)
 			yMax = math.max(yMax, math.ceil(height / VOXEL) * VOXEL + VOXEL)
+			openSea = openSea and height <= L.seaFloorHeight
 		end
+	end
+	if openSea then
+		-- Mar abierto: una capa de fondo bajo el agua alcanza (nadie ve la roca de más
+		-- abajo) y arriba del agua solo hay aire. Casi la mitad de vóxeles en el mar.
+		yMin = math.floor(L.seaFloorHeight / VOXEL) * VOXEL - VOXEL
+		yMax = math.ceil(L.waterLevel / VOXEL) * VOXEL + VOXEL
 	end
 	local rows = (yMax - yMin) / VOXEL
 	local materials, occupancies = {}, {}
