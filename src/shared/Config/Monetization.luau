@@ -64,7 +64,14 @@ export type MonetizationConfig = {
 	upgradeRobux: { [string]: { number } }, -- MEJORAS en Robux: Rod/Basket/Boots, por nivel
 	passGifts: { [string]: number }, -- precio del producto Gift<pase>
 	-- Pack de inicio (producto PackInicio): una sola vez, mucho valor por poco.
-	starterPack: { robux: number, coins: number, boostMinutes: number, rod: number, basket: number },
+	starterPack: {
+		robux: number,
+		coins: number,
+		boostMinutes: number,
+		rod: number,
+		basket: number,
+		boots: number,
+	},
 	sellPonds: boolean, -- vender estanques con Robux (false: se abren solo con kills)
 	receiptHistory: number, -- cuántas compras recientes se recuerdan por jugador
 }
@@ -147,7 +154,8 @@ local Monetization: MonetizationConfig = {
 		Boots = { 0, 5, 19, 39, 79, 199 },
 	},
 	passGifts = { VIP = 299, ReyDelMar = 149, DiosDelVolcan = 399 },
-	starterPack = { robux = 49, coins = 15000, boostMinutes = 60, rod = 4, basket = 3 },
+	-- 19 R$: el producto PackInicio tiene que tener ese precio en el panel de Roblox.
+	starterPack = { robux = 19, coins = 15000, boostMinutes = 60, rod = 4, basket = 3, boots = 4 },
 	sellPonds = false,
 	receiptHistory = 50,
 }

@@ -3,98 +3,123 @@
 	StarterOffer
 
 	Oferta de bienvenida: a los `DELAY_SECONDS` de cada partida, si todavía
-	no compró el pack de inicio (atributo PackInicio), se abre una ventana
-	con lo que trae y el botón de compra (producto PackInicio). Una vez por
+	no compró el pack de inicio (atributo PackInicio), se abre esta ventana.
+	Arriba el regalo sobre rayos, el título y la etiqueta de descuento; en el
+	medio cinco tarjetas con lo que trae (monedas, caña, canasta, botas con
+	sus íconos de MEJORAS y x2 poder); abajo lo que costaría por separado
+	(precios en Robux de MEJORAS) tachado y el botón que late. Una vez por
 	partida; también está siempre arriba en la TIENDA hasta comprarlo.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 
+local Assets = require(ReplicatedStorage.Shared.Assets)
 local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
-local Icons = require(script.Parent.Parent.Interface.Icons)
-local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Purchases = require(script.Parent.Purchases)
+local StarterParts = require(script.Parent.StarterParts)
 local Window = require(script.Parent.Window)
 
 local DELAY_SECONDS = 150
 local PACK = Config.Monetization.starterPack
+local ROBUX = Config.Monetization.upgradeRobux
 local CARDS = Style.PALETTE.Cards
+local PULSE = TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
+
+type Item = {
+	color: Color3,
+	title: string,
+	detail: string,
+	gear: string?,
+	level: number?,
+	icon: string?,
+}
 
 local StarterOffer = {}
 
+-- Lo que costarían las mejoras del pack compradas con Robux en MEJORAS.
+local function separateRobux(): number
+	local function price(category: string, level: number): number
+		local list = ROBUX[category]
+		return if list and list[level] then list[level] else 0
+	end
+	return price("Rod", PACK.rod) + price("Basket", PACK.basket) + price("Boots", PACK.boots)
+end
+
+local function gearItem(category: Upgrades.Category, level: number, color: Color3): Item
+	return {
+		color = color,
+		title = Upgrades.list(category)[level].name,
+		detail = `Nivel {level}`,
+		gear = category,
+		level = level,
+	}
+end
+
 function StarterOffer.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local window =
-		Window.create(screen, "PackInicio", "¡Oferta de bienvenida!", Vector2.new(620, 460))
+	local window = Window.create(screen, "PackInicio", "¡Oferta!", Vector2.new(820, 500))
 	local content = window.content
-	local gift = Icons.view(content, "giftPink")
-	gift.AnchorPoint = Vector2.new(0.5, 0)
-	gift.Position = UDim2.fromScale(0.5, 0)
-	gift.Size = UDim2.fromOffset(100, 100)
-	local once = ShopParts.tag(content, "¡SOLO UNA VEZ!", CARDS.Red)
-	local tag = once.Parent :: Frame
-	tag.AnchorPoint = Vector2.new(0, 0.5)
-	tag.Position = UDim2.new(0.5, 40, 0, 30)
-	tag.Size = UDim2.fromOffset(170, 34)
-	-- Tres tarjetas con rayos: monedas, equipo y x2 poder.
-	local items = {
+	local separate = separateRobux()
+	StarterParts.header(
+		content,
+		if separate > PACK.robux then math.floor((1 - PACK.robux / separate) * 100) else 0
+	)
+	local items: { Item } = {
 		{
-			icon = "coin",
 			color = CARDS.Yellow,
 			title = NumberFormat.short(PACK.coins),
 			detail = "monedas",
+			icon = "coin",
 		},
+		gearItem("Rod", PACK.rod, CARDS.Blue),
+		gearItem("Basket", PACK.basket, CARDS.Green),
+		gearItem("Boots", PACK.boots, CARDS.Cyan),
 		{
-			icon = "rod",
-			color = CARDS.Blue,
-			title = Upgrades.list("Rod")[PACK.rod].name,
-			detail = `+ {Upgrades.list("Basket")[PACK.basket].name}`,
-		},
-		{
-			icon = "bolt",
 			color = CARDS.Purple,
 			title = "x2 poder",
 			detail = `{PACK.boostMinutes} minutos`,
+			icon = "bolt",
 		},
 	}
 	for index, item in items do
-		local card = CardParts.card(content, `Item{index}`, item.color, 14)
-		card.Position = UDim2.new((index - 1) / 3 + 0.01, 0, 0, 108)
-		card.Size = UDim2.new(1 / 3 - 0.02, 0, 0, 176)
-		local icon = Icons.view(card, item.icon)
-		icon.AnchorPoint = Vector2.new(0.5, 0)
-		icon.Position = UDim2.fromScale(0.5, 0.05)
-		icon.Size = UDim2.fromScale(0.75, 0.48)
-		local square = Instance.new("UIAspectRatioConstraint")
-		square.Parent = icon
-		local title =
-			Style.text(card, "Titulo", 26, if index == 1 then UIConfig.Colors.Coins else nil, 2.5)
-		title.Text = item.title
-		title.Position = UDim2.fromScale(0.04, 0.56)
-		title.Size = UDim2.fromScale(0.92, 0.2)
-		local detail = Style.text(card, "Detalle", 20, nil, 2)
-		detail.Text = item.detail
-		detail.Position = UDim2.fromScale(0.04, 0.77)
-		detail.Size = UDim2.fromScale(0.92, 0.18)
+		StarterParts.card(content, index, item)
 	end
-	local note = Style.text(content, "Nota", 20, UIConfig.Colors.Coins, 2)
-	note.Text = "¡Vale mucho más que su precio!"
-	note.Position = UDim2.fromOffset(0, 292)
-	note.Size = UDim2.new(1, 0, 0, 24)
+
+	local value = Style.text(content, "Valor", 24, Color3.fromRGB(255, 200, 200), 2)
+	value.RichText = true
+	value.Text = `Solo el equipo, por separado: <s>{separate} R$</s>   ¡Hoy {PACK.robux} R$!`
+	value.Position = UDim2.fromOffset(0, 310)
+	value.Size = UDim2.new(1, 0, 0, 28)
+	value.Visible = separate > PACK.robux
+
 	local buy = Style.button(content, "Comprar", Style.PALETTE.Buy, "")
 	buy.AnchorPoint = Vector2.new(0.5, 1)
-	buy.Position = UDim2.fromScale(0.5, 1)
-	buy.Size = UDim2.new(0.6, 0, 0, 64)
-	local price = Style.robuxBadge(buy, PACK.robux)
+	buy.Position = UDim2.new(0.5, 0, 1, -4)
+	buy.Size = UDim2.new(0.56, 0, 0, 74)
 	local label = buy:FindFirstChild("Texto") :: TextLabel
 	label.Text = "¡LO QUIERO!"
+	label.Size = UDim2.new(0.58, 0, 1, -10)
+	local robux = Instance.new("ImageLabel")
+	robux.BackgroundTransparency = 1
+	robux.Image = Assets.UI.RobuxIcon
+	robux.ScaleType = Enum.ScaleType.Fit
+	robux.Position = UDim2.new(0.6, 0, 0.18, 0)
+	robux.Size = UDim2.new(0.12, 0, 0.64, 0)
+	robux.Parent = buy
+	local price = Style.text(buy, "Precio", 40, nil, 3)
+	price.Text = tostring(PACK.robux)
+	price.TextXAlignment = Enum.TextXAlignment.Left
+	price.Position = UDim2.new(0.74, 0, 0.12, 0)
+	price.Size = UDim2.new(0.24, 0, 0.76, 0)
+	local beat = Instance.new("UIScale")
+	beat.Parent = buy
+	TweenService:Create(beat, PULSE, { Scale = 1.06 }):Play()
 	buy.Activated:Connect(function()
 		Purchases.promptProduct("PackInicio")
 	end)

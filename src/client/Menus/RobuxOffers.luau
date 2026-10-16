@@ -36,7 +36,7 @@ function RobuxOffers.starter(player: Player): () -> Offer
 	return function()
 		return {
 			title = "Pack de inicio",
-			description = `{pack.coins // 1000}K monedas, caña y canasta mejores y x2 poder {pack.boostMinutes} min`,
+			description = `{pack.coins // 1000}K monedas, caña, canasta y botas mejores y x2 poder {pack.boostMinutes} min`,
 			key = "PackInicio",
 			isPass = false,
 			robux = pack.robux,

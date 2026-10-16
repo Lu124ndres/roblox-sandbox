@@ -64,7 +64,7 @@ local function giftPass(player: Player, key: string): string
 	return MONETIZATION.passes[key].name
 end
 
--- Pack de inicio: monedas, impulso de poder y caña y canasta mejores (nunca las baja).
+-- Pack de inicio: monedas, impulso de poder y caña, canasta y botas mejores (nunca las baja).
 local function starterPack(player: Player): string
 	local pack = MONETIZATION.starterPack
 	PlayerData.edit(player, function(save)
@@ -74,6 +74,7 @@ local function starterPack(player: Player): string
 	end)
 	raiseUpgrade(player, "Rod", pack.rod)
 	raiseUpgrade(player, "Basket", pack.basket)
+	raiseUpgrade(player, "Boots", pack.boots)
 	return "Pack de inicio"
 end
 

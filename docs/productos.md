@@ -6,7 +6,7 @@ pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Pro
 
 ## Crea primero estos 18 (lo que más se ve y más vende)
 
-1. `PackInicio` (49) — oferta de bienvenida, se abre sola a los 2.5 min.
+1. `PackInicio` (19) — oferta de bienvenida, se abre sola a los 2.5 min.
 2. Pases `VIP` (299), `ReyDelMar` (149), `DiosDelVolcan` (399) — sección Pases abajo.
 3. `Fill25` (49), `Fill50` (89), `Fill75` (129) — botones bajo la barra del monstruo.
 4. `ChooseOrca` (25), `ChooseMinotauro` (99), `ChooseDragonMarino` (265), `ChooseZorroDeAgua` (408) — botones del descanso. Para Halloween: `ChooseOrcaFantasma` (149).
@@ -17,7 +17,7 @@ pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Pro
 Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren con kills;
 `sellPonds = false` en `Config/Monetization.luau`). El resto, cuando puedas.
 
-| `PackInicio` | Pack de inicio | 49 | Una sola vez: 15K monedas, caña 4, canasta 3, x2 poder 60 min | |
+| `PackInicio` | Pack de inicio | 19 | Una sola vez: 15K monedas, caña 4, canasta 3, botas 4, x2 poder 60 min | |
 
 | Clave (no cambiar) | Nombre sugerido | Precio R$ | Grupo | ID |
 |---|---|---|---|---|
