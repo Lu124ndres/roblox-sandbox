@@ -6,15 +6,12 @@
 	que lleva sobre el total en grande, el nombre y la etapa. Lee el estado de
 	ReplicatedStorage.EstadoGigante (atributos que publica el servidor).
 
-	La barra muestra solo la etapa actual: la comida que lleva y la que pide
-	para la siguiente ("450 / 2,000"), con un color por etapa; avisos al
-	crecer ("¡La Orca creció!") y al llenarse. Al llenarse muestra la despedida, la cuenta regresiva del
-	descanso del volcán y la llegada del siguiente gigante.
-
-	El total de comida lo publica el servidor (atributo Food, fijo por
-	gigante); si aún no llegó, se usa el de Config. Los cambios se
-	juntan y se pintan como mucho 10 veces por segundo (cada pez cambia
-	Progress y el enojo), y la barra solo se anima si algo cambió.
+	La barra muestra solo la etapa actual ("450 / 2,000"), con un color por
+	etapa (también el aro del retrato y "Etapa 2/4"); avisa al crecer y al
+	llenarse, y fuera de la comida cuenta la despedida, el descanso del volcán
+	y la llegada del siguiente. La comida total la publica el servidor (Food);
+	si aún no llegó, se usa la de Config. Se repinta como mucho 10 veces por
+	segundo y la barra solo se anima si algo cambió.
 	Las piezas del panel las arma Interface/HungerPanel.
 ]]
 
@@ -62,8 +59,8 @@ function HungerBar.mount(
 	-- Arriba al centro, compacta: retrato, nombre y etapa, la barra con la comida grande
 	-- ("1,250 / 2,500"), la fila del enojo (AngerMeter) y los atajos para llenarlo.
 	local parts = HungerPanel.build(screen)
-	local panel, title, detail, amount, fill =
-		parts.panel, parts.title, parts.detail, parts.amount, parts.fill
+	local panel, title, detail, amount, fill, ring =
+		parts.panel, parts.title, parts.detail, parts.amount, parts.fill, parts.ring
 	local portrait = GiantPortrait.attach(parts.portrait)
 
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
@@ -78,6 +75,7 @@ function HungerBar.mount(
 			return
 		end
 		shownFraction, shownColor = fraction, color
+		ring.Color = color
 		TweenService:Create(fill, UIConfig.Tweens.BarFill, {
 			Size = UDim2.fromScale(fraction, 1),
 			BackgroundColor3 = color,
@@ -162,7 +160,7 @@ function HungerBar.mount(
 		end
 		-- Solo el nombre, y la comida que falta para la SIGUIENTE etapa (no el total).
 		title.Text = name
-		detail.Text = ""
+		detail.Text = `Etapa {stage}/{#THRESHOLDS}`
 		local total = totalFood(id)
 		local from = THRESHOLDS[stage] or 0
 		local to = THRESHOLDS[stage + 1] or 1

@@ -2,7 +2,8 @@
 --[[
 	HungerPanel
 
-	Las piezas del panel de hambre (arriba al centro), sin lógica, compactas:
+	Las piezas del panel de hambre (arriba al centro), sin lógica, compactas,
+	sobre una placa azul noche con marco dorado (decorado en HungerLook):
 		[retrato]  Nombre ................ Etapa 1/4
 		[retrato]  [ barra con la comida grande ]
 		[retrato]  Calmada   [enojo]
@@ -12,8 +13,9 @@
 	y = CHIPS_TOP, que fija el alto del panel) usan las medidas de aquí.
 	HungerBar llena las piezas con el estado del gigante.
 
-	Si cabe, el panel sube a la barra de Roblox (entre sus botones y el borde
-	derecho); si no (teléfonos), va justo debajo de ella.
+	Si cabe, el panel sube a la barra de Roblox (entre sus botones y los
+	nuestros, que van en la esquina derecha); si no (teléfonos), va justo
+	debajo de ella.
 	Ancho: hasta 400, pero nunca tanto como para pisar las columnas del HUD.
 ]]
 
@@ -24,6 +26,7 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Ui = require(script.Parent.Parent.Ui)
 local Device = require(script.Parent.Device)
 local Layout = require(script.Parent.Layout)
+local HungerLook = require(script.Parent.HungerLook)
 local Style = require(script.Parent.Style)
 
 local MAX_WIDTH = 400
@@ -38,6 +41,7 @@ export type Parts = {
 	detail: TextLabel,
 	amount: TextLabel,
 	fill: Frame,
+	ring: UIStroke, -- aro de la medalla del retrato (color de la etapa)
 }
 
 local HungerPanel = {}
@@ -54,15 +58,21 @@ function HungerPanel.width(): number
 	return math.clamp(math.floor(free), MIN_WIDTH, MAX_WIDTH)
 end
 
--- Sube el panel a la barra de Roblox si no pisa los botones que hay en ella.
+-- Sube el panel a la barra de Roblox si cabe entre sus botones (izquierda) y los
+-- nuestros (esquina derecha).
 local function place(panel: Frame)
 	local inset = GuiService.TopbarInset
 	local bar = Layout.topBar()
 	local list = bar:FindFirstChildOfClass("UIListLayout")
-	local barRight = bar.AbsolutePosition.X + (if list then list.AbsoluteContentSize.X else 0)
-	local left = (Device.viewport().X - panel.Size.X.Offset * Layout.scale()) / 2
-	local fits = inset.Height > 0 and left > barRight + TOPBAR_GAP
-	panel.Position = UDim2.new(0.5, 0, 0, if fits then -inset.Height + 4 else 6)
+	local barLeft = bar.AbsolutePosition.X
+		+ bar.AbsoluteSize.X
+		- (if list then list.AbsoluteContentSize.X else 0)
+	local width = panel.Size.X.Offset * Layout.scale()
+	local left = (Device.viewport().X - width) / 2
+	local fits = inset.Height > 0
+		and left > inset.Min.X + TOPBAR_GAP
+		and left + width < barLeft - TOPBAR_GAP
+	panel.Position = UDim2.new(0.5, 0, 0, if fits then -inset.Height + 8 else 10)
 end
 
 function HungerPanel.build(screen: ScreenGui): Parts
@@ -85,7 +95,9 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	end
 	relayout()
 
-	-- Ícono del monstruo, un poco más grande que su lugar para que resalte.
+	HungerLook.plate(panel, HungerPanel.PORTRAIT / 2, HungerPanel.ANGER_TOP + 16)
+	local ring = HungerLook.medal(panel, HungerPanel.PORTRAIT)
+	-- Ícono del monstruo, un poco más grande que su medalla para que resalte.
 	local portrait = Instance.new("ImageLabel")
 	portrait.Name = "Retrato"
 	portrait.BackgroundTransparency = 1
@@ -99,7 +111,7 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	local left = HungerPanel.LEFT
 	local title = Style.text(panel, "Nombre", 22)
 	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Position = UDim2.fromOffset(left + 2, 0)
+	title.Position = UDim2.fromOffset(left + 4, 0)
 	title.Size = UDim2.new(0.62, -left, 0, 22)
 
 	local detail = Style.text(panel, "Etapa", 18, Color3.fromRGB(255, 220, 70))
@@ -131,12 +143,14 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	fill.BackgroundColor3 = UIConfig.HungerStageColors[1]
 	Ui.corner(fill, 10)
 	Style.gradient(fill, Color3.new(1, 1, 1))
+	HungerLook.shine(fill)
 	fill.Parent = clip
+	HungerLook.meat(track)
 
 	local amount = Style.text(track, "Cantidad", 26, nil, 2.5)
 	amount.AnchorPoint = Vector2.new(0.5, 0.5)
-	amount.Position = UDim2.fromScale(0.5, 0.5)
-	amount.Size = UDim2.new(1, -12, 1, -4)
+	amount.Position = UDim2.new(0.5, 12, 0.5, 0) -- deja lugar a la carne
+	amount.Size = UDim2.new(1, -36, 1, -4)
 	amount.ZIndex = 4
 
 	return {
@@ -146,6 +160,7 @@ function HungerPanel.build(screen: ScreenGui): Parts
 		detail = detail,
 		amount = amount,
 		fill = fill,
+		ring = ring,
 	}
 end
 
