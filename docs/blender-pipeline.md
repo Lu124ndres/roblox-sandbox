@@ -98,9 +98,10 @@ confirmar en la vista previa de "Importar 3D" que esté parado y mirando al fren
    **Problema visto en juego:** con piezas rígidas, al doblar codos y rodillas se abre un
    hueco y se ve la tapa ("el traje se corta al caminar"). Por eso, después:
 3b. `tools/blender/suavizar_traje.py` (por el MCP de Blender, sobre el FBX de rig_traje):
-   borra las tapas, vuelve a unir cada corte, reparte los pesos mitad y mitad en las
-   costuras y hace una transición suave en codos, muñecas, rodillas y tobillos (el
-   tridente sigue rígido en la mano). Mismo esqueleto y mismas opciones de exportación.
+   sobre el FBX **rígido** de rig_traje: cose solo los cortes de codos, muñecas, rodillas y
+   tobillos (borra esas tapas, une, pesos mitad y mitad y una transición angosta). Hombros,
+   cadera, cintura y cuello quedan como piezas separadas, como un avatar R15: coserlos
+   estiraba la ropa al mover brazos y piernas. El tridente sigue rígido en la mano. Mismo esqueleto y mismas opciones de exportación.
 4. Studio → Importar 3D → "Mantener huesos de influencia cero" (la Raiz no tiene pesos),
    tipo de rig "Personalizar". Mover el Model a `ServerStorage.Traje<clave>` (Marinero,
    DiosDelVolcan, ReyDelMar) y anotar los IDs en `Assets`. El tamaño no importa: el juego lo

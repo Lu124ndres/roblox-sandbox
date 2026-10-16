@@ -21,7 +21,7 @@ V = mathutils.Vector
 WIN = bpy.context.window_manager.windows[0]
 AREA = next(a for a in WIN.screen.areas if a.type == 'VIEW_3D')
 CTX = dict(window=WIN, area=AREA, region=next(r for r in AREA.regions if r.type == 'WINDOW'))
-ZONA = {"Codo": 0.07, "Mano": 0.045, "Rodilla": 0.08, "Pie": 0.05}  # ancho de la transición
+ZONA = {"Codo": 0.045, "Mano": 0.025, "Rodilla": 0.05, "Pie": 0.03}  # ancho de la transición (angosto: no estira)
 PADRE = {"Codo": "Brazo", "Mano": "Codo", "Rodilla": "Pierna", "Pie": "Rodilla"}
 
 for o in list(bpy.data.objects):
@@ -43,13 +43,28 @@ for v in malla.data.vertices:
         g = max(v.groups, key=lambda x: x.weight)
         grupos_en.setdefault(clave(v.co), set()).add(nombres[g.group])
 
+# Solo se cosen los cortes DENTRO de brazos y piernas (codo, muñeca, rodilla, tobillo):
+# hombros, cadera, cintura y cuello quedan como piezas separadas, igual que un avatar R15
+# (ahí no se nota y coserlos estira la ropa al balancear brazos y piernas).
+PARES = set()
+for hijo, padre in PADRE.items():
+    for lado in ("Izq", "Der"):
+        PARES.add(frozenset((hijo + lado, padre + lado)))
+def costura(co):
+    return frozenset(grupos_en.get(clave(co), ())) in PARES
+
 bm = bmesh.new(); bm.from_mesh(malla.data)
 uv = bm.loops.layers.uv.active
-tapas = [f for f in bm.faces if len({(round(l[uv].uv.x, 6), round(l[uv].uv.y, 6)) for l in f.loops}) == 1]
+tapas = [f for f in bm.faces if len({(round(l[uv].uv.x, 6), round(l[uv].uv.y, 6)) for l in f.loops}) == 1
+         and all(costura(v.co) for v in f.verts)]
 bmesh.ops.delete(bm, geom=tapas, context='FACES')
-bmesh.ops.remove_doubles(bm, verts=bm.verts[:], dist=0.0002)
+bmesh.ops.remove_doubles(bm, verts=[v for v in bm.verts if costura(v.co)], dist=0.0002)
 bm.to_mesh(malla.data); malla.data.update(); bm.free()
 
+# Hueso propio de cada vértice después de coser (los de hombros y cadera siguen separados:
+# cada copia conserva el suyo).
+nombres = {g.index: g.name for g in malla.vertex_groups}
+propio = {v.index: nombres[max(v.groups, key=lambda x: x.weight).group] for v in malla.data.vertices if v.groups}
 malla.vertex_groups.clear()
 G = {n: malla.vertex_groups.new(name=n) for n in HUESOS if n != "Raiz"}
 
@@ -72,12 +87,12 @@ costuras = 0
 for v in malla.data.vertices:
     dueños = grupos_en.get(clave(v.co)) or {"Cadera"}
     pesos = {}
-    if len(dueños) > 1:  # costura de un corte: se reparte
+    if frozenset(dueños) in PARES:  # costura de codo, muñeca, rodilla o tobillo: se reparte
         costuras += 1
         for n in dueños:
             pesos[n] = 1.0 / len(dueños)
-    else:
-        pesos[next(iter(dueños))] = 1.0
+    else:  # pieza rígida (los vértices repetidos de hombros y cadera siguen separados)
+        pesos[propio.get(v.index, "Cadera")] = 1.0
     # Transición suave en codos, muñecas, rodillas y tobillos.
     for hijo_base, ancho in ZONA.items():
         for lado in ("Izq", "Der"):
@@ -99,7 +114,7 @@ for v in malla.data.vertices:
 
 # El objeto en la mano (tridente) va entero y rígido a la mano, como en rig_traje:
 # desde su punta por la malla, cerca de su eje, más las islas chicas que toca.
-RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(ENTRADA))))
+RAIZ = globals().get("RAIZ") or os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(ENTRADA))))
 PROP = json.load(open(os.path.join(RAIZ, "tools", "blender", "trajes.json"), encoding="utf-8"))[NOMBRE].get("prop")
 if PROP:
     a, b = V(PROP["a"]), V(PROP["b"])
