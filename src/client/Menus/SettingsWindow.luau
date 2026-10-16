@@ -30,7 +30,7 @@ local OPTIONS: { { key: ClientSettings.Key, text: string, icon: string, hint: st
 		key = "lowFx",
 		text = "Modo rápido",
 		icon = "⚡",
-		hint = "Menos efectos: para celulares lentos",
+		hint = "Menos efectos, más fluido",
 	},
 }
 

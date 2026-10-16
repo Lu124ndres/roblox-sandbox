@@ -66,7 +66,9 @@ function FishDexTabs.mount(parent: Instance, top: number, onSelect: (id: string)
 	local function add(id: string, name: string, color: Color3, order: number)
 		local button = Style.button(row, `Categoria{order}`, color, name)
 		button.LayoutOrder = order
-		button.Size = UDim2.fromOffset(if id == ALL then 104 else 132, TAB_HEIGHT)
+		-- Los nombres largos ("Poco común") llevan pestaña más ancha, si no la letra queda chica.
+		local width = if id == ALL then 104 else math.max(132, 60 + 10 * (utf8.len(name) or 0))
+		button.Size = UDim2.fromOffset(width, TAB_HEIGHT)
 		local label = button:FindFirstChild("Texto") :: TextLabel
 		local scale = Instance.new("UIScale")
 		scale.Parent = button

@@ -1331,3 +1331,26 @@ ondas), rugido (agudo, 1.37), salto (salpicón al caer), músculo (destellos) y 
   viejo. Se quitaron las copias y se verificó que todos los scripts coinciden con `src/`.
 
 **Qué se rompió:** nada. Nota: para simular comida hace falta `count` y `fishId` en GiantFed.
+
+
+---
+
+## 2026-10-16 (9) — Ventanas en teléfono
+
+**Probado** con el simulador de Studio (iPhone XR 896×414 y Samsung Galaxy A06 800×360): Pack de
+inicio, Misiones, Renacer, Mejoras, Colección, Tienda, Ajustes y Premio diario. Todas entran
+en pantalla; el Pack ya no corta el texto de abajo.
+
+**Qué se arregló:**
+
+- Misiones (forma ancha): el texto de cada misión puede ir en dos líneas y tiene más ancho
+  (el premio necesita poco). Los largos pasaron de 10-12 px a 15 px.
+- Renacer: en "AL RENACER" el pez tapaba el número; ahora el número empieza donde termina el
+  pez (en píxeles) y el "+N%" va arriba del título, sin taparlo.
+- Mejoras y Colección: forma ancha y más baja en táctil (`WindowLayout.size`): se ven ~15-20%
+  más grandes, Mejoras gana una columna y en Colección entran todas las pestañas. La pestaña
+  se ensancha con nombres largos ("Poco común", "Legendario").
+- Ajustes: la ayuda de Modo rápido, más corta ("Menos efectos, más fluido").
+
+**Qué queda:** en el A06 (338 px de alto) algunos rótulos decorativos siguen chicos (cinta
+"¡SIGUIENTE!" de Mejoras, "Nv 1/20" de las pestañas, "¡SOLO UNA VEZ!"), pero se leen.

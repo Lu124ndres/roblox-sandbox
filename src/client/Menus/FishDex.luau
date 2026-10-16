@@ -3,10 +3,10 @@
 	FishDex
 
 	Colección de peces: todas las especies (36) en una cuadrícula ordenada por
-	rareza, con pestañas por categoría (FishDexTabs). Las descubiertas
-	se ven en 3D girando, con su rareza y cuántas se han pescado; las que
-	faltan, como una silueta oscura con "???". Arriba, el avance (7/36) y el
-	siguiente premio (cada 6 especies, shared/Collection; con todas, el grande). El botón Peces del HUD se marca cuando hay un
+	rareza, con pestañas por categoría (FishDexTabs); en táctil, ancha. Las
+	descubiertas giran en 3D con su rareza y cuántas se han pescado; las que
+	faltan son una silueta con "???". Arriba, el avance (7/36) y el siguiente
+	premio (shared/Collection). El botón Peces del HUD se marca cuando hay un
 	pez nuevo sin mirar. Los datos vienen de los atributos Pez_<id>.
 
 	Los peces solo giran con la ventana abierta (un único RenderStepped), y
@@ -30,6 +30,7 @@ local FishDexCard = require(script.Parent.FishDexCard)
 local FishDexTabs = require(script.Parent.FishDexTabs)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
+local WindowLayout = require(script.Parent.WindowLayout)
 
 local FISH = Config.Economy.fish
 local PREFIX = Protocol.PlayerAttributes.FishPrefix
@@ -74,9 +75,9 @@ end
 
 function FishDex.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local window = Window.create(screen, "Coleccion", "Colección de peces", Vector2.new(660, 500))
+	local size = WindowLayout.size(Vector2.new(660, 500), Vector2.new(1040, 440))
+	local window = Window.create(screen, "Coleccion", "Colección de peces", size)
 	local hud = HudButtons.top("Peces", "fish", window.toggle)
-
 	-- Arriba: barra de especies descubiertas y el premio por completarla.
 	local bar = CardParts.bar(window.content, Style.PALETTE.Cards.Green, 22)
 	bar.track.Position = UDim2.fromOffset(4, 6)

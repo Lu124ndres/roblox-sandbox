@@ -20,6 +20,7 @@ local Icons = require(script.Parent.Parent.Interface.Icons)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Window = require(script.Parent.Parent.Menus.Window)
+local WindowLayout = require(script.Parent.Parent.Menus.WindowLayout)
 local ShopTabs = require(script.Parent.ShopTabs)
 local UpgradeCard = require(script.Parent.UpgradeCard)
 local UpgradeDetail = require(script.Parent.UpgradeDetail)
@@ -28,7 +29,6 @@ local PALETTE = Style.PALETTE
 local TOP = 58 -- alto de la fila de pestañas
 local CELL = Vector2.new(124, 150)
 local GAP = 10
-local COLUMNS = 4
 
 export type Shop = {
 	window: Window.Window,
@@ -45,8 +45,9 @@ function ShopWindow.mount(
 	onBuyRobux: (Upgrades.Category, level: number) -> (),
 	robuxPrice: (key: string, robux: number) -> number
 ): Shop
-	local window =
-		Window.create(screen, "Mejoras", "Mejoras", Vector2.new(920, 580), PALETTE.WoodPanel)
+	-- En táctil, ancha y baja: se ve más grande y la cuadrícula gana una columna.
+	local size = WindowLayout.size(Vector2.new(920, 580), Vector2.new(1100, 480))
+	local window = Window.create(screen, "Mejoras", "Mejoras", size, PALETTE.WoodPanel)
 	local content = window.content
 	local current: Upgrades.Category = "Rod"
 	local selected = 2
@@ -81,7 +82,7 @@ function ShopWindow.mount(
 	local grid = ShopParts.scroller(body)
 	grid.AnchorPoint = Vector2.new(1, 0)
 	grid.Position = UDim2.fromScale(1, 0)
-	grid.Size = UDim2.new(0.63, 0, 1, 0)
+	grid.Size = UDim2.fromScale(0.63, 1)
 	for _, child in grid:GetChildren() do
 		if child:IsA("UIListLayout") then
 			child:Destroy()
@@ -155,7 +156,7 @@ function ShopWindow.mount(
 	local function setTab(category: Upgrades.Category)
 		current, lastOwned = category, 0
 		refresh()
-		local row = (selected - 1) // COLUMNS
+		local row = (selected - 1) // math.max(layout.AbsoluteCellCount.X, 1)
 		grid.CanvasPosition = Vector2.new(0, math.max(row - 1, 0) * (CELL.Y + GAP))
 	end
 	tabs.onPick(setTab)

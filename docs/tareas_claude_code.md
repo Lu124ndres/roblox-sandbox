@@ -43,14 +43,17 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       cada cuántos segundos (E1 baila y salta; E4 ruge y pisa más, sin bailar). Elegir el perfil
       por el nombre del modelo (`MinotauroE<n>`), como hace el dragón.
       → `1d6b45d`. Perfiles en `Minotauro/Etapas`; E3 ya no baila y E4 tampoco salta.
-- [~] **C2. Probar al minotauro por MCP.** Con `Minotauro:1`: que gire hacia quien le da de
+- [x] **C2. Probar al minotauro por MCP.** Con `Minotauro:1`: que gire hacia quien le da de
       comer (simular GiantFed), que muerda, que los 6 trucos corran sin errores en la consola y
       que los eventos (stomp, roar, land, flex, happy) suenen y salpiquen. Arreglar lo que falle.
-- [ ] **C3. Ventanas en teléfono.** En el emulador de Studio (iPhone XR y un Android chico):
+      → `80c21fb`. Todo anda; se arregló la etapa al bajar, el gruñido grave del becerro y
+      scripts duplicados en el lugar.
+- [~] **C3. Ventanas en teléfono.** En el emulador de Studio (iPhone XR y un Android chico):
       el Pack de inicio (`Menus/StarterOffer.luau`) cortaba el texto de abajo; en Misiones
       (forma ancha) los textos largos quedan muy chicos; en Renacer el pez tapa el número de la
       tarjeta "AL RENACER". Revisar también Tienda, Mejoras, Colección y Ajustes. Usar
       `Menus/WindowLayout.luau` (forma ancha en táctil).
+      → `@@C3@@`. Probado en iPhone XR y Galaxy A06. Ver devlog.
 - [ ] **C4. Revisión de errores.** Jugar 5 minutos por MCP (pescar, alimentar, renacer,
       ruleta, comprar en la tienda de monedas) y revisar la consola. Arreglar errores y
       advertencias nuestras (no las de CorePackages).

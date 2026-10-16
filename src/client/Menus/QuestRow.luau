@@ -53,21 +53,24 @@ export type Row = {
 	kind: string?,
 }
 
-function QuestRow.make(parent: Instance, order: number): Row
+-- wide: tarjeta de media ventana (táctil): el texto puede ir en dos líneas y
+-- le quita ancho al premio, que si no los textos largos quedaban diminutos.
+function QuestRow.make(parent: Instance, order: number, wide: boolean?): Row
 	local box = CardParts.card(parent, `Mision{order}`, CARDS.Blue)
 	box.LayoutOrder = order
 	box.Size = UDim2.new(1, -8, 0, ROW_HEIGHT)
 	local title = Style.text(box, "Texto", 26, nil, 2.5)
 	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Position = UDim2.fromOffset(ROW_HEIGHT, 8)
-	title.Size = UDim2.new(0.62, -ROW_HEIGHT, 0, 30)
+	title.TextWrapped = wide == true
+	title.Position = UDim2.fromOffset(ROW_HEIGHT, if wide then 3 else 8)
+	title.Size = UDim2.new(if wide then 0.74 else 0.62, -ROW_HEIGHT, 0, if wide then 44 else 30)
 	local bar = CardParts.bar(box, CARDS.Green, 20)
-	bar.track.Position = UDim2.fromOffset(ROW_HEIGHT, 44)
-	bar.track.Size = UDim2.new(0.66, -ROW_HEIGHT, 0, 28)
+	bar.track.Position = UDim2.fromOffset(ROW_HEIGHT, if wide then 50 else 44)
+	bar.track.Size = UDim2.new(if wide then 0.7 else 0.66, -ROW_HEIGHT, 0, if wide then 26 else 28)
 	local prize, reward = CardParts.iconText(box, "coin", 28, UIConfig.Colors.Coins)
 	prize.AnchorPoint = Vector2.new(1, 0.5)
 	prize.Position = UDim2.new(1, -14, 0.5, 0)
-	prize.Size = UDim2.new(0.3, -14, 0, 40)
+	prize.Size = UDim2.new(if wide then 0.24 else 0.3, -14, 0, 40)
 	local boost = ShopParts.tag(box, "", CARDS.Purple)
 	local tag = boost.Parent :: Frame
 	tag.AnchorPoint = Vector2.new(1, 0)

@@ -55,9 +55,10 @@ function QuestsWindow.start(screen: ScreenGui)
 	local rows: { QuestRow.Row } = {}
 	local count = QUESTS.perDay + (if #QUESTS.extra > 0 then 1 else 0)
 	for index = 1, count do
-		rows[index] = QuestRow.make(window.content, if index > QUESTS.perDay then 98 else index)
+		rows[index] =
+			QuestRow.make(window.content, if index > QUESTS.perDay then 98 else index, wide)
 	end
-	local chest = QuestRow.make(window.content, QUESTS.perDay + 1)
+	local chest = QuestRow.make(window.content, QUESTS.perDay + 1, wide)
 	QuestRow.setIcon(chest, "chest")
 	chest.title.Text = "Cofre: cumple las tres"
 	chest.reward.Text = NumberFormat.short(QUESTS.bonus.coins)

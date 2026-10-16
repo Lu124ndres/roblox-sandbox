@@ -18,6 +18,8 @@ local Style = require(script.Parent.Parent.Interface.Style)
 export type Entry = { icon: string, label: string }
 export type Requirement = { set: (have: number, need: number, text: string) -> () }
 
+local FISH_SIZE = 66 -- alto del pez en las tarjetas AHORA / AL RENACER (px)
+
 local RebirthParts = {}
 
 -- Tarjeta de peces por segundo: título, pez + número grande y nota (el bono
@@ -37,20 +39,22 @@ function RebirthParts.speedCard(
 	head.Position = UDim2.fromScale(0, 0.05)
 	head.Size = UDim2.fromScale(1, 0.2)
 	local fish = Icons.view(card, "fish")
-	fish.Position = UDim2.fromScale(0.05, 0.26)
-	fish.Size = UDim2.fromScale(0.3, 0.5)
+	fish.Position = UDim2.fromScale(0.04, 0.26)
+	fish.Size = UDim2.new(0.3, 0, 0, FISH_SIZE)
 	local square = Instance.new("UIAspectRatioConstraint")
 	square.Parent = fish
+	-- El número empieza donde termina el pez (en la tarjeta angosta del
+	-- teléfono, una fracción del ancho caía encima del pez).
 	local value = Style.text(card, "Valor", 64, UIConfig.Colors.Coins, 4)
-	value.Position = UDim2.fromScale(0.3, 0.26)
-	value.Size = UDim2.fromScale(0.66, 0.48)
+	value.Position = UDim2.new(0.04, FISH_SIZE + 4, 0.26, 0)
+	value.Size = UDim2.new(0.92, -FISH_SIZE - 4, 0.48, 0)
 	local note = Style.text(card, "Nota", 18, nil, 2)
 	note.Text = "peces por segundo al alimentar"
 	note.Position = UDim2.fromScale(0.04, 0.77)
 	note.Size = UDim2.fromScale(0.92, 0.17)
 	local chip = Style.text(card, "Mas", 34, Style.PALETTE.Buy, 3)
 	chip.AnchorPoint = Vector2.new(1, 0)
-	chip.Position = UDim2.new(1, 14, 0, -18)
+	chip.Position = UDim2.new(1, 14, 0, -36) -- arriba del título, sin taparlo
 	chip.Size = UDim2.fromOffset(110, 42)
 	chip.Rotation = 10
 	chip.ZIndex = 4
