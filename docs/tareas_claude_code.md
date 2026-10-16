@@ -64,6 +64,34 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       dragón en `assets/blender/`) y su animación y efectos en `src/`. **Cowork: no tocar esos
       archivos mientras esté en curso.** Los nombres de huesos actuales se mantienen.
 
+- [ ] **C6. Hábitats dentro del volcán** (pedido del usuario, 2026-10-16). Cada monstruo tiene
+      su zona decorada en el cráter. Cowork modela los props en Blender y los deja en
+      `ServerStorage.Habitats.<GiantId>` (ver "Contrato de hábitats"). Claude Code:
+      1. `src/shared/Config/Habitats.luau`: por `GiantId` la lista de props
+         `{ prop, angulo (grados), radio (studs desde el centro del cráter), escala, giro }`;
+         que se puedan repetir props. Empezar con lo que traiga cada carpeta (Cowork deja en
+         cada carpeta un atributo `Sugerido` con una distribución inicial en JSON).
+      2. `src/server/World/HabitatService.luau`: al cambiar el gigante (y durante `Refilling`)
+         clona el hábitat del gigante actual en `Workspace.Habitat` (borra el anterior), apoya
+         cada prop en el terreno con un raycast hacia abajo y lo ancla. Respetar: la arena de
+         descanso (r 64 en el fondo) libre, el centro libre para el gigante (E4 mide ~165 y
+         ~80 de ancho: nada a menos de r 95 del centro) y el borde por donde caminan los
+         jugadores (r 205..235) libre. Props sin colisión salvo los que tengan `Colision = true`.
+      3. Efectos por atributo `Efecto` en el prop: `"fuego"` (Fire + PointLight naranja en el
+         punto `Llama`, un Attachment del prop), `"luz"` (PointLight del color `ColorLuz`),
+         `"brillo"` (las partes con material Neon laten suave en el cliente). Respetar el modo
+         rápido / gráficos bajos (sin Fire).
+      4. Probar por MCP con `giant Minotauro:1..4`, `Orca`, `DragonMarino`, `OrcaFantasma`.
+
+## Contrato de hábitats (Cowork ↔ Claude Code)
+
+`ServerStorage.Habitats.<GiantId>` (Folder; GiantId = `Minotauro`, `Orca`, `DragonMarino`,
+`OrcaFantasma`). Dentro, un Model por prop (nombre = `prop` de `Config/Habitats`), PrimaryPart
+con pivote en el centro de la base, frente a -Z, tamaño real (1 unidad de Blender = 1 stud,
+pensado para estar a escala con el gigante E1..E4). Atributos del Model: `Efecto` (opcional),
+`ColorLuz` (Color3, opcional), `Colision` (bool, opcional). La carpeta tiene `Sugerido`
+(JSON con la distribución inicial).
+
 ## Contrato de huesos del minotauro (lo respeta Cowork en cada etapa)
 
 `Raiz` (sin pesos) > `Cadera` > `Columna` > `Pecho` > `Cuello` > `Cabeza` > `Mandibula`,
@@ -80,6 +108,9 @@ personaje (-X en Roblox).
       textura fantasma (violeta, vientre lila, marcas cian, oro a naranja calabaza) y 12% de
       transparencia; mismos huesos, `OrcaSwim` las mueve. Texturas en `assets/textures/` y
       `tools/orca_fantasma.py`. Probado: `OrcaFantasma:1` y `:4` nadan.
+- [~] **W3. Props de hábitats** (Blender → `ServerStorage.Habitats`): Minotauro (laberinto en
+      ruinas), Orca (arrecife), DragonMarino (nido volcánico), OrcaFantasma (cementerio marino).
+      Script `tools/blender/habitats.py`, FBX en `assets/blender/habitats/`.
 - [ ] **W2.** Zorro de agua E1..E4 (hoy es la orca teñida).
 
 ## Pedidos para Cowork
