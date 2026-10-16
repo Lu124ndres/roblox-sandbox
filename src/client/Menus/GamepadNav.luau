@@ -8,20 +8,19 @@
 		B (Círculo)    cierra la ventana abierta o sale del menú
 	Al abrirse una ventana, la marca entra a su primer botón y no se sale de
 	ella (SelectionGroup); al cerrarla vuelve al botón del HUD. La marca es un
-	marco dorado; con mando, arriba de la columna derecha dice "Y Menú".
+	marco dorado; con mando, arriba de la columna derecha dice "Y Menú" y
+	"Select Ratón" (GamepadHint): Select saca el cursor virtual de Roblox.
 	Pescar, alimentar y entrenar no pasan por aquí: X (Cuadrado) o R2.
 ]]
 
 local ContextActionService = game:GetService("ContextActionService")
 local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
 
 local InputHints = require(script.Parent.Parent.Interface.InputHints)
-local Layout = require(script.Parent.Parent.Interface.Layout)
-local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
+local GamepadHint = require(script.Parent.GamepadHint)
 
 local GOLD = Color3.fromRGB(255, 214, 60)
 local SELECT_DELAY = 0.15 -- espera a que la ventana termine de armarse
@@ -129,41 +128,10 @@ local function selectionImage(): Frame
 	return frame
 end
 
--- "Y Menú" arriba de la columna derecha (solo con mando).
-local function menuHint(): Frame
-	local hint = Instance.new("Frame")
-	hint.Name = "AyudaMando"
-	hint.LayoutOrder = 0
-	hint.BackgroundColor3, hint.BackgroundTransparency = Color3.fromRGB(20, 24, 40), 0.25
-	hint.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, 40)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0.5, 0)
-	corner.Parent = hint
-	local glyph = Instance.new("ImageLabel")
-	glyph.BackgroundTransparency = 1
-	glyph.Position, glyph.Size = UDim2.fromOffset(8, 4), UDim2.fromOffset(32, 32)
-	glyph.Image = UserInputService:GetImageForKeyCode(Enum.KeyCode.ButtonY)
-	glyph.Parent = hint
-	local label = Style.text(hint, "Texto", 24, nil, 2)
-	label.Text = "Menú"
-	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Position = UDim2.fromOffset(48, 4)
-	label.Size = UDim2.new(1, -56, 1, -8)
-	hint.Parent = Layout.right()
-	local function paint()
-		hint.Visible = gamepad() and GuiService.SelectedObject == nil
-		glyph.Image = UserInputService:GetImageForKeyCode(Enum.KeyCode.ButtonY)
-	end
-	InputHints.onChange(paint)
-	GuiService:GetPropertyChangedSignal("SelectedObject"):Connect(paint)
-	paint()
-	return hint
-end
-
 function GamepadNav.start()
 	Players.LocalPlayer.PlayerGui.SelectionImageObject = selectionImage()
 	Window.onAnyChange(onWindow)
-	menuHint()
+	GamepadHint.start(gamepad)
 	ContextActionService:BindAction("MenuMando", function(_, state: Enum.UserInputState)
 		if state ~= Enum.UserInputState.Begin then
 			return Enum.ContextActionResult.Pass

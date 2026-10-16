@@ -112,6 +112,12 @@
 			"GuaridaDescanso": {
 				"$path": "world/GuaridaDescanso.model.json"
 			}
+		},
+		"StarterGui": {
+			"$className": "StarterGui",
+			"$properties": {
+				"VirtualCursorMode": "Enabled"
+			}
 		}
 	}
 }

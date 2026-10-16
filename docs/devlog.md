@@ -1253,3 +1253,20 @@ pasarme los IDs; poner el ID del grupo en `Config/Social`.
 - Alrededor del faro el terreno es adoquín (antes pasto alto que tapaba la puerta).
 
 **Qué se rompió:** nada. Probado en Studio y lugar guardado (`PescaYAlimentaGigantes.rbxl`).
+
+
+---
+
+## 2026-10-16 (5) — Ratón con Select en Xbox
+
+**Qué se hizo:**
+
+- `StarterGui.VirtualCursorMode = Enabled` (puesto en Studio y guardado en el lugar; también en
+  `default.project.json`, aunque Rojo no puede escribirlo porque no es accesible por script):
+  con mando, Select (View en Xbox) saca el cursor virtual de Roblox, un ratón que se mueve con
+  el stick izquierdo y aprieta con A. Select otra vez lo guarda.
+- `Menus/GamepadHint` (sale de GamepadNav): la ayuda de mando ahora dice "Y Menú" y
+  "Select Ratón".
+
+**Qué se rompió:** nada. Falta probarlo con un mando de verdad (el simulador de Studio no
+manda el botón Select).
