@@ -5,7 +5,8 @@
 	Vacía y vuelve a llenar el lago del volcán en este cliente, según
 	EstadoGigante.VolcanVacio (lo publica RestArena):
 		- al empezar el descanso el agua baja hasta el fondo en drainSeconds,
-		  con remolinos y retumbos, y queda a la vista la guarida del fondo;
+		  con remolinos y retumbos, mientras la guarida sube desde el fondo
+		  (GuaridaSube, que también la hunde al terminar el descanso);
 		- vacío también en la ruleta; después (VolcanLlenando) sube el agua en
 		  refillSeconds, o la lava si salió el dragón (CraterLava), y recién
 		  entonces llega el monstruo.
@@ -27,6 +28,7 @@ local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local CraterLava = require(script.Parent.CraterLava)
+local GuaridaSube = require(script.Parent.GuaridaSube)
 
 local L = WorldLayout
 local CYCLE = Config.Giants.cycle
@@ -145,6 +147,7 @@ end
 function CraterDrain.start(onShown: (boolean) -> ())
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local ATTR = Protocol.GiantAttributes
+	GuaridaSube.watch(stateFolder)
 	local mode: Mode = "water" -- así lo deja TerrainBuilder
 	-- Vacío en el descanso y en la ruleta: se llena cuando llega el siguiente.
 	local function wanted(): Mode

@@ -3,9 +3,11 @@
 	RestArena
 
 	El descanso es en el fondo del volcán. La guarida (world/GuaridaDescanso.model.json,
-	en ServerStorage) está siempre allá abajo, bajo el agua mientras se alimenta
-	al gigante. Al empezar el descanso se publica VolcanVacio = true y cada
-	cliente vacía el lago (Ambient/CraterDrain, en Config.Giants.cycle.drainSeconds);
+	en ServerStorage) llena el fondo de pared a pared y queda ENTERRADA
+	(restArenaSink studs más abajo) mientras se alimenta al gigante. Al empezar el
+	descanso sube a su lugar y se publica VolcanVacio = true: cada cliente vacía el
+	lago (Ambient/CraterDrain, en Config.Giants.cycle.drainSeconds) y la ve subir
+	desde el fondo (Ambient/GuaridaSube; aquí se mueve de una vez, allá se anima);
 	el botón IR A LA GUARIDA (enter) deja al jugador sobre ella cuando ya no hay
 	agua. Al terminar, quien siga dentro del volcán vuelve a la orilla, junto a
 	la puerta donde llega el puente, y el agua sube de nuevo con el siguiente
@@ -26,6 +28,9 @@ local Proximity = require(script.Parent.Proximity)
 
 local RestArena = {}
 
+local SINK = Vector3.new(0, -WorldLayout.restArenaSink, 0)
+
+local arena: Model? = nil
 local up = false
 local drainedAt = 0
 local rng = Random.new()
@@ -48,9 +53,11 @@ end
 function RestArena.init(_map: Instance)
 	local found = ServerStorage:WaitForChild(Protocol.Map.RestArena, 10)
 	assert(found and found:IsA("Model"), "RestArena: falta ServerStorage.GuaridaDescanso")
-	local arena = found:Clone()
-	arena.ModelStreamingMode = Enum.ModelStreamingMode.Persistent
-	arena.Parent = Workspace
+	local model = found:Clone()
+	model.ModelStreamingMode = Enum.ModelStreamingMode.Persistent
+	model:PivotTo(model:GetPivot() + SINK) -- enterrada hasta el descanso
+	model.Parent = Workspace
+	arena = model
 	GiantPublish.set(Protocol.GiantAttributes.Drained, false)
 end
 
@@ -61,6 +68,9 @@ function RestArena.show()
 	end
 	up = true
 	drainedAt = os.clock()
+	if arena then
+		arena:PivotTo(arena:GetPivot() - SINK) -- sube (los clientes lo animan)
+	end
 	GiantPublish.set(Protocol.GiantAttributes.Drained, true)
 end
 
@@ -76,6 +86,9 @@ function RestArena.hide()
 		if root and character and WorldZones.isInCraterPit(root.Position) then
 			character:PivotTo(gateSpot())
 		end
+	end
+	if arena then
+		arena:PivotTo(arena:GetPivot() + SINK) -- se hunde otra vez
 	end
 	GiantPublish.set(Protocol.GiantAttributes.Drained, false)
 end

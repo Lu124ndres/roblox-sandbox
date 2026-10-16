@@ -70,8 +70,9 @@ export type WorldLayout = {
 	craterPeakHeight: number, -- alto máximo de las montañas del anillo sobre el paseo
 	pedestalTop: number,
 	craterDeckHeight: number,
-	restArenaRadius: number, -- guarida del descanso, en el fondo del lago
+	restArenaRadius: number, -- guarida del descanso: llena el fondo del lago de pared a pared
 	restArenaTop: number, -- altura de su piso (se ve al vaciarse el volcán)
+	restArenaSink: number, -- cuánto queda enterrada bajo el fondo mientras no hay descanso
 	boundaryCenter: { number },
 	boundaryRadius: number,
 	hills: { { number } }, -- { x, z, radio }
