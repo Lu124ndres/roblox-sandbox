@@ -3,25 +3,40 @@
 	AdminPanel
 
 	Panel de pruebas para los administradores (atributo EsAdmin, lo pone el
-	servidor; nadie más ve el botón). Cada fila manda AdminCommand(nombre,
-	valor) y el servidor vuelve a comprobar que sea admin y responde con un
-	aviso. Las órdenes están en server/Admin/AdminCommands.
+	servidor; nadie más ve el botón). Arriba se elige a qué jugador se le
+	aplican las órdenes (AdminTarget: tú u otro del servidor) y debajo hay
+	tres pestañas:
+		Jugador    números, canasta, mejoras, velocidad, pases, regalos,
+		           llevarlo a un lugar, ir con él / traerlo y reiniciarlo
+		           como recién llegado (pide confirmación)
+		Monstruos  cada monstruo por etapa, la barra y el descanso
+		Eventos    lanzar ya un evento del servidor
+	Cada botón manda AdminCommand(nombre, valor, UserId del elegido); el
+	servidor vuelve a comprobar que seas admin y responde con un aviso.
+	Las órdenes están en server/Admin.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Config = require(ReplicatedStorage.Shared.Config)
-local Events = require(ReplicatedStorage.Shared.Config.Events)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Style = require(script.Parent.Parent.Interface.Style)
+local AdminPages = require(script.Parent.AdminPages)
+local AdminRows = require(script.Parent.AdminRows)
+local AdminTarget = require(script.Parent.AdminTarget)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
 
 local CARDS = Style.PALETTE.Cards
-local ROW_HEIGHT = 46
+local TAB_HEIGHT = 40
+local TAB_WIDTH = 170
 
-type Button = { text: string, name: string, value: any? }
+type Tab = { title: string, fill: (page: AdminRows.Page) -> () }
+local TABS: { Tab } = {
+	{ title = "Jugador", fill = AdminPages.player },
+	{ title = "Monstruos", fill = AdminPages.giants },
+	{ title = "Eventos", fill = AdminPages.events },
+}
 
 local AdminPanel = {}
 
@@ -32,126 +47,57 @@ function AdminPanel.start(screen: ScreenGui)
 	end
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local command = remotes:WaitForChild(Protocol.Remotes.AdminCommand) :: RemoteEvent
-	local window = Window.create(screen, "Admin", "Panel admin", Vector2.new(860, 600))
+	local window = Window.create(screen, "Admin", "Panel admin", Vector2.new(900, 640))
 	HudButtons.top("Admin", "crown", window.toggle)
 
-	local list = Instance.new("ScrollingFrame")
-	list.BackgroundTransparency = 1
-	list.BorderSizePixel = 0
-	list.Size = UDim2.fromScale(1, 1)
-	list.AutomaticCanvasSize = Enum.AutomaticSize.Y
-	list.CanvasSize = UDim2.new()
-	list.ScrollBarThickness = 8
-	list.Parent = window.content
-	local layout = Instance.new("UIListLayout")
-	layout.Padding = UDim.new(0, 6)
-	layout.SortOrder = Enum.SortOrder.LayoutOrder
-	layout.Parent = list
-
-	local order = 0
-	-- Una fila: nombre a la izquierda, (casilla para escribir) y botones.
-	local function row(title: string, buttons: { Button }, withInput: boolean?)
-		order += 1
-		local frame = Instance.new("Frame")
-		frame.BackgroundTransparency = 1
-		frame.LayoutOrder = order
-		frame.Size = UDim2.new(1, -12, 0, ROW_HEIGHT)
-		frame.Parent = list
-		local flow = Instance.new("UIListLayout")
-		flow.FillDirection = Enum.FillDirection.Horizontal
-		flow.VerticalAlignment = Enum.VerticalAlignment.Center
-		flow.Padding = UDim.new(0, 6)
-		flow.SortOrder = Enum.SortOrder.LayoutOrder
-		flow.Parent = frame
-		local name = Style.text(frame, "Nombre", 24, nil, 2)
-		name.Text = title
-		name.TextXAlignment = Enum.TextXAlignment.Left
-		name.Size = UDim2.fromOffset(150, ROW_HEIGHT)
-		local box: TextBox? = nil
-		if withInput then
-			local input = Instance.new("TextBox")
-			input.LayoutOrder = 1
-			input.Size = UDim2.fromOffset(140, ROW_HEIGHT - 6)
-			input.BackgroundColor3 = Color3.fromRGB(245, 245, 250)
-			input.TextColor3 = Color3.fromRGB(20, 20, 30)
-			input.PlaceholderText = "número"
-			input.Text = ""
-			input.TextScaled = true
-			input.ClearTextOnFocus = false
-			input.Font = Enum.Font.GothamBold
-			local corner = Instance.new("UICorner")
-			corner.CornerRadius = UDim.new(0, 8)
-			corner.Parent = input
-			input.Parent = frame
-			box = input
-		end
-		for index, spec in buttons do
-			local button = Style.button(frame, spec.name, CARDS.Blue, spec.text)
-			button.LayoutOrder = 1 + index
-			button.Size = UDim2.fromOffset(math.max(90, #spec.text * 14 + 24), ROW_HEIGHT - 6)
-			button.Activated:Connect(function()
-				local value = spec.value
-				if value == nil and box then
-					value = tonumber((string.gsub(box.Text, "[,%s]", "")))
-				end
-				command:FireServer(spec.name, value)
-			end)
-		end
+	local target = AdminTarget.mount(window.content)
+	local function send(name: string, value: any)
+		command:FireServer(name, value, target.get().UserId)
 	end
 
-	row("Poder", { { text = "Poner", name = "power" } }, true)
-	row("Monedas", { { text = "Poner", name = "coins" } }, true)
-	row("Kills", { { text = "Poner", name = "kills" } }, true)
-	row("Renacimientos", { { text = "Poner", name = "rebirths" } }, true)
-	row("Peces", {
-		{ text = "Agregar", name = "fish" },
-		{ text = "Vaciar", name = "emptyBasket", value = 0 },
-	}, true)
-	row("Velocidad", {
-		{ text = "Poner", name = "speed" },
-		{ text = "16", name = "speed", value = 16 },
-		{ text = "60", name = "speed", value = 60 },
-		{ text = "120", name = "speed", value = 120 },
-	}, true)
-	row("Mejoras (nivel)", {
-		{ text = "Caña", name = "Rod" },
-		{ text = "Canasta", name = "Basket" },
-		{ text = "Botas", name = "Boots" },
-	}, true)
-	local giants: { Button } = {}
-	for _, def in Config.Giants.chain do
-		table.insert(giants, { text = def.displayName, name = "giant", value = def.id })
+	local tabs = Instance.new("Frame")
+	tabs.Name = "Pestanas"
+	tabs.BackgroundTransparency = 1
+	tabs.Position = UDim2.fromOffset(0, target.height)
+	tabs.Size = UDim2.new(1, 0, 0, TAB_HEIGHT)
+	tabs.Parent = window.content
+	local flow = Instance.new("UIListLayout")
+	flow.FillDirection = Enum.FillDirection.Horizontal
+	flow.Padding = UDim.new(0, 10)
+	flow.SortOrder = Enum.SortOrder.LayoutOrder
+	flow.Parent = tabs
+
+	local area = Instance.new("Frame")
+	area.Name = "Paginas"
+	area.BackgroundTransparency = 1
+	area.Position = UDim2.fromOffset(0, target.height + TAB_HEIGHT + 12)
+	area.Size = UDim2.new(1, 0, 1, -(target.height + TAB_HEIGHT + 12))
+	area.Parent = window.content
+
+	local entries: { { button: TextButton, page: AdminRows.Page } } = {}
+	local function show(index: number)
+		for other, entry in entries do
+			local on = other == index
+			entry.page.frame.Visible = on
+			entry.button.BackgroundColor3 = if on then CARDS.Yellow else Style.PALETTE.Disabled
+			local gradient = entry.button:FindFirstChildOfClass("UIGradient")
+			if gradient then
+				gradient.Enabled = on
+			end
+		end
 	end
-	row("Monstruo", giants)
-	row("Barra", {
-		{ text = "+25%", name = "fill", value = 0.25 },
-		{ text = "+50%", name = "fill", value = 0.5 },
-		{ text = "Llenar", name = "fill", value = 1 },
-		{ text = "Fin descanso", name = "skipRest", value = 0 },
-	})
-	local passes: { Button } = {}
-	for _, key in Config.Monetization.passOrder do
-		table.insert(
-			passes,
-			{ text = Config.Monetization.passes[key].name, name = "pass", value = key }
-		)
+	for index, tab in TABS do
+		local button = Style.button(tabs, tab.title, CARDS.Yellow, tab.title)
+		button.LayoutOrder = index
+		button.Size = UDim2.fromOffset(TAB_WIDTH, TAB_HEIGHT)
+		local page = AdminRows.page(area, send)
+		tab.fill(page)
+		table.insert(entries, { button = button, page = page })
+		button.Activated:Connect(function()
+			show(index)
+		end)
 	end
-	row("Pases (on/off)", passes)
-	local events: { Button } = {}
-	for _, kind in Events.kinds do
-		table.insert(events, { text = kind.name, name = "event", value = kind.id })
-	end
-	row("Evento ya", events)
-	row("Regalos tiempo", {
-		{ text = "+10 min", name = "playtime", value = 10 },
-		{ text = "+1 h", name = "playtime", value = 60 },
-	})
-	row("Ir a", {
-		{ text = "Muelle", name = "tp", value = "muelle" },
-		{ text = "Volcán", name = "tp", value = "volcan" },
-		{ text = "Plaza", name = "tp", value = "plaza" },
-		{ text = "Tienda", name = "tp", value = "tienda" },
-	})
+	show(1)
 end
 
 return AdminPanel

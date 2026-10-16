@@ -971,3 +971,31 @@ descanso y llegada con la lava; 0 errores nuestros.
 **Qué sigue:** guardar el lugar en Studio (los modelos nuevos están en ServerStorage) y
 crear los pases en el Creator Dashboard.
 
+---
+
+## 2026-10-15 — Panel admin: jugadores, monstruos por etapa y reiniciar
+
+**Qué se hizo:**
+
+- Arriba del panel se elige a quién se le aplican las órdenes (`AdminTarget`): "Yo" o
+  cualquier jugador del servidor, con sus números en vivo (poder, monedas, kills,
+  renacimientos, peces). Todo lo que se podía hacer a uno mismo ahora se puede hacer a otro;
+  además "Ir con él" y "Traerlo".
+- Tres pestañas (`AdminPages`): Jugador, Monstruos y Eventos. Los botones van en una grilla
+  de 4 columnas iguales que salta de renglón (`AdminRows`): nada se sale del panel.
+- Monstruos por etapa: cada monstruo con Etapa 1..4 (`giant` = "id:etapa"); si está
+  comiendo cambia al momento en esa etapa (`GiantService.reset(def, etapa)`), si no, llega
+  después. Barra (+25 %, +50 %, llenar) y descanso (terminar, +1 min).
+- Reiniciar como jugador nuevo (`Admin/AdminReset`, pide tocar dos veces): "Progreso" deja
+  todo en cero pero conserva lo comprado con Robux y los ajustes; "Todo" deja la cuenta como
+  nueva (solo quedan los recibos de compras). Limpia tutorial, misiones, regalos por tiempo,
+  lo hace reaparecer y guarda al momento.
+- Servidor: `AdminCommands` reparte entre `AdminPlayer` (órdenes a un jugador) y
+  `AdminWorld` (monstruo, barra, descanso, eventos). `AdminCommand` lleva el UserId del
+  elegido; el aviso dice a quién se le aplicó.
+
+**Qué se rompió:** nada. Probado en Studio con servidor y 2 jugadores: cambiar números,
+peces y reiniciar al otro jugador, traerlo, monstruo en etapa 3, ir al volcán.
+
+**Qué sigue:** nada pendiente del panel.
+

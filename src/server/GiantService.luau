@@ -114,10 +114,11 @@ function GiantService.onFilled(listener: () -> ())
 	table.insert(filledListeners, listener)
 end
 
--- Llega un gigante nuevo (o vuelve el mismo) con la barra en cero y su comida fija.
-function GiantService.reset(def: Config.GiantDef)
+-- Llega un gigante nuevo (o vuelve el mismo) con su comida fija y la barra en cero
+-- (o al inicio de la etapa `stage`: el panel admin lo pone directo en esa etapa).
+function GiantService.reset(def: Config.GiantDef, stage: number?)
 	currentDef = def
-	progress = 0
+	progress = GIANTS.stageThresholds[stage or 1] or 0
 	totalFood = def.food
 	evolvingUntil = 0
 	GiantAnger.calm()

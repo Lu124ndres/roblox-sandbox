@@ -78,7 +78,7 @@ local Protocol = {
 		ClaimDaily = "ClaimDaily",
 		-- cliente -> servidor: (index: number). Cobrar el regalo por tiempo número index.
 		ClaimPlaytime = "ClaimPlaytime",
-		-- cliente -> servidor: (name: string, value: any). Orden del panel de administrador.
+		-- cliente -> servidor: (name, value, UserId del jugador elegido). Orden del panel admin.
 		AdminCommand = "AdminCommand",
 		RestEnter = "RestEnter", -- cliente -> servidor: ir a la guarida durante el descanso
 		Rebirth = "Rebirth", -- cliente -> servidor: renacer (si le alcanzan las monedas)
