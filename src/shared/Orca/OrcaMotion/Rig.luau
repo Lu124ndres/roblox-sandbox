@@ -45,6 +45,7 @@ local TAIL_BEND = { 0.07, 0.1, 0.13, 0.15 }
 local TAIL_LAG = 0.75 -- retraso de la onda entre huesos (rad)
 local JAW_CLOSED, JAW_OPEN = -0.06, 0.5 -- radianes desde la pose del modelo (ya algo abierta)
 local FLUKE_PADDLE = 0.32 -- cuánto se doblan las aletas de la cola contra la onda
+local FLUKE_MAX = 0.4 -- tope (rad): la cría aletea fuerte y sobre la curva de la cola parecían un gancho
 
 local Rig = {}
 
@@ -116,7 +117,11 @@ function Rig.apply(rig: Rig, pose: Pose, dt: number)
 		turnBone(rig, name, wave + lift, curve, 0)
 	end
 	-- Aletas de la cola: paleta que va por detrás de la onda (la derivada) y se abre en la curva.
-	local paddle = -FLUKE_PADDLE * effort * math.cos(phase - (#TAIL + 1) * TAIL_LAG)
+	local paddle = math.clamp(
+		-FLUKE_PADDLE * effort * math.cos(phase - (#TAIL + 1) * TAIL_LAG),
+		-FLUKE_MAX,
+		FLUKE_MAX
+	)
 	local flukes = follow(rig, "Aletas", paddle, dt, 3.2, 0.5)
 	for _, name in { "AletaColaIzq", "AletaColaDer" } do
 		local axes = rig.axes[name]

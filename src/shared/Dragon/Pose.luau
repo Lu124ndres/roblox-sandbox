@@ -64,7 +64,7 @@ function Pose.apply(rig: Rig.Rig, input: Input, dt: number)
 			side = if s == "Der" then 1 else -1
 		end
 		local fold = input.fold
-		local base = rig.neutral + amp * down - fold * 0.25
+		local base = rig.neutral[s] + amp * down - fold * 0.25
 		-- En la curva el ala de adentro baja un poco (timón).
 		local steer = side * turn * 0.06
 		Rig.turn(rig, `Ala{s}1`, 0, -side * fold * 0.5, side * (base + steer))

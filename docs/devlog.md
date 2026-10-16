@@ -1446,6 +1446,30 @@ esfera de `masa()` guarda escala y giro en el objeto (pintar en coordenadas del 
 
 ---
 
+## 2026-10-16 (13) — Orca, dragón y orca fantasma probados con los huesos nuevos (C5)
+
+**Qué se hizo:**
+
+- Probadas en Play por MCP las 12 combinaciones (`Orca`, `DragonMarino` y `OrcaFantasma`,
+  etapas 1 a 4) con los modelos que importó Cowork (`4506599`): cada etapa carga su modelo,
+  todos los huesos se mueven, los tamaños cuadran (la orca mide 16.5/44/82.5/165 de alto y
+  el dragón E4, 99 de largo = 165 × 0.6) y no hay errores nuestros en la consola.
+- Deformación revisada en Edit: clones quietos en el cielo con las poses extremas medidas
+  en Play, aplicadas con el `Rig` y el `Pose` del juego. Sin roturas de malla.
+- `Orca/Etapas`: el perfil se elegía por nombre exacto (`OrcaE<n>`), así que las cuatro
+  `OrcaFantasmaE<n>` nadaban como la adulta; ahora se elige por el sufijo `E<n>`.
+- Orca: tope de 0.4 rad a las aletas de la cola. La cría llegaba a 44° encima de la curva
+  de la cola y la punta quedaba como un gancho.
+- Dragón: el ángulo de planeo (`neutral`) se mide por lado. Algunos modelos tienen el
+  cuerpo un poco torcido (la cadera del E3 está corrida a un lado) y con un solo valor
+  promedio el E3 planeaba con un ala 22° más alta que la otra.
+
+**Aprendido:** en `execute_luau` del servidor, `require` carga otra copia de los módulos,
+no la del juego: la orden `giant` "funciona" pero no cambia nada y pisa los atributos de
+`EstadoGigante`. Para cambiar de gigante hay que mandar `AdminCommand` desde el cliente.
+
+---
+
 ## 2026-10-16 (14) — Hábitats dentro del volcán (C6)
 
 **Qué se hizo:**
