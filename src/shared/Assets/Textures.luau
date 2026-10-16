@@ -13,6 +13,9 @@ local Textures: { [string]: { string } } = {
 		"rbxassetid://100759657454248",
 		"rbxassetid://109198970088136",
 	},
+	MinotauroE2 = { "rbxassetid://85752100448730", "rbxassetid://126704727757248" },
+	MinotauroE3 = { "rbxassetid://90468027558818", "rbxassetid://82219820175391" },
+	MinotauroE4 = { "rbxassetid://108740223585461", "rbxassetid://96009656170909" },
 	OrcaE1 = {
 		"rbxassetid://71957072265867",
 		"rbxassetid://96425004406950",

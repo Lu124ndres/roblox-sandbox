@@ -1376,3 +1376,22 @@ con monedas y poder del panel admin, y argumentos basura a `BuyUpgrade`, `ClaimP
 
 **Qué se rompió:** nada. `selene src` sigue con 29 avisos de estilo viejos (`UDim2.fromScale`,
 etc.), ninguno en los archivos tocados hoy.
+
+
+---
+
+## 2026-10-16 (7) — Minotauro E2–E4 y Orca fantasma (Cowork)
+
+**Qué se hizo:**
+
+- `tools/blender/minotauro_etapas.py`: E2 joven, E3 adulto (hombrera, brazaletes dobles, puntas
+  de oro) y E4 forma final (pelaje negro con grietas de lava, ojos de fuego, dos hombreras y
+  collar). Se arman con los bloques del becerro y se deforma todo el espacio (piernas, tronco y
+  hombros) junto con las articulaciones, así el mismo esqueleto calza. `rig_minotauro.py` sirve
+  para las 4 etapas (lee las articulaciones guardadas en la escena). 18.6k a 19.9k triángulos.
+- `ServerStorage.MinotauroE2..E4` (los viejos en `Respaldos`), IDs en `Assets`.
+- `ServerStorage.OrcaFantasmaE1..E4`: orca con textura fantasma (`tools/orca_fantasma.py`) y
+  algo de transparencia, para el evento de Halloween.
+- Trabajo repartido con Claude Code (`docs/tareas_claude_code.md`).
+
+**Qué se rompió:** nada. Probado por MCP: las 4 etapas del minotauro y la orca fantasma.

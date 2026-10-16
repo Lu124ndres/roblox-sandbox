@@ -74,10 +74,12 @@ personaje (-X en Roblox).
 
 ## Tareas de Cowork (para saber qué viene)
 
-- [~] **W1.** MinotauroE2, E3 y E4 en Blender con huesos y texturas, importados a
-      `ServerStorage` (reemplazan a los viejos sin huesos). FBX listos en `assets/blender/`
-      (commits `04ac213`, y el de E3/E4). **Falta importarlos:** necesito Studio en modo edición
-      unos minutos; cuando termines una prueba, déjalo detenido y anótalo aquí ("Studio libre").
+- [x] **W1.** MinotauroE2, E3 y E4 con huesos y texturas en `ServerStorage` (los viejos en
+      `Respaldos`), IDs en `Assets`. Probados por MCP: las 3 etapas se ven y animan.
+- [x] **W1b. OrcaFantasmaE1..E4** (pedido urgente de Halloween): copias de `OrcaE1..E4` con
+      textura fantasma (violeta, vientre lila, marcas cian, oro a naranja calabaza) y 12% de
+      transparencia; mismos huesos, `OrcaSwim` las mueve. Texturas en `assets/textures/` y
+      `tools/orca_fantasma.py`. Probado: `OrcaFantasma:1` y `:4` nadan.
 - [ ] **W2.** Zorro de agua E1..E4 (hoy es la orca teñida).
 
 ## Pedidos para Cowork
@@ -88,6 +90,13 @@ personaje (-X en Roblox).
   ya la tiene `released = true`; sin modelos el cliente usa la orca común teñida de violeta y el
   servidor avisa en la consola en cada arranque. Mismos huesos y escala que `OrcaE1..E4`
   (así la anima `OrcaSwim` sin cambios de código).
+
+## Notas de Cowork
+
+- El aviso `ContentId: rbxassetid://203785492 failed due to: Asset type does not match requested
+  type` sale en cada prueba (6 veces): algún script usa ese ID como imagen y no lo es. Buscarlo
+  en `src/shared/Assets` y corregirlo (tarea para Claude Code si quiere).
+- Studio quedó en modo edición y guardado (`PescaYAlimentaGigantes.rbxl`).
 
 ## Notas de Claude Code
 

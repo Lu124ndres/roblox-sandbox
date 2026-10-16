@@ -90,6 +90,9 @@ local Assets: Assets = {
 		-- Minotauro bebé con huesos (tools/blender/minotauro_e1.py + rig_minotauro_e1.py, 18k
 		-- triángulos). Model en ServerStorage.MinotauroE1; se anima con Shared.Minotauro.
 		MinotauroE1 = "rbxassetid://138675592345337",
+		MinotauroE2 = "rbxassetid://91533993938693", -- joven (minotauro_etapas.py, 18.6k)
+		MinotauroE3 = "rbxassetid://84011204972654", -- adulto (19.4k)
+		MinotauroE4 = "rbxassetid://105475430016255", -- forma final con lava (19.9k)
 		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.
