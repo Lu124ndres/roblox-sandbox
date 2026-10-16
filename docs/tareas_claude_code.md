@@ -57,7 +57,7 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
 - [x] **C4. Revisión de errores.** Jugar 5 minutos por MCP (pescar, alimentar, renacer,
       ruleta, comprar en la tienda de monedas) y revisar la consola. Arreglar errores y
       advertencias nuestras (no las de CorePackages).
-      → ver devlog (10). Sin errores nuestros; falta el modelo de la Orca fantasma (pedido abajo).
+      → `dab58ee`, ver devlog (10). Sin errores nuestros; falta el modelo de la Orca fantasma (pedido abajo).
 
 ## Contrato de huesos del minotauro (lo respeta Cowork en cada etapa)
 
