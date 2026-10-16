@@ -16,16 +16,22 @@ local Trajes = require(ReplicatedStorage.Shared.Trajes)
 
 local OutfitView = {}
 
--- Las dos líneas de ventajas, a partir de los números del pase.
+-- Las dos líneas de ventajas, a partir de los números del pase: pesca y alimentar.
 function OutfitView.perks(pass: any): { string }
 	local lines = {}
 	if pass.biteDelay then
-		table.insert(lines, `Pican x{math.floor(1 / pass.biteDelay + 0.5)} más rápido`)
+		local times = math.floor(1 / pass.biteDelay + 0.5)
+		table.insert(
+			lines,
+			if pass.instantReel
+				then `Pesca ultrarrápida x{times}`
+				else `Pescas x{times} más rápido`
+		)
 	end
-	if pass.instantReel then
+	if pass.feedSpeed then
+		table.insert(lines, `Alimentas x{pass.feedSpeed} más rápido`)
+	elseif pass.instantReel then
 		table.insert(lines, "Sacas peces de un toque")
-	elseif pass.reelStrength then
-		table.insert(lines, `Recoges con x{pass.reelStrength} de fuerza`)
 	end
 	return lines
 end

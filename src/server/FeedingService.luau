@@ -63,9 +63,10 @@ local function deliver(player: Player): (number, number)
 	local fed, coins = 0, 0
 	-- Con mucha fuerza se cargan muchos peces: cada uno paga menos (FishingPower.coinScale).
 	local coinScale = FishingPower.coinScale(PlayerData.getPower(player))
-	local perSecond =
-		RebirthMath.deliveryPerSecond(RebirthMath.count(player), PlayerData.getCapacity(player))
-	local foodCap = GiantService.getFood() / DELIVERY.minSoloSeconds
+	local speed = Perks.feedMultiplier(player) -- pases: Rey del Mar x2, Dios del Volcán x4
+	local perSecond = speed
+		* RebirthMath.deliveryPerSecond(RebirthMath.count(player), PlayerData.getCapacity(player))
+	local foodCap = speed * GiantService.getFood() / DELIVERY.minSoloSeconds
 	local fishCredit, foodCredit = 1, foodCap -- el primer pez sale al apretar
 	local last = os.clock()
 	while

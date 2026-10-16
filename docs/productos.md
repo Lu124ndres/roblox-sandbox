@@ -106,7 +106,7 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `ReyDelMar` | Rey del Mar | 149 | |
 
 Descripciones para el Creator Hub:
-- **Rey del Mar:** Traje de rey con corona y capa. Los peces pican 2 veces más rápido, recoges con el doble de fuerza y ganas x2 kills.
-- **Dios del Volcán:** Traje de fuego con corona ardiente. Los peces pican 3 veces más rápido, sacas cualquier pez de un toque y ganas x2 kills.
+- **Rey del Mar:** Traje de rey con corona y capa. Pescas x2 más rápido (y recoges con el doble de fuerza), alimentas al monstruo x2 más rápido y ganas x2 kills.
+- **Dios del Volcán:** Traje de fuego con corona ardiente. Pesca ultrarrápida (pican x5 y sacas cualquier pez de un toque), alimentas al monstruo x4 más rápido y ganas x4 kills.
 
 Creator Hub → tu juego → Monetización → Pases → Crear pase. Después, en el pase → **Ventas**: activar "Artículo a la venta" y poner el precio.

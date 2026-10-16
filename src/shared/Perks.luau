@@ -1,14 +1,11 @@
 --!strict
 --[[
-	Perks
-
-	Lo que cambian las compras con Robux y los renacimientos, leído de
+	Perks: lo que cambian las compras con Robux y los renacimientos, leído de
 	atributos que solo pone el servidor (servidor y cliente calculan igual):
 		Pase_<clave> / Nivel<Power|Coins> / Estanque_<i>   pases, x2^nivel, estanques
 		MembershipType (Premium) / Renacimientos           x1.2 / x1.25^n poder y monedas
 		ReplicatedStorage.Impulsos                         entrenamiento del servidor (x2^nivel)
 		racha del diario / x2 monedas de la ruleta         RetentionBonus
-	Lo usan entrenamiento, descanso, entrega, pesca, diario y tienda.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -24,7 +21,6 @@ local MONETIZATION = Config.Monetization
 local SOCIAL = Config.Social
 local PONDS = Config.Progression.ponds
 local ATTR = Protocol.PlayerAttributes
-
 local Perks = {}
 
 function Perks.hasPass(player: Player, key: string): boolean
@@ -116,8 +112,7 @@ function Perks.dailyMultiplier(player: Player): number
 	return passProduct(player, "dailyMultiplier")
 end
 
--- La mejor ventaja de pesca entre los pases que tiene: la más chica si
--- `lowest` (espera hasta que pica), si no la más grande. `fallback` si ninguno.
+-- Mejor valor de `field` entre sus pases (el menor si `lowest`); `fallback` si ninguno.
 local function passBest(player: Player, field: string, fallback: number, lowest: boolean): number
 	local best = fallback
 	for key, pass in MONETIZATION.passes do
@@ -139,6 +134,10 @@ end
 
 function Perks.killMultiplier(player: Player): number
 	return passBest(player, "kills", 1, false)
+end
+
+function Perks.feedMultiplier(player: Player): number -- alimentar más rápido (pases)
+	return passBest(player, "feedSpeed", 1, false)
 end
 
 function Perks.instantReel(player: Player): boolean

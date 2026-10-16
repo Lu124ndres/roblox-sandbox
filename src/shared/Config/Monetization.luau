@@ -14,8 +14,8 @@
 	Pase VIP: etiqueta, suerte extra y premio diario x2.
 	Pases con traje (como el Faraón de «Construye la Pirámide»): se ven en el
 	personaje (`outfit`, ver server/Social/Outfits) y pescan más rápido:
-		ReyDelMar      pica 2 veces más rápido, recoge con x2 de fuerza, x2 kills
-		DiosDelVolcan  pica 3 veces más rápido, recoge de un toque, x2 kills
+		ReyDelMar      pesca x2 más rápido (y x2 de fuerza), alimenta x2, x2 kills
+		DiosDelVolcan  pesca ultrarrápida (x5, de un toque), alimenta x4, x4 kills
 	Si tiene los dos, de cada ventaja vale la mejor.
 	Fill25/50/75: llena esa parte de la barra del monstruo actual.
 	Choose<idGigante>: elige el monstruo que sale después del descanso.
@@ -41,6 +41,7 @@ export type PassDef = {
 	reelStrength: number?, -- multiplica la fuerza de cada toque al recoger
 	instantReel: boolean?, -- un toque basta para sacar cualquier pez
 	kills: number?, -- kills por cada monstruo llenado
+	feedSpeed: number?, -- multiplica lo rápido que alimentas al monstruo
 	outfit: string?, -- traje que se ve en el personaje (Social/Outfits)
 }
 
@@ -102,20 +103,22 @@ local Monetization: MonetizationConfig = {
 		},
 		ReyDelMar = {
 			name = "Rey del Mar",
-			description = "Traje de rey. Pican 2 veces más rápido, recoges con x2 de fuerza y x2 kills.",
+			description = "Traje de rey. Pescas x2 más rápido, alimentas x2 más rápido y x2 kills.",
 			robux = 149,
 			biteDelay = 0.5,
 			reelStrength = 2,
+			feedSpeed = 2,
 			kills = 2,
 			outfit = "ReyDelMar",
 		},
 		DiosDelVolcan = {
 			name = "Dios del Volcán",
-			description = "Traje de fuego. Pican 3 veces más rápido, sacas cualquier pez de un toque y x2 kills.",
+			description = "Traje de fuego. Pesca ultrarrápida de un toque, alimentas x4 más rápido y x4 kills.",
 			robux = 399,
-			biteDelay = 1 / 3,
+			biteDelay = 0.2,
 			instantReel = true,
-			kills = 2,
+			feedSpeed = 4,
+			kills = 4,
 			outfit = "DiosDelVolcan",
 		},
 	},
