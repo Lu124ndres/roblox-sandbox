@@ -44,22 +44,27 @@ function Notices.start(toasts: Toasts.Toasts)
 			local rarity = FishCatalog.rarity(a)
 			if fish then
 				task.delay(1.2, function() -- después del salto del pez
-					toasts.banner(
-						`¡Nuevo en tu colección: {fish.displayName}!`,
-						UIConfig.RarityColors[rarity.id]
-					)
+					local caption = "¡NUEVO EN TU COLECCIÓN!"
 					if type(b) == "number" and b > 0 then
 						Sounds.play("Coins")
-						toasts.show(
-							`+{NumberFormat.short(b)} monedas por descubrirlo`,
-							COLORS.Coins
-						)
+						caption = `¡NUEVO EN TU COLECCIÓN!  +{NumberFormat.short(b)} monedas`
 					end
+					toasts.banner(
+						fish.displayName,
+						UIConfig.RarityColors[rarity.id],
+						"fish",
+						caption
+					)
 				end)
 			end
 		elseif kind == "collection" and type(a) == "number" then
 			Sounds.play("LegendaryCatch")
-			toasts.banner(`¡Colección completa! +{NumberFormat.short(a)} monedas`, COLORS.Coins)
+			toasts.banner(
+				`+{NumberFormat.short(a)} monedas`,
+				COLORS.Coins,
+				"chest",
+				"¡COLECCIÓN COMPLETA!"
+			)
 		elseif kind == "tutorial" and type(a) == "number" then
 			Sounds.play("RareCatch")
 			local done = a >= #RETENTION.tutorial
@@ -75,11 +80,16 @@ function Notices.start(toasts: Toasts.Toasts)
 			local badge = RETENTION.badges[a]
 			if badge then
 				Sounds.play("LegendaryCatch")
-				toasts.banner(`Logro: {badge.name}`, COLORS.Power)
+				toasts.banner(badge.name, COLORS.Power, "crown", "¡LOGRO DESBLOQUEADO!")
 			end
 		elseif kind == "daily" and type(a) == "number" and type(b) == "number" then
 			Sounds.play("Coins")
-			toasts.banner(`Día {a} de racha: +{NumberFormat.short(b)} monedas`, COLORS.Coins)
+			toasts.banner(
+				`+{NumberFormat.short(b)} monedas`,
+				COLORS.Coins,
+				"gift",
+				`DÍA {a} DE RACHA`
+			)
 		elseif kind == "boost" and type(a) == "string" and type(b) == "number" then
 			Sounds.play("StageUp")
 			toasts.banner(`¡{a} subió el entrenamiento de todos a x{b}!`, COLORS.Robux)
@@ -128,7 +138,7 @@ function Notices.start(toasts: Toasts.Toasts)
 			toasts.show(a, COLORS.Power)
 		elseif kind == "playtime" and type(b) == "string" then
 			Sounds.play("LegendaryCatch")
-			toasts.banner(`¡Regalo por jugar! {b}`, COLORS.Coins)
+			toasts.banner(b, COLORS.Coins, "giftPink", "¡REGALO POR JUGAR!")
 		elseif kind == "rare" and type(a) == "string" and type(b) == "string" then
 			local fish = FishCatalog.get(b)
 			local rarity = FishCatalog.rarity(b)

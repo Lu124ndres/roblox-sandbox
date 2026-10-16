@@ -3,29 +3,31 @@
 	Toasts
 
 	Mensajes cortos de feedback ("¡Pescaste una Caballa!", "+12 monedas") y
-	banners grandes para momentos importantes (la barra cambia de estado).
+	tarjetas grandes para momentos importantes (ToastBanner), todos en una sola
+	pila arriba: nunca más de MAX_SHOWN a la vez, así no se amontonan ni bajan
+	hasta el jugador.
 	Aparecen con un rebote, esperan y se desvanecen solos. La pila va justo
 	debajo del panel de hambre (Toasts.placeBelow), así no tapa los atajos
 	para llenar al monstruo, y por encima de las ventanas.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Ui = require(script.Parent.Ui)
+local ToastBanner = require(script.Parent.ToastBanner)
+local ToastFx = require(script.Parent.ToastFx)
 
 export type Toasts = {
 	show: (text: string, color: Color3?) -> (),
-	banner: (text: string, color: Color3?) -> (),
+	banner: (text: string, color: Color3?, icon: string?, caption: string?) -> (),
 }
 
 local COLORS = UIConfig.Colors
-local SIZES = UIConfig.TextSizes
-local TWEENS = UIConfig.Tweens
 local EFFECTS = UIConfig.Effects
 
 local GAP_BELOW = 8 -- aire entre el panel de hambre y el primer aviso
+local MAX_SHOWN = 2 -- más avisos que esto empujan fuera al más viejo (no bajan hasta el jugador)
+local QUICK_SECONDS = 1.6 -- tarjetas en fila: cada una dura menos para no atrasarse
 
 local Toasts = {}
 
@@ -63,32 +65,6 @@ local function held(run: () -> ()): boolean
 	return false
 end
 
-local function popIn(target: GuiObject): UIScale
-	local scale = Instance.new("UIScale")
-	scale.Scale = 0.6
-	scale.Parent = target
-	TweenService:Create(scale, TWEENS.Pop, { Scale = 1 }):Play()
-	return scale
-end
-
-local function fadeOutAndDestroy(target: GuiObject, label: TextLabel, seconds: number)
-	task.delay(seconds, function()
-		local stroke = target:FindFirstChildOfClass("UIStroke")
-		if stroke then
-			TweenService:Create(stroke, TWEENS.Fade, { Transparency = 1 }):Play()
-		end
-		TweenService:Create(target, TWEENS.Fade, { BackgroundTransparency = 1 }):Play()
-		local fade = TweenService:Create(
-			label,
-			TWEENS.Fade,
-			{ TextTransparency = 1, TextStrokeTransparency = 1 }
-		)
-		fade:Play()
-		fade.Completed:Wait()
-		target:Destroy()
-	end)
-end
-
 function Toasts.mount(screen: ScreenGui): Toasts
 	local frame = Instance.new("Frame")
 	frame.Name = "Avisos"
@@ -107,6 +83,47 @@ function Toasts.mount(screen: ScreenGui): Toasts
 
 	local order = 0
 
+	-- Saca enseguida lo más viejo si hay demasiado a la vez (primero los avisos chicos).
+	local function trim()
+		local items: { GuiObject } = {}
+		for _, child in frame:GetChildren() do
+			if child:IsA("GuiObject") then
+				table.insert(items, child)
+			end
+		end
+		table.sort(items, function(x, y)
+			if (x.Name == "Banner") ~= (y.Name == "Banner") then
+				return y.Name == "Banner"
+			end
+			return x.LayoutOrder < y.LayoutOrder
+		end)
+		for index = 1, #items - MAX_SHOWN do
+			items[index]:Destroy()
+		end
+	end
+
+	-- Las tarjetas grandes salen de a una, en fila.
+	type Card = { text: string, color: Color3?, icon: string?, caption: string? }
+	local cards: { Card } = {}
+	local showing = false
+	local function pump()
+		local card = if showing then nil else table.remove(cards, 1)
+		if not card then
+			return
+		end
+		showing = true
+		order += 1
+		local seconds = if #cards > 0 then QUICK_SECONDS else EFFECTS.BannerSeconds
+		local color = card.color or COLORS.Text
+		local holder =
+			ToastBanner.show(frame, order, card.text, color, seconds, card.icon, card.caption)
+		holder.Destroying:Once(function()
+			showing = false
+			task.defer(pump)
+		end)
+		trim()
+	end
+
 	local function show(text: string, color: Color3?)
 		if held(function()
 			show(text, color)
@@ -114,42 +131,18 @@ function Toasts.mount(screen: ScreenGui): Toasts
 			return
 		end
 		order += 1
-		local toast = Ui.panel("Aviso", frame)
-		toast.LayoutOrder = order
-		toast.Size = UDim2.new(1, 0, 0, 40)
-		local limit = Instance.new("UISizeConstraint")
-		limit.MaxSize = Vector2.new(460, 40)
-		limit.Parent = toast
-		local label = Ui.label("Texto", toast, UIConfig.Fonts.Body, SIZES.Body)
-		label.Size = UDim2.new(1, -16, 1, -8)
-		label.Position = UDim2.fromOffset(8, 4)
-		label.Text = text
-		label.TextColor3 = color or COLORS.Text
-		popIn(toast)
-		fadeOutAndDestroy(toast, label, EFFECTS.ToastSeconds)
+		ToastFx.small(frame, order, text, color or COLORS.Text, EFFECTS.ToastSeconds)
+		trim()
 	end
 
-	local function banner(text: string, color: Color3?)
+	local function banner(text: string, color: Color3?, icon: string?, caption: string?)
 		if held(function()
-			banner(text, color)
+			banner(text, color, icon, caption)
 		end) then
 			return
 		end
-		local frame = Instance.new("Frame")
-		frame.Name = "Banner"
-		frame.BackgroundTransparency = 1
-		frame.AnchorPoint = Vector2.new(0.5, 0.5)
-		frame.Position = UDim2.fromScale(0.5, 0.38)
-		frame.Size = UDim2.new(0.9, 0, 0, 72)
-		frame.ZIndex = 40
-		frame.Parent = screen
-		local label = Ui.label("Texto", frame, UIConfig.Fonts.Title, SIZES.Banner)
-		label.Size = UDim2.fromScale(1, 1)
-		label.Text = text
-		label.TextColor3 = color or COLORS.Text
-		label.TextStrokeTransparency = 0
-		popIn(frame)
-		fadeOutAndDestroy(frame, label, EFFECTS.BannerSeconds)
+		table.insert(cards, { text = text, color = color, icon = icon, caption = caption })
+		pump()
 	end
 
 	return { show = show, banner = banner }
