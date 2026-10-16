@@ -83,12 +83,12 @@ local Assets: Assets = {
 		OrcaE4 = "rbxassetid://131514620036527", -- anciana (19,110)
 		-- Pendiente de modelar. Mientras falte, el juego usa un marcador de primitivas.
 		MinotauroE1 = "rbxassetid://0",
-		-- Trajes del personaje (rig_traje.py, piezas rígidas) y dragón (rig_dragon.py, en pose
+		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.
-		TrajeMarinero = "rbxassetid://83830844529752",
-		TrajeDiosDelVolcan = "rbxassetid://95937648548247",
-		TrajeReyDelMar = "rbxassetid://87925923644162",
+		TrajeMarinero = "rbxassetid://116465122880017",
+		TrajeDiosDelVolcan = "rbxassetid://83558599939904",
+		TrajeReyDelMar = "rbxassetid://80385274930421",
 		DragonMarinoE1 = "rbxassetid://93227317182170", -- cría (15,679 triángulos)
 		DragonMarinoE2 = "rbxassetid://127430445743010", -- joven (17,639)
 		DragonMarinoE3 = "rbxassetid://111211189301600", -- adulto (18,619)

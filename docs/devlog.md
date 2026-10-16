@@ -1128,3 +1128,26 @@ referencia.
 **Qué se rompió:** nada. Probado en Studio en PC y con el simulador de iPhone XR.
 
 **Qué sigue:** decidir los cambios de balance propuestos.
+
+---
+
+## 2026-10-16 — Los trajes ya no se cortan al caminar
+
+**Qué se hizo:**
+
+- Los trajes (Marinero, Dios del Volcán, Rey del Mar) estaban hechos de piezas rígidas:
+  al doblar codos y rodillas se abría un hueco y se veía la tapa del corte. Nuevo
+  `tools/blender/suavizar_traje.py`: borra las tapas, une los cortes y reparte los pesos
+  (mitad y mitad en las costuras, transición suave en codos, muñecas, rodillas y tobillos;
+  el tridente sigue rígido en la mano). Reimportados en Studio; los viejos quedaron en
+  `ServerStorage.Respaldos` como `Traje*_rigido`. IDs nuevos en `Assets`.
+- Botones de llenar más chicos con la etiqueta verde de Robux; la ruleta vuelve a tener a
+  todos los monstruos.
+- Paquete de balance y retención (ver `docs/balance.md`): entrega por canasta, comida
+  según el servidor (la Orca se llena en ~6 min), estanques por kills o poder, renacer con
+  x1.25 permanente, misiones jugables solo, premios de colección, ruleta gratis cada 4 h.
+
+**Qué se rompió:** nada. Probado en Studio (correr, ruleta, misiones, panel de hambre).
+Hay que guardar el lugar en Studio para que los trajes nuevos queden en ServerStorage.
+
+**Qué sigue:** modelos 3D del mapa y del equipo.
