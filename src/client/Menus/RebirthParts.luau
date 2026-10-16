@@ -94,7 +94,7 @@ function RebirthParts.listCard(
 	x: number,
 	y: number,
 	entries: { Entry }
-)
+): Frame
 	local card = CardParts.card(parent, title, color, 14)
 	card.Position = UDim2.new(x, 0, 0, y)
 	card.Size = UDim2.new(0.48, 0, 0, 132)
@@ -128,6 +128,7 @@ function RebirthParts.listCard(
 		label.Position = UDim2.fromScale(0, 0.7)
 		label.Size = UDim2.fromScale(1, 0.28)
 	end
+	return card
 end
 
 return RebirthParts

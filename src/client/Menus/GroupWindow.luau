@@ -2,14 +2,11 @@
 --[[
 	GroupWindow
 
-	Regalo por unirse al grupo (botón con el escudo en la barra de Roblox),
-	con el estilo de la TIENDA, como checklist: tarjeta dorada con el premio,
-	barra de pasos cumplidos y una tarjeta por paso con su casilla (azul
-	pendiente, verde con ✓ cumplido):
-		1. Únete al grupo (abre el aviso de Roblox para unirse)
-		2. Juega 15 minutos (cuenta desde que entró a esta partida)
-		3. Reclamar: monedas e impulso de poder, una sola vez
-	El servidor revisa todo de nuevo (remote ClaimGroup). Punto rojo: listo.
+	Regalo por unirse al grupo (escudo en la barra de arriba), como checklist:
+	premio dorado, barra de pasos y una tarjeta por paso (azul pendiente,
+	verde ✓): 1. únete al grupo, 2. juega 15 minutos en esta partida,
+	3. reclama monedas e impulso (una vez; el servidor lo revisa con el
+	remote ClaimGroup). Punto rojo: listo. En táctil, ancha: pasos a la derecha.
 ]]
 
 local GroupService = game:GetService("GroupService")
@@ -26,6 +23,7 @@ local Icons = require(script.Parent.Parent.Interface.Icons)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
+local WindowLayout = require(script.Parent.WindowLayout)
 
 local GROUP = Config.Social.group
 local ATTR = Protocol.PlayerAttributes
@@ -81,9 +79,11 @@ function GroupWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local claimRemote = remotes:WaitForChild(Protocol.Remotes.ClaimGroup) :: RemoteEvent
-	local window = Window.create(screen, "Grupo", "Regalo del grupo", Vector2.new(560, 480))
+	local size = WindowLayout.size(Vector2.new(560, 480), Vector2.new(980, 330))
+	local window = Window.create(screen, "Grupo", "Regalo del grupo", size)
 	local hud = HudButtons.top("Grupo", "group", window.toggle)
-	local content = window.content
+	local content, steps = WindowLayout.columns(window.content, 0.42)
+	local stepsTop = if steps ~= content then 30 else 130
 
 	-- Premio: monedas y minutos de x2 poder, en una tarjeta dorada.
 	local prize = CardParts.card(content, "Premio", CARDS.Yellow, 14)
@@ -100,17 +100,17 @@ function GroupWindow.start(screen: ScreenGui)
 	local progress = CardParts.bar(content, CARDS.Green, 20)
 	progress.track.Position = UDim2.fromOffset(0, 88)
 	progress.track.Size = UDim2.new(1, 0, 0, 30)
-	local step1 = step(content, 130, "group")
+	local step1 = step(steps, stepsTop, "group")
 	local join = Style.button(step1.card, "Unirme", COLORS.Power, "Unirme")
 	join.AnchorPoint = Vector2.new(1, 0.5)
 	join.Position = UDim2.new(1, -10, 0.5, 0)
 	join.Size = UDim2.new(0.26, 0, 0, STEP_HEIGHT - 16)
-	local step2 = step(content, 130 + STEP_HEIGHT + 8, "gift")
-	local step3 = step(content, 130 + (STEP_HEIGHT + 8) * 2, "chest")
+	local step2 = step(steps, stepsTop + STEP_HEIGHT + 8, "gift")
+	local step3 = step(steps, stepsTop + (STEP_HEIGHT + 8) * 2, "chest")
 	local claim = Style.button(content, "Reclamar", PALETTE.Buy, "¡Reclamar!")
 	claim.AnchorPoint = Vector2.new(0.5, 1)
 	claim.Position = UDim2.fromScale(0.5, 1)
-	claim.Size = UDim2.new(0.55, 0, 0, 58)
+	claim.Size = UDim2.new(if steps ~= content then 0.8 else 0.55, 0, 0, 58)
 	local claimText = claim:FindFirstChild("Texto") :: TextLabel
 
 	local member = false

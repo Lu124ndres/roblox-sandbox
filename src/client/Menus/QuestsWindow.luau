@@ -6,7 +6,8 @@
 	con rayos (azul pendiente, verde cumplida; la EXTRA morada), ícono, barra
 	y premio (QuestRow); abajo el cofre por cumplir las tres (la extra de
 	llenar monstruos paga, pero no hace falta para el cofre). El servidor paga y avisa; aquí solo se
-	muestra el atributo Misiones (JSON de server/Retention/Quests).
+	muestra el atributo Misiones (JSON de server/Retention/Quests). En táctil
+	la ventana es ancha y las tarjetas van de dos en dos.
 ]]
 
 local HttpService = game:GetService("HttpService")
@@ -22,6 +23,7 @@ local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local QuestRow = require(script.Parent.QuestRow)
 local Window = require(script.Parent.Window)
+local WindowLayout = require(script.Parent.WindowLayout)
 
 local CARDS = Style.PALETTE.Cards
 
@@ -29,10 +31,21 @@ local QuestsWindow = {}
 
 function QuestsWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local window = Window.create(screen, "Misiones", "Misiones del día", Vector2.new(740, 590))
+	local wide = WindowLayout.wide()
+	local size = WindowLayout.size(Vector2.new(740, 590), Vector2.new(1120, 400))
+	local window = Window.create(screen, "Misiones", "Misiones del día", size)
 	local hud = HudButtons.side("Misiones", "bolt", window.toggle)
-	local list = Instance.new("UIListLayout")
-	list.Padding = UDim.new(0, 14)
+	local list: UIGridStyleLayout
+	if wide then
+		local grid = Instance.new("UIGridLayout")
+		grid.CellPadding = UDim2.fromOffset(14, 14)
+		grid.CellSize = UDim2.new(0.5, -7, 0, QuestRow.ROW_HEIGHT)
+		list = grid
+	else
+		local column = Instance.new("UIListLayout")
+		column.Padding = UDim.new(0, 14)
+		list = column
+	end
 	list.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	list.SortOrder = Enum.SortOrder.LayoutOrder
 	list.Parent = window.content

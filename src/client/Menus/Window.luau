@@ -16,14 +16,11 @@ local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Device = require(script.Parent.Parent.Interface.Device)
 local Style = require(script.Parent.Parent.Interface.Style)
+local WindowLayout = require(script.Parent.WindowLayout)
 
 local PALETTE = Style.PALETTE
 local TITLE_HEIGHT = 34 -- cuánto sobresale el título por encima del panel
 local CLOSE_SIZE = 56
-local REFERENCE_HEIGHT = 720 -- alto de pantalla (px) en que la ventana se ve a escala 1
-local TOUCH_REFERENCE_HEIGHT = 480 -- en táctil, escala 1 ya en pantallas más bajas
-local SCREEN_SHARE = Vector2.new(0.72, 0.8) -- parte de la pantalla que ocupa (PC): deja ver el juego
-local TOUCH_SCREEN_SHARE = Vector2.new(0.96, 0.94)
 
 export type Window = {
 	frame: Frame,
@@ -47,24 +44,8 @@ function Window.onAnyChange(listener: (window: Window, opened: boolean) -> ())
 	table.insert(changeListeners, listener)
 end
 
-function Window.fit(): number
-	local height = Device.viewport().Y
-	if Device.touch() then
-		return math.clamp(height / TOUCH_REFERENCE_HEIGHT, 0.8, 2)
-	end
-	return math.clamp(height / REFERENCE_HEIGHT, 0.6, 1.6)
-end
-
--- Tamaño (en escala de la pantalla) para que, ya escalada, ocupe SCREEN_SHARE.
-function Window.share(): Vector2
-	return if Device.touch() then TOUCH_SCREEN_SHARE else SCREEN_SHARE
-end
-
-local function resize(frame: Frame, fit: number)
-	local share = Window.share()
-	frame.Size = UDim2.fromScale(share.X / fit, share.Y / fit)
-	frame.Position = UDim2.fromScale(0.5, if Device.touch() then 0.5 else 0.53)
-end
+Window.fit = WindowLayout.fit
+Window.share = WindowLayout.share
 
 -- `panelColor`: color del fondo (por defecto el oscuro de la tienda).
 function Window.create(
@@ -137,8 +118,7 @@ function Window.create(
 				callback()
 			end
 			Sounds.play("Click")
-			local fit = Window.fit()
-			resize(frame, fit)
+			local fit = WindowLayout.resize(frame, screen, limit.MaxSize)
 			frame.Visible = true
 			scale.Scale = fit * 0.85
 			pop = TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = fit })
@@ -189,9 +169,7 @@ function Window.create(
 	Device.onResize(function()
 		if frame.Visible then
 			pop:Cancel()
-			local fit = Window.fit()
-			resize(frame, fit)
-			scale.Scale = fit
+			scale.Scale = WindowLayout.resize(frame, screen, limit.MaxSize)
 		end
 	end)
 	return window

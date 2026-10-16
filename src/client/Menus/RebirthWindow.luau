@@ -10,7 +10,8 @@
 	reinicia (roja) y qué te quedas (verde) con íconos; y el botón grande,
 	que late cuando ya alcanza (piezas en RebirthParts). El botón del HUD
 	lleva un punto rojo cuando ya alcanza. Lo decide el
-	servidor (remote Rebirth, Retention/Rebirth).
+	servidor (remote Rebirth, Retention/Rebirth). En táctil es ancha: a la
+	izquierda lo de ahora/al renacer y el botón, a la derecha qué pasa.
 ]]
 
 local Players = game:GetService("Players")
@@ -26,6 +27,7 @@ local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local RebirthParts = require(script.Parent.RebirthParts)
 local Window = require(script.Parent.Window)
+local WindowLayout = require(script.Parent.WindowLayout)
 
 local ATTR = Protocol.PlayerAttributes
 local CARDS = Style.PALETTE.Cards
@@ -42,9 +44,10 @@ function RebirthWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local remote = remotes:WaitForChild(Protocol.Remotes.Rebirth) :: RemoteEvent
-	local window = Window.create(screen, "Renacer", "Renacer", Vector2.new(760, 540))
+	local size = WindowLayout.size(Vector2.new(760, 540), Vector2.new(1080, 400))
+	local window = Window.create(screen, "Renacer", "Renacer", size)
 	local hud = HudButtons.side("Renacer", "arrow", window.toggle)
-	local content = window.content
+	local content, side = WindowLayout.columns(window.content, 0.56)
 
 	local nowValue, _, nowNote = RebirthParts.speedCard(content, "AHORA", CARDS.Blue, 0.04)
 	local afterValue, gain, afterNote =
@@ -61,23 +64,27 @@ function RebirthWindow.start(screen: ScreenGui)
 	-- Lo que pide: monedas y poder, una barra con ícono para cada uno.
 	local coinsNeed = RebirthParts.requirement(content, "coin", UIConfig.Colors.Coins, 0.02, 186)
 	local powerNeed = RebirthParts.requirement(content, "crystal", UIConfig.Colors.Power, 0.52, 186)
-	RebirthParts.listCard(content, "SE REINICIAN", CARDS.Red, 0.01, 244, {
+	local resets = RebirthParts.listCard(side, "SE REINICIAN", CARDS.Red, 0.01, 244, {
 		{ icon = "coin", label = "Monedas" },
 		{ icon = "crystal", label = "Poder" },
 		{ icon = "rod", label = "Mejoras" },
 		{ icon = "basketFish", label = "Canasta" },
 	})
-	RebirthParts.listCard(content, "TE QUEDAS", CARDS.Green, 0.51, 244, {
+	local keeps = RebirthParts.listCard(side, "TE QUEDAS", CARDS.Green, 0.51, 244, {
 		{ icon = "crown", label = "Títulos" },
 		{ icon = "fed", label = "Kills" },
 		{ icon = "pond", label = "Estanques" },
 		{ icon = "fish", label = "Colección" },
 		{ icon = "ticket", label = "Pases" },
 	})
+	if side ~= content then -- ancha: una encima de la otra
+		resets.Position, keeps.Position = UDim2.fromOffset(0, 0), UDim2.fromOffset(0, 168)
+		resets.Size, keeps.Size = UDim2.new(1, 0, 0, 152), UDim2.new(1, 0, 0, 152)
+	end
 	local button = Style.button(content, "Renacer", Style.PALETTE.Buy, "¡RENACER!")
 	button.AnchorPoint = Vector2.new(0.5, 1)
 	button.Position = UDim2.new(0.5, 0, 1, -4)
-	button.Size = UDim2.new(0.52, 0, 0, 70)
+	button.Size = UDim2.new(if side ~= content then 0.7 else 0.52, 0, 0, 70)
 	local buttonText = button:FindFirstChild("Texto") :: TextLabel
 	local beat = Instance.new("UIScale")
 	beat.Parent = button
