@@ -72,9 +72,14 @@ local Assets: Assets = {
 		OrcaE4 = "rbxassetid://131514620036527", -- anciana (19,110)
 		-- Pendiente de modelar. Mientras falte, el juego usa un marcador de primitivas.
 		MinotauroE1 = "rbxassetid://0",
+		-- Trajes del personaje con huesos (tools/blender/rig_traje.py, Shared.Trajes). Fuente:
+		-- assets/blender/Traje*.fbx; los Model están en ServerStorage.Traje<clave> (.rbxl).
+		TrajeMarinero = "rbxassetid://140399842062180", -- 5,880 triángulos
+		TrajeDiosDelVolcan = "rbxassetid://88041119912433", -- 11,760
+		TrajeReyDelMar = "rbxassetid://121886162860571", -- 11,759
 	},
 
-	-- SurfaceAppearance de cada etapa de la orca: color, normales, rugosidad, metal.
+	-- SurfaceAppearance de cada etapa de la orca y de los trajes: color, normales, rugosidad, metal.
 	-- Fuente: assets/textures/OrcaE*_*.png.
 	Textures = {
 		OrcaE1 = {
@@ -100,6 +105,24 @@ local Assets: Assets = {
 			"rbxassetid://116198259641181",
 			"rbxassetid://85563111169953",
 			"rbxassetid://87177939844055",
+		},
+		TrajeMarinero = {
+			"rbxassetid://131464968832070",
+			"rbxassetid://129553047119039",
+			"rbxassetid://71558812691456",
+			"rbxassetid://72022835279811",
+		},
+		TrajeDiosDelVolcan = {
+			"rbxassetid://89365455568650",
+			"rbxassetid://104543477403666",
+			"rbxassetid://125877581449053",
+			"rbxassetid://76444688203661",
+		},
+		TrajeReyDelMar = {
+			"rbxassetid://77999236305334",
+			"rbxassetid://88672425053098",
+			"rbxassetid://124672998971355",
+			"rbxassetid://80130162568865",
 		},
 	},
 

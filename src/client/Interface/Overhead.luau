@@ -22,6 +22,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Titles = require(ReplicatedStorage.Shared.Titles)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local TextCase = require(ReplicatedStorage.Shared.TextCase)
+local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local Icons = require(script.Parent.Icons)
 local OverheadLook = require(script.Parent.OverheadLook)
@@ -41,7 +42,6 @@ local function build(player: Player, head: BasePart): () -> ()
 	gui.Name = TAG_NAME
 	-- Medido en studs: se ve del tamaño del mundo, como un cartel sobre la cabeza.
 	gui.Size = UDim2.fromScale(7, 2.7)
-	gui.StudsOffset = Vector3.new(0, 2.9, 0)
 	gui.LightInfluence = 0
 	gui.ResetOnSpawn = false
 
@@ -84,6 +84,13 @@ local function build(player: Player, head: BasePart): () -> ()
 	gui.Adornee = head
 	OverheadLook.applyQuality(gui)
 	gui.Parent = head
+	local character = head.Parent :: Instance -- los trajes altos (Shared.Trajes) suben el cartel
+	local function lift()
+		local extra = character:GetAttribute(Trajes.EXTRA_HEIGHT)
+		gui.StudsOffset = Vector3.new(0, 2.9 + (tonumber(extra) or 0), 0)
+	end
+	character:GetAttributeChangedSignal(Trajes.EXTRA_HEIGHT):Connect(lift)
+	lift()
 	guis[player] = gui
 
 	local shownIndex, shownKills = 0, -1

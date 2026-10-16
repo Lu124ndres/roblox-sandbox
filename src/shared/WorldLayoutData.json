@@ -28,6 +28,8 @@
 	"pierLength": 56,
 	"spawnAngle": 270,
 	"spawnRadius": 113,
+	"showcaseRadius": 117,
+	"showcaseSide": 24,
 	"shopAngle": 0,
 	"shopRadius": 118,
 	"campAngle": 125,

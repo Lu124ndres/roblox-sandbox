@@ -1,0 +1,107 @@
+--!strict
+--[[
+	Trajes/Vitrinas
+
+	Las vitrinas de los trajes de pase (server/Social/Showcase): avisa para
+	animar el traje en exhibición, lo hace girar despacio para que se vea
+	entero, cambia el texto de la E según el jugador (Comprar, Ponerte o
+	Quitarte) y, si no tiene el pase, abre la compra de Roblox.
+]]
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+
+local Perks = require(ReplicatedStorage.Shared.Perks)
+local Trajes = require(ReplicatedStorage.Shared.Trajes)
+local Purchases = require(script.Parent.Parent.Menus.Purchases)
+
+local SWAY = 0.5 -- radianes a cada lado
+local SWAY_SPEED = 0.45
+local NEAR = 150
+local TEXT_SECONDS = 0.5
+
+-- Gira sobre sus pies: el marco del traje (Trajes.measure), no el pivote del Model.
+type Spin = { model: Model, frame: CFrame, offset: CFrame }
+
+local Vitrinas = {}
+
+local spins: { Spin } = {}
+
+local function wearing(outfit: string): boolean
+	local character = Players.LocalPlayer.Character
+	local current = character and character:FindFirstChild(Trajes.FOLDER)
+	return current ~= nil and current:GetAttribute("Outfit") == outfit
+end
+
+local function setup(vitrina: Instance, onDisplay: (Instance, string) -> ())
+	local pass, outfit = vitrina:GetAttribute("Pase"), vitrina:GetAttribute("Outfit")
+	if type(pass) ~= "string" or type(outfit) ~= "string" then
+		return
+	end
+	local shown = vitrina:WaitForChild("Muestra", 10)
+	if shown and shown:IsA("Model") then
+		local mesh = Trajes.mesh(shown)
+		if mesh then
+			local frame = Trajes.measure(mesh)
+			table.insert(
+				spins,
+				{ model = shown, frame = frame, offset = frame:ToObjectSpace(shown:GetPivot()) }
+			)
+		end
+		onDisplay(shown, outfit)
+	end
+	local base = vitrina:WaitForChild("Pedestal", 10)
+	local prompt = base and base:WaitForChild("Comprar", 10)
+	if not prompt or not prompt:IsA("ProximityPrompt") then
+		return
+	end
+	local player = Players.LocalPlayer
+	prompt.Triggered:Connect(function()
+		if not Perks.hasPass(player, pass) then
+			Purchases.promptPass(pass)
+		end
+	end)
+	task.spawn(function()
+		while prompt.Parent do
+			prompt.ActionText = if not Perks.hasPass(player, pass)
+				then "Comprar"
+				elseif wearing(outfit) then "Quitarte"
+				else "Ponerte"
+			task.wait(TEXT_SECONDS)
+		end
+	end)
+end
+
+function Vitrinas.start(onDisplay: (holder: Instance, key: string) -> ())
+	task.spawn(function()
+		local folder = Workspace:WaitForChild("Vitrinas", 60)
+		if not folder then
+			return
+		end
+		folder.ChildAdded:Connect(function(child: Instance)
+			setup(child, onDisplay)
+		end)
+		for _, child in folder:GetChildren() do
+			task.spawn(setup, child, onDisplay)
+		end
+	end)
+	RunService.Heartbeat:Connect(function()
+		local camera = Workspace.CurrentCamera
+		if not camera then
+			return
+		end
+		local angle = SWAY * math.sin(os.clock() * SWAY_SPEED)
+		for _, spin in spins do
+			if
+				(spin.frame.Position - camera.CFrame.Position).Magnitude < NEAR
+				and spin.model.Parent
+			then
+				spin.model:PivotTo(spin.frame * CFrame.Angles(0, angle, 0) * spin.offset)
+			end
+		end
+	end)
+end
+
+return table.freeze(Vitrinas)

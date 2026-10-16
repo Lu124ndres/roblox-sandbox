@@ -18,6 +18,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local RodBuilder = require(script.Parent.RodBuilder)
@@ -77,13 +78,28 @@ function Rod.attach(character: Model, tier: number): Rod?
 	hold.C1 = gripOffset:Inverse()
 	hold.Parent = grip
 	local dropR6 = if hand.Name == "Right Arm" then R6_HAND_DROP else 0
+	-- Con traje de malla la caña sale de la mano del traje (el cuerpo está escondido).
+	local costume: Instance? = nil
+	local costumeHand: Bone? = nil
+	local function handPoint(): Vector3
+		local current = character:FindFirstChild(Trajes.FOLDER)
+		if current ~= costume then
+			costume = current
+			local mesh = current and Trajes.mesh(current)
+			costumeHand = if mesh then Trajes.bones(mesh).ManoDer else nil
+		end
+		if costumeHand then
+			return costumeHand.TransformedWorldCFrame.Position
+		end
+		return (hand :: BasePart).Position - (hand :: BasePart).CFrame.UpVector * dropR6
+	end
 
 	local function follow(armDegrees: number)
 		if not hand.Parent then
 			return
 		end
 		local elevation = math.rad(armDegrees + ARM_TO_ROD_DEGREES)
-		local origin = root.CFrame:PointToObjectSpace(hand.Position - hand.CFrame.UpVector * dropR6)
+		local origin = root.CFrame:PointToObjectSpace(handPoint())
 		-- En el espacio del personaje: adelante es -Z y arriba es +Y.
 		local direction = Vector3.new(0, math.sin(elevation), -math.cos(elevation))
 		hold.C0 = CFrame.lookAt(origin, origin + direction)

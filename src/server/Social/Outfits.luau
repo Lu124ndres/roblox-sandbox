@@ -3,14 +3,16 @@
 	Outfits
 
 	Todos los jugadores se ven como marineros (no con su avatar): el juego
-	no carga la apariencia (StarterPlayer.LoadCharacterAppearance = false) y
-	aquí se viste a cada personaje con piezas soldadas que todos ven:
+	no carga la apariencia (StarterPlayer.LoadCharacterAppearance = false).
+	Si el traje de malla está en ServerStorage (Shared.Trajes) se usa ese
+	(MeshOutfit); si no, se viste con piezas soldadas que todos ven:
 		Marinero       el uniforme de SailorParts, con el tono de piel del
 		               avatar del jugador
 		ReyDelMar      almirante de los mares (PassLooks + corona y capa de
 		DiosDelVolcan  OutfitParts), un poco más grandes para que resalten
 	El traje de pase sale de Config.Monetization.passes[...].outfit; si tiene
-	los dos, se ve el más caro. Se viste al aparecer y al comprar un pase.
+	los dos, se ve el más caro, salvo que elija otro en una vitrina (atributo
+	TrajeElegido). Se viste al aparecer, al comprar un pase y al elegir.
 ]]
 
 local Players = game:GetService("Players")
@@ -19,6 +21,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local Trajes = require(ReplicatedStorage.Shared.Trajes)
+local MeshOutfit = require(script.Parent.MeshOutfit)
 local OutfitKit = require(script.Parent.OutfitKit)
 local OutfitParts = require(script.Parent.OutfitParts)
 local PassLooks = require(script.Parent.PassLooks)
@@ -69,15 +73,20 @@ local function skinOf(player: Player): Color3
 	return skin
 end
 
--- El traje del pase más caro que tiene, o el de marinero.
+-- El que eligió en una vitrina (si lo tiene), o el del pase más caro, o marinero.
 local function outfitFor(player: Player): string
+	local chosen = player:GetAttribute(Trajes.CHOSEN)
 	local best, price = SAILOR, -1
 	for key, pass in PASSES do
-		if pass.outfit and pass.robux > price and Perks.hasPass(player, key) then
-			best, price = pass.outfit, pass.robux
+		if pass.outfit and Perks.hasPass(player, key) then
+			if pass.outfit == chosen then
+				return pass.outfit
+			elseif pass.robux > price then
+				best, price = pass.outfit, pass.robux
+			end
 		end
 	end
-	return best
+	return if chosen == SAILOR then SAILOR else best
 end
 
 -- Quita lo que traiga del avatar (por si la apariencia llegó a cargar).
@@ -127,6 +136,12 @@ local function dress(player: Player)
 	if math.abs(character:GetScale() - 1) > 0.001 then
 		pcall(character.ScaleTo, character, 1)
 	end
+	if MeshOutfit.available(outfit) then
+		strip(character)
+		if MeshOutfit.build(character, outfit) then
+			return
+		end
+	end
 	local rig = OutfitKit.rig(character)
 	if not rig then
 		return
@@ -160,7 +175,8 @@ local function watch(player: Player)
 	player.AttributeChanged:Connect(function(attribute: string)
 		if
 			string.sub(attribute, 1, #Protocol.PlayerAttributes.PassPrefix)
-			== Protocol.PlayerAttributes.PassPrefix
+				== Protocol.PlayerAttributes.PassPrefix
+			or attribute == Trajes.CHOSEN
 		then
 			dress(player)
 		end

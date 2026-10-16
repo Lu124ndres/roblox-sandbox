@@ -78,3 +78,18 @@ confirmar en la vista previa de "Importar 3D" que esté parado y mirando al fren
    pierden Boca, Espiraculo y Dorsal). Mover el Model a `ServerStorage.OrcaE<n>` y anotar
    los IDs en `Assets`.
 5. Cómo se mueve cada etapa: `src/shared/Orca/Etapas/` (un script por etapa).
+
+## Trajes del personaje con huesos (Marinero, Dios del Volcán, Rey del Mar)
+
+1. `procesar_meshy.py` igual que la orca (Marinero 6,000 triángulos; los de pase 12,000).
+2. Medir hombros, codos, muñecas, cadera, rodillas, tobillos, cuello y cintura en renders de
+   frente con cuadrícula y anotarlos en `tools/blender/trajes.json` (más el objeto en la mano,
+   como el tridente: segmento `prop`, y el faldón: `skirt`).
+3. `python3 -I tools/blender/rig_traje.py -- <modelo.blend> <salida.fbx> tools/blender/trajes.json <Nombre>`:
+   huesos Raiz, Cadera, Pecho, Cabeza, Brazo/Codo/Mano y Pierna/Rodilla/Pie (Izq/Der).
+   Probar posando los huesos en Blender antes de exportar.
+4. Studio → Importar 3D → "Mantener huesos de influencia cero" (la Raiz no tiene pesos),
+   tipo de rig "Personalizar". Mover el Model a `ServerStorage.Traje<clave>` (Marinero,
+   DiosDelVolcan, ReyDelMar) y anotar los IDs en `Assets`. El tamaño no importa: el juego lo
+   escala para que la cadera coincida con la del cuerpo.
+5. Cómo se mueve y brilla cada uno: `src/shared/Trajes/Estilos/<clave>.luau`.

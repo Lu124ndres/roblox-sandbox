@@ -904,3 +904,32 @@ de saltos o profundidad si hace falta al verla con jugadores.
 entrenar en el fondo, regreso a la orilla y llenado, 0 errores.
 
 **Qué sigue:** modelos de Meshy del Dios del Volcán y el Rey del Mar cuando estén.
+
+---
+
+## 2026-10-15 — Trajes de malla: Marinero para todos, Dios del Volcán y Rey del Mar
+
+**Qué se hizo:**
+
+- Los tres modelos de Meshy, reducidos y con esqueleto humanoide (`tools/blender/rig_traje.py`,
+  medidas en `trajes.json`; el tridente va entero a la mano derecha). En ServerStorage como
+  `TrajeMarinero`, `TrajeDiosDelVolcan` y `TrajeReyDelMar`; IDs en `Assets`.
+- `Social/MeshOutfit`: el traje se suelda al HumanoidRootPart, escalado para que su cadera
+  coincida con la del cuerpo, y el cuerpo queda invisible. Todos son Marinero; con el pase
+  se ve el traje del pase. Si falta el modelo, `Outfits` usa los trajes de piezas de antes.
+- Animación para todo el servidor (`client/Trajes`): cada cliente mueve los huesos de todos
+  copiando el giro de cada parte del cuerpo escondido (animaciones de Roblox, pose de la caña,
+  emotes). Encima, un script por traje (`Shared.Trajes.Estilos`): Marinero alegre y saluda;
+  Dios pesado, inclinado, con humo y chispas del volcán, lava en las manos y brillo en el pecho,
+  saca músculo y ruge; Rey erguido, tridente que brilla y gotea, burbujas, alza el tridente.
+- Vitrinas (`Social/Showcase` + `client/Trajes/Vitrinas`): a los lados de la aparición, pedestal
+  de mármol y oro con el traje en grande animado, cartel con nombre, precio y ventajas. E abre
+  la compra; si ya lo tiene, E dice Ponerte o Quitarte (atributo `TrajeElegido`).
+- La caña sale de la mano del traje; el cartel de la cabeza sube con los trajes altos.
+
+**Qué se rompió:** en el cliente la vitrina giraba sobre el pivote del Model (acostado por el
+importador): ahora gira sobre el marco medido con los huesos. Probado en Studio: los tres
+trajes, caminar, vitrinas, Ponerte/Quitarte/Comprar; 0 errores.
+
+**Qué sigue:** crear los pases en el Creator Dashboard y poner sus IDs en `Assets.GamePasses`
+(con ID 0 la vitrina avisa que estará disponible al publicar).
