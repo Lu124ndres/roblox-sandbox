@@ -10,6 +10,7 @@
 	        ticket, friends, group, fang.
 	Hoja 2: rod, boots, crown, pond, bolt, orca, minotaur, dragon, fox,
 	        giftPink, arrow, meat, sunburst (rayos blancos para teñir), glow.
+	Hoja 3: fed (monstruo panzón con un pez: monstruos llenados).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -51,12 +52,13 @@ local CELLS: { [string]: Cell } = {
 	meat = { sheet = 2, index = 11, fallback = "fish:Atun" },
 	sunburst = { sheet = 2, index = 12, fallback = "" },
 	glow = { sheet = 2, index = 13, fallback = "" },
+	fed = { sheet = 3, index = 0, fallback = "skull" },
 }
 
 local Icons = {}
 
 local function sheetId(number: number): string?
-	local id = if number == 1 then Assets.UI.IconSheet else Assets.UI.IconSheet2
+	local id = ({ Assets.UI.IconSheet, Assets.UI.IconSheet2, Assets.UI.IconSheet3 })[number]
 	return if id and id ~= Assets.MISSING then id else nil
 end
 

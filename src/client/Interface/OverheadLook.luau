@@ -84,12 +84,10 @@ function OverheadLook.applyQuality(gui: BillboardGui)
 		then Performance.OverheadLowFxDistance
 		else Performance.OverheadDistance
 	for _, descendant in gui:GetDescendants() do
-		if descendant:IsA("UIStroke") then
-			descendant.Enabled = not low
-			local label = descendant.Parent
-			if label and label:IsA("TextLabel") then
-				label.TextStrokeTransparency = if low then 0.4 else 1
-			end
+		local label = descendant.Parent
+		if descendant:IsA("UIStroke") and label and label:IsA("TextLabel") then
+			descendant.Enabled = not low -- el marco de las insignias se queda
+			label.TextStrokeTransparency = if low then 0.4 else 1
 		end
 	end
 end
@@ -112,23 +110,6 @@ end
 function OverheadLook.animated(index: number): boolean
 	local colors = TITLE_COLORS[index] or TITLE_COLORS[1]
 	return #colors > 2
-end
-
--- Ícono de Roblox Premium (el glifo U+E001 que dibuja Roblox), al lado de las kills.
-function OverheadLook.premiumBadge(parent: Instance, player: Player): TextLabel
-	local badge = Instance.new("TextLabel")
-	badge.Name = "Premium"
-	badge.BackgroundTransparency = 1
-	badge.Size = UDim2.fromScale(0.15, 0.85)
-	badge.LayoutOrder = 3
-	badge.FontFace = Font.fromEnum(Enum.Font.BuilderSansBold)
-	badge.Text = utf8.char(0xE001)
-	badge.TextScaled = true
-	badge.TextColor3 = Color3.new(1, 1, 1)
-	badge.TextStrokeTransparency = 0.4
-	badge.Visible = player.MembershipType == Enum.MembershipType.Premium
-	badge.Parent = parent
-	return badge
 end
 
 -- Color principal de un título (para el aviso de título nuevo).

@@ -999,3 +999,24 @@ peces y reiniciar al otro jugador, traerlo, monstruo en etapa 3, ir al volcán.
 
 **Qué sigue:** nada pendiente del panel.
 
+---
+
+## 2026-10-16 — Cartel de la cabeza con insignias y vitrinas en la zona de entrenamiento
+
+**Qué se hizo:**
+
+- Cartel sobre la cabeza (`Interface/OverheadBadges`): monstruos llenados, VIP y Premium
+  ahora van en pastillas redondas con fondo en degradado, marco y brillo. El colmillo se
+  cambió por un ícono nuevo (monstruo panzón con un pez, hoja 3 de íconos); VIP lleva la
+  corona sobre oro y Premium su ícono sobre fondo oscuro. Con efectos reducidos el marco se
+  queda (solo se quitan los contornos del texto).
+- Zona de entrenamiento más grande: plaza de 96 a 108 de radio y anillo de estanques de 70 a
+  80. Se corrieron hacia afuera la aparición (126), la tienda (128), el campamento (130), las
+  colinas cercanas y las palmeras/arbustos. Isla regenerada con `tools/generar_isla.py`.
+- Las vitrinas del Rey del Mar y el Dios del Volcán pasaron a la zona de entrenamiento, a
+  los lados del camino que baja de la aparición, más grandes (traje de 12 de alto).
+
+**Qué se rompió:** nada. Probado en Studio: cartel con VIP y Premium, vista de la zona.
+
+**Qué sigue:** la tienda con la foto de referencia.
+

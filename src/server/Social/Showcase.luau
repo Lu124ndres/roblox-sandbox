@@ -2,7 +2,8 @@
 --[[
 	Showcase
 
-	Vitrinas de los trajes de pase en el mapa, a los lados de la aparición:
+	Vitrinas de los trajes de pase en la zona de entrenamiento, a los lados
+	del camino que baja de la aparición, entre los estanques y el sagrado:
 	un pedestal de mármol y oro con el traje de malla en grande (lo animan
 	los clientes: client/Trajes/Vitrinas), un cartel con nombre, precio y
 	ventajas, y E para comprarlo. La compra la abre el cliente (Purchases);
@@ -23,10 +24,10 @@ local RateLimit = require(script.Parent.Parent.RateLimit)
 
 local L = WorldLayout
 local PASSES = Config.Monetization.passes
-local DISPLAY_HEIGHT = 9 -- alto del traje en la vitrina (studs)
-local BASE_RADIUS = 5.5
+local DISPLAY_HEIGHT = 12 -- alto del traje en la vitrina (studs)
+local BASE_RADIUS = 6.5
 local BASE_HEIGHT = 2.4
-local PROMPT_DISTANCE = 14
+local PROMPT_DISTANCE = 16
 local MARBLE = Color3.fromRGB(236, 232, 224)
 local GOLD = Color3.fromRGB(255, 200, 70)
 
@@ -132,7 +133,6 @@ local function build(folder: Folder, passKey: string, side: number)
 	local angle = math.rad(L.spawnAngle)
 	local out = Vector3.new(math.cos(angle), 0, math.sin(angle))
 	local tangent = Vector3.new(-out.Z, 0, out.X)
-	local spawn = out * L.spawnRadius
 	local ground = out * L.showcaseRadius
 		+ tangent * L.showcaseSide * side
 		+ Vector3.new(0, L.plateauHeight, 0)
@@ -168,8 +168,8 @@ local function build(folder: Folder, passKey: string, side: number)
 	)
 	step.Parent = model
 	local top = ground + Vector3.new(0, BASE_HEIGHT + 0.35, 0)
-	-- Mira a un punto entre la aparición y el arco: se ve de tres cuartos al aparecer.
-	local facing = spawn - out * 14
+	-- Mira hacia la entrada de la plaza: quien llega por el camino la ve de frente.
+	local facing = out * L.plazaRadius
 	local look = Vector3.new(facing.X - ground.X, 0, facing.Z - ground.Z).Unit
 	local shown = display(outfit, top, look)
 	if shown then

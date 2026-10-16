@@ -93,6 +93,15 @@ un brillo redondo; se dibujaron con Python (PIL), no con IA.
 | 9 | giftPink | regalo.png | Botón rosa de regalar |
 | 10 | arrow | flecha.png | (libre: subir de nivel) |
 | 11 | meat | carne.png | Llenar al monstruo |
+
+### Hoja 3
+
+`assets/ui/iconos/iconos_hoja3.png` (4x4 de 256 px), `Assets.UI.IconSheet3 =
+99850577116916`. Canva (IA) con fondo quitado en Canva.
+
+| Lugar | Tipo en `Icons` | Archivo | Uso |
+|---|---|---|---|
+| 0 | fed | monstruo_lleno.png | Monstruos llenados en el cartel de la cabeza (OverheadBadges) |
 | 12 | sunburst | (dibujado) | Rayos de fondo |
 | 13 | glow | (dibujado) | Brillo |
 

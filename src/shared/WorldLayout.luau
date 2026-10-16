@@ -40,8 +40,8 @@ export type WorldLayout = {
 	pierLength: number,
 	spawnAngle: number,
 	spawnRadius: number,
-	showcaseRadius: number, -- vitrinas de los trajes de pase, a los lados de la aparición
-	showcaseSide: number, -- distancia al costado del eje de la aparición
+	showcaseRadius: number, -- vitrinas de los trajes de pase: en la zona de entrenamiento,
+	showcaseSide: number, -- a esta distancia del centro y a este costado del camino de la aparición
 	shopAngle: number,
 	shopRadius: number,
 	campAngle: number,

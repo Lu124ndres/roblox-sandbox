@@ -3,7 +3,7 @@
 	Overhead
 
 	Lo que se ve sobre la cabeza de cada jugador (para todos):
-		colmillo con sus kills (monstruos llenados), "VIP" si lo tiene y el ícono de Premium
+		insignias con marco y fondo (OverheadBadges): monstruos llenados, VIP y Premium
 		su título (atributo Titulo, por su poder máximo), con un degradado por
 		rango; desde Dios del Mar el brillo recorre el texto
 		su nombre
@@ -16,15 +16,13 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Titles = require(ReplicatedStorage.Shared.Titles)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
-local Icons = require(script.Parent.Icons)
+local OverheadBadges = require(script.Parent.OverheadBadges)
 local OverheadLook = require(script.Parent.OverheadLook)
 local Style = require(script.Parent.Style)
 
@@ -48,27 +46,9 @@ local function build(player: Player, head: BasePart): () -> ()
 	local top = Instance.new("Frame")
 	top.BackgroundTransparency = 1
 	top.Size = UDim2.fromScale(1, 0.38)
+	top.Name = "Insignias"
 	top.Parent = gui
-	local list = Instance.new("UIListLayout")
-	list.FillDirection = Enum.FillDirection.Horizontal
-	list.HorizontalAlignment = Enum.HorizontalAlignment.Center
-	list.VerticalAlignment = Enum.VerticalAlignment.Center
-	list.Padding = UDim.new(0, 6)
-	list.SortOrder = Enum.SortOrder.LayoutOrder
-	list.Parent = top
-	local fang = Icons.view(top, "fang")
-	fang.Size = UDim2.fromScale(0.16, 1)
-	local square = Instance.new("UIAspectRatioConstraint")
-	square.Parent = fang
-	local kills = Style.text(top, "Kills", 80, Color3.fromRGB(255, 236, 200), 2.5)
-	kills.TextXAlignment = Enum.TextXAlignment.Left
-	kills.Size = UDim2.fromScale(0.2, 0.75)
-	kills.LayoutOrder = 1
-	local vip = Style.text(top, "VIP", 80, UIConfig.Colors.Coins, 2.5)
-	vip.Text = "VIP"
-	vip.Size = UDim2.fromScale(0.18, 0.7)
-	vip.LayoutOrder = 2
-	OverheadLook.premiumBadge(top, player)
+	local badges = OverheadBadges.build(top, player)
 
 	local title = Style.text(gui, "Titulo", 90, nil, 3)
 	title.Position = UDim2.fromScale(0, 0.4)
@@ -112,9 +92,9 @@ local function build(player: Player, head: BasePart): () -> ()
 		local killCount = if type(kills_) == "number" then kills_ else 0
 		if killCount ~= shownKills then
 			shownKills = killCount
-			kills.Text = NumberFormat.short(killCount)
+			badges.setKills(killCount)
 		end
-		vip.Visible = Perks.hasPass(player, "VIP")
+		badges.setVip(Perks.hasPass(player, "VIP"))
 	end
 end
 

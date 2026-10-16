@@ -61,6 +61,8 @@ local Assets: Assets = {
 		-- estanque / rayo, orca, minotauro, dragón / zorro, regalo rosa, flecha,
 		-- carne / rayos de fondo (sunburst), brillo redondo.
 		IconSheet2 = "rbxassetid://97933580602007",
+		-- Hoja 3 (assets/ui/iconos/iconos_hoja3.png): monstruo panzón (monstruos llenados).
+		IconSheet3 = "rbxassetid://99850577116916",
 	},
 
 	Meshes = {

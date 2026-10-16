@@ -10,9 +10,9 @@
 	"shelfRadius": 264,
 	"shoreRadius": 167,
 	"deckHeight": 6.6,
-	"plazaRadius": 96,
+	"plazaRadius": 108,
 	"trainingPondCount": 10,
-	"trainingPondRingRadius": 70,
+	"trainingPondRingRadius": 80,
 	"trainingPondRadius": 12.5,
 	"trainingPondFloor": -1.5,
 	"trainingPondWaterTop": 6,
@@ -27,13 +27,13 @@
 	"pierStartRadius": 158,
 	"pierLength": 56,
 	"spawnAngle": 270,
-	"spawnRadius": 113,
-	"showcaseRadius": 117,
-	"showcaseSide": 24,
+	"spawnRadius": 126,
+	"showcaseRadius": 42,
+	"showcaseSide": 22,
 	"shopAngle": 0,
-	"shopRadius": 118,
+	"shopRadius": 128,
 	"campAngle": 125,
-	"campRadius": 120,
+	"campRadius": 130,
 	"lighthouseAngle": 180,
 	"lighthouseRadius": 182,
 	"lighthouseBaseHeight": 15,
@@ -69,28 +69,28 @@
 	"boundaryRadius": 560,
 	"hills": [
 		[
-			-108,
-			24,
+			-125.0,
+			27.8,
 			11
 		],
 		[
-			94,
-			-72,
+			101.6,
+			-77.8,
 			10
 		],
 		[
-			-74,
-			-101,
+			-75.7,
+			-103.3,
 			10
 		],
 		[
-			-120,
-			-43,
+			-120.5,
+			-43.2,
 			9
 		],
 		[
-			106,
-			67,
+			108.2,
+			68.4,
 			10
 		],
 		[
