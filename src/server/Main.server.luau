@@ -39,6 +39,7 @@ local Receipts = require(script.Parent.Monetization.Receipts)
 local SaveService = require(script.Parent.Save.SaveService)
 local SettingsService = require(script.Parent.Retention.SettingsService)
 local ShopService = require(script.Parent.ShopService)
+local HabitatService = require(script.Parent.World.HabitatService)
 local PropDresser = require(script.Parent.World.PropDresser)
 local TerrainBuilder = require(script.Parent.World.TerrainBuilder)
 local TrainingService = require(script.Parent.TrainingService)
@@ -78,3 +79,4 @@ PlayerCollision.init()
 -- en la pieza de aparición). Así EstadoGigante y los remotes existen desde el principio.
 TerrainBuilder.build()
 PropDresser.dress()
+HabitatService.init() -- se apoya en el terreno: va después

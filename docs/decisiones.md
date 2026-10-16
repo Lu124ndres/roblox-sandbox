@@ -541,3 +541,13 @@ modelos viejos y nuevos.
 la etapa 1: con la orca teñida de reemplazo, al crecer le habría puesto la animación de orca.
 **Decisión:** `GiantTemplates.ownTemplate` busca la etapa pedida, las anteriores y después las
 siguientes; la orca teñida solo aparece si el monstruo no tiene ningún modelo propio.
+
+## 2026-10-16 — Hábitats: la luz en el servidor, el fuego en el cliente
+
+**Contexto:** el modo rápido (`lowFx`) es de cada jugador, y `FxQuality` solo apaga los Fire
+que ya existen al cambiar el ajuste; un Fire que el servidor crea después (al cambiar de
+gigante) quedaría prendido. **Decisión:** la PointLight la pone `HabitatPlacer` (se ve igual
+para todos y es barata); el Fire y el latido del Neon los crea `Ambient/HabitatFx` en el
+cliente, que no crea fuego en modo rápido y lo quita al activarlo. Cada prop va con
+`ModelStreamingMode = Atomic`: con streaming, el cliente lo recibe entero (con `Llama` y
+`Brillo`) o no lo recibe.

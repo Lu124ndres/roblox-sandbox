@@ -5,6 +5,7 @@
 ]]
 
 local GiantTypes = require(script.Parent.GiantTypes)
+local Habitats = require(script.Parent.Habitats)
 local Monetization = require(script.Parent.Monetization)
 local Social = require(script.Parent.Social)
 
@@ -136,6 +137,7 @@ export type SavingConfig = {
 
 export type MonetizationConfig = Monetization.MonetizationConfig
 export type SocialConfig = Social.SocialConfig
+export type HabitatsConfig = Habitats.HabitatsConfig
 
 export type Config = {
 	Economy: EconomyConfig,
@@ -147,6 +149,7 @@ export type Config = {
 	Retention: RetentionConfig,
 	Monetization: MonetizationConfig,
 	Social: SocialConfig,
+	Habitats: HabitatsConfig,
 }
 
 return {}

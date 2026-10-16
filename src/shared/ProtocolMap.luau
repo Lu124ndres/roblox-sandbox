@@ -16,4 +16,5 @@ return table.freeze({
 	RestArena = "GuaridaDescanso", -- modelo en ServerStorage: la plataforma del descanso
 	Buoys = "Boyas",
 	Foam = "Espuma",
+	Habitat = "Habitat", -- Workspace.Habitat: los props del hábitat del gigante actual (HabitatService)
 })

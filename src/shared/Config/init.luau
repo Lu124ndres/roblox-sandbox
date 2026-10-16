@@ -28,6 +28,7 @@
 
 local Fish = require(script.Fish)
 local Giants = require(script.Giants)
+local Habitats = require(script.Habitats)
 local Monetization = require(script.Monetization)
 local Social = require(script.Social)
 local Progression = require(script.Progression)
@@ -41,6 +42,7 @@ export type GiantDef = Types.GiantDef
 export type PondDef = Types.PondDef
 export type UpgradeDef = Types.UpgradeDef
 export type PlaytimeGift = Types.PlaytimeGift
+export type HabitatProp = Habitats.HabitatProp
 export type Config = Types.Config
 
 local Config: Types.Config = {
@@ -84,6 +86,8 @@ local Config: Types.Config = {
 	Monetization = Monetization,
 
 	Social = Social,
+
+	Habitats = Habitats,
 
 	Saving = {
 		storeName = "Jugadores_v1",

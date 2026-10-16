@@ -1443,3 +1443,31 @@ afinaron. Las pruebas de E1/E4 y la Orca fantasma las sigue otra sesión.
 **Qué falta:** importarlo en Studio como `ServerStorage.ZorroDeAguaE4_code` y probarlo.
 Aprendido: piezas de bmesh con caras al revés restan volumen al fundir por vóxeles, y una
 esfera de `masa()` guarda escala y giro en el objeto (pintar en coordenadas del mundo).
+
+---
+
+## 2026-10-16 (14) — Hábitats dentro del volcán (C6)
+
+**Qué se hizo:**
+
+- `Config/Habitats.luau`: por gigante, la lista de props (`prop`, `angulo`, `radio`, `escala`,
+  `giro`), copiada del atributo `Sugerido` que dejó Cowork (72 props en total). También tiene
+  las zonas libres, los rayos y los números de luz, fuego y brillo.
+- `World/HabitatPlacer`: coloca cada prop como dice el contrato (`ScaleTo`, rayos solo contra
+  el terreno en el centro y en 4 puntos, el más bajo en la ladera, base 0.5 más abajo, frente
+  hacia afuera más el giro). Descarta lo que caiga a menos de r 95 del centro o desde el
+  acantilado (r 205) hacia afuera. Todo anclado; solo choca la malla principal de los props con
+  `Colision = true`. Pone la PointLight de `fuego` y `luz` en el punto `Llama`.
+- `World/HabitatService`: `Workspace.Habitat` con el hábitat del gigante actual; se rehace al
+  cambiar de gigante y ya durante `VolcanLlenando` (el de `RuletaResultado`). El Zorro no tiene
+  hábitat: el cráter queda vacío.
+- `Ambient/HabitatFx` (cliente): Fire en `Llama` (sin modo rápido) y latido suave del Neon de
+  los props `brillo`.
+
+**Probado por MCP:** Orca (20 props), `Minotauro:1` (19, 4 fuegos), `Minotauro:4` (no se
+rehace), `DragonMarino:2` (13), `OrcaFantasma:1` y `:3` (20, 11 luces), `ZorroDeAgua` (vacío).
+El Neon late (transparencia 0.05 → 0.39). Sin errores nuestros en la consola. El cambio a modo
+rápido no se probó en Play (la ventana de Ajustes no se tocó por MCP).
+
+**Qué se rompió:** nada. El cliente avisaba "Infinite yield" esperando `Workspace.Habitat`
+(el servidor la crea después del terreno); ahora espera sin plazo.
