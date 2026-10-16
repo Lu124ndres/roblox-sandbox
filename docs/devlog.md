@@ -1495,3 +1495,16 @@ rápido no se probó en Play (la ventana de Ajustes no se tocó por MCP).
 
 **Qué se rompió:** nada. El cliente avisaba "Infinite yield" esperando `Workspace.Habitat`
 (el servidor la crea después del terreno); ahora espera sin plazo.
+
+
+---
+
+## 2026-10-16 (13) — Aura nueva del Dios del Volcán
+
+**Qué se hizo:** el aura tapaba el traje (lenguas de fuego por todo el cuerpo y un aro de llamas
+en los pies). Ahora el poder está en el piso y en la silueta: sello de magma a sus pies (charco
+de lava, aro de runas que gira y una onda de choque cada ~3.5 s), brasas ralas que suben más
+alto que la cabeza, dos llamas chicas en los hombros, contorno y halo de lava, un hilo de humo
+en el volcán de la cabeza. Nada de fuego encima del cuerpo.
+
+**Qué se rompió:** nada. Probado en juego (plaza y borde del volcán).
