@@ -1172,3 +1172,25 @@ Hay que guardar el lugar en Studio para que los trajes nuevos queden en ServerSt
 **Qué sigue:** guardar el lugar en Studio (los modelos viven en el .rbxl). Las botas no se
 ven en el personaje (el traje las tapa), así que no llevan modelo.
 
+
+---
+
+## 2026-10-16 — Ruleta de simulador, racha, volcán en orden, carteles y trajes sin estirarse
+
+**Qué se hizo:**
+
+- Vuelven los íconos viejos de la Orca y el Dragón. Trajes: solo se cosen codos, muñecas,
+  rodillas y tobillos (hombros y cadera vuelven a ser piezas: ya no se estira la ropa).
+- Carteles de estanques como los simuladores ("25x" enorme con degradado y franja de luz).
+- Ruleta nueva: rueda redonda (RuedaRuleta/PunteroRuleta) con %, giros guardados, Comprar 1
+  (24 R$) y Comprar 5 (80 R$), rueda grande en el mundo junto a la aparición.
+- Retención: giro gratis cada 6 h, +1 giro cada 15 min jugando (hasta 4), +1 giro con el
+  diario (+3 el día 7) y racha diaria +10% monedas y poder por día (hasta +100%).
+- Volcán: fondo a -150 (antes -400); el descanso cuenta 5 s después de ver la guarida y, tras
+  la ruleta, el cráter se llena de agua o lava antes de que llegue el monstruo.
+- Alimentar más rápido al principio (6 peces/s, canasta en 5 s), cartel de la cabeza más alto,
+  brillo azul al entrenar como viñeta pareja, ventanas que caben en el teléfono.
+
+**Qué se rompió:** el lugar abierto era una recuperación automática sin publicar (sin
+DataStore): se guardó como `respaldo_lugar_2026-10-16.rbxl` (fuera de git) y hay que
+publicarlo sobre el juego real. Ver `docs/lanzamiento.md`.
