@@ -7,8 +7,9 @@
 		izquierda   columna con las estadísticas y la misión del tutorial
 		derecha     columna con el aviso del entrenamiento del servidor, Tienda y
 		            Robux, y los atajos de Poder y Monedas
-		barra       botones redondos en la barra de Roblox (ajustes, premio,
-		            colección), justo después de los botones de Roblox
+		barra       botones redondos chicos en la esquina derecha de la barra de
+		            Roblox (premio, colección, códigos, grupo, ajustes): en móvil
+		            no tapan el juego ni los botones de Roblox
 	Las columnas se achican en pantallas bajas (UIScale según el alto), así en
 	un teléfono acostado no llegan a los botones de Pescar y Saltar.
 	La columna derecha mide lo mismo que sus filas (dos botones de 88 con 10
@@ -29,6 +30,8 @@ local PHONE_REFERENCE_HEIGHT, PHONE_MIN_SCALE = 760, 0.45
 local MARGIN = 12
 local STAT_WIDTH = 250 -- ancho de las filas de estadísticas en PC
 local STAT_WIDTH_TOUCH = 210 -- más angostas en táctil: dejan sitio a la barra de hambre
+local TOP_BUTTON_MIN, TOP_BUTTON_MAX = 26, 36 -- botones redondos de la barra de arriba
+local TOP_BUTTON_TOUCH = 30 -- más chicos en táctil
 
 local Layout = {}
 
@@ -104,17 +107,20 @@ local function refreshScale()
 	end
 end
 
--- Botones en la barra de Roblox, a la derecha de los suyos (GuiService.TopbarInset).
+-- Botones en la esquina derecha de la barra de Roblox (GuiService.TopbarInset).
 local function placeTopBar()
 	local inset = GuiService.TopbarInset
 	local height = inset.Height
+	topBar.AnchorPoint = Vector2.new(1, 0)
 	if height <= 0 then
-		topBar.Position = UDim2.fromOffset(MARGIN, MARGIN)
-		topBar.Size = UDim2.fromOffset(400, 44)
+		topBar.Position = UDim2.new(1, -MARGIN, 0, MARGIN)
+		topBar.Size = UDim2.fromOffset(400, TOP_BUTTON_MAX)
 		return
 	end
-	topBar.Position = UDim2.fromOffset(inset.Min.X + 8, inset.Min.Y + 4)
-	topBar.Size = UDim2.fromOffset(400, height - 8)
+	local largest = if Device.touch() then TOP_BUTTON_TOUCH else TOP_BUTTON_MAX
+	local size = math.clamp(height - 18, TOP_BUTTON_MIN, largest)
+	topBar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
+	topBar.Size = UDim2.fromOffset(400, size)
 end
 
 function Layout.mount(screen: ScreenGui, playerGui: Instance)
@@ -133,8 +139,9 @@ function Layout.mount(screen: ScreenGui, playerGui: Instance)
 	topBar.Parent = barScreen
 	local list = Instance.new("UIListLayout")
 	list.FillDirection = Enum.FillDirection.Horizontal
+	list.HorizontalAlignment = Enum.HorizontalAlignment.Right
 	list.SortOrder = Enum.SortOrder.LayoutOrder
-	list.Padding = UDim.new(0, 10)
+	list.Padding = UDim.new(0, 6)
 	list.Parent = topBar
 	placeTopBar()
 	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeTopBar)

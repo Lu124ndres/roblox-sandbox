@@ -4,7 +4,8 @@
 
 	Botones del menú con ícono (Icons) y nombre con contorno:
 		HudButtons.side   grandes, en la columna derecha (Tienda, Mejoras), centrados
-		HudButtons.top    redondos, en la barra de Roblox (Ajustes, Premio, Peces)
+		HudButtons.top    redondos y chicos, en la esquina derecha de la barra de
+		                  Roblox (Premio, Peces, Códigos, Grupo, Ajustes)
 	Cada módulo agrega el suyo y decide qué hace al tocarlo. Un punto rojo
 	avisa que hay algo nuevo (por ejemplo, el premio diario).
 ]]
@@ -22,6 +23,9 @@ local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local COLORS = UIConfig.Colors
 local SIDE_SIZE = Layout.BUTTON_SIZE
 local TOP_DARK = Color3.fromRGB(28, 30, 38)
+-- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
+local TOP_ORDER: { [string]: number } =
+	{ Premio = 1, Peces = 2, ["Códigos"] = 3, Grupo = 4, Ajustes = 5, Admin = 6 }
 
 export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
 
@@ -128,7 +132,7 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	local button = Instance.new("TextButton")
 	button.Name = `Boton{text}`
 	button.Text = ""
-	button.LayoutOrder = order
+	button.LayoutOrder = TOP_ORDER[text] or 10 + order
 	button.BackgroundColor3 = TOP_DARK
 	button.BackgroundTransparency = 0.25
 	button.Size = UDim2.fromScale(1, 1)
@@ -145,6 +149,8 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	view.Size = UDim2.fromScale(0.95, 0.95)
 	press(button, onClick)
 	local dot = alertDot(button)
+	dot.Size = UDim2.fromOffset(11, 11)
+	dot.Position = UDim2.new(1, -4, 0, 4)
 	return {
 		button = button,
 		setAlert = function(on: boolean)
