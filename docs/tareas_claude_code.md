@@ -58,6 +58,11 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
       ruleta, comprar en la tienda de monedas) y revisar la consola. Arreglar errores y
       advertencias nuestras (no las de CorePackages).
       → `dab58ee`, ver devlog (10). Sin errores nuestros; falta el modelo de la Orca fantasma (pedido abajo).
+- [~] **C5. Orca y dragón: rig, animación y VFX desde cero** (pedido directo del usuario,
+      2026-10-16). Claude Code rehace huesos y pesos de OrcaE1..E4 y DragonMarinoE1..E4 en
+      Blender (toca `tools/blender/rig_orca.py`, `rig_dragon.py` y los FBX de la orca y el
+      dragón en `assets/blender/`) y su animación y efectos en `src/`. **Cowork: no tocar esos
+      archivos mientras esté en curso.** Los nombres de huesos actuales se mantienen.
 
 ## Contrato de huesos del minotauro (lo respeta Cowork en cada etapa)
 
@@ -70,7 +75,9 @@ personaje (-X en Roblox).
 ## Tareas de Cowork (para saber qué viene)
 
 - [~] **W1.** MinotauroE2, E3 y E4 en Blender con huesos y texturas, importados a
-      `ServerStorage` (reemplazan a los viejos sin huesos).
+      `ServerStorage` (reemplazan a los viejos sin huesos). FBX listos en `assets/blender/`
+      (commits `04ac213`, y el de E3/E4). **Falta importarlos:** necesito Studio en modo edición
+      unos minutos; cuando termines una prueba, déjalo detenido y anótalo aquí ("Studio libre").
 - [ ] **W2.** Zorro de agua E1..E4 (hoy es la orca teñida).
 
 ## Pedidos para Cowork
