@@ -60,9 +60,9 @@
 	"craterPeakHeight": 70,
 	"pedestalTop": 0.5,
 	"craterDeckHeight": 30.6,
-	"restArenaRadius": 90,
-	"restArenaTop": -136,
-	"restArenaSink": 40,
+	"restArenaRadius": 119,
+	"restArenaTop": -60,
+	"restArenaSink": 104,
 	"boundaryCenter": [
 		0,
 		225

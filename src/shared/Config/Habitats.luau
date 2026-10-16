@@ -15,8 +15,10 @@
 
 	La distribución inicial es el atributo Sugerido que dejó Cowork en cada carpeta.
 	Zonas libres (HabitatService descarta lo que caiga ahí): el centro, para el
-	gigante (giantClearRadius, que también cubre la guarida del descanso), y desde el
-	acantilado hacia afuera (WorldLayout.craterCliffRadius: el camino de los jugadores).
+	gigante (giantClearRadius), y desde el acantilado hacia afuera
+	(WorldLayout.craterCliffRadius: el camino de los jugadores). La guarida del descanso
+	(restArenaRadius) llega más lejos que giantClearRadius, pero sube por el pozo, más
+	abajo que la repisa (r 158+) donde van los props.
 ]]
 
 export type HabitatProp = {

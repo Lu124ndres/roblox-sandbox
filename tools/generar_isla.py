@@ -1214,6 +1214,9 @@ def guarida_descanso():
     hijos += anillo_tallado("AnilloInterior", cx, cz, 16, 64, 0.5, 0.06, sobre + 0.03, ORO, "Metal", **FANTASMA)
     hijos += anillo_tallado("AnilloMedio", cx, cz, 33, 96, 0.6, 0.06, sobre + 0.03, ORO, "Metal", **FANTASMA)
     hijos += anillo_tallado("AnilloExterior", cx, cz, 58, 128, 0.7, 0.06, sobre + 0.03, ORO, "Metal", **FANTASMA)
+    # Con la guarida grande (más arriba, el pozo es más ancho) un anillo más llena la franja de afuera.
+    if R > 100:
+        hijos += anillo_tallado("AnilloBorde", cx, cz, (58 + R - 7) / 2, 160, 0.7, 0.06, sobre + 0.03, ORO, "Metal", **FANTASMA)
     hijos += anillo_tallado("AnilloLava", cx, cz, R - 7, 120, 0.3, 0.06, sobre + 0.03, LAVA, "Neon", **FANTASMA)
     for k in range(8):
         a = k * 45
