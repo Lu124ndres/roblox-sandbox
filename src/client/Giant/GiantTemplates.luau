@@ -44,8 +44,10 @@ local STAND_IN_TINTS: { [string]: Color3 } = {
 	OrcaFantasma = Color3.fromRGB(170, 110, 255), -- Halloween
 }
 
+-- La etapa pedida o la anterior más cercana; si no hay, la siguiente (un monstruo con
+-- una sola etapa modelada, como el zorro E4, usa ese modelo en todas).
 local function ownTemplate(folder: Instance, base: string, stage: number): Model?
-	for s = stage, 1, -1 do
+	for _, s in { stage, stage - 1, stage - 2, stage - 3, stage + 1, stage + 2, stage + 3 } do
 		local template = folder:FindFirstChild(`{base}E{s}`)
 		if template and template:IsA("Model") then
 			return template

@@ -87,6 +87,16 @@ Estados: `[ ]` pendiente · `[~]` en curso · `[x]` hecha · `[!]` trabada (expl
          rápido / gráficos bajos (sin Fire).
       4. Probar por MCP con `giant Minotauro:1..4`, `Orca`, `DragonMarino`, `OrcaFantasma`.
 
+- [~] **C7. Zorro de agua E4, versión de Claude Code** (prueba del usuario: Code contra
+      Cowork, gana el mejor). Modelo, texturas, rig y animación hechos por Claude Code:
+      `tools/blender/zorro_e4_code.py`, `zorro_e4_pintura.py`, `rig_zorro_e4_code.py`,
+      `assets/blender/ZorroDeAguaE4_code.fbx`, `assets/textures/ZorroDeAguaE4_code_*.png`;
+      código en `src/shared/Zorro/` y `src/client/Giant/ZorroStand.luau` + `ZorroFx.luau`.
+      **No pisa la W2 de Cowork**: archivos con sufijo `_code`. El que gane queda como
+      `ServerStorage.ZorroDeAguaE4`. Huesos: Raiz > Cadera > Columna > Pecho > Cuello1 >
+      Cuello2 > Cabeza > Mandibula, Boca, Oreja<lado>; Pecho > Hombro > Brazo > Antebrazo >
+      Mano; Cadera > Muslo > Pierna > Tobillo > Pie; Cadera > Cola<n>_1.._4 (n = 1..9).
+
 ## Contrato de hábitats (Cowork ↔ Claude Code)
 
 `ServerStorage.Habitats.<GiantId>` (Folder; GiantId = `Minotauro`, `Orca`, `DragonMarino`,

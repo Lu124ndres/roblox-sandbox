@@ -4,7 +4,7 @@
 	modelo de esa etapa (<base>E1..E4), respira, se mece y mira alrededor, con un
 	contorno que late con el enojo (GiantOutline). "Palancas": salto, giro, atención.
 	ScaleTo solo al cambiar la escala más de GiantScaleStep. Con huesos: la orca nada
-	(OrcaSwim), el dragón vuela (DragonFly) y el minotauro se anima (MinoStand).
+	(OrcaSwim), el dragón vuela (DragonFly), el minotauro y el zorro se animan (*Stand).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -22,8 +22,8 @@ local GiantOutline = require(script.Parent.GiantOutline)
 local OrcaSwim = require(script.Parent.OrcaSwim)
 local DragonFly = require(script.Parent.DragonFly)
 local MinoStand = require(script.Parent.MinoStand)
+local ZorroStand = require(script.Parent.ZorroStand)
 local GiantTemplates = require(script.Parent.GiantTemplates)
-
 local EFFECTS, TURN_SHARPNESS = UIConfig.Effects, 6 -- giro hacia su objetivo (1/s)
 
 export type Body = {
@@ -91,10 +91,10 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 	local first = GiantTemplates.templateFor(folder, def, 1)
 	local swim = OrcaSwim.attach(first, base.Position)
 		or DragonFly.attach(first, base.Position)
+		or ZorroStand.attach(first, base.Position) -- antes que el minotauro: también tiene orejas y brazos
 		or MinoStand.attach(first, base.Position)
 	local outline = GiantOutline.attach(model)
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
-
 	local lift, spin = Instance.new("NumberValue"), Instance.new("NumberValue")
 	local currentHeight = GiantStages.heightFor(1)
 	local targetHeight = currentHeight
