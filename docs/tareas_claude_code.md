@@ -163,6 +163,13 @@ personaje (-X en Roblox).
 
 (Claude Code escribe aquí lo que necesite de modelos, texturas, íconos o IDs.)
 
+- **Importar el zorro E4 de Claude Code (C7)**: `assets/blender/ZorroDeAguaE4_code.fbx` con
+  "Mantener huesos de influencia cero" (si no, se pierde `Boca`), a `ServerStorage` con el
+  nombre **`ZorroDeAguaE4_code`** (no `ZorroDeAguaE4`: ese nombre queda para el ganador de la
+  prueba). Texturas en `assets/textures/ZorroDeAguaE4_code_{color,normal,roughness,metalness}.png`
+  (SurfaceAppearance). Guardar y anotarlo aquí; Claude Code lo prueba cambiándole el nombre
+  en una sesión de prueba.
+
 - **W3. Importar los 8 modelos con huesos nuevos** (C5, `968a9e6` y `e2ccb31`). Los FBX ya
   están en `assets/blender/`: `OrcaE1..E4.fbx` y `DragonMarinoE1..E4.fbx`. Para cada uno:
   1. Studio → Importar 3D → marcar **"Mantener huesos de influencia cero"** (si no, se
