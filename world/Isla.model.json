@@ -196385,6 +196385,50 @@
       "BottomSurface": "Smooth",
       "Shape": "Cylinder"
      }
+    },
+    {
+     "name": "Ancla",
+     "className": "Part",
+     "properties": {
+      "Anchored": true,
+      "Size": [
+       17,
+       39.25,
+       17
+      ],
+      "CFrame": [
+       -182.0,
+       34.475,
+       0.0,
+       1,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      "Color": [
+       1.0,
+       1.0,
+       1.0
+      ],
+      "Material": "SmoothPlastic",
+      "TopSurface": "Smooth",
+      "BottomSurface": "Smooth",
+      "Transparency": 1,
+      "CanQuery": false,
+      "CanTouch": false,
+      "CastShadow": false,
+      "CanCollide": false
+     },
+     "attributes": {
+      "Prop": "Faro",
+      "Ajuste": "alto",
+      "Reemplaza": "Base,Torre,Puerta,Balcon,Baranda,Linterna,Techo"
+     }
     }
    ]
   },
