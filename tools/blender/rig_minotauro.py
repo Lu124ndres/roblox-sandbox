@@ -26,7 +26,7 @@ if "puntos" in bpy.context.scene:  # etapas 2-4: articulaciones deformadas (mino
     PUNTOS = {k: V(v) for k, v in json.loads(bpy.context.scene["puntos"]).items()}
 bpy.ops.preferences.addon_enable(module="cycles")
 altos = [o for o in bpy.data.objects if o.type == "MESH"]
-CUERPO_TRIS = 9000
+CUERPO_TRIS = int(os.environ.get("CUERPO_TRIS", "9000"))
 TOPE = {"Ojo": 700, "Mechon": 900, "Cuerno": 450, "Anillo": 220, "Aro": 220, "Brazalete": 260,
         "Borla": 320, "Mandibula": 500, "Pezuna": 380, "Remache": 48, "Cinturon": 360}
 
