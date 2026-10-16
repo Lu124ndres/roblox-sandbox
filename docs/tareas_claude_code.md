@@ -135,7 +135,7 @@ personaje (-X en Roblox).
       textura fantasma (violeta, vientre lila, marcas cian, oro a naranja calabaza) y 12% de
       transparencia; mismos huesos, `OrcaSwim` las mueve. Texturas en `assets/textures/` y
       `tools/orca_fantasma.py`. Probado: `OrcaFantasma:1` y `:4` nadan.
-- [x] **W4. Props de hábitats** (Blender → `ServerStorage.Habitats`): 26 props en 4 carpetas,
+- [x] **W4. Props de hábitats** (Blender → `ServerStorage.Habitats`) → `21caa91`. 26 props en 4 carpetas,
       con `Sugerido` y probados en el cráter (play, colocados como dice "Contrato de hábitats").
       Script `tools/blender/habitats*.py`, FBX/JSON/vistas en `assets/blender/habitats/`,
       paleta `Assets.Textures.Habitats`.
