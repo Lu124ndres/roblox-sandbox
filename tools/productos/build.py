@@ -1,4 +1,6 @@
-from compose import *
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from compose import *  # noqa
 L = load
 P = []
 for n in range(1, 11):

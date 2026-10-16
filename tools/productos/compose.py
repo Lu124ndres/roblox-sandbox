@@ -3,9 +3,10 @@ import math, os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
 
 S = 512
-SRC = "src"
-OUT = "out"
-FONT = "fonts/package/files/luckiest-guy-latin-400-normal.woff"
+HERE = os.path.dirname(os.path.abspath(__file__))
+SRC = os.path.join(HERE, "..", "..", "assets", "ui", "iconos")
+OUT = os.path.join(HERE, "..", "..", "assets", "ui", "productos")
+FONT = os.path.join(HERE, "LuckiestGuy.woff")  # @fontsource/luckiest-guy (OFL)
 os.makedirs(OUT, exist_ok=True)
 
 COLORS = {  # (centro, borde)
