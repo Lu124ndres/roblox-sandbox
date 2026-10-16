@@ -4,6 +4,14 @@ Creator Hub → Creaciones → tu juego → Monetización → Productos de desar
 Crea cada uno con el **precio** de la tabla, copia su ID (⋯ → Copiar ID del recurso) y
 pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Products.luau`).
 
+## Íconos (512x512)
+
+Cada producto y pase tiene su ícono listo en `assets/ui/productos/<Clave>.png`
+(los pases: `Pase_VIP.png`, `Pase_ReyDelMar.png`, `Pase_DiosDelVolcan.png`).
+Al crear el producto, en **Ícono** sube el archivo con el mismo nombre que la clave.
+Para los que ya existen: ⋯ → Editar → cambia la imagen. Vista de todos: `assets/ui/productos/_hoja.png`.
+Se regeneran con `tools/productos/build.py` (fuentes en `assets/ui/iconos/`, fuente LuckiestGuy de @fontsource).
+
 ## Crea primero estos 18 (lo que más se ve y más vende)
 
 1. `PackInicio` (19) — oferta de bienvenida, se abre sola a los 2.5 min.
@@ -12,7 +20,7 @@ pégalo en la columna "ID" (o mándamelo y yo lo pongo en `src/shared/Assets/Pro
 4. `ChooseOrca` (25), `ChooseMinotauro` (99), `ChooseDragonMarino` (265), `ChooseZorroDeAgua` (408) — botones del descanso. Para Halloween: `ChooseOrcaFantasma` (149).
 5. `ServerBoost1` (60), `ServerBoost2` (129), `ServerBoost3` (239) — banner de la tienda.
 6. `Power2` (7), `Coins1` (3), `Coins2` (7) — atajos de la columna derecha (Power1 ya existe).
-7. `Pond11` (799) — **Estanque sagrado x250** del centro de la isla; solo se abre con este producto (también sale en la TIENDA, sección Para siempre).
+7. `Pond11` (799) — **Estanque sagrado x50** del centro de la isla; solo se abre con este producto (también sale en la TIENDA, sección Para siempre).
 
 Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren con kills;
 `sellPonds = false` en `Config/Monetization.luau`). El resto, cuando puedas.
@@ -63,7 +71,7 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `Pond8` | Estanque 8 | 449 | Estanques para siempre | |
 | `Pond9` | Estanque 9 | 649 | Estanques para siempre | |
 | `Pond10` | Estanque 10 | 999 | Estanques para siempre | |
-| `Pond11` | Estanque sagrado x250 | 799 | Solo con Robux (centro de la isla) | |
+| `Pond11` | Estanque sagrado x50 | 799 | Solo con Robux (centro de la isla) | |
 | `Spin1` | 1 giro de ruleta | 24 | Giros de la ruleta (se guardan; no se regalan) | |
 | `Spin5` | 5 giros de ruleta | 80 | Giros de la ruleta (se guardan; no se regalan) | |
 | `GiftVIP` | Regalar VIP | 299 | Regalar el pase VIP a otro jugador | |
