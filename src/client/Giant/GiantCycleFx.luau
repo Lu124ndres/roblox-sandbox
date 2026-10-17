@@ -20,6 +20,8 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
+local GroundFx = require(script.Parent.Parent.Effects.GroundFx)
+local CraterMode = require(script.Parent.Parent.Ambient.CraterMode)
 local GiantBody = require(script.Parent.GiantBody)
 
 local HIDDEN_DEPTH = 3 -- alturas del gigante bajo el agua mientras no está
@@ -39,11 +41,13 @@ local function tween(
 	return animation
 end
 
+-- Llegada y despedida: ola en el agua, nube de arena en el desierto del minotauro.
 local function wave(water: Vector3, height: number, strength: number)
-	Sounds.play("BigSplash", water)
-	Fx.splash(water, 3 + strength)
-	for k = 1, 4 do
-		Fx.ring(water, height * (0.35 + k * 0.3), 1 + k * 0.35)
+	GroundFx.impact(water, 3 + strength, height * 0.65)
+	if not CraterMode.isSand() then
+		for k = 2, 4 do
+			Fx.ring(water, height * (0.35 + k * 0.3), 1 + k * 0.35)
+		end
 	end
 	CameraShake.shake(0.5 + strength * 0.2, 1.4)
 end

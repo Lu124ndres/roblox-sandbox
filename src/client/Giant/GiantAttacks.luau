@@ -27,6 +27,8 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
+local GroundFx = require(script.Parent.Parent.Effects.GroundFx)
+local CraterMode = require(script.Parent.Parent.Ambient.CraterMode)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
 
@@ -89,10 +91,10 @@ local function telegraph(position: Vector3, radius: number, seconds: number)
 	Debris:AddItem(inner, seconds + 0.1)
 
 	task.delay(seconds, function()
-		Fx.splash(ground, 5)
-		Fx.spout(ground, 2.2)
-		Fx.ring(ground, radius * 1.3, 1.2)
-		Sounds.play("BigSplash", ground)
+		GroundFx.impact(ground, 5, radius * 1.3)
+		if not CraterMode.isSand() then
+			Fx.spout(ground, 2.2)
+		end
 		local character = Players.LocalPlayer.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if root and root:IsA("BasePart") then

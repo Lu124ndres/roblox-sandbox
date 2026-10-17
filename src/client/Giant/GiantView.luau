@@ -24,6 +24,7 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
+local GroundFx = require(script.Parent.Parent.Effects.GroundFx)
 local FeedThrow = require(script.Parent.FeedThrow)
 local GiantBody = require(script.Parent.GiantBody)
 local GiantCycleFx = require(script.Parent.GiantCycleFx)
@@ -86,7 +87,7 @@ local function onFed(body: GiantBody.Body, character: Model)
 	Fx.hearts(top, 4)
 	Fx.sparkle(top, UIConfig.Colors.Coins, 16)
 	for _ = 1, if body.flies then 0 else 3 do
-		Fx.splash(waterAround(body, 0.3), 1.4 * math.sqrt(scale))
+		GroundFx.splash(waterAround(body, 0.3), 1.4 * math.sqrt(scale))
 	end
 end
 
