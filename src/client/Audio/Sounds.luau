@@ -15,6 +15,10 @@
 	lejos de la cámara que su alcance (rollOff, o SoundDefaultReach) no se
 	crea, cada clave tiene un tope de copias sonando (SoundMaxPerKey) y cada
 	copia se destruye al terminar.
+
+	Sounds.define(ajustes) agrega volumen, tono y alcance de claves que no
+	están en UIConfig.Sounds (por ejemplo las voces del minotauro, MinoVoces).
+	Sounds.play acepta además un multiplicador de volumen (capas más suaves).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -28,10 +32,17 @@ local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 
 local PITCH_VARIATION = 0.08 -- variación aleatoria para que no suene repetido
 
+type SoundSettings = { volume: number, pitch: number?, rollOff: number? }
+
 local Sounds = {}
 
 local rng = Random.new()
 local playing: { [string]: number } = {} -- copias sonando de cada clave
+local defined: { [string]: SoundSettings } = {} -- ajustes de Sounds.define
+
+local function settingsFor(key: string): SoundSettings?
+	return UIConfig.Sounds[key] or defined[key]
+end
 
 -- Un sonido 3D fuera de su alcance no se oiría: ni se crea.
 local function audible(key: string, position: Vector3): boolean
@@ -39,7 +50,7 @@ local function audible(key: string, position: Vector3): boolean
 	if not camera then
 		return true
 	end
-	local settings = UIConfig.Sounds[key]
+	local settings = settingsFor(key)
 	local reach = if settings and settings.rollOff
 		then settings.rollOff
 		else Performance.SoundDefaultReach
@@ -51,7 +62,7 @@ local function make(key: string): Sound?
 	if not id or id == Assets.MISSING then
 		return nil
 	end
-	local settings = UIConfig.Sounds[key]
+	local settings = settingsFor(key)
 	local sound = Instance.new("Sound")
 	sound.Name = key
 	sound.SoundId = id
@@ -66,7 +77,14 @@ local function make(key: string): Sound?
 	return sound
 end
 
-function Sounds.play(key: string, position: Vector3?, pitchScale: number?)
+-- Ajustes de claves que no están en UIConfig.Sounds (UIConfig manda si están en los dos).
+function Sounds.define(settings: { [string]: SoundSettings })
+	for key, value in settings do
+		defined[key] = value
+	end
+end
+
+function Sounds.play(key: string, position: Vector3?, pitchScale: number?, volumeScale: number?)
 	if (playing[key] or 0) >= Performance.SoundMaxPerKey then
 		return
 	end
@@ -79,6 +97,7 @@ function Sounds.play(key: string, position: Vector3?, pitchScale: number?)
 	end
 	local variation = 1 + rng:NextNumber(-PITCH_VARIATION, PITCH_VARIATION)
 	sound.PlaybackSpeed *= variation * (pitchScale or 1)
+	sound.Volume *= volumeScale or 1
 	local holder: Instance = sound
 	if position then
 		local attachment = Instance.new("Attachment")
