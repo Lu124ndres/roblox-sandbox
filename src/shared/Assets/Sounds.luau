@@ -48,6 +48,15 @@ local Sounds: { [string]: string } = {
 	MinoSandHit = "rbxassetid://9118767938", -- "Sand Impacts 1" (3.0 s): pisotón y caída
 	MinoBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
 	MinoSit = "rbxassetid://9113524166", -- "Body Impact 1" (1.1 s): se sienta
+	-- Comer: Minotauro (sus reacciones a cada pez, ProSoundEffects). Capas en
+	-- client/Audio/MinoVocesComer.
+	MinoGulp = "rbxassetid://9114171955", -- "Drinking Cu Gulping 3" (1.0 s): traga
+	MinoBurp = "rbxassetid://9116448360", -- "Male Burp Cu Closed Mouth Quiet 3" (1.5 s)
+	MinoYum = "rbxassetid://9113636057", -- "Bull Grunts Snorts Breathing Constant 8" (1.1 s)
+	MinoPat = "rbxassetid://9114740689", -- "Gut Hits Bare Skin 13" (1.7 s): se palmea la panza
+	MinoDrum = "rbxassetid://9113512609", -- "Body Hit Slaps 4" (1.1 s): tambor en la panza
+	MinoClap = "rbxassetid://9114762426", -- "Hand Clap Single Hits 1" (0.8 s): atrapa el pez
+	MinoShine = "rbxassetid://9125635442", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 7" (3.5 s)
 	-- Dragón (todo de ProSoundEffects, licencia de Roblox). Etapas y capas en
 	-- client/Audio/DragonVoces; el tono sigue a la voz o al peso de la etapa.
 	DragonScreech = "rbxassetid://9113981940", -- "Creature Mix Pterodactyl Dressed Screams 18" (2.3 s)
