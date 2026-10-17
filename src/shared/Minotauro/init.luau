@@ -10,8 +10,8 @@
 		  estira, mira al cielo o a alguien y hace sus trucos (Posturas, Trucos).
 		  Todo sale de la hora del servidor: todos los clientes lo ven igual;
 		- darle de comer manda: deja lo que hacía (sentado, se para), CAMINA hasta
-		  esa orilla, se inclina, estira los brazos y mastica; cada pez que llega
-		  lo muerde (bite); cuando dejan de darle vuelve a su rutina caminando;
+		  esa orilla, se inclina, estira los brazos y mastica; cada pez (fed) lo
+		  muerde y le saca una reacción (Comer); después vuelve a su rutina;
 		- al evolucionar (EstadoGigante.EvolucionHasta) junta fuerza, explota
 		  hacia arriba y ruge (Evolucion);
 		- apoya siempre el pie más bajo en el suelo (Cuerpo) y orejas, cola,
@@ -19,19 +19,9 @@
 	El ritmo, la voz, la fuerza, la rutina y el paso salen de la etapa (Etapas,
 	por el nombre del modelo). Solo anima huesos si el modelo los tiene; si no,
 	solo gira y camina. step devuelve el pivote (base, -Z al frente).
-	state.events: lo que MinoStand convierte en sonido y efectos:
-		step     cada pisada al caminar
-		stomp    el golpe del pisotón (truco)
-		roar     el rugido (truco, y al evolucionar justo después de la explosión)
-		land     cae de un salto (truco)
-		flex     saca músculo (truco)
-		happy    baila (truco)
-		sit      el golpe al caer sentado
-		standup  se impulsa para pararse
-		snort    resoplido (al olfatear, al despertar de la siesta, al saludar)
-		yawn     bostezo (sentado o al estirarse)
-		sniff    cada olfateada
-		evolve   empieza a evolucionar (el destello va 1.3 s después: Evolucion.BURST)
+	state.events (MinoStand los vuelve sonido y efectos): step, stomp, roar, land,
+	flex, happy, sit, standup, snort, yawn, sniff, evolve (el destello va
+	Evolucion.BURST después) y los de Comer.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -42,6 +32,7 @@ local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
 local Caminar = require(script.Caminar)
+local Comer = require(script.Comer)
 local Conducta = require(script.Conducta)
 local Cuerpo = require(script.Cuerpo)
 local Etapas = require(script.Etapas)
@@ -71,6 +62,7 @@ export type Motion = {
 	mouth: () -> Vector3,
 	water: () -> Vector3,
 	bite: () -> (),
+	fed: (info: Comer.Fed) -> (),
 	destroy: () -> (),
 }
 
@@ -87,7 +79,7 @@ function Minotauro.new(center: Vector3): Motion
 	local springs = Resortes.new()
 	local conducta = Conducta.new()
 	local evolving = Evolucion.watch(stateFolder)
-	local biteUntil, ready, first = 0, false, true
+	local biteUntil, ready, first, comer = 0, false, true, Comer.new()
 
 	local function step(dt: number, info: Info): CFrame
 		dt = math.clamp(dt, 1 / 240, 0.1)
@@ -148,8 +140,12 @@ function Minotauro.new(center: Vector3): Motion
 		stepPhase += dt * 7 * (if turning > 0.05 then 1 else 0)
 		ready = moving < 0.05 and turning < 0.15 and (goal - walk.offset).Magnitude < 1
 
+		local weight = if evolveT then 0 else (1 - 0.6 * moving) * (1 - info.anger)
+		local pivot = CFrame.new(state.center) * CFrame.Angles(0, yaw, 0)
+		local react, takes = Comer.step(comer, profile, pivot, info.height, weight, state.events)
 		local pose = Pose.idle(now, profile)
-		Pose.add(pose, Pose.feeding(w, now, os.clock() < biteUntil))
+		Pose.add(pose, Pose.feeding(w * (1 - takes), now, os.clock() < biteUntil))
+		Pose.add(pose, react)
 		Pose.add(pose, Pose.steps(stepPhase, turning * (1 - moving)))
 		Pose.add(pose, Pose.walk(walk.phase, moving, profile.paso))
 		local mad = info.anger
@@ -192,6 +188,10 @@ function Minotauro.new(center: Vector3): Motion
 		end,
 		bite = function()
 			biteUntil = os.clock() + BITE_SECONDS
+		end,
+		fed = function(fed: Comer.Fed)
+			biteUntil = os.clock() + BITE_SECONDS
+			Comer.fed(comer, fed)
 		end,
 		destroy = feeders.destroy,
 	}
