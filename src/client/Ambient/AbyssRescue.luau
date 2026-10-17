@@ -6,7 +6,9 @@
 	salir nadando. Si el jugador local nada en el abismo unos segundos, la
 	pantalla se oscurece y aparece de vuelta en la puerta del cráter.
 	En el descanso el volcán está vacío (CraterDrain): caminar en el fondo
-	no cuenta, solo nadar.
+	no cuenta, solo nadar. Con el desierto del minotauro (CraterMode "sand")
+	se puede caminar por la arena un rato (SECONDS_ON_SAND), pero tampoco hay
+	por dónde subir: después también se lo rescata.
 ]]
 
 local Players = game:GetService("Players")
@@ -16,9 +18,12 @@ local TweenService = game:GetService("TweenService")
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local CraterMode = require(script.Parent.CraterMode)
 
 local CHECK_SECONDS = 0.5
 local SECONDS_BEFORE_RESCUE = 2.5
+local SECONDS_ON_SAND = 6 -- en la arena se puede pasear un poco antes del rescate
+local SAND_CEILING = WorldLayout.craterRimHeight - 6 -- más abajo, dentro del pozo
 
 local AbyssRescue = {}
 
@@ -69,16 +74,22 @@ function AbyssRescue.start(screen: ScreenGui)
 			local character = Players.LocalPlayer.Character
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 			local drained = stateFolder:GetAttribute(Protocol.GiantAttributes.Drained) == true
-			local inAbyss = character ~= nil
+			local position = if character then character:GetPivot().Position else Vector3.zero
+			local inPit = character ~= nil
 				and humanoid ~= nil
-				and WorldZones.distanceToCrater(character:GetPivot().Position) < WorldLayout.craterCliffRadius
-				-- nadando (o bajo el agua, si el volcán está lleno)
-				and (
-					humanoid:GetState() == Enum.HumanoidStateType.Swimming
-					or (not drained and character:GetPivot().Position.Y < WorldLayout.waterLevel)
-				)
-			swimming = if inAbyss then swimming + CHECK_SECONDS else 0
-			if character and swimming >= SECONDS_BEFORE_RESCUE then
+				and WorldZones.distanceToCrater(position) < WorldLayout.craterCliffRadius
+			local swims = humanoid ~= nil and humanoid:GetState() == Enum.HumanoidStateType.Swimming
+			-- nadando (o bajo el agua, si el volcán está lleno)
+			local inAbyss = inPit
+				and (swims or (not drained and position.Y < WorldLayout.waterLevel))
+			-- parado en la arena del desierto, abajo del borde
+			local onSand = inPit
+				and not drained
+				and CraterMode.isSand()
+				and position.Y < SAND_CEILING
+			swimming = if inAbyss or onSand then swimming + CHECK_SECONDS else 0
+			local limit = if inAbyss then SECONDS_BEFORE_RESCUE else SECONDS_ON_SAND
+			if character and swimming >= limit then
 				swimming = 0
 				fade(screen, 0, 0.4)
 				character:PivotTo(gatePosition())

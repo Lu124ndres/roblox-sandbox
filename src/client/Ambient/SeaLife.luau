@@ -20,16 +20,19 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
+local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
+local CraterMode = require(script.Parent.CraterMode)
 
 local EFFECTS = UIConfig.Effects
 local FOAM_TRAVEL_STUDS = 1.2 -- cuánto sube y baja la espuma sobre la arena
 local FOAM_UPDATE_SECONDS = 1 / 20
+local GLINTS_HIDDEN_Y = -500 -- sobre el desierto del cráter los destellos se esconden aquí abajo
 local JUMP_FISH = { "Sardina", "Anchoa", "Caballa", "PezPayaso", "PargoRojo", "Atun" }
 
 local SeaLife = {}
@@ -100,7 +103,11 @@ local function animate(buoys: { Floating }, foam: { Foam }, glints: BasePart)
 		sinceFoam = 0
 		local camera = Workspace.CurrentCamera
 		local center = if camera then camera.CFrame.Position else Vector3.zero
-		glints.CFrame = CFrame.new(center.X, WorldLayout.waterLevel + 0.3, center.Z)
+		-- Sobre el desierto del minotauro no hay agua que destelle.
+		local dry = CraterMode.isSand()
+			and WorldZones.distanceToCrater(center) < WorldLayout.craterRimOuter
+		local glintY = if dry then GLINTS_HIDDEN_Y else WorldLayout.waterLevel + 0.3
+		glints.CFrame = CFrame.new(center.X, glintY, center.Z)
 		slice = slice % Performance.FoamSlices + 1
 		stepFoam(foam, slice, elapsed, center)
 	end)

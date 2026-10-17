@@ -47,6 +47,8 @@ local function style(terrain: Terrain)
 	-- Fondo claro del lago del cráter: bajo el agua se ve turquesa (y el gigante resalta).
 	terrain:SetMaterialColor(MATERIAL.Limestone, Color3.fromRGB(52, 92, 92))
 	terrain:SetMaterialColor(MATERIAL.Asphalt, Color3.fromRGB(58, 46, 48)) -- cumbres del volcán
+	-- Rocas del desierto del minotauro (las escribe el cliente: Ambient/SandTerrain).
+	terrain:SetMaterialColor(MATERIAL.Sandstone, Color3.fromRGB(186, 128, 84))
 	if not terrain:FindFirstChildOfClass("Clouds") then
 		local clouds = Instance.new("Clouds")
 		clouds.Cover = 0.55

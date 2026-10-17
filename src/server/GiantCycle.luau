@@ -127,7 +127,7 @@ local function cycle(tired: boolean)
 	GiantPublish.set(ATTRS.RouletteAt, Workspace:GetServerTimeNow())
 	GiantService.setPhase("rest", CYCLE.rouletteSeconds + CYCLE.refillSeconds)
 	task.wait(CYCLE.rouletteSeconds)
-	-- Primero se llena el cráter (agua o lava, según el que sale) y después llega.
+	-- Primero se llena el cráter (agua, lava o arena, según el que sale) y después llega.
 	GiantPublish.set(ATTRS.Refilling, true)
 	task.wait(CYCLE.refillSeconds)
 	GiantPublish.set(ATTRS.Refilling, false)

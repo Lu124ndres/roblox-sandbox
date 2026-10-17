@@ -3,8 +3,10 @@
 	SkyMoods
 
 	Los ambientes que mezcla SkyCycle: los momentos del día (entre dos se
-	interpola), el del Cráter del Abismo (luz de lava) y el amanecer del
-	descanso (al llenar al monstruo sale el sol: luz clara y cálida).
+	interpola), el del Cráter del Abismo (luz de lava), el del desierto del
+	minotauro (sol alto y polvo: reemplaza al del cráter mientras está la
+	arena) y el amanecer del descanso (al llenar al monstruo sale el sol: luz
+	clara y cálida).
 ]]
 
 export type Mood = {
@@ -111,6 +113,14 @@ SkyMoods.crater =
 SkyMoods.craterHour = 15.5
 SkyMoods.craterSaturation = 0.12
 SkyMoods.craterContrast = 0.12
+
+-- Desierto (CraterMode "sand"): sol de mediodía, aire dorado con polvo en
+-- suspensión, sombras más tibias y colores un poco lavados por el calor.
+SkyMoods.desert =
+	mood(0, 2.6, rgb(255, 212, 150), rgb(222, 156, 96), 0.3, rgb(255, 240, 212), rgb(214, 178, 136))
+SkyMoods.desertHour = 13
+SkyMoods.desertSaturation = 0.02
+SkyMoods.desertContrast = 0.08
 
 -- Amanecer del descanso: mañana clara y dorada; el sol sube hasta dawnHour.
 SkyMoods.dawn = mood(

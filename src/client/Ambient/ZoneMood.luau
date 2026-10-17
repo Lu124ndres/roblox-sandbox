@@ -8,6 +8,9 @@
 	fumarolas brillan en el fondo (CraterWater), el océano se calla, entra un ambiente
 	tenso y de vez en cuando hay relámpagos y truenos.
 
+	Con el desierto del minotauro (CraterMode "sand") no hay chispas ni
+	relámpagos: la bruma se vuelve polvo y el aire es el de DesertAir.
+
 	SkyCycle lee ZoneMood.blend() para mezclar la luz del día con la del cráter.
 ]]
 
@@ -22,10 +25,14 @@ local Assets = require(ReplicatedStorage.Shared.Assets)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local CraterMode = require(script.Parent.CraterMode)
 local CraterWater = require(script.Parent.CraterWater)
+local DesertAir = require(script.Parent.DesertAir)
 
 local BLEND_SHARPNESS = 1.5 -- qué tan rápido cambia el ambiente al entrar o salir (1/s)
 local LIGHTNING_MIN_SECONDS, LIGHTNING_MAX_SECONDS = 14, 30
+local MIST_LAVA = ColorSequence.new(Color3.fromRGB(255, 170, 120), Color3.fromRGB(200, 90, 60))
+local MIST_DUST = ColorSequence.new(Color3.fromRGB(236, 206, 160), Color3.fromRGB(196, 150, 104))
 
 local ZoneMood = {}
 
@@ -61,7 +68,7 @@ local function craterEffects()
 	mist.Texture = Assets.Particles.Mist
 	mist.Shape = Enum.ParticleEmitterShape.Box
 	mist.ShapeStyle = Enum.ParticleEmitterShapeStyle.Volume
-	mist.Color = ColorSequence.new(Color3.fromRGB(255, 170, 120), Color3.fromRGB(200, 90, 60))
+	mist.Color = MIST_LAVA
 	mist.Size = NumberSequence.new(18, 34)
 	mist.Transparency = NumberSequence.new({
 		NumberSequenceKeypoint.new(0, 1),
@@ -93,6 +100,15 @@ local function craterEffects()
 	embers.SpreadAngle = Vector2.new(25, 25)
 	embers.Acceleration = Vector3.new(0, 2, 0)
 	embers.Parent = fog
+
+	-- En el desierto: sin chispas de lava y la bruma es polvo.
+	local function desert(mode: CraterMode.Mode)
+		local sand = mode == "sand"
+		embers.Enabled = not sand
+		mist.Color = if sand then MIST_DUST else MIST_LAVA
+	end
+	CraterMode.onChanged(desert)
+	desert(CraterMode.get())
 end
 
 local function lightningLoop()
@@ -101,7 +117,7 @@ local function lightningLoop()
 		while true do
 			task.wait(rng:NextNumber(LIGHTNING_MIN_SECONDS, LIGHTNING_MAX_SECONDS))
 			local correction = Lighting:FindFirstChildOfClass("ColorCorrectionEffect")
-			if blend > 0.6 and correction then
+			if blend > 0.6 and correction and not CraterMode.isSand() then
 				for _ = 1, rng:NextInteger(1, 2) do
 					correction.Brightness = 0.45
 					TweenService:Create(correction, TweenInfo.new(0.35), { Brightness = 0 }):Play()
@@ -117,6 +133,7 @@ end
 function ZoneMood.start()
 	craterEffects()
 	CraterWater.start(ZoneMood.blend)
+	DesertAir.start()
 	lightningLoop()
 	local ocean = Sounds.loop("OceanWaves")
 	local horror = Sounds.loop("HorrorAmbience")
