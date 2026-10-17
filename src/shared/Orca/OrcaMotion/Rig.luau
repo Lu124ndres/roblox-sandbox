@@ -37,6 +37,8 @@ export type Pose = {
 	tail: number, -- curva extra de la cola (+ = aletas arriba)
 	pitchSpeed: number?, -- rad/s del cabeceo del cuerpo (las aletas lo siguen tarde)
 	rollSpeed: number?, -- rad/s del alabeo (la dorsal se mece)
+	waveIzq: number?, -- extra de una sola aleta pectoral (saludar; - = arriba)
+	waveDer: number?, -- la del lado +X del modelo (la que sube al alabear positivo)
 }
 
 local TAIL = { "Cola1", "Cola2", "Cola3", "Cola4" }
@@ -150,7 +152,8 @@ function Rig.apply(rig: Rig, pose: Pose, dt: number)
 			local side = axes.side
 			local flap = pose.flap * 0.11 * math.sin(phase * 0.5 - 0.8)
 			local steer = -side * bend * 0.12
-			local want = pose.fins + flap + steer + pitchLag
+			local wave = (if side > 0 then pose.waveDer else pose.waveIzq) or 0
+			local want = pose.fins + flap + steer + pitchLag + wave
 			local root = follow(rig, `Aleta{s}`, want, dt, 2.6, 0.55)
 			-- Mismo ángulo hacia abajo en las dos: el eje largo va con signo opuesto.
 			turnBone(rig, `Aleta{s}`, 0, 0, -side * root)

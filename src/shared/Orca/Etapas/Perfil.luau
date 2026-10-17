@@ -31,6 +31,18 @@ export type Feed = {
 	wiggle: number, -- bamboleo de contenta al comer
 }
 export type Entry = { weight: number, trick: Tricks.Trick }
+export type Gesture = { weight: number, name: string } -- nombre en Comer/Gestos
+export type Meal = {
+	tempo: number, -- multiplica la duración de los gestos (1 = la adulta)
+	snap: number, -- fuerza del mordisco hacia arriba con cada pez
+	roll: number, -- amplitud de los giros de costado
+	hz: number, -- resorte de los gestos: qué tan rápido responde
+	damping: number, -- y cuánto rebota (menos = más rebote)
+	gap: number, -- segundos entre gestos de gusto
+	gestures: { Gesture },
+	rare: Tricks.Trick, -- con un pez raro
+	party: { Tricks.Trick }, -- festejos de combo en orden (el primero de la racha, el segundo, el tercero y siguientes)
+}
 export type Profile = {
 	name: string,
 	voice: number, -- tono de sus llamados (1 = normal, más alto = más aguda)
@@ -40,6 +52,7 @@ export type Profile = {
 	trickEvery: number, -- tramo en segundos en que puede hacer un truco
 	trickChance: number, -- probabilidad de truco en cada tramo
 	tricks: { Entry },
+	meal: Meal,
 }
 
 return {}

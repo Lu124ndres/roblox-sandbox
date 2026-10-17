@@ -8,9 +8,13 @@
 	temblar todo, emerge del fondo como una isla con el agua cayéndole del
 	lomo, se zambulle lento mostrando la cola y da un coletazo que levanta
 	olas. Al comer abre la boca muy grande y traga despacio. Voz grave.
+	Con los peces es lenta y majestuosa: traga despacio, echa chorros enormes y
+	saluda sin apuro; no salta: con un pez raro emerge brillando y en los
+	combos canta grave, azota la cola una vez y emerge como una isla.
 ]]
 
 local Perfil = require(script.Parent.Perfil)
+local Festejos = require(script.Parent.Parent.OrcaMotion.Comer.Festejos)
 local Jumps = require(script.Parent.Parent.OrcaMotion.Tricks.Jumps)
 local Show = require(script.Parent.Parent.OrcaMotion.Tricks.Show)
 local Surface = require(script.Parent.Parent.OrcaMotion.Tricks.Surface)
@@ -36,6 +40,22 @@ local profile: Perfil.Profile = {
 		{ weight = 2, trick = Show.emerge(0.2, 14) },
 		{ weight = 2, trick = Jumps.dive(0.5, 14) },
 		{ weight = 1, trick = Surface.tailSlap(1, 6) },
+	},
+	meal = {
+		tempo = 1.5,
+		snap = 0.7,
+		roll = 0.5,
+		hz = 1.3,
+		damping = 0.9,
+		gap = 1.4,
+		gestures = {
+			{ weight = 3, name = "chorro" },
+			{ weight = 2, name = "saludo" },
+			{ weight = 2, name = "tragar" },
+			{ weight = 1, name = "panza" },
+		},
+		rare = Festejos.emerger(0.18, 7),
+		party = { Festejos.rugido(5), Festejos.coletazo(1, 6), Festejos.isla(0.25, 10) },
 	},
 }
 

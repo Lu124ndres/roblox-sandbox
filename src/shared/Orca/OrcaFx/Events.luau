@@ -22,7 +22,7 @@ local BASE_HEIGHT = 16.5 -- etapa 1: tamaño 1 de los efectos
 local COLORS = Trails.Colors
 
 export type Hooks = {
-	play: (key: string, position: Vector3?, pitch: number?) -> (),
+	play: (key: string, position: Vector3?, pitch: number?, volume: number?) -> (),
 	splash: (position: Vector3, scale: number) -> (),
 	ring: (position: Vector3, radius: number, seconds: number?) -> (),
 	sparkle: (position: Vector3, color: Color3, count: number?) -> (),

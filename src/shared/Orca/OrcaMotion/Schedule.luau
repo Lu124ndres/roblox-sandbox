@@ -15,7 +15,8 @@ local Tricks = require(script.Parent.Tricks)
 
 local BLEND = 0.12 -- parte del truco que se usa para entrar y salir de él
 
-export type Event = { kind: string, where: string? }
+-- spot: un punto del mundo (de dónde vino el pez); size: fuerza (rareza del pez).
+export type Event = { kind: string, where: string?, spot: Vector3?, size: number? }
 export type Schedule = {
 	slot: number,
 	progress: number,
