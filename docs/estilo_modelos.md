@@ -78,6 +78,9 @@ Valores aprobados el 2026-10-16. Esta sección es la única referencia de topolo
   en cada eje, y sus caras caen sobre la cuadrícula.
 - **Cuñas** con pendiente 1:1, 1:2 o 2:1 (en celdas). Nada de ángulos libres.
 - **Bisel de 0.012 BU, un solo segmento**, en las aristas exteriores. Sin redondeo orgánico.
+- **Remaches del faldón: 2 celdas de ancho** (el mismo ancho que la tira, que mide 2). Es un
+  número entero de celdas, dentro de la regla: un remache de 1 celda no puede quedar
+  centrado en una tira de 2.
 
 ### Escala
 
