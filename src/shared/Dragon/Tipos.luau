@@ -1,5 +1,5 @@
 --!strict
--- Tipos del dragón (aparte para que init no pase de 200 líneas).
+-- Tipos del dragón y su estado inicial (aparte para que init no pase de 200 líneas).
 
 local Rig = require(script.Parent.Rig)
 
@@ -18,6 +18,8 @@ export type State = {
 	fireSize: number,
 	events: { Event },
 	rig: Rig.Rig?,
+	perched: number, -- 0 volando .. 1 de pie en una roca
+	mode: string, -- tramo de la rutina: fly, approach, stay, takeoff (o evolve)
 }
 export type Info = { height: number, lift: number, spin: number, anger: number, inner: Model? }
 export type Motion = {
@@ -31,4 +33,26 @@ export type Motion = {
 	destroy: () -> (),
 }
 
-return {}
+local Tipos = {}
+
+function Tipos.newState(center: Vector3): State
+	return {
+		center = center,
+		velocity = Vector3.zero,
+		yaw = 0,
+		length = 10,
+		feeding = 0,
+		fire = false,
+		phase = 0,
+		fold = 0,
+		hidden = false,
+		voice = 1,
+		fireSize = 1,
+		events = {},
+		rig = nil,
+		perched = 0,
+		mode = "fly",
+	}
+end
+
+return table.freeze(Tipos)

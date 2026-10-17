@@ -7,15 +7,20 @@
 	planeo (los modelos nuevos) o arriba (los viejos): `neutral` mide cuánto hay
 	que bajar cada una para que queden en planeo, así sirve cualquiera de los dos
 	(por lado: en algunos modelos el cuerpo está algo torcido y un ala queda más
-	alta que la otra). Al
-	enlazar se miden los ejes del CUERPO con los huesos: adelante (de la cadera
-	a la cabeza), derecha (de la raíz del ala izquierda a la derecha) y arriba,
-	y se pasan al espacio de cada hueso: así no importa cómo los orientó el
-	exportador. turn() gira un hueso con cabeceo (+ = punta arriba), giro
-	(+ = a la izquierda) y alabeo alrededor del eje largo del cuerpo.
+	alta que la otra). Al enlazar se miden los ejes del CUERPO con los huesos:
+	adelante (de la cadera a la cabeza), derecha (de la raíz del ala izquierda a
+	la derecha) y arriba, y se pasan al espacio de cada hueso: así no importa cómo
+	los orientó el exportador. turn() gira un hueso con cabeceo (+ = punta
+	arriba), giro (+ = a la izquierda) y alabeo alrededor del eje largo del cuerpo.
+	Para posarse mide además las patas (Dragon/Medidas: legRest, contacts, feet,
+	shin). El cuello se dobla de costado alrededor del eje perpendicular a cada
+	hueso (sube empinado: girarlo alrededor de "arriba" solo lo retorcería).
+	posed() hace la cinemática directa con los Transform del cuadro (no depende de
+	cuándo actualiza Roblox TransformedWorldCFrame) y sigue los ScaleTo.
 ]]
 
 local Resorte = require(script.Parent.Parent.Resorte)
+local Medidas = require(script.Parent.Medidas)
 
 export type Axes = { pitch: Vector3, yaw: Vector3, roll: Vector3 }
 export type Rig = {
@@ -25,12 +30,19 @@ export type Rig = {
 	side: { [string]: number }, -- +1 lado derecho, -1 izquierdo, 0 al medio
 	right: Vector3, -- ejes del cuerpo en el espacio del pivote
 	up: Vector3,
+	forward: Vector3,
 	root: Bone,
 	neutral: { [string]: number }, -- por lado (Izq/Der): cuánto bajar el ala para planear (rad)
 	springs: { [string]: Resorte.Resorte }, -- inercia de cola, cuello y alas (Pose)
+	legRest: { [string]: number },
+	contacts: { [string]: Vector3 },
+	feet: number,
+	shin: number, -- largo de la pierna al enlazar (para seguir los ScaleTo)
+	cache: { [string]: CFrame },
 }
 
 local DIHEDRAL = 0.1 -- al planear las alas quedan apenas arriba de la horizontal (rad)
+local NECK = { Cuello1 = "Cuello2", Cuello2 = "Cabeza", Cabeza = "Boca" }
 
 local Rig = {}
 
@@ -58,9 +70,14 @@ function Rig.bind(model: Model): Rig?
 	local side: { [string]: number } = {}
 	for name, bone in bones do
 		local rest = (pivot:Inverse() * bone.WorldCFrame).Rotation -- sin Transform: reposo
+		-- El cuello sube empinado: girarlo alrededor de "arriba" solo lo retuerce. Se
+		-- dobla de costado alrededor del eje perpendicular al hueso y a la derecha.
+		local child = bones[NECK[name] or ""]
+		local dir = if child then (at(child) - at(bone)) else forward
+		local bend = right:Cross(if dir.Magnitude > 1e-4 then dir.Unit else forward)
 		axes[name] = {
 			pitch = rest:VectorToObjectSpace(right),
-			yaw = rest:VectorToObjectSpace(up),
+			yaw = rest:VectorToObjectSpace(if bend.Magnitude > 0.2 then bend.Unit else up),
 			roll = rest:VectorToObjectSpace(forward),
 		}
 		local offset = (at(bone) - at(root)):Dot(right)
@@ -76,6 +93,7 @@ function Rig.bind(model: Model): Rig?
 			else 0
 		neutral[s] = elevation - DIHEDRAL
 	end
+	local m = Medidas.measure(bones, pivot, forward, up)
 	return {
 		model = model,
 		bones = bones,
@@ -83,9 +101,15 @@ function Rig.bind(model: Model): Rig?
 		side = side,
 		right = right,
 		up = up,
+		forward = forward,
 		root = root,
 		neutral = neutral,
 		springs = {},
+		legRest = m.legRest,
+		contacts = m.contacts,
+		feet = m.feet,
+		shin = m.shin,
+		cache = {},
 	}
 end
 
@@ -93,6 +117,12 @@ end
 function Rig.frame(rig: Rig): CFrame
 	local pivot = rig.model:GetPivot()
 	return CFrame.fromMatrix(pivot:PointToObjectSpace(rig.root.WorldPosition), rig.right, rig.up)
+end
+
+-- Cuánto creció (o se achicó) el modelo desde que se enlazó (ScaleTo).
+function Rig.scale(rig: Rig): number
+	local bone = rig.bones.PieIzq or rig.bones.PieDer
+	return if bone and rig.shin > 0 then bone.CFrame.Position.Magnitude / rig.shin else 1
 end
 
 function Rig.turn(rig: Rig, name: string, pitch: number, yaw: number, roll: number)
@@ -108,6 +138,35 @@ function Rig.turn(rig: Rig, name: string, pitch: number, yaw: number, roll: numb
 		transform *= CFrame.fromAxisAngle(axes.roll, roll)
 	end
 	bone.Transform = transform
+	table.clear(rig.cache)
+end
+
+-- El hueso con los Transform de ahora, en el espacio del pivote.
+function Rig.posed(rig: Rig, name: string): CFrame
+	local cached = rig.cache[name]
+	if cached then
+		return cached
+	end
+	local bone = rig.bones[name]
+	local parent = bone.Parent
+	local base = if parent and parent:IsA("Bone")
+		then Rig.posed(rig, parent.Name)
+		elseif parent and parent:IsA("BasePart") then rig.model
+			:GetPivot()
+			:ToObjectSpace(parent.CFrame)
+		else CFrame.identity
+	local cf = base * bone.CFrame * bone.Transform
+	rig.cache[name] = cf
+	return cf
+end
+
+-- Punto de apoyo de un hueso con la pose de ahora (espacio del pivote), o nil.
+function Rig.contact(rig: Rig, name: string): Vector3?
+	local offset = rig.contacts[name]
+	if not offset or not rig.bones[name] then
+		return nil
+	end
+	return Rig.posed(rig, name) * (offset * rig.shin * Rig.scale(rig))
 end
 
 function Rig.point(rig: Rig?, name: string): Vector3?

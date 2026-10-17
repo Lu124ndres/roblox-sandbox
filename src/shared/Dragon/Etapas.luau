@@ -11,7 +11,16 @@
 		bank       cuánto se ladea en las curvas
 		tricks     los trucos que hace (Dragon/Trucos) y cada cuántos segundos
 		voice      tono de sus rugidos; fire tamaño del fuego
+		pace       cuánto más lentas son sus posturas, su despegue y su
+		           aterrizaje (1 = cría; la anciana tarda más en todo)
+		bounce     cuánto rebota al aterrizar y al saltar (la cría rebota, la
+		           anciana se asienta con peso)
+		rutina     lo que hace cuando nadie le da de comer (Dragon/Habitos)
 ]]
+
+local Habitos = require(script.Parent.Habitos)
+
+export type Rutina = Habitos.Rutina
 
 export type Profile = {
 	beat: number,
@@ -23,6 +32,9 @@ export type Profile = {
 	trickEvery: number,
 	voice: number,
 	fire: number,
+	pace: number,
+	bounce: number,
+	rutina: Rutina,
 }
 
 local PROFILES: { [number]: Profile } = {
@@ -36,6 +48,9 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 11,
 		voice = 1.55,
 		fire = 0.6,
+		pace = 1,
+		bounce = 1,
+		rutina = Habitos.rutinas[1],
 	},
 	{ -- joven: ágil, picadas y volteretas
 		beat = 1.8,
@@ -47,6 +62,9 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 13,
 		voice = 1.2,
 		fire = 0.9,
+		pace = 1.12,
+		bounce = 0.7,
+		rutina = Habitos.rutinas[2],
 	},
 	{ -- adulto: poderoso, planea más
 		beat = 1.35,
@@ -58,6 +76,9 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 15,
 		voice = 0.95,
 		fire = 1.15,
+		pace = 1.3,
+		bounce = 0.45,
+		rutina = Habitos.rutinas[3],
 	},
 	{ -- anciano: alas enormes, aletazos lentos que mueven el aire
 		beat = 0.95,
@@ -69,6 +90,9 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 17,
 		voice = 0.72,
 		fire = 1.45,
+		pace = 1.55,
+		bounce = 0.25,
+		rutina = Habitos.rutinas[4],
 	},
 }
 

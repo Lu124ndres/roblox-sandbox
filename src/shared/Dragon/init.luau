@@ -2,40 +2,57 @@
 --[[
 	Dragon (DragonMotion)
 
-	El motor que hace volar al dragón sobre el volcán (solo en el cliente):
-		- vuela en vueltas sobre la lava, sube y baja, se ladea en las curvas
-		  y planea al bajar (Vuelo: el mismo recorrido en todos los clientes);
-		- cada tanto hace un truco de su etapa (Trucos, sincronizados);
-		- cuando alguien le da de comer deja su vuelta, va hasta quedar frente
-		  a la orilla de quien lo alimenta, se queda en el aire aleteando con
-		  la boca abierta y muerde cada pez que llega (bite);
-		- anima sus huesos (Pose) según la etapa (Etapas, por el modelo).
-	step devuelve el pivote del modelo. DragonFx lee `state` y sus `events`.
-	El largo del dragón es LENGTH x el alto de su etapa (GiantTemplates escala
-	así a los modelos con alas).
+	El dragón sobre el volcán (solo en el cliente). Sin nadie que le dé de comer
+	sigue su rutina, igual en todos los clientes (Rutina, Conducta): vuela sus
+	vueltas con trucos (Vuelo, Trucos) y a veces se posa en una roca de la guarida
+	(Guarida, Posado) a mirar, estirarse, acicalarse, rugir o echar fuego al
+	cielo, brincar o dormir (Posturas). Darle de comer manda (posado, despega):
+	va frente a quien lo alimenta, se queda en el aire y muerde cada pez (bite).
+	Al evolucionar se envuelve en las alas y en el estallido ruge (Evolucion).
+	step devuelve el pivote; el largo es LENGTH x el alto de su etapa.
+	state.events: lo que Dragon.Fx convierte en sonido y efectos:
+		flap      aletazo fuerte (picada al recuperarse, brinco)
+		whoosh    el aire al pasar rápido (picada, voltereta)
+		roar      rugido (truco, posado al cielo y al evolucionar, 1.45 s)
+		fire      empieza el fuego del truco en el aire (hacia la lava)
+		fireSky   empieza el fuego posado, hacia el cielo
+		land      toca la roca (al posarse y al caer del brinco)
+		fold      pliega las alas sobre el lomo ya posado
+		takeoff   el salto al despegar (con el aletazo hacia abajo)
+		stretch   se estira con las alas arriba
+		preen     empieza a mordisquearse el ala
+		sleep     termina de enroscarse para dormir
+		wake      despierta
+		evolve    empieza a evolucionar (el estallido es 1.3 s después)
+	state.fire dice si sale fuego ahora; state.perched, si está de pie.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
+local Config = require(script.Parent.Config)
 local GiantStages = require(script.Parent.GiantStages)
 local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
+local Apoyo = require(script.Apoyo)
+local Conducta = require(script.Conducta)
 local Cuerpo = require(script.Cuerpo)
+local Destino = require(script.Destino)
 local Etapas = require(script.Etapas)
+local Evolucion = require(script.Evolucion)
 local Pose = require(script.Pose)
 local Rig = require(script.Rig)
 local Rumbo = require(script.Rumbo)
+local Rutina = require(script.Rutina)
+local Tipos = require(script.Tipos)
 local Trucos = require(script.Trucos)
 local Vuelo = require(script.Vuelo)
 
 local L_ = WorldLayout
-local WATER = L_.waterLevel
 local RIM = L_.craterRimHeight
 local BITE_SECONDS = 0.18
-
-local Tipos = require(script.Tipos)
+local ANGRY = Config.Giants.anger.angryThreshold
 
 export type Event = Tipos.Event
 export type State = Tipos.State
@@ -50,28 +67,18 @@ function Dragon.new(lakeCenter: Vector3): Motion
 	local origin = Vector3.new(lakeCenter.X, 0, lakeCenter.Z)
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local feeders = Feeders.watch(origin)
-	local state: State = {
-		center = origin + Vector3.new(0, RIM + 30, 0),
-		velocity = Vector3.zero,
-		yaw = 0,
-		length = 10,
-		feeding = 0,
-		fire = false,
-		phase = 0,
-		fold = 0,
-		hidden = false,
-		voice = 1,
-		fireSize = 1,
-		events = {},
-		rig = nil,
-	}
+	local state: State = Tipos.newState(origin + Vector3.new(0, RIM + 30, 0))
 	local profile = Etapas.forModel(nil)
 	local rigFor: Model? = nil
 	local stage = 1
 	local rumbo = Rumbo.new()
 	local wings = Cuerpo.new()
-	local lastSlot, lastU = -1, 0
+	local conducta = Conducta.new()
+	local apoyo = Apoyo.new()
+	local evolving = Evolucion.watch(stateFolder)
+	local tricks: Trucos.Tracker = { slot = -1, u = 0 }
 	local biteUntil = 0
+	local frozen: Vector3? = nil
 
 	local function step(dt: number, info: Info): CFrame
 		dt = math.clamp(dt, 1 / 240, 0.1)
@@ -83,95 +90,88 @@ function Dragon.new(lakeCenter: Vector3): Motion
 			profile = Etapas.forModel(name)
 			stage = (if name then tonumber(string.match(name, "E(%d)$")) else nil) or 1
 		end
+		local rig = state.rig
 		local L = math.max(info.height * Dragon.LENGTH, 1)
 		local Lpath = GiantStages.heightFor(stage) * Dragon.LENGTH -- fijo por etapa: la vuelta no salta al crecer
-		local radius = math.clamp(L_.craterLakeRadius * 0.6 - Lpath * 0.2, 25, 130)
-		local speed = (20 + Lpath * 0.3) * profile.speed
-		local base = RIM + 16 + Lpath * 0.3
-		local sample = Vuelo.sample(now, origin, radius, base, 10 + Lpath * 0.12, speed)
+		local route = Vuelo.route(origin, Lpath, profile.speed, RIM, L_.craterLakeRadius)
+		local body =
+			{ stand = 0.1 * Lpath, ahead = if rig then rig.feet * rig.shin * Rig.scale(rig) else 0 }
 
 		local phaseName = stateFolder:GetAttribute(Protocol.GiantAttributes.Phase)
 		local active = phaseName == nil or phaseName == "feeding"
-		local direction = if active then feeders.direction() else nil
+		local evolveT = evolving(now, state.events)
+		local direction = if active and not evolveT then feeders.direction() else nil
+		local free = active and not direction and not evolveT and info.anger < ANGRY
 		state.feeding += ((if direction then 1 else 0) - state.feeding) * (1 - math.exp(
 			-dt * (if direction then 1.2 else 0.6)
 		))
 		local w = state.feeding * state.feeding * (3 - 2 * state.feeding)
 
-		local trick, u, slot = nil, 0, -1
-		if active and w < 0.05 then
-			trick, u, slot = Trucos.current(now, profile)
+		local plan = Rutina.plan(now, profile, route, body)
+		local doing = Conducta.step(conducta, plan, now, dt, free, evolveT ~= nil, state.events)
+		local p: Pose.Pose = {}
+		Pose.add(p, doing.pose)
+		-- Trucos: solo volando libre y si la rutina lo deja volando todo el truco.
+		if free and w < 0.05 and doing.pinW == 0 and doing.ground == 0 then
+			Pose.add(p, Trucos.play(tricks, now, profile, Lpath, function(at: number): boolean
+				return Rutina.flying(at, profile, route, body)
+			end, state.events) or {})
 		end
-		local t: Trucos.Pose = if trick then trick.pose(u, Lpath) else {}
-		if trick then
-			if slot ~= lastSlot then
-				lastSlot, lastU = slot, 0
-			end
-			for _, event in trick.events do
-				if event.at > lastU and event.at <= u then
-					table.insert(state.events, { kind = event.kind })
-				end
-			end
-			lastU = u
+		if evolveT then
+			Pose.add(p, Evolucion.pose(evolveT))
 		end
 
-		-- Adónde va: su vuelta (con el truco) o frente a quien le da de comer.
-		local goal = sample.position + Vector3.new(0, t.dy or 0, 0)
-		if direction then
-			local standoff = L_.craterCliffRadius - 12 - Lpath * 0.45
-			local hoverAt = origin
-				+ direction * math.max(standoff, 20)
-				+ Vector3.new(0, RIM + 4 + Lpath * 0.22, 0)
-			goal = goal:Lerp(hoverAt, w)
-		end
-		Rumbo.update(rumbo, dt, {
-			goal = goal,
-			flow = sample.velocity * (t.speed or 1),
+		frozen = if evolveT then frozen or rumbo.position else nil
+		Destino.steer(rumbo, dt, {
+			now = now,
+			route = route,
+			Lpath = Lpath,
+			direction = direction,
 			feeding = w,
-			face = direction,
-			bank = profile.bank,
-			pitch = t.pitch or 0,
-			roll = t.roll,
+			frozen = frozen,
+			pose = p,
+			doing = doing,
+			profile = profile,
 		})
-		local climb = rumbo.climb
-		local gliding = math.clamp(-climb * 3 - (1 - profile.glide * 2), 0, 1) * (1 - w)
+		local ground = Apoyo.ground(apoyo, doing.ground, dt)
+		local gliding = math.clamp(-rumbo.climb * 3 - (1 - profile.glide * 2), 0, 1) * (1 - w)
 		Cuerpo.update(wings, dt, profile, {
 			now = now,
 			gliding = gliding,
 			feeding = w,
 			anger = info.anger,
-			trick = t,
+			flap = p.flap,
+			fold = p.fold or 0,
+			hover = p.hover or 0,
+			jaw = p.jaw or 0,
+			ground = ground,
 			biting = os.clock() < biteUntil,
 		})
-		state.fire, state.phase, state.fold = t.fire == true, wings.phase, wings.fold
+		p.jaw = wings.jaw
+		state.fire, state.phase, state.fold = (p.fire or 0) > 0.5, wings.phase, wings.fold
 
-		local rig = state.rig
-		if rig then
-			Pose.apply(rig, {
-				profile = profile,
-				now = now,
-				phase = wings.phase,
-				amp = wings.amp,
-				fold = wings.fold,
-				turn = rumbo.yawRate,
-				climb = climb,
-				jaw = wings.jaw,
-				headPitch = (t.head or 0) - 0.15 * w,
-				headYaw = 0,
-				hover = wings.hover,
-			}, dt)
-		end
-
+		local placed = Apoyo.place(
+			apoyo,
+			rig,
+			rumbo,
+			doing.line,
+			p,
+			{ now = now, dt = dt, L = L, ground = ground, profile = profile, wings = wings }
+		)
 		local bob = -math.cos(wings.phase) * L * 0.02 * wings.amp
-		state.center = (rumbo.position :: Vector3) + Vector3.new(0, bob + info.lift, 0)
+		state.center = placed.Position + Vector3.new(0, bob + info.lift, 0)
 		state.velocity, state.yaw, state.length = rumbo.velocity, rumbo.yaw, L
 		state.voice, state.fireSize = profile.voice, profile.fire
 		state.hidden = info.lift < -L
-		local body = CFrame.new(state.center)
-			* CFrame.Angles(0, rumbo.yaw + math.rad(info.spin), 0)
-			* CFrame.Angles(rumbo.pitch, 0, 0)
-			* CFrame.Angles(0, 0, rumbo.roll)
-		return if rig then body * Rig.frame(rig):Inverse() else body
+		state.perched, state.mode = ground, if evolveT then "evolve" else plan.mode
+		local bodyCF = CFrame.new(state.center)
+			* CFrame.Angles(0, math.rad(info.spin), 0)
+			* placed.Rotation
+		local pivot = if rig then bodyCF * Rig.frame(rig):Inverse() else bodyCF
+		if rig and doing.line then
+			Apoyo.tail(rig, pivot, doing.line)
+		end
+		return pivot
 	end
 
 	local function point(name: string): Vector3?
@@ -188,7 +188,7 @@ function Dragon.new(lakeCenter: Vector3): Motion
 			return point("Cabeza") or state.center
 		end,
 		water = function(): Vector3
-			return Vector3.new(state.center.X, WATER, state.center.Z)
+			return Vector3.new(state.center.X, L_.waterLevel, state.center.Z)
 		end,
 		bite = function()
 			biteUntil = os.clock() + BITE_SECONDS
