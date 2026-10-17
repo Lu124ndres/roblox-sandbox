@@ -66,7 +66,9 @@ def torso():
     bloque("Pecho", t, "pelo", (-8, 8), (-4, 4), (17, 21))
     bloque("Pecho", t, "pelo", (-8, 8), (-4, 4), (21, 22), recorte={"x-": 1, "x+": 1})
     par("Pecho", t, "pelo", (8, 9), (-3, 3), (17, 20))  # dorsales
-    par("Pecho", t, "crema", (1, 6), (-6, -4), (18, 20), fin="-", recorte={"y-": 1})  # pectorales
+    # Pectorales: arriba en z = 19, una celda por debajo de la mandíbula (z 20), así no se meten
+    # en ella al abrirla (comer, rascarse).
+    par("Pecho", t, "crema", (1, 6), (-6, -4), (17, 19), fin="-", recorte={"y-": 1})
     bloque("Pecho", t, "pelo_osc", (-6, 6), (4, 7), (18, 22), recorte={"y+": 2})  # joroba
     bloque("Cuello", t, "pelo", (-4, 4), (-2, 2), (21, 23))
 
@@ -134,9 +136,10 @@ def orejas_cola_faldon():
     # Orejas cortas y casi horizontales: con la punta en x = 9 no tocan la tapa de la hombrera
     # al abrir el brazo (músculo, rascarse) ni se apoyan en el yugo al caer (rugido).
     # Van justo detrás del cuerno (y 0..3), con el rosa adelante, bajo el anillo de oro.
-    par("Oreja{lado}", "Orejas", "pelo", (5, 8), (1, 3), (23, 25))
-    par("Oreja{lado}", "Orejas", "pelo", (8, 9), (1, 3), (23, 25), eje="x", recorte={"z+": 1})
-    par("Oreja{lado}", "Orejas", "rosa", (6, 8), (0, 1), (23, 25))
+    # Una cuña que se afina hacia la punta (arriba y atrás): sin esquina de atrás afuera, que
+    # era lo que se apoyaba en el yugo al echar la cabeza atrás en el rugido.
+    par("Oreja{lado}", "Orejas", "pelo", (5, 9), (1, 3), (23, 25), eje="x", recorte={"z+": 2, "y+": 2})
+    par("Oreja{lado}", "Orejas", "rosa", (5, 7), (0, 1), (23, 24))
     bloque("Cola1", "Cola", "pelo", (-1, 1), (4, 8), (11, 13))
     bloque("Cola2", "Cola", "pelo", (-1, 1), (8, 10), (8, 12))
     bloque("Cola3", "Cola", "pelo", (-1, 1), (9, 11), (5, 8))
@@ -184,7 +187,7 @@ ARTICULACIONES = [
 # Cola de cada hueso (celdas, lado izquierdo): hacia el hijo, o hacia donde apunta la pieza.
 COLAS = {
     "Cadera": (0, 0, 14), "Columna": (0, 0, 17), "Pecho": (0, 0, 21), "Cuello": (0, 0, 22),
-    "Cabeza": (0, 0, 29), "Mandibula": (0, -9, 21), "Oreja{l}": (9, 1.5, 23.5),
+    "Cabeza": (0, 0, 29), "Mandibula": (0, -9, 21), "Oreja{l}": (9, 1, 23),
     "Brazo{l}": (13, -0.5, 15), "Antebrazo{l}": (13, -0.5, 11), "Mano{l}": (13, -0.5, 8),
     "Muslo{l}": (3.5, 0, 7), "Pierna{l}": (3.5, 0, 2), "Pie{l}": (3.5, -5, 0.5),
     "Cola1": (0, 8, 11), "Cola2": (0, 10, 8), "Cola3": (0, 10, 2),
