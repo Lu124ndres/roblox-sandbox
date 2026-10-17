@@ -125,8 +125,8 @@ local Habitats: HabitatsConfig = {
 		DragonMarino = {
 			{ prop = "Nido", angulo = 90, radio = 164, escala = 2.4, giro = 0 },
 			{ prop = "Costillar", angulo = 240, radio = 168, escala = 1.8, giro = 95 },
-			{ prop = "Obsidiana", angulo = 30, radio = 170, escala = 2, giro = 0 },
-			{ prop = "Obsidiana", angulo = 150, radio = 172, escala = 1.8, giro = 70 },
+			{ prop = "Obsidiana", angulo = 70, radio = 172, escala = 2, giro = 0 }, -- lejos de la roca de 35°
+			{ prop = "Obsidiana", angulo = 132, radio = 172, escala = 1.8, giro = 70 }, -- y de la de 155°
 			{ prop = "Obsidiana", angulo = 310, radio = 168, escala = 2.2, giro = -40 },
 			{ prop = "Fumarola", angulo = 0, radio = 160, escala = 2.2, giro = 0 },
 			{ prop = "Fumarola", angulo = 180, radio = 158, escala = 2, giro = 0 },
