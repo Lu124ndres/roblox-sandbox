@@ -9,7 +9,8 @@
 		"empty"  vacío: descanso y ruleta
 	Lo leen quienes cambian según el relleno (ZoneMood, SkyCycle, AbyssRescue,
 	SeaLife, DesertAir...). sandBlend() sube de 0 a 1 en FADE_SECONDS al llegar
-	el desierto y baja igual al irse (para mezclar la luz cálida sin saltos).
+	el desierto y baja igual al irse (para mezclar la luz cálida sin saltos);
+	lavaBlend() hace lo mismo con la lava (la luz roja de la guarida).
 ]]
 
 export type Mode = "water" | "empty" | "lava" | "sand"
@@ -20,7 +21,13 @@ local CraterMode = {}
 
 local mode: Mode = "water" -- así lo deja TerrainBuilder
 local listeners: { (Mode) -> () } = {}
-local blendFrom, blendAt = 0, -math.huge -- sandBlend al cambiar y cuándo cambió
+local sandFrom, lavaFrom, blendAt = 0, 0, -math.huge -- las mezclas al cambiar y cuándo cambió
+
+local function blendOf(kind: Mode, from: number): number
+	local t = math.clamp((os.clock() - blendAt) / FADE_SECONDS, 0, 1)
+	local target = if mode == kind then 1 else 0
+	return from + (target - from) * t
+end
 
 function CraterMode.get(): Mode
 	return mode
@@ -31,16 +38,18 @@ function CraterMode.isSand(): boolean
 end
 
 function CraterMode.sandBlend(): number
-	local t = math.clamp((os.clock() - blendAt) / FADE_SECONDS, 0, 1)
-	local target = if mode == "sand" then 1 else 0
-	return blendFrom + (target - blendFrom) * t
+	return blendOf("sand", sandFrom)
+end
+
+function CraterMode.lavaBlend(): number
+	return blendOf("lava", lavaFrom)
 end
 
 function CraterMode.set(value: Mode)
 	if value == mode then
 		return
 	end
-	blendFrom, blendAt = CraterMode.sandBlend(), os.clock()
+	sandFrom, lavaFrom, blendAt = CraterMode.sandBlend(), CraterMode.lavaBlend(), os.clock()
 	mode = value
 	for _, listener in listeners do
 		task.spawn(listener, value)

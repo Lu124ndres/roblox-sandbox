@@ -103,8 +103,8 @@ local function animate(buoys: { Floating }, foam: { Foam }, glints: BasePart)
 		sinceFoam = 0
 		local camera = Workspace.CurrentCamera
 		local center = if camera then camera.CFrame.Position else Vector3.zero
-		-- Sobre el desierto del minotauro no hay agua que destelle.
-		local dry = CraterMode.isSand()
+		-- Sobre el desierto del minotauro o la lava del dragón no hay agua que destelle.
+		local dry = (CraterMode.isSand() or CraterMode.get() == "lava")
 			and WorldZones.distanceToCrater(center) < WorldLayout.craterRimOuter
 		local glintY = if dry then GLINTS_HIDDEN_Y else WorldLayout.waterLevel + 0.3
 		glints.CFrame = CFrame.new(center.X, glintY, center.Z)

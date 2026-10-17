@@ -9,7 +9,9 @@
 	tenso y de vez en cuando hay relámpagos y truenos.
 
 	Con el desierto del minotauro (CraterMode "sand") no hay chispas ni
-	relámpagos: la bruma se vuelve polvo y el aire es el de DesertAir.
+	relámpagos: la bruma se vuelve polvo y el aire es el de DesertAir. Con la
+	lava del dragón ("lava") la bruma y las chispas bajan a ras de la lava
+	(está más abajo que el agua) y el resto del aire es el de LairAir.
 
 	SkyCycle lee ZoneMood.blend() para mezclar la luz del día con la del cráter.
 ]]
@@ -22,6 +24,7 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
+local Guarida = require(ReplicatedStorage.Shared.Dragon.Guarida)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
@@ -101,11 +104,13 @@ local function craterEffects()
 	embers.Acceleration = Vector3.new(0, 2, 0)
 	embers.Parent = fog
 
-	-- En el desierto: sin chispas de lava y la bruma es polvo.
+	-- En el desierto: sin chispas de lava y la bruma es polvo. Con la lava: a su altura.
 	local function desert(mode: CraterMode.Mode)
 		local sand = mode == "sand"
 		embers.Enabled = not sand
 		mist.Color = if sand then MIST_DUST else MIST_LAVA
+		local surface = if mode == "lava" then Guarida.lava else WorldLayout.waterLevel
+		fog.CFrame = CFrame.new(WorldZones.craterCenter + Vector3.new(0, surface + 3, 0))
 	end
 	CraterMode.onChanged(desert)
 	desert(CraterMode.get())
