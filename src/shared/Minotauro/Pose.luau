@@ -23,6 +23,8 @@
 		                           costados se abren (huesos opcionales del v2)
 		dy                         salto (fracción del alto)
 		air                        en el aire (0..1): Cuerpo.plant no apoya los pies
+		tailMin / faldonMin        piso para tailUp y los faldones de los costados después
+		                           de los resortes (sentado no se meten en el suelo)
 	apply() la pasa a los huesos con Rig.turn.
 ]]
 

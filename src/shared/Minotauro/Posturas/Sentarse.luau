@@ -57,8 +57,8 @@ local SEATED: Pose.Pose = {
 	elbowR = 0.9,
 	outL = 0.25,
 	outR = 0.25,
-	faldonL = 1.1,
-	faldonR = 1.1,
+	faldonL = 1.3,
+	faldonR = 1.3,
 	tailUp = 0.5,
 	tailCurl = 1.1,
 	tail2 = 0.3,
@@ -135,6 +135,8 @@ local function base(u: number, ctx: Tipos.Ctx): (Pose.Pose, number)
 	local body = ctx.profile.body
 	local extra = math.max(0, math.rad(body.seatSkirt) - Cuerpo.skirt(pose, body))
 	pose.faldonF = (pose.faldonF or 0) + extra * sat
+	pose.tailMin = SEATED.tailUp * 0.9 * sat -- el rebote no mete la cola en el suelo
+	pose.faldonMin = SEATED.faldonL * sat
 	return pose, sat
 end
 
