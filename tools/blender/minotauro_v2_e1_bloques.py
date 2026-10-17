@@ -16,9 +16,11 @@ Uso (desde la raíz del repo):
         [salida.blend] [carpeta de renders]
 """
 import bpy, bmesh, json, math, os, sys
+import numpy as np
 from mathutils import Vector as V
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+exec(open(os.path.join(HERE, "minotauro_v2_revision.py"), encoding="utf-8").read(), globals())
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
 ARGS = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 BLEND = ARGS[0] if ARGS else os.path.join(RAIZ, "assets", "blender", "minotauro_v2", "e1_bloques.blend")
@@ -39,7 +41,6 @@ COLORES = {
 }
 PARTES = {}  # nombre -> {"coleccion", "bloques": [(puntos, color)]}
 EJES = "xyz"
-CAJAS = []  # (parte, color, rangos) para revisar solapamientos
 
 
 def bloque(parte, coleccion, color, x, y, z, eje="z", fin="+", recorte=None):
@@ -63,7 +64,6 @@ def bloque(parte, coleccion, color, x, y, z, eje="z", fin="+", recorte=None):
                 p = {eje: rangos[eje][extremo], a: i, b: j}
                 puntos.append(V((p["x"], p["y"], p["z"])) * CELDA)
     PARTES.setdefault(parte, {"coleccion": coleccion, "bloques": []})["bloques"].append((puntos, color))
-    CAJAS.append((parte, color, (x, y, z)))
 
 
 def par(parte, coleccion, color, x, y, z, eje="z", fin="+", recorte=None):
@@ -131,7 +131,10 @@ def cabeza():
     par("Cabeza", c, "oro", (1, 2), (-10, -9), (18, 20))  # aro de la nariz
     bloque("Cabeza", c, "oro", (-2, 2), (-10, -9), (17, 18))
     # Mechón y cuernitos.
-    bloque("Cabeza", c, "pelo_osc", (-3, 3), (-6, -1), (28, 30), recorte={"y+": 2})
+    # El mechón se apoya sobre la cabeza (no se mete en la cuña de arriba): base sobre la
+    # frente, cuña encima y la punta que cae por delante.
+    bloque("Cabeza", c, "pelo_osc", (-3, 3), (-6, -5), (28, 29))
+    bloque("Cabeza", c, "pelo_osc", (-3, 3), (-6, -1), (29, 31), recorte={"y+": 2})
     bloque("Cabeza", c, "pelo_osc", (-2, 2), (-7, -6), (26, 30))
     par("Cabeza", c, "marfil", (6, 9), (-2, 1), (25, 27))  # sale de lado
     par("Cabeza", c, "oro", (7, 8), (-3, 2), (24, 28))  # anillo
@@ -173,23 +176,76 @@ def material(nombre):
     return m
 
 
-def malla(nombre, bloques):
+def solido(parte, color, puntos):
+    """Bloque convexo: sus caras sin bisel (para revisar) y la malla con bisel."""
+    b = bmesh.new()
+    unicos = {tuple(round(c, 6) for c in p) for p in puntos}
+    bmesh.ops.convex_hull(b, input=[b.verts.new(p) for p in unicos])
+    bmesh.ops.dissolve_limit(b, angle_limit=math.radians(1), verts=b.verts[:], edges=b.edges[:])
+    bmesh.ops.recalc_face_normals(b, faces=b.faces[:])
+    caras = [(f.normal.copy(), [v.co.copy() for v in f.verts]) for f in b.faces]
+    antes = (len(b.faces), len(b.edges), len(b.verts))
+    bmesh.ops.bevel(b, geom=b.edges[:], offset=BISEL, segments=1, affect="EDGES",
+                    profile=0.5, clamp_overlap=True)
+    bmesh.ops.recalc_face_normals(b, faces=b.faces[:])
+    return {"parte": parte, "color": color, "b": b, "caras": caras, "antes": antes,
+            "despues": len(b.faces)}
+
+
+def _muestras(f, paso=0.02):
+    """Puntos que cubren la cara (rejilla + vértices), apenas por fuera del bloque."""
+    n, c = f.normal, f.calc_center_median()
+    u = n.orthogonal().normalized()
+    v = n.cross(u)
+    poli = [((p.co - c).dot(u), (p.co - c).dot(v)) for p in f.verts]
+    xs, ys = [p[0] for p in poli], [p[1] for p in poli]
+    pts = [(x * 0.98, y * 0.98) for x, y in poli] + [(0.0, 0.0)]
+    for x in np.arange(min(xs), max(xs), paso):
+        for y in np.arange(min(ys), max(ys), paso):
+            if all((b[0] - a[0]) * (y - a[1]) - (b[1] - a[1]) * (x - a[0]) >= 0
+                   for a, b in zip(poli, poli[1:] + poli[:1])):
+                pts.append((x, y))
+    return np.array([tuple(c + u * x + v * y + n * 1e-3) for x, y in pts])
+
+
+def quitar_ocultas(solidos):
+    """Borra las caras de un bloque tapadas por completo por otros bloques de la MISMA pieza
+    (la pieza es rígida: nunca se separan). Se compara contra la cuña sin bisel, así que en
+    la ranura del bisel entre dos vecinos puede quedar una rendija de 0.012 BU: no se ve."""
+    quitadas = 0
+    for s in solidos:
+        cajas = []
+        for o in solidos:
+            if o is s:
+                continue
+            N = np.array([tuple(n) for n, _ in o["caras"]])
+            D = np.array([n.dot(pts[0]) for n, pts in o["caras"]])
+            todos = np.array([tuple(p) for _, pts in o["caras"] for p in pts])
+            cajas.append((N, D, todos.min(axis=0) - 2e-3, todos.max(axis=0) + 2e-3))
+        borrar = []
+        for f in s["b"].faces:
+            pts = _muestras(f)
+            cubierto = np.zeros(len(pts), dtype=bool)
+            for N, D, lo, hi in cajas:
+                if ((pts >= lo) & (pts <= hi)).all(axis=1).any():
+                    cubierto |= (pts @ N.T - D <= 1e-6).all(axis=1)
+            if cubierto.all():
+                borrar.append(f)
+        quitadas += sum(len(f.verts) - 2 for f in borrar)
+        bmesh.ops.delete(s["b"], geom=borrar, context="FACES_ONLY")
+    return quitadas
+
+
+def malla(nombre, solidos):
     bm = bmesh.new()
     colores = []
-    for puntos, color in bloques:
-        if color not in colores:
-            colores.append(color)
-        b = bmesh.new()
-        unicos = {tuple(round(c, 6) for c in p) for p in puntos}
-        bmesh.ops.convex_hull(b, input=[b.verts.new(p) for p in unicos])
-        bmesh.ops.dissolve_limit(b, angle_limit=math.radians(1), verts=b.verts[:], edges=b.edges[:])
-        bmesh.ops.bevel(b, geom=b.edges[:], offset=BISEL, segments=1, affect="EDGES",
-                        profile=0.5, clamp_overlap=True)
-        bmesh.ops.recalc_face_normals(b, faces=b.faces[:])
-        copia = {v: bm.verts.new(v.co) for v in b.verts}
-        for f in b.faces:
-            bm.faces.new([copia[v] for v in f.verts]).material_index = colores.index(color)
-        b.free()
+    for s in solidos:
+        if s["color"] not in colores:
+            colores.append(s["color"])
+        copia = {v: bm.verts.new(v.co) for v in s["b"].verts}
+        for f in s["b"].faces:
+            bm.faces.new([copia[v] for v in f.verts]).material_index = colores.index(s["color"])
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if not v.link_faces], context="VERTS")
     me = bpy.data.meshes.new(nombre)
     bm.to_mesh(me)
     bm.free()
@@ -209,37 +265,34 @@ def armar():
         if not col:
             col = bpy.data.collections.new(parte["coleccion"])
             raiz.children.link(col)
-        o = bpy.data.objects.new(nombre, malla(nombre, parte["bloques"]))
+        parte["solidos"] = [solido(nombre, c, p) for p, c in parte["bloques"]]
+        parte["tris_ocultos"] = quitar_ocultas(parte["solidos"])
+        o = bpy.data.objects.new(nombre, malla(nombre, parte["solidos"]))
         o["hueso"] = "Cadera" if nombre.startswith("Faldon") else nombre
         col.objects.link(o)
     return [o for o in raiz.all_objects]
 
 
 # --- Revisión: estadísticas y renders ----------------------------------------------------
-def caras_coplanares():
-    """Pares de bloques que se meten uno en otro y comparten un plano de cara: parpadean."""
-    malos = []
-    for i, (pa, ca, a) in enumerate(CAJAS):
-        for pb, cb, b in CAJAS[i + 1:]:
-            if all(min(a[e][1], b[e][1]) > max(a[e][0], b[e][0]) for e in range(3)):
-                if any(a[e][k] == b[e][k] for e in range(3) for k in (0, 1)):
-                    malos.append(f"{pa}/{ca} {a} con {pb}/{cb} {b}")
-    return malos
-
-
 def estadisticas(objetos):
+    solidos = [s for p in PARTES.values() for s in p["solidos"]]
     tris = {o.name: sum(len(p.vertices) - 2 for p in o.data.polygons) for o in objetos}
     zs = [(o.matrix_world @ v.co).z for o in objetos for v in o.data.vertices]
     alto = max(zs) - min(zs)
     return {
-        "bloques": sum(len(p["bloques"]) for p in PARTES.values()),
+        "bloques": len(solidos),
         "bloques_por_parte": {n: len(p["bloques"]) for n, p in PARTES.items()},
         "triangulos": sum(tris.values()),
+        "triangulos_ocultos_quitados": {n: p["tris_ocultos"] for n, p in PARTES.items() if p["tris_ocultos"]},
         "triangulos_por_parte": tris,
         "partes": len(objetos),
         "alto_bu": round(alto, 4),
         "studs_por_bu": round(ALTO_JUEGO / alto, 4),
-        "caras_coplanares": caras_coplanares(),
+        "caras_coplanares": coplanares(solidos),
+        "normales_hacia_adentro": normales(solidos),
+        "bisel": bisel(solidos),
+        "pendientes": pendientes(solidos, CELDA),
+        "huesos": huesos(objetos),
     }
 
 
@@ -270,13 +323,20 @@ def renders(carpeta):
     sc.collection.objects.link(cam)
     sc.camera = cam
     centro = V((0, 0, 1.55))
+    vistas(sc, cam, sol, centro, carpeta, "")
+    materiales_diagnostico([m.name for m in bpy.data.materials if m.name.startswith("MinoV2_")])
+    sc.cycles.samples = 8
+    vistas(sc, cam, sol, centro, carpeta, "diagnostico_")
+
+
+def vistas(sc, cam, sol, centro, carpeta, prefijo):
     for nombre, angulo, alto in (("frente", 0, 0), ("perfil", 90, 0), ("tres_cuartos", 35, 0.35),
                                  ("atras", 180, 0)):
         a = math.radians(angulo)
         cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, alto * 10))
         cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
         sol.rotation_euler = (math.radians(50), 0, a + math.radians(-35))
-        sc.render.filepath = os.path.join(carpeta, f"{nombre}.png")
+        sc.render.filepath = os.path.join(carpeta, f"{prefijo}{nombre}.png")
         bpy.ops.render.render(write_still=True)
 
 
@@ -288,4 +348,4 @@ bpy.ops.wm.save_as_mainfile(filepath=BLEND)
 renders(RENDERS)
 with open(os.path.join(RENDERS, "estadisticas.json"), "w", encoding="utf-8") as f:
     json.dump(datos, f, indent=2, ensure_ascii=False)
-print("ESTADISTICAS", json.dumps({k: v for k, v in datos.items() if "por_parte" not in k}))
+print("ESTADISTICAS", json.dumps({k: v for k, v in datos.items() if "por_parte" not in k}, ensure_ascii=False))

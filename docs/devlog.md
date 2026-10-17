@@ -1603,3 +1603,22 @@ huesos, 17,998 a 19,874 triángulos), no la orca teñida; el comentario de `Conf
 que dice lo contrario está desactualizado.
 
 **Qué se rompió:** nada (no se tocó `src/` ni los modelos actuales).
+
+---
+
+## 2026-10-16 (19) — Minotauro v2 E1: revisión del modelo de bloques
+
+**Qué se hizo (pedido del usuario):** `tools/blender/minotauro_v2_revision.py` revisa el
+modelo con la forma real de cada bloque (cuñas y bisel, no su caja): caras coplanares que
+parpadean, normales hacia adentro, bisel, pendientes de las cuñas, cuadrícula y la tabla
+pieza → hueso. El script borra las caras tapadas por completo dentro de cada pieza (190
+triángulos) y el mechón ya no se mete en la cuña de la cabeza: se apoya encima. Renders de
+diagnóstico (color plano y caras de atrás en rojo) junto a los normales.
+
+**Resultado:** 93 bloques, 3,890 triángulos, 3.1 BU; 0 coplanares, 0 normales al revés,
+bisel de 0.012 en un segmento en todos los bloques, 0 cuñas fuera de regla. Los artefactos
+negros del primer render eran caras coplanares de bloques solapados (se corrigió la
+geometría en `f659620`); lo oscuro entre las piernas es la borla de la cola en sombra.
+
+**Qué se rompió:** nada. El faldón (3 piezas) va al hueso `Cadera`: queda propuesto darle
+huesos propios.

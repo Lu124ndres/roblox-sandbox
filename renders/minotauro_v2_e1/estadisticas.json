@@ -1,5 +1,5 @@
 {
-  "bloques": 92,
+  "bloques": 93,
   "bloques_por_parte": {
     "PieIzq": 1,
     "PieDer": 1,
@@ -17,7 +17,7 @@
     "AntebrazoDer": 2,
     "ManoIzq": 2,
     "ManoDer": 2,
-    "Cabeza": 31,
+    "Cabeza": 32,
     "Mandibula": 1,
     "OrejaIzq": 3,
     "OrejaDer": 3,
@@ -28,7 +28,25 @@
     "FaldonIzq": 4,
     "FaldonDer": 4
   },
-  "triangulos": 4036,
+  "triangulos": 3890,
+  "triangulos_ocultos_quitados": {
+    "Cadera": 6,
+    "Columna": 4,
+    "Pecho": 8,
+    "BrazoIzq": 16,
+    "BrazoDer": 16,
+    "AntebrazoIzq": 2,
+    "AntebrazoDer": 2,
+    "ManoIzq": 2,
+    "ManoDer": 2,
+    "Cabeza": 104,
+    "OrejaIzq": 4,
+    "OrejaDer": 4,
+    "Cola3": 6,
+    "FaldonFrente": 6,
+    "FaldonIzq": 4,
+    "FaldonDer": 4
+  },
   "triangulos_por_parte": {
     "PieIzq": 44,
     "PieDer": 44,
@@ -36,33 +54,86 @@
     "PiernaDer": 44,
     "MusloIzq": 88,
     "MusloDer": 88,
-    "Cadera": 176,
-    "Columna": 176,
-    "Pecho": 164,
+    "Cadera": 170,
+    "Columna": 172,
+    "Pecho": 156,
     "Cuello": 44,
-    "BrazoIzq": 132,
-    "BrazoDer": 132,
-    "AntebrazoIzq": 88,
-    "AntebrazoDer": 88,
-    "ManoIzq": 88,
-    "ManoDer": 88,
-    "Cabeza": 1364,
+    "BrazoIzq": 116,
+    "BrazoDer": 116,
+    "AntebrazoIzq": 86,
+    "AntebrazoDer": 86,
+    "ManoIzq": 86,
+    "ManoDer": 86,
+    "Cabeza": 1304,
     "Mandibula": 44,
-    "OrejaIzq": 132,
-    "OrejaDer": 132,
+    "OrejaIzq": 128,
+    "OrejaDer": 128,
     "Cola1": 44,
     "Cola2": 44,
-    "Cola3": 132,
-    "FaldonFrente": 264,
-    "FaldonIzq": 176,
-    "FaldonDer": 176
+    "Cola3": 126,
+    "FaldonFrente": 258,
+    "FaldonIzq": 172,
+    "FaldonDer": 172
   },
   "partes": 26,
   "alto_bu": 3.1,
   "studs_por_bu": 5.3226,
-  "caras_coplanares": [
-    "Pecho/pelo ((-5, 5), (-3, 3), (18, 19)) con BrazoIzq/pelo_osc ((4, 12), (-4, 4), (17, 19))",
-    "Pecho/pelo ((-5, 5), (-3, 3), (18, 19)) con BrazoDer/pelo_osc ((-12, -4), (-4, 4), (17, 19))",
-    "Cabeza/pelo ((-6, 6), (-5, 4), (28, 29)) con Cabeza/pelo_osc ((-3, 3), (-6, -1), (28, 30))"
-  ]
+  "caras_coplanares": [],
+  "normales_hacia_adentro": 0,
+  "bisel": {
+    "min": 0.012,
+    "max": 0.012,
+    "segmentos_distintos_de_1": []
+  },
+  "pendientes": {
+    "cunas_fuera_de_regla": [],
+    "vertices_fuera_de_cuadricula": []
+  },
+  "huesos": {
+    "pieza_a_hueso": {
+      "PieIzq": "PieIzq",
+      "PieDer": "PieDer",
+      "PiernaIzq": "PiernaIzq",
+      "PiernaDer": "PiernaDer",
+      "MusloIzq": "MusloIzq",
+      "MusloDer": "MusloDer",
+      "Cadera": "Cadera",
+      "Columna": "Columna",
+      "Pecho": "Pecho",
+      "Cuello": "Cuello",
+      "BrazoIzq": "BrazoIzq",
+      "BrazoDer": "BrazoDer",
+      "AntebrazoIzq": "AntebrazoIzq",
+      "AntebrazoDer": "AntebrazoDer",
+      "ManoIzq": "ManoIzq",
+      "ManoDer": "ManoDer",
+      "Cabeza": "Cabeza",
+      "Mandibula": "Mandibula",
+      "OrejaIzq": "OrejaIzq",
+      "OrejaDer": "OrejaDer",
+      "Cola1": "Cola1",
+      "Cola2": "Cola2",
+      "Cola3": "Cola3",
+      "FaldonFrente": "Cadera",
+      "FaldonIzq": "Cadera",
+      "FaldonDer": "Cadera"
+    },
+    "piezas_sin_hueso_del_contrato": [],
+    "huesos_sin_pieza": [
+      "Boca",
+      "Raiz"
+    ],
+    "huesos_con_varias_piezas": {
+      "Cadera": [
+        "Cadera",
+        "FaldonDer",
+        "FaldonFrente",
+        "FaldonIzq"
+      ]
+    },
+    "huesos_sin_pesos_por_contrato": [
+      "Boca",
+      "Raiz"
+    ]
+  }
 }
