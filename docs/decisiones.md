@@ -602,3 +602,21 @@ interruptor, no reemplazo). **Decisión:** campo opcional `modelSuffix` en el gi
 lo publica con el nombre de siempre (`MinotauroE1`), así el cliente, `Etapas.forModel` y la
 animación no cambian; si no, usa el actual. Volver atrás es borrar una línea. Mientras solo
 exista E1, al crecer pasa del becerro de bloques al joven actual.
+
+## 2026-10-17 — El desierto del minotauro es del cliente, como la lava
+
+**Contexto:** el usuario pidió que el hábitat del minotauro sea un desierto en vez de agua. El cráter
+ya cambiaba de relleno por gigante en el cliente (agua o lava, `CraterDrain`). **Decisión:** un
+tercer modo, "sand" (`GiantDef.sand`): el cliente escribe el terreno de arena (una cáscara de ~10
+filas de vóxeles, por cuartos, un cuarto por cuadro), mientras sube o baja es un solo disco, y los
+props del hábitat los sube el cliente sobre la arena (el servidor los sigue apoyando en la repisa).
+`CraterMode` dice qué hay en el cráter a quien cambia según el relleno (luz, polvo, rescate).
+
+## 2026-10-17 — La rutina del minotauro y la evolución se sincronizan con la hora del servidor
+
+**Contexto:** el minotauro se anima en cada cliente. **Decisión:** la rutina (adónde camina, qué
+postura toca, a qué jugador mira) sale de `GetServerTimeNow()` con un hash sin estado
+(`Minotauro/Azar`), y la evolución usa `EvolucionHasta`: el estallido es a los 1.3 s del inicio,
+tanto para los efectos (`EvolveFx`) como para la pose (`Minotauro/Evolucion`), y el cambio de
+modelo pasa ahí, tapado por el destello, en vez de apenas llega la etapa.
+

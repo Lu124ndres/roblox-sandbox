@@ -1869,3 +1869,46 @@ selene y stylua.
 
 **Qué sigue:** que el usuario los vea y publicar.
 
+---
+
+## 2026-10-17 (10) — Minotauro: rutina, desierto, voces y evolución
+
+**Qué se hizo (pedido del usuario; cuatro sesiones en paralelo, cada una con sus archivos):**
+
+- **Rutina** (`Minotauro/Rutina`, `Habitos`, `Posturas/`, `Evolucion`, `Azar`): cuando no come, el
+  minotauro pasea por el cráter, se sienta (y sentado se rasca, bosteza, mira o dormita), olfatea,
+  se estira, mira al cielo o a un jugador y hace sus trucos (que pasan a ser una opción más: ya no
+  hay `trickEvery`). Todo sale de la hora del servidor con un hash sin estado: todos lo ven igual.
+  Cambia por etapa (el becerro trota e inquieto, la forma final casi no camina y se sienta pesado).
+  Comer manda: se para, va a la orilla y vuelve a la rutina. Pose de evolución (se agacha, explota
+  hacia arriba a los 1.3 s, ruge). Eventos nuevos: `sit`, `standup`, `snort`, `yawn`, `sniff`,
+  `evolve`. `Cuerpo.plant` ahora cuenta la pezuña inclinada.
+- **Desierto** (`client/Ambient`: `CraterMode`, `CraterSand`, `SandTerrain`, `SandShape`,
+  `SandDisc`, `SandDecor`, `SandProps`, `DesertAir`, `DustDevils`, `LakeFill`): con `sand = true`
+  el cráter es un desierto de terreno (dunas, ondas de viento, bancos y mesetas de arenisca, huesos
+  y piedras) que sube con cortinas de arena al llegar el gigante y se escurre en el descanso; los
+  props suben con la arena; viento con arena, polvo, vaho, remolinos y luz cálida. Todo local del
+  cliente, como la lava.
+- **Voces y polvo** (`client/Audio/MinoVoces`, `Giant/MinoSuelo`, `Effects/SandFx`): 14 sonidos de
+  ProSoundEffects (bramido de toro por etapa con capas de gruñido y retumbo, resoplidos, pisadas en
+  arena, golpes) y polvo de arena en pisadas, pisotón, caídas y al sentarse. `Assets.Sounds` pasa a
+  `Assets/Sounds.luau`.
+- **Evolución** (`Giant/EvolveFx`, `EvolveLook`, `GiantEvolution`, `Effects/Evolve*`): para todos
+  los gigantes, con su color: carga con aura, energía y anillos (0..1.3 s), estallido con destello,
+  columna de luz, onda en el suelo y chispas, y calma con chispas que caen. El cambio de modelo
+  pasa en el destello, igual para todos.
+- `Effects/GroundFx`: los peces que come, la llegada, la despedida y los ataques levantan arena en
+  el desierto en vez de salpicar.
+
+**Probado en Studio (Play):** el desierto sube con el minotauro; en 60 s la E1 estaba sentada, se
+paró, caminó ~50 studs, se detuvo a hacer cosas y siguió; una evolución forzada (`fill 0.3`) se ve
+con la carga dorada y pasa a la E2 en el destello; la E4 pasea a 48 studs del centro como mucho
+(el desierto tiene 190) a 61 cuadros por segundo; consola sin errores ni avisos del juego.
+Checklist: build, selene (28 avisos viejos, ninguno nuevo) y stylua.
+
+**Qué se rompió:** nada visto. Pendiente de oír en el juego: volúmenes y el pico de la carga de la
+evolución contra el estallido (`EvolveFx`). La arena se ve pálida de día (el color de terreno
+Sand es global: también es el de las playas).
+
+**Qué sigue:** que el usuario lo vea y escuche en el juego y publicar.
+
