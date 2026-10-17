@@ -11,6 +11,10 @@
 	de RuletaResultado), así el que llega encuentra su casa puesta. Un gigante
 	sin carpeta en ServerStorage.Habitats (o sin entrada en Config) deja el
 	cráter vacío.
+
+	Los props se apoyan en el fondo de verdad (bajo el agua en la repisa). Con
+	el desierto del minotauro la arena llega más arriba: cada cliente los sube
+	sobre ella mientras está (client/Ambient/SandProps), como la arena misma.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
