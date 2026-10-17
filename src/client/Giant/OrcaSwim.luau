@@ -8,6 +8,7 @@
 	(respetan volumen, alcance y modo rápido) y el temblor de cámara, más
 	fuerte cuanto más cerca está el jugador local. Solo nadan los modelos con
 	huesos de orca (hueso Raiz); los demás gigantes se quedan en su lugar.
+	Cada pez que le llega (fed) dispara su animación especial al comer
 ]]
 
 local Players = game:GetService("Players")
@@ -90,9 +91,7 @@ function OrcaSwim.attach(template: Model?, center: Vector3): Swim?
 		mouth = motion.mouth,
 		water = motion.water,
 		bite = motion.bite,
-		fed = function(_) -- por ahora solo muerde (animación especial: pendiente)
-			motion.bite()
-		end,
+		fed = motion.fed,
 		destroy = function()
 			motion.destroy()
 			fx.destroy()

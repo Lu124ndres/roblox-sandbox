@@ -7,9 +7,13 @@
 	salto alto y lento con giro completo, aletazos acostada de costado,
 	asomarse para vigilar a los jugadores y zambullidas hondas sacando la
 	cola. Al comer levanta bien la cabeza y abre la boca grande.
+	Con los peces agradece con calma: saluda con la aleta, echa chorros y se gira
+	mostrando la panza; con un pez raro da un salto alto y cae de costado, y
+	en los combos canta, salpica la orilla y hace un tirabuzón lento.
 ]]
 
 local Perfil = require(script.Parent.Perfil)
+local Festejos = require(script.Parent.Parent.OrcaMotion.Comer.Festejos)
 local Jumps = require(script.Parent.Parent.OrcaMotion.Tricks.Jumps)
 local Show = require(script.Parent.Parent.OrcaMotion.Tricks.Show)
 local Surface = require(script.Parent.Parent.OrcaMotion.Tricks.Surface)
@@ -27,6 +31,26 @@ local profile: Perfil.Profile = {
 		{ weight = 2, trick = Surface.finSlap(3, 5) },
 		{ weight = 2, trick = Show.spyhop(0.3, 1, 5.5) },
 		{ weight = 1, trick = Jumps.dive(1.1, 9) },
+	},
+	meal = {
+		tempo = 1,
+		snap = 1,
+		roll = 0.9,
+		hz = 2.2,
+		damping = 0.65,
+		gap = 0.9,
+		gestures = {
+			{ weight = 3, name = "saludo" },
+			{ weight = 2, name = "chorro" },
+			{ weight = 2, name = "panza" },
+			{ weight = 1, name = "coletazo" },
+		},
+		rare = Festejos.salto(1.05, 0.5, 3.8),
+		party = {
+			Festejos.canto(0.3, 1, 4.6),
+			Festejos.coletazo(2, 4.6),
+			Festejos.tirabuzon(1.2, 2, 4.4),
+		},
 	},
 }
 

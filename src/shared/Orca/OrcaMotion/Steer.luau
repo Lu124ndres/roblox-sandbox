@@ -68,4 +68,34 @@ function Steer.update(
 	steer.turn += (change / dt - steer.turn) * (1 - math.exp(-dt * 4))
 end
 
+-- Persigue su recorrido (`path`: dónde va y cómo se mueve) o, si alguien le da
+-- de comer, la orilla hacia `direction`. Devuelve qué tan cerca está de esa
+-- orilla (0..1). Las etapas enormes (radius < 1) giran en el centro.
+function Steer.follow(
+	steer: Steer,
+	dt: number,
+	path: { position: Vector3, velocity: Vector3 },
+	direction: Vector3?,
+	radius: number,
+	height: number,
+	cruise: number,
+	boost: number, -- el truco la apura o la frena
+	now: number
+): number
+	local goal = if direction then direction * radius * 0.92 else path.position
+	local close = if direction
+		then math.clamp(1 - (goal - steer.position).Magnitude / height, 0, 1)
+		else 0
+	Steer.update(
+		steer,
+		dt,
+		goal,
+		if direction then Vector3.zero else path.velocity * boost,
+		cruise * boost * (if direction then 2.4 else 1.7),
+		if direction and close > 0.3 then direction else nil,
+		if radius < 1 then now * 0.1 else nil
+	)
+	return close
+end
+
 return table.freeze(Steer)

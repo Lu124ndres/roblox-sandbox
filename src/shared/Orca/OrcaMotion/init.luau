@@ -9,9 +9,9 @@
 		  recorrido en todos los clientes, sale de la hora del servidor);
 		- de vez en cuando hacen un truco de su etapa (Tricks), también
 		  sincronizado por la hora del servidor;
-		- cuando alguien les da de comer (Feeders) dejan su recorrido, nadan
-		  hacia la orilla de quien las alimenta, sacan la cabeza y abren la
-		  boca; cada pez que llega las hace morder (bite).
+		- cuando alguien les da de comer (Feeders) nadan hacia la orilla de
+		  quien las alimenta, sacan la cabeza y abren la boca; cada pez que
+		  llega (fed) dispara su animación especial al comer (Comer).
 	step devuelve el pivote del modelo cada cuadro y anima sus huesos (Rig;
 	altura, cabeceo y boca en Body). OrcaFx lee `state` y sus `events`.
 ]]
@@ -24,6 +24,7 @@ local WorldLayout = require(script.Parent.Parent.WorldLayout)
 local Etapas = require(script.Parent.Etapas)
 local Perfil = require(script.Parent.Etapas.Perfil)
 local Body = require(script.Body)
+local Comer = require(script.Comer)
 local Feeders = require(script.Feeders)
 local Path = require(script.Path)
 local Rig = require(script.Rig)
@@ -47,6 +48,7 @@ export type State = {
 	breath: number, -- ciclo de respirar (0 = en la superficie)
 	trick: string?, -- nombre del truco que está haciendo
 	hidden: boolean, -- escondida bajo el lago (descanso)
+	ghost: boolean, -- es la Orca fantasma (OrcaFx le pone su toque espectral)
 	voice: number, -- tono de sus llamados (etapa)
 	events: { Event }, -- lo que pasó este cuadro (OrcaFx los consume)
 	rig: Rig.Rig?,
@@ -60,6 +62,7 @@ export type Motion = {
 	water: () -> Vector3,
 	point: (name: string) -> Vector3?,
 	bite: () -> (),
+	fed: (info: Comer.Info) -> (), -- le llegó un pez: muerde y reacciona
 	destroy: () -> (),
 }
 
@@ -79,6 +82,7 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 		breath = 0,
 		trick = nil,
 		hidden = false,
+		ghost = false,
 		voice = 1,
 		events = {},
 		rig = nil,
@@ -89,6 +93,7 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 	local rigFor: Model? = nil
 	local biteUntil = 0
 	local schedule = Schedule.new()
+	local comer = Comer.new()
 
 	local function step(dt: number, info: Info): CFrame
 		dt = math.clamp(dt, 1 / 240, 0.1)
@@ -98,6 +103,8 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 			rigFor = info.inner
 			state.rig = if info.inner then Rig.bind(info.inner) else nil
 			profile = Etapas.forModel(if info.inner then info.inner.Name else nil)
+			state.ghost = info.inner ~= nil
+				and string.find(info.inner:GetFullName(), "Fantasma") ~= nil
 		end
 		local radius = Path.radius(LAKE, height)
 		local cruise = Path.speed(height) * profile.swim.speed * (1 + info.anger * 0.5)
@@ -121,21 +128,10 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 			body = Body.new(sample.depth * height)
 		end
 		local steer, shape = swim :: Steer.Steer, body :: Body.Body
-		local goal = if direction then direction * radius * 0.92 else sample.position
-		local close = if direction
-			then math.clamp(1 - (goal - steer.position).Magnitude / height, 0, 1)
-			else 0
-		Steer.update(
-			steer,
-			dt,
-			goal,
-			if direction then Vector3.zero else sample.velocity * boost,
-			cruise * boost * (if direction then 2.4 else 1.7),
-			if direction and close > 0.3 then direction else nil,
-			if radius < 1 then now * 0.1 else nil -- las etapas enormes giran en el centro
-		)
+		local close = Steer.follow(steer, dt, sample, direction, radius, height, cruise, boost, now)
 		local speed = steer.velocity.Magnitude
 		local turn = steer.turn + schedule.yawRate
+		local meal = Comer.step(comer, dt, profile, state, state.events)
 		Body.step(shape, dt, {
 			profile = profile,
 			height = height,
@@ -151,6 +147,7 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 			weight = weight,
 			biting = os.clock() < biteUntil,
 			anger = info.anger,
+			meal = meal,
 			rig = state.rig, -- y anima los huesos
 		})
 
@@ -158,12 +155,15 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 		state.breath, state.voice = sample.breath, profile.voice
 		state.trick = doing.name
 		state.hidden = info.lift < -height * 1.5
-		state.center = origin + steer.position + Vector3.new(0, WATER + shape.depth + info.lift, 0)
+		local add = meal.add -- los gestos al comer, sobre el cuerpo
+		local depth = shape.depth + add.depth * height + info.lift
+		state.center = origin + steer.position + Vector3.new(0, WATER + depth, 0)
+		local yaw = steer.yaw + schedule.yaw + meal.yaw + add.yaw + math.rad(info.spin)
 		local center = if state.rig then state.rig.center else 0.45
 		return CFrame.new(state.center)
-			* CFrame.Angles(0, steer.yaw + schedule.yaw + math.rad(info.spin), 0)
-			* CFrame.Angles(shape.pitch, 0, 0)
-			* CFrame.Angles(0, 0, shape.roll)
+			* CFrame.Angles(0, yaw, 0)
+			* CFrame.Angles(shape.pitch + add.pitch, 0, 0)
+			* CFrame.Angles(0, 0, shape.roll + add.roll)
 			* CFrame.new(0, -height * center, 0)
 	end
 
@@ -187,6 +187,10 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 		end,
 		bite = function()
 			biteUntil = os.clock() + BITE_SECONDS
+		end,
+		fed = function(fish: Comer.Info)
+			biteUntil = os.clock() + BITE_SECONDS
+			Comer.fed(comer, fish, profile, state.events)
 		end,
 		destroy = feeders.destroy,
 	}
