@@ -1912,3 +1912,44 @@ Sand es global: también es el de las playas).
 
 **Qué sigue:** que el usuario lo vea y escuche en el juego y publicar.
 
+
+## 2026-10-17 (11) — Rocas naturales en la guarida del dragón
+
+**Qué se hizo (pedido del usuario: "que parezcan naturales"):** las rocas donde se posa el dragón
+eran columnas apiladas y parecían tambores. Ahora son peñones de bloques volcánicos
+(`Ambient/LairRocks` y el nuevo `Ambient/LairCrag`):
+- **Cima:** lajas giradas en escalones de 0.18; la primera queda justo en `Guarida.point()`.
+- **Núcleo:** queda 3.5 más abajo y entre laja y laja se ve como una grieta.
+- **Contorno:** una corona de bloques bajada con `LairCrag.under` para que nada sobresalga de la
+  cima. Tiene bultos y entrantes, pero nunca más adentro que `size`, porque `Dragon/Posado` pisa
+  plano hasta ahí.
+- **Laderas:** hileras de bloques torcidos que se abren hacia la lava, con taludes en cuña,
+  bloques sueltos, vetas de magma por las grietas y costra de discos corridos.
+- **Materiales:** basalto y pizarra; la obsidiana es lisa y sin reflejo, porque el vidrio de
+  Roblox reflejaba el cielo y se veía azul.
+
+**Probado en Studio (Play):** la guarida con el dragón E2 se ve de día y al atardecer, sin errores
+en la consola.
+Checklist: build, selene (28 avisos viejos) y stylua.
+
+## 2026-10-17 (12) — Dragón marino v2: la cría rediseñada para que se lea como dragón
+
+**Qué se hizo (pedido del usuario: "más parecido a dragón"):** `dragon_v2_e1_geometria.py`, más los
+nuevos `dragon_v2_e1_alas.py` y `dragon_v2_formas.py` (prismas convexos, membranas cóncavas y
+púas, para E2..E4):
+- **Cabeza:** hocico largo con narinas, cejas en cuña, ojos a los costados, dos cuernos marfil y
+  aletitas en las mejillas.
+- **Cuello:** en arco, con la cabeza sobre el lomo.
+- **Alas:** de murciélago, con brazo, garrita en la muñeca, tres dedos en abanico y membrana
+  sólida con festón cóncavo.
+- **Cuerpo y cola:** púas de la nuca a la cola, placas ventrales menta y la cola con pala en
+  rombo.
+- **Patas:** más gruesas, con garras.
+
+Usa 5,107 triángulos. La Cadera gira a la altura de la Cabeza para que `Rig.bind` siga dando
+adelante = −y exacto.
+
+**Qué sigue:**
+- E2, E3 y E4 sobre esta base.
+- Las brasas de `DragonEmbers` salen de la Cadera, que ahora está alta: conviene sacarlas del
+  Pecho o de Cola1.
