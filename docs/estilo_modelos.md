@@ -180,6 +180,20 @@ deformación de la malla.
 | Cola en S y levantada | segmentos separados o metidos uno en otro |
 | Torso echado atrás (rugido) y adelante (comer) | torso que se separa de la cadera |
 
+**E1 (2026-10-17):** `tools/blender/minotauro_v2_e1_poses.py` posa las piezas con los ejes de
+`Pose.apply` y renderiza estas poses y el pico de cada truco del juego en
+`renders/minotauro_v2_e1/poses/` (el pisotón está en `minotauro_v2_e1_pisoton.py`). En
+`poses.json` separa tres cosas: piezas sin articulación que se cruzan, juntas que se solapan
+de más y piezas que se separan de su padre. Lo que queda, con los hombros ya arreglados:
+
+- Ninguna pieza se separa en ninguna pose.
+- Solo poses de la guía que el juego no usa: brazos arriba a 150° (manos y antebrazos en la
+  cabeza y las orejas), mirar abajo 45° (cabeza en el pecho), pierna a 90° (pierna en la cadera).
+- Codo doblado (140° de la guía; 106° en rascarse): la mano entra ~1 celda en el brazo.
+- Orejas caídas (rugido, baile, músculo) sobre la tapa de la hombrera: hasta 0.7 celdas.
+- `Pecho/Cabeza` de hasta 1.4 celdas en los trucos: son las esquinas de arriba del pecho que
+  quedan dentro de la cabeza (más grande que el pecho); no se ven.
+
 Reglas de pesos:
 
 - **100 % por pieza: un solo hueso por vértice**, sin mezcla en las articulaciones.

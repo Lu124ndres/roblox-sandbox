@@ -1692,3 +1692,22 @@ en el script del pisotón. Guía de estilo: sección "Hombros (E1)".
 fuera de regla. El pisotón no cambia (faldón a 55°, 91° y 3°).
 
 **Qué se rompió:** nada; de frente se ve la junta de la hombrera en x ±8.
+
+---
+
+## 2026-10-17 (2) — Minotauro v2 E1: poses extremas
+
+**Qué se hizo:** `tools/blender/minotauro_v2_e1_poses.py` posa las piezas rígidas con la
+cadena de huesos del contrato y los mismos ejes que `Pose.apply` / `Rig.turn` (así las poses
+del juego se escriben con sus claves: `outL`, `elbowOutL`, `lookPitch`…). Prueba las 13 poses
+de la guía y el pico de 7 trucos del juego (músculo, rugido, rascarse, salto agachado y en el
+aire, baile, comer), levanta el faldón lo justo en cada una y guarda en `poses.json` qué
+piezas se cruzan, qué juntas se solapan de más y qué piezas se separan. Las articulaciones del
+v2 quedan anotadas en `inventario_modelos.md`. Renders en `renders/minotauro_v2_e1/poses/`.
+
+**Resultado:** con la hombrera partida ninguna pieza se separa y los trucos del juego solo
+dejan roces chicos (orejas sobre la hombrera, la mano en el brazo con el codo doblado). Lo
+grande queda en poses de la guía que el juego no usa (brazos a 150°, mirar abajo 45°, pierna a
+90°). Detalle en la guía de estilo, "Poses extremas".
+
+**Qué se rompió:** nada.
