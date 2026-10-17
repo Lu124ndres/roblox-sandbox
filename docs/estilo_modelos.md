@@ -240,8 +240,14 @@ memoria con `EditableMesh`, sin cambiar nada del lugar).
 
 ## 4. Criterios de animación
 
-Las animaciones con keyframes cubren las **acciones principales**. Lo continuo
-(respirar, mirar, la cola) sigue siendo por código y se suma encima.
+> **Decidido el 2026-10-17: todo por código, sin keyframes** (ver `docs/decisiones.md`). Las
+> acciones de la tabla de abajo son trucos de `src/shared/Minotauro/Trucos/` (uno por módulo)
+> que cumplen estos principios con la pose; la acción secundaria la hace `Minotauro/Resortes`
+> y los pies en el suelo `Minotauro/Cuerpo`. Se revisan en video con
+> `tools/blender/minotauro_v2_e1_animacion.py`.
+
+Las **acciones principales** se arman con curvas por código. Lo continuo (respirar, mirar,
+la cola) también, y se suma encima.
 
 ### Principios (todos obligatorios)
 
@@ -255,7 +261,7 @@ Las animaciones con keyframes cubren las **acciones principales**. Lo continuo
 | **Peso por etapa** | El becerro es rápido y rebota; la E4 tarda más, con anticipación más larga y casi sin rebote. Mismo clip, distinto tiempo, o un clip por etapa si el resultado lo pide (ver plan). |
 | **Pose clara** | La silueta de cada pose clave se lee en negro sobre blanco. |
 
-### Acciones con keyframes (Minotauro)
+### Acciones principales (Minotauro)
 
 Son las que hoy hacen `Trucos.luau`, `Caminar.luau` y `Pose.feeding`:
 

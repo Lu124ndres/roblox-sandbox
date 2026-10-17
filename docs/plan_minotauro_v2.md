@@ -33,6 +33,9 @@ de abajo.
    los keyframes serían nuevos. Si se aprueba, en el primer commit de código actualizo
    `CLAUDE.md` y agrego la decisión con el motivo (calidad de las acciones principales) y
    el costo (clips subidos a Roblox, ver riesgo R2).
+   **Respondida el 2026-10-17: sin keyframes, todo por código** (`decisiones.md`). Los
+   pasos 6 y 8 cambian: no hay clips que subir (R2 y R3 dejan de aplicar); los trucos se
+   rehacen en `src/shared/Minotauro/Trucos/` y se revisan en video desde Blender.
 3. **Presupuesto de triángulos.** `blender-pipeline.md` dice 10k; los actuales tienen 18-20k;
    Roblox admite 20k por MeshPart. Propuesta: E1 8k, E2 10k, E3 12k, E4 15k.
 4. **Quién toca qué.** `tools/blender/`, `assets/` y `src/shared/Assets/` son de Cowork

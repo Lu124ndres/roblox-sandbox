@@ -581,3 +581,15 @@ cabeza en el músculo, el rugido y el baile. **Decisión:** la mitad de adentro 
 pasa a `Pecho` (yugo fijo) y el brazo se queda con la tapa, girando por su borde de adentro
 (x = 8). Además, las dos mitades bajan una celda para dejar libre la cabeza. Se compararon las
 opciones con `tools/blender/minotauro_v2_e1_poses.py` en los picos de los trucos del juego.
+
+## 2026-10-17 — El minotauro se anima por código, con resortes, no con keyframes
+
+**Contexto:** el plan del v2 proponía clips con keyframes para las acciones principales, contra
+la regla de `CLAUDE.md` (2026-10-11). Los clips son assets que hay que subir a mano con la cuenta
+dueña del juego y pelean con la pose por código por `Bone.Transform`. **Decisión (del usuario):**
+seguir por código. Los trucos se rehacen con los principios de la guía (anticipación, aplastarse
+y estirarse con la pose, arcos, rebote) en `Minotauro/Trucos/`; la acción secundaria sale de
+resortes (`Minotauro/Resortes`: orejas, cola, mandíbula y faldón persiguen su pose con retraso y
+los empuja la inercia del cuerpo) y los pies se apoyan solos (`Minotauro/Cuerpo.plant`). Todo
+vive en git y sirve igual para el modelo actual y el v2 (los huesos del faldón son opcionales).
+Peso por etapa: `pace` (más lento) y `bounce` (menos rebote) en `Minotauro/Etapas`.

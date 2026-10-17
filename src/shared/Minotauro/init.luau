@@ -10,7 +10,9 @@
 		  inclina, estira los brazos y mastica; cada pez que llega lo muerde (bite);
 		  cuando dejan de darle vuelve caminando al centro; cada pisada salpica;
 		- entre comidas hace trucos sincronizados (Trucos): pisotón, rugido,
-		  músculo, baile, rascarse y salto.
+		  músculo, baile, rascarse y salto;
+		- apoya siempre el pie más bajo en el suelo (Cuerpo) y orejas, cola,
+		  mandíbula y faldón siguen al cuerpo con retraso (Resortes).
 	El ritmo, la voz, la fuerza y los trucos salen de la etapa (Etapas, por el
 	nombre del modelo). Solo anima huesos si el modelo los tiene; si no, solo
 	gira y salta. step devuelve el pivote (base, -Z al frente).
@@ -24,8 +26,10 @@ local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
 local Caminar = require(script.Caminar)
+local Cuerpo = require(script.Cuerpo)
 local Etapas = require(script.Etapas)
 local Pose = require(script.Pose)
+local Resortes = require(script.Resortes)
 local Rig = require(script.Rig)
 local Trucos = require(script.Trucos)
 
@@ -65,6 +69,7 @@ function Minotauro.new(center: Vector3): Motion
 	local rigFor: Model? = nil
 	local yaw, stepPhase, feeding = 0, 0, 0
 	local walk = Caminar.new()
+	local springs = Resortes.new()
 	local biteUntil = 0
 	local lastSlot, lastU = -1, 0
 
@@ -134,6 +139,8 @@ function Minotauro.new(center: Vector3): Motion
 		end
 		local rig = state.rig
 		if rig then
+			Cuerpo.plant(pose)
+			Resortes.step(springs, pose, dt, turn / dt, profile)
 			Pose.apply(rig, pose)
 		end
 		state.height = info.height

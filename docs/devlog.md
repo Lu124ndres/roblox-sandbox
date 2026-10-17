@@ -1731,3 +1731,31 @@ rígidas (error máximo 0.00001 celdas); el FBX reimportado tiene los 28 huesos,
 
 **Qué sigue:** importar el FBX a `ServerStorage.MinotauroE1_v2` (a mano, con "Mantener
 huesos de influencia cero") y el código para usarlo (paso 8 del plan).
+
+---
+
+## 2026-10-17 (4) — Minotauro: animaciones por código con resortes
+
+**Qué se hizo (pedido del usuario, por código y no con keyframes):**
+
+- `Minotauro/Trucos` pasa a carpeta: un módulo por truco y `Curvas` (llegar con rebote,
+  impacto sin suavizar, parábola del salto…). Cada truco se rehizo con anticipación,
+  aplastarse y estirarse con la pose y arcos: el pisotón se echa atrás, tiembla arriba y el
+  golpe dobla las dos rodillas; el rugido toma aire antes; el músculo bombea mirando el brazo;
+  el baile flexiona en cada tiempo y mueve los brazos en círculos; al rascarse golpetea el pie;
+  el salto se aplasta, se estira, encoge las piernas y cae aplastándose. El pisotón sigue en 57°.
+- `Minotauro/Resortes`: orejas, cola (en cadena), mandíbula y faldón persiguen su pose con
+  retraso y los empuja la inercia del cuerpo (subir, bajar, girar, mecerse).
+- `Minotauro/Cuerpo`: `plant` apoya el pie más bajo (al doblar las rodillas se agacha de verdad)
+  y `skirt` levanta el faldón de adelante lo que pide el muslo (curva medida del pisotón).
+- `Pose.apply` mueve los huesos opcionales del faldón; `Etapas` suma `pace` y `bounce` por
+  etapa y reconoce los modelos `…E<n>_v2`.
+
+**Probado en Studio por MCP:** los módulos corridos en Edit dan las poses de los 6 trucos; en
+Play, con `Minotauro:1`, 25 s a 60 cuadros por segundo, la pierna llegó a 1.0 rad en un truco,
+orejas, cola y mandíbula se movieron con los resortes y la consola no mostró errores. Checklist:
+build, selene y stylua sin avisos en `Minotauro`.
+
+**Qué se rompió:** nada. Visto en Edit: en el `MinotauroE1` actual la pierna casi no sube aunque
+el hueso gira 1 rad (la rodilla de reposo está 2 studs delante de la cadera); es de los pesos de
+ese modelo, no de este cambio.

@@ -11,6 +11,9 @@
 		voice      tono del rugido (agudo > 1, grave < 1)
 		stomp      fuerza del pisotón y de la caída: temblor y tamaño de la ola
 		tricks     los trucos que hace (Minotauro/Trucos) y cada cuántos segundos
+		pace       cuánto más lentos son sus trucos y sus resortes (1 = becerro)
+		bounce     amortiguación de los resortes (Minotauro/Resortes): baja rebota,
+		           alta se queda quieta enseguida
 ]]
 
 export type Profile = {
@@ -22,6 +25,8 @@ export type Profile = {
 	stomp: number,
 	tricks: { string },
 	trickEvery: number,
+	pace: number,
+	bounce: number,
 }
 
 local PROFILES: { [number]: Profile } = {
@@ -34,6 +39,8 @@ local PROFILES: { [number]: Profile } = {
 		stomp = 0.7,
 		tricks = { "baile", "salto", "pisoton", "rugido", "baile", "musculo", "salto", "rascarse" },
 		trickEvery = 11,
+		pace = 1,
+		bounce = 0.28,
 	},
 	{ -- joven: fanfarrón, saca músculo y todavía baila
 		breathe = 3,
@@ -44,6 +51,8 @@ local PROFILES: { [number]: Profile } = {
 		stomp = 0.9,
 		tricks = { "pisoton", "musculo", "baile", "rugido", "salto", "rascarse" },
 		trickEvery = 12,
+		pace = 1.1,
+		bounce = 0.38,
 	},
 	{ -- adulto: pesado, pisa y ruge
 		breathe = 3.5,
@@ -54,6 +63,8 @@ local PROFILES: { [number]: Profile } = {
 		stomp = 1.15,
 		tricks = { "pisoton", "rugido", "musculo", "salto", "pisoton", "rascarse" },
 		trickEvery = 13,
+		pace = 1.25,
+		bounce = 0.5,
 	},
 	{ -- forma final: enorme y lento; ruge y pisa, ya no baila ni salta
 		breathe = 4.2,
@@ -64,14 +75,20 @@ local PROFILES: { [number]: Profile } = {
 		stomp = 1.5,
 		tricks = { "rugido", "pisoton", "musculo", "pisoton", "rugido", "rascarse" },
 		trickEvery = 14,
+		pace = 1.45,
+		bounce = 0.65,
 	},
 }
 
 local Etapas = {}
 
--- La etapa sale del nombre del modelo (…E1 … E4); sin modelo, el becerro.
+-- La etapa sale del nombre del modelo (…E1 … E4, o …E1_v2 del modelo de bloques);
+-- sin modelo, el becerro.
 function Etapas.forModel(name: string?): Profile
-	local stage = if name then tonumber(string.match(name, "E(%d)$")) else nil
+	local digit = if name
+		then string.match(name, "E(%d)_v%d+$") or string.match(name, "E(%d)$")
+		else nil
+	local stage = tonumber(digit)
 	return PROFILES[math.clamp(stage or 1, 1, #PROFILES)]
 end
 

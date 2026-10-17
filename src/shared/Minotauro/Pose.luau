@@ -14,7 +14,10 @@
 		                           doblado adelante, antebrazo hacia arriba (por lado L/R)
 		legL / kneeL               pierna: muslo adelante, rodilla doblada (L/R)
 		tail1..tail3 / tailUp      cola: de lado a lado y arriba
+		faldonF / faldonL / faldonR faldón: el de adelante se levanta, los de los
+		                           costados se abren (huesos opcionales del v2)
 		dy                         salto (fracción del alto)
+		air                        en el aire (0..1): Cuerpo.plant no apoya los pies
 	apply() la pasa a los huesos con Rig.turn.
 ]]
 
@@ -155,7 +158,9 @@ function Pose.apply(rig: Rig.Rig, p: Pose)
 		Rig.turn(rig, "Muslo" .. lado, v("leg" .. s), 0, 0)
 		Rig.turn(rig, "Pierna" .. lado, -knee, 0, 0)
 		Rig.turn(rig, "Pie" .. lado, knee * 0.5 - v("leg" .. s) * 0.4, 0, 0)
+		Rig.turn(rig, "Faldon" .. lado, 0, 0, v("faldon" .. s) * out)
 	end
+	Rig.turn(rig, "FaldonFrente", v("faldonF"), 0, 0)
 	local up = v("tailUp")
 	Rig.turn(rig, "Cola1", -up, v("tail1"), 0) -- la cola apunta atrás: cabeceo - la sube
 	Rig.turn(rig, "Cola2", -up * 0.5, v("tail2"), 0)
