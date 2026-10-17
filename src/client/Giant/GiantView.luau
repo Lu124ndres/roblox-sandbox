@@ -6,7 +6,8 @@
 		- al comer: le llegan los peces volando (FeedThrow), gira hacia quien
 		  lo alimentó y rebota (la orca muerde), salpica, suelta corazones;
 		- al llenarse, en el descanso y al volver: GiantCycleFx;
-		- al pasar de etapa: ruge, tiembla la cámara y crece (3, 8, 15, 30 jugadores);
+		- al pasar de etapa: evoluciona (GiantEvolution: carga, estallido con el
+		  cambio de modelo y calma) y crece (3, 8, 15, 30 jugadores);
 		- cada tanto: gruñe y echa un chorro (la orca, al respirar). Todo local.
 ]]
 
@@ -26,6 +27,7 @@ local Fx = require(script.Parent.Parent.Effects.Fx)
 local FeedThrow = require(script.Parent.FeedThrow)
 local GiantBody = require(script.Parent.GiantBody)
 local GiantCycleFx = require(script.Parent.GiantCycleFx)
+local GiantEvolution = require(script.Parent.GiantEvolution)
 
 local ATTR, EFFECTS = Protocol.GiantAttributes, UIConfig.Effects
 
@@ -88,37 +90,6 @@ local function onFed(body: GiantBody.Body, character: Model)
 	end
 end
 
--- Cambio de etapa: rugido, temblor y crecimiento entre olas.
-local function onStage(body: GiantBody.Body, stage: number)
-	local newHeight = GiantStages.heightFor(stage)
-	local scale = newHeight / GiantStages.heightFor(1)
-	Sounds.play("Roar", body.top())
-	Sounds.play("OrcaCall", body.top(), 0.7)
-	CameraShake.shake(0.6 + 0.4 * stage * nearness(), 2.4)
-	hop(body.lift, newHeight * 0.12, 0.6)
-	TweenService
-		:Create(
-			body.spin,
-			TweenInfo.new(1.4, Enum.EasingStyle.Quad),
-			{ Value = body.spin.Value + 360 }
-		)
-		:Play()
-	body.setStage(stage)
-	task.delay(1.2, function()
-		local water = body.water()
-		Sounds.play("BigSplash", water)
-		Fx.splash(water, 3 + scale)
-		for k = 1, 3 do
-			Fx.ring(water, newHeight * (0.4 + k * 0.35), 1.2 + k * 0.4)
-		end
-		for _ = 1, 6 do
-			Fx.splash(waterAround(body, 0.45), 1.5 + scale * 0.3)
-		end
-		Fx.sparkle(body.top(), UIConfig.Colors.Coins, 50)
-		CameraShake.shake(0.4 * stage * nearness(), 1.2)
-	end)
-end
-
 local function ambientLoop(getBody: () -> GiantBody.Body?)
 	task.spawn(function()
 		while true do
@@ -149,6 +120,7 @@ function GiantView.start()
 	local body: GiantBody.Body? = nil
 	local currentId: string? = nil
 	local lastStage = 1
+	local evolution: GiantEvolution.Handle? = nil -- la evolución en curso
 
 	local function refresh()
 		local id = stateFolder:GetAttribute(ATTR.Id)
@@ -162,6 +134,10 @@ function GiantView.start()
 			if not def then
 				return
 			end
+			if evolution then
+				evolution.cancel()
+				evolution = nil
+			end
 			if body then
 				body.destroy()
 			end
@@ -172,7 +148,10 @@ function GiantView.start()
 			return
 		end
 		if body and stage > lastStage then
-			onStage(body, stage)
+			if evolution then
+				evolution.finish() -- otra antes de terminar (admin): la anterior se aplica ya
+			end
+			evolution = GiantEvolution.begin(body, defsById[id], stage)
 		end
 		lastStage = stage
 	end

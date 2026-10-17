@@ -139,6 +139,9 @@ local Assets: Assets = {
 		BigSplash = "rbxasset://sounds/impact_water.mp3",
 		StageUp = "rbxassetid://3454671965", -- fanfarria (badge fanfare)
 		Roar = "rbxassetid://133651202885353", -- "Monster Roar"
+		-- Evolución (EvolveFx; de ProSoundEffects, la cuenta de Pro Sound Effects en Roblox)
+		EvolveCharge = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
+		EvolveBurst = "rbxassetid://9126102254", -- "Time Warp Big Explosion Blast Boom Tonal Tail 1" (5.8 s)
 		-- Música (con licencia de Roblox: APM y DistroKid, se pueden usar en cualquier juego)
 		MusicIsland = "rbxassetid://128770946473000", -- "The Fisherman's Small Boat" (2:39)
 		MusicCrater = "rbxassetid://1843867314", -- "Tension Repeat Drones 29" (2:04)
