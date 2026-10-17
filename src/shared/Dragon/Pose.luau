@@ -18,6 +18,10 @@
 		            izquierda), head cabecea, tilt ladea; compensa el aletazo para
 		            que la cabeza vaya firme y sigue con un poco de rebote
 		boca        jaw 0 cerrada .. 1 abierta
+		directas    sin resorte, para lo rápido de comer (Dragon/Comer): neckSnap,
+		            headSnap y lookSnap se suman a neck, head y look ya suavizados;
+		            gulp2 y gulp1 doblan Cuello2 y Cuello1 (el trago que baja) sin
+		            mover la cabeza
 	El ala parte del planeo: `rig.neutral` (medido del modelo) la baja hasta ahí.
 ]]
 
@@ -94,13 +98,14 @@ function Pose.apply(rig: Rig.Rig, input: Input, p: Pose, dt: number)
 
 	-- Cuello y cabeza: compensan el aletazo y miran.
 	local counter = -0.07 * amp * math.sin(phase + 0.6)
-	local look = follow(rig, "Mirar", v("look") - turn * 0.12, dt, 1.5, 0.65)
-	local neck = follow(rig, "Cuello", v("neck"), dt, 1.4, 0.6)
-	local nod = follow(rig, "Cabecear", v("head"), dt, 1.8, 0.7)
+	local look = follow(rig, "Mirar", v("look") - turn * 0.12, dt, 1.5, 0.65) + v("lookSnap")
+	local neck = follow(rig, "Cuello", v("neck"), dt, 1.4, 0.6) + v("neckSnap")
+	local nod = follow(rig, "Cabecear", v("head"), dt, 1.8, 0.7) + v("headSnap")
 	local tilt = follow(rig, "Ladear", v("tilt"), dt, 1.6, 0.6)
-	Rig.turn(rig, "Cuello1", neck * 0.55 + nod * 0.15 + counter, look * 0.35, 0)
-	Rig.turn(rig, "Cuello2", neck * 0.45 + nod * 0.2 + counter * 0.6, look * 0.3, 0)
-	Rig.turn(rig, "Cabeza", nod * 0.65 - neck * 0.5 - counter * 0.4, look * 0.35, tilt)
+	local g1, g2 = v("gulp1"), v("gulp2")
+	Rig.turn(rig, "Cuello1", neck * 0.55 + nod * 0.15 + counter + g1, look * 0.35, 0)
+	Rig.turn(rig, "Cuello2", neck * 0.45 + nod * 0.2 + counter * 0.6 + g2 - g1, look * 0.3, 0)
+	Rig.turn(rig, "Cabeza", nod * 0.65 - neck * 0.5 - counter * 0.4 - g2, look * 0.35, tilt)
 	Rig.turn(rig, "Mandibula", -0.75 * math.clamp(v("jaw"), 0, 1.3), 0, 0)
 
 	-- Patas: recogidas al volar, colgando al quedarse quieto, de pie posado.

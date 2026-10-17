@@ -7,24 +7,13 @@
 	vueltas con trucos (Vuelo, Trucos) y a veces se posa en una roca de la guarida
 	(Guarida, Posado) a mirar, estirarse, acicalarse, rugir o echar fuego al
 	cielo, brincar o dormir (Posturas). Darle de comer manda (posado, despega):
-	va frente a quien lo alimenta, se queda en el aire y muerde cada pez (bite).
-	Al evolucionar se envuelve en las alas y en el estallido ruge (Evolucion).
-	step devuelve el pivote; el largo es LENGTH x el alto de su etapa.
-	state.events: lo que Dragon.Fx convierte en sonido y efectos:
-		flap      aletazo fuerte (picada al recuperarse, brinco)
-		whoosh    el aire al pasar rápido (picada, voltereta)
-		roar      rugido (truco, posado al cielo y al evolucionar, 1.45 s)
-		fire      empieza el fuego del truco en el aire (hacia la lava)
-		fireSky   empieza el fuego posado, hacia el cielo
-		land      toca la roca (al posarse y al caer del brinco)
-		fold      pliega las alas sobre el lomo ya posado
-		takeoff   el salto al despegar (con el aletazo hacia abajo)
-		stretch   se estira con las alas arriba
-		preen     empieza a mordisquearse el ala
-		sleep     termina de enroscarse para dormir
-		wake      despierta
-		evolve    empieza a evolucionar (el estallido es 1.3 s después)
-	state.fire dice si sale fuego ahora; state.perched, si está de pie.
+	va frente a quien lo alimenta y se queda en el aire con la boca abierta; con
+	cada pez (fed) hace su animación especial (Comer: lo atrapa, lo traga, festeja
+	los peces raros y las rachas). Al evolucionar se envuelve en las alas y en el
+	estallido ruge (Evolucion). step devuelve el pivote; el largo es LENGTH x el
+	alto de su etapa. state.events (lo que Dragon.Fx vuelve sonido y efectos):
+	ver Dragon/Tipos. state.fire dice si sale fuego ahora; state.perched, si está
+	de pie.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -35,7 +24,9 @@ local GiantStages = require(script.Parent.GiantStages)
 local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
+local Acto = require(script.Comer.Acto)
 local Apoyo = require(script.Apoyo)
+local Comer = require(script.Comer)
 local Conducta = require(script.Conducta)
 local Cuerpo = require(script.Cuerpo)
 local Destino = require(script.Destino)
@@ -58,6 +49,7 @@ export type Event = Tipos.Event
 export type State = Tipos.State
 export type Info = Tipos.Info
 export type Motion = Tipos.Motion
+export type Fed = Tipos.Fed
 
 local Dragon = {}
 
@@ -75,6 +67,7 @@ function Dragon.new(lakeCenter: Vector3): Motion
 	local wings = Cuerpo.new()
 	local conducta = Conducta.new()
 	local apoyo = Apoyo.new()
+	local comer = Comer.new()
 	local evolving = Evolucion.watch(stateFolder)
 	local tricks: Trucos.Tracker = { slot = -1, u = 0 }
 	local biteUntil = 0
@@ -120,6 +113,7 @@ function Dragon.new(lakeCenter: Vector3): Motion
 		if evolveT then
 			Pose.add(p, Evolucion.pose(evolveT))
 		end
+		Pose.add(p, Comer.step(comer, state, profile, stage, rumbo.yaw, evolveT ~= nil))
 
 		frozen = if evolveT then frozen or rumbo.position else nil
 		Destino.steer(rumbo, dt, {
@@ -145,7 +139,7 @@ function Dragon.new(lakeCenter: Vector3): Motion
 			hover = p.hover or 0,
 			jaw = p.jaw or 0,
 			ground = ground,
-			biting = os.clock() < biteUntil,
+			biting = os.clock() < biteUntil or Comer.biting(comer, os.clock()),
 		})
 		p.jaw = wings.jaw
 		state.fire, state.phase, state.fold = (p.fire or 0) > 0.5, wings.phase, wings.fold
@@ -159,7 +153,9 @@ function Dragon.new(lakeCenter: Vector3): Motion
 			{ now = now, dt = dt, L = L, ground = ground, profile = profile, wings = wings }
 		)
 		local bob = -math.cos(wings.phase) * L * 0.02 * wings.amp
-		state.center = placed.Position + Vector3.new(0, bob + info.lift, 0)
+		state.center = placed.Position
+			+ Vector3.new(0, bob + info.lift, 0)
+			+ Acto.offset(p, placed, L, ground)
 		state.velocity, state.yaw, state.length = rumbo.velocity, rumbo.yaw, L
 		state.voice, state.fireSize = profile.voice, profile.fire
 		state.hidden = info.lift < -L
@@ -192,6 +188,9 @@ function Dragon.new(lakeCenter: Vector3): Motion
 		end,
 		bite = function()
 			biteUntil = os.clock() + BITE_SECONDS
+		end,
+		fed = function(fed: Tipos.Fed)
+			Comer.fed(comer, fed)
 		end,
 		destroy = feeders.destroy,
 	}
