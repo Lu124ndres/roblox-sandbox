@@ -12,7 +12,8 @@
 		          pasa tal cual como cue: el cliente sabe cuáles suenan.
 		aletazos  cue flap (o hover si está quieto en el aire) con la fuerza del
 		          aletazo medida en el ala (Aleteo): planeando no suena.
-		estelas   aire en las puntas de las alas al ir rápido, picar o despegar.
+		estelas   aire en las puntas de las alas al ir rápido, picar, despegar o
+		          con la alegría de comer (joy: vuelta, aletazo de gloria).
 	Con efectos reducidos (fxScale 0) no se ve el fuego ni las estelas; los
 	cues siguen (los sonidos los respeta el cliente).
 ]]
@@ -98,7 +99,7 @@ function DragonFx.new(motion: Tipos.Motion, hooks: Hooks): Fx
 		for _, event in events do
 			if event.kind == "fireSky" then
 				skyUntil = now + FIRE_SKY
-			elseif event.kind == "takeoff" then
+			elseif event.kind == "takeoff" or event.kind == "joy" then
 				takeoffAt = now
 			end
 			cue(event.kind)

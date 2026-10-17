@@ -74,6 +74,15 @@ local Sounds: { [string]: string } = {
 	DragonDebris = "rbxassetid://9114034406", -- "Debris Rain 1" (4.0 s): grava y ceniza
 	DragonBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
 	DragonRocks = "rbxassetid://9118690959", -- "Rocks Movement 1" (3.3 s): se acomoda
+	-- Comer: Dragón (ProSoundEffects). Su animación especial al comer (Dragon/Comer):
+	-- capas por etapa en client/Audio/DragonRecetasComer.
+	DragonSnap = "rbxassetid://9119055432", -- "Shark Bite Smaller Teeth Snaps 6" (0.6 s): muerde
+	DragonGulp = "rbxassetid://9114688489", -- "Gulping Water Glottal Croaks Slurp Water 4" (1.1 s): traga
+	DragonPurr = "rbxassetid://9113984339", -- "Creature Purring 1" (1.4 s): gusto, cría y joven
+	DragonPurrDeep = "rbxassetid://9113984377", -- "Creature Purr 2" (4.6 s): gusto, adulto y anciano
+	DragonTreat = "rbxassetid://9125635442", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 7" (3.5 s)
+	DragonFlare = "rbxassetid://9117987817", -- "Pyro Fire Ball Burst 1" (1.5 s): llamarada de un pez raro
+	DragonFireRing = "rbxassetid://9117985933", -- "Pyro Fire Ball Burst 7" (1.9 s): anillo de fuego
 	-- Evolución (EvolveFx; de ProSoundEffects, la cuenta de Pro Sound Effects en Roblox)
 	EvolveCharge = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
 	EvolveBurst = "rbxassetid://9126102254", -- "Time Warp Big Explosion Blast Boom Tonal Tail 1" (5.8 s)

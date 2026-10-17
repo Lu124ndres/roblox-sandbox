@@ -3,9 +3,10 @@
 	DragonVoces
 
 	Qué suena en cada momento del dragón según su etapa. Como MinoVoces: cada
-	evento es una lista de capas (DragonRecetas: claves de Assets.Sounds,
-	sección Dragón) que pueden sonar solo en algunas etapas, en la cabeza, la
-	boca, el cuerpo o el suelo, y con un retraso.
+	evento es una lista de capas (DragonRecetas y, al comer, DragonRecetasComer:
+	claves de Assets.Sounds, secciones Dragón y Comer: Dragón) que pueden sonar
+	solo en algunas etapas, en la cabeza, la boca, el cuerpo o el suelo, y con
+	un retraso.
 
 	Por etapa:
 		voz    la cría chilla agudo y juguetón (pterodáctilo con el tono alto) y
@@ -23,6 +24,7 @@
 ]]
 
 local DragonRecetas = require(script.Parent.DragonRecetas)
+local DragonRecetasComer = require(script.Parent.DragonRecetasComer)
 local Sounds = require(script.Parent.Sounds)
 
 export type Info = {
@@ -63,6 +65,14 @@ Sounds.define({
 	DragonDebris = { volume = 0.7, rollOff = 350 },
 	DragonBoom = { volume = 1, rollOff = 700 },
 	DragonRocks = { volume = 0.6, rollOff = 260 },
+	-- Al comer (DragonRecetasComer)
+	DragonSnap = { volume = 0.7, rollOff = 260 },
+	DragonGulp = { volume = 0.6, rollOff = 220 },
+	DragonPurr = { volume = 0.6, rollOff = 220 },
+	DragonPurrDeep = { volume = 0.7, rollOff = 300 },
+	DragonTreat = { volume = 0.6, rollOff = 400 },
+	DragonFlare = { volume = 0.9, rollOff = 500 },
+	DragonFireRing = { volume = 1, rollOff = 600 },
 })
 
 local DragonVoces = {}
@@ -86,7 +96,7 @@ end
 
 -- Suena el evento kind (las capas de esta etapa). Sin receta: nada.
 function DragonVoces.play(kind: string, info: Info)
-	local recipe = DragonRecetas[kind]
+	local recipe = DragonRecetas[kind] or DragonRecetasComer[kind]
 	if not recipe then
 		return
 	end
