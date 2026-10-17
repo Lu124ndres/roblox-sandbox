@@ -108,11 +108,10 @@ En E2..E4 las articulaciones salen deformadas y se guardan en `scene["puntos"]` 
 Roll de todos los huesos: 0. Exportación FBX: `primary_bone_axis="Y"`,
 `secondary_bone_axis="X"`, `axis_forward="-Z"`, `axis_up="Y"`, `add_leaf_bones=False`.
 
-### Adición propuesta para la v2: huesos del faldón (opción a, pendiente de aprobación)
+### Adición opcional para la v2: huesos del faldón (aprobada el 2026-10-16)
 
-No es parte del contrato vigente. Si se aprueba la opción a del faldón
-(`tools/blender/minotauro_v2_e1_pisoton.py`), el rig v2 suma tres huesos, todos hijos de
-`Cadera`, con las piezas del faldón al 100 %:
+Opción a del faldón (`tools/blender/minotauro_v2_e1_pisoton.py`). El rig v2 suma tres huesos,
+todos hijos de `Cadera`, con las piezas del faldón al 100 %. Todavía no se animan:
 
 ```
 Cadera

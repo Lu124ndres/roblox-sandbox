@@ -114,23 +114,16 @@
       "Cola1": "Cola1",
       "Cola2": "Cola2",
       "Cola3": "Cola3",
-      "FaldonFrente": "Cadera",
-      "FaldonIzq": "Cadera",
-      "FaldonDer": "Cadera"
+      "FaldonFrente": "FaldonFrente",
+      "FaldonIzq": "FaldonIzq",
+      "FaldonDer": "FaldonDer"
     },
     "piezas_sin_hueso_del_contrato": [],
     "huesos_sin_pieza": [
       "Boca",
       "Raiz"
     ],
-    "huesos_con_varias_piezas": {
-      "Cadera": [
-        "Cadera",
-        "FaldonDer",
-        "FaldonFrente",
-        "FaldonIzq"
-      ]
-    },
+    "huesos_con_varias_piezas": {},
     "huesos_sin_pesos_por_contrato": [
       "Boca",
       "Raiz"

@@ -134,6 +134,21 @@ Orca fantasma), no por monstruo:
 - Comprobación en Studio: la textura se ve igual que en Blender con la luz del cráter
   (de día y con la hora propia del volcán).
 
+### Faldón y cinturón (E1)
+
+Aprobado el 2026-10-16 (`ADELANTE = 1` en `tools/blender/minotauro_v2_e1_bloques.py`):
+
+- El **frente del cinturón** va 1 celda delante del cuerpo: cinturón en y −5..4 (celdas,
+  −y = frente), hebilla en y −6..−5 y piedra en y −7..−6.
+- Las **tiras del frente** cuelgan desde z = 10 en y −6..−5 y sus remaches van en y −7..−6.
+  Las tiras de los costados no cambian (x ±6..±7).
+- La **bisagra** de `FaldonFrente` (borde de adelante y arriba de las tiras, y = −6, z = 10)
+  queda a 6 celdas de la cadera, fuera del recorrido de la rodilla (5.8 celdas). Con el
+  cinturón en su lugar anterior (bisagra a 5 celdas), la rodilla atravesaba la raíz de las
+  tiras en cualquier pisotón.
+- Cada parte del faldón es una pieza con su hueso opcional (`FaldonFrente`, `FaldonIzq`,
+  `FaldonDer`, hijos de `Cadera`; ver `docs/inventario_modelos.md`).
+
 ### Poses extremas
 
 Cada etapa se prueba en estas poses antes de exportar (render de cada una). Se revisa

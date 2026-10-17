@@ -30,10 +30,10 @@ CELDA = 0.1
 BISEL = 0.012
 PENDIENTES = (0.5, 1.0, 2.0)  # celdas que se mete el lado / celdas de largo
 ALTO_JUEGO = 16.5  # studs: 3 x 5.5 (Config/Giants.luau)
-# Propuesta del pisotón (minotauro_v2_e1_pisoton.py): celdas que el frente del cinturón y el
-# faldón salen hacia adelante. 0 = el modelo aprobado; 1 = la bisagra del faldón queda fuera
-# del recorrido de la rodilla.
-ADELANTE = 0
+# Pisotón (minotauro_v2_e1_pisoton.py): celdas que el frente del cinturón y el
+# faldón salen hacia adelante (aprobado: 1, así la bisagra del faldón queda fuera
+# del recorrido de la rodilla; con 0 la rodilla atraviesa la raíz de las tiras).
+ADELANTE = 1
 
 # --- Paleta (lineal, la misma de minotauro_e1.py) ---------------------------------------
 COLORES = {
@@ -274,7 +274,7 @@ def armar():
         parte["solidos"] = [solido(nombre, c, p) for p, c in parte["bloques"]]
         parte["tris_ocultos"] = quitar_ocultas(parte["solidos"])
         o = bpy.data.objects.new(nombre, malla(nombre, parte["solidos"]))
-        o["hueso"] = "Cadera" if nombre.startswith("Faldon") else nombre
+        o["hueso"] = nombre  # las piezas del faldón van a sus huesos opcionales (hijos de Cadera)
         col.objects.link(o)
     return [o for o in raiz.all_objects]
 

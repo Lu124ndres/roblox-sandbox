@@ -11,7 +11,7 @@ aristas y vértices antes del bisel), "despues" (caras después del bisel)}.
     normales(solidos)       caras con la normal hacia adentro del bloque.
     bisel(solidos)          cuántos segmentos dejó el bisel y a qué distancia de la arista.
     pendientes(solidos)     cuñas fuera de 1:1, 1:2 o 2:1 y vértices fuera de la cuadrícula.
-    huesos(objetos)         pieza -> hueso contra el contrato de 25 huesos.
+    huesos(objetos)         pieza -> hueso contra el contrato (25 huesos + 3 opcionales del faldón).
 """
 import math
 from mathutils import Vector as V
@@ -19,6 +19,7 @@ from mathutils import Vector as V
 HUESOS = ["Raiz", "Cadera", "Columna", "Pecho", "Cuello", "Cabeza", "Mandibula", "Boca",
           "Cola1", "Cola2", "Cola3"] + [f"{h}{l}" for l in ("Izq", "Der") for h in (
               "Oreja", "Brazo", "Antebrazo", "Mano", "Muslo", "Pierna", "Pie")]
+HUESOS += ["FaldonFrente", "FaldonIzq", "FaldonDer"]  # adición opcional v2, hijos de Cadera
 SIN_PESOS = {"Raiz", "Boca"}
 
 

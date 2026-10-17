@@ -1639,3 +1639,21 @@ como mucho. Renders `pisoton_a.png`, `pisoton_b.png` y `pisoton_b_choque.png`. L
 faldón quedan anotados en `inventario_modelos.md` como adición propuesta.
 
 **Qué se rompió:** nada; el modelo aprobado no cambió (93 bloques, 3,890 triángulos).
+
+---
+
+## 2026-10-16 (21) — Minotauro v2 E1: cinturón adelante y huesos del faldón
+
+**Qué se hizo (aprobado por el usuario):** `ADELANTE = 1` en
+`tools/blender/minotauro_v2_e1_bloques.py`: el frente del cinturón, la hebilla y las tiras del
+frente salen 1 celda hacia adelante y la bisagra de `FaldonFrente` queda a 6 celdas de la
+cadera, fuera del recorrido de la rodilla. Cada pieza del faldón va a su hueso opcional
+(`FaldonFrente`, `FaldonIzq`, `FaldonDer`, hijos de `Cadera`, todavía sin animar); el
+verificador acepta esos 3 huesos además de los 25 del contrato. Se regeneraron el `.blend` y
+los renders de revisión. Guía de estilo: sección "Faldón y cinturón (E1)"; inventario: la
+adición pasa de propuesta a aprobada.
+
+**Resultado:** 93 bloques, 3,890 triángulos, 0 coplanares, 0 normales al revés, 0 cuñas fuera
+de regla; cada hueso con una sola pieza.
+
+**Qué se rompió:** nada; el modelo todavía no se exporta a Studio.
