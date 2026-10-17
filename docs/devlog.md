@@ -1657,3 +1657,21 @@ adición pasa de propuesta a aprobada.
 de regla; cada hueso con una sola pieza.
 
 **Qué se rompió:** nada; el modelo todavía no se exporta a Studio.
+
+---
+
+## 2026-10-16 (22) — Minotauro v2 E1: pisotón y caminata con el faldón aprobado
+
+**Qué se hizo (pedido del usuario):** `tools/blender/minotauro_v2_e1_pisoton.py` deja de
+comparar las opciones a y b y mide la opción a con el modelo aprobado: choques de las dos
+piernas contra las tres piezas del faldón en el pisotón del juego, la pose extrema y toda la
+caminata (`Pose.walk`), más la curva del faldón según el muslo del pisotón (40° a 70°).
+Renders `pisoton_57.png`, `pisoton_perfil.png` (de perfil, sin el brazo derecho, que tapaba
+el muslo) y `caminata.png`; se borraron `pisoton_a.png`, `pisoton_b.png` y
+`pisoton_b_choque.png`.
+
+**Resultado:** el faldón se levanta 55° en el pisotón, 91° en la pose extrema y 3° como mucho
+en la caminata. Con el cinturón en su lugar anterior no había ángulo sin choque. Se propuso
+bajar el pisotón a 55° y se descartó: pide 64° (ver `decisiones.md`). `Trucos.luau` no cambia.
+
+**Qué se rompió:** nada.

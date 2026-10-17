@@ -559,3 +559,14 @@ cliente, que no crea fuego en modo rápido y lo quita al activarlo. Cada prop va
 y la bruma, y no se veía al monstruo. **Decisión:** `SkyCycle` lleva el reloj hacia
 `SkyMoods.craterHour` (por el camino corto) según `ZoneMood.blend()`, igual que el amanecer del
 descanso lo lleva a la mañana. La isla conserva su noche; el volcán siempre se juega con luz.
+
+## 2026-10-16 — El pisotón del minotauro se queda en 57°
+
+**Contexto:** con el faldón v2 E1, el pisotón del juego (`Minotauro/Trucos.luau`, muslo
+1.0 rad = 57.3°) obliga a levantar `FaldonFrente` 55° para que el muslo no lo atraviese. Se
+propuso bajar el muslo a 55° para que pidiera menos. **Decisión:** no se cambia. La curva de
+`tools/blender/minotauro_v2_e1_pisoton.py` (`curva_muslo_faldon` en
+`renders/minotauro_v2_e1/pisoton.json`) no baja con el muslo: tiene su pico en 52° (71°) y a
+55° pide 64°, más que a 57°. El único choque es la esquina de arriba y adelante del muslo
+contra la raíz de las tiras, que entre 52° y 66° se aleja de ellas al subir. Si algún día se
+quiere un faldón más quieto, el pisotón tendría que subir (63–66° piden 16–34°), no bajar.

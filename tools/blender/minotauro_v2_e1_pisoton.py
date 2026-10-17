@@ -1,14 +1,19 @@
 r"""
-Pose de pisotón del Minotauro v2 E1 para comparar dos opciones del faldón:
-    a) FaldonFrente con hueso propio (bisagra en el borde de adelante del cinturón): se
-       levanta solo lo justo para que el muslo no lo atraviese.
-    b) Faldón rígido en Cadera (sin huesos nuevos): el muslo sube hasta el límite sin choque.
-Mide las dos con el modelo aprobado (ADELANTE = 0) y con la propuesta de cinturón y faldón
-1 celda más adelante (ADELANTE = 1); los renders son de la propuesta. No guarda el .blend.
-Mueve las piezas rígidas como lo haría el rig (Muslo > Pierna > Pie), busca los ángulos sin
-choque (BVH entre la pierna derecha y el faldón) y renderiza cada opción. El pisotón del
-juego (Minotauro/Trucos.luau) sube el muslo 1.0 rad y dobla la rodilla 1.2 rad; la guía pide
-revisar además la pierna a 90°.
+Pisotón y caminata del Minotauro v2 E1 contra el faldón (opción a, aprobada el 2026-10-16):
+FaldonFrente tiene hueso propio con la bisagra en el borde de adelante del cinturón y se
+levanta lo justo para que el muslo no lo atraviese.
+
+Mueve las piezas rígidas como lo haría el rig (Muslo > Pierna > Pie y los brazos desde el
+hombro), busca con choques BVH (piernas contra las tres piezas del faldón) cuánto tiene que
+levantarse el faldón y renderiza:
+    pisoton_57.png      el pisotón del juego (Minotauro/Trucos.luau: muslo 1.0 rad, rodilla
+                        1.2 rad, brazos abiertos 0.5 rad)
+    pisoton_perfil.png  el mismo de perfil, cerca de la cadera y sin el brazo derecho (lo tapa)
+    caminata.png        el momento de la caminata (Minotauro/Pose.luau, Pose.walk) que más pide
+                        levantar el faldón
+También mide la pose extrema de la guía (muslo y rodilla a 90°), la curva del faldón según el
+muslo del pisotón (de 40° a 70°) y, para comparar, el cinturón en su lugar anterior
+(ADELANTE = 0). No guarda el .blend.
 
 Uso (desde la raíz del repo, después de minotauro_v2_e1_bloques.py):
     blender -b --factory-startup --python tools/blender/minotauro_v2_e1_pisoton.py
@@ -20,39 +25,45 @@ from mathutils.bvhtree import BVHTree
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
 _src = open(os.path.join(HERE, "minotauro_v2_e1_bloques.py"), encoding="utf-8").read()
-exec(_src[:_src.index("objetos = armar()")], globals())  # armar(), estudio(), CELDA
+exec(_src[:_src.index("objetos = armar()")], globals())  # armar(), estudio(), CELDA, ADELANTE
 SALIDA = os.path.join(RAIZ, "renders", "minotauro_v2_e1")
+APROBADO = ADELANTE
 
 C = CELDA
-CADERA = V((-3, 0, 10)) * C  # muslo derecho: centro en x = -3 celdas, arriba en el cinturón
-RODILLA = V((-3, 0, 6)) * C
-HOMBRO = V((10.5, 0, 17.5)) * C  # brazo izquierdo; el derecho, espejado
-ABRIR = math.degrees(0.5)  # el pisotón del juego abre los brazos (outL/outR = 0.5 rad)
-BISAGRA = V((0, -5, 10)) * C  # borde de adelante y arriba de las tiras (se corre con ADELANTE)
-JUEGO = (math.degrees(1.0), math.degrees(1.2))  # muslo y rodilla del pisotón del juego
-EXTREMO = (90.0, 90.0)  # pose extrema de la guía
-PIERNA = ["MusloDer", "PiernaDer", "PieDer"]
-FALDON = ["FaldonFrente", "FaldonDer"]
+CADERA = V((3, 0, 10)) * C  # muslo izquierdo (x = +3 celdas); el derecho, espejado
+RODILLA = V((3, 0, 6)) * C
+HOMBRO = V((10.5, 0, 17.5)) * C
+BISAGRA = V((0, -5, 10)) * C  # sin ADELANTE: borde de adelante y arriba de las tiras
+JUEGO = (math.degrees(1.0), math.degrees(1.2))  # pisotón del juego: muslo y rodilla
+EXTREMO = (90.0, 90.0)
+ABRIR = math.degrees(0.5)
+PIERNAS = [p + l for p in ("Muslo", "Pierna", "Pie") for l in ("Izq", "Der")]
+FALDON = ["FaldonFrente", "FaldonIzq", "FaldonDer"]
+BRAZOS = [p + l for p in ("Brazo", "Antebrazo", "Mano") for l in ("Izq", "Der")]
 ob = bpy.data.objects
 
 
-def giro(pivote, grados):
-    """Cabeceo alrededor del eje x por el pivote (negativo = la punta va hacia adelante)."""
-    return Matrix.Translation(pivote) @ Matrix.Rotation(math.radians(grados), 4, "X") @ Matrix.Translation(-pivote)
+def giro(pivote, grados, eje="X"):
+    """Giro por el pivote. En x, negativo = la punta va hacia adelante (-y)."""
+    return Matrix.Translation(pivote) @ Matrix.Rotation(math.radians(grados), 4, eje) @ Matrix.Translation(-pivote)
 
 
-def posar(muslo, rodilla, faldon):
-    for o in ob:
-        if o.type == "MESH" and o.name in PARTES_POSABLES:
-            o.matrix_world = Matrix.Identity(4)
-    for s, lado in ((1, "Izq"), (-1, "Der")):
-        h = V((HOMBRO.x * s, HOMBRO.y, HOMBRO.z))
-        m = Matrix.Translation(h) @ Matrix.Rotation(math.radians(-ABRIR * s), 4, "Y") @ Matrix.Translation(-h)
+def lado(p, s):
+    return V((p.x * s, p.y, p.z))
+
+
+def posar(piernas, faldon, abrir=0.0, brazos=(0.0, 0.0)):
+    """piernas: {"Izq": (muslo, rodilla), "Der": ...} en grados (muslo + = adelante, rodilla +
+    = la pierna va atrás); brazos: cabeceo izquierdo y derecho (+ = adelante)."""
+    for s, l, cabeceo in ((1, "Izq", brazos[0]), (-1, "Der", brazos[1])):
+        muslo, rodilla = piernas.get(l, (0.0, 0.0))
+        m = giro(lado(CADERA, s), -muslo)
+        ob["Muslo" + l].matrix_world = m
+        ob["Pierna" + l].matrix_world = ob["Pie" + l].matrix_world = m @ giro(lado(RODILLA, s), rodilla)
+        h = lado(HOMBRO, s)
+        b = giro(h, -cabeceo) @ giro(h, -abrir * s, "Y")
         for pieza in ("Brazo", "Antebrazo", "Mano"):
-            ob[pieza + lado].matrix_world = m
-    m = giro(CADERA, -muslo)
-    ob["MusloDer"].matrix_world = m
-    ob["PiernaDer"].matrix_world = ob["PieDer"].matrix_world = m @ giro(RODILLA, rodilla)
+            ob[pieza + l].matrix_world = b
     ob["FaldonFrente"].matrix_world = giro(BISAGRA - V((0, ADELANTE * C, 0)), -faldon)
 
 
@@ -62,37 +73,39 @@ def arbol(o):
 
 
 def chocan():
-    return any(arbol(ob[a]).overlap(arbol(ob[b])) for a in PIERNA for b in FALDON)
+    return any(arbol(ob[a]).overlap(arbol(ob[b])) for a in PIERNAS for b in FALDON)
 
 
-def faldon_minimo(muslo, rodilla):
-    """Opción a: el menor levantamiento del faldón (de 1 en 1 grado) sin choque."""
+def faldon_minimo(piernas, **brazos):
+    """El menor levantamiento del faldón (de 1 en 1 grado) sin choque; None si no hay."""
     for f in range(0, 181):
-        posar(muslo, rodilla, f)
+        posar(piernas, f, **brazos)
         if not chocan():
             return f
     return None
 
 
-def muslo_maximo():
-    """Opción b: el mayor cabeceo del muslo (rodilla en la proporción del juego) sin choque."""
-    ultimo = 0.0
-    for d in range(0, 91):
-        posar(d, d * JUEGO[1] / JUEGO[0], 0)
-        if chocan():
-            return ultimo
-        ultimo = float(d)
-    return ultimo
+def pisoton(muslo, rodilla):
+    return {"Der": (muslo, rodilla)}
 
 
-def render(nombre, sc, cam, sol):
-    centro = V((0, 0, 1.45))
-    a = math.radians(-60)  # desde la derecha del personaje (la pierna que pisa) y desde arriba
-    cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, 4.0))
-    cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
-    sol.rotation_euler = (math.radians(50), 0, a + math.radians(-35))
-    sc.render.filepath = os.path.join(SALIDA, nombre)
-    bpy.ops.render.render(write_still=True)
+def caminata(fase):
+    """Pose.walk: legL = 0.55 sen, legR = -0.55 sen, rodillas 0.75 max(0, ±cos), brazos ∓0.45 sen."""
+    s, c = math.sin(fase), math.cos(fase)
+    g = math.degrees
+    piernas = {"Izq": (g(0.55 * s), g(0.75 * max(0, c))), "Der": (g(-0.55 * s), g(0.75 * max(0, -c)))}
+    return piernas, (g(-0.45 * s), g(0.45 * s))
+
+
+def medir_caminata():
+    peor = (0, 0)
+    for grados in range(0, 360, 5):
+        piernas, brazos = caminata(math.radians(grados))
+        f = faldon_minimo(piernas, brazos=brazos)
+        if f is None:
+            return {"faldon_maximo": None, "fase": grados}
+        peor = max(peor, (f, grados))
+    return {"faldon_maximo": peor[0], "fase": peor[1]}
 
 
 def medir(adelante):
@@ -100,26 +113,60 @@ def medir(adelante):
     ADELANTE = adelante
     PARTES.clear()
     armar()
-    posar(0, 0, 0)
-    d = {"reposo_sin_choque": not chocan()}
-    d["a_faldon_juego"] = faldon_minimo(*JUEGO)
-    d["a_faldon_extremo"] = faldon_minimo(*EXTREMO)
-    d["b_muslo_maximo"] = muslo_maximo()
-    return d
+    posar({}, 0)
+    return {
+        "reposo_sin_choque": not chocan(),
+        "pisoton_57": faldon_minimo(pisoton(*JUEGO), abrir=ABRIR),
+        "extremo_90": faldon_minimo(pisoton(*EXTREMO), abrir=ABRIR),
+        "caminata": medir_caminata(),
+    }
 
 
-PARTES_POSABLES = set(PIERNA + FALDON) | {p + l for p in ("Brazo", "Antebrazo", "Mano") for l in ("Izq", "Der")}
-datos = {"juego_muslo_rodilla": [round(x, 1) for x in JUEGO], "modelo_aprobado": medir(0)}
-datos["propuesta_adelante_1"] = d = medir(1)  # deja armada la propuesta para los renders
+def curva_muslo():
+    """Faldón mínimo según el muslo del pisotón (rodilla en la proporción del juego), de 40° a
+    70° cada medio grado. No baja con el muslo: tiene su pico en 52° (por eso no se bajó el
+    pisotón a 55°, ver docs/decisiones.md)."""
+    k = JUEGO[1] / JUEGO[0]
+    return {f"{m / 2:g}": faldon_minimo(pisoton(m / 2, m / 2 * k), abrir=ABRIR) for m in range(80, 141)}
+
+
+def render(nombre, sc, cam, sol, angulo=-60, alto=4.0, centro=V((0, 0, 1.45))):
+    """angulo: desde dónde mira la cámara alrededor del eje z (-60 = derecha del personaje, la
+    pierna que pisa, y adelante; -90 = perfil derecho)."""
+    a = math.radians(angulo)
+    cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, alto))
+    cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
+    sol.rotation_euler = (math.radians(50), 0, a + math.radians(-35))
+    sc.render.filepath = os.path.join(SALIDA, nombre)
+    bpy.ops.render.render(write_still=True)
+
+
+def render_perfil(nombre, sc, cam, sol):
+    """Perfil derecho cerca de la cadera, sin el brazo derecho (tapa el muslo)."""
+    brazo = [ob[p + "Der"] for p in ("Brazo", "Antebrazo", "Mano")]
+    escala = cam.data.ortho_scale
+    for o in brazo:
+        o.hide_render = True
+    cam.data.ortho_scale = 1.6
+    render(nombre, sc, cam, sol, angulo=-90, alto=0.3, centro=V((0, -0.3, 0.85)))
+    cam.data.ortho_scale = escala
+    for o in brazo:
+        o.hide_render = False
+
+
+datos = {"grados_levantado_del_faldon": "None = no hay ángulo sin choque",
+         "pisoton_juego_muslo_rodilla": [round(x, 1) for x in JUEGO],
+         "cinturon_anterior_adelante_0": medir(0)}
+datos[f"aprobado_adelante_{APROBADO}"] = d = medir(APROBADO)  # deja armado el aprobado
+d["curva_muslo_faldon"] = curva_muslo()
 
 sc, cam, sol = estudio()
-posar(*JUEGO, d["a_faldon_juego"])
-render("pisoton_a.png", sc, cam, sol)
-b = d["b_muslo_maximo"]
-posar(b, b * JUEGO[1] / JUEGO[0], 0)
-render("pisoton_b.png", sc, cam, sol)
-posar(*JUEGO, 0)
-render("pisoton_b_choque.png", sc, cam, sol)
+posar(pisoton(*JUEGO), d["pisoton_57"], abrir=ABRIR)
+render("pisoton_57.png", sc, cam, sol)
+render_perfil("pisoton_perfil.png", sc, cam, sol)
+piernas, brazos = caminata(math.radians(d["caminata"]["fase"]))
+posar(piernas, d["caminata"]["faldon_maximo"], brazos=brazos)
+render("caminata.png", sc, cam, sol)
 with open(os.path.join(SALIDA, "pisoton.json"), "w", encoding="utf-8") as f:
     json.dump(datos, f, indent=2, ensure_ascii=False)
-print("PISOTON", json.dumps(datos))
+print("PISOTON", json.dumps(datos, ensure_ascii=False))
