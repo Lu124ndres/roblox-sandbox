@@ -10,7 +10,7 @@ exportar, con escala y rotación aplicadas en todos los objetos.
 
 | Etapa | Alto del modelo (BU) | Alto esperado (studs) | Alto con 5.32 (studs) | Estado |
 |---|---|---|---|---|
-| E1 | 3.1 (medido por el script) | 16.5 | 16.5 (FBX) | rig y FBX hechos; sin importar a Studio |
+| E1 | 3.1 (medido por el script) | 16.5 | 16.5 (FBX) | en `ServerStorage.MinotauroE1_v2`; el juego todavía no lo usa |
 | E2 | — | 44 | — | sin modelar |
 | E3 | — | 82.5 | — | sin modelar |
 | E4 | — | 165 | — | sin modelar |
@@ -40,7 +40,13 @@ tamaño real y las cuatro etapas sean comparables.
   - Revisión: en las 20 poses de `minotauro_v2_e1_poses.py` la malla deformada por los huesos
     coincide con las piezas rígidas (error máximo 0.00001 celdas). Reimportado en Blender:
     28 huesos, 26 grupos, la textura y 16.5 de alto.
-- Importar a Studio (pendiente, a mano: el MCP de Studio no importa FBX): Importar 3D →
-  **"Mantener huesos de influencia cero"** (si no, se pierden `Raiz` y `Boca`), revisar en la
-  vista previa que esté parado y mirando al frente, y dejar el Model en
-  `ServerStorage.MinotauroE1_v2`. No reemplaza a `MinotauroE1`.
+- Importado a Studio el 2026-10-17 (a mano: el MCP de Studio no importa FBX) con Importar 3D →
+  **"Mantener huesos de influencia cero"** (si no, se pierden `Raiz` y `Boca`), y movido a
+  `ServerStorage.MinotauroE1_v2`. No reemplaza a `MinotauroE1`. Revisado por el MCP:
+  - Model con la MeshPart `MinotauroE1_v2` (13.84 × 16.5 × 10.65 studs), 28 huesos, parado
+    (arriba +Y), mirando a −Z, con el pivote en `Raiz` (la base); `BrazoIzq` en −X y `Boca`
+    adelante.
+  - MeshId `rbxassetid://122555252081745`, TextureID `rbxassetid://99845921194303` (la paleta;
+    sin SurfaceAppearance). Todavía no están en `src/shared/Assets` (paso 8 del plan).
+  - Mismas propiedades de la pieza que `MinotauroE1` (sin anclar y con colisión: el código lo
+    ancla y se la quita al copiarlo); no tiene `AnimationController` y el código no lo usa.
