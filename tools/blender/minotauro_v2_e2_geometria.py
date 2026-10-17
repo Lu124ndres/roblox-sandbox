@@ -61,8 +61,7 @@ def torso():
     bloque("Columna", t, "pelo", (-5, 5), (-3, 3), (12, 13))
     par("Columna", t, "crema", (0, 4), (-4, -3), (12, 13))  # abdominales
     bloque("Columna", t, "pelo_osc", (-4, 4), (3, 4), (12, 13))  # lomo
-    # Pecho ancho y alto (lleva el tirante) con pectorales (la ranura del bisel los separa al
-    # medio) y joroba.
+    # Pecho ancho y alto (lleva el tirante), pectorales (los separa el bisel) y joroba.
     bloque("Pecho", t, "pelo", (-6, 6), (-3, 3), (13, 18))
     bloque("Pecho", t, "pelo", (-6, 6), (-3, 3), (18, 19), recorte={"x-": 1, "x+": 1})
     par("Pecho", t, "crema", (0, 5), (-4, -3), (14, 18))  # pectorales
@@ -91,9 +90,8 @@ def tirante():
 
 def brazos():
     b = "Brazos"
-    # Hombrera partida como en la E1: la mitad de adentro es del pecho y no se mueve; la tapa
-    # va con el brazo, que gira por su borde de adentro (x = 8, z = 17). Una celda por debajo
-    # de la cabeza (z 19).
+    # Hombrera partida como en la E1: la mitad de adentro es del pecho; la tapa, del brazo, que
+    # gira por su borde de adentro (x = 8, z = 17). Una celda por debajo de la cabeza (z 19).
     par("Pecho", b, "pelo_osc", (5, 8), (-4, 4), (16, 18))
     par("Brazo{lado}", b, "pelo_osc", (8, 12), (-4, 4), (16, 18), recorte={"x+": 2})
     par("Brazo{lado}", b, "pelo", (9, 12), (-2, 1), (13, 17))
@@ -112,9 +110,8 @@ def cabeza():
     par("Cabeza", c, "pelo_osc", (5, 6), (-3, 1), (20, 23))  # mejillas
     bloque("Cabeza", c, "pelo_osc", (-3, 3), (4, 5), (20, 24))  # nuca, en escalones
     bloque("Cabeza", c, "pelo_osc", (-1, 1), (5, 6), (21, 23))
-    # Ojos de 3 x 3 celdas que asoman 1 (30 % del ancho de la cara): ámbar brillante con la
-    # pupila negra vertical al centro y un brillo blanco arriba afuera. Cejas bravas encima
-    # (en cuña, bajan al medio), sin sobresalir más que el ojo: no le echan sombra.
+    # Ojos de 3 x 3 que asoman 1: ámbar, pupila negra al centro y brillo. Cejas en cuña que
+    # bajan al medio y no sobresalen más que el ojo (no le hacen sombra).
     par("Cabeza", c, "ambar", (1, 2), (-5, -4), (22, 25))
     par("Cabeza", c, "negro", (2, 3), (-5, -4), (22, 24))
     par("Cabeza", c, "ambar", (2, 3), (-5, -4), (24, 25))
@@ -129,24 +126,23 @@ def cabeza():
     par("Cabeza", c, "nariz", (1, 3), (-9, -8), (20, 21))  # narinas
     par("Cabeza", c, "oro", (1, 2), (-9, -8), (18, 20))  # aro de la nariz
     bloque("Cabeza", c, "oro", (-2, 2), (-9, -8), (17, 18))
-    # Mechón: base sobre la frente, cuña encima y la punta que cae entre los ojos (al ras de
-    # ellos: si asoma más, les hace sombra).
+    # Mechón: base, cuña encima y la punta entre los ojos (al ras: si asoma, les hace sombra).
     bloque("Cabeza", c, "pelo_osc", (-1, 1), (-5, -4), (25, 26))
     bloque("Cabeza", c, "pelo_osc", (-2, 2), (-5, -1), (26, 28), recorte={"y+": 2})
     bloque("Cabeza", c, "pelo_osc", (-1, 1), (-5, -4), (23, 25))
-    # Cuernos más largos que los del becerro: salen de lado, anillo de oro, suben y terminan
-    # en punta.
-    par("Cabeza", c, "marfil", (5, 10), (-2, 1), (23, 25))
-    par("Cabeza", c, "oro", (6, 7), (-3, 2), (22, 26))  # anillo
-    par("Cabeza", c, "marfil", (8, 10), (-2, 1), (25, 26))
+    # Cuernos más largos que los del becerro: de lado, anillo de oro y punta. Van altos para
+    # dejar las orejas a 2 celdas de la hombrera (no se meten en el hombro en los trucos).
+    par("Cabeza", c, "marfil", (5, 10), (-2, 1), (24, 26))
+    par("Cabeza", c, "oro", (6, 7), (-3, 2), (23, 27))  # anillo
     par("Cabeza", c, "marfil", (8, 10), (-2, 1), (26, 28), recorte={"x-": 1, "y-": 1, "y+": 1})
-    bloque("Mandibula", "Mandibula", "crema", (-3, 3), (-7, -4), (17, 19))
+    # Mandíbula de 3 de fondo, al ras del tirante: al abrirse no se mete en la hebilla.
+    bloque("Mandibula", "Mandibula", "crema", (-3, 3), (-7, -5), (17, 19))
 
 
 def orejas_cola_faldon():
-    par("Oreja{lado}", "Orejas", "pelo", (6, 9), (-1, 2), (20, 22))
-    par("Oreja{lado}", "Orejas", "pelo", (9, 11), (-1, 2), (19, 21), eje="x", recorte={"z+": 1})
-    par("Oreja{lado}", "Orejas", "rosa", (6, 9), (-2, -1), (20, 22))
+    par("Oreja{lado}", "Orejas", "pelo", (6, 9), (-1, 2), (21, 23))
+    par("Oreja{lado}", "Orejas", "pelo", (9, 10), (-1, 2), (20, 22), eje="x", recorte={"z+": 1})
+    par("Oreja{lado}", "Orejas", "rosa", (6, 9), (-2, -1), (21, 23))
     bloque("Cola1", "Cola", "pelo", (-1, 1), (3, 6), (9, 11))
     bloque("Cola2", "Cola", "pelo", (-1, 1), (6, 8), (7, 10))
     bloque("Cola3", "Cola", "pelo", (-1, 1), (7, 9), (4, 7))
@@ -177,8 +173,8 @@ ARTICULACIONES = [
     ("Pecho", "Columna", (0, 0, 13)),
     ("Cuello", "Pecho", (0, 0, 18)),
     ("Cabeza", "Cuello", (0, 0, 19)),
-    ("Mandibula", "Cabeza", (0, -4, 19)),
-    ("Oreja{l}", "Cabeza", (6, 0.5, 21)),
+    ("Mandibula", "Cabeza", (0, -5, 19)),
+    ("Oreja{l}", "Cabeza", (6, 0.5, 22)),
     ("Brazo{l}", "Pecho", (8, -0.5, 17)),
     ("Antebrazo{l}", "Brazo{l}", (10.5, -0.5, 13)),
     ("Mano{l}", "Antebrazo{l}", (10.5, -0.5, 9)),
@@ -194,7 +190,7 @@ ARTICULACIONES = [
 # Cola de cada hueso (celdas, lado izquierdo): hacia el hijo, o hacia donde apunta la pieza.
 COLAS = {
     "Cadera": (0, 0, 12), "Columna": (0, 0, 13),"Pecho": (0, 0, 18), "Cuello": (0, 0, 19),
-    "Cabeza": (0, 0, 26), "Mandibula": (0, -7, 18), "Oreja{l}": (11, 0.5, 20),
+    "Cabeza": (0, 0, 26), "Mandibula": (0, -7, 18), "Oreja{l}": (10, 0.5, 21),
     "Brazo{l}": (10.5, -0.5, 13), "Antebrazo{l}": (10.5, -0.5, 9), "Mano{l}": (10.5, -0.5, 6),
     "Muslo{l}": (3, 0, 6), "Pierna{l}": (3, 0, 2), "Pie{l}": (3, -4, 0.5),
     "Cola1": (0, 6, 9), "Cola2": (0, 7.5, 7), "Cola3": (0, 8, 2),
