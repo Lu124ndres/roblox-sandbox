@@ -1849,3 +1849,19 @@ y `use_nodes`, que desaparece en Blender 6.
 **Qué sigue:** importar los tres FBX a Studio, moverlos a `ServerStorage.MinotauroE<n>_v2`, sus IDs
 en `Assets`, probar las cuatro etapas en Play y los videos de los trucos de cada una.
 
+---
+
+## 2026-10-17 (9) — Minotauro v2 completo en el juego
+
+**Qué se hizo:** el usuario importó los FBX de E2..E4; por el MCP se revisaron y se movieron a
+`ServerStorage.MinotauroE<n>_v2`, y sus IDs entraron en `Assets`. Con `modelSuffix = "_v2"` el
+Minotauro crece en bloques de la E1 a la E4, sin el salto al modelo orgánico.
+
+**Probado en Studio (Play):** las cuatro etapas con `Minotauro:<n>`: 28 huesos, alto base correcto,
+~60 cuadros por segundo, trucos con resortes y faldón; consola sin errores. Checklist: build,
+selene y stylua.
+
+**Qué se rompió:** nada.
+
+**Qué sigue:** los videos de los trucos de E2..E4 (con su ritmo y rebote) y publicar.
+

@@ -11,9 +11,9 @@ exportar, con escala y rotación aplicadas en todos los objetos.
 | Etapa | Alto del modelo (BU) | Alto esperado (studs) | Alto con 5.32 (studs) | Estado |
 |---|---|---|---|---|
 | E1 | 3.1 (medido por el script) | 16.5 | 16.5 (FBX) | en `ServerStorage.MinotauroE1_v2`; **el juego lo usa** (`modelSuffix`) |
-| E2 | 8.4 (28 módulos de 0.3) | 44 | 44.71 (FBX) | rig y FBX hechos; sin importar a Studio |
-| E3 | 15.5 (31 módulos de 0.5) | 82.5 | 82.5 (FBX) | rig y FBX hechos; sin importar a Studio |
-| E4 | 31 (31 módulos de 1.0) | 165 | 165 (FBX) | rig y FBX hechos; sin importar a Studio |
+| E2 | 8.4 (28 módulos de 0.3) | 44 | 44.71 (FBX) | en `ServerStorage.MinotauroE2_v2`; **el juego lo usa** |
+| E3 | 15.5 (31 módulos de 0.5) | 82.5 | 82.5 (FBX) | en `ServerStorage.MinotauroE3_v2`; **el juego lo usa** |
+| E4 | 31 (31 módulos de 1.0) | 165 | 165 (FBX) | en `ServerStorage.MinotauroE4_v2`; **el juego lo usa** |
 
 El juego igual escala cada etapa al alto de `Config/Giants.luau` (`GiantBody` con
 `Model:ScaleTo`); la escala de exportación sirve para que el modelo llegue a Studio con su
@@ -72,5 +72,15 @@ opciones de exportación que la E1 (`rig_minotauro_v2.py --etapa <n>`).
   al revés, ninguna pieza se separa en las 20 poses de `minotauro_v2_poses.py`.
 - Medidas para el código en `src/shared/Minotauro/Medidas.luau` (de `medidas.json`).
 - Las cuatro lado a lado: `renders/minotauro_v2_alineacion/` (`minotauro_v2_alineacion.py`).
-- Importar a Studio (pendiente, a mano): igual que la E1, con "Mantener huesos de influencia
-  cero", y dejar cada Model en `ServerStorage.MinotauroE<n>_v2`.
+- Importados a Studio el 2026-10-17 (a mano, con "Mantener huesos de influencia cero") y movidos
+  a `ServerStorage.MinotauroE<n>_v2`. Revisados por el MCP: 28 huesos, parados, mirando a −Z,
+  pivote en `Raiz`, `BrazoIzq` en −X y `Boca` adelante; IDs en `Assets.Meshes` y
+  `Assets.Textures` (`MinotauroE<n>_v2`).
+  | Etapa | MeshId | TextureID |
+  |---|---|---|
+  | E2 | `105048502299348` | `137284523253350` |
+  | E3 | `112201493043935` | `97172953101798` |
+  | E4 | `123237644499937` | `86563923351119` |
+- Probado en Play: el servidor publica las cuatro v2 (alto base 16.5 / 44.7 / 82.5 / 165) y cada
+  etapa anima a ~60 cuadros por segundo con sus trucos; la E3 hizo el pisotón con el faldón a
+  67°; consola sin errores.

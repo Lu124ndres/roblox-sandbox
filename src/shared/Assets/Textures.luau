@@ -16,6 +16,9 @@ local Textures: { [string]: { string } } = {
 	MinotauroE2 = { "rbxassetid://85752100448730", "rbxassetid://126704727757248" },
 	-- v2 de bloques: solo color de la paleta, en el TextureID de la MeshPart (sin SurfaceAppearance).
 	MinotauroE1_v2 = { "rbxassetid://99845921194303" },
+	MinotauroE2_v2 = { "rbxassetid://137284523253350" },
+	MinotauroE3_v2 = { "rbxassetid://97172953101798" },
+	MinotauroE4_v2 = { "rbxassetid://86563923351119" },
 	MinotauroE3 = { "rbxassetid://90468027558818", "rbxassetid://82219820175391" },
 	MinotauroE4 = { "rbxassetid://108740223585461", "rbxassetid://96009656170909" },
 	OrcaE1 = {

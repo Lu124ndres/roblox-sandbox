@@ -93,9 +93,12 @@ local Assets: Assets = {
 		MinotauroE2 = "rbxassetid://91533993938693", -- joven (minotauro_etapas.py, 18.6k)
 		MinotauroE3 = "rbxassetid://84011204972654", -- adulto (19.4k)
 		MinotauroE4 = "rbxassetid://105475430016255", -- forma final con lava (19.9k)
-		-- Minotauro v2 de bloques (rig_minotauro_v2_e1.py, 3,966 triángulos, 28 huesos). Model
-		-- en ServerStorage.MinotauroE1_v2; se usa en lugar de MinotauroE1 (modelSuffix en Config).
-		MinotauroE1_v2 = "rbxassetid://122555252081745",
+		-- Minotauro v2 de bloques (rig_minotauro_v2.py, 28 huesos). Models en
+		-- ServerStorage.MinotauroE<n>_v2; se usan en lugar de MinotauroE<n> (modelSuffix en Config).
+		MinotauroE1_v2 = "rbxassetid://122555252081745", -- becerro (3,966 triángulos)
+		MinotauroE2_v2 = "rbxassetid://105048502299348", -- joven (4,946)
+		MinotauroE3_v2 = "rbxassetid://112201493043935", -- adulto (4,276)
+		MinotauroE4_v2 = "rbxassetid://123237644499937", -- forma final (5,916)
 		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.
