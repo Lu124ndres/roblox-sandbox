@@ -1,5 +1,5 @@
 {
-  "bloques": 107,
+  "bloques": 109,
   "bloques_por_parte": {
     "PieIzq": 1,
     "PieDer": 1,
@@ -17,7 +17,7 @@
     "AntebrazoDer": 2,
     "ManoIzq": 2,
     "ManoDer": 2,
-    "Cabeza": 30,
+    "Cabeza": 32,
     "Mandibula": 1,
     "OrejaIzq": 3,
     "OrejaDer": 3,
@@ -28,7 +28,7 @@
     "FaldonIzq": 6,
     "FaldonDer": 6
   },
-  "triangulos": 4274,
+  "triangulos": 4380,
   "triangulos_ocultos_quitados": {
     "MusloIzq": 2,
     "MusloDer": 2,
@@ -41,7 +41,7 @@
     "AntebrazoDer": 14,
     "ManoIzq": 2,
     "ManoDer": 2,
-    "Cabeza": 104,
+    "Cabeza": 110,
     "OrejaIzq": 6,
     "OrejaDer": 6,
     "Cola3": 6,
@@ -66,7 +66,7 @@
     "AntebrazoDer": 74,
     "ManoIzq": 86,
     "ManoDer": 86,
-    "Cabeza": 1192,
+    "Cabeza": 1298,
     "Mandibula": 44,
     "OrejaIzq": 126,
     "OrejaDer": 126,

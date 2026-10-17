@@ -34,7 +34,7 @@ COLORES = {
     "rosa": _lineal("#EA999B"), "nariz": _lineal("#893038"), "boca": _lineal("#893038"),
     "cuero": _lineal("#613C27"), "cuero_rojo": _lineal("#7C2C27"), "oro": _lineal("#FFCE61"),
     "marfil": _lineal("#EFE2C5"), "negro": (0.01, 0.008, 0.008),
-    "ambar": (1.0, 0.45, 0.04),  # acento de la etapa (en Roblox, Neon)
+    "ambar": (1.0, 0.45, 0.04),  # acento de la etapa: ojos (en Roblox, Neon)
     "pezuna": (0.04, 0.03, 0.03),
 }
 
@@ -97,10 +97,14 @@ def cabeza():
     bloque("Cabeza", c, "pelo", (-5, 5), (-5, 3), (28, 29), recorte={"x-": 1, "x+": 1})
     par("Cabeza", c, "pelo_osc", (5, 6), (-4, 0), (22, 25))  # mejillas
     bloque("Cabeza", c, "pelo_osc", (-4, 4), (3, 4), (23, 28))  # nuca
-    # Ojos ámbar con la pupila hacia adentro, bajo cejas bravas (cuñas que bajan al centro).
-    par("Cabeza", c, "ambar", (3, 5), (-6, -5), (26, 27))
-    par("Cabeza", c, "negro", (2, 3), (-6, -5), (26, 27))
-    par("Cabeza", c, "pelo_osc", (1, 5), (-7, -5), (27, 29), eje="x", fin="-", recorte={"z+": 2})
+    # Ojos de 3 x 2 celdas (30 % del ancho de la cara) que asoman 1 celda, como en la E1: un
+    # solo bloque ámbar con la pupila negra delante (asoma 1 celda más). El ceño es otra celda
+    # delante de la esquina de adentro: con la punta del mechón forma una V brava. La ceja de
+    # afuera va al ras de los ojos, encima, para no echarles sombra.
+    par("Cabeza", c, "ambar", (1, 4), (-6, -5), (26, 28))
+    par("Cabeza", c, "negro", (2, 3), (-7, -6), (26, 27))  # pupila
+    par("Cabeza", c, "pelo_osc", (1, 2), (-7, -6), (27, 28))  # ceño
+    par("Cabeza", c, "pelo_osc", (3, 5), (-6, -5), (28, 29))  # ceja (a los lados del copete)
     # Hocico largo: base, cuña hacia los ojos y frente (más angosta: así la cara de adelante
     # de la base no queda tapada entera y la junta no abre una rendija) con narinas y aro.
     bloque("Cabeza", c, "hocico", (-4, 4), (-9, -5), (22, 25))
