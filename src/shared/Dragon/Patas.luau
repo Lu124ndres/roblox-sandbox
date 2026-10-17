@@ -57,9 +57,9 @@ function Patas.apply(
 	local legs = math.clamp(p.legs or 0, 0, 1)
 	local crouch, reach = p.crouch or 0, p.reach or 0
 	for _, s in { "Izq", "Der" } do
-		for _, chain in { { FRONT, front }, { BACK, back } } do
-			local parts: { Part }, tilt: number = chain[1], chain[2]
-			local isFront = parts == FRONT
+		for _, isFront in { true, false } do
+			local parts = if isFront then FRONT else BACK
+			local tilt = if isFront then front else back
 			local lift = if isFront then p["lift" .. (if s == "Izq" then "L" else "R")] or 0 else 0
 			local bent = crouch + (if isFront then p.bend or 0 else 0)
 			local before = tilt
