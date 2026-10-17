@@ -1759,3 +1759,19 @@ build, selene y stylua sin avisos en `Minotauro`.
 **Qué se rompió:** nada. Visto en Edit: en el `MinotauroE1` actual la pierna casi no sube aunque
 el hueso gira 1 rad (la rodilla de reposo está 2 studs delante de la cadera); es de los pesos de
 ese modelo, no de este cambio.
+
+---
+
+## 2026-10-17 (5) — Minotauro v2 E1: los trucos en video
+
+**Qué se hizo:** como el v2 todavía no está en Studio, las poses de los 6 trucos se calcularon
+en Studio con los módulos del juego (Edit, por el MCP) y
+`tools/blender/minotauro_v2_e1_animacion.py` las pone en el rig del v2 con la misma cuenta que
+`Pose.apply` y arma un GIF por truco en `renders/minotauro_v2_e1/animaciones/` (con las poses
+en `poses_juego.json`). Detalle: en Edit, `require` devuelve la copia que ya cargó aunque Rojo
+cambie el código; hay que clonar la carpeta del módulo para que lo cargue de nuevo.
+
+**Qué se rompió:** nada.
+
+**Qué sigue:** importar `MinotauroE1_v2.fbx` a `ServerStorage.MinotauroE1_v2` (a mano) y el
+interruptor para usarlo en el juego (paso 8 del plan).
