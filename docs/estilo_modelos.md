@@ -81,10 +81,19 @@ Valores aprobados el 2026-10-16. Esta sección es la única referencia de topolo
 
 ### Escala
 
-- **E1 mide 16.5 studs** en el juego (3 × 5.5, `Config/Giants.luau`). En Blender mide
-  ~3.1 BU, así que la escala es de **~5.3 studs por BU** (16.5 / alto real).
-- Escala y rotación aplicadas antes de exportar. La escala usada se registra en
-  `docs/import_minotauro_v2.md`.
+Alto por etapa en veces el alto del jugador (5.5 studs; `stageHeightsInPlayers` y
+`playerHeightStuds` de `Config/Giants.luau`, comprobado el 2026-10-16):
+
+| Etapa | Jugadores | Studs | BU |
+|---|---|---|---|
+| E1 | 3 | 16.5 | 3.1 |
+| E2 | 8 | 44 | 8.3 |
+| E3 | 15 | 82.5 | 15.5 |
+| E4 | 30 | 165 | 31.0 |
+
+- **Escala única de exportación: 5.32 studs por BU**, la misma para las cuatro etapas,
+  aplicada una sola vez y con las transformaciones aplicadas (escala y rotación).
+- La escala usada se registra en `docs/import_minotauro_v2.md`.
 
 ### Topología
 
@@ -93,7 +102,8 @@ Valores aprobados el 2026-10-16. Esta sección es la única referencia de topolo
 - **Juntas:** las piezas se solapan, o una **placa de unión** tapa la junta en hombros,
   codos, cadera y rodillas. No se exigen bucles de aristas por articulación.
 - **Simetría en X** exacta (se modela medio cuerpo y se espeja).
-- **Presupuesto:** hasta **8,000 triángulos en E1**. (E2..E4: por decidir.)
+- **Presupuesto de triángulos:** E1 hasta **8,000**. E2, E3 y E4: **por definir**
+  (se pregunta antes de modelar cada una; no se asume ningún valor).
 - **Sin vértices sueltos ni normales invertidas.** Las caras internas entre bloques
   solapados se permiten dentro de una pieza si no se ven.
 
