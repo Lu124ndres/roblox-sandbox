@@ -5,7 +5,8 @@
 	Los ambientes que mezcla SkyCycle: los momentos del día (entre dos se
 	interpola), el del Cráter del Abismo (luz de lava), el del desierto del
 	minotauro (sol alto y polvo: reemplaza al del cráter mientras está la
-	arena) y el amanecer del descanso (al llenar al monstruo sale el sol: luz
+	arena), el de la guarida volcánica del dragón (más roja, mientras está la
+	lava) y el amanecer del descanso (al llenar al monstruo sale el sol: luz
 	clara y cálida).
 ]]
 
@@ -121,6 +122,14 @@ SkyMoods.desert =
 SkyMoods.desertHour = 13
 SkyMoods.desertSaturation = 0.02
 SkyMoods.desertContrast = 0.08
+
+-- Guarida volcánica (CraterMode "lava"): sol bajo de tarde, bruma roja y espesa
+-- de humo, sombras rojizas; algo más oscuro que el cráter pero claro para jugar.
+SkyMoods.lair =
+	mood(0, 1.9, rgb(255, 92, 52), rgb(168, 42, 22), 0.3, rgb(255, 212, 188), rgb(205, 112, 88))
+SkyMoods.lairHour = 17
+SkyMoods.lairSaturation = 0.18
+SkyMoods.lairContrast = 0.16
 
 -- Amanecer del descanso: mañana clara y dorada; el sol sube hasta dawnHour.
 SkyMoods.dawn = mood(

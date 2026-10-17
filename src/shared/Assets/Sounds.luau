@@ -77,6 +77,11 @@ local Sounds: { [string]: string } = {
 	-- Evolución (EvolveFx; de ProSoundEffects, la cuenta de Pro Sound Effects en Roblox)
 	EvolveCharge = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
 	EvolveBurst = "rbxassetid://9126102254", -- "Time Warp Big Explosion Blast Boom Tonal Tail 1" (5.8 s)
+	-- Guarida del dragón (ProSoundEffects). Volumen, tono y alcance: client/Ambient/LairAir
+	-- y LairGeysers (Sounds.define).
+	LairRumble = "rbxassetid://9112823552", -- "Lava Rumble 1" (46 s, bucle): el volcán con lava
+	LairBubbles = "rbxassetid://9120306743", -- "Underwater Bubbles 6" (1.9 s), grave: aviso del géiser
+	GeyserBurst = "rbxassetid://9117984897", -- "Pyro Fire Ball Burst 2" (3.5 s): revienta el géiser
 	-- Música (con licencia de Roblox: APM y DistroKid, se pueden usar en cualquier juego)
 	MusicIsland = "rbxassetid://128770946473000", -- "The Fisherman's Small Boat" (2:39)
 	MusicCrater = "rbxassetid://1843867314", -- "Tension Repeat Drones 29" (2:04)

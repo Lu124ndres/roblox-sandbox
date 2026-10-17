@@ -9,6 +9,8 @@
 	revientan y humo. rise() la hace subir desde el fondo y sink() bajar (en
 	el descanso), ajustando el ancho al del pozo en cada altura. Se puede
 	pisar (quien cae lo rescata AbyssRescue). Local de cada cliente.
+	La guarida volcánica (rocas, nido, cascadas, géiseres...) va con ella:
+	LavaLair, que sigue su altura en cada cuadro.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -16,13 +18,15 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Guarida = require(ReplicatedStorage.Shared.Dragon.Guarida)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
+local LavaLair = require(script.Parent.LavaLair)
 
 local L = WorldLayout
 local CYCLE = Config.Giants.cycle
-local LEVEL = -25 -- altura de la lava (studs): bajo el borde, a la vista desde el anillo
+local LEVEL = Guarida.lava -- altura de la lava (studs): bajo el borde, a la vista desde el anillo
 local BOTTOM = L.craterFloor + 2
 local CENTER = WorldZones.craterCenter
 local SPARK = "rbxasset://textures/particles/fire_sparks_main.dds"
@@ -137,6 +141,7 @@ local function place(y: number)
 	glow.CFrame = CFrame.new(CENTER.X, y - 1, CENTER.Z) * upright
 	crust.Size = Vector3.new(0.4, r * 2 - 1, r * 2 - 1)
 	crust.CFrame = CFrame.new(CENTER.X, y + 0.25, CENTER.Z) * upright
+	LavaLair.level(y)
 end
 
 local function move(from: number, to: number, seconds: number, after: (() -> ())?)
@@ -173,10 +178,12 @@ local function move(from: number, to: number, seconds: number, after: (() -> ())
 end
 
 function CraterLava.rise(instant: boolean)
+	LavaLair.arrive(instant)
 	move(BOTTOM, LEVEL, if instant then 0 else CYCLE.refillSeconds * 1.5)
 end
 
 function CraterLava.sink(instant: boolean)
+	LavaLair.leave(instant)
 	move(LEVEL, BOTTOM, if instant then 0 else CYCLE.drainSeconds, function()
 		folder.Parent = nil
 	end)
