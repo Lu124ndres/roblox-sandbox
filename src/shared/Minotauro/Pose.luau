@@ -5,15 +5,20 @@
 	La pose del minotauro como una tabla de números (radianes) que se suman:
 	reposo (respira, se mece, mueve la cola y las orejas, mira alrededor),
 	comer (se inclina hacia quien le da, estira los brazos, abre la boca y
-	mastica), pasitos al girar y el truco del momento (Minotauro/Trucos).
+	mastica), caminar (con el paso de su etapa), pasitos al girar y lo que esté
+	haciendo de su rutina (Minotauro/Posturas y Minotauro/Trucos).
 		lean / sway / breathe     tronco: adelante (-) o atrás (+), de lado, respirar
 		lookYaw / lookPitch / tilt cabeza: girar (+ a su izquierda), arriba/abajo, ladear
 		jaw                        boca abierta (0..1)
 		earL / earR                orejas arriba (+) o atrás (-)
 		armL / outL / elbowL / elbowOutL   brazo: adelante, abierto al costado, codo
 		                           doblado adelante, antebrazo hacia arriba (por lado L/R)
-		legL / kneeL               pierna: muslo adelante, rodilla doblada (L/R)
+		legL / kneeL / footL       pierna: muslo adelante, rodilla doblada, punta del pie
+		                           arriba (L/R)
+		hip                        cadera: se echa atrás (+) con todo lo de arriba y las
+		                           piernas (al sentarse apoya la cola del cuerpo)
 		tail1..tail3 / tailUp      cola: de lado a lado y arriba
+		tailCurl                   cola: levanta la mitad de la punta (sentado la apoya atrás)
 		faldonF / faldonL / faldonR faldón: el de adelante se levanta, los de los
 		                           costados se abren (huesos opcionales del v2)
 		dy                         salto (fracción del alto)
@@ -95,23 +100,30 @@ end
 
 -- Caminar: las piernas se alternan (la que va adelante dobla la rodilla al
 -- levantarse), los brazos van al revés que las piernas, el tronco se inclina un
--- poco, se mece y sube y baja con cada paso; la cola acompaña.
-function Pose.walk(phase: number, amount: number): Pose
+-- poco, se mece y sube y baja con cada paso; la cola acompaña. El paso de la
+-- etapa (Etapas.paso) le da su manera: el becerro trota dando saltitos, el joven
+-- saca pecho y abre los brazos, los grandes van agachados y pesados.
+function Pose.walk(phase: number, amount: number, paso: Etapas.Paso): Pose
 	local s, c = math.sin(phase), math.cos(phase)
+	local bob = math.abs(c)
 	return {
 		legL = 0.55 * s * amount,
 		legR = -0.55 * s * amount,
-		kneeL = 0.75 * math.max(0, c) * amount,
-		kneeR = 0.75 * math.max(0, -c) * amount,
-		armL = -0.45 * s * amount,
-		armR = 0.45 * s * amount,
+		kneeL = (0.75 * math.max(0, c) + paso.knee) * amount,
+		kneeR = (0.75 * math.max(0, -c) + paso.knee) * amount,
+		armL = -0.45 * s * paso.arms * amount,
+		armR = 0.45 * s * paso.arms * amount,
+		outL = paso.out * amount,
+		outR = paso.out * amount,
 		elbowL = 0.25 * amount,
 		elbowR = 0.25 * amount,
-		lean = -0.07 * amount,
-		sway = 0.05 * s * amount,
-		dy = 0.012 * math.abs(c) * amount,
+		lean = (-0.07 + paso.lean) * amount,
+		lookPitch = paso.chin * amount,
+		sway = 0.05 * s * paso.sway * amount,
+		dy = (0.012 + paso.bounce) * bob * amount,
 		tail1 = 0.25 * s * amount,
 		tail2 = 0.3 * s * amount,
+		tailUp = paso.tail * amount,
 	}
 end
 
@@ -134,7 +146,7 @@ function Pose.apply(rig: Rig.Rig, p: Pose)
 		return p[key] or 0
 	end
 	local lean, breathe = v("lean"), v("breathe")
-	Rig.turn(rig, "Cadera", 0, 0, v("sway"))
+	Rig.turn(rig, "Cadera", v("hip"), 0, v("sway"))
 	Rig.turn(rig, "Columna", lean * 0.5 + breathe, 0, -v("sway") * 0.5)
 	Rig.turn(rig, "Pecho", lean * 0.5 + breathe * 0.6, v("lookYaw") * 0.2, 0)
 	Rig.turn(rig, "Cuello", v("lookPitch") * 0.4, v("lookYaw") * 0.35, v("tilt") * 0.3)
@@ -157,14 +169,15 @@ function Pose.apply(rig: Rig.Rig, p: Pose)
 		local knee = v("knee" .. s)
 		Rig.turn(rig, "Muslo" .. lado, v("leg" .. s), 0, 0)
 		Rig.turn(rig, "Pierna" .. lado, -knee, 0, 0)
-		Rig.turn(rig, "Pie" .. lado, knee * 0.5 - v("leg" .. s) * 0.4, 0, 0)
+		Rig.turn(rig, "Pie" .. lado, knee * 0.5 - v("leg" .. s) * 0.4 + v("foot" .. s), 0, 0)
 		Rig.turn(rig, "Faldon" .. lado, 0, 0, v("faldon" .. s) * out)
 	end
 	Rig.turn(rig, "FaldonFrente", v("faldonF"), 0, 0)
 	local up = v("tailUp")
 	Rig.turn(rig, "Cola1", -up, v("tail1"), 0) -- la cola apunta atrás: cabeceo - la sube
-	Rig.turn(rig, "Cola2", -up * 0.5, v("tail2"), 0)
-	Rig.turn(rig, "Cola3", 0, v("tail3"), 0)
+	local curl = v("tailCurl")
+	Rig.turn(rig, "Cola2", -up * 0.5 - curl, v("tail2"), 0)
+	Rig.turn(rig, "Cola3", -curl * 0.5, v("tail3"), 0)
 end
 
 return table.freeze(Pose)

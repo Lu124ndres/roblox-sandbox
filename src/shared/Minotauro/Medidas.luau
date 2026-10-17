@@ -10,6 +10,14 @@
 		footSide      distancia de cada pie al centro
 		skirt         muslo -> faldón de adelante, en grados: lo que hay que
 		              levantarlo para que el muslo no lo atraviese (ya creciente)
+		ankle         alto del tobillo (la pezuña) y toe / heel, cuánto sale la
+		              pezuña adelante y atrás del tobillo: al inclinarse el pie baja
+		              el talón o la punta (minotauro_v2_e<n>_geometria.py, Pie)
+		shinBack / shinFront  grosor de la pierna atrás y adelante del tobillo: la
+		              pierna inclinada baja ese borde (Pierna)
+		seatSkirt     grados que tiene que levantarse el faldón de adelante sentado
+		              (piernas estiradas adelante: las pezuñas lo empujan más que en
+		              skirt); medido en Blender con la postura de Posturas/Sentarse
 ]]
 
 export type Body = {
@@ -17,6 +25,12 @@ export type Body = {
 	shin: number,
 	hip: number,
 	footSide: number,
+	ankle: number,
+	toe: number,
+	heel: number,
+	shinBack: number,
+	shinFront: number,
+	seatSkirt: number,
 	skirt: { { number } },
 }
 
@@ -26,6 +40,12 @@ local BODIES: { [number]: Body } = {
 		shin = 0.129,
 		hip = 0.3226,
 		footSide = 0.0968,
+		ankle = 0.0645,
+		toe = 0.129,
+		heel = 0.0645,
+		shinBack = 0.0645,
+		shinFront = 0.0645,
+		seatSkirt = 71,
 		skirt = {
 			{ 0, 0 },
 			{ 28, 0 },
@@ -51,6 +71,12 @@ local BODIES: { [number]: Body } = {
 		shin = 0.1429,
 		hip = 0.3571,
 		footSide = 0.1071,
+		ankle = 0.0714,
+		toe = 0.1429,
+		heel = 0.0714,
+		shinBack = 0.0714,
+		shinFront = 0.0714,
+		seatSkirt = 71,
 		skirt = {
 			{ 0, 0 },
 			{ 28, 0 },
@@ -76,6 +102,12 @@ local BODIES: { [number]: Body } = {
 		shin = 0.1613,
 		hip = 0.3871,
 		footSide = 0.1129,
+		ankle = 0.0645,
+		toe = 0.1935,
+		heel = 0.0645,
+		shinBack = 0.0645,
+		shinFront = 0.0645,
+		seatSkirt = 72,
 		skirt = {
 			{ 0, 0 },
 			{ 36, 0 },
@@ -98,6 +130,12 @@ local BODIES: { [number]: Body } = {
 		shin = 0.1613,
 		hip = 0.3871,
 		footSide = 0.1613,
+		ankle = 0.0645,
+		toe = 0.1935,
+		heel = 0.0645,
+		shinBack = 0.0968,
+		shinFront = 0.129,
+		seatSkirt = 68,
 		skirt = {
 			{ 0, 0 },
 			{ 54, 0 },

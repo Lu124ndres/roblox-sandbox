@@ -10,19 +10,21 @@
 		sway       cuánto se mece (multiplica el vaivén y la respiración)
 		voice      tono del rugido (agudo > 1, grave < 1)
 		stomp      fuerza del pisotón y de la caída: temblor y tamaño de la ola
-		tricks     los trucos que hace (Minotauro/Trucos) y cada cuántos segundos
-		pace       cuánto más lentos son sus trucos y sus resortes (1 = becerro)
+		tricks     los trucos que hace (Minotauro/Trucos) cuando su rutina pide "truco"
+		pace       cuánto más lentos son sus trucos, sus posturas y sus resortes (1 = becerro)
 		bounce     amortiguación de los resortes (Minotauro/Resortes): baja rebota,
 		           alta se queda quieta enseguida
-		body       medidas del cuerpo para Minotauro/Cuerpo, en fracciones del alto
-		           (renders/minotauro_v2_e<n>/medidas.json, del modelo de bloques v2):
-		           thigh y shin (largo del muslo y de la pierna), hip (alto de la
-		           cadera), footSide (pie al centro) y skirt (muslo -> faldón, grados)
+		rutina     lo que hace cuando nadie le da de comer y paso, su manera de
+		paso       caminar (Minotauro/Habitos)
+		body       medidas del cuerpo (Minotauro/Medidas)
 ]]
 
+local Habitos = require(script.Parent.Habitos)
 local Medidas = require(script.Parent.Medidas)
 
 export type Body = Medidas.Body
+export type Rutina = Habitos.Rutina
+export type Paso = Habitos.Paso
 
 export type Profile = {
 	breathe: number,
@@ -32,14 +34,15 @@ export type Profile = {
 	voice: number,
 	stomp: number,
 	tricks: { string },
-	trickEvery: number,
 	pace: number,
 	bounce: number,
+	rutina: Rutina,
+	paso: Paso,
 	body: Body,
 }
 
 local PROFILES: { [number]: Profile } = {
-	{ -- becerro: inquieto, baila y salta
+	{ -- becerro: inquieto y juguetón; trota, cambia seguido de lugar y de idea
 		breathe = 2.6,
 		tail = 1.8,
 		turnSpeed = 1.3,
@@ -47,12 +50,13 @@ local PROFILES: { [number]: Profile } = {
 		voice = 1.35,
 		stomp = 0.7,
 		tricks = { "baile", "salto", "pisoton", "rugido", "baile", "musculo", "salto", "rascarse" },
-		trickEvery = 11,
 		pace = 1,
 		bounce = 0.28,
+		rutina = Habitos.rutinas[1],
+		paso = Habitos.pasos[1],
 		body = Medidas[1],
 	},
-	{ -- joven: fanfarrón, saca músculo y todavía baila
+	{ -- joven: fanfarrón; camina sacando pecho, se luce y mira a la gente
 		breathe = 3,
 		tail = 2.1,
 		turnSpeed = 1.15,
@@ -60,12 +64,13 @@ local PROFILES: { [number]: Profile } = {
 		voice = 1.1,
 		stomp = 0.9,
 		tricks = { "pisoton", "musculo", "baile", "rugido", "salto", "rascarse" },
-		trickEvery = 12,
 		pace = 1.1,
 		bounce = 0.38,
+		rutina = Habitos.rutinas[2],
+		paso = Habitos.pasos[2],
 		body = Medidas[2],
 	},
-	{ -- adulto: pesado, pisa y ruge
+	{ -- adulto: pesado; pasea agachado, se sienta y a veces dormita
 		breathe = 3.5,
 		tail = 2.5,
 		turnSpeed = 0.95,
@@ -73,12 +78,13 @@ local PROFILES: { [number]: Profile } = {
 		voice = 0.88,
 		stomp = 1.15,
 		tricks = { "pisoton", "rugido", "musculo", "salto", "pisoton", "rascarse" },
-		trickEvery = 13,
 		pace = 1.25,
 		bounce = 0.5,
+		rutina = Habitos.rutinas[3],
+		paso = Habitos.pasos[3],
 		body = Medidas[3],
 	},
-	{ -- forma final: enorme y lento; ruge y pisa, ya no baila ni salta
+	{ -- forma final: enorme y lento; camina poco, se sienta pesado y dormita
 		breathe = 4.2,
 		tail = 3,
 		turnSpeed = 0.75,
@@ -86,9 +92,10 @@ local PROFILES: { [number]: Profile } = {
 		voice = 0.7,
 		stomp = 1.5,
 		tricks = { "rugido", "pisoton", "musculo", "pisoton", "rugido", "rascarse" },
-		trickEvery = 14,
 		pace = 1.45,
 		bounce = 0.65,
+		rutina = Habitos.rutinas[4],
+		paso = Habitos.pasos[4],
 		body = Medidas[4],
 	},
 }

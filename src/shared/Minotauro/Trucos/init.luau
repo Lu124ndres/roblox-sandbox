@@ -2,10 +2,10 @@
 --[[
 	Minotauro/Trucos
 
-	Los trucos del minotauro, sincronizados por la hora del servidor (todos los
-	ven a la vez): cada trickEvery segundos de la etapa (Minotauro/Etapas) puede
-	empezar uno de los suyos. pose(u) da, para el avance u (0..1), lo que se suma
-	a su pose (Minotauro/Pose). Uno por módulo, armados con Curvas y con los
+	Los trucos del minotauro. Su rutina (Minotauro/Rutina) elige cuándo hace uno
+	y cuál de los de su etapa (Minotauro/Etapas: tricks), con la hora del servidor:
+	todos los ven a la vez. pose(u) da, para el avance u (0..1), lo que se suma a
+	su pose (Minotauro/Pose). Uno por módulo, armados con Curvas y con los
 	principios de docs/estilo_modelos.md (anticipación, aplastarse y estirarse con
 	la pose, arcos, rebote al llegar); orejas, cola y faldón los mueve Resortes:
 		pisoton   levanta una pata y la estampa: ola y temblor
@@ -18,7 +18,6 @@
 	La etapa los hace más lentos (pace): la forma final tarda más en todo.
 ]]
 
-local Etapas = require(script.Parent.Etapas)
 local Pose = require(script.Parent.Pose)
 
 export type Trick = {
@@ -39,20 +38,9 @@ local TRICKS: { [string]: Trick } = {
 
 local Trucos = {}
 
--- Truco que está haciendo ahora (o nil), su avance 0..1 y el tramo (para los eventos).
-function Trucos.current(now: number, profile: Etapas.Profile): (Trick?, number, number)
-	local every = profile.trickEvery
-	local slot = math.floor(now / every)
-	local hash = (slot * 2654435761) % 1000 / 1000
-	if hash < 0.2 then
-		return nil, 0, slot -- este tramo sin truco
-	end
-	local trick = TRICKS[profile.tricks[slot % #profile.tricks + 1]]
-	local u = (now - slot * every - every * 0.3) / (trick.seconds * profile.pace)
-	if u < 0 or u > 1 then
-		return nil, 0, slot
-	end
-	return trick, u, slot
+-- El truco con ese nombre (los de Etapas.tricks); nil si no existe.
+function Trucos.get(name: string): Trick?
+	return TRICKS[name]
 end
 
 return table.freeze(Trucos)
