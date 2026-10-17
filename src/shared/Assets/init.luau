@@ -139,6 +139,22 @@ local Assets: Assets = {
 		BigSplash = "rbxasset://sounds/impact_water.mp3",
 		StageUp = "rbxassetid://3454671965", -- fanfarria (badge fanfare)
 		Roar = "rbxassetid://133651202885353", -- "Monster Roar"
+		-- Minotauro (biblioteca con licencia de Roblox: ProSoundEffects). Etapas y capas en
+		-- client/Audio/MinoVoces; el tono baja con la etapa.
+		MinoBellow = "rbxassetid://9113626273", -- "Bull Bellows 3" (2.7 s): becerro y joven
+		MinoBellowDeep = "rbxassetid://9113625924", -- "Bull Bellows 4" (3.5 s): adulto y final
+		MinoGrowl = "rbxassetid://9125470377", -- "Creature Growls Lion Deep Guttural" (2.7 s)
+		MinoRumble = "rbxassetid://9116300725", -- "Lion Roar Growl Low Rumble" (5.8 s): final
+		MinoSnort = "rbxassetid://9113634896", -- "Bull Goblin Snorts 6" (0.8 s)
+		MinoBreath = "rbxassetid://9113630137", -- "Bull Breaths 10" (1.5 s): reposo, pararse
+		MinoGrunt = "rbxassetid://9125470306", -- "Creature Growls Lion Deep Guttural" (1.5 s)
+		MinoYawn = "rbxassetid://9116307890", -- "Lion Roar Tired 1" (3.3 s)
+		MinoSniff = "rbxassetid://9119305209", -- "Sniff Breathe In 5" (2.4 s)
+		MinoStepSand = "rbxassetid://9118768256", -- "Sand Impacts 4" (0.8 s)
+		MinoStepHeavy = "rbxassetid://9118598240", -- "Rock Hit Dirt Impact 12" (0.8 s)
+		MinoSandHit = "rbxassetid://9118767938", -- "Sand Impacts 1" (3.0 s): pisotón y caída
+		MinoBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
+		MinoSit = "rbxassetid://9113524166", -- "Body Impact 1" (1.1 s): se sienta
 		-- Música (con licencia de Roblox: APM y DistroKid, se pueden usar en cualquier juego)
 		MusicIsland = "rbxassetid://128770946473000", -- "The Fisherman's Small Boat" (2:39)
 		MusicCrater = "rbxassetid://1843867314", -- "Tension Repeat Drones 29" (2:04)
