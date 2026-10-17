@@ -9,21 +9,28 @@ la más chica a la más grande y renderiza:
     silueta.png       lo mismo en negro sobre blanco (la guía pide que la silueta se lea así)
 en renders/minotauro_v2_alineacion/. No guarda nada más.
 
+Con --criatura dragon hace lo mismo con el Dragón marino v2 (assets/blender/dragon_v2/,
+renders/dragon_v2_alineacion/), suma una vista desde arriba (arriba.png) y en proporciones.png
+las iguala por el largo, que es como las mide el juego (docs/plan_dragon_v2.md, "Escala").
+
 Uso (desde la raíz del repo):
-    blender -b --factory-startup --python tools/blender/minotauro_v2_alineacion.py
+    blender -b --factory-startup --python tools/blender/minotauro_v2_alineacion.py [-- --criatura dragon]
 """
-import bpy, json, math, os
+import bpy, json, math, os, sys
 from mathutils import Matrix, Vector as V
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
-SALIDA = os.path.join(RAIZ, "renders", "minotauro_v2_alineacion")
+ARGS = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+CRIATURA = ARGS[ARGS.index("--criatura") + 1] if "--criatura" in ARGS else "minotauro"
+VUELA = CRIATURA == "dragon"  # se mide por el largo y se mira también desde arriba
+SALIDA = os.path.join(RAIZ, "renders", f"{CRIATURA}_v2_alineacion")
 HUECO = 0.25  # separación entre etapas, en fracción del ancho de la más grande vecina
 
 
 def cargar(etapa):
     """Objetos con hueso del .blend de la etapa, linkeados a la escena; None si no existe."""
-    ruta = os.path.join(RAIZ, "assets", "blender", "minotauro_v2", f"e{etapa}_bloques.blend")
+    ruta = os.path.join(RAIZ, "assets", "blender", f"{CRIATURA}_v2", f"e{etapa}_bloques.blend")
     if not os.path.exists(ruta):
         return None
     with bpy.data.libraries.load(ruta, link=False) as (desde, hacia):
@@ -96,12 +103,22 @@ for nombre, grados, ojo in (("frente", 0, 0.0), ("tres_cuartos", 30, 0.25)):
     apuntar(cam, centro, grados, ancho * 4, ancho * 4 * ojo)
     sc.render.filepath = os.path.join(SALIDA, nombre + ".png")
     bpy.ops.render.render(write_still=True)
-# Proporciones: todas al alto de la más grande, en fila, para comparar cabeza, piernas y hombros.
-mayor = max(f["alto_bu"] for f in fila.values())
+if VUELA:
+    cam.location = centro + V((0, 0, ancho * 4))
+    cam.rotation_euler = (0, 0, 0)
+    sc.render.filepath = os.path.join(SALIDA, "arriba.png")
+    bpy.ops.render.render(write_still=True)
+# Proporciones: todas a la medida de la más grande (el alto; en el dragón, el lado más largo), en
+# fila, para comparar cabeza, piernas y hombros.
+def medida(lo, hi):
+    return max(hi - lo) if VUELA else hi.z - lo.z
+
+
+mayor = max(medida(*caja(objs)) for objs in etapas.values())
 x, anterior = 0.0, 0.0
 for i, (n, objs) in enumerate(etapas.items()):
     lo, hi = caja(objs)
-    k = mayor / (hi.z - lo.z)
+    k = mayor / medida(lo, hi)
     base = V(((lo.x + hi.x) / 2, 0, lo.z))
     ancho_k = (hi.x - lo.x) * k
     x += (anterior + ancho_k) / 2 * (1 + HUECO) if i else 0
@@ -111,8 +128,9 @@ for i, (n, objs) in enumerate(etapas.items()):
     anterior = ancho_k
 lo, hi = caja([o for objs in etapas.values() for o in objs])
 ancho = hi.x - lo.x
-cam.data.ortho_scale = max(ancho * 1.08, mayor * 2.15)
-centro = V(((lo.x + hi.x) / 2, 0, mayor / 2))
+alto = hi.z - lo.z
+cam.data.ortho_scale = max(ancho * 1.08, alto * 2.15)
+centro = V(((lo.x + hi.x) / 2, 0, alto / 2))
 bpy.data.objects["Plane"].location.x = centro.x
 apuntar(cam, centro, 0, ancho * 4, 0)
 sc.render.filepath = os.path.join(SALIDA, "proporciones.png")
