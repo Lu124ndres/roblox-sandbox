@@ -11,6 +11,8 @@
 		- al girar o mecerse, la cola y las tiras de los costados se van al revés;
 		- la cola es una cadena: cada segmento más blando que el anterior, así la
 		  punta llega tarde.
+	Sentado, la cola y los faldones de los costados no bajan de lo que pide la
+	postura (tailMin, faldonMin): el rebote del golpe los metería en el suelo.
 	El faldón de adelante nunca baja de lo que pide el muslo (Cuerpo.skirt):
 	lo empuja la pierna y vuelve con el resorte.
 	Rebote y rigidez salen de la etapa (Etapas: bounce y pace): el becerro rebota
@@ -102,8 +104,10 @@ function Resortes.step(
 		pose[name] = math.clamp(pose[name], -TAIL_MAX, TAIL_MAX)
 	end
 	pose.faldonF = math.max(pose.faldonF, lift)
-	pose.faldonL = math.max(pose.faldonL, -0.2) -- más adentro tocaría el muslo
-	pose.faldonR = math.max(pose.faldonR, -0.2)
+	local faldonMin = math.max(pose.faldonMin or 0, -0.2) -- más adentro tocaría el muslo
+	pose.faldonL = math.max(pose.faldonL, faldonMin)
+	pose.faldonR = math.max(pose.faldonR, faldonMin)
+	pose.tailUp = math.max(pose.tailUp, pose.tailMin or -math.huge)
 	pose.jaw = math.max(pose.jaw, 0)
 end
 

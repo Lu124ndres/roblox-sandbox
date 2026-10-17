@@ -2,39 +2,58 @@
 --[[
 	Minotauro (MinotauroMotion)
 
-	El minotauro en el centro del cráter (solo en el cliente):
+	El minotauro en el fondo del cráter (solo en el cliente):
 		- respira, se mece, mueve la cola y las orejas y mira alrededor (Pose);
-		- cada tanto se da vuelta con pasitos para mirar a otro lado (todos los
-		  clientes lo ven igual: sale de la hora del servidor);
-		- cuando alguien le da de comer CAMINA hasta esa orilla (Caminar), se
-		  inclina, estira los brazos y mastica; cada pez que llega lo muerde (bite);
-		  cuando dejan de darle vuelve caminando al centro; cada pisada salpica;
-		- entre comidas hace trucos sincronizados (Trucos): pisotón, rugido,
-		  músculo, baile, rascarse y salto;
+		- cuando nadie le da de comer sigue su rutina (Rutina, Conducta): pasea
+		  entre lugares del cráter (Caminar, con el paso de su etapa), se sienta
+		  (y sentado se rasca, bosteza, mira o dormita), olfatea el suelo, se
+		  estira, mira al cielo o a alguien y hace sus trucos (Posturas, Trucos).
+		  Todo sale de la hora del servidor: todos los clientes lo ven igual;
+		- darle de comer manda: deja lo que hacía (sentado, se para), CAMINA hasta
+		  esa orilla, se inclina, estira los brazos y mastica; cada pez que llega
+		  lo muerde (bite); cuando dejan de darle vuelve a su rutina caminando;
+		- al evolucionar (EstadoGigante.EvolucionHasta) junta fuerza, explota
+		  hacia arriba y ruge (Evolucion);
 		- apoya siempre el pie más bajo en el suelo (Cuerpo) y orejas, cola,
 		  mandíbula y faldón siguen al cuerpo con retraso (Resortes).
-	El ritmo, la voz, la fuerza y los trucos salen de la etapa (Etapas, por el
-	nombre del modelo). Solo anima huesos si el modelo los tiene; si no, solo
-	gira y salta. step devuelve el pivote (base, -Z al frente).
-	state.events: lo que MinoStand convierte en sonido y efectos.
+	El ritmo, la voz, la fuerza, la rutina y el paso salen de la etapa (Etapas,
+	por el nombre del modelo). Solo anima huesos si el modelo los tiene; si no,
+	solo gira y camina. step devuelve el pivote (base, -Z al frente).
+	state.events: lo que MinoStand convierte en sonido y efectos:
+		step     cada pisada al caminar
+		stomp    el golpe del pisotón (truco)
+		roar     el rugido (truco, y al evolucionar justo después de la explosión)
+		land     cae de un salto (truco)
+		flex     saca músculo (truco)
+		happy    baila (truco)
+		sit      el golpe al caer sentado
+		standup  se impulsa para pararse
+		snort    resoplido (al olfatear, al despertar de la siesta, al saludar)
+		yawn     bostezo (sentado o al estirarse)
+		sniff    cada olfateada
+		evolve   empieza a evolucionar (el destello va 1.3 s después: Evolucion.BURST)
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
+local Config = require(script.Parent.Config)
 local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
 local Caminar = require(script.Caminar)
+local Conducta = require(script.Conducta)
 local Cuerpo = require(script.Cuerpo)
 local Etapas = require(script.Etapas)
+local Evolucion = require(script.Evolucion)
 local Pose = require(script.Pose)
+local Posturas = require(script.Posturas)
 local Resortes = require(script.Resortes)
 local Rig = require(script.Rig)
-local Trucos = require(script.Trucos)
+local Rutina = require(script.Rutina)
 
-local LOOK_EVERY = 16 -- segundos entre vueltas para mirar a otro lado
 local BITE_SECONDS = 0.16
+local ANGRY = Config.Giants.anger.angryThreshold
 
 export type Event = { kind: string }
 export type State = {
@@ -57,10 +76,6 @@ export type Motion = {
 
 local Minotauro = {}
 
-local function angleTowards(d: Vector3): number
-	return math.atan2(-d.X, -d.Z) -- Angles(0, y, 0) mira a (-sin y, 0, -cos y)
-end
-
 function Minotauro.new(center: Vector3): Motion
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local feeders = Feeders.watch(Vector3.new(center.X, 0, center.Z))
@@ -70,8 +85,9 @@ function Minotauro.new(center: Vector3): Motion
 	local yaw, stepPhase, feeding = 0, 0, 0
 	local walk = Caminar.new()
 	local springs = Resortes.new()
-	local biteUntil = 0
-	local lastSlot, lastU = -1, 0
+	local conducta = Conducta.new()
+	local evolving = Evolucion.watch(stateFolder)
+	local biteUntil, ready, first = 0, false, true
 
 	local function step(dt: number, info: Info): CFrame
 		dt = math.clamp(dt, 1 / 240, 0.1)
@@ -82,60 +98,67 @@ function Minotauro.new(center: Vector3): Motion
 			state.profile = Etapas.forModel(if info.inner then info.inner.Name else nil)
 		end
 		local profile = state.profile
-		local turnSpeed = profile.turnSpeed
 		local phaseName = stateFolder:GetAttribute(Protocol.GiantAttributes.Phase)
 		local active = phaseName == nil or phaseName == "feeding"
-		local direction = if active then feeders.direction() else nil
-		feeding += ((if direction then 1 else 0) - feeding) * (1 - math.exp(-dt * 2.5))
-		local w = feeding * feeding * (3 - 2 * feeding)
+		local evolveT = evolving(now, state.events)
+		local direction = if active and not evolveT then feeders.direction() else nil
+		local free = active and not direction and not evolveT and info.anger < ANGRY
+		local plan = Rutina.plan(now, profile, info.height)
+		if first then -- recién lo ve: donde los demás ya lo ven
+			first = false
+			walk.offset = plan.from:Lerp(plan.spot, if plan.walking then plan.progress else 1)
+			yaw = plan.facing
+		end
+		local routine, busy = Conducta.step(conducta, plan, dt, free, ready, state.events)
 
-		-- Camina: hasta la orilla de quien le da de comer, o de vuelta al centro.
-		local goal = if direction then Caminar.standFor(direction, info.height) else Vector3.zero
-		local moving, heading, stepped = Caminar.update(walk, dt, goal, info.height)
+		-- Camina: a su lugar de la rutina, a la orilla de quien le da de comer o al centro.
+		local goal = plan.spot
+		if busy or evolveT or info.anger >= ANGRY then
+			goal = walk.offset -- se queda donde está
+		elseif direction then
+			goal = Caminar.standFor(direction, info.height)
+		elseif not active then
+			goal = Vector3.zero
+		end
+		local gait = if free then profile.rutina.gait else 1
+		local anchor = if free then plan.from else nil
+		local moving, heading, stepped = Caminar.update(walk, dt, goal, info.height, gait, anchor)
 		if stepped then
 			table.insert(state.events, { kind = "step" })
 		end
-		w *= 1 - moving -- come cuando llega, no mientras camina
+		local eats = if direction and not busy then 1 else 0
+		feeding += (eats - feeding) * (1 - math.exp(-dt * 2.5))
+		local w = feeding * feeding * (3 - 2 * feeding) * (1 - moving) -- come cuando llega
 
-		-- Hacia dónde mira: adonde camina, quien le da de comer o, cada tanto, otro lado.
-		local target: number
+		-- Hacia dónde mira: adonde camina, quien le da de comer o lo que pide la rutina.
+		local target = yaw
+		local playing = conducta.playing
 		if heading and moving > 0.15 then
-			target = angleTowards(heading)
+			target = Caminar.angleTowards(heading)
 		elseif direction then
-			target = angleTowards(direction)
-		else
-			local slot = math.floor(now / LOOK_EVERY)
-			target = ((slot * 2654435761) % 1000) / 1000 * math.pi * 2
+			target = Caminar.angleTowards(direction)
+		elseif playing and playing.looks then
+			local toward = Posturas.lookAt(conducta.key, center + walk.offset)
+			target = if toward then Caminar.angleTowards(toward) else yaw
+		elseif free and not busy then
+			target = plan.facing
 		end
-		local delta = (target - yaw + math.pi) % (math.pi * 2) - math.pi
-		local turn = math.clamp(delta * 3, -turnSpeed, turnSpeed) * dt
+		local turn, turning = Caminar.turn(yaw, target, profile.turnSpeed, dt)
 		yaw += turn
-		local turning = math.clamp(math.abs(turn / dt) / turnSpeed * 1.6, 0, 1)
 		stepPhase += dt * 7 * (if turning > 0.05 then 1 else 0)
+		ready = moving < 0.05 and turning < 0.15 and (goal - walk.offset).Magnitude < 1
 
 		local pose = Pose.idle(now, profile)
 		Pose.add(pose, Pose.feeding(w, now, os.clock() < biteUntil))
 		Pose.add(pose, Pose.steps(stepPhase, turning * (1 - moving)))
-		Pose.add(pose, Pose.walk(walk.phase, moving))
-		Pose.add(
-			pose,
-			{ lean = -0.12 * info.anger, earL = -0.5 * info.anger, earR = -0.5 * info.anger }
-		)
-		local trick, u, slot = nil, 0, -1
-		if active and w < 0.05 and turning < 0.1 and moving < 0.05 then
-			trick, u, slot = Trucos.current(now, profile)
+		Pose.add(pose, Pose.walk(walk.phase, moving, profile.paso))
+		local mad = info.anger
+		Pose.add(pose, { lean = -0.12 * mad, earL = -0.5 * mad, earR = -0.5 * mad })
+		if routine then
+			Pose.add(pose, routine)
 		end
-		if trick then
-			if slot ~= lastSlot then
-				lastSlot, lastU = slot, 0
-			end
-			for _, event in trick.events do
-				if event.at > lastU and event.at <= u then
-					table.insert(state.events, { kind = event.kind })
-				end
-			end
-			lastU = u
-			Pose.add(pose, trick.pose(u))
+		if evolveT then
+			Pose.add(pose, Evolucion.pose(evolveT))
 		end
 		local rig = state.rig
 		if rig then
