@@ -255,8 +255,9 @@ memoria con `EditableMesh`, sin cambiar nada del lugar).
 > **Decidido el 2026-10-17: todo por código, sin keyframes** (ver `docs/decisiones.md`). Las
 > acciones de la tabla de abajo son trucos de `src/shared/Minotauro/Trucos/` (uno por módulo)
 > que cumplen estos principios con la pose; la acción secundaria la hace `Minotauro/Resortes`
-> y los pies en el suelo `Minotauro/Cuerpo`. Se revisan en video con
-> `tools/blender/minotauro_v2_animacion.py`.
+> y los pies en el suelo `Minotauro/Cuerpo`. Entre trucos, la rutina (`Minotauro/Rutina`,
+> `Habitos`, `Posturas/`) lo hace pasear, sentarse, olfatear, estirarse y mirar; los trucos son
+> una opción más de esa rutina. Se revisan en video con `tools/blender/minotauro_v2_animacion.py`.
 
 Las **acciones principales** se arman con curvas por código. Lo continuo (respirar, mirar,
 la cola) también, y se suma encima.
