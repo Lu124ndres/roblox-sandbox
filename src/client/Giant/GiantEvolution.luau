@@ -13,7 +13,7 @@
 	crea el cuerpo directo en su etapa (setStage instantáneo).
 	En el estallido salta y gira como siempre, salvo los gigantes con pose
 	de evolución propia (OWN_POSE: el minotauro se agacha, explota hacia
-	arriba y ruge por su cuenta).
+	arriba y ruge por su cuenta; el dragón se envuelve en las alas y las abre de golpe).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -30,7 +30,7 @@ local GiantBody = require(script.Parent.GiantBody)
 
 export type Handle = EvolveFx.Evolution
 
-local OWN_POSE: { [string]: boolean } = { Minotauro = true }
+local OWN_POSE: { [string]: boolean } = { Minotauro = true, DragonMarino = true }
 
 local GiantEvolution = {}
 
