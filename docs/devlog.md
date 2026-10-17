@@ -1863,5 +1863,9 @@ selene y stylua.
 
 **Qué se rompió:** nada.
 
-**Qué sigue:** los videos de los trucos de E2..E4 (con su ritmo y rebote) y publicar.
+**Videos:** las poses de los 6 trucos de E2..E4 salen de Studio con el perfil de cada etapa (ritmo
+1.1 / 1.25 / 1.45 y su rebote) y `minotauro_v2_animacion.py --etapa <n>` los renderiza en
+`renders/minotauro_v2_e<n>/animaciones/` (con `poses_juego.json`).
+
+**Qué sigue:** que el usuario los vea y publicar.
 
