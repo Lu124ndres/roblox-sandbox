@@ -17,9 +17,20 @@ Piernas, Cola, Orejas, Faldon). obj["hueso"] guarda ese hueso.
 Ejes: x = izquierda del personaje, -y = frente, z arriba; parado en z = 0, centrado en x.
 Sin textura ni rig: solo colores planos de la paleta para revisar la forma.
 
+Otras criaturas (--criatura, sin él el minotauro): carga <criatura>_v2_e<n>_geometria.py, que
+además puede traer
+    MODELO          nombre del modelo en el juego (la colección es <MODELO>E<n>_v2)
+    PREFIJO         prefijo de los materiales (el del minotauro es MinoV2_)
+    CONTRATO        lista de huesos del contrato y CONTRATO_SIN_PESOS (si no, los del minotauro)
+    LARGO_JUEGO     se mide por su dimensión más larga (studs) en vez del alto: el encuadre
+                    toma la caja entera y studs_por_bu sale de esa dimensión (el dragón)
+    VISTAS_EXTRA    más vistas (nombre, ángulo, alto); con alto negativo, desde abajo y sin piso
+    PISO_BAJO       cuánto más abajo va el piso (en las medidas de la E1), para que no parezca posado
+
 Uso (desde la raíz del repo; sin --etapa, la 1):
     blender -b --factory-startup --python tools/blender/minotauro_v2_bloques.py -- --etapa 2
-Salidas: assets/blender/minotauro_v2/e<n>_bloques.blend y renders/minotauro_v2_e<n>/.
+    blender -b --factory-startup --python tools/blender/minotauro_v2_bloques.py -- --criatura dragon
+Salidas: assets/blender/<criatura>_v2/e<n>_bloques.blend y renders/<criatura>_v2_e<n>/.
 """
 import bpy, bmesh, json, math, os, sys
 import numpy as np
@@ -30,9 +41,16 @@ exec(open(os.path.join(HERE, "minotauro_v2_revision.py"), encoding="utf-8").read
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
 ARGS = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 ETAPA = int(ARGS[ARGS.index("--etapa") + 1]) if "--etapa" in ARGS else 1
-exec(open(os.path.join(HERE, f"minotauro_v2_e{ETAPA}_geometria.py"), encoding="utf-8").read(), globals())
-BLEND = os.path.join(RAIZ, "assets", "blender", "minotauro_v2", f"e{ETAPA}_bloques.blend")
-RENDERS = os.path.join(RAIZ, "renders", f"minotauro_v2_e{ETAPA}")
+# La criatura: la fija el script que carga este archivo (dragon_v2_poses.py) o --criatura.
+CRIATURA = globals().get("CRIATURA") or (ARGS[ARGS.index("--criatura") + 1] if "--criatura" in ARGS
+                                         else "minotauro")
+exec(open(os.path.join(HERE, f"{CRIATURA}_v2_e{ETAPA}_geometria.py"), encoding="utf-8").read(), globals())
+BLEND = os.path.join(RAIZ, "assets", "blender", f"{CRIATURA}_v2", f"e{ETAPA}_bloques.blend")
+RENDERS = os.path.join(RAIZ, "renders", f"{CRIATURA}_v2_e{ETAPA}")
+MODELO = globals().get("MODELO", "Minotauro")
+PREFIJO = globals().get("PREFIJO", "MinoV2_")
+if "CONTRATO" in globals():  # si no, el contrato del minotauro (minotauro_v2_revision.py)
+    HUESOS, SIN_PESOS = list(CONTRATO), set(CONTRATO_SIN_PESOS)
 BISEL_CELDAS = 0.12
 BISEL = BISEL_CELDAS * CELDA
 PENDIENTES = (0.5, 1.0, 2.0)  # celdas que se mete el lado / celdas de largo
@@ -76,10 +94,10 @@ def par(parte, coleccion, color, x, y, z, eje="z", fin="+", recorte=None):
 
 # --- Mallas ----------------------------------------------------------------------------
 def material(nombre):
-    m = bpy.data.materials.get("MinoV2_" + nombre)
+    m = bpy.data.materials.get(PREFIJO + nombre)
     if m:
         return m
-    m = bpy.data.materials.new("MinoV2_" + nombre)
+    m = bpy.data.materials.new(PREFIJO + nombre)
     m.use_nodes = True
     bsdf = m.node_tree.nodes["Principled BSDF"]
     bsdf.inputs["Base Color"].default_value = (*COLORES[nombre], 1)
@@ -172,7 +190,7 @@ def armar():
     for o in list(bpy.data.objects):
         bpy.data.objects.remove(o)
     construir()
-    raiz = bpy.data.collections.new(f"MinotauroE{ETAPA}_v2")
+    raiz = bpy.data.collections.new(f"{MODELO}E{ETAPA}_v2")
     bpy.context.scene.collection.children.link(raiz)
     for nombre, parte in PARTES.items():
         col = bpy.data.collections.get(parte["coleccion"])
@@ -207,7 +225,20 @@ def estadisticas(objetos):
         "bisel": bisel(solidos),
         "pendientes": pendientes(solidos, CELDA),
         "huesos": huesos(objetos),
-    }
+    } | medidas_por_largo(objetos)
+
+
+def medidas_por_largo(objetos):
+    """Criaturas que se miden por su dimensión más larga (LARGO_JUEGO): esa dimensión y los
+    studs por BU que salen de ella (reemplazan a los del alto)."""
+    if "LARGO_JUEGO" not in globals():
+        return {}
+    pts = np.array([tuple(o.matrix_world @ v.co) for o in objetos for v in o.data.vertices])
+    dims = pts.max(axis=0) - pts.min(axis=0)
+    return {"studs_por_bu": round(LARGO_JUEGO / dims.max(), 4),
+            "dimensiones_bu": {"ancho_x": round(dims[0], 4), "largo_y": round(dims[1], 4),
+                               "alto_z": round(dims[2], 4)},
+            "dimension_mayor_bu": round(dims.max(), 4)}
 
 
 def alto_bu():
@@ -233,7 +264,7 @@ def estudio(alto=3.1):
     mundo.node_tree.nodes["Background"].inputs["Color"].default_value = (0.32, 0.36, 0.42, 1)
     mundo.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.9
     sc.world = mundo
-    bpy.ops.mesh.primitive_plane_add(size=12 * k, location=(0, 0, 0))
+    bpy.ops.mesh.primitive_plane_add(size=12 * k, location=(0, 0, -globals().get("PISO_BAJO", 0) * k))
     piso = bpy.context.active_object
     piso.data.materials.append(bpy.data.materials.new("Piso"))
     piso.data.materials[0].diffuse_color = (0.3, 0.33, 0.36, 1)
@@ -249,25 +280,41 @@ def estudio(alto=3.1):
     return sc, cam, sol
 
 
+def encuadre():
+    """Centro de la cámara y k, las medidas de la E1 del minotauro (3.1 BU de alto) en proporción:
+    al alto, parado en z = 0; con LARGO_JUEGO, a la caja entera (el dragón vuela)."""
+    if "LARGO_JUEGO" not in globals():
+        alto = alto_bu()
+        return V((0, 0, 1.55 * alto / 3.1)), alto / 3.1
+    pts = np.array([tuple(o.matrix_world @ v.co) for o in bpy.data.objects
+                    if o.type == "MESH" and "hueso" in o for v in o.data.vertices])
+    lo, hi = pts.min(axis=0), pts.max(axis=0)
+    return V(tuple((lo + hi) / 2)), (hi - lo).max() / 3.1
+
+
+VISTAS = (("frente", 0, 0), ("perfil", 90, 0), ("tres_cuartos", 35, 0.35), ("atras", 180, 0))
+VISTAS += tuple(globals().get("VISTAS_EXTRA", ()))
+
+
 def renders(carpeta):
     os.makedirs(carpeta, exist_ok=True)
-    alto = alto_bu()
-    sc, cam, sol = estudio(alto)
-    k = alto / 3.1
-    centro = V((0, 0, 1.55 * k))
+    centro, k = encuadre()
+    sc, cam, sol = estudio(k * 3.1)
     vistas(sc, cam, sol, centro, carpeta, "", k)
-    materiales_diagnostico([m.name for m in bpy.data.materials if m.name.startswith("MinoV2_")])
+    materiales_diagnostico([m.name for m in bpy.data.materials if m.name.startswith(PREFIJO)])
     sc.cycles.samples = 8
     vistas(sc, cam, sol, centro, carpeta, "diagnostico_", k)
 
 
 def vistas(sc, cam, sol, centro, carpeta, prefijo, k=1.0):
-    for nombre, angulo, alto in (("frente", 0, 0), ("perfil", 90, 0), ("tres_cuartos", 35, 0.35),
-                                 ("atras", 180, 0)):
+    piso = bpy.data.objects.get("Plane")
+    for nombre, angulo, alto in VISTAS:
         a = math.radians(angulo)
         cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, alto * 10)) * k
         cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
         sol.rotation_euler = (math.radians(50), 0, a + math.radians(-35))
+        if piso:
+            piso.hide_render = alto < 0  # desde abajo, sin piso
         sc.render.filepath = os.path.join(carpeta, f"{prefijo}{nombre}.png")
         bpy.ops.render.render(write_still=True)
 

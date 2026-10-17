@@ -15,6 +15,8 @@ minotauro_v2_e<n>_geometria.py; los umbrales van en celdas del módulo de la eta
 
 Uso (desde la raíz del repo; sin --etapa, la 1):
     blender -b --factory-startup --python tools/blender/minotauro_v2_poses.py -- --etapa 2
+dragon_v2_poses.py carga este archivo hasta armar() y cambia lo propio del dragón (la cuenta de
+Dragon/Pose y Dragon/Rig, las poses y la cámara); medir() y revisar() son las mismas.
 """
 import bpy, json, math, os
 from mathutils import Matrix, Vector as V
@@ -24,7 +26,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
 _src = open(os.path.join(HERE, "minotauro_v2_bloques.py"), encoding="utf-8").read()
 exec(_src[:_src.index("# === PRINCIPAL")], globals())  # armar(), estudio(), ETAPA y su geometría
-SALIDA = os.path.join(RAIZ, "renders", f"minotauro_v2_e{ETAPA}", "poses")
+SALIDA = os.path.join(RENDERS, "poses")  # renders/<criatura>_v2_e<n>/poses
 C = CELDA
 PENETRA = 0.3  # celdas
 JUNTA = 1.0

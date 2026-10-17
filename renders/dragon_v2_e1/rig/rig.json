@@ -1,0 +1,43 @@
+{
+  "triangulos": 4582,
+  "huesos": 32,
+  "huesos_que_deforman": 30,
+  "huesos_del_contrato_que_faltan": [],
+  "colores_en_la_paleta": 13,
+  "pesos": {
+    "vertices_con_mas_de_un_hueso": 0,
+    "grupos_en_huesos_sin_pesos": []
+  },
+  "error_maximo_celdas_por_pose": {
+    "planeo": 4e-06,
+    "aletazo_abajo_max": 5e-06,
+    "aletazo_arriba_max": 6e-06,
+    "aletazo_abajo_rugido": 6e-06,
+    "aletazo_arriba_rugido": 6e-06,
+    "alas_plegadas_picada": 5e-06,
+    "cola_enroscada": 5e-06,
+    "cola_en_s": 5e-06,
+    "cola_arriba": 4e-06,
+    "cola_abajo": 4e-06,
+    "cuello_izq_30": 4e-06,
+    "cuello_izq_60": 4e-06,
+    "cuello_der_60": 4e-06,
+    "cuello_arriba_45": 4e-06,
+    "cuello_abajo_45": 4e-06,
+    "boca_max": 4e-06,
+    "patas_colgando": 4e-06,
+    "patas_apoyadas": 4e-06,
+    "patas_recogidas_aleteo": 6e-06,
+    "truco_rugido": 7e-06,
+    "truco_fuego": 5e-06,
+    "truco_voltereta": 6e-06,
+    "comer": 6e-06,
+    "curva_cerrada": 4e-06
+  },
+  "escala_studs_por_bu": 2.75,
+  "medidas_studs": {
+    "ancho_x": 9.9,
+    "largo_y": 9.9,
+    "alto_z": 3.85
+  }
+}
