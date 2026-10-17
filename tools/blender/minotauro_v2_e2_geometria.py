@@ -112,13 +112,16 @@ def cabeza():
     par("Cabeza", c, "pelo_osc", (5, 6), (-3, 1), (20, 23))  # mejillas
     bloque("Cabeza", c, "pelo_osc", (-3, 3), (4, 5), (20, 24))  # nuca, en escalones
     bloque("Cabeza", c, "pelo_osc", (-1, 1), (5, 6), (21, 23))
-    # Ojos ámbar con la pupila hacia adentro y un brillo; cejas bravas en cuña (bajan al medio).
-    par("Cabeza", c, "negro", (1, 2), (-5, -4), (22, 24))
-    par("Cabeza", c, "ambar", (2, 4), (-5, -4), (22, 23))
-    par("Cabeza", c, "ambar", (2, 3), (-5, -4), (23, 24))
-    par("Cabeza", c, "blanco", (3, 4), (-5, -4), (23, 24))
-    par("Cabeza", c, "pelo_osc", (1, 3), (-5, -4), (24, 25), eje="x", fin="-", recorte={"z+": 1})
-    par("Cabeza", c, "pelo_osc", (3, 5), (-5, -4), (24, 25))
+    # Ojos de 3 x 3 celdas que asoman 1 (30 % del ancho de la cara): ámbar brillante con la
+    # pupila negra vertical al centro y un brillo blanco arriba afuera. Cejas bravas encima
+    # (en cuña, bajan al medio), sin sobresalir más que el ojo: no le echan sombra.
+    par("Cabeza", c, "ambar", (1, 2), (-5, -4), (22, 25))
+    par("Cabeza", c, "negro", (2, 3), (-5, -4), (22, 24))
+    par("Cabeza", c, "ambar", (2, 3), (-5, -4), (24, 25))
+    par("Cabeza", c, "ambar", (3, 4), (-5, -4), (22, 24))
+    par("Cabeza", c, "blanco", (3, 4), (-5, -4), (24, 25))
+    par("Cabeza", c, "pelo_osc", (1, 3), (-5, -4), (25, 26), eje="x", fin="-", recorte={"z+": 1})
+    par("Cabeza", c, "pelo_osc", (3, 5), (-5, -4), (25, 26))
     # Hocico: base, cuña hacia los ojos, frente angosta con las narinas y el aro de oro.
     bloque("Cabeza", c, "hocico", (-4, 4), (-7, -4), (19, 21))
     bloque("Cabeza", c, "hocico", (-4, 4), (-7, -4), (21, 22), recorte={"y-": 1})
@@ -126,10 +129,11 @@ def cabeza():
     par("Cabeza", c, "nariz", (1, 3), (-9, -8), (20, 21))  # narinas
     par("Cabeza", c, "oro", (1, 2), (-9, -8), (18, 20))  # aro de la nariz
     bloque("Cabeza", c, "oro", (-2, 2), (-9, -8), (17, 18))
-    # Mechón: base sobre la frente, cuña encima y la punta que cae entre los ojos.
-    bloque("Cabeza", c, "pelo_osc", (-2, 2), (-5, -4), (25, 26))
+    # Mechón: base sobre la frente, cuña encima y la punta que cae entre los ojos (al ras de
+    # ellos: si asoma más, les hace sombra).
+    bloque("Cabeza", c, "pelo_osc", (-1, 1), (-5, -4), (25, 26))
     bloque("Cabeza", c, "pelo_osc", (-2, 2), (-5, -1), (26, 28), recorte={"y+": 2})
-    bloque("Cabeza", c, "pelo_osc", (-1, 1), (-6, -4), (23, 27))
+    bloque("Cabeza", c, "pelo_osc", (-1, 1), (-5, -4), (23, 25))
     # Cuernos más largos que los del becerro: salen de lado, anillo de oro, suben y terminan
     # en punta.
     par("Cabeza", c, "marfil", (5, 10), (-2, 1), (23, 25))
