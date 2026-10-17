@@ -1,0 +1,18 @@
+{
+  "juego_muslo_rodilla": [
+    57.3,
+    68.8
+  ],
+  "modelo_aprobado": {
+    "reposo_sin_choque": true,
+    "a_faldon_juego": null,
+    "a_faldon_extremo": null,
+    "b_muslo_maximo": 13.0
+  },
+  "propuesta_adelante_1": {
+    "reposo_sin_choque": true,
+    "a_faldon_juego": 55,
+    "a_faldon_extremo": 91,
+    "b_muslo_maximo": 29.0
+  }
+}

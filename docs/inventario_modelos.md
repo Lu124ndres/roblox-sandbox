@@ -108,6 +108,24 @@ En E2..E4 las articulaciones salen deformadas y se guardan en `scene["puntos"]` 
 Roll de todos los huesos: 0. Exportación FBX: `primary_bone_axis="Y"`,
 `secondary_bone_axis="X"`, `axis_forward="-Z"`, `axis_up="Y"`, `add_leaf_bones=False`.
 
+### Adición propuesta para la v2: huesos del faldón (opción a, pendiente de aprobación)
+
+No es parte del contrato vigente. Si se aprueba la opción a del faldón
+(`tools/blender/minotauro_v2_e1_pisoton.py`), el rig v2 suma tres huesos, todos hijos de
+`Cadera`, con las piezas del faldón al 100 %:
+
+```
+Cadera
+├── FaldonFrente   bisagra en el borde de adelante del cinturón; se levanta con el muslo
+├── FaldonIzq      tiras del costado izquierdo
+└── FaldonDer      tiras del costado derecho
+```
+
+**Son opcionales para el código actual:** `Rig.bind` solo exige `Raiz`, `Cadera`, `Cabeza`,
+`BrazoIzq` y `BrazoDer`, y `Pose.apply` no los nombra, así que un modelo con estos huesos
+anima igual que hoy (el faldón queda quieto con `Cadera`) hasta que el código los mueva. Con
+ellos el contrato pasa de 25 a 28 huesos (26 que deforman).
+
 ### Qué exige el código de cada hueso
 
 | Requisito | Dónde |

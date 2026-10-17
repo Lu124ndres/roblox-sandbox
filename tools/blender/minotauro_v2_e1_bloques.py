@@ -30,6 +30,10 @@ CELDA = 0.1
 BISEL = 0.012
 PENDIENTES = (0.5, 1.0, 2.0)  # celdas que se mete el lado / celdas de largo
 ALTO_JUEGO = 16.5  # studs: 3 x 5.5 (Config/Giants.luau)
+# Propuesta del pisotón (minotauro_v2_e1_pisoton.py): celdas que el frente del cinturón y el
+# faldón salen hacia adelante. 0 = el modelo aprobado; 1 = la bisagra del faldón queda fuera
+# del recorrido de la rodilla.
+ADELANTE = 0
 
 # --- Paleta (lineal, la misma de minotauro_e1.py) ---------------------------------------
 COLORES = {
@@ -87,9 +91,10 @@ def piernas():
 def torso():
     t = "Torso"
     bloque("Cadera", t, "pelo", (-4, 4), (-3, 3), (9, 10))
-    bloque("Cadera", t, "cuero", (-7, 7), (-4, 4), (10, 12))  # cinturón
-    bloque("Cadera", t, "oro", (-2, 2), (-5, -4), (10, 12))  # hebilla
-    bloque("Cadera", t, "cuero_rojo", (-1, 1), (-6, -5), (10, 12))
+    a = ADELANTE
+    bloque("Cadera", t, "cuero", (-7, 7), (-4 - a, 4), (10, 12))  # cinturón
+    bloque("Cadera", t, "oro", (-2, 2), (-5 - a, -4 - a), (10, 12))  # hebilla
+    bloque("Cadera", t, "cuero_rojo", (-1, 1), (-6 - a, -5 - a), (10, 12))
     bloque("Columna", t, "pelo", (-5, 5), (-3, 3), (12, 15))
     bloque("Columna", t, "crema", (-4, 4), (-5, -3), (12, 15))  # panza
     bloque("Columna", t, "pelo_osc", (-4, 4), (3, 4), (12, 17))  # placa del lomo
@@ -155,8 +160,9 @@ def orejas_cola_faldon():
            recorte={"x-": 1, "x+": 1, "y-": 1, "y+": 1})
     # Faldón: tres tiras adelante y dos a cada lado, con remaches de oro.
     for x, largo in (((-4, -2), 4), ((-1, 1), 5), ((2, 4), 4)):
-        bloque("FaldonFrente", "Faldon", "cuero_rojo", x, (-5, -4), (10 - largo, 10))
-        bloque("FaldonFrente", "Faldon", "oro", x, (-6, -5), (9, 10))
+        a = ADELANTE
+        bloque("FaldonFrente", "Faldon", "cuero_rojo", x, (-5 - a, -4 - a), (10 - largo, 10))
+        bloque("FaldonFrente", "Faldon", "oro", x, (-6 - a, -5 - a), (9, 10))
     for y in ((-3, -1), (0, 2)):
         par("Faldon{lado}", "Faldon", "cuero_rojo", (6, 7), y, (6, 10))
         par("Faldon{lado}", "Faldon", "oro", (7, 8), y, (9, 10))
@@ -296,8 +302,8 @@ def estadisticas(objetos):
     }
 
 
-def renders(carpeta):
-    os.makedirs(carpeta, exist_ok=True)
+def estudio():
+    """Luz, fondo, piso y cámara ortográfica de las revisiones."""
     sc = bpy.context.scene
     sc.render.engine = "CYCLES"
     sc.cycles.device = "CPU"
@@ -322,6 +328,12 @@ def renders(carpeta):
     cam.data.type, cam.data.ortho_scale = "ORTHO", 3.7
     sc.collection.objects.link(cam)
     sc.camera = cam
+    return sc, cam, sol
+
+
+def renders(carpeta):
+    os.makedirs(carpeta, exist_ok=True)
+    sc, cam, sol = estudio()
     centro = V((0, 0, 1.55))
     vistas(sc, cam, sol, centro, carpeta, "")
     materiales_diagnostico([m.name for m in bpy.data.materials if m.name.startswith("MinoV2_")])

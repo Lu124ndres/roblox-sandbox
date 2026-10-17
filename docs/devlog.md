@@ -1622,3 +1622,20 @@ geometría en `f659620`); lo oscuro entre las piernas es la borla de la cola en 
 
 **Qué se rompió:** nada. El faldón (3 piezas) va al hueso `Cadera`: queda propuesto darle
 huesos propios.
+
+---
+
+## 2026-10-16 (20) — Minotauro v2 E1: el faldón en el pisotón
+
+**Qué se hizo (pedido del usuario):** `tools/blender/minotauro_v2_e1_pisoton.py` posa las
+piezas como lo haría el rig y busca, con choques BVH entre la pierna y el faldón, los ángulos
+del pisotón del juego (muslo 57°, rodilla 69°, brazos abiertos) y de la pose extrema (90°).
+Con el modelo aprobado ninguna opción llega: la rodillera recorre un círculo de 5.8 celdas
+alrededor de la cadera y la bisagra del faldón está a 5, así que la rodilla pasa por la raíz
+de las tiras (levantar el faldón o recortarlo no alcanza). Con el cinturón y el faldón 1 celda
+más adelante (`ADELANTE = 1`, propuesta; el modelo aprobado sigue en 0): opción a, el faldón
+se levanta 55° en el pisotón y 91° en la pose extrema; opción b (rígido), el muslo llega a 29°
+como mucho. Renders `pisoton_a.png`, `pisoton_b.png` y `pisoton_b_choque.png`. Los huesos del
+faldón quedan anotados en `inventario_modelos.md` como adición propuesta.
+
+**Qué se rompió:** nada; el modelo aprobado no cambió (93 bloques, 3,890 triángulos).
