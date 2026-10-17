@@ -63,6 +63,7 @@ local Giants: Types.GiantsConfig = {
 			food = 600,
 			targetMinutes = 10,
 			modelBase = "Minotauro",
+			sand = true, -- su hábitat es un desierto: el cráter sin agua, con arena y dunas
 			-- Modelo de bloques v2 (docs/plan_minotauro_v2.md): MinotauroE1_v2..E4_v2. Una
 			-- etapa sin v2 seguiría con el modelo actual. Sin esta línea vuelve todo al actual.
 			modelSuffix = "_v2",
