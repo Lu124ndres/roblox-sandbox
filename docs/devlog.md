@@ -1775,3 +1775,23 @@ cambie el código; hay que clonar la carpeta del módulo para que lo cargue de n
 
 **Qué sigue:** importar `MinotauroE1_v2.fbx` a `ServerStorage.MinotauroE1_v2` (a mano) y el
 interruptor para usarlo en el juego (paso 8 del plan).
+
+---
+
+## 2026-10-17 (6) — El Minotauro v2 E1 en el juego
+
+**Qué se hizo:** el usuario importó el FBX; por el MCP se revisó (parado, mirando a −Z, 28
+huesos, pivote en la base) y se movió a `ServerStorage.MinotauroE1_v2`. `modelSuffix = "_v2"`
+en el Minotauro (`Config/Giants.luau`): `GiantTemplates` publica el v2 como `MinotauroE1`. IDs
+en `Assets` (malla y textura de la paleta).
+
+**Probado en Studio (Play, `Minotauro:1`):** se publica con 28 huesos y alto base 16.5; E2
+sigue con el modelo actual; a 60 cuadros por segundo hizo salto y pisotón (muslo a 1.0 rad,
+faldón de adelante a 1.38 rad, por encima de lo que pide el muslo); consola sin errores.
+
+**Qué se rompió:** la cola se enroscaba (hasta 1.5 rad por segmento): el último resorte vibraba
+al mismo ritmo que el baile y entraba en resonancia. Se endurecieron los tres resortes de la
+cola, se bajó cuánto la empuja el vaivén y se le puso un tope de 0.9 rad por segmento; en 40 s
+de Play quedó en 0.9.
+
+**Qué sigue:** que el usuario vea el v2 en el juego; las etapas E2..E4 en bloques (paso 9).

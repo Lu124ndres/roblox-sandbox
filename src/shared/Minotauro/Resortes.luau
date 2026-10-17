@@ -37,14 +37,17 @@ local CHANNELS: { [string]: Channel } = {
 	earR = { k = 160, rise = -0.4, turn = 0, sway = -0.25 },
 	jaw = { k = 220, rise = -0.25, turn = 0, sway = 0 },
 	tailUp = { k = 110, rise = -0.5, turn = 0, sway = 0 },
-	tail1 = { k = 90, rise = 0, turn = -0.25, sway = -0.4 },
-	tail2 = { k = 60, rise = 0, turn = -0.3, sway = -0.5 },
-	tail3 = { k = 40, rise = 0, turn = -0.35, sway = -0.6 },
+	-- La cola no puede vibrar a ~6.3 rad/s (el ritmo del baile): entraba en resonancia y se
+	-- enroscaba (1.5 rad por segmento en Studio). Por eso es más dura y tiene tope (TAIL_MAX).
+	tail1 = { k = 160, rise = 0, turn = -0.25, sway = -0.25 },
+	tail2 = { k = 125, rise = 0, turn = -0.3, sway = -0.3 },
+	tail3 = { k = 100, rise = 0, turn = -0.35, sway = -0.35 },
 	faldonF = { k = 140, rise = -0.5, turn = 0, sway = 0, zeta = 0.6 },
 	faldonL = { k = 120, rise = -0.3, turn = 0.1, sway = 0.5 },
 	faldonR = { k = 120, rise = -0.3, turn = -0.1, sway = -0.5 },
 }
 local SUBSTEP = 1 / 120
+local TAIL_MAX = 0.9 -- rad por segmento
 
 local Resortes = {}
 
@@ -94,6 +97,9 @@ function Resortes.step(
 			s.x += s.v * h
 		end
 		pose[name] = s.x
+	end
+	for _, name in { "tail1", "tail2", "tail3" } do
+		pose[name] = math.clamp(pose[name], -TAIL_MAX, TAIL_MAX)
 	end
 	pose.faldonF = math.max(pose.faldonF, lift)
 	pose.faldonL = math.max(pose.faldonL, -0.2) -- más adentro tocaría el muslo
