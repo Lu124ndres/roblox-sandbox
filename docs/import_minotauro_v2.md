@@ -11,9 +11,9 @@ exportar, con escala y rotación aplicadas en todos los objetos.
 | Etapa | Alto del modelo (BU) | Alto esperado (studs) | Alto con 5.32 (studs) | Estado |
 |---|---|---|---|---|
 | E1 | 3.1 (medido por el script) | 16.5 | 16.5 (FBX) | en `ServerStorage.MinotauroE1_v2`; **el juego lo usa** (`modelSuffix`) |
-| E2 | — | 44 | — | sin modelar |
-| E3 | — | 82.5 | — | sin modelar |
-| E4 | — | 165 | — | sin modelar |
+| E2 | 8.4 (28 módulos de 0.3) | 44 | 44.71 (FBX) | rig y FBX hechos; sin importar a Studio |
+| E3 | 15.5 (31 módulos de 0.5) | 82.5 | 82.5 (FBX) | rig y FBX hechos; sin importar a Studio |
+| E4 | 31 (31 módulos de 1.0) | 165 | 165 (FBX) | rig y FBX hechos; sin importar a Studio |
 
 El juego igual escala cada etapa al alto de `Config/Giants.luau` (`GiantBody` con
 `Model:ScaleTo`); la escala de exportación sirve para que el modelo llegue a Studio con su
@@ -55,3 +55,22 @@ tamaño real y las cuatro etapas sean comparables.
   el pisotón y la consola sin errores.
   - Mismas propiedades de la pieza que `MinotauroE1` (sin anclar y con colisión: el código lo
     ancla y se la quita al copiarlo); no tiene `AnimationController` y el código no lo usa.
+
+## E2, E3 y E4
+
+Modeladas a la vez el 2026-10-17 (una sesión por etapa, con las herramientas comunes; ver
+`docs/devlog.md`). Fuente: `tools/blender/minotauro_v2_e<n>_geometria.py`; mismos scripts y
+opciones de exportación que la E1 (`rig_minotauro_v2.py --etapa <n>`).
+
+| Etapa | Bloques | Triángulos (tope) | Colores | FBX | Error del rig | Faldón: pisotón / 90° / caminata |
+|---|---|---|---|---|---|---|
+| E2 joven | 121 | 4,946 (10k) | 14 | `assets/blender/MinotauroE2_v2.fbx` | 0.00001 | 55° / 90° / 3° |
+| E3 adulto | 107 | 4,276 (12k) | 14 | `assets/blender/MinotauroE3_v2.fbx` | 0.00002 | 58° / 91° / 0° |
+| E4 forma final | 142 | 5,916 (15k) | 12 | `assets/blender/MinotauroE4_v2.fbx` | 0.00001 | 3° / 91° / 4° |
+
+- Las tres: 28 huesos (26 que deforman), un hueso por vértice, sin caras coplanares ni normales
+  al revés, ninguna pieza se separa en las 20 poses de `minotauro_v2_poses.py`.
+- Medidas para el código en `src/shared/Minotauro/Medidas.luau` (de `medidas.json`).
+- Las cuatro lado a lado: `renders/minotauro_v2_alineacion/` (`minotauro_v2_alineacion.py`).
+- Importar a Studio (pendiente, a mano): igual que la E1, con "Mantener huesos de influencia
+  cero", y dejar cada Model en `ServerStorage.MinotauroE<n>_v2`.

@@ -20,13 +20,9 @@
 		           cadera), footSide (pie al centro) y skirt (muslo -> faldón, grados)
 ]]
 
-export type Body = {
-	thigh: number,
-	shin: number,
-	hip: number,
-	footSide: number,
-	skirt: { { number } },
-}
+local Medidas = require(script.Parent.Medidas)
+
+export type Body = Medidas.Body
 
 export type Profile = {
 	breathe: number,
@@ -42,17 +38,6 @@ export type Profile = {
 	body: Body,
 }
 
--- Medidas del v2 E1 (minotauro_v2_pisoton.py). Las etapas que todavía no tienen su v2 usan
--- estas: el muslo y la pierna miden casi lo mismo en todas (minotauro_etapas.py las estira
--- parecido).
-local BODY_E1: Body = {
-	thigh = 0.129,
-	shin = 0.129,
-	hip = 0.3226,
-	footSide = 0.0968,
-	skirt = { { 0, 0 }, { 40, 15 }, { 45, 28 }, { 48, 47 }, { 50, 67 }, { 52, 71 }, { 90, 91 } },
-}
-
 local PROFILES: { [number]: Profile } = {
 	{ -- becerro: inquieto, baila y salta
 		breathe = 2.6,
@@ -65,7 +50,7 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 11,
 		pace = 1,
 		bounce = 0.28,
-		body = BODY_E1,
+		body = Medidas[1],
 	},
 	{ -- joven: fanfarrón, saca músculo y todavía baila
 		breathe = 3,
@@ -78,7 +63,7 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 12,
 		pace = 1.1,
 		bounce = 0.38,
-		body = BODY_E1,
+		body = Medidas[2],
 	},
 	{ -- adulto: pesado, pisa y ruge
 		breathe = 3.5,
@@ -91,7 +76,7 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 13,
 		pace = 1.25,
 		bounce = 0.5,
-		body = BODY_E1,
+		body = Medidas[3],
 	},
 	{ -- forma final: enorme y lento; ruge y pisa, ya no baila ni salta
 		breathe = 4.2,
@@ -104,7 +89,7 @@ local PROFILES: { [number]: Profile } = {
 		trickEvery = 14,
 		pace = 1.45,
 		bounce = 0.65,
-		body = BODY_E1,
+		body = Medidas[4],
 	},
 }
 

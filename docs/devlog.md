@@ -1816,3 +1816,36 @@ errores y el pisotón sube el muslo a 1.0 rad. Checklist: build, selene y stylua
 
 **Qué se rompió:** nada. `pisoton.json` de la E1 cambia de formato y ya no trae la comparación con
 el cinturón anterior (`ADELANTE = 0`): queda en `decisiones.md` y en el commit 9f18333.
+
+---
+
+## 2026-10-17 (8) — Minotauro v2 E2, E3 y E4 a la vez
+
+**Qué se hizo (pedido del usuario: las tres etapas en paralelo):** una sesión por etapa, cada una en
+su copia del repo y solo con los archivos de su etapa (`minotauro_v2_e<n>_geometria.py`, su
+`.blend`, sus renders y su FBX). Primero el bloqueo con renders y el pisotón; el usuario aprobó las
+siluetas lado a lado (`minotauro_v2_alineacion.py`) y pidió solo ojos más visibles. Después cada
+sesión hizo los ojos, las poses extremas y el rig con FBX, y se unieron las tres ramas.
+
+- E2 joven: tirante de cuero rojo en X sobre el pecho, ojos ámbar de 3×3 con pupila y brillo.
+- E3 adulto: hombreras con púas en la tapa del brazo, puntas de oro en los cuernos, ojos ámbar.
+- E4 forma final: pelaje casi negro con grietas de lava (que asoman o van metidas), ojos de lava
+  con brillo claro, colmillos y hombreras de cuero con borde de oro; `ADELANTE = 2` (el faldón
+  casi no se mueve, "enorme y lento").
+
+Por las poses, cada una ajustó algo sin cambiar la silueta: E2 acortó la mandíbula (entraba en la
+hebilla al abrirse) y subió orejas y cuernos; E3 bajó los pectorales y afinó las orejas; E4 acortó
+las orejas, subió el hombro y bajó la mitad fija de la hombrera. Las medidas de cada etapa pasan a
+`Minotauro/Medidas.luau` (Etapas las usa en `body`).
+
+**Resultado:** cifras en `import_minotauro_v2.md`. En los trucos del juego ninguna etapa atraviesa
+a la vista más que la E1 y ninguna pieza se separa. Checklist: build, selene y stylua.
+
+**Qué se rompió:** nada. Propuestas de las sesiones para los scripts comunes, pendientes: que
+`quitar_ocultas` conserve una de las dos caras de contacto (si no, por la rendija del bisel se ve
+el interior), encuadrar el render del pisotón por el ancho del modelo (corta los cuernos de E2..E4)
+y `use_nodes`, que desaparece en Blender 6.
+
+**Qué sigue:** importar los tres FBX a Studio, moverlos a `ServerStorage.MinotauroE<n>_v2`, sus IDs
+en `Assets`, probar las cuatro etapas en Play y los videos de los trucos de cada una.
+
