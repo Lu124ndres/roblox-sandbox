@@ -12,7 +12,8 @@ pasos 5 y 7):
      minotauro_v2_poses.py (error máximo por vértice) y renderiza los trucos con los huesos;
   5. escala de exportación 5.32 studs por BU aplicada (docs/import_minotauro_v2.md) y FBX con
      las mismas opciones que los otros rigs (bake_space_transform=False, -Z adelante, Y arriba).
-No toca los modelos actuales (MinotauroE<n>). Uso (desde la raíz del repo; sin --etapa, la 1):
+No toca los modelos actuales (MinotauroE<n>). rig_dragon_v2.py usa estas funciones con las
+poses del dragón (carga el archivo hasta "PRINCIPAL"). Uso (desde la raíz del repo; sin --etapa, la 1):
     blender -b --factory-startup --python tools/blender/rig_minotauro_v2.py -- --etapa 2
 Salidas: assets/blender/MinotauroE<n>_v2.fbx, assets/blender/minotauro_v2/e<n>_rig.blend,
 assets/textures/MinotauroE<n>_v2_color.png, renders/minotauro_v2_e<n>/rig/ (PNG y rig.json).
@@ -22,8 +23,9 @@ import numpy as np
 from mathutils import Matrix, Vector as V
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-_src = open(os.path.join(HERE, "minotauro_v2_poses.py"), encoding="utf-8").read()
-exec(_src[:_src.index("\narmar()\n")], globals())  # armar(), estudio(), HUESOS, POSES, matrices()
+if "giros" not in globals():  # rig_dragon_v2.py ya cargó las poses del dragón
+    _src = open(os.path.join(HERE, "minotauro_v2_poses.py"), encoding="utf-8").read()
+    exec(_src[:_src.index("\narmar()\n")], globals())  # armar(), estudio(), HUESOS, POSES, matrices()
 NOMBRE = f"MinotauroE{ETAPA}_v2"
 FBX = os.path.join(RAIZ, "assets", "blender", NOMBRE + ".fbx")
 BLEND = os.path.join(RAIZ, "assets", "blender", "minotauro_v2", f"e{ETAPA}_rig.blend")
@@ -80,7 +82,7 @@ def paleta(malla):
     img.save()
     me = malla.data
     uv = me.uv_layers.new(name="UVMap")
-    color_de = [m.name.removeprefix("MinoV2_") for m in me.materials]
+    color_de = [m.name.removeprefix(PREFIJO) for m in me.materials]
     for p in me.polygons:
         u = centro[color_de[p.material_index]]
         for li in p.loop_indices:
@@ -199,6 +201,7 @@ def exportar(malla, arm):
                              secondary_bone_axis="X", object_types={"ARMATURE", "MESH"})
 
 
+# === PRINCIPAL (rig_dragon_v2.py carga este archivo hasta aquí) ===
 piezas = [o for o in armar() if o.type == "MESH"]
 ALTO = alto_bu()
 faldon = {n: faldon_minimo(pose) or 0 for n, (pose, _) in POSES.items()}  # con las piezas sueltas
