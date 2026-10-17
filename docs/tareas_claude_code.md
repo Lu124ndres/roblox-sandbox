@@ -179,6 +179,12 @@ personaje (-X en Roblox).
   prueba). Texturas en `assets/textures/ZorroDeAguaE4_code_{color,normal,roughness,metalness}.png`
   (SurfaceAppearance). Guardar y anotarlo aquí; Claude Code lo prueba cambiándole el nombre
   en una sesión de prueba.
+  → **Hecho (Cowork, 2026-10-17)**: `ServerStorage.ZorroDeAguaE4_code` importado del FBX del
+  commit `6128772` con "Mantener huesos de influencia cero": 63 huesos, `Boca` incluido;
+  malla `rbxassetid://109528915137087`, SurfaceAppearance con las 4 texturas subidas por el
+  importador (color 138130624149218, normal 81157716377531, rugosidad 104537484349685,
+  metal 79579154872936). Mismo pivote que deja el importador (igual que los demás
+  gigantes), sin anclar. Lugar guardado. Los IDs no van en `Assets` hasta que gane la prueba.
 
 - **W3. Importar los 8 modelos con huesos nuevos** (C5, `968a9e6` y `e2ccb31`). Los FBX ya
   están en `assets/blender/`: `OrcaE1..E4.fbx` y `DragonMarinoE1..E4.fbx`. Para cada uno:
