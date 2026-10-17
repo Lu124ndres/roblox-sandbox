@@ -6,7 +6,8 @@ La cuenta es la de src/shared/Dragon:
     Rig.bind    ejes del CUERPO medidos en los huesos: adelante (de Cadera a Cabeza), derecha
                 (de AlaIzq1 a AlaDer1) y arriba; el lado de cada hueso y `neutral`, cuánto
                 bajar cada ala para que quede en planeo (diedro de 0.1 rad).
-    Rig.turn    cabeceo por la derecha, giro por arriba y alabeo por adelante, en ese orden.
+    Rig.turn    cabeceo por la derecha, giro por arriba (en el cuello, por derecha x el hueso) y
+                alabeo por adelante, en ese orden.
     Pose.apply  alas (aletazo con látigo, plegado en picada, timón en las curvas), pecho, cadera,
                 cola (onda y curva), cuello y cabeza, mandíbula y patas (colgando al quedarse
                 quieto). Los resortes se toman ya asentados (su objetivo).
@@ -52,6 +53,21 @@ LADO = {}
 for _n, (_, _p) in HUESOS.items():
     _d = (_p - ORIGEN).dot(DERECHA)
     LADO[_n] = 0 if abs(_d) < 1e-4 else math.copysign(1, _d)
+# El cuello sube: Rig.bind gira cada hueso alrededor de derecha x (del hueso a su hijo), no de
+# "arriba" (en el resto de los huesos es lo mismo: derecha x adelante = arriba).
+CUELLO = {"Cuello1": "Cuello2", "Cuello2": "Cabeza", "Cabeza": "Boca"}
+
+
+def _eje_giro(n):
+    hijo = CUELLO.get(n)
+    if not hijo:
+        return ARRIBA
+    d = (_junta(hijo) if hijo in HUESOS else V(PUNTOS[hijo][1]) * C) - _junta(n)
+    eje = DERECHA.cross(d.normalized() if d.length > 1e-6 else ADELANTE)
+    return eje.normalized() if eje.length > 0.2 else ARRIBA
+
+
+EJE_GIRO = {_n: _eje_giro(_n) for _n in HUESOS}
 NEUTRAL = {}
 for _s in ("Izq", "Der"):
     _span = _junta(f"Ala{_s}3") - _junta(f"Ala{_s}1")
@@ -115,7 +131,7 @@ def giros(p, faldon=0.0):
     r = {}
     for nombre in HUESOS:
         a, g, b = rot.get(nombre, (0, 0, 0))
-        r[nombre] = (Matrix.Rotation(a, 4, DERECHA) @ Matrix.Rotation(g, 4, ARRIBA)
+        r[nombre] = (Matrix.Rotation(a, 4, DERECHA) @ Matrix.Rotation(g, 4, EJE_GIRO[nombre])
                      @ Matrix.Rotation(b, 4, ADELANTE))
     return r
 
