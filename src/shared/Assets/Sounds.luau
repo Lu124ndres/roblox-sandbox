@@ -74,6 +74,17 @@ local Sounds: { [string]: string } = {
 	DragonDebris = "rbxassetid://9114034406", -- "Debris Rain 1" (4.0 s): grava y ceniza
 	DragonBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
 	DragonRocks = "rbxassetid://9118690959", -- "Rocks Movement 1" (3.3 s): se acomoda
+	-- Comer: Orca (animación especial al comer, OrcaFx/Comida; ProSoundEffects, licencia de
+	-- Roblox). Volumen y alcance: client/Audio/OrcaVoces; el tono sigue a la voz de la etapa.
+	OrcaSnap = "rbxassetid://9119055965", -- "Shark Bite Smaller Teeth Snaps 5" (0.3 s): chasquido
+	OrcaGulp = "rbxassetid://9114688489", -- "Gulping Water Glottal Croaks Slurp Water 4" (1.1 s)
+	OrcaHappySpout = "rbxassetid://9120591369", -- "Water Spray 1" (3.1 s): chorro alegre
+	OrcaClicks = "rbxassetid://9126135650", -- "Tongue Clicks Classic Clicks From Roof Of Mouth 11" (0.9 s)
+	OrcaSong = "rbxassetid://9126210261", -- "Whale Vocal Underwater Talk With Sea Creature 1" (9.9 s)
+	OrcaTailSlap = "rbxassetid://9119187654", -- "Slap And Grab 14" (2.7 s): coletazo mojado
+	OrcaPartySplash = "rbxassetid://9119476512", -- "Splash Deep Thunking Impact 2" (3.6 s)
+	OrcaShine = "rbxassetid://9125635285", -- la de EvolveCharge (3.4 s), aguda: pez raro
+	OrcaGhostWhoosh = "rbxassetid://9125989548", -- "Spirit Whooshes Low End Airy Growls Fast Bys 2" (2.1 s)
 	-- Evolución (EvolveFx; de ProSoundEffects, la cuenta de Pro Sound Effects en Roblox)
 	EvolveCharge = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
 	EvolveBurst = "rbxassetid://9126102254", -- "Time Warp Big Explosion Blast Boom Tonal Tail 1" (5.8 s)

@@ -11,7 +11,9 @@
 		  dorados, coral y turquesa y temblor de cámara cerca;
 		- en los trucos: coletazos, aletazos, rugidos, cascadas (Events);
 		- al comer: llamado y salpicadura al asomarse, ondas alrededor y
-		  destellos dorados en la boca.
+		  destellos dorados en la boca; con cada pez, su animación especial
+		  (Comida: chasquidos, chorros, cantos, olas; la Orca fantasma con
+		  su toque espectral, Fantasma).
 	Lee OrcaMotion.state cada cuadro y detecta los cambios (cruzar el agua,
 	empezar a comer...). Los sonidos y salpicaduras son los del juego (hooks),
 	así respetan el volumen, el alcance y el modo rápido.
@@ -20,7 +22,9 @@
 local WorldLayout = require(script.Parent.Parent.WorldLayout)
 local OrcaMotion = require(script.Parent.OrcaMotion)
 local Rig = require(script.Parent.OrcaMotion.Rig)
+local Comida = require(script.Comida)
 local Events = require(script.Events)
+local Fantasma = require(script.Fantasma)
 local Trails = require(script.Trails)
 
 local WATER = WorldLayout.waterLevel
@@ -40,6 +44,7 @@ local OrcaFx = {}
 function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 	local trails: Trails.Trails? = nil
 	local trailsFor: Rig.Rig? = nil
+	local ghost: Fantasma.Fantasma? = nil
 	local lastRel, lastBreath, wasFeeding = 0, 0, false
 	local ringIn, callIn = 0, math.random(CALL_MIN, CALL_MAX)
 
@@ -75,13 +80,20 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 			if trails then
 				Trails.destroy(trails)
 			end
+			if ghost then
+				Fantasma.destroy(ghost)
+			end
 			trailsFor = state.rig
 			trails = if state.rig then Trails.attach(state.rig) else nil
+			ghost = if state.rig and state.ghost then Fantasma.attach(state.rig) else nil
 		end
 		if trails then
 			Trails.update(trails, state, hooks.fxScale(), not state.hidden)
 		end
 		local height = state.height
+		if ghost then
+			Fantasma.update(ghost, dt, height, hooks.fxScale())
+		end
 		local rel = state.center.Y - WATER
 		if state.hidden then
 			table.clear(state.events)
@@ -91,7 +103,9 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 		local scale = math.sqrt(height / BASE_HEIGHT)
 		crossings(rel, height, scale)
 		for _, event in state.events do
-			Events.play(event, motion, hooks)
+			if not Comida.play(event, motion, hooks, ghost) then
+				Events.play(event, motion, hooks)
+			end
 		end
 		table.clear(state.events)
 
@@ -129,6 +143,10 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 			if trails then
 				Trails.destroy(trails)
 				trails = nil
+			end
+			if ghost then
+				Fantasma.destroy(ghost)
+				ghost = nil
 			end
 		end,
 	}

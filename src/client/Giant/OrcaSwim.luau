@@ -9,6 +9,7 @@
 	fuerte cuanto más cerca está el jugador local. Solo nadan los modelos con
 	huesos de orca (hueso Raiz); los demás gigantes se quedan en su lugar.
 	Cada pez que le llega (fed) dispara su animación especial al comer
+	(OrcaMotion/Comer, sonidos en OrcaFx/Comida, volúmenes en Audio/OrcaVoces).
 ]]
 
 local Players = game:GetService("Players")
@@ -17,6 +18,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local OrcaFx = require(ReplicatedStorage.Shared.Orca.OrcaFx)
 local OrcaMotion = require(ReplicatedStorage.Shared.Orca.OrcaMotion)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
+require(script.Parent.Parent.Audio.OrcaVoces) -- volumen y alcance de los sonidos al comer
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
