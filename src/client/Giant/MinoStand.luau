@@ -17,6 +17,8 @@
 		evolve   resoplido corto (la evolución la dibuja otro módulo)
 		flex     destellos dorados alrededor
 		happy    corazones sobre la cabeza
+	Sus reacciones a cada pez (fed: Minotauro/Comer) suenan con Audio/MinoVocesComer
+	y se ven con MinoComer (ojos que brillan, oro, papelitos, corazones, eructo).
 	Un evento desconocido no hace nada. En reposo gruñe o respira cada tanto.
 	Solo los modelos con huesos de minotauro (OrejaIzq y BrazoIzq, sin alas).
 	Misma forma que OrcaSwim para que GiantBody use uno u otro.
@@ -28,9 +30,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Minotauro = require(ReplicatedStorage.Shared.Minotauro)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local MinoVoces = require(script.Parent.Parent.Audio.MinoVoces)
+local MinoVocesComer = require(script.Parent.Parent.Audio.MinoVocesComer)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local SandFx = require(script.Parent.Parent.Effects.SandFx)
+local MinoComer = require(script.Parent.MinoComer)
 local MinoSuelo = require(script.Parent.MinoSuelo)
 local OrcaSwim = require(script.Parent.OrcaSwim)
 
@@ -38,6 +42,8 @@ local SHAKE_REACH = 240
 local GRUNT_EVERY = NumberRange.new(9, 16) -- segundos de calma entre gruñidos en reposo
 
 local MinoStand = {}
+
+MinoVoces.add(MinoVocesComer)
 
 local rng = Random.new()
 
@@ -106,7 +112,7 @@ local function play(motion: Minotauro.Motion, kind: string, place: MinoSuelo.Pla
 		Fx.sparkle(motion.top(), UIConfig.Colors.Coins, 24)
 	elseif kind == "happy" then
 		Fx.hearts(motion.top(), 5)
-	else
+	elseif not MinoComer.play(motion, kind, ground, place.sand, shake) then
 		impact(kind, ground, motion.state.height, profile.stomp, place.sand)
 	end
 end
@@ -160,9 +166,7 @@ function MinoStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 		mouth = motion.mouth,
 		water = motion.water,
 		bite = motion.bite,
-		fed = function(_) -- por ahora solo muerde (animación especial: pendiente)
-			motion.bite()
-		end,
+		fed = motion.fed,
 		destroy = motion.destroy,
 	}
 end

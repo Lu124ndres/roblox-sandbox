@@ -24,7 +24,7 @@
 
 local Sounds = require(script.Parent.Sounds)
 
-type Layer = {
+export type Layer = {
 	key: string,
 	at: "head" | "ground",
 	tone: ("voice" | "weight")?, -- el tono sigue a la voz o al peso de la etapa
@@ -153,6 +153,13 @@ local function playLayer(layer: Layer, info: Info)
 	end
 	local position = if layer.at == "head" then info.head else info.ground
 	Sounds.play(layer.key, position, pitch, volume)
+end
+
+-- Suma recetas de otro módulo (las de sus reacciones al comer: Audio/MinoVocesComer).
+function MinoVoces.add(recipes: { [string]: { Layer } })
+	for kind, recipe in recipes do
+		RECIPES[kind] = recipe
+	end
 end
 
 -- Suena el evento kind (las capas que tocan a esta etapa y a este suelo).
