@@ -1675,3 +1675,20 @@ en la caminata. Con el cinturón en su lugar anterior no había ángulo sin choq
 bajar el pisotón a 55° y se descartó: pide 64° (ver `decisiones.md`). `Trucos.luau` no cambia.
 
 **Qué se rompió:** nada.
+
+---
+
+## 2026-10-17 (1) — Minotauro v2 E1: hombrera partida y hombros más abajo
+
+**Qué se hizo (aprobado por el usuario):** las poses extremas mostraron que la hombrera, del
+brazo y de x 4 a 12, se separaba del pecho al abrir el brazo y se metía en la cabeza. Se
+probaron tres arreglos fuera del repo (pivote en el borde del pecho, hombrera partida, y
+partida con los hombros una celda más abajo) en los picos de los trucos del juego; quedó el
+último. En `minotauro_v2_e1_bloques.py` la mitad de adentro es de `Pecho` (x 4..8), la tapa
+es de `Brazo` (x 8..12) y las dos van en z 16..18; el hombro gira en (±8, −0.5, 17), también
+en el script del pisotón. Guía de estilo: sección "Hombros (E1)".
+
+**Resultado:** 95 bloques, 3,966 triángulos, 3.1 BU; 0 coplanares, 0 normales al revés, 0 cuñas
+fuera de regla. El pisotón no cambia (faldón a 55°, 91° y 3°).
+
+**Qué se rompió:** nada; de frente se ve la junta de la hombrera en x ±8.

@@ -149,6 +149,19 @@ Aprobado el 2026-10-16 (`ADELANTE = 1` en `tools/blender/minotauro_v2_e1_bloques
 - Cada parte del faldón es una pieza con su hueso opcional (`FaldonFrente`, `FaldonIzq`,
   `FaldonDer`, hijos de `Cadera`; ver `docs/inventario_modelos.md`).
 
+### Hombros (E1)
+
+Aprobado el 2026-10-17, después de las poses extremas (`tools/blender/minotauro_v2_e1_poses.py`):
+
+- La **hombrera va partida**: la mitad de adentro (x ±4..±8) es de `Pecho` y no se mueve; la
+  tapa (x ±8..±12, con la cuña arriba afuera) es de `Brazo`. El **hombro gira por el borde de
+  adentro de la tapa** (x ±8, y −0.5, z 17).
+- Las dos mitades van en **z 16..18**, una celda por debajo de la cabeza (z 19): las
+  mejillas (x ±6..±7) no la tocan al ladear o girar la cabeza.
+- Con la hombrera entera en el brazo (x ±4..±12, girando en x ±10.5) el brazo se separaba
+  del pecho al abrirse (3 celdas en el músculo del juego) y la hombrera se metía en la
+  cabeza al comer y rascarse.
+
 ### Poses extremas
 
 Cada etapa se prueba en estas poses antes de exportar (render de cada una). Se revisa

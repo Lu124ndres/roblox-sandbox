@@ -108,7 +108,11 @@ def torso():
 
 def brazos():
     b = "Brazos"
-    par("Brazo{lado}", b, "pelo_osc", (4, 12), (-4, 4), (17, 19), recorte={"x+": 2})  # hombrera
+    # Hombrera partida (minotauro_v2_e1_poses.py): la mitad de adentro es del pecho y no se
+    # mueve; la tapa va con el brazo, que gira por su borde de adentro (x = 8, z = 17). Una
+    # celda por debajo de la cabeza, así las mejillas no la tocan al ladearla.
+    par("Pecho", b, "pelo_osc", (4, 8), (-4, 4), (16, 18))
+    par("Brazo{lado}", b, "pelo_osc", (8, 12), (-4, 4), (16, 18), recorte={"x+": 2})
     par("Brazo{lado}", b, "pelo", (9, 12), (-2, 1), (14, 17))
     par("Brazo{lado}", b, "pelo_osc", (8, 13), (-3, 2), (13, 15))  # codera
     par("Antebrazo{lado}", b, "pelo", (9, 12), (-2, 1), (11, 14))

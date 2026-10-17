@@ -32,7 +32,7 @@ APROBADO = ADELANTE
 C = CELDA
 CADERA = V((3, 0, 10)) * C  # muslo izquierdo (x = +3 celdas); el derecho, espejado
 RODILLA = V((3, 0, 6)) * C
-HOMBRO = V((10.5, 0, 17.5)) * C
+HOMBRO = V((8, -0.5, 17)) * C  # borde de adentro de la tapa de la hombrera
 BISAGRA = V((0, -5, 10)) * C  # sin ADELANTE: borde de adelante y arriba de las tiras
 JUEGO = (math.degrees(1.0), math.degrees(1.2))  # pisotón del juego: muslo y rodilla
 EXTREMO = (90.0, 90.0)

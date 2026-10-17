@@ -570,3 +570,14 @@ propuso bajar el muslo a 55° para que pidiera menos. **Decisión:** no se cambi
 55° pide 64°, más que a 57°. El único choque es la esquina de arriba y adelante del muslo
 contra la raíz de las tiras, que entre 52° y 66° se aleja de ellas al subir. Si algún día se
 quiere un faldón más quieto, el pisotón tendría que subir (63–66° piden 16–34°), no bajar.
+
+## 2026-10-17 — La hombrera del minotauro v2 va partida entre el pecho y el brazo
+
+**Contexto:** en el v2 E1 el pecho es angosto (x ±5) y el brazo cuelga lejos (x 9..12); la
+hombrera (x 4..12) era lo único que los unía y era del brazo. Cualquier pivote del hombro
+falla con una pieza tan ancha: en x = 10.5 la hombrera se separa del pecho al abrir el brazo
+y se mete en el torso; en x = 5 (borde del pecho) no se separa, pero el brazo entra en la
+cabeza en el músculo, el rugido y el baile. **Decisión:** la mitad de adentro de la hombrera
+pasa a `Pecho` (yugo fijo) y el brazo se queda con la tapa, girando por su borde de adentro
+(x = 8). Además, las dos mitades bajan una celda para dejar libre la cabeza. Se compararon las
+opciones con `tools/blender/minotauro_v2_e1_poses.py` en los picos de los trucos del juego.
