@@ -156,8 +156,8 @@ function Pose.apply(rig: Rig.Rig, p: Pose, t: number, turn: number, dt: number)
 		for j = 1, 4 do
 			local reach = j / 4
 			local name = `{tail.prefix}{j}`
-			local swirl = (0.11 * calm + 0.06 * fan) * reach * math.sin(t * 2.1 + offset - j * 0.7)
-			local bob = 0.07 * calm * reach * math.sin(t * 1.4 + offset * 1.3 - j * 0.6)
+			local swirl = (0.22 * calm + 0.08 * fan) * reach * math.sin(t * 1.8 + offset - j * 0.7)
+			local bob = 0.13 * calm * reach * math.sin(t * 1.2 + offset * 1.3 - j * 0.6)
 			local wagging = wag * 0.16 * math.sin(t * 13 + offset - j * 0.5)
 			local spread = if j == 1 then fan * 0.35 * tail.side else 0
 			local up = if j == 1 then -lift * 0.35 else -lift * 0.08
