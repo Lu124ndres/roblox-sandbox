@@ -44,6 +44,7 @@ COLORES = {n: _lineal(h) for n, h in {
     "panza": "#C9F2D4",  # panza, pecho y mandíbula (menta clara)
     "aleta": "#62D8E6",  # aletas y membrana del ala (agua clara)
     "aleta_osc": "#2E9FC0",  # rayos de las aletas
+    "dedo": "#44BCD6",  # dedos del ala: en relieve, apenas más oscuros que la membrana
     "ojo": "#F4FAF7", "pupila": "#16222E",  # alto contraste, sin negro ni blanco puros
     "mejilla": "#F59FAE",
     "boca": "#B83A50", "garganta": "#FF8A3D",  # el fuego de la cría: brillo en la garganta
@@ -124,25 +125,32 @@ def cola():
 
 def alas():
     a = "Alas"
-    # Cada segmento: borde de ataque grueso adelante, membrana atrás con una costilla oscura
-    # (el "dedo" del ala) y el borde de fuga en cuña. Tejas: cada segmento empieza una celda
-    # adentro del anterior y una celda más arriba (el diedro).
+    # Cada segmento: borde de ataque grueso adelante y UNA placa de membrana llena detrás (sin
+    # tiras sueltas). El dedo del ala va encima como relieve de una celda, y el borde de fuga
+    # termina en festón: puntas en cuña 1:1 o 1:2 detrás de la placa, con la punta en la línea
+    # del dedo. Tejas: cada segmento empieza una celda adentro del anterior y una celda más
+    # arriba (el diedro), así al aletear siempre queda uno sobre el otro.
+    def segmento(hueso, x, z, borde, fondo, dedo, puntas):
+        par(hueso, a, "aleta", x, (borde[1], fondo), (z, z + 1))
+        par(hueso, a, "dedo", (dedo - 1, dedo + 1), (borde[1], fondo - 2), (z + 1, z + 2))
+        par(hueso, a, "dedo", (dedo - 1, dedo + 1), (fondo - 2, fondo), (z + 1, z + 2), eje="y",
+            recorte={"x-": 1, "x+": 1})  # el dedo termina en punta hacia el festón
+        for x0, x1 in puntas:
+            n = (x1 - x0) // 2
+            par(hueso, a, "aleta", (x0, x1), (fondo, fondo + 2), (z, z + 1), eje="y",
+                recorte={"x-": n, "x+": n})
+
     # Ala1 (brazo del ala), del hombro, arriba del pecho.
     par("Ala{lado}1", a, "cuerpo", (4, 10), (-6, -4), (10, 12))
-    par("Ala{lado}1", a, "aleta", (4, 6), (-4, 4), (10, 11))
-    par("Ala{lado}1", a, "aleta_osc", (6, 7), (-4, 5), (10, 11))
-    par("Ala{lado}1", a, "aleta", (7, 10), (-4, 2), (10, 11))
-    par("Ala{lado}1", a, "aleta", (7, 10), (2, 4), (10, 11), eje="y", recorte={"x+": 2})
+    segmento("Ala{lado}1", (4, 10), 10, (-6, -4), 3, 6, [(4, 8), (8, 10)])
     # Ala2.
     par("Ala{lado}2", a, "cuerpo", (9, 15), (-5, -3), (11, 13))
-    par("Ala{lado}2", a, "aleta", (9, 11), (-3, 3), (11, 12))
-    par("Ala{lado}2", a, "aleta_osc", (11, 12), (-3, 4), (11, 12))
-    par("Ala{lado}2", a, "aleta", (12, 15), (-3, 1), (11, 12))
-    par("Ala{lado}2", a, "aleta", (12, 15), (1, 3), (11, 12), eje="y", recorte={"x+": 2})
+    segmento("Ala{lado}2", (9, 15), 11, (-5, -3), 3, 11, [(9, 13), (13, 15)])
     # Ala3 (punta): el borde termina en una garra y la membrana se afina hacia afuera.
     par("Ala{lado}3", a, "cuerpo", (14, 16), (-4, -2), (12, 14))
     par("Ala{lado}3", a, "garra", (16, 18), (-4, -2), (12, 14), eje="x", recorte={"y+": 1, "z+": 1})
-    par("Ala{lado}3", a, "aleta", (14, 18), (-2, 2), (12, 13), eje="x", recorte={"y+": 2})
+    segmento("Ala{lado}3", (14, 16), 12, (-4, -2), 2, 15, [(14, 16)])
+    par("Ala{lado}3", a, "aleta", (16, 18), (-2, 2), (12, 13), eje="x", recorte={"y+": 2})
 
 
 def patas():
@@ -153,7 +161,7 @@ def patas():
     par("Antebrazo{lado}", p, "cuerpo", (2, 4), (-2, 1), (2, 4))
     par("Mano{lado}", p, "panza", (2, 4), (1, 3), (2, 3))
     par("Mano{lado}", p, "garra", (2, 4), (3, 4), (2, 3))
-    par("Muslo{lado}", p, "cuerpo", (2, 4), (1, 5), (4, 8))
+    par("Muslo{lado}", p, "cuerpo", (2, 4), (1, 5), (4, 7))  # bajo: la membrana del ala pasa por encima al bajar
     par("Pierna{lado}", p, "cuerpo", (2, 4), (5, 7), (3, 5))
     par("Pie{lado}", p, "panza", (2, 4), (7, 9), (3, 4))
     par("Pie{lado}", p, "garra", (2, 4), (9, 10), (3, 4))
@@ -185,7 +193,7 @@ ARTICULACIONES = [
     ("Brazo{l}", "Pecho", (2.5, -3.5, 5)),
     ("Antebrazo{l}", "Brazo{l}", (3, -2, 3)),
     ("Mano{l}", "Antebrazo{l}", (3, 1, 2.5)),
-    ("Muslo{l}", "Cadera", (3, 3, 7)),
+    ("Muslo{l}", "Cadera", (3, 3, 6.5)),
     ("Pierna{l}", "Muslo{l}", (3, 5, 4)),
     ("Pie{l}", "Pierna{l}", (3, 7, 3.5)),
 ]

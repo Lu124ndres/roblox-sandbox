@@ -56,7 +56,7 @@ El brillo del fuego en Roblox sale del color más Neon o `PointLight` (no hay ca
 
 | Etapa | Piezas propias |
 |---|---|
-| **E1 cría** (hecha) | Cabeza grande (10 de ancho, más que el pecho), ojos de 4×4 con pupila y brillo, mejillas, colmillitos, cuello corto, aletas de abanico a los lados de la cabeza y cresta arriba, aletas bajas en el lomo, alas de 3 segmentos en tejas con una costilla oscura y garra en la punta, cola de 6 segmentos con aleta en horquilla, patitas recogidas. Fuego: solo la garganta (se ve al abrir la boca y un poco desde abajo). |
+| **E1 cría** (hecha) | Cabeza grande (10 de ancho, más que el pecho), ojos de 4×4 con pupila y brillo, mejillas, colmillitos, cuello corto, aletas de abanico a los lados de la cabeza y cresta arriba, aletas bajas en el lomo, alas de 3 segmentos en tejas, cada uno con una membrana llena, el dedo del ala en relieve y el borde de atrás en festón (puntas en cuña), y garra en la punta, cola de 6 segmentos con aleta en horquilla, patitas recogidas. Fuego: solo la garganta (se ve al abrir la boca y un poco desde abajo). |
 | **E2 joven** | Más largo de cuerpo y cola (la cabeza, proporcionalmente más chica), cuernitos detrás de las aletas de la cabeza, aletas del lomo más altas, alas con dos costillas y garra en el pulgar, ojos ámbar, brasas naranjas en las puntas de las aletas. |
 | **E3 adulto** | Cuernos largos hacia atrás, colmillos, placas en el pecho, aletas del lomo en sierra, alas grandes con borde grueso, grietas de fuego en pecho, lomo y cola (que asoman o van metidas entre placas, como el Minotauro E4), la aleta de la cola con borde de fuego. |
 | **E4 anciano** | Corona de cuernos, barba de aletas, cuerpo casi negro con grietas de lava por todo el cuerpo, alas enormes con la membrana en escalones (desgarrada) y bordes de lava, ojos de lava, aleta de la cola grande. Enorme y lento. |
@@ -83,7 +83,7 @@ celdas (x = izquierda del dragón, −y = hocico, z arriba; lado izquierdo):
 | Cola1..Cola6 | (0, 4, 7.5) … (0, 15, 7) | cada 2 celdas |
 | AlaIzq1, 2, 3 | (4, −5, 11), (9.5, −4, 11), (14.5, −3, 12) | hombro en el borde de arriba del pecho; bisagras en la cara de contacto de las tejas |
 | Brazo, Antebrazo, Mano | (2.5, −3.5, 5), (3, −2, 3), (3, 1, 2.5) | |
-| Muslo, Pierna, Pie | (3, 3, 7), (3, 5, 4), (3, 7, 3.5) | |
+| Muslo, Pierna, Pie | (3, 3, 6.5), (3, 5, 4), (3, 7, 3.5) | |
 
 Con estas articulaciones `Rig.bind` da adelante = −y, derecha = −x (en Blender) y arriba = z, y
 `neutral` = −0.007 rad: el diedro modelado (0.093 rad, una celda más arriba por segmento) es
@@ -97,7 +97,10 @@ casi el 0.1 que pide el código, así el planeo del juego es el del modelo.
 - **Cola:** cada segmento mete una cuña 1:2 dentro del anterior (de la misma sección hacia
   adentro): tapa la V que se abre al girar. Una caja metida no sirve si comparte una cara con el
   padre (caras coplanares).
-- **Patas adentro de x = 4:** el ala gira por el hombro (x = 4) y al bajar no las toca.
+- **Membrana llena:** una placa por segmento (no tiras), el dedo encima como relieve de una celda
+  que termina en punta, y detrás puntas en cuña 1:1 o 1:2 (festón) con la punta en la línea del dedo.
+- **Patas adentro de x = 4 y muslo bajo (z 4..7):** el ala gira por el hombro (x = 4); al bajar, la
+  cara de abajo de la membrana barre hacia adentro por encima del muslo sin tocarlo.
 - **Pecho corto (hasta y = −1):** el muslo, al colgar (quieto en el aire), gira hacia adelante y
   entraba en el pecho.
 - Las piezas que se solapan son siempre más chicas en todos los lados que la que las tapa.
@@ -150,10 +153,10 @@ la sección de abajo. Se compara contra el planeo del juego (umbrales: atraviesa
    con su módulo, paleta y piezas propias; bloqueo con renders, alineación de las cuatro lado a
    lado (adaptar `minotauro_v2_alineacion.py` a `--criatura`), poses extremas.
 4. **Rig y FBX** de las cuatro (`rig_dragon_v2.py --etapa <n>` → `assets/blender/DragonMarinoE<n>_v2.fbx`).
-   Probado con la E1 (`renders/dragon_v2_e1/rig/rig.json`): 32 huesos (30 que deforman), un hueso
-   por vértice, la malla movida por los huesos coincide con las piezas rígidas en las 24 poses
-   (error máximo 0.000007 celdas) y el FBX mide 9.9 × 9.9 × 3.85 studs. El FBX, la textura y el
-   `.blend` del rig no se guardan hasta que apruebes el estilo.
+   E1 hecho: `assets/blender/DragonMarinoE1_v2.fbx`, `assets/textures/DragonMarinoE1_v2_color.png`
+   y `assets/blender/dragon_v2/e1_rig.blend` (`renders/dragon_v2_e1/rig/rig.json`): 32 huesos (30
+   que deforman), un hueso por vértice, la malla movida por los huesos coincide con las piezas
+   rígidas en las 24 poses (error máximo 0.000007 celdas) y mide 9.9 × 9.9 × 3.85 studs.
 5. **Studio:** importar a mano con "Mantener huesos de influencia cero" a
    `ServerStorage.DragonMarinoE<n>_v2`, IDs en `Assets` y `modelSuffix = "_v2"` en el Dragón
    (`Config/Giants.luau`): `GiantTemplates` lo publica con el nombre de siempre.
