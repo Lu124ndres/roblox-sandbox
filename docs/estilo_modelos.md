@@ -82,7 +82,9 @@ Valores aprobados el 2026-10-16. Esta sección es la única referencia de topolo
 ### Escala
 
 Alto por etapa en veces el alto del jugador (5.5 studs; `stageHeightsInPlayers` y
-`playerHeightStuds` de `Config/Giants.luau`, comprobado el 2026-10-16):
+`playerHeightStuds` de `Config/Giants.luau`, comprobado el 2026-10-16). **Es global:**
+la misma tabla vale para los cinco gigantes (Orca, Minotauro, Dragón marino, Zorro de agua y
+Orca fantasma), no por monstruo:
 
 | Etapa | Jugadores | Studs | BU |
 |---|---|---|---|
@@ -152,6 +154,44 @@ Reglas de pesos:
 - **100 % por pieza: un solo hueso por vértice**, sin mezcla en las articulaciones.
   Reemplaza al límite de 4 influencias.
 - Las piezas chicas (cuernos, aros, ojos, pezuñas) van al hueso de la pieza que las lleva.
+
+### Por confirmar (no afectan a E1)
+
+- Alto final y articulaciones de E2..E4 en Blender (viven en `.blend` fuera del repo). En
+  Studio, las MeshPart importadas miden 3.34, 3.91, 4.19 y 4.42 studs de alto (E1..E4),
+  pero eso no da las articulaciones.
+- Datos que viven solo en Studio y no se revisaron aún: pivote y atributos de cada Model.
+- Discrepancia de triángulos de los modelos actuales: Studio confirma 17,998 / 18,638 /
+  19,376 / 19,874 (E1..E4); queda por confirmar de dónde salen los 9.5k de los logs.
+- Si `tools/blender/minotauro.py` (sin huesos) está obsoleto.
+- Squash y stretch escalando huesos en Roblox (por eso se hace con la pose, sección 4).
+- Cómo se importan en Studio los clips de huesos desde FBX.
+
+## Estado del Minotauro en Studio
+
+Revisado el 2026-10-16 por el MCP de Studio (`PescaYAlimentaGigantes.rbxl`, modo Edit, solo
+lectura: `search_game_tree`, `script_grep`, `inspect_instance` y un conteo de caras en
+memoria con `EditableMesh`, sin cambiar nada del lugar).
+
+- **El juego usa el Minotauro real, no la orca teñida.** `ServerStorage` tiene
+  `MinotauroE1..E4` (Model con una MeshPart del mismo nombre, `SurfaceAppearance` y 25
+  huesos desde `Raiz`). El servidor (`Server.GiantTemplates`) copia `<modelBase>E<n>` a
+  `ReplicatedStorage.ModelosGigantes` y solo avisa "el cliente usará la orca teñida" si no
+  encuentra ninguno; el cliente (`Client.Giant.GiantTemplates.templateFor`) usa la orca con
+  `STAND_IN_TINTS.Minotauro` solo si no hay modelo propio de ninguna etapa.
+- El comentario de `inRoulette` en `Config/Giants.luau` ("usa la orca teñida") está
+  desactualizado.
+- Los MeshId coinciden con `Assets.Meshes`:
+
+| Etapa | MeshId | Triángulos | Huesos | Tamaño de la MeshPart (studs) |
+|---|---|---|---|---|
+| E1 | `138675592345337` | 17,998 | 25 | 1.80 × 3.34 × 1.66 |
+| E2 | `91533993938693` | 18,638 | 25 | 1.90 × 3.91 × 1.65 |
+| E3 | `84011204972654` | 19,376 | 25 | 2.06 × 4.19 × 1.66 |
+| E4 | `105475430016255` | 19,874 | 25 | 2.22 × 4.42 × 1.67 |
+
+- `ServerStorage.Respaldos` guarda versiones anteriores: `MinotauroE1_suelto`,
+  `MinotauroE1_v1` y `MinotauroE2_viejo`..`MinotauroE4_viejo`.
 
 ## 4. Criterios de animación
 

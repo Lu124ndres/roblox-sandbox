@@ -1585,3 +1585,21 @@ nombra al juego (dicen "el juego"); el README ahora lo nombra.
 +1000 y 10 min de x2, después `LANZAMIENTO` → "ya usado"; un código que no existe → inválido.
 
 **Qué se rompió:** nada.
+
+---
+
+## 2026-10-16 (18) — Minotauro v2: guía de estilo de bloques y estado en Studio
+
+**Qué se hizo (pedido del usuario):** `docs/estilo_modelos.md` fija lo aprobado para los
+gigantes v2: estilo de bloques; cuadrícula de 0.1 BU con cuñas 1:1, 1:2 y 2:1 y bisel de
+0.012; alto por etapa global (3, 8, 15 y 30 jugadores de 5.5 studs) con una sola escala de
+exportación de 5.32 studs por BU; hasta 8,000 triángulos en E1 (E2..E4 por definir); piezas
+rígidas con placas de unión y pesos de un solo hueso por vértice. Lista lo que sigue por
+confirmar y suma "Estado del Minotauro en Studio". También se modeló el E1 de bloques
+(`f659620`, `tools/blender/minotauro_v2_e1_bloques.py`): 92 bloques, 4,036 triángulos, 3.1 BU.
+
+**Probado por MCP (solo lectura):** el juego usa `ServerStorage.MinotauroE1..E4` reales (25
+huesos, 17,998 a 19,874 triángulos), no la orca teñida; el comentario de `Config/Giants.luau`
+que dice lo contrario está desactualizado.
+
+**Qué se rompió:** nada (no se tocó `src/` ni los modelos actuales).
