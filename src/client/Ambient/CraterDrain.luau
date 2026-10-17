@@ -23,6 +23,7 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local CraterLava = require(script.Parent.CraterLava)
 local CraterMode = require(script.Parent.CraterMode)
+local CraterGuard = require(script.Parent.CraterGuard)
 local CraterSand = require(script.Parent.CraterSand)
 local GuaridaSube = require(script.Parent.GuaridaSube)
 local LakeFill = require(script.Parent.LakeFill)
@@ -96,6 +97,7 @@ function CraterDrain.start(onShown: (boolean) -> ())
 		end)
 	end
 	apply(true) -- quien entra lo ve como está, al instante
+	CraterGuard.start() -- con streaming, el agua del servidor puede volver encima
 end
 
 return CraterDrain
