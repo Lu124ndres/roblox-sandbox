@@ -28,7 +28,7 @@
     "FaldonIzq": 6,
     "FaldonDer": 6
   },
-  "triangulos": 5920,
+  "triangulos": 5916,
   "triangulos_ocultos_quitados": {
     "PiernaIzq": 14,
     "PiernaDer": 14,
@@ -36,7 +36,7 @@
     "MusloDer": 8,
     "Cadera": 6,
     "Columna": 16,
-    "Pecho": 16,
+    "Pecho": 20,
     "BrazoIzq": 24,
     "BrazoDer": 24,
     "AntebrazoIzq": 10,
@@ -60,7 +60,7 @@
     "MusloDer": 168,
     "Cadera": 170,
     "Columna": 424,
-    "Pecho": 424,
+    "Pecho": 420,
     "Cuello": 44,
     "BrazoIzq": 196,
     "BrazoDer": 196,

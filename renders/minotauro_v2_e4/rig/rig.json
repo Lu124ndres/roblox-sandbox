@@ -1,0 +1,34 @@
+{
+  "triangulos": 5916,
+  "huesos": 28,
+  "huesos_que_deforman": 26,
+  "colores_en_la_paleta": 12,
+  "pesos": {
+    "vertices_con_mas_de_un_hueso": 0,
+    "grupos_en_huesos_sin_pesos": []
+  },
+  "error_maximo_celdas_por_pose": {
+    "brazos_arriba_150": 8e-06,
+    "brazos_adelante_cruzados": 7e-06,
+    "codo_140": 6e-06,
+    "rodilla_120": 4e-06,
+    "pierna_90": 4e-06,
+    "cuello_arriba_45": 5e-06,
+    "cuello_abajo_45": 8e-06,
+    "cuello_izq_60": 5e-06,
+    "cuello_der_60": 5e-06,
+    "mandibula_max": 4e-06,
+    "cola_s_arriba": 4e-06,
+    "torso_atras": 6e-06,
+    "torso_adelante": 4e-06,
+    "truco_musculo": 8e-06,
+    "truco_rugido": 8e-06,
+    "truco_rascarse": 9e-06,
+    "truco_salto_agachado": 5e-06,
+    "truco_salto_aire": 1e-05,
+    "truco_baile": 8e-06,
+    "comer": 6e-06
+  },
+  "escala_studs_por_bu": 5.3226,
+  "alto_studs": 165.001
+}

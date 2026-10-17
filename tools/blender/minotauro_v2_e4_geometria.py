@@ -84,9 +84,12 @@ def torso():
 def brazos():
     b = "Brazos"
     # Hombrera partida (como la E1): la mitad de adentro es del pecho y no se mueve; la tapa
-    # va con el brazo, que gira por su borde de adentro (x = 11, z = 20). Las dos bajan en
-    # cuña hacia adelante y atrás; arriba quedan una celda por debajo de la cabeza (z 23).
-    par("Pecho", b, "cuero", (8, 11), (-5, 4), (18, 22), recorte={"y-": 2, "y+": 2})
+    # va con el brazo, que gira por su borde de adentro (x = 11) una celda por debajo de su
+    # tope (z = 21, como en la E1: al subir el brazo, la tapa casi no entra en el pecho). Las
+    # dos bajan en cuña hacia adelante y atrás; arriba quedan una celda por debajo de la
+    # cabeza (z 23).
+    # La mitad de adentro, una celda más baja que la tapa: ahí caen las orejas al ladear.
+    par("Pecho", b, "cuero", (8, 11), (-5, 4), (18, 21), recorte={"y-": 3, "y+": 3})
     par("Brazo{lado}", b, "cuero", (11, 17), (-5, 4), (18, 22),
         recorte={"x+": 2, "y-": 2, "y+": 2})
     par("Brazo{lado}", b, "oro", (11, 17), (-6, 5), (17, 18))  # borde de la hombrera
@@ -140,7 +143,8 @@ def cabeza():
 
 def orejas_cola_faldon():
     par("Oreja{lado}", "Orejas", "pelo", (6, 9), (-2, 1), (23, 25))
-    par("Oreja{lado}", "Orejas", "pelo", (9, 11), (-2, 1), (23, 25), eje="x", recorte={"z+": 1})
+    # Cortas (4 celdas desde la cabeza): caídas casi no entran en la hombrera, a 1 celda abajo.
+    par("Oreja{lado}", "Orejas", "pelo", (9, 10), (-2, 1), (23, 25), eje="x", recorte={"z+": 1})
     par("Oreja{lado}", "Orejas", "rosa", (7, 9), (-3, -2), (23, 25))
     bloque("Cola1", "Cola", "pelo", (-1, 1), (5, 9), (11, 13))
     bloque("Cola2", "Cola", "pelo", (-1, 1), (9, 11), (8, 12))
@@ -174,7 +178,7 @@ ARTICULACIONES = [
     ("Cabeza", "Cuello", (0, -1, 23)),
     ("Mandibula", "Cabeza", (0, -5, 23)),
     ("Oreja{l}", "Cabeza", (6.5, -0.5, 24)),
-    ("Brazo{l}", "Pecho", (11, -0.5, 20)),
+    ("Brazo{l}", "Pecho", (11, -0.5, 21)),
     ("Antebrazo{l}", "Brazo{l}", (14, -0.5, 14)),
     ("Mano{l}", "Antebrazo{l}", (14, -0.5, 9)),
     ("Muslo{l}", "Cadera", (5, 0, 12)),
@@ -189,7 +193,7 @@ ARTICULACIONES = [
 # Cola de cada hueso (celdas, lado izquierdo): hacia el hijo, o hacia donde apunta la pieza.
 COLAS = {
     "Cadera": (0, 0, 14), "Columna": (0, 0, 17), "Pecho": (0, -1, 22), "Cuello": (0, -1, 23),
-    "Cabeza": (0, -1, 29), "Mandibula": (0, -9, 22), "Oreja{l}": (11, -0.5, 23.5),
+    "Cabeza": (0, -1, 29), "Mandibula": (0, -9, 22), "Oreja{l}": (10, -0.5, 23.5),
     "Brazo{l}": (14, -0.5, 14), "Antebrazo{l}": (14, -0.5, 9), "Mano{l}": (14, -0.5, 6),
     "Muslo{l}": (5, 0, 7), "Pierna{l}": (5, 0, 2), "Pie{l}": (5, -6, 0.5),
     "Cola1": (0, 9, 11), "Cola2": (0, 10.5, 8), "Cola3": (0, 11, 2),
