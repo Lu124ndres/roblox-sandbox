@@ -4,7 +4,7 @@
 
 	Brasas que se escapan de las grietas de fuego del cuerpo en las etapas
 	grandes (adulto y anciano): unos pocos puntos al rojo que salen del pecho,
-	el cuello, la cadera y la cola, suben con el calor y se apagan. Van en
+	el cuello y la cola, suben con el calor y se apagan. Van en
 	huesos nuevos (Grieta) hijos de esos huesos (siguen la animación) y las partículas
 	quedan en el mundo (el dragón vuela y dejan un rastro tenue). Ritmo bajo y
 	registrado en FxQuality: en modo rápido no sale ninguna.
@@ -19,7 +19,7 @@ local Assets = require(ReplicatedStorage.Shared.Assets)
 local Rig = require(ReplicatedStorage.Shared.Dragon.Rig)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 
-local BONES = { "Pecho", "Cuello2", "Cadera", "Cola2" }
+local BONES = { "Pecho", "Cuello2", "Cola1", "Cola2" } -- no la Cadera: en los v2 gira sobre el lomo
 local RATE = { [3] = 1.5, [4] = 3 } -- brasas por segundo en cada hueso
 local rgb = Color3.fromRGB
 

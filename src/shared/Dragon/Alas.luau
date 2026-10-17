@@ -20,6 +20,10 @@
 
 local Rig = require(script.Parent.Rig)
 
+-- Tope de la amplitud (rad): el aletazo de comer y enojado llega a ~1.36; el rugido enojado
+-- pedía 1.79 y las alas de bloques pasaban la vertical y se cruzaban con el cuerpo.
+local MAX_AMP = 1.4
+
 export type Flight = {
 	phase: number, -- fase del aleteo (rad)
 	amp: number, -- amplitud actual del aleteo (rad)
@@ -38,7 +42,7 @@ function Alas.apply(rig: Rig.Rig, f: Flight, p: { [string]: number })
 	local function v(key: string): number
 		return p[key] or 0
 	end
-	local phase, amp, fold = f.phase, f.amp, f.fold
+	local phase, amp, fold = f.phase, math.min(f.amp, MAX_AMP), f.fold
 	local down = Alas.stroke(phase) -- +1 abajo del todo, -1 arriba
 	local upstroke = math.max(0, -math.cos(phase)) -- subiendo
 	local turn = math.clamp(f.turn, -1.5, 1.5)
