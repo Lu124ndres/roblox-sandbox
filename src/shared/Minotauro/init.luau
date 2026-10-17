@@ -139,7 +139,7 @@ function Minotauro.new(center: Vector3): Motion
 		end
 		local rig = state.rig
 		if rig then
-			Cuerpo.plant(pose)
+			Cuerpo.plant(pose, profile.body)
 			Resortes.step(springs, pose, dt, turn / dt, profile)
 			Pose.apply(rig, pose)
 		end

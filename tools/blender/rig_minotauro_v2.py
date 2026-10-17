@@ -1,48 +1,37 @@
 r"""
-Rig del Minotauro v2 E1 (bloques) y FBX para Roblox (docs/plan_minotauro_v2.md, pasos 5 y 7):
-  1. arma las piezas (minotauro_v2_e1_bloques.py) y las une en una malla; cada pieza va entera
+Rig del Minotauro v2 (bloques), cualquier etapa, y FBX para Roblox (docs/plan_minotauro_v2.md,
+pasos 5 y 7):
+  1. arma las piezas (minotauro_v2_bloques.py) y las une en una malla; cada pieza va entera
      a su hueso (peso 1, un hueso por vértice);
-  2. color plano por paleta: una textura de 256 con un cuadro por color y todas las UVs de
+  2. color plano por paleta: una textura con un cuadro de 64 px por color y todas las UVs de
      cada cara en el centro de su cuadro (las UVs por costuras y el horneado son otro paso);
   3. esqueleto: los 25 huesos del contrato más FaldonFrente/Izq/Der (hijos de Cadera), cada
-     uno con la cabeza en su articulación (HUESOS de minotauro_v2_e1_poses.py) y roll 0;
+     uno con la cabeza en su articulación (ARTICULACIONES de minotauro_v2_e<n>_geometria.py),
+     la cola en COLAS y roll 0; Raiz y Boca son PUNTOS, sin pesos;
   4. revisa que el esqueleto dé lo mismo que las piezas rígidas en todas las poses de
-     poses.py (error máximo por vértice) y renderiza los trucos posados con los huesos;
+     minotauro_v2_poses.py (error máximo por vértice) y renderiza los trucos con los huesos;
   5. escala de exportación 5.32 studs por BU aplicada (docs/import_minotauro_v2.md) y FBX con
      las mismas opciones que los otros rigs (bake_space_transform=False, -Z adelante, Y arriba).
-No toca el modelo actual (MinotauroE1). Uso (desde la raíz del repo):
-    blender -b --factory-startup --python tools/blender/rig_minotauro_v2_e1.py
-Salidas: assets/blender/MinotauroE1_v2.fbx, assets/blender/minotauro_v2/e1_rig.blend,
-assets/textures/MinotauroE1_v2_color.png, renders/minotauro_v2_e1/rig/ (PNG y rig.json).
+No toca los modelos actuales (MinotauroE<n>). Uso (desde la raíz del repo; sin --etapa, la 1):
+    blender -b --factory-startup --python tools/blender/rig_minotauro_v2.py -- --etapa 2
+Salidas: assets/blender/MinotauroE<n>_v2.fbx, assets/blender/minotauro_v2/e<n>_rig.blend,
+assets/textures/MinotauroE<n>_v2_color.png, renders/minotauro_v2_e<n>/rig/ (PNG y rig.json).
 """
 import bpy, json, math, os
 import numpy as np
 from mathutils import Matrix, Vector as V
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-_src = open(os.path.join(HERE, "minotauro_v2_e1_poses.py"), encoding="utf-8").read()
+_src = open(os.path.join(HERE, "minotauro_v2_poses.py"), encoding="utf-8").read()
 exec(_src[:_src.index("\narmar()\n")], globals())  # armar(), estudio(), HUESOS, POSES, matrices()
-NOMBRE = "MinotauroE1_v2"
+NOMBRE = f"MinotauroE{ETAPA}_v2"
 FBX = os.path.join(RAIZ, "assets", "blender", NOMBRE + ".fbx")
-BLEND = os.path.join(RAIZ, "assets", "blender", "minotauro_v2", "e1_rig.blend")
+BLEND = os.path.join(RAIZ, "assets", "blender", "minotauro_v2", f"e{ETAPA}_rig.blend")
 PNG = os.path.join(RAIZ, "assets", "textures", NOMBRE + "_color.png")
-REVISION = os.path.join(RAIZ, "renders", "minotauro_v2_e1", "rig")
+REVISION = os.path.join(RAIZ, "renders", f"minotauro_v2_e{ETAPA}", "rig")
 ESCALA = 5.3226  # studs por BU (docs/import_minotauro_v2.md)
-LADO = 256  # textura de la paleta: cuadros de 64 px, 4 x 4
-CUADRO = 64
-
-# Cola de cada hueso (celdas, lado izquierdo): hacia el hijo, o hacia donde apunta la pieza.
-COLAS = {
-    "Cadera": (0, 0, 12), "Columna": (0, 0, 15), "Pecho": (0, 0, 18), "Cuello": (0, 0, 19),
-    "Cabeza": (0, 0, 28), "Mandibula": (0, -8, 18), "Oreja{l}": (12, 0.5, 22),
-    "Brazo{l}": (10.5, -0.5, 14), "Antebrazo{l}": (10.5, -0.5, 10), "Mano{l}": (10.5, -0.5, 7),
-    "Muslo{l}": (3, 0, 6), "Pierna{l}": (3, 0, 2), "Pie{l}": (3, -4, 0.5),
-    "Cola1": (0, 6, 9), "Cola2": (0, 7.5, 7), "Cola3": (0, 8, 2),
-    "FaldonFrente": (0, -6, 6), "Faldon{l}": (6.5, 0, 6),
-}
-# Huesos sin pesos (punto): Raiz en la base y Boca entre el hocico y la mandíbula.
-PUNTOS = {"Raiz": (None, (0, 0, 0), (0, 0, 3)), "Boca": ("Cabeza", (0, -8.5, 18.5), (0, -9.5, 18.5))}
-SIN_PESOS = set(PUNTOS)
+CUADRO = 64  # px por color en la textura de la paleta
+SIN_PESOS = set(PUNTOS)  # COLAS y PUNTOS: de minotauro_v2_e<n>_geometria.py
 TRUCOS = ["truco_musculo", "truco_rugido", "truco_rascarse", "truco_baile", "comer", "rodilla_120"]
 
 
@@ -75,10 +64,12 @@ def srgb(c):
 def paleta(malla):
     """Textura con un cuadro por color y las UVs de cada cara en el centro del suyo."""
     nombres = list(COLORES)
+    lado = math.ceil(math.sqrt(len(nombres)))  # cuadros por lado (4 x 4 en la E1)
+    LADO = lado * CUADRO
     px = np.ones((LADO, LADO, 4), dtype=np.float32)
     centro = {}
     for i, n in enumerate(nombres):
-        cx, cy = i % (LADO // CUADRO), i // (LADO // CUADRO)
+        cx, cy = i % lado, i // lado
         px[cy * CUADRO:(cy + 1) * CUADRO, cx * CUADRO:(cx + 1) * CUADRO, :3] = [srgb(c) for c in COLORES[n]]
         centro[n] = ((cx + 0.5) * CUADRO / LADO, (cy + 0.5) * CUADRO / LADO)
     img = bpy.data.images.new(NOMBRE + "_color", LADO, LADO, alpha=False)
@@ -166,9 +157,10 @@ def error_maximo(malla, arm, p, faldon, reposo):
 
 
 def render(nombre, sc, cam, sol, angulo):
-    centro = V((0, 0, 1.55))
+    k = ALTO / 3.1  # las medidas de la E1, en proporción al alto
+    centro = V((0, 0, 1.55 * k))
     a = G(angulo)
-    cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, 2.5))
+    cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, 2.5)) * k
     cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
     sol.rotation_euler = (G(50), 0, a + G(-35))
     sc.render.filepath = os.path.join(REVISION, nombre + ".png")
@@ -208,6 +200,7 @@ def exportar(malla, arm):
 
 
 piezas = [o for o in armar() if o.type == "MESH"]
+ALTO = alto_bu()
 faldon = {n: faldon_minimo(pose) or 0 for n, (pose, _) in POSES.items()}  # con las piezas sueltas
 posar({})
 malla = unir(piezas)
@@ -217,7 +210,7 @@ enlazar(malla, arm)
 reposo = [v.co.copy() for v in malla.data.vertices]
 errores = {n: round(error_maximo(malla, arm, pose, faldon[n], reposo), 6) for n, (pose, _) in POSES.items()}
 os.makedirs(REVISION, exist_ok=True)
-sc, cam, sol = estudio()
+sc, cam, sol = estudio(ALTO)
 sc.cycles.samples = 24
 for nombre in ["reposo"] + TRUCOS:
     pose, angulo = POSES.get(nombre, ({}, 35))

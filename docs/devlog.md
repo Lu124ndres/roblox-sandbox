@@ -1795,3 +1795,24 @@ cola, se bajó cuánto la empuja el vaivén y se le puso un tope de 0.9 rad por 
 de Play quedó en 0.9.
 
 **Qué sigue:** que el usuario vea el v2 en el juego; las etapas E2..E4 en bloques (paso 9).
+
+---
+
+## 2026-10-17 (7) — Minotauro v2: herramientas para cualquier etapa
+
+**Qué se hizo (preparación para hacer E2, E3 y E4 a la vez):** los scripts del v2 dejan de ser de
+la E1. `minotauro_v2_bloques.py` tiene lo común (bloques, cuñas, mallas, revisión, renders) y
+carga `minotauro_v2_e<n>_geometria.py` con lo propio de la etapa (módulo, paleta, piezas,
+articulaciones, colas de los huesos). Poses, pisotón, rig y video toman `--etapa <n>` y miden la
+cámara, el piso y el muestreo de caras ocultas en proporción al módulo. El pisotón guarda además
+`medidas.json` (muslo, pierna, cadera, pies y faldón según el muslo) y `Minotauro/Cuerpo` toma
+esas medidas de cada etapa (`body` en `Etapas`; E2..E4 usan las de la E1 hasta tener su v2).
+Guía: módulo por etapa (0.3 / 0.5 / 1.0 BU, los bloques crecen con el cuerpo) y presupuesto de
+10k / 12k / 15k triángulos (aprobados por el usuario).
+
+**Probado:** la E1 sale igual con los scripts nuevos (95 bloques, 3,966 triángulos, mismas caras
+ocultas, pisotón 55° / 91° / 3°, `poses.json` idéntico, rig con error 0.00001); en Play, sin
+errores y el pisotón sube el muslo a 1.0 rad. Checklist: build, selene y stylua.
+
+**Qué se rompió:** nada. `pisoton.json` de la E1 cambia de formato y ya no trae la comparación con
+el cinturón anterior (`ADELANTE = 0`): queda en `decisiones.md` y en el commit 9f18333.

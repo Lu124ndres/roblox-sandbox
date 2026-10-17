@@ -1,5 +1,5 @@
 r"""
-Revisión de los modelos de bloques v2 (la usa minotauro_v2_e1_bloques.py con exec).
+Revisión de los modelos de bloques v2 (la usa minotauro_v2_bloques.py con exec).
 
 Cada bloque llega como sólido: {"parte", "color", "b" (bmesh con bisel y sin caras
 ocultas), "caras" (caras de la cuña SIN bisel: (normal, vértices)), "antes" (caras,

@@ -81,7 +81,7 @@ function Resortes.step(
 )
 	local rise = rate(r, pose, "dy", dt) -- alturas por segundo
 	local sway = rate(r, pose, "sway", dt)
-	local lift = Cuerpo.skirt(pose)
+	local lift = Cuerpo.skirt(pose, profile.body)
 	pose.faldonF = (pose.faldonF or 0) + lift
 	local zeta = profile.bounce
 	local soft = 1 / (profile.pace * profile.pace)

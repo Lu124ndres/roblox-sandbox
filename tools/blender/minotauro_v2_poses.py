@@ -1,5 +1,5 @@
 r"""
-Poses extremas del Minotauro v2 E1 (docs/estilo_modelos.md, "Poses extremas") y el pico de
+Poses extremas del Minotauro v2, cualquier etapa (docs/estilo_modelos.md, "Poses extremas") y el pico de
 cada truco del juego (Minotauro/Trucos.luau y Pose.feeding, con su curva en 1 y sin el reposo
 encima). Posa las piezas rígidas con la cadena de huesos del contrato y los mismos ejes que
 Minotauro/Pose.luau (Pose.apply) y Minotauro/Rig.luau (Rig.turn), y revisa:
@@ -9,11 +9,12 @@ Minotauro/Pose.luau (Pose.apply) y Minotauro/Rig.luau (Rig.turn), y revisa:
                (en bloques rígidos la junta siempre se solapa un poco; se mira en el render)
     hueco      una pieza que se separa de su padre más de HUECO celdas
 FaldonFrente se levanta lo justo para que las piernas no lo atraviesen (como en
-minotauro_v2_e1_pisoton.py). Renderiza cada pose en renders/minotauro_v2_e1/poses/ y guarda
-poses.json. No guarda el .blend.
+minotauro_v2_pisoton.py). Renderiza cada pose en renders/minotauro_v2_e<n>/poses/ y guarda
+poses.json. No guarda el .blend. Las articulaciones salen de ARTICULACIONES de
+minotauro_v2_e<n>_geometria.py; los umbrales van en celdas del módulo de la etapa.
 
-Uso (desde la raíz del repo):
-    blender -b --factory-startup --python tools/blender/minotauro_v2_e1_poses.py
+Uso (desde la raíz del repo; sin --etapa, la 1):
+    blender -b --factory-startup --python tools/blender/minotauro_v2_poses.py -- --etapa 2
 """
 import bpy, json, math, os
 from mathutils import Matrix, Vector as V
@@ -21,41 +22,18 @@ from mathutils.bvhtree import BVHTree
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
-_src = open(os.path.join(HERE, "minotauro_v2_e1_bloques.py"), encoding="utf-8").read()
-exec(_src[:_src.index("objetos = armar()")], globals())  # armar(), estudio(), CELDA, ADELANTE
-SALIDA = os.path.join(RAIZ, "renders", "minotauro_v2_e1", "poses")
+_src = open(os.path.join(HERE, "minotauro_v2_bloques.py"), encoding="utf-8").read()
+exec(_src[:_src.index("# === PRINCIPAL")], globals())  # armar(), estudio(), ETAPA y su geometría
+SALIDA = os.path.join(RAIZ, "renders", f"minotauro_v2_e{ETAPA}", "poses")
 C = CELDA
 PENETRA = 0.3  # celdas
 JUNTA = 1.0
 HUECO = 0.2
 G = math.radians
 
-# Hueso -> (padre, articulación en celdas). {l}: Izq en +x y Der espejado. Ordenados con el
-# padre antes que el hijo. Cadera, rodilla, hombro y bisagra son las de
-# minotauro_v2_e1_pisoton.py. El hombro está en el borde de adentro de la tapa de la hombrera
-# (la otra mitad es del pecho) y el brazo gira por el centro de su sección (y = -0.5).
-_HUESOS = [
-    ("Cadera", None, (0, 0, 10)),
-    ("Columna", "Cadera", (0, 0, 12)),
-    ("Pecho", "Columna", (0, 0, 15)),
-    ("Cuello", "Pecho", (0, 0, 18)),
-    ("Cabeza", "Cuello", (0, 0, 19)),
-    ("Mandibula", "Cabeza", (0, -4, 19)),
-    ("Oreja{l}", "Cabeza", (7, 0.5, 23)),
-    ("Brazo{l}", "Pecho", (8, -0.5, 17)),
-    ("Antebrazo{l}", "Brazo{l}", (10.5, -0.5, 14)),
-    ("Mano{l}", "Antebrazo{l}", (10.5, -0.5, 10)),
-    ("Muslo{l}", "Cadera", (3, 0, 10)),
-    ("Pierna{l}", "Muslo{l}", (3, 0, 6)),
-    ("Pie{l}", "Pierna{l}", (3, 0, 2)),
-    ("Cola1", "Cadera", (0, 3, 10)),
-    ("Cola2", "Cola1", (0, 6, 9)),
-    ("Cola3", "Cola2", (0, 7.5, 7)),
-    ("FaldonFrente", "Cadera", (0, -5 - ADELANTE, 10)),
-    ("Faldon{l}", "Cadera", (6.5, 0, 10)),
-]
+# Hueso -> (padre, articulación en BU), con los dos lados ya armados.
 HUESOS = {}
-for _n, _p, (_x, _y, _z) in _HUESOS:
+for _n, _p, (_x, _y, _z) in ARTICULACIONES:
     for _s, _l in ((1, "Izq"), (-1, "Der")) if "{l}" in _n else ((1, ""),):
         HUESOS[_n.format(l=_l)] = ((_p or "").format(l=_l) or None, V((_x * _s, _y, _z)) * C)
 PIERNAS = [p + l for p in ("Muslo", "Pierna", "Pie") for l in ("Izq", "Der")]
@@ -76,7 +54,7 @@ POSES = {  # nombre -> (pose con las claves de Pose.luau, ángulo de la cámara)
     "cola_s_arriba": ({"tailUp": 0.6, "tail1": 0.5, "tail2": -0.6, "tail3": 0.6}, 150),
     "torso_atras": ({"lean": 0.4}, 90),
     "torso_adelante": ({"lean": -0.4}, 90),
-    # Picos de los trucos (el pisotón está en minotauro_v2_e1_pisoton.py).
+    # Picos de los trucos (el pisotón está en minotauro_v2_pisoton.py).
     "truco_musculo": ({"outL": 1.25, "outR": 1.25, "elbowOutL": 1.62, "elbowOutR": 1.62,
                        "lean": 0.08, "lookYaw": 0.5, "tilt": 0.15, "jaw": 0.25}, 0),
     "truco_rugido": ({"lean": 0.22, "lookPitch": 0.49, "jaw": 1.1, "outL": 0.9, "outR": 0.9,
@@ -209,9 +187,10 @@ def revisar(reposo):
 
 
 def render(nombre, sc, cam, sol, angulo):
-    centro = V((0, 0, 1.55))
+    k = ALTO / 3.1  # las medidas de la E1, en proporción al alto
+    centro = V((0, 0, 1.55 * k))
     a = G(angulo)
-    cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, 2.5))
+    cam.location = centro + V((math.sin(a) * 10, -math.cos(a) * 10, 2.5)) * k
     cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
     sol.rotation_euler = (G(50), 0, a + G(-35))
     sc.render.filepath = os.path.join(SALIDA, nombre + ".png")
@@ -221,12 +200,13 @@ def render(nombre, sc, cam, sol, angulo):
 armar()
 os.makedirs(SALIDA, exist_ok=True)
 posar({})
+ALTO = alto_bu()  # en reposo
 reposo = medir()
 datos = {"umbral_celdas": {"atraviesa": PENETRA, "junta": JUNTA, "hueco": HUECO},
          "reposo": {"cruces": {f"{a}/{b}": round(d, 2) for (a, b), d in sorted(reposo[0].items())},
                     "huecos": {h: round(d, 2) for h, d in reposo[1].items() if d > 0}},
          "poses": {}}
-sc, cam, sol = estudio()
+sc, cam, sol = estudio(ALTO)
 sc.cycles.samples = 24
 for nombre, (pose, angulo) in POSES.items():
     f = faldon_minimo(pose)

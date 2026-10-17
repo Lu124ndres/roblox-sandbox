@@ -98,6 +98,18 @@ Orca fantasma), no por monstruo:
 
 - **Escala única de exportación: 5.32 studs por BU**, la misma para las cuatro etapas,
   aplicada una sola vez y con las transformaciones aplicadas (escala y rotación).
+- **Los bloques crecen con el cuerpo** (decidido el 2026-10-17): cada etapa se modela con su
+  **módulo**, un múltiplo de la celda de 0.1 BU (así sigue sobre la cuadrícula), y casi el
+  mismo alto en módulos que la E1. Bisel, cuñas y remaches se miden en módulos: el bisel es
+  0.12 módulos (0.012 BU en la E1). Lo propio de cada etapa va en
+  `tools/blender/minotauro_v2_e<n>_geometria.py` (`CELDA` = módulo).
+
+| Etapa | Módulo (BU) | Alto en módulos | Alto (BU) | Alto (studs) |
+|---|---|---|---|---|
+| E1 | 0.1 | 31 | 3.1 | 16.5 |
+| E2 | 0.3 | 28 | 8.4 | 44.7 (1.6 % más que la tabla: tiene que ser un número entero de módulos) |
+| E3 | 0.5 | 31 | 15.5 | 82.5 |
+| E4 | 1.0 | 31 | 31.0 | 165 |
 - La escala usada se registra en `docs/import_minotauro_v2.md`.
 
 ### Topología
@@ -107,8 +119,8 @@ Orca fantasma), no por monstruo:
 - **Juntas:** las piezas se solapan, o una **placa de unión** tapa la junta en hombros,
   codos, cadera y rodillas. No se exigen bucles de aristas por articulación.
 - **Simetría en X** exacta (se modela medio cuerpo y se espeja).
-- **Presupuesto de triángulos:** E1 hasta **8,000**. E2, E3 y E4: **por definir**
-  (se pregunta antes de modelar cada una; no se asume ningún valor).
+- **Presupuesto de triángulos:** E1 hasta **8,000**; E2 **10,000**, E3 **12,000** y E4
+  **15,000** (aprobados el 2026-10-17).
 - **Sin vértices sueltos ni normales invertidas.** Las caras internas entre bloques
   solapados se permiten dentro de una pieza si no se ven.
 
@@ -136,7 +148,7 @@ Orca fantasma), no por monstruo:
 
 ### Faldón y cinturón (E1)
 
-Aprobado el 2026-10-16 (`ADELANTE = 1` en `tools/blender/minotauro_v2_e1_bloques.py`):
+Aprobado el 2026-10-16 (`ADELANTE = 1` en `tools/blender/minotauro_v2_e1_geometria.py`):
 
 - El **frente del cinturón** va 1 celda delante del cuerpo: cinturón en y −5..4 (celdas,
   −y = frente), hebilla en y −6..−5 y piedra en y −7..−6.
@@ -151,7 +163,7 @@ Aprobado el 2026-10-16 (`ADELANTE = 1` en `tools/blender/minotauro_v2_e1_bloques
 
 ### Hombros (E1)
 
-Aprobado el 2026-10-17, después de las poses extremas (`tools/blender/minotauro_v2_e1_poses.py`):
+Aprobado el 2026-10-17, después de las poses extremas (`tools/blender/minotauro_v2_poses.py`):
 
 - La **hombrera va partida**: la mitad de adentro (x ±4..±8) es de `Pecho` y no se mueve; la
   tapa (x ±8..±12, con la cuña arriba afuera) es de `Brazo`. El **hombro gira por el borde de
@@ -180,9 +192,9 @@ deformación de la malla.
 | Cola en S y levantada | segmentos separados o metidos uno en otro |
 | Torso echado atrás (rugido) y adelante (comer) | torso que se separa de la cadera |
 
-**E1 (2026-10-17):** `tools/blender/minotauro_v2_e1_poses.py` posa las piezas con los ejes de
+**E1 (2026-10-17):** `tools/blender/minotauro_v2_poses.py --etapa 1` posa las piezas con los ejes de
 `Pose.apply` y renderiza estas poses y el pico de cada truco del juego en
-`renders/minotauro_v2_e1/poses/` (el pisotón está en `minotauro_v2_e1_pisoton.py`). En
+`renders/minotauro_v2_e1/poses/` (el pisotón está en `minotauro_v2_pisoton.py`). En
 `poses.json` separa tres cosas: piezas sin articulación que se cruzan, juntas que se solapan
 de más y piezas que se separan de su padre. Lo que queda, con los hombros ya arreglados:
 
@@ -244,7 +256,7 @@ memoria con `EditableMesh`, sin cambiar nada del lugar).
 > acciones de la tabla de abajo son trucos de `src/shared/Minotauro/Trucos/` (uno por módulo)
 > que cumplen estos principios con la pose; la acción secundaria la hace `Minotauro/Resortes`
 > y los pies en el suelo `Minotauro/Cuerpo`. Se revisan en video con
-> `tools/blender/minotauro_v2_e1_animacion.py`.
+> `tools/blender/minotauro_v2_animacion.py`.
 
 Las **acciones principales** se arman con curvas por código. Lo continuo (respirar, mirar,
 la cola) también, y se suma encima.

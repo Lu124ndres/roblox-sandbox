@@ -1,19 +1,11 @@
 {
   "grados_levantado_del_faldon": "None = no hay ángulo sin choque",
+  "etapa": 1,
   "pisoton_juego_muslo_rodilla": [
     57.3,
     68.8
   ],
-  "cinturon_anterior_adelante_0": {
-    "reposo_sin_choque": true,
-    "pisoton_57": null,
-    "extremo_90": null,
-    "caminata": {
-      "faldon_maximo": 26,
-      "fase": 270
-    }
-  },
-  "aprobado_adelante_1": {
+  "faldon": {
     "reposo_sin_choque": true,
     "pisoton_57": 55,
     "extremo_90": 91,

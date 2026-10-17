@@ -1,29 +1,32 @@
 r"""
-Los trucos del Minotauro v2 E1 en video, con las poses que calcula el código del juego.
+Los trucos del Minotauro v2 en video (cualquier etapa), con las poses que calcula el código del juego.
 
 Las poses salen de Studio: los módulos de src/shared/Minotauro corridos en Edit por el MCP
 (Pose.idle + el truco + Cuerpo.plant + Resortes, cuadro a cuadro a 60 por segundo y guardados
 a 30), en un JSON {"keys": [...], "fps": 30, "trucos": {nombre: {"frames": [[...], ...]}}}.
-Aquí se ponen en el rig de assets/blender/minotauro_v2/e1_rig.blend con la misma cuenta que
+Aquí se ponen en el rig de assets/blender/minotauro_v2/e<n>_rig.blend con la misma cuenta que
 Pose.apply y Rig.turn (cabeceo por la derecha del cuerpo, giro por arriba, alabeo por
 adelante, en los ejes de reposo de cada hueso), se sube el cuerpo con dy y se arma un GIF por
 truco con ffmpeg.
 
 Uso (desde la raíz del repo):
-    blender -b --factory-startup --python tools/blender/minotauro_v2_e1_animacion.py -- <poses.json>
-Las poses de la última revisión están en renders/minotauro_v2_e1/animaciones/poses_juego.json
-(etapa 1, con el código del commit que las acompaña).
-Salida: renders/minotauro_v2_e1/animaciones/<truco>.gif
+    blender -b --factory-startup --python tools/blender/minotauro_v2_animacion.py -- <poses.json> [--etapa 2]
+Las poses de la última revisión de cada etapa están en renders/minotauro_v2_e<n>/animaciones/
+poses_juego.json (con el código del commit que las acompaña; el perfil de la etapa cambia el
+ritmo y el rebote).
+Salida: renders/minotauro_v2_e<n>/animaciones/<truco>.gif
 """
 import bpy, json, math, os, shutil, subprocess, sys, tempfile
 from mathutils import Matrix, Vector as V
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
-BLEND = os.path.join(RAIZ, "assets", "blender", "minotauro_v2", "e1_rig.blend")
-SALIDA = os.path.join(RAIZ, "renders", "minotauro_v2_e1", "animaciones")
-POSES = sys.argv[sys.argv.index("--") + 1]
-ALTO = 16.5  # studs: el rig ya está escalado
+ARGS = sys.argv[sys.argv.index("--") + 1:]
+ETAPA = int(ARGS[ARGS.index("--etapa") + 1]) if "--etapa" in ARGS else 1
+BLEND = os.path.join(RAIZ, "assets", "blender", "minotauro_v2", f"e{ETAPA}_rig.blend")
+SALIDA = os.path.join(RAIZ, "renders", f"minotauro_v2_e{ETAPA}", "animaciones")
+POSES = ARGS[0]
+ALTO = 16.5  # studs; se mide en el rig al abrirlo (ya está escalado)
 CAMARA = {"Pisoton": -35, "Salto": -70}  # grados alrededor del cuerpo (0 = de frente); 35 si no está
 LADO = 400
 
@@ -80,18 +83,21 @@ def escena():
     mundo = bpy.data.worlds.new("Fondo")
     mundo.color = (0.32, 0.36, 0.42)
     sc.world = mundo
-    bpy.ops.mesh.primitive_plane_add(size=60, location=(0, 0, 0))
+    k = ALTO / 16.5  # cámara y piso medidos para la E1
+    bpy.ops.mesh.primitive_plane_add(size=60 * k, location=(0, 0, 0))
     cam = bpy.data.objects.new("Camara", bpy.data.cameras.new("Camara"))
-    cam.data.type, cam.data.ortho_scale = "ORTHO", 26
+    cam.data.type, cam.data.ortho_scale = "ORTHO", 26 * k
+    cam.data.clip_end = 400 * k
     sc.collection.objects.link(cam)
     sc.camera = cam
     return sc, cam
 
 
 def apuntar(cam, grados):
-    centro = V((0, 0, 10))
+    k = ALTO / 16.5
+    centro = V((0, 0, 10 * k))
     a = math.radians(grados)
-    cam.location = centro + V((math.sin(a) * 60, -math.cos(a) * 60, 18))
+    cam.location = centro + V((math.sin(a) * 60, -math.cos(a) * 60, 18)) * k
     cam.rotation_euler = (centro - cam.location).to_track_quat("-Z", "Y").to_euler()
 
 
@@ -104,6 +110,9 @@ def gif(cuadros, fps, destino):
 
 bpy.ops.wm.open_mainfile(filepath=BLEND)
 arm = next(o for o in bpy.data.objects if o.type == "ARMATURE")
+_malla = next(o for o in bpy.data.objects if o.type == "MESH")
+_zs = [(_malla.matrix_world @ v.co).z for v in _malla.data.vertices]
+ALTO = max(_zs) - min(_zs)
 datos = json.load(open(POSES, encoding="utf-8"))
 claves = datos["keys"]
 sc, cam = escena()

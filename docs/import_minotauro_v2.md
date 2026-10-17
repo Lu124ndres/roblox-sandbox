@@ -21,10 +21,10 @@ tamaño real y las cuatro etapas sean comparables.
 
 ## E1
 
-- Fuente: `tools/blender/minotauro_v2_e1_bloques.py` → `assets/blender/minotauro_v2/e1_bloques.blend`.
+- Fuente: `tools/blender/minotauro_v2_e1_geometria.py` (con `minotauro_v2_bloques.py --etapa 1`) → `assets/blender/minotauro_v2/e1_bloques.blend`.
 - Renders de revisión: `renders/minotauro_v2_e1/` (frente, perfil, tres cuartos, atrás y
   `estadisticas.json`).
-- Rig y FBX: `tools/blender/rig_minotauro_v2_e1.py` → `assets/blender/MinotauroE1_v2.fbx`
+- Rig y FBX: `tools/blender/rig_minotauro_v2.py --etapa 1` → `assets/blender/MinotauroE1_v2.fbx`
   (rig en `assets/blender/minotauro_v2/e1_rig.blend`, revisión en
   `renders/minotauro_v2_e1/rig/`).
   - Una malla `MinotauroE1_v2` de 3,966 triángulos; cada pieza entera a su hueso (peso 1).
@@ -37,7 +37,7 @@ tamaño real y las cuatro etapas sean comparables.
   - Opciones: `apply_scale_options="FBX_SCALE_UNITS"`, `axis_forward="-Z"`, `axis_up="Y"`,
     `bake_space_transform=False`, `primary_bone_axis="Y"`, `secondary_bone_axis="X"`,
     `add_leaf_bones=False` (las mismas que `rig_minotauro_e1.py`).
-  - Revisión: en las 20 poses de `minotauro_v2_e1_poses.py` la malla deformada por los huesos
+  - Revisión: en las 20 poses de `minotauro_v2_poses.py` la malla deformada por los huesos
     coincide con las piezas rígidas (error máximo 0.00001 celdas). Reimportado en Blender:
     28 huesos, 26 grupos, la textura y 16.5 de alto.
 - Importado a Studio el 2026-10-17 (a mano: el MCP de Studio no importa FBX) con Importar 3D →

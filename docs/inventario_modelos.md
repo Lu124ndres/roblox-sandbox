@@ -111,7 +111,7 @@ Roll de todos los huesos: 0. Exportación FBX: `primary_bone_axis="Y"`,
 ### Articulaciones del v2 E1 (bloques)
 
 El modelo de bloques no tiene rig todavía. Las articulaciones con que se prueban las poses
-viven en `HUESOS` de `tools/blender/minotauro_v2_e1_poses.py` (celdas de 0.1 BU, lado
+viven en `ARTICULACIONES` de `tools/blender/minotauro_v2_e1_geometria.py` (celdas de 0.1 BU, lado
 izquierdo): cadera (±3, 0, 10), rodilla (±3, 0, 6), tobillo (±3, 0, 2), hombro
 (±8, −0.5, 17) en el borde de adentro de la tapa de la hombrera, codo (±10.5, −0.5, 14),
 muñeca (±10.5, −0.5, 10), cuello (0, 0, 18), cabeza (0, 0, 19), mandíbula (0, −4, 19), oreja
@@ -120,7 +120,7 @@ muñeca (±10.5, −0.5, 10), cuello (0, 0, 18), cabeza (0, 0, 19), mandíbula (
 
 ### Adición opcional para la v2: huesos del faldón (aprobada el 2026-10-16)
 
-Opción a del faldón (`tools/blender/minotauro_v2_e1_pisoton.py`). El rig v2 suma tres huesos,
+Opción a del faldón (`tools/blender/minotauro_v2_pisoton.py`). El rig v2 suma tres huesos,
 todos hijos de `Cadera`, con las piezas del faldón al 100 %. Todavía no se animan:
 
 ```
