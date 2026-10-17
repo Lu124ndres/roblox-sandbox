@@ -8,11 +8,15 @@
 		- cada tanto se da vuelta con pasos cruzados para mirar a otro lado (todos los
 		  clientes lo ven igual: sale de la hora del servidor);
 		- cuando alguien le da de comer gira hacia esa orilla, baja el pecho, abre la
-		  boca y menea las colas; cada pez que llega lo muerde (bite);
+		  boca y menea las colas; cada pez que llega (fed) lo atrapa con su
+		  animación especial (Comer: bocados, peces raros, combos y el gesto al
+		  jugador de este cliente), que puede girarlo, darlo vuelta o hacerlo
+		  correr en círculo;
 		- entre comidas hace trucos sincronizados (Trucos): aullido, abanico, salto,
 		  sacudida, reverencia y fuegos fatuos.
 	step devuelve el pivote (base, -Z al frente). state.events: lo que ZorroStand
-	convierte en sonido y efectos; state.steps: cuántas patas acaban de pisar.
+	convierte en sonido y efectos; state.stepped: cuántas patas acaban de pisar;
+	state.trail: 0..1, deja estela de agua (corre).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -21,6 +25,8 @@ local Workspace = game:GetService("Workspace")
 local Protocol = require(script.Parent.Protocol)
 local WorldLayout = require(script.Parent.WorldLayout)
 local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
+local Comer = require(script.Comer)
+local Pivote = require(script.Comer.Pivote)
 local Pose = require(script.Pose)
 local Rig = require(script.Rig)
 local Trucos = require(script.Trucos)
@@ -30,7 +36,8 @@ local LOOK_EVERY = 18 -- segundos entre vueltas para mirar a otro lado
 local BITE_SECONDS = 0.16
 local WATER = WorldLayout.waterLevel
 
-export type Event = { kind: string }
+-- power: rareza del pez (eventos de Comer); side: 1 su izquierda, -1 su derecha.
+export type Event = { kind: string, power: number?, side: number? }
 export type State = {
 	events: { Event },
 	rig: Rig.Rig?,
@@ -38,6 +45,7 @@ export type State = {
 	center: Vector3,
 	fan: number, -- 0..1: colas abiertas (brillan más)
 	stepped: number, -- patas que pisaron en este cuadro (ondas en el agua)
+	trail: number, -- 0..1: corre y deja estela de agua
 }
 export type Info = { height: number, lift: number, spin: number, anger: number, inner: Model? }
 export type Motion = {
@@ -48,6 +56,7 @@ export type Motion = {
 	water: () -> Vector3,
 	point: (name: string) -> Vector3?,
 	bite: () -> (),
+	fed: (info: Comer.Fed) -> (),
 	destroy: () -> (),
 }
 
@@ -62,7 +71,8 @@ function Zorro.new(center: Vector3): Motion
 	local feeders = Feeders.watch(Vector3.new(center.X, 0, center.Z))
 	local ground = Vector3.new(center.X, WATER, center.Z)
 	local state: State =
-		{ events = {}, rig = nil, height = 10, center = ground, fan = 0, stepped = 0 }
+		{ events = {}, rig = nil, height = 10, center = ground, fan = 0, stepped = 0, trail = 0 }
+	local comer = Comer.new()
 	local rigFor: Model? = nil
 	local yaw, stepPhase, feeding, turnRate = 0, 0, 0, 0
 	local biteUntil = 0
@@ -99,15 +109,17 @@ function Zorro.new(center: Vector3): Motion
 		stepPhase += dt * 6 * (if turning > 0.05 then 1 else 0)
 		state.stepped = if math.floor(stepPhase / math.pi) ~= before then 2 else 0
 
+		local extra, body =
+			Comer.step(comer, os.clock(), info.height, Pivote.radius(center, info.height))
 		local pose = Pose.idle(now)
-		Pose.add(pose, Pose.feeding(w, now, os.clock() < biteUntil))
+		Pose.add(pose, Pose.feeding(w * (1 - body.take), now, os.clock() < biteUntil))
 		Pose.add(pose, Pose.steps(stepPhase, turning))
 		Pose.add(
 			pose,
 			{ earL = -0.5 * info.anger, earR = -0.5 * info.anger, lean = -0.1 * info.anger }
 		)
 		local trick, u, slot = nil, 0, -1
-		if active and w < 0.05 and turning < 0.1 then
+		if active and w < 0.05 and turning < 0.1 and comer.big == nil then
 			trick, u, slot = Trucos.current(now)
 		end
 		if trick then
@@ -122,15 +134,28 @@ function Zorro.new(center: Vector3): Motion
 			lastU = u
 			Pose.add(pose, trick.pose(u))
 		end
+		Pose.add(pose, extra)
+		local heading = yaw + math.rad(info.spin)
+		Pivote.look(pose, body, state.center, state.height, heading + body.spin)
+		for _, event in Comer.drain(comer) do
+			table.insert(
+				state.events,
+				{ kind = event.kind, power = event.power, side = event.side }
+			)
+		end
+		state.stepped = if body.stepped then 2 else state.stepped
+		state.trail = body.trail
 		state.fan += (math.clamp(pose.tailFan or 0, 0, 1) - state.fan) * (1 - math.exp(-dt * 4))
 		local rig = state.rig
 		if rig then
-			Pose.apply(rig, pose, now, turnRate, dt)
+			Pose.apply(rig, pose, now, turnRate + body.turn, dt)
 		end
 		state.height = info.height
 		local dy = (pose.dy or 0) * info.height - (pose.crouch or 0) * info.height * 0.06
-		state.center = ground + Vector3.new(0, info.lift + dy, 0)
-		return CFrame.new(state.center) * CFrame.Angles(0, yaw + math.rad(info.spin), 0)
+		local base = ground + Vector3.new(0, info.lift + dy, 0)
+		local placed, pivot = Pivote.build(base, heading, body, info.height)
+		state.center = placed
+		return pivot
 	end
 
 	local function point(name: string): Vector3?
@@ -151,6 +176,9 @@ function Zorro.new(center: Vector3): Motion
 		end,
 		bite = function()
 			biteUntil = os.clock() + BITE_SECONDS
+		end,
+		fed = function(info: Comer.Fed)
+			Comer.fed(comer, info, os.clock())
 		end,
 		destroy = feeders.destroy,
 	}

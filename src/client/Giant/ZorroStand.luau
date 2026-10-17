@@ -13,6 +13,8 @@
 		shake   se sacude: gotas por todo el cuerpo
 		happy   reverencia de juego: corazones
 		orbs    fuegos fatuos: orbes de agua que suben a su alrededor
+	Los de su animación al comer (fed: cada pez, los raros y los combos) los
+	pone ZorroComerFx, y ZorroEstela la estela de agua cuando corre.
 	Solo los modelos con huesos de zorro (Cola1_1 y HombroIzq).
 	Misma forma que OrcaSwim para que GiantBody use uno u otro.
 ]]
@@ -26,6 +28,8 @@ local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local OrcaSwim = require(script.Parent.OrcaSwim)
+local ZorroComerFx = require(script.Parent.ZorroComerFx)
+local ZorroEstela = require(script.Parent.Parent.Effects.ZorroEstela)
 local ZorroFx = require(script.Parent.ZorroFx)
 
 local SHAKE_REACH = 260
@@ -44,7 +48,8 @@ local function shake(position: Vector3, magnitude: number, seconds: number)
 	end
 end
 
-local function play(motion: Zorro.Motion, fx: ZorroFx.ZorroFx?, kind: string)
+local function play(motion: Zorro.Motion, fx: ZorroFx.ZorroFx?, event: Zorro.Event)
+	local kind = event.kind
 	local height = motion.state.height
 	local water = motion.water()
 	local size = math.max(1, height / 12)
@@ -85,6 +90,8 @@ local function play(motion: Zorro.Motion, fx: ZorroFx.ZorroFx?, kind: string)
 		Sounds.play("CoinPop", motion.top(), 0.6)
 		ZorroFx.orbs(fx, motion, math.max(1, math.round(6 * ClientSettings.fxScale())))
 		Fx.sparkle(motion.top(), CYAN, 20)
+	elseif kind ~= "orbs" then
+		ZorroComerFx.play(motion, event)
 	end
 end
 
@@ -99,6 +106,7 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 	local motion = Zorro.new(center)
 	local fx: ZorroFx.ZorroFx? = nil
 	local fxFor: any = nil
+	local estela = ZorroEstela.new()
 	return {
 		step = function(
 			dt: number,
@@ -127,19 +135,27 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 			if #events > 0 then
 				motion.state.events = {}
 				for _, event in events do
-					play(motion, fx, event.kind)
+					play(motion, fx, event)
 				end
 			end
+			ZorroComerFx.step(motion)
+			ZorroEstela.update(estela, motion.state.trail, height, motion.water().Y, motion.point)
 			return pivot
 		end,
 		top = motion.top,
 		mouth = motion.mouth,
 		water = motion.water,
 		bite = motion.bite,
-		fed = function(_) -- por ahora solo muerde (animación especial: pendiente)
-			motion.bite()
+		fed = function(info: OrcaSwim.FedInfo)
+			motion.fed({
+				from = info.from,
+				rarity = info.rarity,
+				isLocal = info.isLocal,
+				streak = info.streak,
+			})
 		end,
 		destroy = function()
+			ZorroEstela.destroy(estela)
 			if fx then
 				ZorroFx.destroy(fx)
 			end

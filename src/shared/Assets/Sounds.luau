@@ -100,6 +100,17 @@ local Sounds: { [string]: string } = {
 	LairRumble = "rbxassetid://9112823552", -- "Lava Rumble 1" (46 s, bucle): el volcán con lava
 	LairBubbles = "rbxassetid://9120306743", -- "Underwater Bubbles 6" (1.9 s), grave: aviso del géiser
 	GeyserBurst = "rbxassetid://9117984897", -- "Pyro Fire Ball Burst 2" (3.5 s): revienta el géiser
+	-- Comer: Zorro (ProSoundEffects, licencia de Roblox). Capas y tono por etapa en
+	-- client/Audio/ZorroVoces; los efectos en client/Giant/ZorroComerFx.
+	ZorroYip = "rbxassetid://9113955748", -- "Coyotes Gruff Barking 12" (0.5 s): ladrido corto
+	ZorroYipDouble = "rbxassetid://9113955372", -- "Coyotes Gruff Barking 8" (0.8 s): le ladra al jugador
+	ZorroGulp = "rbxassetid://9114171960", -- "Drinking Cu Gulping 5" (1.0 s): traga
+	ZorroLick = "rbxassetid://9114172114", -- "Drinking Cu Gulping 7" (1.1 s): sorbo, se relame
+	ZorroHowlJoy = "rbxassetid://9120790124", -- "Wolf Howl Human- Like 5" (2.2 s): aullido de alegría
+	ZorroHowlBig = "rbxassetid://9120790529", -- "Wolf Howl Two Versions 1" (3.5 s): gran festejo
+	ZorroBubbles = "rbxassetid://9125408740", -- "Bubble Magic Many Gurgly Floating By Very Wet 1" (2.7 s)
+	ZorroShimmer = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
+	ZorroPaw = "rbxassetid://9117946641", -- "Puddle Stomps Small Water Splashes 3" (0.5 s): pisadas, manotazo
 	-- Música (con licencia de Roblox: APM y DistroKid, se pueden usar en cualquier juego)
 	MusicIsland = "rbxassetid://128770946473000", -- "The Fisherman's Small Boat" (2:39)
 	MusicCrater = "rbxassetid://1843867314", -- "Tension Repeat Drones 29" (2:04)
