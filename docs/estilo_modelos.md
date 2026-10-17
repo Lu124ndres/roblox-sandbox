@@ -28,12 +28,8 @@ gigantes en corrales.
    del modelo; brillo Neon en ojos, grietas y armas.
 5. **Proporciones de juguete.** Cabeza y manos grandes, patas gruesas, poses abiertas.
 
-> **Atención: las referencias no son "orgánicas".** El pedido habla de "modelado orgánico";
-> las capturas muestran estilo **facetado / de bloques**. Hay que elegir una de dos (o la
-> mezcla) antes de modelar. Ver la pregunta 1 en `docs/plan_minotauro_v2.md`. Esta guía
-> propone la **mezcla**: anatomía continua que se deforma bien (orgánica en la malla) con
-> planos marcados en músculos, cuernos y armadura (facetado en la lectura), y textura con
-> relieve de estilo Roblox.
+> **Estilo decidido (2026-10-16): bloques.** Como en las capturas: bloques, placas y cuñas,
+> no formas orgánicas. Cada parte del cuerpo es una pieza rígida (ver sección 3).
 
 > Las capturas son de otro juego. `referencias/` no está en git y conviene que siga así:
 > el repositorio es público.
@@ -74,23 +70,32 @@ Reglas:
 
 ## 3. Criterios de calidad del modelo
 
+Valores aprobados el 2026-10-16. Esta sección es la única referencia de topología y tamaño.
+
+### Cuadrícula
+
+- **Celda de 0.1 BU** (unidades de Blender). Todo bloque mide un número entero de celdas
+  en cada eje, y sus caras caen sobre la cuadrícula.
+- **Cuñas** con pendiente 1:1, 1:2 o 2:1 (en celdas). Nada de ángulos libres.
+- **Bisel de 0.012 BU, un solo segmento**, en las aristas exteriores. Sin redondeo orgánico.
+
+### Escala
+
+- **E1 mide 16.5 studs** en el juego (3 × 5.5, `Config/Giants.luau`). En Blender mide
+  ~3.1 BU, así que la escala es de **~5.3 studs por BU** (16.5 / alto real).
+- Escala y rotación aplicadas antes de exportar. La escala usada se registra en
+  `docs/import_minotauro_v2.md`.
+
 ### Topología
 
-- **Quads en todo el cuerpo** que deforma; triángulos solo en piezas rígidas y en zonas
-  planas que no se doblan.
-- **Bucles de aristas en cada articulación:** mínimo 3 bucles en hombros, codos, muñecas,
-  cadera, rodillas, tobillos y cuello; 2 en cada segmento de la cola y en la base de las
-  orejas. El bucle del medio queda **en** el eje de giro del hueso.
-- **Bucles de la cara:** anillos alrededor de los ojos y de la boca, para que la mandíbula
-  abra sin estirar el hocico.
-- **Densidad pareja:** sin polos de 5+ aristas en zonas que se doblan; los polos van en
-  zonas planas (espalda, pecho).
+- **Cada parte del cuerpo es una pieza rígida** (cabeza, mandíbula, torso, brazos,
+  piernas, cola, orejas, faldón…), formada por bloques, placas y cuñas.
+- **Juntas:** las piezas se solapan, o una **placa de unión** tapa la junta en hombros,
+  codos, cadera y rodillas. No se exigen bucles de aristas por articulación.
 - **Simetría en X** exacta (se modela medio cuerpo y se espeja).
-- **Presupuesto de triángulos por etapa: por decidir** (ver pregunta 3 del plan). El
-  máximo de Roblox por MeshPart es 20,000; `blender-pipeline.md` dice 10,000. Propuesta:
-  E1 8k, E2 10k, E3 12k, E4 15k (la E4 se ve de cerca y es la más grande).
-- **Sin caras internas, vértices sueltos ni normales invertidas** (Mesh Analysis y
-  "Select All by Trait" en cero).
+- **Presupuesto:** hasta **8,000 triángulos en E1**. (E2..E4: por decidir.)
+- **Sin vértices sueltos ni normales invertidas.** Las caras internas entre bloques
+  solapados se permiten dentro de una pieza si no se ven.
 
 ### UVs
 
@@ -114,32 +119,29 @@ Reglas:
 - Comprobación en Studio: la textura se ve igual que en Blender con la luz del cráter
   (de día y con la hora propia del volcán).
 
-### Deformación en poses extremas
+### Poses extremas
 
-Cada etapa se prueba en estas poses antes de exportar (render de cada una):
+Cada etapa se prueba en estas poses antes de exportar (render de cada una). Se revisa
+que **las piezas no se separen ni se atraviesen de forma visible**; ya no se revisa la
+deformación de la malla.
 
 | Pose | Qué no puede pasar |
 |---|---|
-| Brazos arriba (músculo, 150°) | hombro que colapsa o atraviesa el cuello |
+| Brazos arriba (músculo, 150°) | hueco visible en el hombro; brazo que atraviesa la cabeza |
 | Brazos adelante y cruzados | antebrazo que atraviesa el pecho |
-| Codo doblado 140° | codo que se aplasta como una manguera (pérdida de volumen > 20 %) |
-| Rodilla doblada 120° (salto agachado) | rodilla puntiaguda o muslo que atraviesa la pantorrilla |
-| Pierna arriba 90° (pisotón) | ingle que se estira o faldón que atraviesa la pierna |
-| Cuello: mira arriba, abajo y 60° a cada lado | papada que se hunde, cuernos que se deforman |
-| Mandíbula abierta al máximo (rugido) | hocico que se estira, dientes que se doblan |
-| Cola en S y levantada | segmentos que se pliegan sobre sí mismos |
-| Torso echado atrás (rugido) y adelante (comer) | panza que atraviesa la cadera |
+| Codo doblado 140° | hueco en el codo que la placa de unión no tapa |
+| Rodilla doblada 120° (salto agachado) | hueco en la rodilla; muslo que atraviesa la pierna |
+| Pierna arriba 90° (pisotón) | pierna que atraviesa el faldón o se separa de la cadera |
+| Cuello: mira arriba, abajo y 60° a cada lado | cabeza que se separa del torso o lo atraviesa |
+| Mandíbula abierta al máximo (rugido) | hueco entre mandíbula y cabeza visible desde el costado |
+| Cola en S y levantada | segmentos separados o metidos uno en otro |
+| Torso echado atrás (rugido) y adelante (comer) | torso que se separa de la cadera |
 
 Reglas de pesos:
 
-- **Pintados y revisados zona por zona**, partiendo del calor automático. Máximo 4
-  influencias por vértice (límite de Roblox), normalizados.
-- **Piezas duras** (cuernos, aros, hebillas, pezuñas, hombreras) al 100 % de un hueso,
-  pero **pegadas** a la piel (sin huecos al moverse).
-- **Faldón y tirantes** con pesos repartidos entre `Cadera` y los muslos, o huesos propios
-  si se aprueban (ver plan).
-- Corrector de volumen en codos y rodillas si hace falta: un bucle extra o forma de
-  "codo de goma" con pesos 50/50 en el bucle central.
+- **100 % por pieza: un solo hueso por vértice**, sin mezcla en las articulaciones.
+  Reemplaza al límite de 4 influencias.
+- Las piezas chicas (cuernos, aros, ojos, pezuñas) van al hueso de la pieza que las lleva.
 
 ## 4. Criterios de animación
 
