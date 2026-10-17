@@ -65,7 +65,7 @@ local Giants: Types.GiantsConfig = {
 			modelBase = "Minotauro",
 			rouletteWeight = 30,
 			released = true,
-			inRoulette = true, -- sin modelo de Meshy aún: usa la orca teñida (GiantTemplates)
+			inRoulette = true, -- modelos propios: ServerStorage.MinotauroE1..E4
 		},
 		{
 			id = "DragonMarino",
