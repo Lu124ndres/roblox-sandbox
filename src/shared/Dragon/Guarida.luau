@@ -28,9 +28,9 @@ local Guarida = {}
 Guarida.lava = LAVA
 Guarida.perches = table.freeze({
 	{ angle = 0, radius = 0, top = 22, size = 34 }, -- la roca central, con el nido
-	{ angle = math.rad(35), radius = 128, top = 14, size = 26 },
+	{ angle = math.rad(35), radius = 115, top = 14, size = 26 }, -- a 128 la pared tapaba la cima
 	{ angle = math.rad(155), radius = 132, top = 18, size = 26 },
-	{ angle = math.rad(265), radius = 124, top = 10, size = 24 },
+	{ angle = math.rad(265), radius = 112, top = 10, size = 24 }, -- ídem (a 124)
 } :: { Perch })
 Guarida.nest = table.freeze({ perch = 1, offset = Vector3.new(0, 0, 12) }) -- sobre la central, atrás
 
