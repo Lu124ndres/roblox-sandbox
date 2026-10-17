@@ -2,171 +2,148 @@
 --[[
 	Dragon/Fx
 
-	Sonidos y efectos del dragón: lee DragonMotion.state cada cuadro.
-		fuego     chorro de llamas desde la boca hacia adelante de la cabeza,
-		          con chispas y una luz que ilumina todo (trucos de fuego)
-		roar      rugido con la voz de su etapa y temblor de cámara cerca
-		estelas   aire en las puntas de las alas al ir rápido o picar (Estelas)
-		whoosh    el aire al pasar rápido (picadas, volteretas)
-		aletazos  cada bajada del ala suena (los grandes, más grave y fuerte)
-	Los sonidos y destellos son los del juego (hooks): respetan volumen,
-	alcance y el modo de efectos reducidos.
+	Lee DragonMotion.state cada cuadro y lo convierte en efectos y "cues"
+	(momentos con sonido o efecto que dibuja el cliente, hooks.cue):
+		fuego     el chorro de llamas (Fuego) mientras state.fire; con el evento
+		          fireSky apunta al cielo (y arde FIRE_SKY segundos aunque el
+		          comportamiento no encienda state.fire). Cues fireStart/fireEnd.
+		eventos   cada evento del dragón (roar, whoosh, flap, takeoff, land, fold,
+		          stretch, preen, sleep, wake, fireSky, evolve... y los que vengan)
+		          pasa tal cual como cue: el cliente sabe cuáles suenan.
+		aletazos  cue flap (o hover si está quieto en el aire) con la fuerza del
+		          aletazo medida en el ala (Aleteo): planeando no suena.
+		estelas   aire en las puntas de las alas al ir rápido, picar o despegar.
+	Con efectos reducidos (fxScale 0) no se ve el fuego ni las estelas; los
+	cues siguen (los sonidos los respeta el cliente).
 ]]
 
+local Aleteo = require(script.Parent.Aleteo)
 local Estelas = require(script.Parent.Estelas)
+local Fuego = require(script.Parent.Fuego)
 local Tipos = require(script.Parent.Tipos)
 
+export type Cue = {
+	stage: number, -- 1 cría … 4 anciano (del nombre del modelo)
+	voice: number,
+	length: number,
+	strength: number?, -- 0..1, solo en flap y hover
+}
 export type Hooks = {
-	play: (key: string, position: Vector3?, pitch: number?) -> (),
-	sparkle: (position: Vector3, color: Color3, count: number?) -> (),
-	shake: (position: Vector3, magnitude: number, seconds: number) -> (),
+	cue: (kind: string, cue: Cue) -> (),
 	fxScale: () -> number,
 }
 export type Fx = { step: (dt: number) -> (), destroy: () -> () }
 
-local FIRE = "rbxasset://textures/particles/fire_main.dds"
-local SPARK = "rbxasset://textures/particles/fire_sparks_main.dds"
-local rgb = Color3.fromRGB
+local FIRE_SKY = 2.5 -- segundos de fuego al cielo si el comportamiento no lo enciende
+local SKY_EASE = 6 -- qué tan rápido gira el chorro hacia arriba y vuelve
+local TAKEOFF_TRAILS = 1.5 -- segundos de estelas después de despegar
+local MIN_STROKE = 0.2 -- fuerza mínima para que un aletazo suene
+local HOVER_SPEED = 8 -- studs/s: más lento y aleteando = quieto en el aire
 
 local DragonFx = {}
 
-type Breath = {
-	socket: Bone,
-	flames: ParticleEmitter,
-	sparks: ParticleEmitter,
-	light: PointLight,
-	length: number,
-}
-
-local function build(rig: any): Breath?
-	local boca, cabeza = rig.bones.Boca, rig.bones.Cabeza
-	if not boca or not cabeza then
-		return nil
-	end
-	local forward = (boca.WorldPosition - cabeza.WorldPosition).Unit
-	local socket = Instance.new("Bone")
-	socket.Name = "Fuego"
-	socket.CFrame = boca.WorldCFrame:ToObjectSpace(
-		CFrame.lookAt(boca.WorldPosition, boca.WorldPosition + forward)
-	)
-	socket.Parent = boca
-	local flames = Instance.new("ParticleEmitter")
-	flames.Texture = FIRE
-	flames.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, rgb(255, 250, 200)),
-		ColorSequenceKeypoint.new(0.3, rgb(255, 160, 40)),
-		ColorSequenceKeypoint.new(1, rgb(150, 20, 5)),
-	})
-	flames.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.1),
-		NumberSequenceKeypoint.new(0.7, 0.4),
-		NumberSequenceKeypoint.new(1, 1),
-	})
-	flames.LightEmission = 1
-	flames.LightInfluence = 0
-	flames.EmissionDirection = Enum.NormalId.Front
-	flames.Rotation = NumberRange.new(0, 360)
-	flames.RotSpeed = NumberRange.new(-120, 120)
-	flames.Lifetime = NumberRange.new(0.45, 0.7)
-	flames.SpreadAngle = Vector2.new(9, 9)
-	flames.LockedToPart = true -- el dragón vuela más rápido que el chorro: que viaje con la boca
-	flames.Rate = 70
-	flames.Enabled = false
-	flames.Parent = socket
-	local sparks = flames:Clone()
-	sparks.Texture = SPARK
-	sparks.Rate = 40
-	sparks.SpreadAngle = Vector2.new(20, 20)
-	sparks.Parent = socket
-	local light = Instance.new("PointLight")
-	light.Color = rgb(255, 140, 40)
-	light.Brightness = 4
-	light.Enabled = false
-	light.Parent = socket
-	return { socket = socket, flames = flames, sparks = sparks, light = light, length = 0 }
-end
-
-local function resize(breath: Breath, length: number, size: number)
-	breath.length = length
-	local L = length * size
-	breath.flames.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.05 * L),
-		NumberSequenceKeypoint.new(0.4, 0.18 * L),
-		NumberSequenceKeypoint.new(1, 0.3 * L),
-	})
-	breath.flames.Speed = NumberRange.new(1.1 * L, 1.5 * L)
-	breath.flames.Acceleration = Vector3.new(0, 0.2 * L, 0)
-	breath.sparks.Size = NumberSequence.new(0.02 * L, 0)
-	breath.sparks.Speed = NumberRange.new(1.2 * L, 1.8 * L)
-	breath.light.Range = math.min(1.2 * L, 60)
+-- Etapa por el nombre del modelo (…E1 … E4, también …E2_v2); sin rig, la cría.
+function DragonFx.stage(rig: any): number
+	local name = if rig then rig.model.Name else ""
+	return math.clamp(tonumber(string.match(name, "E(%d)")) or 1, 1, 4)
 end
 
 function DragonFx.new(motion: Tipos.Motion, hooks: Hooks): Fx
-	local breath: Breath? = nil
+	local breath: Fuego.Fuego? = nil
 	local trails: Estelas.Estelas? = nil
+	local wing = Aleteo.new()
 	local boundTo: any = nil
-	local lastStroke = 0
+	local stage = 1
 	local firing = false
+	local skyUntil, sky = 0, 0
+	local takeoffAt = -math.huge
 
-	local function step(_dt: number)
+	local function cue(kind: string, strength: number?)
 		local state = motion.state
-		if state.rig ~= boundTo then
-			if breath then
-				breath.socket:Destroy()
-			end
-			if trails then
-				Estelas.destroy(trails)
-			end
-			boundTo = state.rig
-			breath = if state.rig then build(state.rig) else nil
-			trails = if state.rig then Estelas.build(state.rig) else nil
+		hooks.cue(kind, {
+			stage = stage,
+			voice = state.voice,
+			length = state.length,
+			strength = strength,
+		})
+	end
+
+	local function unbind()
+		if breath then
+			Fuego.destroy(breath)
 		end
 		if trails then
-			Estelas.step(trails, state, hooks.fxScale())
+			Estelas.destroy(trails)
 		end
-		local b = breath
-		if b and math.abs(b.length - state.length) > b.length * 0.08 then
-			resize(b, state.length, state.fireSize)
+		breath, trails = nil, nil
+	end
+
+	local function bind(rig: any)
+		unbind()
+		boundTo, stage, wing = rig, DragonFx.stage(rig), Aleteo.new()
+		if rig and rig.bones.Boca and rig.bones.Cabeza then
+			breath = Fuego.build(rig.bones.Boca)
 		end
-		local fire = state.fire and not state.hidden and hooks.fxScale() > 0
-		if b then
-			b.flames.Enabled, b.sparks.Enabled, b.light.Enabled = fire, fire, fire
+		trails = if rig then Estelas.build(rig) else nil
+	end
+
+	local function step(dt: number)
+		local state = motion.state
+		local rig = state.rig
+		if rig ~= boundTo then
+			bind(rig)
 		end
-		if fire and not firing then
-			hooks.play("Roar", motion.mouth(), state.voice * 0.8)
-		end
-		firing = fire
+		local now = os.clock()
 		local events = state.events
 		for _, event in events do
-			if event.kind == "roar" then
-				hooks.play("Roar", motion.mouth(), state.voice)
-				hooks.shake(state.center, 0.3 + state.length * 0.006, 1.6)
-				hooks.sparkle(motion.mouth(), rgb(255, 170, 60), 18)
-			elseif event.kind == "whoosh" or event.kind == "flap" then
-				hooks.play("Whoosh", state.center, 0.6 * state.voice)
+			if event.kind == "fireSky" then
+				skyUntil = now + FIRE_SKY
+			elseif event.kind == "takeoff" then
+				takeoffAt = now
 			end
+			cue(event.kind)
 		end
 		table.clear(events)
-		-- Un aletazo por vuelta de la fase (en la bajada).
-		local stroke = math.floor((state.phase + math.pi / 2) / (2 * math.pi))
-		if stroke ~= lastStroke and not state.hidden then
-			lastStroke = stroke
-			if state.length > 25 then
-				hooks.play("Whoosh", state.center, math.clamp(0.9 - state.length / 250, 0.35, 0.9))
+
+		-- Fuego: el del comportamiento o, tras fireSky, el del cielo.
+		local skyOn = now < skyUntil
+		if skyOn and state.fire then
+			skyUntil = math.max(skyUntil, now + 0.15) -- sigue al cielo mientras arda
+		end
+		local fire = (state.fire or skyOn) and not state.hidden
+		sky += ((if skyOn then 1 else 0) - sky) * (1 - math.exp(-dt * SKY_EASE))
+		if fire ~= firing then
+			firing = fire
+			cue(if fire then "fireStart" else "fireEnd")
+		end
+		local visible = hooks.fxScale() > 0
+		local b = breath
+		if b and rig then
+			local L = state.length * state.fireSize
+			if math.abs(b.length - L) > b.length * 0.08 then
+				Fuego.resize(b, L)
+			end
+			Fuego.step(b, rig.bones.Boca, rig.bones.Cabeza, fire and visible, sky)
+		end
+
+		if trails then
+			local boost = math.clamp(1 - (now - takeoffAt) / TAKEOFF_TRAILS, 0, 1)
+			Estelas.step(trails, state, hooks.fxScale(), boost)
+		end
+
+		-- Un aletazo por vuelta de la fase, si el ala de verdad barrió el aire.
+		if rig and not state.hidden then
+			local strength = Aleteo.step(wing, rig, state)
+			if strength and strength >= MIN_STROKE then
+				local hovering = state.feeding > 0.5 or state.velocity.Magnitude < HOVER_SPEED
+				cue(if hovering then "hover" else "flap", strength)
 			end
 		end
 	end
 
 	return {
 		step = step,
-		destroy = function()
-			if breath then
-				breath.socket:Destroy()
-			end
-			if trails then
-				Estelas.destroy(trails)
-			end
-		end,
+		destroy = unbind, -- los bucles de sonido los corta el cliente
 	}
 end
 

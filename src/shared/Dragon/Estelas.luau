@@ -7,7 +7,8 @@
 	planear despacio. Va de la mano del ala (AlaIzq3 / AlaDer3) a un punto en la
 	punta: una cinta fina entre dos huesos nuevos cerca de la punta (BordeAla<lado> y
 	PuntaAla<lado>, que siguen la animación). Color
-	aguamarina del dragón marino; con efectos reducidos no se ve.
+	aguamarina del dragón marino; con efectos reducidos no se ve. boost (0..1)
+	las enciende un rato aunque vaya lento (los aletazos del despegue).
 ]]
 
 local Tipos = require(script.Parent.Tipos)
@@ -64,10 +65,11 @@ function Estelas.build(rig: any): Estelas?
 	return if #trails > 0 then { trails = trails, tips = tips, rig = rig } else nil
 end
 
--- strength: 0..1 cuánto se ve (velocidad, picada, aletazo); 0 o sin efectos: apagadas.
-function Estelas.step(e: Estelas, state: Tipos.State, fxScale: number)
+-- strength: 0..1 cuánto se ve (velocidad, picada, despegue); 0 o sin efectos: apagadas.
+function Estelas.step(e: Estelas, state: Tipos.State, fxScale: number, boost: number?)
 	local speed = state.velocity.Magnitude
-	local strength = math.max(math.clamp((speed - FAST) / (FULL - FAST), 0, 1), state.fold)
+	local fast = math.clamp((speed - FAST) / (FULL - FAST), 0, 1)
+	local strength = math.max(fast, state.fold, boost or 0)
 	local on = strength > 0.15 and fxScale > 0 and not state.hidden
 	for _, t in e.trails do
 		t.Enabled = on

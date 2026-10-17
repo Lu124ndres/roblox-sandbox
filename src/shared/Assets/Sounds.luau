@@ -48,6 +48,32 @@ local Sounds: { [string]: string } = {
 	MinoSandHit = "rbxassetid://9118767938", -- "Sand Impacts 1" (3.0 s): pisotón y caída
 	MinoBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
 	MinoSit = "rbxassetid://9113524166", -- "Body Impact 1" (1.1 s): se sienta
+	-- Dragón (todo de ProSoundEffects, licencia de Roblox). Etapas y capas en
+	-- client/Audio/DragonVoces; el tono sigue a la voz o al peso de la etapa.
+	DragonScreech = "rbxassetid://9113981940", -- "Creature Mix Pterodactyl Dressed Screams 18" (2.3 s)
+	DragonChirp = "rbxassetid://9113981651", -- "Creature Mix Pterodactyl Dressed Screams 14" (0.7 s)
+	DragonRoar = "rbxassetid://9113987603", -- "Creature Vocal Giant Crab Monster Roars 1" (6.2 s)
+	DragonRoarGrowl = "rbxassetid://9113980319", -- "Creature Mix Giant Crab Monster Roar Growl 1" (4.1 s)
+	DragonRumble = "rbxassetid://9120025244", -- "Thunder With Lion Roar Searing Blast 16" (3.4 s)
+	DragonGrowl = "rbxassetid://9113973119", -- "Creature Growls Lion 7" (1.4 s)
+	DragonHiss = "rbxassetid://9114808824", -- "Hissing Alligator 1" (4.4 s)
+	DragonSnort = "rbxassetid://9119628762", -- "Steam Whoosh Phased 1" (2.7 s): resoplido de humo
+	DragonSnore = "rbxassetid://9112863325", -- "Rumble Breath Growl 2" (58.9 s, bucle): dormido
+	DragonYawn = "rbxassetid://9116308659", -- "Lion Roar Tired 12" (1.5 s)
+	DragonFlapSmall = "rbxassetid://9120779671", -- "Wing Flap Up Down Movement 7" (0.8 s)
+	DragonFlap = "rbxassetid://9120771864", -- "Wing Flaps 27" (0.8 s): golpe de aire
+	DragonFlapHeavy = "rbxassetid://9120773999", -- "Wing Flaps 14" (1.5 s): dragón gigante, cuero
+	DragonFlapBurst = "rbxassetid://9120777676", -- "Wing Flaps 6" (2.0 s): varios, despegue
+	DragonGust = "rbxassetid://9120720147", -- "Whoosh Giant Swish By 5" (2.5 s): ráfaga
+	DragonFold = "rbxassetid://9116257799", -- "Leather Strap 2" (4.4 s): pliega las alas
+	DragonFireStart = "rbxassetid://9114432334", -- "Fire Burst 10" (5.9 s)
+	DragonFireLick = "rbxassetid://9114463219", -- "Flame Licks 8" (1.7 s)
+	DragonFireLoop = "rbxassetid://9112825494", -- "Macho Destructo Fire 1" (36 s, bucle)
+	DragonFireWave = "rbxassetid://9114429860", -- "Fire Burst 9" (8.7 s): fuego al cielo
+	DragonLand = "rbxassetid://9118588970", -- "Rock Drops 10 Ft High Onto Rocks Dirt 1" (4.0 s)
+	DragonDebris = "rbxassetid://9114034406", -- "Debris Rain 1" (4.0 s): grava y ceniza
+	DragonBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
+	DragonRocks = "rbxassetid://9118690959", -- "Rocks Movement 1" (3.3 s): se acomoda
 	-- Evolución (EvolveFx; de ProSoundEffects, la cuenta de Pro Sound Effects en Roblox)
 	EvolveCharge = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
 	EvolveBurst = "rbxassetid://9126102254", -- "Time Warp Big Explosion Blast Boom Tonal Tail 1" (5.8 s)
