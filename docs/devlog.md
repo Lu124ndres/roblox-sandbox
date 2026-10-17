@@ -1711,3 +1711,23 @@ grande queda en poses de la guía que el juego no usa (brazos a 150°, mirar aba
 90°). Detalle en la guía de estilo, "Poses extremas".
 
 **Qué se rompió:** nada.
+
+---
+
+## 2026-10-17 (3) — Minotauro v2 E1: rig y FBX
+
+**Qué se hizo (pedido del usuario):** `tools/blender/rig_minotauro_v2_e1.py` une las piezas
+de bloques en una malla con cada pieza entera a su hueso, arma el esqueleto de 28 huesos (los
+25 del contrato y los 3 del faldón) en las articulaciones de las poses, pinta con una paleta
+de 256 px (un cuadro por color) y exporta `assets/blender/MinotauroE1_v2.fbx` a 16.5 studs.
+`minotauro_v2_e1_poses.py` separa `giros()` y `matrices()` de `posar()` para que el rig use
+la misma cuenta.
+
+**Resultado:** en las 20 poses, la malla movida por los huesos coincide con las piezas
+rígidas (error máximo 0.00001 celdas); el FBX reimportado tiene los 28 huesos, la textura y
+16.5 studs de alto. Detalle en `import_minotauro_v2.md`.
+
+**Qué se rompió:** nada; `MinotauroE1` no se tocó.
+
+**Qué sigue:** importar el FBX a `ServerStorage.MinotauroE1_v2` (a mano, con "Mantener
+huesos de influencia cero") y el código para usarlo (paso 8 del plan).

@@ -125,18 +125,30 @@ def locales(p):
     return r
 
 
-def posar(p, faldon=0.0):
-    """Rig.turn: cabeceo por la derecha del cuerpo (-x), giro por arriba (z), alabeo por
-    adelante (-y), en ese orden y heredando el giro del padre."""
-    rot, m = locales(p), {}
-    for nombre, (padre, piv) in HUESOS.items():
+def giros(p, faldon=0.0):
+    """Rig.turn en ejes del mundo: cabeceo por la derecha del cuerpo (-x), giro por arriba (z)
+    y alabeo por adelante (-y), en ese orden. Hueso -> matriz de giro (sin trasladar)."""
+    rot = locales(p)
+    r = {}
+    for nombre in HUESOS:
         a, g, b = rot.get(nombre, (0, 0, 0))
-        r = Matrix.Rotation(-a, 4, "X") @ Matrix.Rotation(g, 4, "Z") @ Matrix.Rotation(-b, 4, "Y")
-        if nombre == "FaldonFrente":
-            r = Matrix.Rotation(G(-faldon), 4, "X")
+        r[nombre] = Matrix.Rotation(-a, 4, "X") @ Matrix.Rotation(g, 4, "Z") @ Matrix.Rotation(-b, 4, "Y")
+    r["FaldonFrente"] = Matrix.Rotation(G(-faldon), 4, "X")
+    return r
+
+
+def matrices(p, faldon=0.0):
+    """Matriz del mundo de cada pieza, heredando el giro del padre."""
+    r, m = giros(p, faldon), {}
+    for nombre, (padre, piv) in HUESOS.items():
         base = m[padre] if padre else Matrix.Identity(4)
-        m[nombre] = base @ Matrix.Translation(piv) @ r @ Matrix.Translation(-piv)
-        ob[nombre].matrix_world = m[nombre]
+        m[nombre] = base @ Matrix.Translation(piv) @ r[nombre] @ Matrix.Translation(-piv)
+    return m
+
+
+def posar(p, faldon=0.0):
+    for nombre, m in matrices(p, faldon).items():
+        ob[nombre].matrix_world = m
 
 
 def arbol(o):
