@@ -1,0 +1,421 @@
+{
+  "umbral_celdas": {
+    "atraviesa": 0.3,
+    "junta": 1.0,
+    "hueco": 0.2
+  },
+  "reposo": {
+    "cruces": {
+      "BrazoDer/AntebrazoDer": 0.0,
+      "BrazoIzq/AntebrazoIzq": 0.0,
+      "Cabeza/Mandibula": 1.0,
+      "Cabeza/OrejaDer": 0.0,
+      "Cabeza/OrejaIzq": 0.0,
+      "Cadera/Cola1": 0.94,
+      "Cadera/Columna": 0.0,
+      "Cadera/FaldonDer": 0.0,
+      "Cadera/FaldonFrente": 0.0,
+      "Cadera/FaldonIzq": 0.0,
+      "Cadera/MusloDer": 1.0,
+      "Cadera/MusloIzq": 1.0,
+      "Cola2/Cola3": 0.0,
+      "Columna/Pecho": 0.94,
+      "Cuello/Cabeza": 1.0,
+      "MusloDer/PiernaDer": 0.0,
+      "Pecho/Cabeza": 0.0,
+      "Pecho/Cuello": 1.0,
+      "PiernaDer/PieDer": 0.0,
+      "PiernaIzq/PieIzq": 0.0
+    },
+    "huecos": {}
+  },
+  "poses": {
+    "brazos_arriba_150": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Cabeza",
+            "AntebrazoDer"
+          ],
+          "celdas": 0.97
+        },
+        {
+          "piezas": [
+            "Cabeza",
+            "AntebrazoIzq"
+          ],
+          "celdas": 0.97
+        },
+        {
+          "piezas": [
+            "Cabeza",
+            "BrazoDer"
+          ],
+          "celdas": 1.29
+        },
+        {
+          "piezas": [
+            "Cabeza",
+            "BrazoIzq"
+          ],
+          "celdas": 1.29
+        },
+        {
+          "piezas": [
+            "Cabeza",
+            "ManoDer"
+          ],
+          "celdas": 1.47
+        },
+        {
+          "piezas": [
+            "Cabeza",
+            "ManoIzq"
+          ],
+          "celdas": 1.47
+        },
+        {
+          "piezas": [
+            "OrejaDer",
+            "BrazoDer"
+          ],
+          "celdas": 0.88
+        },
+        {
+          "piezas": [
+            "OrejaIzq",
+            "BrazoIzq"
+          ],
+          "celdas": 0.88
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "brazos_adelante_cruzados": {
+      "faldon_levantado": 0,
+      "atraviesa": [],
+      "junta": [],
+      "hueco": []
+    },
+    "codo_140": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "BrazoDer",
+            "ManoDer"
+          ],
+          "celdas": 1.36
+        },
+        {
+          "piezas": [
+            "BrazoIzq",
+            "ManoIzq"
+          ],
+          "celdas": 1.36
+        }
+      ],
+      "junta": [
+        {
+          "piezas": [
+            "BrazoDer",
+            "AntebrazoDer"
+          ],
+          "celdas": 1.31
+        },
+        {
+          "piezas": [
+            "BrazoIzq",
+            "AntebrazoIzq"
+          ],
+          "celdas": 1.31
+        }
+      ],
+      "hueco": []
+    },
+    "rodilla_120": {
+      "faldon_levantado": 40,
+      "atraviesa": [],
+      "junta": [
+        {
+          "piezas": [
+            "MusloDer",
+            "PiernaDer"
+          ],
+          "celdas": 1.71
+        },
+        {
+          "piezas": [
+            "MusloIzq",
+            "PiernaIzq"
+          ],
+          "celdas": 1.71
+        }
+      ],
+      "hueco": []
+    },
+    "pierna_90": {
+      "faldon_levantado": 91,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Cadera",
+            "PiernaDer"
+          ],
+          "celdas": 0.92
+        },
+        {
+          "piezas": [
+            "Columna",
+            "MusloDer"
+          ],
+          "celdas": 1.0
+        }
+      ],
+      "junta": [
+        {
+          "piezas": [
+            "MusloDer",
+            "PiernaDer"
+          ],
+          "celdas": 1.94
+        }
+      ],
+      "hueco": []
+    },
+    "cuello_arriba_45": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 1.57
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "cuello_abajo_45": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Cadera",
+            "Cabeza"
+          ],
+          "celdas": 0.41
+        },
+        {
+          "piezas": [
+            "Columna",
+            "Cabeza"
+          ],
+          "celdas": 0.46
+        },
+        {
+          "piezas": [
+            "Columna",
+            "Mandibula"
+          ],
+          "celdas": 0.98
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 2.42
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Mandibula"
+          ],
+          "celdas": 0.89
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "cuello_izq_60": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Pecho",
+            "Mandibula"
+          ],
+          "celdas": 1.0
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "cuello_der_60": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Pecho",
+            "Mandibula"
+          ],
+          "celdas": 1.0
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "mandibula_max": {
+      "faldon_levantado": 0,
+      "atraviesa": [],
+      "junta": [],
+      "hueco": []
+    },
+    "cola_s_arriba": {
+      "faldon_levantado": 0,
+      "atraviesa": [],
+      "junta": [],
+      "hueco": []
+    },
+    "torso_atras": {
+      "faldon_levantado": 0,
+      "atraviesa": [],
+      "junta": [],
+      "hueco": []
+    },
+    "torso_adelante": {
+      "faldon_levantado": 0,
+      "atraviesa": [],
+      "junta": [],
+      "hueco": []
+    },
+    "truco_musculo": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 0.66
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Mandibula"
+          ],
+          "celdas": 0.5
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "truco_rugido": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 1.12
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "OrejaDer"
+          ],
+          "celdas": 0.39
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "OrejaIzq"
+          ],
+          "celdas": 0.39
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "truco_rascarse": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "BrazoDer",
+            "ManoDer"
+          ],
+          "celdas": 0.82
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 0.77
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "OrejaIzq"
+          ],
+          "celdas": 0.48
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "truco_salto_agachado": {
+      "faldon_levantado": 0,
+      "atraviesa": [],
+      "junta": [],
+      "hueco": []
+    },
+    "truco_salto_aire": {
+      "faldon_levantado": 0,
+      "atraviesa": [],
+      "junta": [],
+      "hueco": []
+    },
+    "truco_baile": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 0.46
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "OrejaDer"
+          ],
+          "celdas": 0.46
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    },
+    "comer": {
+      "faldon_levantado": 0,
+      "atraviesa": [
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 0.41
+        }
+      ],
+      "junta": [],
+      "hueco": []
+    }
+  }
+}
