@@ -3,7 +3,7 @@ Minotauro v2, etapa 4 (forma final): los datos de la etapa para minotauro_v2_blo
 El mismo personaje que el becerro (minotauro_v2_e1_geometria.py), crecido: enorme y lento,
 ruge y pisa. Pelaje casi negro con grietas de lava, ojos de lava, cuernos enormes, hombreras
 de cuero con borde de oro, colmillos y más oro que las etapas anteriores.
-Las grietas son bloques de lava que asoman un módulo sobre el pelaje (brazos, piernas, cara)
+Las grietas son bloques de lava que asoman un módulo sobre el pelaje (brazos, piernas, lomo)
 o que quedan un módulo metidos entre placas (pecho y panza): nunca en el plano de otra cara.
 Todo en celdas del módulo de la etapa (CELDA): 31 de alto, como el becerro.
 Ejes: x = izquierda del personaje, -y = frente, z arriba; parado en z = 0, centrado en x.
@@ -28,6 +28,7 @@ COLORES = {n: _lineal(h) for n, h in {
     "pelo": "#381F19", "pelo_osc": "#1F110D",  # mechón, nuca, codos, nudillos
     "panza": "#6F4535",  # panza, pecho y hocico (un solo color en la E4)
     "lava": "#FF9938",  # ojos y grietas: en Roblox brilla con Neon o luz
+    "lava_clara": "#FFE2A0",  # brillo de los ojos (el blanco del becerro)
     "rosa": "#EA999B", "nariz": "#893038", "cuero": "#613C27", "cuero_rojo": "#7C2C27",
     "oro": "#FFCE61", "marfil": "#EFE2C5", "pezuna": "#382F2F",
 }.items()}
@@ -107,16 +108,19 @@ def cabeza():
     bloque("Cabeza", c, "pelo", (-6, 6), (-6, 2), (28, 29), recorte={"x-": 1, "x+": 1})
     par("Cabeza", c, "pelo_osc", (6, 7), (-5, -2), (23, 26))  # mejillas
     bloque("Cabeza", c, "pelo_osc", (-4, 4), (2, 4), (23, 28))  # nuca
-    # Ojos de lava bajo el ceño (cuñas que bajan hacia el centro); de cada ojo cae una grieta.
-    par("Cabeza", c, "lava", (3, 5), (-7, -6), (25, 27))
-    par("Cabeza", c, "pelo_osc", (3, 6), (-7, -6), (27, 28))
-    par("Cabeza", c, "pelo_osc", (1, 3), (-7, -6), (27, 28), eje="x", fin="-", recorte={"z+": 1})
-    par("Cabeza", c, "lava", (4, 5), (-7, -6), (24, 25))
-    par("Cabeza", c, "lava", (5, 6), (-7, -6), (23, 24))
+    # Ojos de lava de 3 x 2 (un cuarto de la cara, como los del becerro) que asoman una celda.
+    # Con el brillo claro arriba y afuera, donde el becerro tiene el blanco. Van por encima
+    # del hocico (así no los tapa de tres cuartos), con una celda de pelaje entre ellos y el
+    # anillo del cuerno, y el ceño va al ras, sin alero que les haga sombra; entre los ceños,
+    # la base del mechón.
+    par("Cabeza", c, "lava", (2, 4), (-7, -6), (26, 28))
+    par("Cabeza", c, "lava", (4, 5), (-7, -6), (26, 27))
+    par("Cabeza", c, "lava_clara", (4, 5), (-7, -6), (27, 28))
+    par("Cabeza", c, "pelo_osc", (3, 6), (-7, -6), (28, 29))
     # Mechón, como el del becerro: base sobre la frente, cuña encima y la punta que cae.
     bloque("Cabeza", c, "pelo_osc", (-3, 3), (-7, -6), (28, 29))
     bloque("Cabeza", c, "pelo_osc", (-3, 3), (-7, -2), (29, 31), recorte={"y+": 2})
-    bloque("Cabeza", c, "pelo_osc", (-2, 2), (-8, -7), (26, 30))
+    bloque("Cabeza", c, "pelo_osc", (-1, 1), (-8, -7), (27, 30))  # angosta: no tapa los ojos
     # Hocico: base, cuña hacia los ojos, narinas y el aro de oro.
     bloque("Cabeza", c, "panza", (-3, 3), (-9, -6), (23, 25))
     bloque("Cabeza", c, "panza", (-3, 3), (-9, -6), (25, 26), recorte={"y-": 1})
