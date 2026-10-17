@@ -16,6 +16,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
@@ -27,6 +28,7 @@ local Fx = require(script.Parent.Parent.Effects.Fx)
 local GroundFx = require(script.Parent.Parent.Effects.GroundFx)
 local FeedThrow = require(script.Parent.FeedThrow)
 local GiantBody = require(script.Parent.GiantBody)
+local FedInfo = require(script.Parent.FedInfo)
 local GiantCycleFx = require(script.Parent.GiantCycleFx)
 local GiantEvolution = require(script.Parent.GiantEvolution)
 
@@ -74,11 +76,24 @@ local function nearness(): number
 	return if character then WorldZones.craterBlend(character:GetPivot().Position) else 0
 end
 
-local function onFed(body: GiantBody.Body, character: Model)
-	body.lookAt(character:GetPivot().Position, EFFECTS.GiantAttentionSeconds)
+local streak, lastFed = 0, -math.huge
+
+local function onFed(body: GiantBody.Body, character: Model, fishId: string)
+	local from = character:GetPivot().Position
+	body.lookAt(from, EFFECTS.GiantAttentionSeconds)
 	local scale = body.height() / GiantStages.heightFor(1)
+	streak = if os.clock() - lastFed > FedInfo.STREAK_GAP then 1 else streak + 1
+	lastFed = os.clock()
 	if body.swims then
-		body.bite()
+		local _, rarity = FishCatalog.rarity(fishId)
+		local isLocal = character == Players.LocalPlayer.Character
+		body.fed({
+			from = from,
+			fishId = fishId,
+			rarity = rarity,
+			isLocal = isLocal,
+			streak = streak,
+		})
 	else
 		hop(body.lift, EFFECTS.GiantBounceHeight * scale, 0.18)
 	end
@@ -162,9 +177,9 @@ function GiantView.start()
 
 	FeedThrow.listen(function()
 		return if body then body.mouth() else nil
-	end, function(character: Model)
+	end, function(character: Model, fishId: string)
 		if body then
-			onFed(body, character)
+			onFed(body, character, fishId)
 		end
 	end, function()
 		return if body then body.height() else 20 -- tamaño de la onda al morder

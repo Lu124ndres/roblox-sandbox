@@ -20,8 +20,11 @@ local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 
+local FedInfo = require(script.Parent.FedInfo)
+
 local SHAKE_REACH = 220 -- studs: más lejos no tiembla
 
+export type FedInfo = FedInfo.FedInfo
 export type Swim = {
 	step: (
 		dt: number,
@@ -35,6 +38,7 @@ export type Swim = {
 	mouth: () -> Vector3,
 	water: () -> Vector3,
 	bite: () -> (),
+	fed: (info: FedInfo.FedInfo) -> (), -- le llegó un pez: su animación especial al comer
 	destroy: () -> (),
 }
 
@@ -86,6 +90,9 @@ function OrcaSwim.attach(template: Model?, center: Vector3): Swim?
 		mouth = motion.mouth,
 		water = motion.water,
 		bite = motion.bite,
+		fed = function(_) -- por ahora solo muerde (animación especial: pendiente)
+			motion.bite()
+		end,
 		destroy = function()
 			motion.destroy()
 			fx.destroy()

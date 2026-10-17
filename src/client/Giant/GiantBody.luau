@@ -37,7 +37,7 @@ export type Body = {
 	top: () -> Vector3, -- punto sobre la cabeza
 	mouth: () -> Vector3, -- adonde vuelan los peces
 	water: () -> Vector3, -- el agua justo bajo el gigante
-	bite: () -> (), -- muerde (la orca cierra la boca un instante)
+	fed: (info: OrcaSwim.FedInfo) -> (), -- le llegó un pez: su animación especial al comer
 	swims: boolean, -- se anima solo (orca, dragón, minotauro): muerde en vez de saltar
 	flies: boolean, -- vuela (dragón): sin salpicaduras al comer
 	destroy: () -> (),
@@ -182,7 +182,7 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 			else function(): Vector3
 				return Vector3.new(base.X, WorldLayout.waterLevel, base.Z)
 			end,
-		bite = if swim then swim.bite else function() end,
+		fed = if swim then swim.fed else function(_: OrcaSwim.FedInfo) end,
 		swims = swim ~= nil,
 		flies = first ~= nil and first:FindFirstChild("AlaIzq1", true) ~= nil,
 		destroy = function()

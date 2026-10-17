@@ -82,7 +82,7 @@ end
 -- muchos peces seguidos se ve una mordida tras otra, no una ráfaga de efectos.
 function FeedThrow.listen(
 	getMouth: () -> Vector3?,
-	onArrive: (character: Model) -> (),
+	onArrive: (character: Model, fishId: string) -> (),
 	getSize: () -> number
 )
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
@@ -103,7 +103,7 @@ function FeedThrow.listen(
 		FeedThrow.throw(character:GetPivot().Position, target, fishId, function()
 			if os.clock() - lastBite >= BITE_SECONDS then
 				lastBite = os.clock()
-				onArrive(character)
+				onArrive(character, fishId)
 			end
 		end, isLocal, getSize())
 	end

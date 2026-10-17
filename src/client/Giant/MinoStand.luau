@@ -160,6 +160,9 @@ function MinoStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 		mouth = motion.mouth,
 		water = motion.water,
 		bite = motion.bite,
+		fed = function(_) -- por ahora solo muerde (animación especial: pendiente)
+			motion.bite()
+		end,
 		destroy = motion.destroy,
 	}
 end
