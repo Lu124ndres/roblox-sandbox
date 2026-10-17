@@ -14,6 +14,7 @@ export type GiantDef = {
 	food: number, -- comida MÍNIMA de la barra (servidor vacío o de novatos)
 	targetMinutes: number, -- minutos que debería tardar el servidor en llenarlo (GiantFood)
 	modelBase: string, -- nombre base de sus modelos: <base>E1..E4 en ServerStorage (uno por etapa)
+	modelSuffix: string?, -- si existe <base>E<n><sufijo> (otra versión del modelo), se usa ese
 	released: boolean, -- false = llega en una actualización (evento), no en la v1
 	rouletteWeight: number, -- peso en la ruleta (probabilidad = peso / suma de los que pueden salir)
 	inRoulette: boolean, -- puede salir en la ruleta al terminar el descanso (requiere su modelo)

@@ -10,6 +10,10 @@
 	a escala 1 guardado en un atributo. Pueden tener varias MeshParts (cuerpo,
 	cuernos, armadura...).
 
+	Si el gigante tiene modelSuffix (Config/Giants) y existe <modelBase>E<n><sufijo>
+	(por ejemplo MinotauroE1_v2), se publica ese con el nombre de siempre
+	(MinotauroE1): el cliente y la animación no cambian.
+
 	Si falta el modelo de una etapa, el cliente usa el de la etapa anterior;
 	si no hay ninguno, usa la orca teñida (o un marcador si tampoco hay orca).
 ]]
@@ -24,15 +28,16 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 
 local GiantTemplates = {}
 
-local function prepare(name: string): Model?
-	local template = ServerStorage:FindFirstChild(name)
+-- name: con qué nombre se publica; source: qué modelo de ServerStorage se copia.
+local function prepare(name: string, source: string): Model?
+	local template = ServerStorage:FindFirstChild(source)
 	if not template or not template:IsA("Model") then
 		return nil
 	end
 	local model = template:Clone()
 	model:ScaleTo(1)
 	if not model:FindFirstChildWhichIsA("BasePart", true) then
-		warn(`GiantTemplates: {name} no tiene piezas`)
+		warn(`GiantTemplates: {source} no tiene piezas`)
 		model:Destroy()
 		return nil
 	end
@@ -85,7 +90,12 @@ function GiantTemplates.publish()
 	for _, def in Config.Giants.chain do
 		local found = 0
 		for stage = 1, GiantStages.count do
-			local model = prepare(`{def.modelBase}E{stage}`)
+			local name = `{def.modelBase}E{stage}`
+			local variant = if def.modelSuffix then name .. def.modelSuffix else nil
+			local source = if variant and ServerStorage:FindFirstChild(variant)
+				then variant
+				else name
+			local model = prepare(name, source)
 			if model then
 				model.Parent = folder
 				found += 1

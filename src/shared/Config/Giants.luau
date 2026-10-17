@@ -63,6 +63,9 @@ local Giants: Types.GiantsConfig = {
 			food = 600,
 			targetMinutes = 10,
 			modelBase = "Minotauro",
+			-- Modelo de bloques v2 (docs/plan_minotauro_v2.md): hoy solo MinotauroE1_v2; las
+			-- etapas sin v2 siguen con el modelo actual. Sin esta línea vuelve todo al actual.
+			modelSuffix = "_v2",
 			rouletteWeight = 30,
 			released = true,
 			inRoulette = true, -- modelos propios: ServerStorage.MinotauroE1..E4

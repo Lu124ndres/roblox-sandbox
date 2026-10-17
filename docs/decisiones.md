@@ -593,3 +593,12 @@ resortes (`Minotauro/Resortes`: orejas, cola, mandíbula y faldón persiguen su 
 los empuja la inercia del cuerpo) y los pies se apoyan solos (`Minotauro/Cuerpo.plant`). Todo
 vive en git y sirve igual para el modelo actual y el v2 (los huesos del faldón son opcionales).
 Peso por etapa: `pace` (más lento) y `bounce` (menos rebote) en `Minotauro/Etapas`.
+
+## 2026-10-17 — Los modelos v2 entran por un sufijo, con el nombre de siempre
+
+**Contexto:** el Minotauro v2 solo tiene E1 y tiene que convivir con el actual (plan del v2:
+interruptor, no reemplazo). **Decisión:** campo opcional `modelSuffix` en el gigante
+(`Config/Giants.luau`). Si `ServerStorage` tiene `<modelBase>E<n><sufijo>`, `GiantTemplates`
+lo publica con el nombre de siempre (`MinotauroE1`), así el cliente, `Etapas.forModel` y la
+animación no cambian; si no, usa el actual. Volver atrás es borrar una línea. Mientras solo
+exista E1, al crecer pasa del becerro de bloques al joven actual.

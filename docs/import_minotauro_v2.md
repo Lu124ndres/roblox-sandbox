@@ -10,7 +10,7 @@ exportar, con escala y rotación aplicadas en todos los objetos.
 
 | Etapa | Alto del modelo (BU) | Alto esperado (studs) | Alto con 5.32 (studs) | Estado |
 |---|---|---|---|---|
-| E1 | 3.1 (medido por el script) | 16.5 | 16.5 (FBX) | en `ServerStorage.MinotauroE1_v2`; el juego todavía no lo usa |
+| E1 | 3.1 (medido por el script) | 16.5 | 16.5 (FBX) | en `ServerStorage.MinotauroE1_v2`; **el juego lo usa** (`modelSuffix`) |
 | E2 | — | 44 | — | sin modelar |
 | E3 | — | 82.5 | — | sin modelar |
 | E4 | — | 165 | — | sin modelar |
@@ -47,6 +47,11 @@ tamaño real y las cuatro etapas sean comparables.
     (arriba +Y), mirando a −Z, con el pivote en `Raiz` (la base); `BrazoIzq` en −X y `Boca`
     adelante.
   - MeshId `rbxassetid://122555252081745`, TextureID `rbxassetid://99845921194303` (la paleta;
-    sin SurfaceAppearance). Todavía no están en `src/shared/Assets` (paso 8 del plan).
+    sin SurfaceAppearance), en `Assets.Meshes.MinotauroE1_v2` y `Assets.Textures.MinotauroE1_v2`.
+- En el juego: `modelSuffix = "_v2"` en el Minotauro de `Config/Giants.luau`. El servidor
+  (`GiantTemplates`) publica `MinotauroE1_v2` con el nombre `MinotauroE1`; las etapas sin v2
+  (E2..E4) siguen con el modelo actual. Quitando esa línea vuelve todo al modelo actual.
+  Probado en Play (2026-10-17): 28 huesos publicados, alto base 16.5, el faldón se levanta en
+  el pisotón y la consola sin errores.
   - Mismas propiedades de la pieza que `MinotauroE1` (sin anclar y con colisión: el código lo
     ancla y se la quita al copiarlo); no tiene `AnimationController` y el código no lo usa.
