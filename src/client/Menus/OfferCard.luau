@@ -2,9 +2,10 @@
 --[[
 	OfferCard
 
-	Tarjeta de la TIENDA como en los simuladores: fondo de color con rayos,
-	ícono grande arriba, nombre, descripción, botón verde con el precio en
-	Robux y, si se puede regalar, el botón rosa del regalo. Se repinta con
+	Tarjeta de la TIENDA como en los simuladores, de piedra (ShopStone): pizarra
+	oscura con borde biselado, el ícono grande sobre un chip de piedra de su
+	color con rayos, nombre dorado, descripción, botón de piedra verde con el
+	precio en Robux y, si se puede regalar, el botón rosa del regalo. Se repinta con
 	spec() (lo que toca vender ahora) y compra o regala lo que diga spec()
 	en ese momento.
 	Los botones tienen alto fijo (BUTTON_HEIGHT) para que se puedan tocar en
@@ -12,15 +13,17 @@
 ]]
 
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local RobuxOffers = require(script.Parent.RobuxOffers)
+local ShopStone = require(script.Parent.ShopStone)
 
 type Offer = RobuxOffers.Offer
 
 local PALETTE = Style.PALETTE
 local BUTTON_HEIGHT = 56
-local MARGIN = 10
+local MARGIN = 14 -- deja ver el borde biselado de la piedra
 local DESCRIPTION_MIN_TEXT = 20
 local DESCRIPTION_MAX_TEXT = 22
 
@@ -43,23 +46,23 @@ function OfferCard.new(
 	local card = Instance.new("Frame")
 	card.Name = "Tarjeta"
 	card.LayoutOrder = order
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 16)
-	corner.Parent = card
-	Style.border(card, 4)
-	ShopParts.sunburst(card, color)
+	ShopStone.card(card)
 	card.Parent = parent
 
-	-- De arriba abajo (tarjeta de 260): ícono 8..92, nombre 92..122,
-	-- descripción 122..190 (hasta 3 líneas) y botones 194..250.
-	local view = Icons.view(card, icon)
+	-- De arriba abajo (tarjeta de 268): chip 14..92 con el ícono, nombre 94..122,
+	-- descripción 122..194 (hasta 3 líneas) y botones 198..254.
+	local chip = ShopStone.chip(card, color)
+	chip.Position = UDim2.fromOffset(MARGIN, MARGIN)
+	chip.Size = UDim2.new(1, -2 * MARGIN, 0, 92 - MARGIN)
+	local view = Icons.view(chip, icon)
 	view.AnchorPoint = Vector2.new(0.5, 0)
-	view.Position = UDim2.new(0.5, 0, 0, 8)
-	view.Size = UDim2.new(0.62, 0, 0, 84)
+	view.Position = UDim2.new(0.5, 0, 0, -6) -- asoma un poco por arriba del chip
+	view.Size = UDim2.new(0.7, 0, 1, 8)
 
 	local title = Style.text(card, "Nombre", 30, nil, 3)
-	title.Position = UDim2.fromOffset(8, 92)
-	title.Size = UDim2.new(1, -16, 0, 30)
+	title.Position = UDim2.fromOffset(8, 94)
+	title.Size = UDim2.new(1, -16, 0, 28)
+	Kit.gold(title)
 
 	local description = Style.text(card, "Detalle", DESCRIPTION_MAX_TEXT, nil, 1.6)
 	description.TextWrapped = true

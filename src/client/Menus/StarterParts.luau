@@ -2,23 +2,23 @@
 --[[
 	StarterParts
 
-	Piezas de la ventana del pack de inicio (StarterOffer): la cabecera con
-	el regalo, el título y el sello de descuento que se mece, y las tarjetas
-	de lo que trae (con el ícono de MEJORAS si es equipo).
+	Piezas de la ventana del pack de inicio (StarterOffer), de piedra
+	(ShopStone): la cabecera con el regalo sobre un chip rosa, el título
+	dorado y la placa roja de descuento que se mece, y las tarjetas de
+	pizarra de lo que trae (chip de su color con el ícono de MEJORAS si es
+	equipo, nombre dorado).
 ]]
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local GearIcons = require(script.Parent.Parent.Interface.GearIcons)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
+local ShopStone = require(script.Parent.ShopStone)
 
 local CARDS = Style.PALETTE.Cards
-local GOLD = UIConfig.Colors.Coins
 local PULSE = TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 
 export type Item = {
@@ -33,14 +33,16 @@ export type Item = {
 local StarterParts = {}
 
 function StarterParts.header(content: Frame, discount: number)
-	local art = CardParts.card(content, "Regalo", CARDS.Pink, 50)
+	local art = ShopStone.chip(content, CARDS.Pink)
+	art.Name = "Regalo"
 	art.Position = UDim2.fromOffset(4, 0)
 	art.Size = UDim2.fromOffset(96, 96)
 	local gift = Icons.view(art, "giftPink")
-	gift.Position = UDim2.fromOffset(6, 4)
-	gift.Size = UDim2.fromOffset(84, 84)
-	local title = Style.text(content, "Titulo", 44, GOLD, 3.5)
+	gift.Position = UDim2.fromOffset(2, -4) -- asoma un poco por arriba
+	gift.Size = UDim2.fromOffset(92, 92)
+	local title = Style.text(content, "Titulo", 44, nil, 3.5)
 	title.Text = "¡PACK DE INICIO!"
+	Kit.gold(title)
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Position = UDim2.fromOffset(112, 4)
 	title.Size = UDim2.new(0.62, -112, 0, 52)
@@ -55,39 +57,43 @@ function StarterParts.header(content: Frame, discount: number)
 	tag.Position = UDim2.new(1, -110, 0, 30)
 	tag.Size = UDim2.fromOffset(170, 34)
 	if discount > 0 then
-		local seal = CardParts.card(content, "Descuento", CARDS.Red, 48)
+		local seal = ShopStone.seal(content, `-{discount}%`)
 		seal.AnchorPoint = Vector2.new(1, 0)
-		seal.Position = UDim2.new(1, -4, 0, -4)
-		seal.Size = UDim2.fromOffset(96, 96)
+		seal.Position = UDim2.new(1, -4, 0, 4)
+		seal.Size = UDim2.fromOffset(100, 80)
 		seal.Rotation = 12
-		local off = Style.text(seal, "Texto", 34, nil, 3)
-		off.Text = `-{discount}%`
-		off.Position = UDim2.fromScale(0.08, 0.25)
-		off.Size = UDim2.fromScale(0.84, 0.5)
 		TweenService:Create(seal, PULSE, { Rotation = -6 }):Play()
 	end
 end
 
 function StarterParts.card(content: Frame, index: number, item: Item)
-	local frame = CardParts.card(content, `Item{index}`, item.color, 14)
+	local frame = Instance.new("Frame")
+	frame.Name = `Item{index}`
 	frame.Position = UDim2.new((index - 1) * 0.2 + 0.005, 0, 0, 110)
 	frame.Size = UDim2.new(0.19, 0, 0, 190)
+	ShopStone.card(frame)
+	frame.Parent = content
+	local chip = ShopStone.chip(frame, item.color)
+	chip.Position = UDim2.fromOffset(10, 10)
+	chip.Size = UDim2.new(1, -20, 0.5, -6)
 	local icon: GuiObject = if item.gear and item.level
-		then GearIcons.view(frame, item.gear, item.level)
-		else Icons.view(frame, item.icon or "coin")
-	icon.AnchorPoint = Vector2.new(0.5, 0)
-	icon.Position = UDim2.fromScale(0.5, 0.04)
-	icon.Size = UDim2.fromScale(0.9, 0.52)
+		then GearIcons.view(chip, item.gear, item.level)
+		else Icons.view(chip, item.icon or "coin")
+	icon.AnchorPoint = Vector2.new(0.5, 0.5)
+	icon.Position = UDim2.fromScale(0.5, 0.46)
+	icon.Size = UDim2.fromScale(1, 1.08)
 	local square = Instance.new("UIAspectRatioConstraint")
+	square.DominantAxis = Enum.DominantAxis.Height -- el chip es más ancho que alto
 	square.Parent = icon
-	local title = Style.text(frame, "Titulo", 24, if index == 1 then GOLD else nil, 2.5)
+	local title = Style.text(frame, "Titulo", 24, nil, 2.5)
 	title.Text = item.title
-	title.Position = UDim2.fromScale(0.04, 0.58)
-	title.Size = UDim2.fromScale(0.92, 0.2)
+	title.Position = UDim2.fromScale(0.06, 0.55)
+	title.Size = UDim2.fromScale(0.88, 0.2)
+	Kit.gold(title)
 	local detail = Style.text(frame, "Detalle", 18, nil, 2)
 	detail.Text = item.detail
-	detail.Position = UDim2.fromScale(0.04, 0.78)
-	detail.Size = UDim2.fromScale(0.92, 0.17)
+	detail.Position = UDim2.fromScale(0.06, 0.75)
+	detail.Size = UDim2.fromScale(0.88, 0.16)
 end
 
 return StarterParts

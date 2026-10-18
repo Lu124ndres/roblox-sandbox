@@ -4,28 +4,31 @@
 
 	PERSONAJES de la TIENDA (como los simuladores): una tarjeta ancha por cada
 	traje de pase, dos por fila (una si la ventana es angosta):
-		fondo de color con rayos que giran y marco negro
+		pizarra de piedra con borde biselado (ShopStone)
 		el personaje en 3D a la izquierda, saliendo un poco por arriba (copia de
-		su vitrina del mapa, Workspace.Vitrinas)
-		nombre grande y sus ventajas en dos líneas (salen del pase en Config)
+		su vitrina del mapa, Workspace.Vitrinas), delante de un chip de piedra
+		de su color con rayos que giran
+		nombre grande dorado y sus ventajas en dos líneas (salen del pase en Config)
 		etiqueta inclinada arriba a la derecha ("x2 Kills")
-		botón verde: Robux y precio; si ya lo tiene, Equipar o Desequipar
-		(remote ElegirTraje) y el regalo rosa para comprárselo a otro
+		botón con marco de lava: Robux y precio en dorado; si ya lo tiene,
+		Equipar o Desequipar (remote ElegirTraje) y el regalo rosa para
+		comprárselo a otro
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Assets = require(ReplicatedStorage.Shared.Assets)
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local OfferCard = require(script.Parent.OfferCard)
 local OutfitView = require(script.Parent.OutfitView)
 local RobuxOffers = require(script.Parent.RobuxOffers)
+local ShopStone = require(script.Parent.ShopStone)
 
 local PASSES = Config.Monetization.passes
 local CARDS = Style.PALETTE.Cards
@@ -68,16 +71,17 @@ local function card(
 	local frame = Instance.new("Frame")
 	frame.Name = passKey
 	frame.LayoutOrder = order
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 18)
-	corner.Parent = frame
-	Style.border(frame, 4.5)
-	ShopParts.sunburst(frame, COLORS[passKey] or CARDS.Purple, 1.6)
+	ShopStone.card(frame)
 	frame.ClipsDescendants = false
 	frame.Parent = parent
+	local chip = ShopStone.chip(frame, COLORS[passKey] or CARDS.Purple)
+	chip.Position = UDim2.fromOffset(MARGIN, MARGIN)
+	chip.Size = UDim2.new(0.34, -MARGIN, 1, -2 * MARGIN)
 	OutfitView.portrait(frame, passKey)
 
-	text(frame, "Nombre", 56, 10, 58).Text = pass.name
+	local name = text(frame, "Nombre", 56, 10, 58)
+	name.Text = pass.name
+	Kit.gold(name)
 	for index, line in OutfitView.perks(pass) do
 		text(frame, `Ventaja{index}`, 34, 70 + (index - 1) * 38, 36).Text = line
 	end
@@ -90,22 +94,18 @@ local function card(
 		holder.Rotation = 6
 	end
 
-	local buy = Style.button(frame, "Comprar", Style.PALETTE.Buy, "")
+	local buy = Style.lavaButton(frame, "Comprar", "")
 	buy.AnchorPoint = Vector2.new(0, 1)
 	buy.Position = UDim2.new(0.2, 0, 1, -MARGIN)
 	buy.Size = UDim2.new(0.8, -3 * MARGIN - BUTTON_HEIGHT, 0, BUTTON_HEIGHT)
 	buy.ZIndex = 3
 	local label = buy:FindFirstChild("Texto") :: TextLabel
 	label.ZIndex = 4
-	local robux = Instance.new("ImageLabel")
-	robux.BackgroundTransparency = 1
-	robux.Image = Assets.UI.RobuxIcon
-	robux.ScaleType = Enum.ScaleType.Fit
+	local robux = ShopStone.robuxIcon(buy)
 	robux.AnchorPoint = Vector2.new(0, 0.5)
-	robux.Position = UDim2.new(0.22, 0, 0.5, 0)
+	robux.Position = UDim2.fromScale(0.22, 0.5)
 	robux.Size = UDim2.fromScale(0.16, 0.7)
 	robux.ZIndex = 4
-	robux.Parent = buy
 	local gift = ShopParts.gift(frame)
 	gift.AnchorPoint = Vector2.new(1, 1)
 	gift.Position = UDim2.new(1, -MARGIN, 1, -MARGIN)
@@ -131,11 +131,11 @@ local function card(
 			local costume = character and character:FindFirstChild(Trajes.FOLDER)
 			local wearing = costume ~= nil and costume:GetAttribute("Outfit") == pass.outfit
 			label.Text = if wearing then "Desequipar" else "Equipar"
-			label.Position, label.Size = UDim2.fromOffset(5, 4), UDim2.new(1, -10, 1, -8)
+			label.Position, label.Size = UDim2.fromOffset(9, 7), UDim2.new(1, -18, 1, -16)
 		else
 			local current = spec()
 			label.Text = tostring(actions.price(current.key, true, current.robux))
-			label.Position, label.Size = UDim2.new(0.4, 0, 0, 4), UDim2.new(0.5, 0, 1, -8)
+			label.Position, label.Size = UDim2.new(0.4, 0, 0, 7), UDim2.new(0.5, 0, 1, -16)
 		end
 		gift.Visible = spec().gift ~= nil
 	end

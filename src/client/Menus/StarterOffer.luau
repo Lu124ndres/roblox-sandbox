@@ -7,21 +7,23 @@
 	Arriba el regalo sobre rayos, el título y la etiqueta de descuento; en el
 	medio cinco tarjetas con lo que trae (monedas, caña, canasta, botas con
 	sus íconos de MEJORAS y x2 poder); abajo lo que costaría por separado
-	(precios en Robux de MEJORAS) tachado y el botón que late. Una vez por
-	partida; también está siempre arriba en la TIENDA hasta comprarlo.
+	(precios en Robux de MEJORAS) tachado y el botón de lava que late, con
+	una gema a cada lado. Una vez por partida; también está siempre en la
+	TIENDA hasta comprarlo. Las piezas de piedra salen de StarterParts.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
-local Assets = require(ReplicatedStorage.Shared.Assets)
 local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Purchases = require(script.Parent.Purchases)
+local ShopStone = require(script.Parent.ShopStone)
 local StarterParts = require(script.Parent.StarterParts)
 local Window = require(script.Parent.Window)
 
@@ -91,32 +93,31 @@ function StarterOffer.start(screen: ScreenGui)
 		StarterParts.card(content, index, item)
 	end
 
-	local value = Style.text(content, "Valor", 24, Color3.fromRGB(255, 200, 200), 2)
+	local value = Style.text(content, "Valor", 24, Color3.fromRGB(255, 214, 200), 2)
 	value.RichText = true
 	value.Text = `Solo el equipo, por separado: <s>{separate} R$</s>   ¡Hoy {PACK.robux} R$!`
 	value.Position = UDim2.fromOffset(0, 310)
 	value.Size = UDim2.new(1, 0, 0, 28)
 	value.Visible = separate > PACK.robux
 
-	local buy = Style.button(content, "Comprar", Style.PALETTE.Buy, "")
+	local buy = Style.lavaButton(content, "Comprar", "¡LO QUIERO!")
 	buy.AnchorPoint = Vector2.new(0.5, 1)
-	buy.Position = UDim2.new(0.5, 0, 1, -4)
-	buy.Size = UDim2.new(0.56, 0, 0, 74)
+	buy.Position = UDim2.new(0.5, 0, 1, -8)
+	buy.Size = UDim2.new(0.56, 0, 0, 78)
 	local label = buy:FindFirstChild("Texto") :: TextLabel
-	label.Text = "¡LO QUIERO!"
-	label.Size = UDim2.new(0.58, 0, 1, -10)
-	local robux = Instance.new("ImageLabel")
-	robux.BackgroundTransparency = 1
-	robux.Image = Assets.UI.RobuxIcon
-	robux.ScaleType = Enum.ScaleType.Fit
-	robux.Position = UDim2.new(0.6, 0, 0.18, 0)
-	robux.Size = UDim2.new(0.12, 0, 0.64, 0)
-	robux.Parent = buy
+	label.Position = UDim2.new(0.04, 0, 0, 8)
+	label.Size = UDim2.new(0.54, 0, 1, -16)
+	local robux = ShopStone.robuxIcon(buy)
+	robux.AnchorPoint = Vector2.new(0, 0.5)
+	robux.Position = UDim2.fromScale(0.6, 0.5)
+	robux.Size = UDim2.fromScale(0.12, 0.58)
 	local price = Style.text(buy, "Precio", 40, nil, 3)
 	price.Text = tostring(PACK.robux)
 	price.TextXAlignment = Enum.TextXAlignment.Left
-	price.Position = UDim2.new(0.74, 0, 0.12, 0)
-	price.Size = UDim2.new(0.24, 0, 0.76, 0)
+	price.Position = UDim2.fromScale(0.73, 0.14)
+	price.Size = UDim2.fromScale(0.23, 0.72)
+	Kit.gold(price)
+	Kit.gems(buy, 46)
 	local beat = Instance.new("UIScale")
 	beat.Parent = buy
 	TweenService:Create(beat, PULSE, { Scale = 1.06 }):Play()
