@@ -56,14 +56,16 @@ local Config: Types.Config = {
 			walkSpeed = 56, -- más que las mejores botas (52)
 		},
 		fishing = {
-			biteDelayMinSeconds = 2,
-			biteDelayMaxSeconds = 5,
-			castSeconds = 0.9,
+			-- Rápido desde el primer pez (pedido del usuario: la primera impresión tiene
+			-- que ser pescar y pescar). El poder lo acorta todavía más (FishingPower).
+			biteDelayMinSeconds = 0.8,
+			biteDelayMaxSeconds = 1.8,
+			castSeconds = 0.6,
 			castDistanceStuds = 12,
-			resultHoldSeconds = 1.6,
+			resultHoldSeconds = 0.9,
 			carryCapacity = 20,
 			maxDriftStuds = 10,
-			castCooldownSeconds = 0.6,
+			castCooldownSeconds = 0.3,
 		},
 		feeding = {
 			promptDistanceStuds = 10,

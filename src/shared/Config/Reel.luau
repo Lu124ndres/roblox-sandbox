@@ -9,8 +9,8 @@
 
 	Tiempo para atraparlo tocando a `tapsPerSecond` toques por segundo:
 		(1 - startProgress) / (gain * fuerza * toques - drain)
-	A 7 toques/s con la caña 1: Común ~0.8 s, Poco común ~1.2 s, Raro ~1.8 s,
-	Épico ~2.6 s, Legendario ~3.8 s, Mítico ~5.5 s. Cada nivel de caña suma
+	A 7 toques/s con la caña 1: Común ~0.65 s, Poco común ~1 s, Raro ~1.5 s,
+	Épico ~2.1 s, Legendario ~3 s, Mítico ~4.4 s. Cada nivel de caña suma
 	`strengthPerRodLevel` a la fuerza (caña 10 = x1.9), y los pases con
 	traje la multiplican (ver Config.Monetization.passes).
 
@@ -35,7 +35,7 @@ export type ReelConfig = {
 }
 
 local Reel: ReelConfig = {
-	startProgress = 0.25,
+	startProgress = 0.4,
 	timeoutSeconds = 10,
 	graceSeconds = 0.3,
 	maxTapsPerSecond = 14,
