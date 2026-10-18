@@ -1,4 +1,4 @@
-"""Forma de los estanques naturales y piezas sueltas que usan todos los módulos del jardín.
+"""Forma de los estanques naturales y utilidades de piezas que comparten los módulos del jardín.
 
 La orilla ondulada es la misma que WorldZones.pondEdge (el terreno de server/World/GardenShape):
 si cambia allá, cambia acá.
@@ -11,7 +11,6 @@ L = gi.L
 SAGRADO = L["trainingPondCount"] + 1  # mismo índice que WorldZones.SACRED_POND
 AGUA = L["trainingPondWaterTop"]
 SUELO = L["plateauHeight"]
-ORILLA = L["pondBankWidth"]
 
 
 def centro(i):
@@ -44,14 +43,6 @@ def borde(i, ang):
     return radio(i) * forma
 
 
-def punto(i, grados, mas=0.0, y=None):
-    """Punto a `mas` studs por fuera de la orilla (negativo: dentro del agua) en esa dirección."""
-    a = math.radians(grados)
-    c = centro(i)
-    d = borde(i, a) + mas
-    return (c[0] + math.cos(a) * d, SUELO if y is None else y, c[2] + math.sin(a) * d)
-
-
 def en_agua(i, grados, fraccion, y=AGUA):
     """Punto dentro del agua, a `fraccion` del radio de la orilla en esa dirección."""
     a = math.radians(grados)
@@ -68,12 +59,6 @@ def elipsoide(nombre, pos, medidas, rgb, material="SmoothPlastic", r=gi.I3, **ex
     return nodo
 
 
-def cilindro(nombre, base, alto, diam, rgb, material="SmoothPlastic", inclinado=(0, 1, 0), **extra):
-    """Cilindro que crece desde `base` en la dirección `inclinado` (los de Roblox crecen en X)."""
-    u = gi.norm(inclinado)
-    return gi.pieza(nombre, (alto, diam, diam), gi.add(base, u, alto / 2), rgb, material, gi.base_con_x(u), "Cylinder", **extra)
-
-
 def orientar(x, arriba=(0, 1, 0)):
     """Rotación con el eje X local hacia x y el Y lo más cerca posible de `arriba` (pétalos,
     hojas: su lado plano mira hacia arriba)."""
@@ -81,15 +66,3 @@ def orientar(x, arriba=(0, 1, 0)):
     k = sum(a * b for a, b in zip(arriba, x))
     y = gi.norm(tuple(arriba[n] - k * x[n] for n in range(3)))
     return gi.columnas(x, y, gi.cross(x, y))
-
-
-def tallo(rng, grados_max=12):
-    """Dirección casi vertical con una inclinación al azar."""
-    a = math.radians(rng.uniform(0, 360))
-    t = math.radians(rng.uniform(0, grados_max))
-    return (math.sin(t) * math.cos(a), math.cos(t), math.sin(t) * math.sin(a))
-
-
-def variar(rng, rgb, cuanto=10):
-    d = rng.randint(-cuanto, cuanto)
-    return tuple(max(0, min(255, c + d)) for c in rgb)

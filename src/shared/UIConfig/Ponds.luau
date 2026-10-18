@@ -3,7 +3,8 @@
 	Estanques de entrenamiento (sección de UIConfig en su propio archivo): color y
 	nombre de cada uno, del más débil al más fuerte; el 11 es el sagrado del centro.
 	El color es el mismo de sus piezas (COLORES_ESTANQUE en tools/generar_isla.py) y
-	el nombre, el de su tema (tools/estanques). Los muestra el cartel (PondSigns).
+	el nombre, el de una piedra de ese color (tools/estanques/temas). Los muestra el
+	cartel (PondSigns).
 ]]
 
 local Ponds = {
@@ -21,14 +22,14 @@ local Ponds = {
 		Color3.fromRGB(120, 245, 255),
 	},
 	Names = {
-		"Charca del Prado",
-		"Estanque de los Juncos",
-		"Laguna de los Lirios",
-		"Estanque de Bambú",
-		"Estanque de los Hongos",
-		"Estanque del Cerezo",
-		"Estanque del Arce",
-		"Estanque de la Cascada",
+		"Estanque de Jade",
+		"Estanque Turquesa",
+		"Estanque de Zafiro",
+		"Estanque Índigo",
+		"Estanque de Amatista",
+		"Estanque Rosa",
+		"Estanque de Rubí",
+		"Estanque de Ámbar",
 		"Estanque Dorado",
 		"Estanque Celestial",
 		"Estanque Sagrado",

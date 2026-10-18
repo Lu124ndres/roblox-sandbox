@@ -72,7 +72,7 @@ local Config: Types.Config = {
 		training = {
 			tickSeconds = 0.6, -- cada 0.6 s se gana poder (estanques y guarida)
 			powerPerTick = 1,
-			promptDistanceStuds = 18,
+			promptDistanceStuds = 22, -- desde el centro: alcanza la orilla de los estanques de 14 studs
 			maxDriftStuds = 9,
 		},
 	},
