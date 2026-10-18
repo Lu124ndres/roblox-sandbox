@@ -7,7 +7,8 @@
 	Progress con freno, al instante al cruzar una etapa o llenarse).
 
 	El hambre es un progreso (0..1): cada lote avanza comida / total. El total
-	(atributo Food) se calcula al llegar según el servidor (Feeding/GiantFood). Lo comido se anuncia
+	(atributo Food) sale de quiénes están en el servidor (Feeding/GiantFood): se calcula al
+	llegar y se recalcula si entra o sale alguien (Feeding/FoodResize). Lo comido se anuncia
 	por lotes (Feeding/FedBroadcast) y se anota por jugador (Contributions).
 ]]
 
@@ -21,6 +22,7 @@ local Contributions = require(script.Parent.Feeding.Contributions)
 local FedBroadcast = require(script.Parent.Feeding.FedBroadcast)
 local GiantFood = require(script.Parent.Feeding.GiantFood)
 local GiantAnger = require(script.Parent.Feeding.GiantAnger)
+local GiantPhase = require(script.Parent.Feeding.GiantPhase)
 local GiantPublish = require(script.Parent.Feeding.GiantPublish)
 
 local GIANTS = Config.Giants
@@ -33,22 +35,12 @@ local currentDef: Config.GiantDef
 local progress = 0
 local totalFood = 1
 local center = Vector3.zero
-local phase: Protocol.GiantPhase = "feeding"
-local phaseEndsAt = 0
 local filledListeners: { () -> () } = {}
 local evolvingUntil = 0 -- os.clock(): hasta entonces evoluciona y no come
 
 local function publish()
-	GiantPublish.set(ATTR.Id, currentDef.id)
-	GiantPublish.set(ATTR.DisplayName, currentDef.displayName)
-	GiantPublish.set(ATTR.Article, currentDef.article)
-	GiantPublish.set(ATTR.Multiplier, currentDef.multiplier)
-	GiantPublish.set(ATTR.Food, totalFood)
-	GiantPublish.set(ATTR.Anger, GiantAnger.get())
-	GiantPublish.set(ATTR.Phase, phase)
-	GiantPublish.set(ATTR.PhaseEndsAt, phaseEndsAt)
-	GiantPublish.set(ATTR.EvolvingUntil, 0)
-	GiantPublish.progress(progress, true)
+	GiantPublish.all(currentDef, totalFood, GiantAnger.get(), progress)
+	GiantPhase.publish()
 end
 
 function GiantService.init(map: Instance)
@@ -87,7 +79,7 @@ end
 
 -- Solo en la fase "feeding" y sin evolucionar se le puede dar de comer (y puede enojarse).
 function GiantService.isFeeding(): boolean
-	return phase == "feeding" and progress < 1 and not GiantService.isEvolving()
+	return GiantPhase.get() == "feeding" and progress < 1 and not GiantService.isEvolving()
 end
 
 -- Fin de la etapa actual (0.25, 0.5, 0.75 o 1).
@@ -100,17 +92,9 @@ function GiantService.remainingFood(): number
 	return math.max(0, (stageEnd() - progress) * totalFood)
 end
 
-function GiantService.getPhase(): Protocol.GiantPhase
-	return phase
-end
-
--- Cambia de fase; seconds = cuánto dura (para la cuenta regresiva de los clientes).
-function GiantService.setPhase(nextPhase: Protocol.GiantPhase, seconds: number?)
-	phase = nextPhase
-	phaseEndsAt = if seconds then Workspace:GetServerTimeNow() + seconds else 0
-	GiantPublish.set(ATTR.Phase, phase)
-	GiantPublish.set(ATTR.PhaseEndsAt, phaseEndsAt)
-end
+-- Fase del ciclo (Feeding/GiantPhase); GiantCycle la cambia.
+GiantService.getPhase = GiantPhase.get
+GiantService.setPhase = GiantPhase.set
 
 -- GiantCycle se entera aquí de que la barra llegó al 100 %.
 function GiantService.onFilled(listener: () -> ())
@@ -126,6 +110,15 @@ function GiantService.reset(def: Config.GiantDef, stage: number?)
 	GiantAnger.calm()
 	Contributions.reset()
 	publish()
+end
+
+-- Recalcula la comida con los jugadores de ahora (Feeding/FoodResize): si entra alguien
+-- fuerte, lo que falta crece a su medida; lo ya llenado (la fracción) no baja.
+function GiantService.resize()
+	if GiantPhase.get() == "feeding" then
+		totalFood = GiantFood.forGiant(currentDef)
+		GiantPublish.set(ATTR.Food, totalFood)
+	end
 end
 
 -- Quienes le dieron algo (se llevan la kill; con un pez basta).

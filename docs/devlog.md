@@ -2654,3 +2654,22 @@ vuelve lento; con FPS normales se ven. Sin errores nuestros en la consola.
 0.19, y no siguió subiendo después de soltar. Los 11 contornos en Neon (6 tenues: cerrados).
 
 **Qué se rompió:** nada visto.
+
+---
+
+## 2026-10-18 (15) — La barra del gigante se recalcula con quiénes están
+
+**Qué se hizo (pedido del usuario: «si la barra es baja y se une un jugador poderoso, la
+insta-llena»):** la comida del monstruo se calculaba una sola vez al llegar, con los jugadores
+de ese momento. Ahora `Feeding/FoodResize` la recalcula (`GiantService.resize`, con la misma
+fórmula de `GiantFood`) cuando termina de cargar alguien que entra, cuando sale alguien y cada
+15 s por si alguien sube mucho de poder. Lo ya llenado es una fracción de la barra, así que no
+baja: lo que falta crece a la medida de los nuevos. De paso, la fase del ciclo pasó a
+`Feeding/GiantPhase` y el estado inicial lo publica `GiantPublish.all` (GiantService estaba
+en 211 líneas).
+
+**Probado en Studio (Play):** con la barra de un novato en 81 M de comida, al volverse fuerte
+(5 B de poder, mejoras al máximo) pasó a 501 M en el siguiente recálculo; una canasta llena
+(22.6 M de peces) subió la barra un 15 %: hacen falta ~7 viajes, no uno.
+
+**Qué se rompió:** nada visto.

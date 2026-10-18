@@ -28,6 +28,7 @@ local Perks = require(ReplicatedStorage.Shared.Perks)
 local RebirthMath = require(ReplicatedStorage.Shared.RebirthMath)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Basket = require(script.Parent.Feeding.Basket)
+local FoodResize = require(script.Parent.Feeding.FoodResize)
 local GiantService = require(script.Parent.GiantService)
 local PlayerData = require(script.Parent.PlayerData)
 local Quests = require(script.Parent.Retention.Quests)
@@ -159,6 +160,7 @@ end
 function FeedingService.init()
 	-- FeedRequest(mantiene: boolean): el servidor mira dónde está el jugador.
 	Remotes.FeedRequest.OnServerEvent:Connect(RateLimit.wrap("FeedRequest", 4, 6, onFeed))
+	FoodResize.start(GiantService) -- la barra sigue a quiénes están en el servidor
 	Players.PlayerRemoving:Connect(function(player: Player)
 		lastRequestAt[player] = nil
 		streaming[player] = nil

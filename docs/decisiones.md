@@ -770,3 +770,11 @@ minutos) primero frenaba los peces y después hacía que la barra subiera más l
 en `GiantFood`, que dimensiona la barra con lo que el servidor puede pescar y entregar
 (`targetMinutes`), así que un jugador solo sigue necesitando varios viajes.
 
+## 2026-10-18 — La barra del gigante sigue a quiénes están en el servidor
+
+**Contexto:** sin el tope por persona, un jugador fuerte que entraba con la barra dimensionada
+para novatos la llenaba de un golpe. **Decisión:** en vez de volver al tope, la comida se
+recalcula al entrar o salir alguien y cada 15 s (`Feeding/FoodResize`). Como la barra guarda
+una fracción, agrandar la comida no borra lo comido ni frena a nadie: solo hace que a cada uno
+le cueste lo suyo. `GiantFood` sigue siendo la única fórmula del tamaño.
+

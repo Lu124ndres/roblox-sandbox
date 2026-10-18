@@ -45,6 +45,20 @@ function GiantPublish.progress(value: number, now: boolean)
 	end
 end
 
+-- El estado del gigante de una vez (al arrancar y cuando llega otro; la fase la publica
+-- GiantPhase).
+function GiantPublish.all(def: Config.GiantDef, food: number, anger: number, progress: number)
+	local ATTR = Protocol.GiantAttributes
+	folder:SetAttribute(ATTR.Id, def.id)
+	folder:SetAttribute(ATTR.DisplayName, def.displayName)
+	folder:SetAttribute(ATTR.Article, def.article)
+	folder:SetAttribute(ATTR.Multiplier, def.multiplier)
+	folder:SetAttribute(ATTR.Food, food)
+	folder:SetAttribute(ATTR.Anger, anger)
+	folder:SetAttribute(ATTR.EvolvingUntil, 0)
+	GiantPublish.progress(progress, true)
+end
+
 -- La carpeta aparece para los clientes (después de publicar el estado inicial).
 function GiantPublish.show()
 	folder.Parent = ReplicatedStorage
