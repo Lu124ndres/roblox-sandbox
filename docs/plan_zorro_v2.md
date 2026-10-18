@@ -3,8 +3,8 @@
 Rehacer el Zorro de agua en bloques, en cuatro etapas, siguiendo `docs/guia_crear_monstruo.md`.
 Es el primer monstruo hecho con **olas de agentes paralelos** (guía, sección 12).
 
-**Estado (2026-10-18):** E1, E2 y E3 aprobadas por el usuario, con poses medidas, rig, FBX y
-textura. Falta la E4. Las colas, el hábitat y los sonidos ya están en el juego y se probaron con
+**Estado (2026-10-18):** las cuatro etapas aprobadas por el usuario, con poses medidas, rig, FBX
+y textura. Sigue la importación a Studio. Las colas, el hábitat y los sonidos ya están en el juego y se probaron con
 el zorro E4 actual.
 
 ## Identidad
@@ -38,9 +38,9 @@ el zorro E4 actual.
 | Colas | 1 | 3 | 6 | 9 |
 | Triángulos (máx.) | 8k | 10k | 12k | 15k |
 | Huesos | 36 | 46 | 61 | 76 |
-| Triángulos reales | 3,940 | 4,604 | 7,604 | — |
-| Poses limpias (`zorro_v2_poses.py`) | 20 de 29 | 19 de 29 | 24 de 29 | — |
-| Estado | **aprobada** | **aprobada** | **aprobada** | en curso |
+| Triángulos reales | 3,940 | 4,604 | 7,604 | 10,332 |
+| Poses limpias (`zorro_v2_poses.py`) | 20 de 29 | 19 de 29 | 24 de 29 | 23 de 29 |
+| Estado | **aprobada** | **aprobada** | **aprobada** | **aprobada** |
 
 Escala única de exportación: **5.32 studs por BU** (la del minotauro).
 
@@ -98,6 +98,22 @@ cuello chocaban con el torso. Reglas que salieron (están en el docstring de cad
 - Pendiente en las tres: rascarse la oreja (la pata de la cría no llega) y las juntas de cola
   dobladas 45° todas a la vez.
 
+## E4 (forma final, aprobada el 2026-10-18)
+
+Nueve colas de cinco tramos: Cola1 central vertical, A (1:2), B (1:1), C (2:1) y D tendida a cada
+lado, cada una en su capa de profundidad, que calcula `zorro_v2_e4_capas.py` a partir de los pares
+de tramos cercanos en x-z. Con nueve colas las reglas se endurecen: una celda de aire hasta 2.5
+celdas de distancia (tres en las puntas), y la cola cuya punta tapa a otra va detrás. Capas, de
+adelante hacia atrás: A en el lomo, B en la grupa, y la central, C y D sobre una base de colas de
+la Cadera hasta y 28. Cabeza de 5 × 10 y corona de tres cristales de hielo. Lo que el usuario
+aprobó sabiendo: el abanico es hondo hacia atrás (en tres cuartos se lee como cola de pavo real) y
+la losa de la base se ve de perfil. La cola D baja del piso al sentarse o dormir (conviene topar
+su plegado en `Estados`). `zorro_v2_vistas.py` tiene fijo el centro de la cara de la E3: la E1, la
+E2 y la E4 rehacen esa vista con su propio script.
+
+Alineación de las cuatro: `renders/zorro_v2_alineacion/` (`minotauro_v2_alineacion.py -- --criatura
+zorro`).
+
 ## Código y hábitat (ola 1, en el juego desde el 2026-10-17)
 
 - `Zorro/Colas/`: resortes por junta, onda de la raíz a la punta sin bucles, reacción al cuerpo,
@@ -109,11 +125,9 @@ cuello chocaban con el torso. Reglas que salieron (están en el docstring de cad
 
 ## Pasos que faltan
 
-1. **Ola 2:** E1, E2 y E4 aprobadas por el usuario, alineación a escala, poses y rig de las cuatro,
-   FBX y texturas. Commit.
-2. **Studio:** el usuario importa los 4 FBX con "Mantener huesos de influencia cero"; se pasan a
+1. **Studio:** el usuario importa los 4 FBX con "Mantener huesos de influencia cero"; se pasan a
    `ServerStorage.ZorroDeAguaE<n>_v2`, IDs en `Assets` y `modelSuffix = "_v2"`.
-3. **Ola 3:** locomoción e IK, mirada y cara (parpadeo, gestos), conductas y rutina (el catálogo de
+2. **Ola 3:** locomoción e IK, mirada y cara (parpadeo, gestos), conductas y rutina (el catálogo de
    la biblia, mirar al público ≥ 70 %, usar `Zorro/Guarida`), comer y evolución.
-4. **Arreglos vistos en Play:** témpanos grandes menos regulares; luz duplicada de `ZorroFx`
+3. **Arreglos vistos en Play:** témpanos grandes menos regulares; luz duplicada de `ZorroFx`
    (`LuzGema`) con la de `ZorroAgua` (`BrilloOjos`); campos `ice` y `at` en `Zorro.Event`.
