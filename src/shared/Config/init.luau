@@ -53,7 +53,7 @@ local Config: Types.Config = {
 	Gameplay = {
 		-- La corriente del puente lleva rápido al volcán y de vuelta.
 		bridge = {
-			walkSpeed = 44,
+			walkSpeed = 56, -- más que las mejores botas (52)
 		},
 		fishing = {
 			biteDelayMinSeconds = 2,

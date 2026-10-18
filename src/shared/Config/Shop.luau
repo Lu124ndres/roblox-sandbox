@@ -8,7 +8,8 @@
 		        `luck` sube la probabilidad de los peces poco comunes o mejores
 		        (peso x (1 + luck)).
 		Basket  multiplica la capacidad de la canasta.
-		Boots   velocidad al caminar (la normal de Roblox es 16).
+		Boots   velocidad al caminar: se empieza en 22 (más que los 16 de Roblox) y
+		        llega a 52; el puente al volcán siempre va más rápido (56).
 
 	Precios: un jugador nuevo gana ~200 monedas/min pescando con la Orca (más
 	con poder, canasta y monstruos mejores; ver docs/balance.md); la segunda
@@ -57,20 +58,20 @@ local Shop: Types.ShopConfig = {
 		{ name = "Bóveda infinita", price = 1600000000, value = 160 },
 	},
 	Boots = {
-		{ name = "Sandalias", price = 0, value = 16 },
-		{ name = "Botas de playa", price = 200, value = 18 },
-		{ name = "Botas de marinero", price = 1200, value = 20 },
-		{ name = "Botas veloces", price = 6000, value = 23 },
-		{ name = "Botas del viento", price = 30000, value = 26 },
-		{ name = "Botas del rayo", price = 150000, value = 30 },
-		{ name = "Botas de coral", price = 400000, value = 32 },
-		{ name = "Botas de explorador", price = 1200000, value = 34 },
-		{ name = "Botas de hielo", price = 3500000, value = 36 },
-		{ name = "Botas de lava", price = 10000000, value = 38 },
-		{ name = "Botas de cristal", price = 30000000, value = 40 },
-		{ name = "Botas del cometa", price = 90000000, value = 42 },
-		{ name = "Botas del abismo", price = 270000000, value = 44 },
-		{ name = "Botas de Hermes", price = 800000000, value = 46 },
+		{ name = "Sandalias", price = 0, value = 22 },
+		{ name = "Botas de playa", price = 200, value = 24 },
+		{ name = "Botas de marinero", price = 1200, value = 26 },
+		{ name = "Botas veloces", price = 6000, value = 29 },
+		{ name = "Botas del viento", price = 30000, value = 32 },
+		{ name = "Botas del rayo", price = 150000, value = 35 },
+		{ name = "Botas de coral", price = 400000, value = 38 },
+		{ name = "Botas de explorador", price = 1200000, value = 40 },
+		{ name = "Botas de hielo", price = 3500000, value = 42 },
+		{ name = "Botas de lava", price = 10000000, value = 44 },
+		{ name = "Botas de cristal", price = 30000000, value = 46 },
+		{ name = "Botas del cometa", price = 90000000, value = 48 },
+		{ name = "Botas del abismo", price = 270000000, value = 50 },
+		{ name = "Botas de Hermes", price = 800000000, value = 52 },
 	},
 }
 

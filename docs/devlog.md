@@ -2411,3 +2411,25 @@ el muelle (`docs/capturas/2026-10-18-flecha-guia.jpg`).
 pensado porque el pasto alto del terreno los tapaba.
 
 **Qué sigue:** el video tutorial (tomas en Studio con el minotauro).
+
+---
+
+## 2026-10-18 (8) — Velocidad inicial 22 y flechas guía flotando
+
+**Qué se hizo:**
+
+- **Velocidad:** se empieza a 22 (antes 16, la de Roblox); las botas van de 22 a 52
+  (24, 26, 29, 32, 35, 38, 40, 42, 44, 46, 48, 50, 52), con los mismos precios. El puente sube
+  a 56 y nunca frena a nadie (`math.max` con la velocidad de las botas: antes las Botas de
+  Hermes, 46, iban más lento sobre el puente de 44). `StarterPlayer.CharacterWalkSpeed` = 22.
+- **Flechas guía:** fuera los chevrones del piso. Ahora es una fila de 5 flechas amarillas
+  flotando a la altura del pecho por el camino (`GuidePath`), más la del jugador
+  (`GuideArrow`), todas con un solo contorno negro. Cada flecha del camino está clavada en
+  una marca fija del camino (cada 8 studs) y mira hacia donde sigue: al caminar no giran ni
+  se corren (antes se calculaban desde la posición del jugador y se torcían). La del jugador
+  gira suave hacia la dirección nueva.
+
+**Probado en Studio (Play):** velocidad 22 al aparecer; los ángulos de las flechas del
+camino no cambian mientras el jugador camina; flechas amarillas camino al muelle.
+
+**Qué se rompió:** nada visto.

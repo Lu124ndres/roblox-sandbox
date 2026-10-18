@@ -61,7 +61,7 @@ export type TrainingConfig = {
 }
 
 export type BridgeConfig = {
-	walkSpeed: number, -- velocidad sobre el puente al volcán (la normal es 16)
+	walkSpeed: number, -- velocidad sobre el puente al volcán (más que cualquier bota)
 }
 
 export type GameplayConfig = {

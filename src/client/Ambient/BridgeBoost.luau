@@ -40,7 +40,7 @@ function BridgeBoost.start()
 		if on then
 			normalSpeed = humanoid.WalkSpeed
 			normalFov = camera.FieldOfView
-			humanoid.WalkSpeed = BOOST_SPEED
+			humanoid.WalkSpeed = math.max(normalSpeed, BOOST_SPEED) -- nunca frena a nadie
 		else
 			humanoid.WalkSpeed = normalSpeed
 		end
