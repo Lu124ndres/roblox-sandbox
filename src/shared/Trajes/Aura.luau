@@ -50,6 +50,41 @@ local function shaped(spec: Particulas.Spec, surface: boolean): Particulas.Spec
 	return copy
 end
 
+-- Una luz en un punto del traje (alcance en altos del traje).
+function Aura.light(
+	parent: Instance?,
+	color: Color3,
+	brightness: number,
+	range: number,
+	h: number
+): PointLight?
+	if not parent then
+		return nil
+	end
+	local light = Instance.new("PointLight")
+	light.Color = color
+	light.Brightness = brightness
+	light.Range = range * h
+	light.Parent = parent
+	return light
+end
+
+-- Para hacer latir el brillo propio del traje (lava, gemas): devuelve con qué
+-- fijar SurfaceAppearance.EmissiveStrength, o nada si el traje no lo tiene.
+function Aura.glow(fx: Tipos.Fx): (strength: number) -> ()
+	local surface = fx.surface
+	local ok = surface ~= nil
+		and pcall(function()
+			(surface :: SurfaceAppearance).EmissiveStrength = (surface :: SurfaceAppearance).EmissiveStrength
+		end)
+	if not ok or not surface then
+		return function(_strength: number) end
+	end
+	return function(strength: number)
+		surface.EmissiveStrength = strength
+	end
+end
+
 function Aura.build(fx: Tipos.Fx, palette: Palette)
 	local body = fx.aura(Vector3.new(0.55, 0.85, 0.55), 0.47)
 	local feet = fx.aura(Vector3.new(0.8, 0.02, 0.8), 0.02)

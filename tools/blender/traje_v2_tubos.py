@@ -1,5 +1,5 @@
 """
-Tubos de anillos para el Marinero v2 (y cualquier personaje de bloques): cada parte es una
+Tubos de anillos de los trajes de bloques v2: cada parte es una
 pila de rectángulos de esquinas redondeadas unidos por quads, con tapas en cuadrícula, y las
 partes se unen con puentes cortos (se borran las caras de un rectángulo en cada parte y se
 unen los dos bordes). Todo queda en una sola malla cerrada, sin piezas sueltas.
@@ -7,6 +7,8 @@ unen los dos bordes). Todo queda en una sola malla cerrada, sin piezas sueltas.
 Un anillo es (z, cx, cy, ancho, fondo, radio). Las líneas rectas salen de fx y fy (fracciones
 de medio lado recto), así que dos anillos con el mismo "ancho - 2 radio" tienen los mismos
 puntos rectos y la tapa no cambia de cuadrícula (eso permite chaflanes sin mover las líneas).
+Un tubo puede llevar una matriz (giro y lugar): así salen cuernos, púas o un tridente
+inclinado, armados de pie y después girados.
 """
 import math
 import bmesh
@@ -43,9 +45,10 @@ def puntos_anillo(z, cx, cy, w, d, r, fx, fy, k):
 class Tubo:
     """Una parte: anillos unidos y dos tapas. Guarda las caras para colorear y puentear."""
 
-    def __init__(self, bm, nombre, anillos, fx, fy, k, etiqueta):
+    def __init__(self, bm, nombre, anillos, fx, fy, k, etiqueta, valor=0, matriz=None):
         self.bm, self.nombre = bm, nombre
         self.anillos, self.caras = [], {}
+        antes = len(bm.verts)
         for an in anillos:
             pts, idx, xs, ys = puntos_anillo(*an, fx, fy, k)
             verts = [bm.verts.new(p) for p in pts]
@@ -60,7 +63,10 @@ class Tubo:
         self.tapa("abajo", 0, k)
         self.tapa("arriba", len(self.anillos) - 1, k)
         for f in self.caras.values():
-            f[etiqueta] = 0  # se pone después con la parte
+            f[etiqueta] = valor
+        if matriz is not None:
+            for v in list(bm.verts)[antes:]:  # los vértices nuevos van al final
+                v.co = matriz @ v.co
 
     def tapa(self, cual, a, k):
         bm = self.bm

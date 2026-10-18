@@ -743,3 +743,21 @@ pasto del jardín es LeafyGrass porque Roblox dibuja pasto alto sobre Grass y ta
 entera es el botón (`InputHoldBegin/End`). Va con `AlwaysOnTop` para que no la tapen el agua ni
 los espíritus de los estanques.
 
+
+## 2026-10-18 — Un solo generador de trajes v2 con fichas, y las luces no van pegadas al cuerpo
+
+**Contexto:** después del Marinero v2, el usuario pidió el Rey del Mar y el Dios del Volcán
+desde cero y con mucho detalle. **Decisión:** un generador común (`tools/blender/traje_v2*.py`)
+con el esqueleto, las articulaciones y las líneas de los puentes fijos en `traje_v2_base.py`, y
+una ficha por traje con sus formas, accesorios, colores y dibujos. Así los tres doblan igual y
+el juego los mueve con el mismo rig. El detalle va como accesorios: tubos cerrados metidos en la
+parte que los lleva y pegados a un hueso (nunca se separan). **Lo no obvio:**
+- Las caras se eligen con renders: cada ficha trae varias (`TRAJE_CARA`) y la elegida queda por
+  defecto, para que el FBX no dependa de una variable de entorno.
+- El brillo es una máscara de emisión aparte (`_brillo.png`). El importador de Studio toma la
+  textura conectada a la emisión en Blender, que es la de color: hay que subir la máscara y
+  ponerla a mano en `SurfaceAppearance.EmissiveMaskContent` (se puede por `execute_luau`).
+- Una `PointLight` dentro del cuerpo ilumina de frente toda la armadura y la deja de un solo
+  color: las luces del traje son tenues y la de la vitrina sale del botón, desde abajo.
+- La capa no sigue a ninguna parte del cuerpo: la mueve el estilo con `fx.pose` cada cuadro
+  (sube con la velocidad, suavizado, y ondea con dos ondas desfasadas).

@@ -2591,3 +2591,44 @@ anterior dio 15 fps: era la prueba del zorro de otra sesión corriendo a la vez 
 abierto en Neon y el 10 cerrado; el jugador aparece sobre el sendero, sin plataforma.
 
 **Qué se rompió:** nada visto.
+
+---
+
+## 2026-10-18 (14) — Rey del Mar y Dios del Volcán desde cero, y vitrinas nuevas
+
+**Qué se hizo (pedido del usuario: los dos trajes de pase nuevos, con mucho detalle, texturas
+y efectos "que digan: eso lo quiero comprar"; sin tridente; vitrinas como sus referencias):**
+
+- **Generador común de trajes v2** (`tools/blender/traje_v2_*.py`): los scripts del Marinero
+  pasaron a un sistema con una ficha por traje. El Marinero sale idéntico (mismos vértices,
+  UVs, pesos y textura píxel a píxel), así que no hubo que reimportarlo.
+- **Rey del Mar** (cara elegida: yelmo cerrado con ranura en T que brilla): peto con filigrana
+  y gema tallada, gorguera, capa real con cuello alto que ondea (huesos `Capa1`/`Capa2`),
+  faldones que siguen a las piernas, hombreras de concha en capas con cristales, brazales y
+  grebas con aletas, rodilleras con gema, punteras de oro, corona de dos pisos, escamas
+  grabadas. 14,784 triángulos.
+- **Dios del Volcán** (cara elegida: calavera demonio): placas de obsidiana sobre un cuerpo de
+  magma que brilla en las juntas, corazón de cristal, púas en columna, guanteletes, nudillos,
+  rodillas y botas, hombreras con gotas de lava, cuernos con relieve, hebilla de calavera.
+  15,812 triángulos.
+- **Brillo real**: máscara de emisión subida y puesta en la `SurfaceAppearance`; en el juego
+  late (el corazón del volcán da dos golpes y la lava respira; las gemas del rey titilan).
+- **Efectos** (`Shared/Trajes`): la capa (`Capa`), pisadas de lava o de agua (`Huellas`), el
+  sello de magma (`Sello`), luces y destellos en los puntos del modelo nuevo. Un estilo puede
+  devolver una función por cuadro (`Tipos.Tick`) y girar huesos propios (`fx.pose`).
+- **Vitrinas** (`Social/ShowcaseStage`, `ShowcaseAura`, `ShowcaseSign`): pedestal hexagonal con
+  aros de luz que laten y botón, cono de luz, rayos que giran detrás, aura de lenguas de fuego
+  o de agua, el traje flotando en su pose de vitrina (puño al cielo / brazos de poder) y el
+  cartel con precio, nombre con degradado y ventajas (`perks` en `Config.Monetization`).
+
+**Qué se rompió (y se arregló):** las luces puntuales pegadas al cuerpo (pecho, visera, aura
+de la vitrina) lavaban el traje entero de color: se quitaron o quedaron muy suaves, y la luz de
+la vitrina sale del botón. El cono de luz tapaba el cuerpo: ahora llega solo a los pies. El
+importador puso como máscara de brillo la textura de color: se reemplazó por la máscara buena.
+
+**Probado en Studio (Play):** las dos vitrinas (capturas), el Dios del Volcán puesto con su
+brillo latiendo y el módulo de pisadas real dejando 10 huellas al caminar. En Studio el
+vigilante de FPS activa solo el modo rápido (partículas y pisadas en 0) cuando el MCP lo
+vuelve lento; con FPS normales se ven. Sin errores nuestros en la consola.
+
+**Qué sigue:** guardar el lugar en Studio (los modelos viven en el `.rbxl`).

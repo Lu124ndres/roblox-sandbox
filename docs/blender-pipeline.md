@@ -110,21 +110,38 @@ confirmar en la vista previa de "Importar 3D" que esté parado y mirando al fren
 6. El aura de los trajes de pase: `src/shared/Trajes/Aura.luau` (lenguas de fuego o agua,
    motas, destellos, halo, onda en el piso y contorno) con texturas propias (abajo).
 
-### Marinero v2 (el traje de todos, desde cero)
+### Trajes v2 de bloques (Marinero, Rey del Mar, Dios del Volcán)
 
-El Marinero ya no sale de Meshy ni de los pasos de arriba. Se arma entero por script:
+Los tres trajes ya no salen de Meshy ni de los pasos de arriba: se arman enteros por script con
+un generador común y una **ficha** por traje (`tools/blender/traje_v2_<clave>.py`, claves
+`marinero`, `rey_del_mar`, `dios_del_volcan`):
 
-1. `python tools/blender/marinero_v2_textura.py`: dibuja la textura (cara, pecho, espalda y
-   paleta) con PIL en `assets/blender/marinero_v2/Marinero_color.png`.
-2. `blender -b --factory-startup --python tools/blender/marinero_v2.py`: malla de una pieza
-   (`marinero_v2_cuerpo.py` + `marinero_v2_tubos.py`), pesos, 16 huesos y
-   `assets/blender/TrajeMarinero_v2.fbx`. Imprime `aristas_abiertas` y `caras_degeneradas`:
-   las dos tienen que dar 0.
-3. `blender -b --factory-startup --python tools/blender/marinero_v2_vistas.py`: renders en
-   reposo y en poses extremas (`renders/marinero_v2/`). Las poses giran los huesos con la
-   misma cuenta que el juego.
-4. Importar como los otros trajes (paso 4 de arriba). Medidas y colores en
-   `marinero_v2_datos.py`.
+- `traje_v2_base.py`: esqueleto (los 16 huesos), articulaciones, pesos y las líneas de malla
+  donde se cortan los puentes; lo comparten los tres.
+- `traje_v2_tubos.py` / `traje_v2_cuerpo.py`: cada parte es un tubo de anillos redondeados; las
+  partes se unen con puentes en sus pivotes (una sola malla cerrada). Los accesorios (corona,
+  capa, cuernos, púas, placas) son tubos aparte, metidos un poco en lo que los lleva y pegados a
+  un hueso. `traje_v2_formas.py`: placas biseladas y púas en cualquier dirección.
+- `traje_v2_regiones.py`: dónde cae cada cara en la textura (paleta, región plana o "caja",
+  que envuelve todo el cuerpo con un mismo dibujo).
+- Ficha: medidas por tramo, colores, regiones y color de cada cara; `..._piezas.py` sus
+  accesorios, `..._dibujo.py` sus dibujos (PIL) y `..._cara.py` las caras elegibles
+  (variable `TRAJE_CARA`; la elegida por el usuario es la de por defecto).
+
+Pasos:
+
+1. `python tools/blender/traje_v2_textura.py --traje <clave>`: textura de color y, si algo
+   brilla, máscara de brillo (`assets/blender/<carpeta>/<Archivo>_color.png` y `_brillo.png`).
+   Las grietas y el magma del volcán salen de `traje_v2_grietas.py` (Voronoi con numpy).
+2. `blender -b --factory-startup --python tools/blender/traje_v2.py -- --traje <clave>`: malla,
+   pesos, huesos (más los extra de la ficha, como la capa) y `assets/blender/Traje<Archivo>_v2.fbx`.
+   Imprime `aristas_abiertas` y `caras_degeneradas`: las dos tienen que dar 0.
+3. `blender -b --factory-startup --python tools/blender/traje_v2_vistas.py -- --traje <clave>`:
+   renders en reposo, poses extremas y la cara de cerca (`renders/<carpeta>/`). Las poses giran
+   los huesos con la misma cuenta que el juego. `--solo` y `--sufijo` para comparar caras.
+4. Importar como los otros trajes (paso 4 de arriba). Si la ficha tiene brillo: subir la
+   máscara (`_brillo.png`) y ponerla en `SurfaceAppearance.EmissiveMaskContent` (la que crea el
+   importador no sirve: toma la textura de color).
 
 ## Dragón marino (4 etapas que vuelan)
 

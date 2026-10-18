@@ -36,6 +36,7 @@ export type Rig = {
 	links: { Link },
 	height: number,
 	extras: { Instance }, -- puntos de efectos creados (se borran al soltar)
+	tick: Trajes.Tick?, -- lo que el estilo hace cada cuadro (capa, brillo, pisadas)
 }
 
 local Rig = {}
@@ -107,7 +108,7 @@ function Rig.bind(
 		end
 	end
 	local ok, err = pcall(function()
-		style.effects(Efectos.make(mesh, bones, frame, height, rig.extras, emitter))
+		rig.tick = style.effects(Efectos.make(mesh, bones, frame, height, rig.extras, emitter))
 	end)
 	if not ok then
 		warn(`Trajes: efectos de {key}: {err}`)
@@ -155,6 +156,9 @@ function Rig.step(rig: Rig, ctx: Trajes.Context)
 		end
 		link.bone.Transform = transform
 	end
+	if rig.tick then
+		rig.tick(ctx)
+	end
 end
 
 function Rig.unbind(rig: Rig)
@@ -162,8 +166,9 @@ function Rig.unbind(rig: Rig)
 		extra:Destroy()
 	end
 	table.clear(rig.extras)
-	for _, link in rig.links do
-		link.bone.Transform = CFrame.identity
+	rig.tick = nil
+	for _, bone in Trajes.bones(rig.mesh) do -- también los que mueve el estilo (la capa)
+		bone.Transform = CFrame.identity
 	end
 end
 

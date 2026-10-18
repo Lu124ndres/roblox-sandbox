@@ -21,6 +21,7 @@ export type BoneInfo = Tipos.BoneInfo
 export type Context = Tipos.Context
 export type Fx = Tipos.Fx
 export type Style = Tipos.Style
+export type Tick = Tipos.Tick
 
 local function limb(
 	side: string,

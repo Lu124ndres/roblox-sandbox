@@ -9,12 +9,16 @@
 		aura       una pieza invisible del tamaño del cuerpo (cilindro de pie),
 		           soldada al traje: sus emisores salen de toda la superficie
 		highlight  contorno brillante del traje
-	El modo de efectos reducidos se respeta con `emitter` (FxQuality).
+		pose       gira un hueso que no sigue al cuerpo (la capa), en el
+		           espacio del personaje
+		surface    la SurfaceAppearance del traje, para hacer latir su brillo
+	El modo de efectos reducidos se respeta con `emitter` y `rate` (FxQuality).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
+local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 
 local Efectos = {}
 
@@ -30,10 +34,24 @@ function Efectos.make(
 		table.insert(extras, instance)
 		return instance
 	end
+	-- Rotación de reposo de cada hueso en el espacio del personaje (para pose).
+	local rests: { [string]: CFrame } = {}
+	for name, bone in bones do
+		rests[name] = frame.Rotation:Inverse() * bone.WorldCFrame.Rotation
+	end
 	return {
+		mesh = mesh,
 		bones = bones,
 		height = height,
+		surface = mesh:FindFirstChildWhichIsA("SurfaceAppearance"),
+		rate = FxQuality.rateScale,
 		emitter = emitter,
+		pose = function(name: string, turn: CFrame)
+			local bone, rest = bones[name], rests[name]
+			if bone and rest then
+				bone.Transform = rest:Inverse() * turn * rest
+			end
+		end,
 		socket = function(name: string, offset: Vector3): Bone?
 			local bone = bones[name]
 			if not bone then

@@ -132,8 +132,11 @@ local Assets: Assets = {
 		-- plana y cara, pecho y espalda dibujados (5,332 triángulos, 16 huesos). El de Meshy
 		-- quedó en ServerStorage.Respaldos.TrajeMarinero_meshy.
 		TrajeMarinero = "rbxassetid://140300273939135",
-		TrajeDiosDelVolcan = "rbxassetid://137998127570612",
-		TrajeReyDelMar = "rbxassetid://137608233485403",
+		-- Rey del Mar y Dios del Volcán v2 (tools/blender/traje_v2.py): bloques con mucho detalle,
+		-- textura dibujada y máscara de brillo (EmissiveMask). Los de Meshy quedaron en
+		-- ServerStorage.Respaldos.Traje*_meshy.
+		TrajeDiosDelVolcan = "rbxassetid://140208758172851", -- 15,812 triángulos, 16 huesos
+		TrajeReyDelMar = "rbxassetid://77866847879162", -- 14,784 triángulos, 18 huesos (capa)
 		DragonMarinoE1 = "rbxassetid://122661699655092", -- cría (15,679 triángulos)
 		DragonMarinoE2 = "rbxassetid://110887980669740", -- joven (17,639)
 		DragonMarinoE3 = "rbxassetid://115962400260493", -- adulto (18,619)

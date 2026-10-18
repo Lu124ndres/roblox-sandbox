@@ -3,10 +3,11 @@
 	Showcase
 
 	Vitrinas de los trajes de pase en la zona de entrenamiento, a los lados
-	de la aparición (que está dentro del jardín):
-	un pedestal de mármol y oro con el traje de malla en grande (lo animan
-	los clientes: client/Trajes/Vitrinas), un cartel con nombre, precio y
-	ventajas, y E para comprarlo. La compra la abre el cliente (Purchases);
+	de la aparición (que está dentro del jardín): el escenario en el color del
+	traje (Social/ShowcaseStage: pedestal hexagonal con aros de luz, haz,
+	rayos, aura y cartel con precio, nombre y ventajas), el traje de malla en
+	grande flotando en su pose (lo animan los clientes: client/Trajes/Vitrinas)
+	y E para comprarlo. La compra la abre el cliente (Purchases);
 	si ya tiene el pase, E aquí se lo pone o se lo quita (vuelve a Marinero,
 	atributo TrajeElegido, que lee Outfits).
 ]]
@@ -22,72 +23,20 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Proximity = require(script.Parent.Parent.Proximity)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local OutfitChoice = require(script.Parent.OutfitChoice)
+local ShowcaseAura = require(script.Parent.ShowcaseAura)
+local ShowcaseSign = require(script.Parent.ShowcaseSign)
+local ShowcaseStage = require(script.Parent.ShowcaseStage)
 
 local L = WorldLayout
 local PASSES = Config.Monetization.passes
 local DISPLAY_HEIGHT = 12 -- alto del traje en la vitrina (studs)
-local BASE_RADIUS = 6.5
-local BASE_HEIGHT = 2.4
+local HOVER = 1.2 -- el traje flota sobre el pedestal (studs)
 local PROMPT_DISTANCE = 16
 local SPAWN_LOOK_AHEAD = 20 -- studs hacia el volcán (+Z) desde la aparición
-local MARBLE = Color3.fromRGB(236, 232, 224)
-local GOLD = Color3.fromRGB(255, 200, 70)
 
 local Showcase = {}
 
 local limiter = RateLimit.new("Vitrina", 1, 2)
-
-local function cylinder(
-	name: string,
-	radius: number,
-	height: number,
-	top: Vector3,
-	color: Color3,
-	material: Enum.Material
-): Part
-	local part = Instance.new("Part")
-	part.Name = name
-	part.Shape = Enum.PartType.Cylinder
-	part.Size = Vector3.new(height, radius * 2, radius * 2)
-	part.CFrame = CFrame.new(top - Vector3.new(0, height / 2, 0))
-		* CFrame.Angles(0, 0, math.rad(90))
-	part.Color = color
-	part.Material = material
-	part.Anchored = true
-	part.TopSurface, part.BottomSurface = Enum.SurfaceType.Smooth, Enum.SurfaceType.Smooth
-	return part
-end
-
-local function label(parent: Instance, text: string, y: number, height: number, color: Color3)
-	local line = Instance.new("TextLabel")
-	line.BackgroundTransparency = 1
-	line.Position = UDim2.fromScale(0, y)
-	line.Size = UDim2.fromScale(1, height)
-	line.Font = Enum.Font.FredokaOne
-	line.TextScaled = true
-	line.TextWrapped = true
-	line.Text = text
-	line.TextColor3 = color
-	local stroke = Instance.new("UIStroke")
-	stroke.Thickness = 3
-	stroke.Color = Color3.fromRGB(20, 24, 40)
-	stroke.Parent = line
-	line.Parent = parent
-end
-
-local function sign(parent: BasePart, passKey: string, height: number)
-	local pass = PASSES[passKey]
-	local gui = Instance.new("BillboardGui")
-	gui.Name = "Cartel"
-	gui.Size = UDim2.fromScale(11, 4.4)
-	gui.StudsOffset = Vector3.new(0, height + 2.6, 0)
-	gui.MaxDistance = 90
-	gui.LightInfluence = 0
-	label(gui, string.upper(pass.name), 0, 0.36, GOLD)
-	label(gui, `R$ {pass.robux}`, 0.36, 0.24, Color3.fromRGB(120, 255, 140))
-	label(gui, pass.description, 0.62, 0.38, Color3.new(1, 1, 1))
-	gui.Parent = parent
-end
 
 -- El traje en grande, parado sobre el pedestal y mirando hacia `look`.
 local function display(outfit: string, top: Vector3, look: Vector3): Model?
@@ -138,42 +87,19 @@ local function build(folder: Folder, passKey: string, side: number)
 	model.Name = passKey
 	model:SetAttribute("Pase", passKey)
 	model:SetAttribute("Outfit", outfit)
-	local base = cylinder(
-		"Pedestal",
-		BASE_RADIUS,
-		BASE_HEIGHT,
-		ground + Vector3.new(0, BASE_HEIGHT, 0),
-		MARBLE,
-		Enum.Material.Marble
-	)
-	base.Parent = model
-	local rim = cylinder(
-		"Borde",
-		BASE_RADIUS + 0.3,
-		0.5,
-		ground + Vector3.new(0, BASE_HEIGHT + 0.1, 0),
-		GOLD,
-		Enum.Material.Metal
-	)
-	rim.Parent = model
-	local step = cylinder(
-		"Escalon",
-		BASE_RADIUS + 1.6,
-		0.6,
-		ground + Vector3.new(0, 0.6, 0),
-		MARBLE,
-		Enum.Material.Marble
-	)
-	step.Parent = model
-	local top = ground + Vector3.new(0, BASE_HEIGHT + 0.35, 0)
+	local look = ShowcaseStage.LOOKS[outfit]
+	local top, button, base = ShowcaseStage.pedestal(model, ground, look)
 	-- Mira un poco delante de la aparición: quien aparece la ve de frente al dar unos pasos.
 	local facing = WorldZones.spawnPoint() + Vector3.new(0, 0, SPAWN_LOOK_AHEAD)
-	local look = Vector3.new(facing.X - ground.X, 0, facing.Z - ground.Z).Unit
-	local shown = display(outfit, top, look)
+	local toward = Vector3.new(facing.X - ground.X, 0, facing.Z - ground.Z).Unit
+	local feet = top + Vector3.new(0, HOVER, 0)
+	local shown = display(outfit, feet, toward)
 	if shown then
 		shown.Parent = model
 	end
-	sign(base, passKey, DISPLAY_HEIGHT + BASE_HEIGHT / 2)
+	ShowcaseStage.beam(button, HOVER, look)
+	ShowcaseAura.build(model, feet, DISPLAY_HEIGHT, look)
+	ShowcaseSign.build(base, passKey, DISPLAY_HEIGHT + HOVER + 1, look)
 	local prompt = Proximity.makePrompt(base, "Comprar", PASSES[passKey].name, PROMPT_DISTANCE)
 	prompt.Name = "Comprar"
 	prompt.Triggered:Connect(function(player: Player)

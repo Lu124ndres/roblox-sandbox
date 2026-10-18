@@ -43,6 +43,7 @@ export type PassDef = {
 	kills: number?, -- kills por cada monstruo llenado
 	feedSpeed: number?, -- multiplica lo rápido que alimentas al monstruo
 	outfit: string?, -- traje que se ve en el personaje (Social/Outfits)
+	perks: string?, -- ventajas en una línea, para el cartel de la vitrina (Social/Showcase)
 }
 
 export type LevelDef = {
@@ -104,6 +105,7 @@ local Monetization: MonetizationConfig = {
 		ReyDelMar = {
 			name = "Rey del Mar",
 			description = "Traje de rey. Pescas x2 más rápido, alimentas x2 más rápido y x2 kills.",
+			perks = "Pesca x2 · Alimenta x2 · x2 kills", -- línea corta del cartel de la vitrina
 			robux = 149,
 			biteDelay = 0.5,
 			reelStrength = 2,
@@ -114,6 +116,7 @@ local Monetization: MonetizationConfig = {
 		DiosDelVolcan = {
 			name = "Dios del Volcán",
 			description = "Traje de fuego. Pesca ultrarrápida de un toque, alimentas x4 más rápido y x4 kills.",
+			perks = "Pesca de un toque · Alimenta x4 · x4 kills",
 			robux = 399,
 			biteDelay = 0.2,
 			instantReel = true,

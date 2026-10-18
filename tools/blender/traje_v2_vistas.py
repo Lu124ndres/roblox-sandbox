@@ -1,23 +1,30 @@
 """
-Vistas y poses del Marinero v2 para revisarlo antes de llevarlo a Studio: frente, perfil, tres
-cuartos y atrás en reposo, y poses extremas (caminar, brazos arriba, sentado, la caña y
-saludar) para ver que no se abra ni se estire en las articulaciones.
+Vistas y poses de un traje v2 para revisarlo antes de llevarlo a Studio: frente, perfil, tres
+cuartos y atrás en reposo, y poses extremas (caminar, brazos arriba, sentado, agachado, la caña
+y saludar) para ver que no se abra ni se estire en las articulaciones.
 
 Cada pose gira los huesos igual que el juego (src/client/Trajes/Rig.luau): un giro D en el
 espacio del personaje, respecto del padre, se aplica al hueso como R⁻¹·D·R (R = su reposo).
 Ejes del personaje: +X su izquierda, -Y su frente, +Z arriba.
 
-Uso (desde la raíz del repo, después de marinero_v2.py):
-    blender -b --factory-startup --python tools/blender/marinero_v2_vistas.py
-Salida: renders/marinero_v2/*.png
+Los huesos extra de la ficha (la capa) se posan con ficha.POSES_EXTRA[pose], si hay.
+
+Uso (desde la raíz del repo, después de traje_v2.py):
+    blender -b --factory-startup --python tools/blender/traje_v2_vistas.py -- --traje <clave>
+Opciones: --solo frente,cara_frente (solo esas tomas) y --sufijo _a (al final del nombre).
+Salida: renders/<carpeta>/*.png
 """
-import bpy, math, os
+import bpy, importlib, math, os, sys
 from mathutils import Quaternion, Vector as V
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
 RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
-BLEND = os.path.join(RAIZ, "assets", "blender", "marinero_v2", "marinero_v2.blend")
-SALIDA = os.path.join(RAIZ, "renders", "marinero_v2")
+ARGS = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+CLAVE = ARGS[ARGS.index("--traje") + 1] if "--traje" in ARGS else "marinero"
+F = importlib.import_module("traje_v2_" + CLAVE)
+BLEND = os.path.join(RAIZ, "assets", "blender", F.CARPETA, f"{F.CARPETA}.blend")
+SALIDA = os.path.join(RAIZ, "renders", F.CARPETA)
 X, Y, Z = V((1, 0, 0)), V((0, 1, 0)), V((0, 0, 1))
 
 # Pose: hueso -> lista de (eje, grados). Adelante es girar en -X (brazos y piernas).
@@ -41,10 +48,17 @@ TOMAS = [("frente", "reposo", 0, 0), ("perfil", "reposo", 90, 0), ("tres_cuartos
          ("brazos_arriba", "brazos_arriba", 20, 10), ("sentado", "sentado", 60, 10),
          ("sentado_perfil", "sentado", 90, 0), ("agachado", "agachado", 60, 10),
          ("agachado_perfil", "agachado", 90, 0),
-         ("cana", "cana", -35, 10), ("saludo", "saludo", 25, 5)]
+         ("cana", "cana", -35, 10), ("saludo", "saludo", 25, 5),
+         ("cara_frente", "reposo", 0, 3), ("cara_tres_cuartos", "reposo", 32, 8)]
+# Tomas de cerca de la cabeza (las que empiezan con "cara"): encuadre y centro propios.
+CARA_ENCUADRE, CARA_CENTRO = 2.9, V((0, 0, 4.95))
+SOLO = ARGS[ARGS.index("--solo") + 1].split(",") if "--solo" in ARGS else None
+SUFIJO = ARGS[ARGS.index("--sufijo") + 1] if "--sufijo" in ARGS else ""
 
 
-def posar(rig, pose):
+def posar(rig, nombre):
+    pose = dict(POSES[nombre])
+    pose.update(getattr(F, "POSES_EXTRA", {}).get(nombre, {}))
     for pb in rig.pose.bones:
         pb.rotation_mode = "QUATERNION"
         q = Quaternion()
@@ -77,7 +91,7 @@ def estudio():
     sol.data.energy, sol.data.angle = 3.2, math.radians(8)
     sc.collection.objects.link(sol)
     cam = bpy.data.objects.new("Camara", bpy.data.cameras.new("Camara"))
-    cam.data.type, cam.data.ortho_scale = "ORTHO", 7.6
+    cam.data.type, cam.data.ortho_scale = "ORTHO", getattr(F, "ENCUADRE", 7.6)
     sc.collection.objects.link(cam)
     sc.camera = cam
     return sc, cam, sol
@@ -86,17 +100,22 @@ def estudio():
 def main():
     bpy.ops.wm.open_mainfile(filepath=BLEND)
     os.makedirs(SALIDA, exist_ok=True)
-    rig = bpy.data.objects["RigMarinero"]
+    rig = bpy.data.objects["Rig" + F.ARCHIVO]
     sc, cam, sol = estudio()
-    centro = V((0, 0, 2.9))
+    encuadre, centro_cuerpo = cam.data.ortho_scale, V((0, 0, getattr(F, "CENTRO_Z", 2.9)))
     for archivo, pose, angulo, elev in TOMAS:
-        posar(rig, POSES[pose])
+        if SOLO and archivo not in SOLO:
+            continue
+        cerca = archivo.startswith("cara")
+        cam.data.ortho_scale = CARA_ENCUADRE if cerca else encuadre
+        centro = CARA_CENTRO if cerca else centro_cuerpo
+        posar(rig, pose)
         a, e = math.radians(angulo), math.radians(elev)
         direccion = V((math.sin(a) * math.cos(e), -math.cos(a) * math.cos(e), math.sin(e)))
         cam.location = centro + direccion * 20
         cam.rotation_euler = (-direccion).to_track_quat("-Z", "Y").to_euler()
         sol.rotation_euler = (math.radians(50), 0, a - math.radians(35))
-        sc.render.filepath = os.path.join(SALIDA, f"{archivo}.png")
+        sc.render.filepath = os.path.join(SALIDA, f"{archivo}{SUFIJO}.png")
         bpy.ops.render.render(write_still=True)
 
 

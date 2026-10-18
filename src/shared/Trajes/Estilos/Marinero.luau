@@ -42,7 +42,9 @@ local style: Tipos.Style = {
 		end
 		return pose
 	end,
-	effects = function(_fx: Tipos.Fx) end,
+	effects = function(_fx: Tipos.Fx): Tipos.Tick?
+		return nil
+	end,
 }
 
 return style
