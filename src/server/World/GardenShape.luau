@@ -11,7 +11,8 @@
 		- cada estanque es una hoya de barro con agua propia, de orilla ondulada
 		  (WorldZones.pondEdge), con una franja de barro alrededor.
 	Los bordes de los senderos ondulan un poco: no parecen trazados con regla. Son de
-	arena (no de Ground: la guarida de lava le cambia el color a ese material).
+	arena (no de Ground: la guarida de lava le cambia el color a ese material). El pasto
+	es LeafyGrass, no Grass: Roblox le pone pasto alto encima a Grass y tapaba los estanques.
 	Las piezas del jardín (rocas, nenúfares, juncos, árboles) salen de tools/estanques.
 ]]
 
@@ -66,7 +67,7 @@ end
 -- Altura del suelo, material y tope del agua de un punto del jardín; `height` es la
 -- altura de la meseta en ese punto.
 function GardenShape.sample(point: Vector2, height: number): (number, Enum.Material, number)
-	local material = if onPath(point) then MATERIAL.Sand else MATERIAL.Grass
+	local material = if onPath(point) then MATERIAL.Sand else MATERIAL.LeafyGrass
 	for index, center in PONDS do
 		local offset = point - center
 		local distance = offset.Magnitude

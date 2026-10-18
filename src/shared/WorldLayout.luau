@@ -27,9 +27,10 @@ export type WorldLayout = {
 	shoreRadius: number,
 	deckHeight: number,
 	plazaRadius: number,
-	-- Zona de entrenamiento: estanques en círculo alrededor del centro de la isla.
+	-- Zona de entrenamiento: los estanques repartidos por el jardín; los más bajos,
+	-- cerca del puente al volcán (+Z), y el sagrado en el centro.
 	trainingPondCount: number,
-	trainingPondRingRadius: number,
+	pondPositions: { { number } }, -- { x, z } de los estanques 1..trainingPondCount
 	trainingPondRadius: number,
 	trainingPondFloor: number,
 	trainingPondWaterTop: number,
@@ -48,10 +49,10 @@ export type WorldLayout = {
 	pierAngles: { number },
 	pierStartRadius: number,
 	pierLength: number,
-	spawnAngle: number,
-	spawnRadius: number,
+	spawnAngle: number, -- dónde está el arco de la entrada (con los tableros del ranking)
+	spawnPosition: { number }, -- { x, z }: se aparece dentro del jardín, mirando al volcán
 	showcaseRadius: number, -- vitrinas de los trajes de pase: en la zona de entrenamiento,
-	showcaseSide: number, -- a esta distancia del centro y a este costado del camino de la aparición
+	showcaseSide: number, -- a esta distancia del centro y a este costado de la aparición
 	shopAngle: number,
 	shopRadius: number,
 	campAngle: number,
@@ -60,8 +61,8 @@ export type WorldLayout = {
 	lighthouseRadius: number,
 	lighthouseBaseHeight: number,
 	lighthouseMoundRadius: number,
-	fishingBandInner: number, -- desde este radio se puede pescar (orilla y muelles)
-	fishingBandOuter: number, -- hasta este radio (los muelles llegan a ~146)
+	fishingBandInner: number, -- desde este radio se puede pescar (toda la playa; no hay muelles)
+	fishingBandOuter: number, -- hasta este radio (un poco mar adentro de la orilla)
 	bridgeAngle: number,
 	bridgeStartRadius: number,
 	bridgeWidth: number,

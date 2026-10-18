@@ -45,6 +45,8 @@ local function style(terrain: Terrain)
 	terrain:SetMaterialColor(MATERIAL.CrackedLava, Color3.fromRGB(255, 96, 40))
 	terrain:SetMaterialColor(MATERIAL.Slate, Color3.fromRGB(150, 150, 156))
 	terrain:SetMaterialColor(MATERIAL.Mud, Color3.fromRGB(96, 78, 54)) -- orillas de los estanques
+	-- Pasto corto del jardín de entrenamiento (sin el pasto alto de Grass, que tapaba el agua).
+	terrain:SetMaterialColor(MATERIAL.LeafyGrass, Color3.fromRGB(104, 172, 70))
 	-- Fondo claro del lago del cráter: bajo el agua se ve turquesa (y el gigante resalta).
 	terrain:SetMaterialColor(MATERIAL.Limestone, Color3.fromRGB(52, 92, 92))
 	terrain:SetMaterialColor(MATERIAL.Asphalt, Color3.fromRGB(58, 46, 48)) -- cumbres del volcán

@@ -17,15 +17,8 @@ def centro(i):
     """Centro del estanque i a la altura del agua (WorldZones.pondCenter)."""
     if i == SAGRADO:
         return (0, AGUA, 0)
-    a = math.radians(angulo(i))
-    r = L["trainingPondRingRadius"]
-    return (math.cos(a) * r, AGUA, math.sin(a) * r)
-
-
-def angulo(i):
-    """Dirección del estanque desde el centro de la isla, en grados (WorldZones.pondAngle)."""
-    paso = 360 / L["trainingPondCount"]
-    return L["spawnAngle"] + paso / 2 + (i - 1) * paso
+    x, z = L["pondPositions"][i - 1]
+    return (x, AGUA, z)
 
 
 def radio(i):

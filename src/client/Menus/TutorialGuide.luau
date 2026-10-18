@@ -7,7 +7,7 @@
 	línea recta de flechas amarillas flotando que sale del jugador y apunta al
 	destino, en tramos rectos (GuidePath y GuideArrow: al volcán, primero a la
 	entrada del puente y después por el puente) hasta el destino (el
-	muelle más cercano, la puerta del volcán, un estanque o la tienda). Al
+	playa más cercana, la puerta del volcán, un estanque o la tienda). Al
 	llegar, las flechas se van; nada queda puesto en el mapa. Desaparece al
 	terminar. El avance lo decide el servidor (atributos Tutorial y
 	TutorialCount).
@@ -45,19 +45,9 @@ end
 -- A dónde tiene que ir el jugador para la misión `id`.
 local function targetFor(id: string, position: Vector3): Vector3
 	if id == "pescar" then
-		local best, bestDistance = Vector3.zero, math.huge
-		for _, angle in WorldLayout.pierAngles do
-			local tip = polar(
-				angle,
-				WorldLayout.pierStartRadius + WorldLayout.pierLength - 6,
-				WorldLayout.deckHeight
-			)
-			local distance = (tip - position).Magnitude
-			if distance < bestDistance then
-				best, bestDistance = tip, distance
-			end
-		end
-		return best
+		-- La playa más cercana: hacia afuera de la isla desde donde está el jugador.
+		local angle = math.deg(math.atan2(position.Z, position.X))
+		return polar(angle, WorldLayout.shoreRadius - 5, WorldLayout.waterLevel + 1)
 	elseif id == "alimentar" then
 		local start, finish = WorldZones.bridgeEnds()
 		local onTheWay = WorldZones.isOnBridge(position)

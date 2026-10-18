@@ -20,6 +20,7 @@ def estanque(i):
     tono = gi.COLORES_ESTANQUE[(i - 1) % len(gi.COLORES_ESTANQUE)]
     rng = random.Random(1000 + i)
     hijos = base.tapa_y_prompt(i, tono) + base.espiritu(i, tono) + temas.tema(i, rng)
+    hijos.append(base.brillo_orilla(i, tono))
     return gi.grupo(f"Estanque{i}", hijos)
 
 

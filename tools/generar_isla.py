@@ -8,7 +8,7 @@ src/shared/WorldLayoutData.json, así que piezas y terreno siempre coinciden.
     python tools/generar_isla.py
 
 Lenguaje visual (ver docs/alcance.md):
-    turquesa = pescar (alfombras en los muelles; se pesca desde toda la orilla)
+    turquesa = pescar (se pesca desde toda la orilla: no hay muelles)
     coral    = alimentar (las 8 cubetas alrededor de la laguna)
 
 Unidades en studs. Ángulos en grados sobre XZ (0 = +X, 90 = +Z). El gigante vive en el
@@ -38,7 +38,6 @@ FLORES = ((255, 128, 160), (255, 214, 92), (250, 250, 255), (190, 140, 255))
 COCO = (112, 76, 46)
 ROCA = ((132, 136, 142), (110, 114, 122), (96, 101, 110))
 CORAL_VIVO = ((255, 120, 140), (255, 160, 90), (190, 110, 220))
-TURQUESA = (54, 196, 184)
 CORAL = (255, 122, 100)
 CREMA = (255, 241, 216)
 ROJO_BOYA = (230, 64, 56)
@@ -324,18 +323,7 @@ def zona_entrenamiento():
     return jardin()
 
 
-# --- Muelles y puntos de pesca ---------------------------------------------------------
-def tablones_z(nombre, x0, x1, z0, z1):
-    """Tablones que cruzan en X y se repiten a lo largo de Z."""
-    hijos, z, i = [], z0, 0
-    while z < z1 - 0.01:
-        hijos.append(pieza(f"Tablon{i}", (x1 - x0, 0.5, 1.8), ((x0 + x1) / 2, CUBIERTA_Y - 0.25, z + 1),
-                           variar(MADERA_CLARA if i % 2 else MADERA_MEDIA, 6), "WoodPlanks"))
-        z, i = z + 2, i + 1
-    hijos.append(pieza("Base", (x1 - x0 - 0.4, 0.4, z1 - z0 - 0.4), ((x0 + x1) / 2, CUBIERTA_Y - 0.7, (z0 + z1) / 2), MADERA_OSCURA, "Wood"))
-    return grupo(nombre, hijos)
-
-
+# --- Tablones (cabaña) -----------------------------------------------------------------
 def tablones_x(nombre, x0, x1, z0, z1):
     hijos, x, i = [], x0, 0
     while x < x1 - 0.01:
@@ -346,54 +334,6 @@ def tablones_x(nombre, x0, x1, z0, z1):
     return grupo(nombre, hijos)
 
 
-def punto_de_pesca(nombre, x, z, yaw):
-    """Alfombra turquesa, farol y cebo: marca los mejores lugares, aunque se puede
-    pescar desde cualquier punto de la orilla o del muelle."""
-    r = ry(yaw)
-    lado = aplicar(r, (1, 0, 0))
-    hijos = [
-        pieza("Alfombra", (5, 0.12, 5), (x, CUBIERTA_Y + 0.06, z), TURQUESA, "Fabric", r, **DECORADO, CanCollide=False),
-        pieza("Borde", (5.6, 0.14, 5.6), (x, CUBIERTA_Y + 0.03, z), CREMA, "Fabric", r, **DECORADO, CanCollide=False),
-        farol("Farol", *(lambda p: (p[0], p[2]))(add((x, 0, z), lado, 3.2))),
-        pieza("Cebo", (1.4, 1.2, 1.4), add((x, CUBIERTA_Y + 0.6, z), lado, -2.6), CORAL, "SmoothPlastic", VERTICAL, "Cylinder", **DECORADO),
-    ]
-    return grupo(nombre, hijos)
-
-
-def muelle(indice, angulo):
-    """Se arma en coordenadas locales (+Z hacia el mar) y luego se rota a su ángulo."""
-    largo = L["pierLength"]
-    fin = largo - 12  # empieza la plataforma
-    hijos = [tablones_z("Pasarela", -5, 5, 0, fin), tablones_x("Plataforma", -13, 13, fin, largo)]
-    for i, z in enumerate(range(6, largo + 1, 8)):
-        for lado in (-1, 1):
-            x = 5.3 * lado if z < fin else 13.3 * lado
-            hijos.append(poste(f"Poste{i}_{lado}", x, z, CUBIERTA_Y + 0.6, L["seaFloorHeight"] + 2))
-    hijos.append(poste("PosteFinI", -13.3, largo - 0.3, CUBIERTA_Y + 0.6, L["seaFloorHeight"] + 2))
-    hijos.append(poste("PosteFinD", 13.3, largo - 0.3, CUBIERTA_Y + 0.6, L["seaFloorHeight"] + 2))
-    # Cuerda baja a los lados de la pasarela.
-    for lado in (-1, 1):
-        for i, z in enumerate(range(6, fin, 6)):
-            hijos.append(poste(f"Bolardo{i}_{lado}", 5.2 * lado, z, CUBIERTA_Y + 2.2, CUBIERTA_Y, 0.6))
-        hijos.append(pieza(f"Cuerda{lado}", (0.25, 0.25, fin - 6), (5.2 * lado, CUBIERTA_Y + 1.9, (fin + 6) / 2), PAJA, "Fabric", **DECORADO))
-        hijos.append(muro(f"MuroPasarela{lado}", (5.4 * lado, 8), (5.4 * lado, fin)))
-    hijos += [
-        muro("MuroFin", (-13.5, largo + 0.3), (13.5, largo + 0.3)),
-        muro("MuroI", (-13.5, fin), (-13.5, largo)),
-        muro("MuroD", (13.5, fin), (13.5, largo)),
-        muro("MuroAtrasI", (-13.5, fin), (-5.4, fin)),
-        muro("MuroAtrasD", (5.4, fin), (13.5, fin)),
-    ]
-    puntos = [
-        punto_de_pesca("PuntoIzq", -10, fin + 6, 90),
-        punto_de_pesca("PuntoDer", 10, fin + 6, -90),
-        punto_de_pesca("PuntoFin", 0, largo - 2.6, 180),
-    ]
-    hijos.append(grupo("PuntosDePesca", puntos, "Folder"))
-    d = direccion(angulo)
-    return mover(grupo(f"Muelle{indice}", hijos), base_con_z(d), polar(angulo, L["pierStartRadius"], 0))
-
-
 # --- Aparición, entrada y cabaña ----------------------------------------------------------
 # La plaza grande sigue de mármol claro con oro; la aparición y el arco de entrada son de
 # basalto con lava (ver "Temática volcánica" arriba).
@@ -401,7 +341,7 @@ MARMOL_CLARO = (238, 233, 224)
 HIERRO_NEGRO = (40, 40, 46)
 LUZ_FAROLA = (255, 214, 150)
 SETO = ((52, 122, 64), (62, 138, 72))
-ANGULOS_CAMINO = [L["spawnAngle"], L["shopAngle"], L["campAngle"], L["lighthouseAngle"], L["bridgeAngle"]] + L["pierAngles"]
+ANGULOS_CAMINO = [L["spawnAngle"], L["shopAngle"], L["campAngle"], L["lighthouseAngle"], L["bridgeAngle"]]
 
 
 def sobre_camino(angulo, margen):
@@ -451,15 +391,15 @@ def pilar(nombre, p, y0, alto, ancho=2.4, r=I3, caras=(), tramos=3, espejo=1):
 
 
 def aparicion():
-    """Plataforma redonda de basalto donde se aparece (mira hacia la laguna)."""
-    a = L["spawnAngle"]
-    d = direccion(a)
+    """Plataforma redonda de basalto donde se aparece, dentro del jardín de entrenamiento,
+    mirando al volcán (+Z)."""
+    x, z = L["spawnPosition"]
     return {
         "name": "Aparicion", "className": "SpawnLocation",
         "properties": {
             "Anchored": True, "Neutral": True, "Duration": 0, "Size": [1, 14, 14], "Shape": "Cylinder",
-            # Cilindro de pie que sigue mirando a la laguna: su LookVector (-Z local) apunta al centro.
-            "CFrame": cf(polar(a, L["spawnRadius"], L["plateauHeight"] + 0.3), mat(base_con_z(d), rz(90))),
+            # Cilindro de pie; su LookVector (-Z local) apunta al volcán (+Z del mundo).
+            "CFrame": cf((x, L["plateauHeight"] + 0.3, z), mat(base_con_z((0, 0, -1)), rz(90))),
             "Color": color(ROCA_VOLCANICA), "Material": "Basalt", "TopSurface": "Smooth", "BottomSurface": "Smooth",
         },
     }
@@ -468,8 +408,8 @@ def aparicion():
 def plaza_aparicion():
     """Escalón de basalto con filo de oro mate alrededor de la aparición, un círculo de lava
     sobre la plataforma y cuatro farolas de basalto."""
-    a = L["spawnAngle"]
-    c = polar(a, L["spawnRadius"], 0)
+    a = 90  # hacia el volcán
+    c = (L["spawnPosition"][0], 0, L["spawnPosition"][1])
     y = L["plateauHeight"]
     hijos = anillo_tallado("Oro", c[0], c[2], 7.05, 48, 0.4, 0.9, y + 0.85, ORO_MATE, "Metal", **DECORADO)
     hijos += anillo_tallado("Escalon", c[0], c[2], 9.2, 48, 4.2, 0.7, y + 0.35, ROCA_VOLCANICA_OSCURA, "Basalt")
@@ -505,8 +445,8 @@ def arco_entrada():
     hijos.append(pieza("Viga", (19.5, 1.8, 3), add(base, (0, y + 16.4, 0)), ROCA_VOLCANICA, "Basalt", r))
     for k, dy in enumerate((15.45, 17.35)):
         hijos.append(pieza(f"Moldura{k}", (19.7, 0.3, 3.2), add(base, (0, y + dy, 0)), ORO_MATE, "Metal", r, **DECORADO))
-    # El texto mira hacia afuera (+Z local = hacia la aparición).
-    hijos += placa("Cartel", add(base, (0, y + 12.6, 0)), r, "LAGUNA DE LOS GIGANTES", 12.6, 2.6)
+    # Se lee desde adentro del jardín (la aparición ahora está adentro).
+    hijos += placa("Cartel", add(base, (0, y + 12.6, 0)), r, "LAGUNA DE LOS GIGANTES", 12.6, 2.6, "Front")
     # Salón de la fama: dos tableros grandes a los lados del arco y uno sobre él. Miran hacia
     # adentro (-Z local, cara Front): se leen desde la zona de entrenamiento del centro.
     for lado, nombre, titulo in ((-1, "TableroPoder", "TOP PODER"), (1, "TableroKills", "TOP MONSTRUOS")):
@@ -571,7 +511,7 @@ def palmera(nombre, base, yaw, inclinacion=4.5, segmentos=6):
 
 
 def lejos_de_caminos(angulo, margen):
-    caminos = list(L["pierAngles"]) + [L["spawnAngle"], L["shopAngle"], L["lighthouseAngle"], L["campAngle"], L["bridgeAngle"]]
+    caminos = [L["spawnAngle"], L["shopAngle"], L["lighthouseAngle"], L["campAngle"], L["bridgeAngle"]]
     return all(abs((angulo - c + 180) % 360 - 180) > margen for c in caminos)
 
 
@@ -1117,7 +1057,6 @@ def main():
         zona_entrenamiento(),
         puente(),
         crater(),
-        grupo("Muelles", [muelle(i + 1, a) for i, a in enumerate(L["pierAngles"])], "Folder"),
         aparicion(),
         plaza_aparicion(),
         arco_entrada(),

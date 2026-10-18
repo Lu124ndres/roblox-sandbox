@@ -2505,3 +2505,34 @@ altura). Ver `docs/decisiones.md`.
 
 **Qué sigue:** guardar el lugar en Studio (el modelo vive en el `.rbxl`). Si gusta, el mismo
 método para el Rey del Mar y el Dios del Volcán.
+
+---
+
+## 2026-10-18 (11) — Observaciones del usuario tras jugar: pesca, muelles, jardín y aviso de E
+
+**Qué se hizo:**
+
+- **Pesca más rápida al empezar:** pique de 0.8 a 1.8 s (antes 2 a 5), lanzamiento 0.6 s
+  (antes 0.9), el pez se muestra 0.9 s (antes 1.6), espera entre lanzamientos 0.3 s y la
+  barra de recoger empieza en 0.4 (antes 0.25). Un pez común toma ~2-3 s en vez de 5-8 s.
+  `GiantFood` usa los mismos números, así que el monstruo se sigue llenando en su tiempo.
+- **Sin muelles:** se pesca desde toda la playa (`fishingBandInner` 158 → 148, desde que
+  termina el pasto). Fuera los muelles, sus caminos, el tp de admin «muelle» (ahora
+  «orilla») y el destino del tutorial (ahora la playa más cercana).
+- **Jardín:** los estanques tienen posiciones propias (`pondPositions`): el 1 y el 2 junto al
+  camino al puente del volcán, los siguientes bajando por los costados y el 10 al fondo; el
+  sagrado en el centro. La aparición está dentro del jardín (`spawnPosition`, al sur del
+  sagrado, mirando al volcán), con las vitrinas de trajes a los lados. Senderos: avenida
+  norte-sur y este-oeste, y el anillo. El pasto del jardín es LeafyGrass (sin el pasto alto
+  de Grass, que tapaba el agua) y cada estanque tiene un borde de luz de su color.
+- **Aviso de «E» propio** (`Interface/PromptView`): placa de piedra con la tecla tallada (E
+  dorada, el botón del mando o «TOCA»), el objeto en chico y la acción grande en dorado;
+  entra con rebote y se hunde al apretar. Todos los ProximityPrompt del juego son
+  `Style = Custom` (server/Proximity y la ruleta).
+
+**Probado en Studio (Play):** vista del jardín (`docs/capturas/2026-10-18-jardin-reparto.jpg`)
+y el aviso en el estanque 1 (`...-aviso-entrenar.jpg`). La captura del MCP no dibuja los
+BillboardGui con AlwaysOnTop: para verlo hubo que apagarlo un momento.
+
+**Qué se rompió:** al probar seguido, el guardado expulsa con «Tus datos siguen abiertos en
+otro servidor»: cada Play detenido deja el bloqueo de sesión hasta que vence (180 s).

@@ -725,3 +725,21 @@ Codo, muñeca, cintura, rodilla y tobillo son piel continua con una franja de pe
   bota sobre el tobillo): se estira un color liso, que no se nota.
 - Colores planos por celda de paleta (64 px) en vez de horneado: cada cara toma el centro de
   su celda, sin costuras. Solo cara, pecho y espalda llevan dibujo, con proyección plana.
+
+## 2026-10-18 — Estanques con posición propia y aparición dentro del jardín
+
+**Contexto:** el usuario quería los estanques bajos cerca del volcán (el viaje a alimentar es
+corto mientras se suben las kills) y aparecer dentro de la zona de entrenamiento.
+**Decisión:** el anillo de estanques se cambió por posiciones fijas en `WorldLayoutData.json`
+(`pondPositions`, `spawnPosition`), que leen el terreno (`GardenShape`), las piezas
+(`tools/estanques`), el servidor y el tutorial vía `WorldZones.pondCenter`/`spawnPoint`. El arco
+de la entrada y los tableros siguen en `spawnAngle` (ahora son la puerta sur a la playa). El
+pasto del jardín es LeafyGrass porque Roblox dibuja pasto alto sobre Grass y tapaba el agua.
+
+## 2026-10-18 — Los avisos de E son de la interfaz, no de Roblox
+
+**Decisión:** todos los ProximityPrompt van con `Style = Custom` y los dibuja
+`Interface/PromptView` (placa de piedra, tecla tallada, acción en dorado). En celular la placa
+entera es el botón (`InputHoldBegin/End`). Va con `AlwaysOnTop` para que no la tapen el agua ni
+los espíritus de los estanques.
+

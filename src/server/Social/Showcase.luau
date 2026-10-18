@@ -3,7 +3,7 @@
 	Showcase
 
 	Vitrinas de los trajes de pase en la zona de entrenamiento, a los lados
-	del camino que baja de la aparición, entre los estanques y el sagrado:
+	de la aparición (que está dentro del jardín):
 	un pedestal de mármol y oro con el traje de malla en grande (lo animan
 	los clientes: client/Trajes/Vitrinas), un cartel con nombre, precio y
 	ventajas, y E para comprarlo. La compra la abre el cliente (Purchases);
@@ -18,6 +18,7 @@ local Workspace = game:GetService("Workspace")
 local Config = require(ReplicatedStorage.Shared.Config)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
+local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Proximity = require(script.Parent.Parent.Proximity)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local OutfitChoice = require(script.Parent.OutfitChoice)
@@ -28,6 +29,7 @@ local DISPLAY_HEIGHT = 12 -- alto del traje en la vitrina (studs)
 local BASE_RADIUS = 6.5
 local BASE_HEIGHT = 2.4
 local PROMPT_DISTANCE = 16
+local SPAWN_LOOK_AHEAD = 20 -- studs hacia el volcán (+Z) desde la aparición
 local MARBLE = Color3.fromRGB(236, 232, 224)
 local GOLD = Color3.fromRGB(255, 200, 70)
 
@@ -164,8 +166,8 @@ local function build(folder: Folder, passKey: string, side: number)
 	)
 	step.Parent = model
 	local top = ground + Vector3.new(0, BASE_HEIGHT + 0.35, 0)
-	-- Mira hacia la entrada de la plaza: quien llega por el camino la ve de frente.
-	local facing = out * L.plazaRadius
+	-- Mira un poco delante de la aparición: quien aparece la ve de frente al dar unos pasos.
+	local facing = WorldZones.spawnPoint() + Vector3.new(0, 0, SPAWN_LOOK_AHEAD)
 	local look = Vector3.new(facing.X - ground.X, 0, facing.Z - ground.Z).Unit
 	local shown = display(outfit, top, look)
 	if shown then

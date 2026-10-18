@@ -12,7 +12,6 @@
 	"deckHeight": 6.6,
 	"plazaRadius": 122,
 	"trainingPondCount": 10,
-	"trainingPondRingRadius": 90,
 	"trainingPondRadius": 14,
 	"trainingPondFloor": -1.5,
 	"trainingPondWaterTop": 6,
@@ -27,11 +26,10 @@
 	"gardenRingRadius": 116,
 	"gardenPathHalfWidth": 3,
 	"gardenSpokeAngles": [
-		270,
-		342,
-		54,
-		126,
-		198
+		0,
+		90,
+		180,
+		270
 	],
 	"gardenClearingRadius": 29,
 	"pierAngles": [
@@ -43,9 +41,8 @@
 	"pierStartRadius": 158,
 	"pierLength": 56,
 	"spawnAngle": 270,
-	"spawnRadius": 140,
-	"showcaseRadius": 42,
-	"showcaseSide": 22,
+	"showcaseRadius": 52,
+	"showcaseSide": 28,
 	"shopAngle": 0,
 	"shopRadius": 142,
 	"campAngle": 125,
@@ -54,8 +51,8 @@
 	"lighthouseRadius": 182,
 	"lighthouseBaseHeight": 15,
 	"lighthouseMoundRadius": 30,
-	"fishingBandInner": 158,
-	"fishingBandOuter": 258,
+	"fishingBandInner": 148,
+	"fishingBandOuter": 176,
 	"bridgeAngle": 90,
 	"bridgeStartRadius": 142,
 	"bridgeWidth": 34,
@@ -157,5 +154,51 @@
 			-72,
 			7
 		]
+	],
+	"pondPositions": [
+		[
+			-26,
+			90
+		],
+		[
+			26,
+			90
+		],
+		[
+			-64,
+			60
+		],
+		[
+			64,
+			60
+		],
+		[
+			-90,
+			24
+		],
+		[
+			90,
+			24
+		],
+		[
+			-82,
+			-34
+		],
+		[
+			82,
+			-34
+		],
+		[
+			-46,
+			-80
+		],
+		[
+			46,
+			-80
+		]
+	],
+	"spawnPosition": [
+		0,
+		-52
 	]
 }
