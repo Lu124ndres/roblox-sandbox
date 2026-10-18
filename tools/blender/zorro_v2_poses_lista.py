@@ -7,15 +7,12 @@ armar_poses() llena, después de armar las piezas:
     INFO      lo que mide el juego en cada escena de colas (maxJoint, minGap, minTip, minRoom) y la
               distancia que queda en las poses de contacto (rascarse, lamerse)
 Las poses de cola salen de simular Zorro/Colas con los pedidos de Colas/Prueba (y el máximo que
-acepta cada clave cuando se pide "al máximo"): nada inventado. Las del cuerpo que el juego ya hace
-(mirar, aullido, reverencia, salto, sacudida, comer, paso) salen de Zorro/Trucos y Pose; las que
-todavía no existen (sentado, echado, rascarse, lamerse, párpados) llevan `huesos` y se buscan con
-resolver() cuando hay un contacto.
+acepta cada clave cuando se pide "al máximo"): nada inventado. Las del cuerpo usan las claves de
+Zorro/Pose (sit, lie, curl, scratch, pawL, stretch, spine, walk, pounce...) con la cuenta de
+zorro_v2_poses_cuerpo.py; solo los párpados y las puntas de las orejas llevan `huesos`. La base
+baja Pose.drop (subida_zorro()) y las escenas de colas sentado y echado bajan lo mismo.
 """
 Q = math.radians(45)
-# Cuánto pesan los choques en resolver() (sobre la distancia al contacto), medido: 1.0 en el echado
-# esquiva las patas plegadas bajo la grupa; en rascarse, más peso hace que la pata no llegue.
-K_CHOQUE = globals().get("K_CHOQUE") or {"sentado": 0.3, "dormir": 1.0, "rascarse": 0.05, "lamerse": 0.6}
 CARA = ["Cabeza", "Mandibula", "OrejaIzq", "OrejaDer", "OrejaPuntaIzq", "OrejaPuntaDer", "ParpadoIzq", "ParpadoDer"]
 
 
@@ -70,69 +67,30 @@ def _juntas(caso):
     return out
 
 
-def espejar(e):
-    """Copia los huesos Izq de `huesos` a los Der (cabeceo igual, giro y alabeo al revés)."""
-    for h, (p, g, b) in list(e["huesos"].items()):
-        if h.endswith("Izq"):
-            e["huesos"][h[:-3] + "Der"] = (p, -g, -b)
-    return e
-
-
-def _z(m, h, p, z=0.0):
-    return abs(punto(m, h, p).z - z * C)
-
-
 def _contactos():
-    """Sentado, echado, rascarse y lamerse: resolver() con los puntos de contacto. Los puntos salen
-    de la caja de cada pieza (ref), así sirven en cualquier etapa."""
-    r, piv = {}, lambda h: HUESOS[h][1]
-    mano_abajo, mano_arriba = ref("ManoIzq", 0.5, 0.5, 0), ref("ManoIzq", 0.5, 0.5, 1, dz=0.2)
-    talon, punta_pie = ref("PieIzq", 0.5, 1, 0), ref("PieIzq", 0.5, 0, 0)
-    libres = {"Cadera.0": (0, 1.2, 0.6), "dy": (-0.4, 0, -0.15), "lookPitch": (-1.2, 0.3, -0.5),
-              "HombroIzq.0": (-1.2, 0.3, -0.6), "MusloIzq.0": (-0.5, 2.5, 1.0), "PiernaIzq.0": (-2.6, 0.5, -1.5),
-              "TobilloIzq.0": (-0.5, 2.6, 1.5), "PieIzq.0": (-1.5, 1.5, -0.5)}
-    def sentado(m):
-        recta = abs(punto(m, "AntebrazoIzq", piv("AntebrazoIzq")).y - punto(m, "ManoIzq", piv("ManoIzq")).y)
-        adelante = (m["Cabeza"].to_3x3() @ V((0, -1, 0))).z
-        return (_z(m, "ManoIzq", mano_abajo) + _z(m, "PieIzq", talon) + _z(m, "PieIzq", punta_pie)
-                + _z(m, "Cadera", ref("Cadera", 0.5, 1, 0), 0.5) + recta + abs(adelante) * C)
-    r["sentado"] = resolver({}, libres, sentado, k_choque=K_CHOQUE["sentado"])
-    libres = {"dy": (-0.45, 0, -0.25), "Cadera.0": (-0.3, 0.3, 0), "BrazoIzq.0": (-1.6, 1.8, 1.2),
-              "AntebrazoIzq.0": (-2.0, 1.6, 0.3), "ManoIzq.0": (-1.5, 1.5, 0), "MusloIzq.0": (-0.5, 2.6, 1.6),
-              "PiernaIzq.0": (-2.2, 0.5, -1.8), "TobilloIzq.0": (-0.5, 1.2, 1.0), "PieIzq.0": (-1.5, 1.5, 0)}
-    # El lomo se dobla de lado hasta su límite limpio (columna_de_lado, ~0.25 rad por hueso).
-    echado = {"lookYaw": -1.0, "lookPitch": -0.4, "huesos": {"Columna": (0, -0.25, 0), "Pecho": (0, -0.25, 0)}}
-    panza = [("Pecho", ref("Pecho", 0.5, 0.5, 0)), ("Cadera", ref("Cadera", 0.5, 0.5, 0))]
-    r["dormir"] = resolver(echado, libres, k_choque=K_CHOQUE["dormir"], costo=lambda m: (
-        sum(_z(m, h, p, 0.5) for h, p in panza) + _z(m, "ManoIzq", mano_abajo)
-        + _z(m, "AntebrazoIzq", ref("AntebrazoIzq", 0.5, 0.5, 0)) + _z(m, "PieIzq", talon) + _z(m, "PieIzq", punta_pie)))
-    libres = {"lookYaw": (0, 1.3, 0.8), "lookPitch": (-1.0, 0.4, -0.4), "tilt": (-0.8, 0.8, 0.3),
-              "Columna.1": (0, 0.6, 0.3), "Pecho.1": (0, 0.6, 0.3), "MusloIzq.0": (-0.5, 2.4, 1.2),
-              "MusloIzq.2": (-0.3, 1.6, 0.3), "Cadera.2": (-0.4, 0.4, 0), "PiernaIzq.0": (-2.4, 1.0, -0.5),
-              "TobilloIzq.0": (-1.0, 2.4, 0.8), "PieIzq.0": (-1.2, 1.2, 0)}
-    garra, oreja = ref("PieIzq", 0.5, 0.1, 0.5), ref("OrejaIzq", 0.5, 1, 0.5, dy=0.5)  # detrás de la oreja
-    rascar = lambda m: (punto(m, "PieIzq", garra) - punto(m, "OrejaIzq", oreja)).length
-    llega = resolver({"earL": 0.3, "jaw": 0.1}, libres, rascar, k_choque=0)  # primero, que llegue
-    r["rascarse_oreja"] = resolver({"earL": 0.3, "jaw": 0.1}, libres, rascar, k_choque=K_CHOQUE["rascarse"],
-                                   inicio=llega[2])
-    r["rascarse_sin_esquivar_choques"] = llega
-    libres = {"lookPitch": (-1.2, 0.3, -0.6), "lookYaw": (-0.2, 1.0, 0.3), "tilt": (-0.6, 0.6, 0),
-              "HombroIzq.0": (-0.5, 0.8, 0.2), "BrazoIzq.0": (0, 1.8, 1.0), "BrazoIzq.2": (-0.6, 0.6, 0),
-              "AntebrazoIzq.0": (-2.2, 0.5, -1.0), "ManoIzq.0": (-1.2, 1.2, 0)}
-    menton = ref("Mandibula", 0.5, 0.25, 0, dz=-0.7)  # debajo del mentón, donde lame
-    lamer = lambda m: (punto(m, "ManoIzq", mano_arriba) - punto(m, "Mandibula", menton)).length
-    r["lamerse_pata"] = resolver({"jaw": 0.35, "earL": 0.2, "earR": 0.2}, libres, lamer, k_choque=K_CHOQUE["lamerse"])
-    espejar(r["sentado"][0])
-    espejar(r["dormir"][0])
-    return r
+    """Cuánto le falta (celdas) a la pata que rasca para llegar detrás de la cabeza (bajo la oreja) y a
+    la mano que se lame para llegar bajo el mentón, con las poses de las claves."""
+    garra, cuello = ref("PieIzq", 0.5, 0.1, 0.5), ref("Cabeza", 1.0, 1.0, 0.3)
+    mano, menton = ref("ManoIzq", 0.5, 0.5, 1, dz=0.2), ref("Mandibula", 0.5, 0.25, 0, dz=-0.7)
+    out = {}
+    for nombre, entrada, (pa, a), (pb, b) in (
+            ("rascarse", RASCAR, ("PieIzq", garra), ("Cabeza", cuello)),
+            ("lamerse_sentado", {"sit": 1, "pawL": 1, "jaw": 0.2}, ("ManoIzq", mano), ("Mandibula", menton)),
+            ("lamerse_parado", {"pawL": 1, "jaw": 0.2}, ("ManoIzq", mano), ("Mandibula", menton))):
+        m = matrices(entrada)
+        out[nombre] = round((punto(m, pa, a) - punto(m, pb, b)).length / C, 2)
+    return out
+
+
+RASCAR = {"sit": 1, "scratch": 1, "scratchSide": 1, "earL": 0.3, "jaw": 0.1}
 
 
 def armar_poses():
-    global MED, POSES, BARRIDOS, INFO
+    global MED, POSES, BARRIDOS, INFO, subida
+    subida = subida_zorro  # la base baja Pose.drop, como en el juego
     MED = medidas({n: np.array(tuple(p)) for n, (_, p) in HUESOS.items()}, ALTO_BU)
     BARRIDOS, INFO, colas = {}, {"escenas_colas": {}, "contacto_celdas": {}}, {}
-    cont = _contactos()
-    BAJADA.update({n: max(0.0, -cont[n][0].get("dy", 0.0)) for n in BAJADA})
+    BAJADA.update({"sentado": drop({"sit": 1}), "dormir": drop({"lie": 1})})
     INFO["bajada"] = {n: round(b, 3) for n, b in BAJADA.items()}
     for nombre, (plan, seg, como) in ESCENAS.items():
         cuadros = simular(MED, ETAPA, plan, seg)
@@ -145,7 +103,13 @@ def armar_poses():
             "minRoom": round(min(min(q["room"]) for q in cuadros), 3)}
         BARRIDOS[nombre] = [(f"{q['u']:.2f}", {"colas": q["angulos"]}) for q in vivos[::max(1, len(vivos) // 8)]]
     BARRIDOS["paso"] = [(f"{f:.2f}", pasos(f)) for f in (2 * math.pi * i / 24 for i in range(24))]
-    INFO["contacto_celdas"] = {n: round(c[1] / C, 2) for n, c in cont.items()}
+    BARRIDOS["caminar"] = [(f"{f:.2f}", {"walk": 1, "walkPhase": f}) for f in (2 * math.pi * i / 24 for i in range(24))]
+    BARRIDOS["rascarse_latido"] = [(f"{b:.1f}", dict(RASCAR, scratchBeat=b)) for b in (-1, -0.5, 0, 0.5, 1)]
+    BARRIDOS["rascarse_der_latido"] = [(f"{b:.1f}", dict(RASCAR, scratchSide=-1, earL=0, earR=0.3, scratchBeat=b))
+                                       for b in (-1, -0.5, 0, 0.5, 1)]
+    INFO["contacto_celdas"] = _contactos()
+    INFO["drop"] = {"sentado": round(drop({"sit": 1}), 3), "echado": round(drop({"lie": 1}), 3),
+                    "caminando": round(drop({"walk": 1}), 3), "quieto": round(drop({}), 3)}
     ear = lambda k: {"earL": k, "earR": k}
     POSES = {
         "mirar_arriba_45": ({"lookPitch": Q}, 90, 0), "mirar_abajo_45": ({"lookPitch": -Q}, 90, 0),
@@ -156,14 +120,24 @@ def armar_poses():
         "orejas_planas": ({**ear(-1.0), "huesos": lados(["OrejaPunta"], (0.5, 0, 0))}, 60, 10, CARA),
         "orejas_adelante": ({**ear(1.0), "huesos": lados(["OrejaPunta"], (-0.5, 0, 0))}, 60, 10, CARA),
         "reverencia": ({"bow": 0.9, "lookPitch": 0.35, "jaw": 0.35, **ear(0.5), "colas": colas["colas_reverencia"]}, 90, 0),
-        "sentado": (dict(cont["sentado"][0], colas=colas["colas_sentado"]), 60, 10),
-        "dormir_echado": (dict(cont["dormir"][0], colas=colas["colas_dormir"]), 150, 45),
+        "sentado": ({"sit": 1, "tailWrap": 1, "colas": colas["colas_sentado"]}, 60, 10),
+        "sentado_lado": ({"sit": 1, "colas": colas["colas_sentado"]}, 90, 0),
+        "echado": ({"lie": 1, "colas": colas["colas_dormir"]}, 40, 25),
+        "dormir_enroscado": ({"lie": 1, "curl": 1, "curlSide": 1, "colas": colas["colas_dormir"]}, 150, 45),
+        "dormir_enroscado_der": ({"lie": 1, "curl": 1, "curlSide": -1}, -150, 45),
         "salto_agachado": ({"crouch": 0.6, "lean": -0.12}, 90, 0),
         "salto_estirado": ({"dy": 0.35, "crouch": -0.35, "stepFL": 0.7, "stepFR": 0.7, "stepHL": 0.5, "stepHR": 0.5,
                             **ear(-0.4), "jaw": 0.3, "colas": colas["colas_salto"]}, 90, 0),
         "paso_FL_HR": (pasos(math.pi / 2), 90, 0), "paso_FR_HL": (pasos(3 * math.pi / 2), -90, 0),
-        "rascarse_oreja": (cont["rascarse_oreja"][0], 60, 10),
-        "lamerse_pata": (cont["lamerse_pata"][0], 40, 10),
+        "rascarse_izq": (RASCAR, 60, 10),
+        "rascarse_der": (dict(RASCAR, scratchSide=-1, earL=0, earR=0.3, scratchBeat=1), -60, 10),
+        "lamerse_sentado": ({"sit": 1, "pawL": 1, "jaw": 0.2}, 40, 10),
+        "lamerse_parado": ({"pawR": 1, "jaw": 0.2}, -40, 10),
+        "estirarse": ({"stretch": 1, "lookPitch": 0.2}, 90, 0),
+        "columna_de_lado": ({"spine": 1, "lookYaw": 0.6}, 0, 70),
+        "picada": ({"pounce": 1, "dy": 0.3, "colas": colas["colas_salto"]}, 90, 0),
+        "picada_34": ({"pounce": 1, "dy": 0.3, "colas": colas["colas_salto"]}, 30, 10),
+        **{f"caminar_{i}": ({"walk": 1, "walkPhase": math.pi * i / 2}, 90, 0) for i in range(4)},
         "sacudida": ({"shake": 1, "t": math.pi / 76, "crouch": 0.1, "lookPitch": -0.1, **ear(-0.3),
                       "colas": colas["colas_sacudida"]}, 0, 20),
         "comer": ({"bow": 0.35, "lean": -0.12, "lookPitch": -0.28, "jaw": 0.8, **ear(0.35), "colas": colas["colas_comer"]}, 60, 10),

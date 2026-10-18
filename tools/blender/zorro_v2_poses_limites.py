@@ -13,7 +13,8 @@ posar(), revisar() y MED):
     juntas_por_cola(reposo)  la prueba de 45° en cada junta (como colas_juntas_45_*), pero de a una
                             cola: qué atraviesa cada una sola (las poses colas_juntas_45_* doblan las
                             seis a la vez, media vuelta cada una: ahí se cruzan entre ellas)
-Sirve para elegir topes en Pose.luau y valores de Limites.luau/Estados.luau con números medidos.
+Sirve para elegir topes en Pose y Patas/Ajustes y valores de Limites.luau/Estados.luau con números
+medidos. Las claves de postura (sentarse, echarse...) se cuentan solas: hasta dónde quedan limpias.
 """
 CLAVES = [  # (nombre, entrada(x), tope que se prueba)
     ("mirar_arriba", lambda x: {"lookPitch": x}, 1.2),
@@ -25,12 +26,23 @@ CLAVES = [  # (nombre, entrada(x), tope que se prueba)
     ("orejas_atras", lambda x: {"earL": -x, "earR": -x}, 1.5),
     ("reverencia", lambda x: {"bow": x}, 1.2),
     ("agacharse", lambda x: {"crouch": x}, 1.2),
-    ("estirarse", lambda x: {"crouch": -x}, 1.0),
+    ("estirarse", lambda x: {"crouch": -x}, 1.0),  # las patas rectas (salto)
     ("levantar_pata_delantera", lambda x: {"stepFL": x}, 1.5),
     ("levantar_pata_trasera", lambda x: {"stepHL": x}, 1.5),
     ("inclinarse_atras", lambda x: {"lean": x}, 1.0),
     ("inclinarse_adelante", lambda x: {"lean": -x}, 1.0),
     ("sacudida", lambda x: {"shake": x, "t": math.pi / 76}, 1.0),
+    # Las claves de la ola 3 (Pose y Patas), solas o sobre la postura que las lleva.
+    ("sentarse", lambda x: {"sit": x}, 1.0),
+    ("echarse", lambda x: {"lie": x}, 1.0),
+    ("enroscarse", lambda x: {"lie": 1, "curl": x, "curlSide": 1}, 1.0),
+    ("rascarse", lambda x: {"sit": 1, "scratch": x, "scratchSide": 1}, 1.0),
+    ("lamerse_parado", lambda x: {"pawL": x}, 1.0),
+    ("lamerse_sentado", lambda x: {"sit": 1, "pawL": x}, 1.0),
+    ("estirar_traseras", lambda x: {"stretch": x}, 1.0),
+    ("curvar_el_cuerpo", lambda x: {"spine": x}, 1.0),
+    ("picada", lambda x: {"pounce": x, "dy": 0.3}, 1.0),
+    ("caminar", lambda x: {"walk": x, "walkPhase": math.pi / 2}, 1.0),
     # Huesos que el juego todavía no mueve solos (sentarse, echarse, rascarse, lamerse).
     ("brazo_adelante", lambda x: {"huesos": lados(["Brazo"], (x, 0, 0))}, 1.8),
     ("brazo_atras", lambda x: {"huesos": lados(["Brazo"], (-x, 0, 0))}, 1.8),

@@ -24,6 +24,10 @@
   },
   "reposo": {
     "cruces": {
+      "AntebrazoDer/ManoDer": 0.12,
+      "AntebrazoIzq/ManoIzq": 0.12,
+      "BrazoDer/AntebrazoDer": 0.19,
+      "BrazoIzq/AntebrazoIzq": 0.19,
       "Cabeza/Mandibula": 0.0,
       "Cabeza/OrejaDer": 0.0,
       "Cabeza/OrejaIzq": 0.0,
@@ -78,19 +82,21 @@
       "Cola9_4/Cola9_5": 1.0,
       "Cuello1/Cuello2": 0.0,
       "Cuello2/Cabeza": 0.96,
-      "MusloDer/PiernaDer": 0.0,
-      "MusloIzq/PiernaIzq": 0.0,
-      "Pecho/BrazoDer": 1.94,
-      "Pecho/BrazoIzq": 1.94,
+      "MusloDer/PiernaDer": 0.18,
+      "MusloIzq/PiernaIzq": 0.18,
+      "Pecho/BrazoDer": 1.96,
+      "Pecho/BrazoIzq": 1.96,
       "Pecho/Cuello1": 1.0,
       "Pecho/HombroDer": 0.0,
       "Pecho/HombroIzq": 0.0,
-      "PiernaDer/TobilloDer": 0.0,
-      "PiernaIzq/TobilloIzq": 0.0
+      "PiernaDer/TobilloDer": 0.58,
+      "PiernaIzq/TobilloIzq": 0.58,
+      "TobilloDer/PieDer": 0.34,
+      "TobilloIzq/PieIzq": 0.34
     },
     "huecos": {
-      "BrazoIzq": 1.0,
-      "BrazoDer": 1.0
+      "BrazoIzq": 0.92,
+      "BrazoDer": 0.92
     }
   },
   "colas_medidas": [
@@ -155,16 +161,16 @@
         "minRoom": 1.0
       },
       "colas_dormir": {
-        "maxJoint_rad": 0.107,
+        "maxJoint_rad": 0.309,
         "minGap_rad": 0.138,
-        "minTip_altos_cadera": 0.955,
-        "minRoom": 0.25
+        "minTip_altos_cadera": 0.38,
+        "minRoom": 0.688
       },
       "colas_sentado": {
-        "maxJoint_rad": 0.317,
-        "minGap_rad": 0.128,
-        "minTip_altos_cadera": 0.302,
-        "minRoom": 1.0
+        "maxJoint_rad": 0.238,
+        "minGap_rad": 0.138,
+        "minTip_altos_cadera": 0.58,
+        "minRoom": 0.688
       },
       "colas_meneo_max": {
         "maxJoint_rad": 0.317,
@@ -210,15 +216,19 @@
       }
     },
     "contacto_celdas": {
-      "sentado": 0.73,
-      "dormir": 1.46,
-      "rascarse_oreja": 1.22,
-      "rascarse_sin_esquivar_choques": 0.35,
-      "lamerse_pata": 3.83
+      "rascarse": 7.03,
+      "lamerse_sentado": 5.92,
+      "lamerse_parado": 0.77
     },
     "bajada": {
-      "sentado": 0.05,
-      "dormir": 0.196
+      "sentado": 0.136,
+      "dormir": 0.098
+    },
+    "drop": {
+      "sentado": 0.136,
+      "echado": 0.098,
+      "caminando": 0.018,
+      "quieto": 0.006
     }
   },
   "poses": {
@@ -250,10 +260,7 @@
       "atraviesa": [],
       "junta": [],
       "hueco": [],
-      "bajo_piso": {
-        "PieDer": 0.38,
-        "PieIzq": 0.38
-      }
+      "bajo_piso": {}
     },
     "parpados_cerrados": {
       "atraviesa": [],
@@ -277,69 +284,101 @@
       "atraviesa": [],
       "junta": [],
       "hueco": [],
-      "bajo_piso": {
-        "ManoDer": 1.28,
-        "ManoIzq": 1.28
-      }
+      "bajo_piso": {}
     },
     "sentado": {
       "atraviesa": [],
       "junta": [],
       "hueco": [],
       "bajo_piso": {
-        "Cola8_1": 2.38,
-        "Cola8_2": 5.26,
-        "Cola8_3": 6.37,
-        "Cola8_4": 5.36,
-        "Cola8_5": 3.67,
-        "Cola9_1": 2.41,
-        "Cola9_2": 5.33,
-        "Cola9_3": 6.5,
-        "Cola9_4": 5.48,
-        "Cola9_5": 4.01
+        "Cadera": 6.87,
+        "Cola6_1": 5.54,
+        "Cola6_2": 5.52,
+        "Cola6_3": 5.83,
+        "Cola6_4": 4.77,
+        "Cola6_5": 4.11,
+        "Cola7_1": 5.54,
+        "Cola7_2": 5.52,
+        "Cola7_3": 5.85,
+        "Cola7_4": 4.79,
+        "Cola7_5": 4.17,
+        "Cola8_1": 9.64,
+        "Cola8_2": 12.61,
+        "Cola8_3": 13.85,
+        "Cola8_4": 13.48,
+        "Cola8_5": 10.97,
+        "Cola9_1": 9.67,
+        "Cola9_2": 12.67,
+        "Cola9_3": 13.95,
+        "Cola9_4": 13.56,
+        "Cola9_5": 11.22
       }
     },
-    "dormir_echado": {
+    "sentado_lado": {
       "atraviesa": [],
       "junta": [],
       "hueco": [],
       "bajo_piso": {
-        "AntebrazoDer": 1.79,
-        "AntebrazoIzq": 1.67,
-        "BrazoDer": 0.83,
-        "BrazoIzq": 0.71,
-        "Cola6_1": 0.94,
-        "Cola7_1": 0.94,
-        "Cola8_1": 2.59,
-        "Cola8_2": 4.86,
-        "Cola8_3": 5.25,
-        "Cola8_4": 4.05,
-        "Cola9_1": 2.59,
-        "Cola9_2": 4.86,
-        "Cola9_3": 5.25,
-        "Cola9_4": 4.05,
-        "ManoDer": 2.06,
-        "ManoIzq": 1.93,
-        "MusloDer": 0.44,
-        "MusloIzq": 0.44,
-        "PieDer": 1.98,
-        "PieIzq": 1.98,
-        "PiernaDer": 2.52,
-        "PiernaIzq": 2.52,
-        "TobilloDer": 2.78,
-        "TobilloIzq": 2.78
+        "Cadera": 6.87,
+        "Cola6_1": 5.54,
+        "Cola6_2": 5.52,
+        "Cola6_3": 5.83,
+        "Cola6_4": 4.77,
+        "Cola6_5": 4.11,
+        "Cola7_1": 5.54,
+        "Cola7_2": 5.52,
+        "Cola7_3": 5.85,
+        "Cola7_4": 4.79,
+        "Cola7_5": 4.17,
+        "Cola8_1": 9.64,
+        "Cola8_2": 12.61,
+        "Cola8_3": 13.85,
+        "Cola8_4": 13.48,
+        "Cola8_5": 10.97,
+        "Cola9_1": 9.67,
+        "Cola9_2": 12.67,
+        "Cola9_3": 13.95,
+        "Cola9_4": 13.56,
+        "Cola9_5": 11.22
       }
+    },
+    "echado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "Cola8_2": 1.34,
+        "Cola8_3": 2.1,
+        "Cola8_4": 0.52,
+        "Cola9_2": 1.34,
+        "Cola9_3": 2.1,
+        "Cola9_4": 0.52
+      }
+    },
+    "dormir_enroscado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "Cola8_2": 1.34,
+        "Cola8_3": 2.1,
+        "Cola8_4": 0.52,
+        "Cola9_2": 1.34,
+        "Cola9_3": 2.1,
+        "Cola9_4": 0.52
+      }
+    },
+    "dormir_enroscado_der": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
     },
     "salto_agachado": {
       "atraviesa": [],
       "junta": [],
       "hueco": [],
-      "bajo_piso": {
-        "ManoDer": 0.51,
-        "ManoIzq": 0.51,
-        "PieDer": 0.72,
-        "PieIzq": 0.72
-      }
+      "bajo_piso": {}
     },
     "salto_estirado": {
       "atraviesa": [],
@@ -359,83 +398,140 @@
       "hueco": [],
       "bajo_piso": {}
     },
-    "rascarse_oreja": {
-      "atraviesa": [
-        {
-          "piezas": [
-            "Cadera",
-            "PiernaIzq"
-          ],
-          "celdas": 1.43
-        },
-        {
-          "piezas": [
-            "Columna",
-            "HombroIzq"
-          ],
-          "celdas": 0.33
-        },
-        {
-          "piezas": [
-            "MusloIzq",
-            "Cola2_1"
-          ],
-          "celdas": 0.37
-        },
-        {
-          "piezas": [
-            "Pecho",
-            "Cabeza"
-          ],
-          "celdas": 0.73
-        },
-        {
-          "piezas": [
-            "PieIzq",
-            "Cola2_1"
-          ],
-          "celdas": 1.29
-        },
-        {
-          "piezas": [
-            "PiernaIzq",
-            "Cola2_1"
-          ],
-          "celdas": 1.25
-        },
-        {
-          "piezas": [
-            "TobilloIzq",
-            "Cola2_1"
-          ],
-          "celdas": 1.23
-        },
-        {
-          "piezas": [
-            "TobilloIzq",
-            "Cola2_2"
-          ],
-          "celdas": 0.37
-        }
-      ],
+    "rascarse_izq": {
+      "atraviesa": [],
       "junta": [],
       "hueco": [],
       "bajo_piso": {
-        "Cola9_3": 0.46,
-        "ManoDer": 0.36,
-        "PieDer": 0.72
+        "Cadera": 7.01,
+        "Cola6_1": 5.43,
+        "Cola6_2": 4.29,
+        "Cola6_3": 2.36,
+        "Cola6_4": 1.36,
+        "Cola6_5": 0.39,
+        "Cola7_1": 5.66,
+        "Cola7_2": 4.94,
+        "Cola7_3": 3.51,
+        "Cola7_4": 2.58,
+        "Cola7_5": 1.76,
+        "Cola8_1": 8.99,
+        "Cola8_2": 11.37,
+        "Cola8_3": 12.35,
+        "Cola8_4": 12.2,
+        "Cola8_5": 8.47,
+        "Cola9_1": 9.39,
+        "Cola9_2": 12.08,
+        "Cola9_3": 13.07,
+        "Cola9_4": 12.93,
+        "Cola9_5": 9.63
       }
     },
-    "lamerse_pata": {
-      "atraviesa": [
-        {
-          "piezas": [
-            "Pecho",
-            "AntebrazoIzq"
-          ],
-          "celdas": 0.33
-        }
-      ],
+    "rascarse_der": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "Cadera": 7.01,
+        "Cola6_1": 5.66,
+        "Cola6_2": 4.94,
+        "Cola6_3": 3.51,
+        "Cola6_4": 2.58,
+        "Cola6_5": 1.76,
+        "Cola7_1": 5.43,
+        "Cola7_2": 4.29,
+        "Cola7_3": 2.36,
+        "Cola7_4": 1.36,
+        "Cola7_5": 0.39,
+        "Cola8_1": 9.39,
+        "Cola8_2": 12.08,
+        "Cola8_3": 13.07,
+        "Cola8_4": 12.93,
+        "Cola8_5": 9.63,
+        "Cola9_1": 8.99,
+        "Cola9_2": 11.37,
+        "Cola9_3": 12.35,
+        "Cola9_4": 12.2,
+        "Cola9_5": 8.47
+      }
+    },
+    "lamerse_sentado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "Cadera": 6.87,
+        "Cola6_1": 5.55,
+        "Cola6_2": 4.62,
+        "Cola6_3": 2.83,
+        "Cola6_4": 1.9,
+        "Cola6_5": 0.97,
+        "Cola7_1": 5.55,
+        "Cola7_2": 4.62,
+        "Cola7_3": 2.83,
+        "Cola7_4": 1.9,
+        "Cola7_5": 0.97,
+        "Cola8_1": 9.11,
+        "Cola8_2": 11.73,
+        "Cola8_3": 12.65,
+        "Cola8_4": 12.57,
+        "Cola8_5": 8.98,
+        "Cola9_1": 9.11,
+        "Cola9_2": 11.73,
+        "Cola9_3": 12.65,
+        "Cola9_4": 12.57,
+        "Cola9_5": 8.98
+      }
+    },
+    "lamerse_parado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "estirarse": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "columna_de_lado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "picada": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "picada_34": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "caminar_0": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "caminar_1": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "caminar_2": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "caminar_3": {
+      "atraviesa": [],
       "junta": [],
       "hueco": [],
       "bajo_piso": {}
@@ -445,18 +541,15 @@
       "junta": [],
       "hueco": [],
       "bajo_piso": {
-        "ManoDer": 0.58,
-        "PieDer": 0.77
+        "ManoDer": 0.53,
+        "PieDer": 0.61
       }
     },
     "comer": {
       "atraviesa": [],
       "junta": [],
       "hueco": [],
-      "bajo_piso": {
-        "ManoDer": 1.54,
-        "ManoIzq": 1.54
-      }
+      "bajo_piso": {}
     },
     "colas_abanico_max": {
       "atraviesa": [],
@@ -570,16 +663,16 @@
       "junta": [],
       "hueco": [],
       "bajo_piso": {
-        "Cola4_5": 1.83,
-        "Cola5_5": 1.83,
-        "Cola6_4": 1.4,
-        "Cola6_5": 6.24,
-        "Cola7_4": 1.4,
-        "Cola7_5": 6.24,
-        "Cola8_4": 6.94,
-        "Cola8_5": 10.49,
-        "Cola9_4": 6.94,
-        "Cola9_5": 10.49
+        "Cola4_5": 2.01,
+        "Cola5_5": 2.01,
+        "Cola6_4": 1.59,
+        "Cola6_5": 6.43,
+        "Cola7_4": 1.59,
+        "Cola7_5": 6.43,
+        "Cola8_4": 7.12,
+        "Cola8_5": 10.67,
+        "Cola9_4": 7.12,
+        "Cola9_5": 10.67
       }
     },
     "colas_juntas_45_adentro": {
@@ -1086,20 +1179,20 @@
             "PiernaDer",
             "Cola2_5"
           ],
-          "celdas": 0.6
+          "celdas": 0.94
         },
         {
           "piezas": [
             "PiernaIzq",
             "Cola3_5"
           ],
-          "celdas": 0.6
+          "celdas": 0.94
         }
       ],
       "junta": [],
       "hueco": [],
       "bajo_piso": {
-        "Cola1_5": 2.83
+        "Cola1_5": 3.01
       }
     },
     "colas_juntas_45_adelante": {
@@ -1361,14 +1454,14 @@
             "MusloDer",
             "Cola1_5"
           ],
-          "celdas": 1.17
+          "celdas": 1.18
         },
         {
           "piezas": [
             "MusloDer",
             "Cola5_5"
           ],
-          "celdas": 0.8
+          "celdas": 0.87
         },
         {
           "piezas": [
@@ -1382,7 +1475,7 @@
             "MusloIzq",
             "Cola4_5"
           ],
-          "celdas": 0.8
+          "celdas": 0.87
         },
         {
           "piezas": [
@@ -1452,6 +1545,18 @@
     "paso": {
       "muestras": 24,
       "con_problemas": {}
+    },
+    "caminar": {
+      "muestras": 24,
+      "con_problemas": {}
+    },
+    "rascarse_latido": {
+      "muestras": 5,
+      "con_problemas": {}
+    },
+    "rascarse_der_latido": {
+      "muestras": 5,
+      "con_problemas": {}
     }
   },
   "limites_cuerpo": {
@@ -1461,7 +1566,7 @@
     },
     "mirar_abajo": {
       "tope_probado": 1.2,
-      "limpio_hasta": 0.858
+      "limpio_hasta": 0.816
     },
     "mirar_a_un_lado": {
       "tope_probado": 1.6,
@@ -1485,11 +1590,11 @@
     },
     "reverencia": {
       "tope_probado": 1.2,
-      "limpio_hasta": 0.928
+      "limpio_hasta": 1.2
     },
     "agacharse": {
       "tope_probado": 1.2,
-      "limpio_hasta": 1.2
+      "limpio_hasta": 1.036
     },
     "estirarse": {
       "tope_probado": 1.0,
@@ -1497,7 +1602,7 @@
     },
     "levantar_pata_delantera": {
       "tope_probado": 1.5,
-      "limpio_hasta": 1.143
+      "limpio_hasta": 1.436
     },
     "levantar_pata_trasera": {
       "tope_probado": 1.5,
@@ -1509,9 +1614,49 @@
     },
     "inclinarse_adelante": {
       "tope_probado": 1.0,
-      "limpio_hasta": 1.0
+      "limpio_hasta": 0.574
     },
     "sacudida": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "sentarse": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "echarse": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "enroscarse": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "rascarse": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "lamerse_parado": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 0.488
+    },
+    "lamerse_sentado": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "estirar_traseras": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "curvar_el_cuerpo": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "picada": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "caminar": {
       "tope_probado": 1.0,
       "limpio_hasta": 1.0
     },
@@ -1525,11 +1670,11 @@
     },
     "muslo_adelante": {
       "tope_probado": 2.4,
-      "limpio_hasta": 1.163
+      "limpio_hasta": 1.256
     },
     "muslo_afuera": {
       "tope_probado": 1.6,
-      "limpio_hasta": 1.6
+      "limpio_hasta": 1.388
     },
     "columna_de_lado": {
       "tope_probado": 1.0,
@@ -1781,8 +1926,8 @@
     ]
   },
   "limpias": {
-    "cuantas": 23,
-    "de": 29,
+    "cuantas": 38,
+    "de": 42,
     "nombres": [
       "mirar_arriba_45",
       "mirar_abajo_45",
@@ -1794,11 +1939,26 @@
       "orejas_adelante",
       "reverencia",
       "sentado",
-      "dormir_echado",
+      "sentado_lado",
+      "echado",
+      "dormir_enroscado",
+      "dormir_enroscado_der",
       "salto_agachado",
       "salto_estirado",
       "paso_FL_HR",
       "paso_FR_HL",
+      "rascarse_izq",
+      "rascarse_der",
+      "lamerse_sentado",
+      "lamerse_parado",
+      "estirarse",
+      "columna_de_lado",
+      "picada",
+      "picada_34",
+      "caminar_0",
+      "caminar_1",
+      "caminar_2",
+      "caminar_3",
       "sacudida",
       "comer",
       "colas_abanico_max",

@@ -1,63 +1,118 @@
 r"""
-Poses del cuerpo del Zorro de agua v2 con la cuenta de src/shared/Zorro/Pose.luau (Pose.apply, con
-los resortes de la cabeza y las orejas ya asentados) y un buscador de poses de contacto. Lo carga
-zorro_v2_poses.py con exec (usa HUESOS, matrices(), V y C de minotauro_v2_poses.py).
+Poses del cuerpo del Zorro de agua v2 con la cuenta de src/shared/Zorro/Pose (Pose.apply, Pose.drop y
+Pose/Tronco, con los resortes de la cabeza y las orejas ya asentados) y de src/shared/Zorro/Patas (las
+cuatro patas con IK en el plano del cuerpo, Patas/Plano, y los números de Patas/Ajustes), y un buscador
+de poses de contacto. Lo carga zorro_v2_poses.py con exec (usa HUESOS, matrices(), V y C de
+minotauro_v2_poses.py, y ETAPA).
 
-Una entrada de pose es una tabla con las claves de Pose.luau (lean, lookYaw, jaw, bow, crouch,
+Una entrada de pose es una tabla con las claves de Pose (lean, lookYaw, jaw, bow, crouch, sit, lie,
+curl/curlSide, scratch/scratchSide/scratchBeat, pawL/pawR, stretch, spine, walk/walkPhase, pounce,
 stepFL...) y, además:
-    huesos  {hueso: (cabeceo, giro, alabeo)} que reemplazan lo de Pose.apply: lo que el juego todavía
-            no pide (sentarse, echarse, rascarse, lamerse, párpados, punta de la oreja)
-    dy      cuánto sube (+) o baja la base, en fracción del alto (como pose.dy en Zorro/init)
+    huesos  {hueso: (cabeceo, giro, alabeo)} que reemplazan lo de Pose.apply (párpados, punta de la
+            oreja, o lo que busca resolver())
+    dy      cuánto sube (+) o baja la base, en fracción del alto (como pose.dy); la base baja además
+            Pose.drop (subida_zorro(), que zorro_v2_poses_lista.py pone en lugar de subida())
     t       la hora, solo para el temblor de la sacudida (sin(t * 38))
     colas   {hueso: (fan, fold)}: lo que escribe Zorro/Colas en cada tramo (zorro_v2_colas_paso.py)
-resolver() busca los ángulos que llevan un punto de una pieza a otro (la pata a la oreja): descenso
-por coordenadas sobre matrices(), sin mirar choques (eso lo revisa después revisar()).
+Las patas se cuentan en el plano del cuerpo (adelante, arriba) con números complejos: f + u·i, en
+fracciones del alto, el piso en u = 0 (Vector2 en Patas/Plano). resolver() (zorro_v2_poses_resolver.py)
+busca los ángulos que llevan un punto de una pieza a otro.
 """
 import copy
+import cmath
+
+for _f in ("zorro_v2_poses_ajustes.py", "zorro_v2_poses_patas.py", "zorro_v2_poses_resolver.py"):
+    exec(open(os.path.join(HERE, _f), encoding="utf-8").read(), globals())
 
 
-BOW_BEND = 1.5  # Pose.luau: cuánto doblan las delanteras en la reverencia (por bow)
-CROUCH_DROP = 0.035  # Zorro/init: cuánto baja la base al agacharse (fracción del alto, por crouch)
+def _v(e, k):
+    return e.get(k, 0.0)
 
 
-def _pata(r, delantera, s, lift, bend):
-    """leg() de Pose.luau (swing siempre 0 en Pose.apply)."""
-    if delantera:
-        r[f"Hombro{s}"] = (0, 0, 0)
-        r[f"Brazo{s}"] = (0.35 * lift - bend * 0.5, 0, 0)
-        r[f"Antebrazo{s}"] = (-1.1 * lift + bend * 0.9, 0, 0)
-        r[f"Mano{s}"] = (-0.8 * lift - bend * 0.4, 0, 0)
-    else:
-        r[f"Muslo{s}"] = (0.3 * lift + bend * 0.5, 0, 0)
-        r[f"Pierna{s}"] = (-0.4 * lift - bend * 0.9, 0, 0)
-        r[f"Tobillo{s}"] = (0.7 * lift + bend * 0.8, 0, 0)
-        r[f"Pie{s}"] = (-0.5 * lift - bend * 0.4, 0, 0)
+def _u01(e, k):
+    return max(0.0, min(1.0, e.get(k, 0.0)))
+
+
+def drop(e, etapa=None):
+    """Pose.drop: cuánto baja la base (fracción del alto)."""
+    A = ETAPAS[etapa or ETAPA]
+    walk = _u01(e, "walk")
+    body = max(_u01(e, "sit") * A["sitDrop"], _u01(e, "lie") * A["lieDrop"])
+    bob = BOB * walk * (0.5 + 0.5 * math.cos(2 * _v(e, "walkPhase") - math.pi))
+    return SETTLE + _v(e, "crouch") * CROUCH_DROP + body + _u01(e, "stretch") * STRETCH_DROP + WALK_DROP * walk + bob
+
+
+def subida_zorro(p):
+    """Cuánto sube la base (BU): (pose.dy - Pose.drop) x alto."""
+    p = p or {}
+    return (p.get("dy", 0.0) - drop(p)) * (ALTO_BU or 0.0)
+
+
+# ---------------------------------------------------------------- Pose/Tronco y Pose.apply
+def tronco(e, etapa=None):
+    """Tronco.compute: giros de Cadera, Columna y Pecho, objetivo de la cabeza y lo que suman las
+    claves a la mandíbula y las orejas."""
+    etapa = etapa or ETAPA
+    A = ETAPAS[etapa]
+    v = lambda k: e.get(k, 0.0)
+    temblor = math.sin(v("t") * 38) * 0.22 * v("shake")
+    lean, breathe, crouch, sway = v("lean"), v("breathe"), v("crouch"), v("sway")
+    bow = min(v("bow"), A["bowMax"])
+    sit, stretch, pounce, walk = _u01(e, "sit"), _u01(e, "stretch"), _u01(e, "pounce"), _u01(e, "walk")
+    curl, scratch = _u01(e, "curl"), _u01(e, "scratch")
+    tope = 1 + (A["pawSitMax"] - 1) * sit  # sentado, el antebrazo topa con el pecho
+    pl, pr = min(_u01(e, "pawL"), tope), min(_u01(e, "pawR"), tope)
+    paw = max(pl, pr)
+    cside = 1 if v("curlSide") >= 0 else -1
+    sside = 1 if v("scratchSide") >= 0 else -1
+    andar = ciclo(e, etapa)
+    zancada = ZANCADA[etapa]
+    lateral = max(-1.0, min(1.0, v("spine"))) + cside * CURL_SPINE * curl
+    yaw_lomo = max(-SPINE_MAX, min(SPINE_MAX, lateral * SPINE_MAX))
+    rol_cadera = 0.06 * (andar["HDer"][1] - andar["HIzq"][1])
+    rol_pecho = 0.05 * (andar["FDer"][1] - andar["FIzq"][1])
+    yaw_paso = 0.04 * (andar["HIzq"][0] - andar["HDer"][0]) / max(zancada, 1e-6)
+    encorva = A["pawHunch"] * sit * paw
+    a_h = -bow * 0.2 + crouch * 0.05 + sit * SIT[0] + stretch * STRETCH_TRUNK[0] - pounce * 0.35
+    a_s = (lean * 0.4 + breathe - bow * 0.25 + sit * SIT[1] + stretch * STRETCH_TRUNK[1] - pounce * 0.1
+           - walk * 0.03 - encorva * 0.4)
+    a_c = lean * 0.4 + breathe * 0.7 - bow * 0.2 + sit * SIT[2] + stretch * STRETCH_TRUNK[2] - encorva * 0.6
+    endereza = HEAD_LEVEL * (sit * sum(SIT) - encorva + stretch * 0.06)
+    k = min(sit, 1.0)
+    ph = [x + (y - x) * k for x, y in zip(A["pawHeadStand"], A["pawHeadSit"])]
+    cabeceo = 0.04 * walk * math.cos(2 * v("walkPhase") - math.pi)
+    sh = A["scratchHead"]
+    yaw = (v("lookYaw") + cside * curl * A["curlHead"][0] + sside * scratch * sh[0] + (pl - pr) * ph[0]
+           - yaw_lomo * 0.5 * (1 - curl))
+    pitch = (v("lookPitch") + bow * 0.5 - endereza + curl * A["curlHead"][1] + scratch * sh[1] + paw * ph[1]
+             - pounce * 0.35 - 0.05 * walk - cabeceo)
+    return {
+        "Cadera": (a_h, -yaw_lomo * 0.3 + yaw_paso, sway + temblor + rol_cadera + sside * scratch * 0.04),
+        "Columna": (a_s, yaw_lomo - yaw_paso, -sway * 0.4 - temblor * 0.8 - rol_cadera * 0.6),
+        "Pecho": (a_c, max(-SPINE_MAX, min(SPINE_MAX, yaw_lomo + v("lookYaw") * 0.1)), temblor * 0.6 + rol_pecho),
+        "yaw": yaw, "pitch": pitch, "tilt": v("tilt") - sside * scratch * (sh[2] + 0.06 * v("scratchBeat")),
+        "jaw": 0.15 * paw, "ears": -0.4 * curl + 0.6 * pounce, "temblor": temblor,
+    }
 
 
 def locales(e):
     """Pose.apply: hueso -> (cabeceo, giro, alabeo) en radianes (sin las colas)."""
-    if not e:
-        return {}
-    v = lambda k: e.get(k, 0.0)
-    temblor = math.sin(v("t") * 38) * 0.22 * v("shake")
-    lean, breathe, bow, crouch, sway = v("lean"), v("breathe"), v("bow"), v("crouch"), v("sway")
-    yaw, pitch, tilt = v("lookYaw"), v("lookPitch") + bow * 0.5, v("tilt")
-    r = {
-        "Cadera": (-bow * 0.2 + crouch * 0.05, 0, sway + temblor),
-        "Columna": (lean * 0.4 + breathe - bow * 0.25, 0, -sway * 0.4 - temblor * 0.8),
-        "Pecho": (lean * 0.4 + breathe * 0.7 - bow * 0.2, yaw * 0.1, temblor * 0.6),
-        "Cuello1": (pitch * 0.35, yaw * 0.3, tilt * 0.2 - temblor * 0.5),
-        "Cuello2": (pitch * 0.3, yaw * 0.3, tilt * 0.3),
-        "Cabeza": (pitch * 0.35 - breathe * 0.4, yaw * 0.4, tilt * 0.5 + temblor * 0.4),
-        "Mandibula": (-0.6 * max(-0.1, min(1.1, v("jaw"))), 0, 0),
-    }
+    e = e or {}
+    t = tronco(e)
+    yaw, pitch, tilt, temblor = t["yaw"], t["pitch"], t["tilt"], t["temblor"]
+    breathe = e.get("breathe", 0.0)
+    r = {n: t[n] for n in ("Cadera", "Columna", "Pecho")}
+    r.update({
+        "Cuello1": (pitch * 0.25, yaw * 0.2, tilt * 0.2 - temblor * 0.5),
+        "Cuello2": (pitch * 0.25, yaw * 0.25, tilt * 0.3),
+        "Cabeza": (pitch * 0.5 - breathe * 0.4, yaw * 0.55, tilt * 0.5 + temblor * 0.4),
+        "Mandibula": (-0.6 * max(-0.1, min(1.1, e.get("jaw", 0.0) + t["jaw"])), 0, 0),
+    })
     for s, k in (("Izq", "earL"), ("Der", "earR")):
         lado = 1 if s == "Izq" else -1  # -(rig.side): la Izq está a la izquierda (side -1)
-        r[f"Oreja{s}"] = (-v(k) * 0.6, 0, v(k) * 0.3 * lado + temblor * lado)
-    _pata(r, True, "Izq", v("stepFL"), bow * BOW_BEND + crouch)
-    _pata(r, True, "Der", v("stepFR"), bow * BOW_BEND + crouch)
-    _pata(r, False, "Izq", v("stepHL"), crouch - bow * 0.15)
-    _pata(r, False, "Der", v("stepHR"), crouch - bow * 0.15)
+        oreja = e.get(k, 0.0) + t["ears"]
+        r[f"Oreja{s}"] = (-oreja * 0.6, 0, oreja * 0.3 * lado + temblor * lado)
+    r.update(patas_ik(e, (t["Cadera"][0], t["Columna"][0], t["Pecho"][0])))
     r.update(e.get("huesos", {}))
     return r
 
@@ -85,77 +140,3 @@ def ref(pieza, fx, fy, fz, dy=0.0, dz=0.0):
     vs = np.array([tuple(v.co) for v in bpy.data.objects[pieza].data.vertices])
     lo, hi = vs.min(axis=0), vs.max(axis=0)
     return V(tuple(lo + (hi - lo) * (fx, fy, fz))) + V((0, dy * C, dz * C))
-
-
-def _aplicar(base, vals):
-    e = copy.deepcopy(base)
-    e.setdefault("huesos", {})
-    for k, x in vals.items():
-        if "." in k:  # "Hueso.eje": 0 cabeceo, 1 giro, 2 alabeo
-            h, eje = k.split(".")
-            t = list(e["huesos"].get(h, (0, 0, 0)))
-            t[int(eje)] = x
-            e["huesos"][h] = tuple(t)
-        else:
-            e[k] = x
-    return e
-
-
-def preparar_choques(cruces_reposo):
-    """Para choque(): las muestras (vértices y centros de caras) y la caja de cada pieza del cuerpo
-    en reposo, achicada PENETRA celdas. Se saltan los pares padre-hijo y los que ya se tocan en
-    reposo (como revisar())."""
-    global MUESTRAS, CAJAS, PARES
-    MUESTRAS, CAJAS = {}, {}
-    for n in HUESOS:
-        if n.startswith("Cola"):
-            continue
-        me = bpy.data.objects[n].data
-        vs = np.array([tuple(v.co) for v in me.vertices])
-        pts = np.vstack([vs, [tuple(p.center) for p in me.polygons]])
-        MUESTRAS[n] = np.hstack([pts, np.ones((len(pts), 1))]).T
-        CAJAS[n] = (vs.min(axis=0) + PENETRA * C, vs.max(axis=0) - PENETRA * C)
-    nombres = list(CAJAS)
-    PARES = [(a, b) for i, a in enumerate(nombres) for b in nombres[i + 1:]
-             if HUESOS[a][0] != b and HUESOS[b][0] != a and (a, b) not in cruces_reposo
-             and (b, a) not in cruces_reposo]
-
-
-def choque(m):
-    """Cuánto se meten las piezas del cuerpo unas en otras (suma de hondos, BU), aproximando cada
-    pieza por su caja: barato, para que resolver() esquive los choques."""
-    total = 0.0
-    mat = {n: np.array(m[n]) for n in CAJAS}
-    inv = {n: np.linalg.inv(x) for n, x in mat.items()}
-    for a, b in PARES:
-        for x, y in ((a, b), (b, a)):
-            p = (inv[y] @ mat[x] @ MUESTRAS[x])[:3]
-            lo, hi = CAJAS[y]
-            d = np.minimum(p - lo[:, None], hi[:, None] - p).min(axis=0)
-            total += float(d[d > 0].sum())
-    return total
-
-
-def resolver(base, libres, costo, vueltas=60, k_choque=0.3, inicio=None):
-    """libres {clave: (mín, máx, inicio)}; costo(m) -> número (BU), al que se suma choque(m) x
-    k_choque. `inicio` reemplaza los valores de arranque. Devuelve (entrada, costo sin los
-    choques, valores)."""
-    vals = dict({k: ini for k, (_, _, ini) in libres.items()}, **(inicio or {}))
-    paso = {k: (hi - lo) / 4 for k, (lo, hi, _) in libres.items()}
-    total = lambda m: costo(m) + k_choque * choque(m)
-    mejor = total(matrices(_aplicar(base, vals)))
-    for _ in range(vueltas):
-        mejoro = False
-        for k, (lo, hi, _) in libres.items():
-            for d in (paso[k], -paso[k]):
-                prueba = dict(vals, **{k: max(lo, min(hi, vals[k] + d))})
-                c = total(matrices(_aplicar(base, prueba)))
-                if c < mejor - 1e-7:
-                    vals, mejor, mejoro = prueba, c, True
-                    break
-        if not mejoro:
-            paso = {k: p / 2 for k, p in paso.items()}
-            if max(paso.values()) < 1e-3:
-                break
-    e = _aplicar(base, vals)
-    return e, costo(matrices(e)), vals
