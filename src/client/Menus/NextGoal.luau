@@ -49,18 +49,15 @@ local function goals(player: Player): { Goal }
 	local list: { Goal } = {}
 	local coins = number(player, ATTR.Coins)
 	local kills = number(player, ATTR.Kills)
-	-- Siguiente estanque: se abre con monstruos o con poder (lo que esté más cerca).
 	local power = number(player, ATTR.Power)
+	-- Siguiente estanque: solo se abre llenando monstruos.
 	for index, pond in PONDS do
 		if not pond.robuxOnly and not Perks.pondOpen(player, index) then
-			local byKills = kills / math.max(pond.requiredKills, 1)
-			local byPower = power / math.max(pond.requiredPower, 1)
+			local missing = pond.requiredKills - kills
 			table.insert(list, {
 				icon = "pond",
-				text = if byPower > byKills
-					then `Junta {NumberFormat.short(pond.requiredPower - power)} de poder: estanque x{pond.multiplier}`
-					else `Llena {pond.requiredKills - kills} monstruos más: estanque x{pond.multiplier}`,
-				fraction = math.max(byKills, byPower),
+				text = `Llena {missing} {if missing == 1 then "monstruo" else "monstruos"} más: estanque x{pond.multiplier}`,
+				fraction = kills / math.max(pond.requiredKills, 1),
 				ready = false,
 			})
 			break

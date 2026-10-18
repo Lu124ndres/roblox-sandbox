@@ -20,7 +20,6 @@
 ]]
 
 local Config = require(script.Parent.Config)
-local NumberFormat = require(script.Parent.NumberFormat)
 local Upgrades = require(script.Parent.Upgrades)
 
 local PROGRESSION = Config.Progression
@@ -86,26 +85,9 @@ function FishingPower.biteDelay(baseSeconds: number, power: number): number
 	return math.max(PROGRESSION.minBiteDelaySeconds, baseSeconds / FishingPower.speed(power))
 end
 
--- Multiplicador del mejor estanque que se abre con `kills` monstruos llenados o `power`.
-function FishingPower.bestPondMultiplier(kills: number, power: number): number
-	local best = 1
-	for _, pond in PROGRESSION.ponds do
-		if not pond.robuxOnly and (kills >= pond.requiredKills or power >= pond.requiredPower) then
-			best = math.max(best, pond.multiplier)
-		end
-	end
-	return best
-end
-
--- Qué pide un estanque: "3 monstruos o 25K de poder" (short: "3 kills o 25K poder").
-function FishingPower.pondRequirement(pond: Config.PondDef, short: boolean?): string
-	local power = NumberFormat.short(pond.requiredPower)
-	if short then
-		return `{pond.requiredKills} {if pond.requiredKills == 1 then "kill" else "kills"} o {power} poder`
-	end
-	local kills =
-		`{pond.requiredKills} {if pond.requiredKills == 1 then "monstruo" else "monstruos"}`
-	return `{kills} o {power} de poder`
+-- Qué pide un estanque: "3 monstruos".
+function FishingPower.pondRequirement(pond: Config.PondDef): string
+	return `{pond.requiredKills} {if pond.requiredKills == 1 then "monstruo" else "monstruos"}`
 end
 
 return FishingPower

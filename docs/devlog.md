@@ -2344,3 +2344,19 @@ Plugins y el de la Creator Store, 13916111004); conectados los dos, cada cambio 
 veces. Hay que dejar uno solo y reconectar. **Resuelto:** quedó un solo plugin de Rojo activo;
 en Edit la puerta tiene sus 25 piezas, la zona 1008 y el puente 315 (igual que el archivo) y
 no hay scripts duplicados.
+
+---
+
+## 2026-10-18 (5) — Estanques solo con monstruos llenados
+
+**Qué se hizo:** los estanques ya no se abren con poder, solo llenando monstruos (o con
+Robux). `Perks.pondOpen` mira solo las kills y la compra; `FishingPower.pondRequirement` dice
+«15 monstruos llenados»; la siguiente meta del HUD dice cuántos monstruos faltan; el cartel
+muestra la calavera con «4/15 monstruos». Se quitó `requiredPower` de la configuración y
+`FishingPower.bestPondMultiplier`, que no usaba nadie.
+
+**Qué se rompió:** nada visto. `rojo build` y `selene` sin errores nuevos.
+
+**Qué sigue:** revisar la curva de kills de `Config/Progression` si los estanques altos se
+sienten lejos sin el atajo del poder.
+

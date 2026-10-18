@@ -4,9 +4,9 @@
 
 	Un cartel flotante sobre cada estanque de entrenamiento (lo dibuja
 	PondSignView): su nombre, el multiplicador de poder y una cápsula con lo
-	que pide para abrirse (monstruos llenados o poder, lo que llegue primero;
-	el sagrado, su pase de Robux) o «¡Abierto! Entrenar». Se actualiza cuando
-	cambia el poder o las kills del jugador. Mientras entrena en un estanque,
+	que pide para abrirse (cuántos monstruos llenó de los que pide: solo se abre
+	así; el sagrado, con su pase de Robux) o «¡Abierto! Entrenar». Se actualiza cuando
+	cambian las kills del jugador (o compra un estanque). Mientras entrena en un estanque,
 	el cartel de ese se esconde: de cerca tapaba su nombre y su título. Solo
 	muestra: el servidor decide quién entrena dónde (TrainingService).
 ]]
@@ -16,7 +16,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
@@ -48,6 +47,10 @@ function PondSigns.start()
 	for index = 1, #PONDS do
 		signs[index] = build(index)
 	end
+	local function kills(): number
+		local value = player:GetAttribute(Protocol.PlayerAttributes.Kills)
+		return if type(value) == "number" then value else 0
+	end
 	local function refresh()
 		for index, sign in signs do
 			local def = PONDS[index]
@@ -55,7 +58,8 @@ function PondSigns.start()
 				then "open"
 				elseif def.robuxOnly then "robux"
 				else "locked"
-			sign.set(state, `{def.requiredKills}`, NumberFormat.short(def.requiredPower))
+			local have = math.min(kills(), def.requiredKills)
+			sign.set(state, `{have}/{def.requiredKills}`)
 		end
 	end
 	local function hideCurrent()

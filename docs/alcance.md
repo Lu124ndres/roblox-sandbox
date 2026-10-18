@@ -88,7 +88,8 @@ solo bocado lo calma. Valores en `Config/Giants.luau` (`anger`).
 hasta el borde) donde caben todos los del servidor (40-50): cada uno pesca frente a sí.
 Con E el jugador se
 pone a pescar sin hacer nada (AFK) y gana 1 de poder de pesca por segundo multiplicado
-por el estanque (x1 a x100). Los mejores estanques piden un mínimo de poder. El poder
+por el estanque (x1 a x100). Los estanques se abren **solo llenando monstruos** (kills; el
+poder no los abre desde el 2026-10-18), o comprándolos con Robux. El poder
 hace **pescar más y más rápido** (`Shared/FishingPower.luau`):
 
 | Poder | Velocidad (`1 + raíz/40`) | Peces por pique (`1 + piso(raíz/60)`) | Capacidad (20 x peces) |

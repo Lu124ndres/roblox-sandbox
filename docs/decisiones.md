@@ -683,3 +683,11 @@ desfasarse; el atributo `Brillo` del ancla la pone en Neon. Fuego y humo son ins
 `Fire`/`Smoke` (sin assets). La decoración de la orilla de los estanques se quitó entera:
 estorbaba al caminar y el usuario la vio mal resuelta.
 
+## 2026-10-18 — Los estanques se abren solo con monstruos llenados
+
+**Contexto:** cada estanque se abría con kills **o** con poder (lo que llegara primero).
+**Decisión (pedido del usuario):** solo con kills (`requiredKills`) o comprándolo con Robux;
+se borró `requiredPower` de `Config/Progression` y del tipo `PondDef`. Las kills no se pierden
+al renacer, así que un estanque abierto queda abierto. De paso, `Perks.affectsPonds` ya no
+reacciona al poder (que sube cada tick), y el cartel muestra el avance («4/15 monstruos»).
+

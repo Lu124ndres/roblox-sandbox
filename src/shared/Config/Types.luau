@@ -28,8 +28,7 @@ export type FishDef = {
 -- Un estanque de la zona de entrenamiento.
 export type PondDef = {
 	multiplier: number, -- poder por segundo = powerPerTick * multiplier
-	requiredKills: number, -- monstruos llenados (kills) para usarlo...
-	requiredPower: number, -- ...o este poder de pesca (lo que llegue primero)
+	requiredKills: number, -- monstruos llenados (kills) para usarlo (o comprarlo con Robux)
 	robuxOnly: boolean?, -- solo se abre comprándolo (el estanque sagrado del centro)
 }
 

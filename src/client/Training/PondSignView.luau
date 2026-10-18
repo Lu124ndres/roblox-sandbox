@@ -7,7 +7,7 @@
 		nombre          "Estanque de Bambú", blanco con un toque del color del estanque
 		multiplicador   el ícono de poder y "x3" enorme, del color del estanque
 		                (degradado claro → color) con contorno marrón oscuro
-		cápsula         cerrado: calavera "6" o cristal "150K" (lo que llegue primero);
+		cápsula         cerrado: calavera y "4/15" (monstruos llenados: solo se abre así);
 		                el sagrado: Robux "Pase sagrado"; abierto: "¡Abierto! Entrenar"
 		                en verde
 	Los contornos y el borde de la cápsula siguen al alto del cartel en pantalla
@@ -23,7 +23,7 @@ local Kit = require(script.Parent.Parent.Interface.Kit)
 
 export type State = "open" | "locked" | "robux"
 export type View = {
-	set: (state: State, kills: string, power: string) -> (),
+	set: (state: State, kills: string) -> (),
 	show: (visible: boolean) -> (),
 }
 
@@ -141,12 +141,7 @@ function PondSignView.build(
 	local capsule, border = pill(root, color, strokes)
 	local skull = icon(capsule, "skull", 1)
 	local kills = label(capsule, "Kills", WHITE, "small", strokes)
-	kills.LayoutOrder, kills.Size = 2, UDim2.fromScale(0.15, 0.72)
-	local either = label(capsule, "O", Color3.fromRGB(200, 190, 180), "small", strokes)
-	either.LayoutOrder, either.Size, either.Text = 3, UDim2.fromScale(0.07, 0.62), "o"
-	local crystal = icon(capsule, "crystal", 4)
-	local amount = label(capsule, "Poder", WHITE, "small", strokes)
-	amount.LayoutOrder, amount.Size = 5, UDim2.fromScale(0.21, 0.72)
+	kills.LayoutOrder, kills.Size = 2, UDim2.fromScale(0.4, 0.72)
 	local robux = Instance.new("ImageLabel")
 	robux.Name = "Robux"
 	robux.BackgroundTransparency = 1
@@ -159,7 +154,7 @@ function PondSignView.build(
 	robux.Parent = capsule
 	local note = label(capsule, "Nota", WHITE, "small", strokes)
 	note.LayoutOrder, note.Size = 7, UDim2.fromScale(0.8, 0.7)
-	local locked = { skull, kills, either, crystal, amount }
+	local locked = { skull, kills }
 
 	-- Contornos al alto en pantalla y el ícono de poder pegado a la izquierda del "x3".
 	local function fit()
@@ -174,7 +169,7 @@ function PondSignView.build(
 	root:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
 	big:GetPropertyChangedSignal("TextBounds"):Connect(fit)
 
-	local function set(state: State, killsText: string, powerText: string)
+	local function set(state: State, killsText: string)
 		for _, item in locked do
 			item.Visible = state == "locked"
 		end
@@ -182,15 +177,15 @@ function PondSignView.build(
 		note.Visible = state ~= "locked"
 		note.Text = if state == "open" then "¡Abierto! Entrenar" else "Pase sagrado"
 		note.Size = UDim2.fromScale(if state == "robux" then 0.62 else 0.84, 0.7)
-		kills.Text, amount.Text = killsText, powerText
+		kills.Text = killsText
 		capsule.BackgroundColor3 = if state == "open" then OPEN else PILL
 		border.Color = if state == "open" then Color3.fromRGB(170, 255, 170) else color
 		big.TextTransparency = if state == "open" then 0 else 0.1
 	end
 
 	return {
-		set = function(state: State, killsText: string, powerText: string)
-			set(state, killsText, powerText)
+		set = function(state: State, killsText: string)
+			set(state, killsText)
 			fit()
 		end,
 		show = function(visible: boolean)

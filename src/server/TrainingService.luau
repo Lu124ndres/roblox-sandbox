@@ -8,8 +8,8 @@
 	del estanque x su caña (tienda). Vuelve a apretar E, se aleja o se pone a pescar en el mar y
 	deja de entrenar.
 
-	Los estanques mejores piden monstruos llenados o un mínimo de poder
-	(Config.Progression.ponds), o comprarlos con Robux; los pases y el x2 del servidor multiplican (Perks).
+	Los estanques mejores piden monstruos llenados (Config.Progression.ponds;
+	el poder no los abre), o comprarlos con Robux; los pases y el x2 del servidor multiplican (Perks).
 	Caben todos los que quieran en el mismo estanque (servidores de 40-50):
 	cada uno lanza su corcho hacia el agua frente a él, no al mismo punto.
 	El poder hace pescar más peces y más rápido (Shared/FishingPower).
