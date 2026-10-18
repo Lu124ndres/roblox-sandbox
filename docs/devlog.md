@@ -1953,3 +1953,36 @@ adelante = −y exacto.
 - E2, E3 y E4 sobre esta base.
 - Las brasas de `DragonEmbers` salen de la Cadera, que ahora está alta: conviene sacarlas del
   Pecho o de Cola1.
+
+## 2026-10-17 (13) — Dragón marino v2: las cuatro etapas con la referencia del usuario
+
+**Qué se hizo:** el usuario rechazó las E2..E4 del primer diseño ("no me gustaron") y pidió rehacer
+las cuatro inspiradas en una imagen suya: un dragón oscuro estilo wyvern de alas enormes. Eligió
+"referencia + toques marinos".
+- **Guía común:** paleta por etapa (de marrón oscuro a casi negro, con brasa y ~15% de turquesa),
+  proporciones, escala y reglas del rig, para que cuatro sesiones en paralelo hicieran el mismo
+  dragón.
+- **Etapas:** `dragon_v2_e<n>_geometria.py` y sus módulos, con FBX y textura de cada una. La E1
+  reemplaza a la cría anterior.
+- **Alineación:** `minotauro_v2_alineacion.py --criatura dragon`.
+- **Detalle:** en `docs/plan_dragon_v2.md`.
+
+**Resultado:**
+
+| Etapa | Triángulos | Poses limpias |
+|---|---|---|
+| E1 | 6,796 | 19 de 24 |
+| E2 | 6,814 | 20 de 24 |
+| E3 | 7,282 | 20 de 24 |
+| E4 | 10,908 | 20 de 24 |
+
+- La envergadura mide exacta en las cuatro (9.9 / 26.4 / 49.5 / 99 studs).
+- En las cuatro, adelante = −y y el aleteo al máximo del juego sale limpio.
+
+**Qué quedó flojo (el usuario las aprobó así):**
+- Las alas no dominan la silueta como en la referencia: el juego escala al dragón por su lado más
+  largo.
+- Las cuatro etapas no son del todo parejas entre sí.
+
+**Qué sigue:** importar los cuatro FBX a Studio, poner sus IDs en `Assets` y `modelSuffix = "_v2"`
+en el dragón, y probarlo.

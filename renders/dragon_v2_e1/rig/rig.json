@@ -1,9 +1,9 @@
 {
-  "triangulos": 5107,
+  "triangulos": 6796,
   "huesos": 32,
   "huesos_que_deforman": 30,
   "huesos_del_contrato_que_faltan": [],
-  "colores_en_la_paleta": 11,
+  "colores_en_la_paleta": 13,
   "pesos": {
     "vertices_con_mas_de_un_hueso": 0,
     "grupos_en_huesos_sin_pesos": []
@@ -13,31 +13,31 @@
     "aletazo_abajo_max": 6e-06,
     "aletazo_arriba_max": 7e-06,
     "aletazo_abajo_rugido": 6e-06,
-    "aletazo_arriba_rugido": 6e-06,
+    "aletazo_arriba_rugido": 7e-06,
     "alas_plegadas_picada": 6e-06,
-    "cola_enroscada": 4e-06,
-    "cola_en_s": 5e-06,
+    "cola_enroscada": 5e-06,
+    "cola_en_s": 4e-06,
     "cola_arriba": 4e-06,
     "cola_abajo": 5e-06,
-    "cuello_izq_30": 6e-06,
+    "cuello_izq_30": 5e-06,
     "cuello_izq_60": 4e-06,
-    "cuello_der_60": 5e-06,
-    "cuello_arriba_45": 7e-06,
-    "cuello_abajo_45": 8e-06,
+    "cuello_der_60": 4e-06,
+    "cuello_arriba_45": 8e-06,
+    "cuello_abajo_45": 5e-06,
     "boca_max": 4e-06,
     "patas_colgando": 4e-06,
     "patas_apoyadas": 4e-06,
     "patas_recogidas_aleteo": 5e-06,
-    "truco_rugido": 8e-06,
-    "truco_fuego": 4e-06,
-    "truco_voltereta": 8e-06,
+    "truco_rugido": 6e-06,
+    "truco_fuego": 5e-06,
+    "truco_voltereta": 7e-06,
     "comer": 7e-06,
     "curva_cerrada": 5e-06
   },
-  "escala_studs_por_bu": 2.7565,
+  "escala_studs_por_bu": 2.75,
   "medidas_studs": {
-    "ancho_x": 9.894,
-    "largo_y": 9.9,
-    "alto_z": 7.428
+    "ancho_x": 9.9,
+    "largo_y": 9.32,
+    "alto_z": 6.325
   }
 }

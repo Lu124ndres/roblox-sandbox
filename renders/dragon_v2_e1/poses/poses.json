@@ -47,20 +47,21 @@
       "Cadera/AntebrazoDer": 0.0,
       "Cadera/AntebrazoIzq": 0.0,
       "Cadera/Cola1": 2.03,
-      "Cadera/Cola2": 0.09,
       "Cadera/MusloDer": 1.0,
       "Cadera/MusloIzq": 1.0,
       "Cadera/Pecho": 1.0,
-      "Cola1/Cola2": 1.69,
+      "Cola1/Cola2": 1.38,
       "Cola1/MusloIzq": 0.03,
-      "Cola2/Cola3": 1.38,
-      "Cola3/Cola4": 0.86,
+      "Cola2/Cola3": 0.92,
+      "Cola3/Cola4": 0.88,
       "Cola4/Cola5": 0.88,
       "Cola5/Cola6": 0.85,
       "Cuello1/Cuello2": 1.94,
       "Cuello2/Cabeza": 1.0,
       "MusloDer/PiernaDer": 0.0,
       "MusloIzq/PiernaIzq": 0.0,
+      "Pecho/AntebrazoDer": 0.16,
+      "Pecho/AntebrazoIzq": 0.16,
       "Pecho/BrazoDer": 1.09,
       "Pecho/BrazoIzq": 1.09,
       "Pecho/Cuello1": 2.94,
@@ -95,98 +96,112 @@
             "AlaDer1",
             "BrazoDer"
           ],
-          "celdas": 0.8
+          "celdas": 0.54
         },
         {
           "piezas": [
             "AlaDer1",
             "MusloDer"
           ],
-          "celdas": 0.54
+          "celdas": 0.79
         },
         {
           "piezas": [
             "AlaDer2",
             "AntebrazoDer"
           ],
-          "celdas": 0.53
+          "celdas": 0.59
         },
         {
           "piezas": [
             "AlaDer2",
             "BrazoDer"
           ],
-          "celdas": 0.89
+          "celdas": 0.83
+        },
+        {
+          "piezas": [
+            "AlaDer2",
+            "ManoDer"
+          ],
+          "celdas": 0.42
         },
         {
           "piezas": [
             "AlaDer2",
             "MusloDer"
           ],
-          "celdas": 0.99
+          "celdas": 0.94
         },
         {
           "piezas": [
             "AlaDer2",
             "PiernaDer"
           ],
-          "celdas": 0.47
+          "celdas": 0.48
         },
         {
           "piezas": [
             "AlaIzq1",
             "BrazoIzq"
           ],
-          "celdas": 0.8
+          "celdas": 0.54
         },
         {
           "piezas": [
             "AlaIzq1",
             "MusloIzq"
           ],
-          "celdas": 0.54
+          "celdas": 0.79
         },
         {
           "piezas": [
             "AlaIzq2",
             "AntebrazoIzq"
           ],
-          "celdas": 0.53
+          "celdas": 0.59
         },
         {
           "piezas": [
             "AlaIzq2",
             "BrazoIzq"
           ],
-          "celdas": 0.89
+          "celdas": 0.83
+        },
+        {
+          "piezas": [
+            "AlaIzq2",
+            "ManoIzq"
+          ],
+          "celdas": 0.42
         },
         {
           "piezas": [
             "AlaIzq2",
             "MusloIzq"
           ],
-          "celdas": 0.99
+          "celdas": 0.94
         },
         {
           "piezas": [
             "AlaIzq2",
             "PiernaIzq"
           ],
-          "celdas": 0.47
+          "celdas": 0.48
         },
         {
           "piezas": [
             "AlaIzq3",
             "AlaDer3"
           ],
-          "celdas": 0.42
+          "celdas": 0.71
         },
         {
           "piezas": [
             "Cadera",
             "AlaDer1"
           ],
-          "celdas": 0.95
+          "celdas": 0.91
         },
         {
           "piezas": [
@@ -200,7 +215,7 @@
             "Cadera",
             "AlaIzq1"
           ],
-          "celdas": 0.95
+          "celdas": 0.91
         },
         {
           "piezas": [
@@ -208,27 +223,6 @@
             "AlaIzq2"
           ],
           "celdas": 0.49
-        },
-        {
-          "piezas": [
-            "Cola1",
-            "AlaDer1"
-          ],
-          "celdas": 0.38
-        },
-        {
-          "piezas": [
-            "Cola1",
-            "AlaIzq1"
-          ],
-          "celdas": 0.39
-        },
-        {
-          "piezas": [
-            "Cola2",
-            "AlaIzq1"
-          ],
-          "celdas": 0.47
         },
         {
           "piezas": [
@@ -249,14 +243,14 @@
             "Pecho",
             "AlaDer2"
           ],
-          "celdas": 0.77
+          "celdas": 0.8
         },
         {
           "piezas": [
             "Pecho",
             "AlaIzq2"
           ],
-          "celdas": 0.77
+          "celdas": 0.8
         }
       ],
       "junta": [
@@ -265,14 +259,14 @@
             "Pecho",
             "AlaDer1"
           ],
-          "celdas": 1.78
+          "celdas": 1.99
         },
         {
           "piezas": [
             "Pecho",
             "AlaIzq1"
           ],
-          "celdas": 1.78
+          "celdas": 1.99
         }
       ],
       "hueco": []
@@ -312,7 +306,7 @@
             "Cuello1",
             "AlaDer2"
           ],
-          "celdas": 0.64
+          "celdas": 0.9
         },
         {
           "piezas": [
@@ -326,7 +320,7 @@
             "Cuello1",
             "AlaIzq2"
           ],
-          "celdas": 0.64
+          "celdas": 0.9
         },
         {
           "piezas": [
@@ -340,7 +334,7 @@
             "Cuello2",
             "AlaDer2"
           ],
-          "celdas": 1.52
+          "celdas": 1.24
         },
         {
           "piezas": [
@@ -354,7 +348,7 @@
             "Cuello2",
             "AlaIzq2"
           ],
-          "celdas": 1.52
+          "celdas": 1.24
         }
       ],
       "junta": [],
@@ -387,21 +381,14 @@
             "Cola1",
             "MusloDer"
           ],
-          "celdas": 0.61
-        },
-        {
-          "piezas": [
-            "Cola2",
-            "MusloDer"
-          ],
-          "celdas": 0.99
+          "celdas": 0.57
         },
         {
           "piezas": [
             "Cola6",
             "MusloDer"
           ],
-          "celdas": 0.52
+          "celdas": 0.88
         }
       ],
       "junta": [],
@@ -415,13 +402,6 @@
             "MusloDer"
           ],
           "celdas": 0.37
-        },
-        {
-          "piezas": [
-            "Cola2",
-            "MusloDer"
-          ],
-          "celdas": 0.57
         }
       ],
       "junta": [],
