@@ -3,9 +3,9 @@
 Rehacer el Zorro de agua en bloques, en cuatro etapas, siguiendo `docs/guia_crear_monstruo.md`.
 Es el primer monstruo hecho con **olas de agentes paralelos** (guía, sección 12).
 
-**Estado (2026-10-18):** E3 aprobada por el usuario. Ola 2 en curso: E1, E2 y E4 a partir de la
-E3, más las poses y el rig. Las colas, el hábitat y los sonidos ya están en el juego y se
-probaron con el zorro E4 actual.
+**Estado (2026-10-18):** E1, E2 y E3 aprobadas por el usuario, con poses medidas, rig, FBX y
+textura. Falta la E4. Las colas, el hábitat y los sonidos ya están en el juego y se probaron con
+el zorro E4 actual.
 
 ## Identidad
 
@@ -38,7 +38,9 @@ probaron con el zorro E4 actual.
 | Colas | 1 | 3 | 6 | 9 |
 | Triángulos (máx.) | 8k | 10k | 12k | 15k |
 | Huesos | 36 | 46 | 61 | 76 |
-| Estado | en curso | en curso | **aprobada** (7,258 tris) | en curso |
+| Triángulos reales | 3,940 | 4,604 | 7,604 | — |
+| Poses limpias (`zorro_v2_poses.py`) | 20 de 29 | 19 de 29 | 24 de 29 | — |
+| Estado | **aprobada** | **aprobada** | **aprobada** | en curso |
 
 Escala única de exportación: **5.32 studs por BU** (la del minotauro).
 
@@ -72,6 +74,29 @@ La E4 queda en 76 huesos, 6 más que el tope de la guía: excepción aceptada po
 - **Lo que difiere de la referencia** (el usuario la aprobó así): el abanico es más bajo
   respecto del cuerpo (sube ~2.2 veces el lomo; la referencia, ~3), la cara se lee más dura y la
   cola de abajo remata en un rectángulo.
+
+## Segunda vuelta: juntas y colas que no se cruzan (2026-10-18)
+
+Con la E3 aprobada a la vista, `zorro_v2_poses.py` (la cuenta de `Zorro/Rig`, `Pose` y una
+traducción de `Zorro/Colas` en `zorro_v2_colas_sim.py`) dio solo 7 de 29 poses limpias: las
+colas vecinas compartían profundidad y se cruzaban hasta en reposo, y el muslo, el brazo y el
+cuello chocaban con el torso. Reglas que salieron (están en el docstring de cada `_colas.py`):
+
+- **Cada cola en su capa de profundidad:** si dos tramos de colas distintas se solapan en x-z,
+  entre sus franjas en y queda al menos 1 celda. Lo mismo para dos tramos no seguidos de una
+  misma cola (paso ≥ la mitad del hondo + media celda). Hondo de 3 o menos. Una cola y su espejo
+  necesitan ≥ 2 celdas en x y 0.45 rad de hueco de reposo.
+- **Colas gruesas (E1):** cada tramo nace 2 celdas por debajo de la punta del anterior y ningún
+  tramo con hijo pasa de 8 de ancho.
+- **Cuerpo:** junta Cadera/Columna adelante, cuña en el muslo, pata delantera con espiga de 1×1
+  y cuñas, cuello bajo el cráneo, babero sin pasar el lomo, párpado de 3 celdas, oreja con cuñas.
+- **Código** (commit 1d527e8): tope a la suma de pliegues (`FOLD_MAX` 1.2), hueco mínimo del 70 %
+  del de reposo, una cola sola que baja por su costado al enroscarse, y los límites saben cuánto
+  baja el cuerpo al sentarse.
+- La E2 se exporta a 44 studs exactos (`rig_zorro_v2.py` escala por el alto de la etapa), no a
+  los 44.7 de la escala única: en el juego no cambia nada.
+- Pendiente en las tres: rascarse la oreja (la pata de la cría no llega) y las juntas de cola
+  dobladas 45° todas a la vez.
 
 ## Código y hábitat (ola 1, en el juego desde el 2026-10-17)
 
