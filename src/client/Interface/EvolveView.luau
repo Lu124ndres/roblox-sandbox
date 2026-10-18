@@ -4,7 +4,8 @@
 
 	Cada cuarto de barra que se llena, el monstruo evoluciona y no come por
 	unos segundos (Config.Giants.cycle.evolveSeconds). Mientras tanto, encima
-	de la barra del hambre aparece un cartel brillante con la cuenta regresiva
+	de la barra del hambre aparece un cartel de piedra (Interface/Kit) teñido
+	de morado y rosa que se mueve, con la cuenta regresiva
 	("✨ ¡EVOLUCIONANDO! 4 ✨"). Lee el atributo EvolucionHasta que publica el
 	servidor (GiantService) con la hora del servidor en que termina.
 ]]
@@ -14,12 +15,13 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
-local Ui = require(script.Parent.Parent.Ui)
 local HungerPanel = require(script.Parent.HungerPanel)
+local Kit = require(script.Parent.Kit)
 local Style = require(script.Parent.Style)
 
 local COLOR_A = Color3.fromRGB(150, 90, 255)
 local COLOR_B = Color3.fromRGB(255, 120, 220)
+local SLICE = 0.25 -- borde de piedra fino: el cartel es tan bajo como la barra
 
 local EvolveView = {}
 
@@ -28,20 +30,20 @@ function EvolveView.mount(panel: Frame)
 	local left = HungerPanel.LEFT
 	local card = Instance.new("Frame")
 	card.Name = "Evolucion"
-	card.BackgroundColor3 = COLOR_A
 	card.Position = UDim2.fromOffset(left, 22)
 	card.Size = UDim2.new(1, -left, 0, 30)
 	card.ZIndex = 20
 	card.Visible = false
-	Ui.corner(card, 10)
-	Style.border(card, 3)
+	-- Piedra blanca: el degradado que se mueve la tiñe de morado y rosa.
+	local skin = Kit.skin(card, "boton")
+	skin.SliceScale = SLICE
 	local gradient = Instance.new("UIGradient")
 	gradient.Color = ColorSequence.new({
 		ColorSequenceKeypoint.new(0, COLOR_A),
 		ColorSequenceKeypoint.new(0.5, COLOR_B),
 		ColorSequenceKeypoint.new(1, COLOR_A),
 	})
-	gradient.Parent = card
+	gradient.Parent = skin
 	card.Parent = panel
 	local label = Style.text(card, "Texto", 24, nil, 2.5)
 	label.ZIndex = 21

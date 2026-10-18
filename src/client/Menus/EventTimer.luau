@@ -4,7 +4,9 @@
 
 	En la columna derecha, debajo del entrenamiento del servidor: el evento
 	del servidor activo (nombre, qué da y cuánto le queda, con su color) o,
-	si no hay, cuánto falta para el siguiente ("Evento en 4:12"). La
+	si no hay, cuánto falta para el siguiente ("Evento en 4:12"), en una
+	placa de piedra teñida del color del evento (gris si no hay) con el
+	nombre dorado (Interface/Kit). La
 	cuenta del siguiente da una razón para quedarse. Lo decide el servidor
 	(server/Social/EventScheduler); aquí solo se muestra.
 ]]
@@ -13,13 +15,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ServerEvents = require(ReplicatedStorage.Shared.ServerEvents)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local REFRESH_SECONDS = 0.5
-local IDLE_COLOR = Color3.fromRGB(64, 72, 110)
+local IDLE_COLOR = Kit.STONE -- piedra gris mientras no hay evento
 
 local EventTimer = {}
 
@@ -33,10 +35,7 @@ function EventTimer.start()
 	pill.Name = "EventoServidor"
 	pill.LayoutOrder = 2
 	pill.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, 54)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 12)
-	corner.Parent = pill
-	Style.border(pill, 3)
+	local skin = Kit.skin(pill, "boton", IDLE_COLOR)
 	pill.Parent = Layout.right()
 	local icon = Icons.view(pill, "bolt")
 	icon.AnchorPoint = Vector2.new(0, 0.5)
@@ -45,6 +44,7 @@ function EventTimer.start()
 	local title = Style.text(pill, "Nombre", 22, nil, 2)
 	title.Position = UDim2.fromOffset(48, 4)
 	title.Size = UDim2.new(1, -54, 0, 24)
+	Kit.gold(title)
 	local detail = Style.text(pill, "Detalle", 17, nil, 2)
 	detail.Position = UDim2.fromOffset(48, 29)
 	detail.Size = UDim2.new(1, -54, 0, 20)
@@ -52,7 +52,7 @@ function EventTimer.start()
 	local function paint(color: Color3)
 		if painted ~= color then
 			painted = color
-			CardParts.paint(pill, color)
+			Kit.tint(skin, color)
 		end
 	end
 

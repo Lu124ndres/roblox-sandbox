@@ -2,8 +2,10 @@
 --[[
 	Hud
 
-	Estadísticas compactas a la izquierda, al estilo simulador: ícono con su
-	multiplicador debajo, el número con contorno y una línea chica:
+	Estadísticas compactas a la izquierda, al estilo simulador: cada una en una
+	placa de piedra (Interface/Kit) con el ícono asomando por la izquierda, su
+	multiplicador debajo, el número con contorno (las monedas, doradas) y una
+	línea chica:
 		Monedas   (x de Monedas compradas)
 		Poder     (x de Poder: compras y entrenamiento del servidor) · velocidad y peces por pique
 		Peces     en la canasta / capacidad («LLENA» bajo el ícono cuando no cabe más)
@@ -22,6 +24,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Device = require(script.Parent.Interface.Device)
 local Icons = require(script.Parent.Interface.Icons)
+local Kit = require(script.Parent.Interface.Kit)
 local Layout = require(script.Parent.Interface.Layout)
 local Style = require(script.Parent.Interface.Style)
 
@@ -32,6 +35,7 @@ local VALUE_HEIGHT = 42
 local DETAIL_HEIGHT = ROW_HEIGHT - VALUE_HEIGHT
 local DETAIL_MAX_TEXT = 16
 local BADGE_HEIGHT = 20
+local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
 
 type Row = { value: TextLabel, detail: TextLabel, badge: TextLabel }
 
@@ -56,6 +60,15 @@ local function row(order: number, icon: string, color: Color3): Row
 	frame.BackgroundTransparency = 1
 	frame.Size = UDim2.fromOffset(Layout.statWidth(), ROW_HEIGHT)
 	frame.Parent = Layout.left()
+	-- La placa empieza a media altura del ícono: el ícono asoma por la izquierda.
+	local plate = Instance.new("Frame")
+	plate.Name = "Placa"
+	plate.BackgroundTransparency = 1
+	plate.Position = UDim2.fromOffset(ROW_HEIGHT / 2, 2)
+	plate.Size = UDim2.new(1, -ROW_HEIGHT / 2, 1, -4)
+	plate.ZIndex = 0
+	plate.Parent = frame
+	Kit.skin(plate, "panel").SliceScale = PLATE_SLICE
 	local view = Icons.view(frame, icon)
 	view.Size = UDim2.fromOffset(ROW_HEIGHT, ROW_HEIGHT - 4)
 	local badge = Style.text(frame, "Multiplicador", BADGE_HEIGHT, nil, 2)
@@ -66,14 +79,15 @@ local function row(order: number, icon: string, color: Color3): Row
 	-- En táctil el número ocupa toda la fila y no hay línea chica.
 	local touch = Device.touch()
 	local value =
-		Style.text(frame, "Valor", if touch then ROW_HEIGHT - 6 else VALUE_HEIGHT, color, 3)
+		Style.text(frame, "Valor", if touch then ROW_HEIGHT - 12 else VALUE_HEIGHT - 4, color, 3)
 	value.TextXAlignment = Enum.TextXAlignment.Left
-	value.Position = UDim2.fromOffset(ROW_HEIGHT + 4, if touch then 3 else 0)
-	value.Size = UDim2.new(1, -ROW_HEIGHT - 4, 0, if touch then ROW_HEIGHT - 6 else VALUE_HEIGHT)
+	value.Position = UDim2.fromOffset(ROW_HEIGHT + 4, if touch then 6 else 3)
+	value.Size =
+		UDim2.new(1, -ROW_HEIGHT - 14, 0, if touch then ROW_HEIGHT - 12 else VALUE_HEIGHT - 4)
 	local detail = Style.text(frame, "Detalle", DETAIL_MAX_TEXT, nil, 1.5)
 	detail.TextXAlignment = Enum.TextXAlignment.Left
-	detail.Position = UDim2.fromOffset(ROW_HEIGHT + 4, VALUE_HEIGHT)
-	detail.Size = UDim2.new(1, -ROW_HEIGHT - 4, 0, DETAIL_HEIGHT)
+	detail.Position = UDim2.fromOffset(ROW_HEIGHT + 4, VALUE_HEIGHT - 3)
+	detail.Size = UDim2.new(1, -ROW_HEIGHT - 14, 0, DETAIL_HEIGHT - 2)
 	detail.Visible = not touch
 	return { value = value, detail = detail, badge = badge }
 end
@@ -89,6 +103,9 @@ function Hud.mount(_screen: ScreenGui, player: Player): TextLabel
 	local fish = row(3, "basketFish", COLORS.Fishing)
 	local kills = row(4, "skull", Color3.fromRGB(255, 120, 110))
 	coins.detail.Text = ""
+	Kit.gold(coins.value)
+	Kit.gold(coins.badge)
+	Kit.gold(power.badge)
 	kills.detail.Text = "monstruos llenados"
 	kills.badge.Visible = false
 

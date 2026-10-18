@@ -4,7 +4,8 @@
 
 	Atajos de Robux siempre a la vista en la columna derecha, debajo de
 	Tienda y Robux: el siguiente nivel de Poder y de Monedas ("x4 Poder")
-	con su precio en una insignia verde. Tocarlos abre la compra de Roblox.
+	con su precio en una insignia verde. Son de piedra gris con el nombre
+	dorado, como MEJORAS (HudButtons.iconButton). Tocarlos abre la compra de Roblox.
 	Lo que muestran sale de RobuxOffers (lo mismo que la tienda de Robux).
 ]]
 
@@ -45,7 +46,6 @@ function QuickBuys.start()
 		local button = HudButtons.iconButton(row, key, ICONS[key] or "coin", SIZE)
 		button.LayoutOrder = index
 		local label = button:FindFirstChild("Nombre") :: TextLabel
-		label.TextColor3 = Color3.fromRGB(255, 225, 90)
 		local price = Style.robuxBadge(button)
 		button.Activated:Connect(function()
 			local offer = spec()

@@ -3,11 +3,12 @@
 	HungerPanel
 
 	Las piezas del panel de hambre (arriba al centro), sin lógica, compactas,
-	sobre una placa azul noche con marco dorado (decorado en HungerLook):
-		[retrato]  Nombre ................ Etapa 1/4
-		[retrato]  [ barra con la comida grande ]
-		[retrato]  Calmada   [enojo]
-		           +25%  +50%  +75%
+	sobre una placa de piedra con una gema a cada lado (decorado en HungerLook):
+		<>[retrato]  Nombre ................ Etapa 1/4  <>
+		<>[retrato]  [ barra con la comida grande ]    <>
+		<>[retrato]  Calmada   [enojo]                 <>
+		             +25%  +50%  +75%   (cuelgan del borde de abajo)
+	El nombre y la etapa van en dorado y la barra en un hueco de la piedra.
 	El retrato del monstruo (GiantPortrait, su ícono) va a la izquierda; la fila del
 	enojo (AngerMeter, y = ANGER_TOP) y los atajos para llenarlo (FillChips,
 	y = CHIPS_TOP, que fija el alto del panel) usan las medidas de aquí.
@@ -16,7 +17,8 @@
 	Si cabe, el panel sube a la barra de Roblox (entre sus botones y los
 	nuestros, que van en la esquina derecha); si no (teléfonos), va justo
 	debajo de ella.
-	Ancho: hasta 400, pero nunca tanto como para pisar las columnas del HUD.
+	Ancho: hasta 400, pero nunca tanto como para pisar las columnas del HUD (ni
+	con lo que sobresalen la placa y las gemas, HungerLook.OVERHANG).
 ]]
 
 local GuiService = game:GetService("GuiService")
@@ -27,12 +29,14 @@ local Ui = require(script.Parent.Parent.Ui)
 local Device = require(script.Parent.Device)
 local Layout = require(script.Parent.Layout)
 local HungerLook = require(script.Parent.HungerLook)
+local Kit = require(script.Parent.Kit)
 local Style = require(script.Parent.Style)
 
 local MAX_WIDTH = 400
 local MIN_WIDTH = UIConfig.Spacing.HungerWidthMin
 local SIDE_GAP = 24 -- aire entre el panel y cada columna
 local TOPBAR_GAP = 12 -- aire entre los botones de la barra de Roblox y el panel
+local OVERHANG = HungerLook.OVERHANG
 
 export type Parts = {
 	panel: Frame,
@@ -50,11 +54,13 @@ HungerPanel.PORTRAIT = 62 -- lado del retrato
 HungerPanel.LEFT = HungerPanel.PORTRAIT + 6 -- donde empiezan el nombre y la barra
 HungerPanel.ANGER_TOP = 55
 HungerPanel.CHIPS_TOP = 80
+HungerPanel.OVERHANG = OVERHANG -- lo que sobresalen la placa y las gemas por cada lado
+local PLATE_BOTTOM = HungerPanel.CHIPS_TOP + 10 -- los atajos de llenar cuelgan del borde
 
 -- Ancho (antes de escalar) que cabe entre las dos columnas.
 function HungerPanel.width(): number
 	local scale = Layout.scale()
-	local free = Device.viewport().X / scale - 2 * (Layout.statWidth() + SIDE_GAP)
+	local free = Device.viewport().X / scale - 2 * (Layout.statWidth() + SIDE_GAP + OVERHANG)
 	return math.clamp(math.floor(free), MIN_WIDTH, MAX_WIDTH)
 end
 
@@ -67,11 +73,11 @@ local function place(panel: Frame)
 	local barLeft = bar.AbsolutePosition.X
 		+ bar.AbsoluteSize.X
 		- (if list then list.AbsoluteContentSize.X else 0)
-	local width = panel.Size.X.Offset * Layout.scale()
+	local scale = Layout.scale()
+	local width = panel.Size.X.Offset * scale
 	local left = (Device.viewport().X - width) / 2
-	local fits = inset.Height > 0
-		and left > inset.Min.X + TOPBAR_GAP
-		and left + width < barLeft - TOPBAR_GAP
+	local gap = TOPBAR_GAP + OVERHANG * scale
+	local fits = inset.Height > 0 and left > inset.Min.X + gap and left + width < barLeft - gap
 	panel.Position = UDim2.new(0.5, 0, 0, if fits then -inset.Height + 8 else 10)
 end
 
@@ -95,7 +101,7 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	end
 	relayout()
 
-	HungerLook.plate(panel, HungerPanel.PORTRAIT / 2, HungerPanel.ANGER_TOP + 16)
+	HungerLook.plate(panel, PLATE_BOTTOM)
 	local ring = HungerLook.medal(panel, HungerPanel.PORTRAIT)
 	-- Ícono del monstruo, un poco más grande que su medalla para que resalte.
 	local portrait = Instance.new("ImageLabel")
@@ -113,35 +119,28 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Position = UDim2.fromOffset(left + 4, 0)
 	title.Size = UDim2.new(0.62, -left, 0, 22)
+	Kit.gold(title)
 
-	local detail = Style.text(panel, "Etapa", 18, Color3.fromRGB(255, 220, 70))
+	local detail = Style.text(panel, "Etapa", 18)
 	detail.TextXAlignment = Enum.TextXAlignment.Right
 	detail.AnchorPoint = Vector2.new(1, 0)
 	detail.Position = UDim2.new(1, -4, 0, 2)
 	detail.Size = UDim2.new(0.38, 0, 0, 18)
+	Kit.gold(detail)
 
 	local track = Instance.new("Frame")
 	track.Name = "Pista"
-	track.BackgroundColor3 = Color3.fromRGB(34, 36, 46)
 	track.Position = UDim2.fromOffset(left, 22)
 	track.Size = UDim2.new(1, -left, 0, 30)
-	Ui.corner(track, 10)
-	Style.border(track, 3)
 	track.Parent = panel
-	local clip = Instance.new("Frame")
-	clip.Name = "Recorte"
-	clip.BackgroundTransparency = 1
-	clip.Size = UDim2.fromScale(1, 1)
-	clip.ClipsDescendants = true
-	clip.Parent = track
-	Ui.corner(clip, 10)
+	local clip = HungerLook.hollow(track)
 
 	local fill = Instance.new("Frame")
 	fill.Name = "Relleno"
 	fill.BorderSizePixel = 0
 	fill.Size = UDim2.fromScale(0, 1)
 	fill.BackgroundColor3 = UIConfig.HungerStageColors[1]
-	Ui.corner(fill, 10)
+	Ui.corner(fill, 6)
 	Style.gradient(fill, Color3.new(1, 1, 1))
 	HungerLook.shine(fill)
 	fill.Parent = clip

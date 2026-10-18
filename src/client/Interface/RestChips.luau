@@ -6,7 +6,7 @@
 	se ven mientras come), aparecen:
 		- un botón por monstruo con su ícono y su precio en Robux: comprarlo
 		  hace que salga ese al terminar el descanso (producto Choose<id>);
-		  el que ya está elegido se marca en dorado;
+		  son de piedra morada y el que ya está elegido se vuelve de piedra dorada;
 		- junto a la barra, "+1 MIN DESCANSO" con su precio: alarga el descanso
 		  de todo el servidor (producto RestTime);
 		- el botón grande "IR A LA GUARIDA (xN)", con el multiplicador del
@@ -31,6 +31,7 @@ local Style = require(script.Parent.Style)
 local CHIP_HEIGHT, CHIP_WIDTH, GAP = 52, 70, 12
 local BUTTON_HEIGHT = 42
 local CARDS = Style.PALETTE.Cards
+local CHOSEN = Color3.fromRGB(255, 200, 60) -- piedra dorada: el monstruo ya elegido
 
 local RestChips = {}
 
@@ -92,7 +93,7 @@ function RestChips.mount(panel: Frame)
 	local more =
 		Style.button(panel, "MasDescanso", CARDS.Green, `+{restTime.seconds // 60} MIN DESCANSO`)
 	more.AnchorPoint = Vector2.new(0, 0.5)
-	more.Position = UDim2.new(1, 14, 0, 37)
+	more.Position = UDim2.new(1, HungerPanel.OVERHANG + 4, 0, 37) -- a la derecha de la gema
 	more.Size = UDim2.fromOffset(112, 50)
 	more.Visible = false
 	local moreText = more:FindFirstChild("Texto") :: TextLabel
@@ -143,11 +144,9 @@ function RestChips.mount(panel: Frame)
 			end
 		end
 		local chosen = boosts:GetAttribute(Protocol.BoostAttributes.NextGiant)
+		-- Style.button tiñe la piedra con BackgroundColor3.
 		for id, chip in chips do
-			local stroke = chip:FindFirstChildOfClass("UIStroke")
-			if stroke then
-				stroke.Color = if id == chosen then Color3.fromRGB(255, 220, 70) else Style.OUTLINE
-			end
+			chip.BackgroundColor3 = if id == chosen then CHOSEN else CARDS.Purple
 		end
 	end
 	state:GetAttributeChangedSignal(Protocol.GiantAttributes.Phase):Connect(refresh)

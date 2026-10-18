@@ -4,6 +4,7 @@
 
 	Cartel arriba de la columna derecha mientras dura el entrenamiento que alguien
 	compró para todo el servidor: cuánto multiplica, quién fue y cuánto queda.
+	Es una placa de piedra verde (Interface/Kit) con texto blanco con contorno.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -11,7 +12,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Ui = require(script.Parent.Parent.Ui)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
@@ -21,19 +22,20 @@ local BoostTimer = {}
 
 function BoostTimer.start(_screen: ScreenGui)
 	-- Arriba de la columna derecha (encima de Tienda y Robux).
-	local pill = Ui.panel("ImpulsoServidor", Layout.right())
+	local pill = Instance.new("Frame")
+	pill.Name = "ImpulsoServidor"
 	pill.LayoutOrder = 1
 	pill.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, 54) -- el ancho de la columna
-	Style.border(pill, 3)
-	pill.BackgroundColor3 = UIConfig.Colors.Robux
-	pill.BackgroundTransparency = 0.1
 	pill.Visible = false
-	local title = Ui.label("Texto", pill, UIConfig.Fonts.Title, UIConfig.TextSizes.Body)
-	title.Position = UDim2.fromOffset(8, 4)
-	title.Size = UDim2.new(1, -16, 0, 26)
-	local by = Ui.label("Comprador", pill, UIConfig.Fonts.Body, UIConfig.TextSizes.Small)
-	by.Position = UDim2.fromOffset(8, 30)
-	by.Size = UDim2.new(1, -16, 0, 18)
+	Kit.skin(pill, "boton", UIConfig.Colors.Robux)
+	pill.Parent = Layout.right()
+	local title = Style.text(pill, "Texto", UIConfig.TextSizes.Body, nil, 2)
+	title.Position = UDim2.fromOffset(10, 5)
+	title.Size = UDim2.new(1, -20, 0, 24)
+	local by = Style.text(pill, "Comprador", UIConfig.TextSizes.Small, nil, 1.5)
+	by.FontFace = UIConfig.Fonts.Body
+	by.Position = UDim2.fromOffset(10, 29)
+	by.Size = UDim2.new(1, -20, 0, 18)
 
 	local folder = ReplicatedStorage:WaitForChild(Protocol.BoostFolder)
 	task.spawn(function()

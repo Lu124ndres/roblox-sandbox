@@ -2,9 +2,11 @@
 --[[
 	HudButtons
 
-	Botones del menú con ícono (Icons) y nombre con contorno:
-		HudButtons.side   grandes, en la columna derecha (Tienda, Mejoras), centrados
-		HudButtons.top    redondos y chicos, en la esquina derecha de la barra de
+	Botones del menú con ícono (Icons) y nombre dorado, de piedra tallada
+	(Interface/Kit):
+		HudButtons.side   grandes, en la columna derecha (Tienda, Mejoras), centrados;
+		                  piedra gris, salvo los de LAVA (la TIENDA, con marco de lava)
+		HudButtons.top    cuadraditos de piedra en la esquina derecha de la barra de
 		                  Roblox (Premio, Peces, Códigos, Grupo, Ajustes)
 	Cada módulo agrega el suyo y decide qué hace al tocarlo. Un punto rojo
 	avisa que hay algo nuevo (por ejemplo, el premio diario).
@@ -16,13 +18,16 @@ local TweenService = game:GetService("TweenService")
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 
 local COLORS = UIConfig.Colors
 local SIDE_SIZE = Layout.BUTTON_SIZE
-local TOP_DARK = Color3.fromRGB(28, 30, 38)
+local TOP_SLICE = 0.2 -- borde de piedra más fino en los botones chicos de arriba
+-- Los laterales que llevan el marco de lava (lo más importante).
+local LAVA: { [string]: boolean } = { Tienda = true }
 -- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
 local TOP_ORDER: { [string]: number } =
 	{ Ruleta = 1, Premio = 2, Peces = 3, ["Códigos"] = 4, Grupo = 5, Ajustes = 6, Admin = 7 }
@@ -65,33 +70,41 @@ local function press(button: TextButton, onClick: () -> ())
 	end)
 end
 
--- Botón de ícono con nombre abajo; lo usan también los atajos de Robux. Todo el
--- cuadro (ícono y nombre) es el botón: el ícono y el nombre no reciben toques,
--- así el toque siempre llega al botón aunque caiga sobre el dibujo.
+-- Botón de piedra con ícono y nombre dorado abajo; lo usan también los atajos de
+-- Robux. `lava`: con el marco de lava (si no, piedra gris). Todo el cuadro (ícono y
+-- nombre) es el botón: el ícono y el nombre no reciben toques, así el toque
+-- siempre llega al botón aunque caiga sobre el dibujo.
 function HudButtons.iconButton(
 	parent: Instance,
 	text: string,
 	icon: string,
-	size: number
+	size: number,
+	lava: boolean?
 ): TextButton
 	local button = Instance.new("TextButton")
 	button.Name = `Boton{text}`
 	button.Text = ""
-	button.BackgroundTransparency = 1
+	button.AutoButtonColor = false
 	button.Active = true
 	button.Size = UDim2.fromOffset(size, size + 4)
 	button.Parent = parent
+	local skin = if lava then Kit.skin(button, "lava") else Kit.skin(button, "boton", Kit.STONE)
+	Kit.press(button, skin)
+	-- El ícono asoma un poco sobre el borde de arriba, como en los simuladores.
 	local view = Icons.view(button, icon)
-	view.Size = UDim2.fromOffset(size, size - 10)
+	view.AnchorPoint = Vector2.new(0.5, 0)
+	view.Position = UDim2.new(0.5, 0, 0, -2)
+	view.Size = UDim2.fromOffset(size - 8, size - 24)
 	view.Active = false
 	view.Interactable = false
 	local label = Style.text(button, "Nombre", 20, nil, 2)
 	label.AnchorPoint = Vector2.new(0.5, 1)
-	label.Position = UDim2.new(0.5, 0, 1, 0)
-	label.Size = UDim2.new(1, 4, 0, 22) -- casi el ancho del botón: no pisa al vecino
+	label.Position = UDim2.new(0.5, 0, 1, -6)
+	label.Size = UDim2.new(1, -10, 0, 22)
 	label.Active = false
 	label.Interactable = false
 	label.Text = TextCase.upper(text)
+	Kit.gold(label)
 	return button
 end
 
@@ -113,7 +126,7 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 	end
 	order += 1
 	sideCount += 1
-	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE)
+	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE, LAVA[text])
 	button.LayoutOrder = order
 	table.insert(registered, button)
 	press(button, onClick)
@@ -133,20 +146,19 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	button.Name = `Boton{text}`
 	button.Text = ""
 	button.LayoutOrder = TOP_ORDER[text] or 10 + order
-	button.BackgroundColor3 = TOP_DARK
-	button.BackgroundTransparency = 0.25
+	button.AutoButtonColor = false
 	button.Size = UDim2.fromScale(1, 1)
 	local aspect = Instance.new("UIAspectRatioConstraint")
 	aspect.Parent = button
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(1, 0)
-	corner.Parent = button
+	local skin = Kit.skin(button, "boton", Kit.STONE)
+	skin.SliceScale = TOP_SLICE
+	Kit.press(button, skin)
 	button.Parent = bar
 	table.insert(registered, button)
 	local view = Icons.view(button, icon)
 	view.AnchorPoint = Vector2.new(0.5, 0.5)
 	view.Position = UDim2.fromScale(0.5, 0.5)
-	view.Size = UDim2.fromScale(0.95, 0.95)
+	view.Size = UDim2.fromScale(0.9, 0.9)
 	press(button, onClick)
 	local dot = alertDot(button)
 	dot.Size = UDim2.fromOffset(11, 11)

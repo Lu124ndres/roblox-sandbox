@@ -2,8 +2,8 @@
 --[[
 	TutorialGuide
 
-	Guía del primer minuto: un panel a la derecha con la misión actual
-	(Config.Retention.tutorial) y su avance, y un marcador en el mundo que
+	Guía del primer minuto: una placa de piedra (Interface/Kit) con la misión
+	actual (Config.Retention.tutorial, el título en dorado) y su avance, y un marcador en el mundo que
 	flota sobre el destino (el muelle más cercano, el puente y la puerta del
 	volcán, un estanque o la tienda) con la distancia. Desaparece al
 	terminar. El avance lo decide el servidor (atributos Tutorial y
@@ -23,12 +23,14 @@ local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Ui = require(script.Parent.Parent.Ui)
 local InputHints = require(script.Parent.Parent.Interface.InputHints)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local COLORS = UIConfig.Colors
 local ATTR = Protocol.PlayerAttributes
 local STEPS = Config.Retention.tutorial
+local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
 
 local TutorialGuide = {}
 
@@ -73,24 +75,24 @@ function TutorialGuide.start(screen: ScreenGui)
 	panel.LayoutOrder = 20
 	panel.Size = UDim2.fromOffset(230, 70)
 	panel.Visible = false
-	Style.border(panel, 3)
+	Kit.skin(panel, "panel").SliceScale = PLATE_SLICE
 	if touchOnly then
 		-- Un poco a la izquierda del centro: a la derecha abajo van Pescar y ¡TIRA!.
 		panel.AnchorPoint = Vector2.new(0.5, 1)
 		panel.Position = UDim2.new(0.5, -40, 1, -8)
 		Layout.scaleWith(panel)
 	end
-	local title = Ui.label("Titulo", panel, UIConfig.Fonts.Title, UIConfig.TextSizes.Small)
-	title.TextColor3 = COLORS.Coins
+	local title = Style.text(panel, "Titulo", UIConfig.TextSizes.Small, nil, 2)
+	Kit.gold(title)
 	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Position = UDim2.fromOffset(8, 4)
-	title.Size = UDim2.new(1, -16, 0, 18)
+	title.Position = UDim2.fromOffset(10, 6)
+	title.Size = UDim2.new(1, -20, 0, 18)
 	local text = Ui.label("Texto", panel, UIConfig.Fonts.Body, UIConfig.TextSizes.Small)
 	text.TextXAlignment = Enum.TextXAlignment.Left
 	text.TextYAlignment = Enum.TextYAlignment.Top
 	text.TextWrapped = true
-	text.Position = UDim2.fromOffset(8, 23)
-	text.Size = UDim2.new(1, -16, 0, 44)
+	text.Position = UDim2.fromOffset(10, 25)
+	text.Size = UDim2.new(1, -20, 0, 40)
 
 	-- Marcador en el mundo: flecha que flota sobre el destino, siempre visible.
 	local anchor = Instance.new("Attachment")

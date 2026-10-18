@@ -2,8 +2,9 @@
 --[[
 	FillChips
 
-	Fila de botones de colores debajo de la barra de hambre: "+25%", "+50%" y
-	"+75%" chicos, con la etiqueta verde de su precio en Robux (llenan al
+	Fila de botones de piedra de colores (verde, naranja y rojo) que cuelgan del
+	borde de abajo del panel de hambre: "+25%", "+50%" y "+75%" chicos, con la
+	etiqueta verde de su precio en Robux (llenan al
 	monstruo actual para todos). Solo se ven mientras el monstruo está comiendo.
 	Cada botón mide al menos 28 px de alto ya escalado, y el panel de hambre
 	crece para que quepan.
@@ -26,6 +27,7 @@ local CHIP_HEIGHT = 30 -- alto antes de escalar...
 local MIN_SCREEN_HEIGHT = 28 -- ...pero nunca menos que esto en pantalla
 local CHIP_MAX_WIDTH = 78
 local GAP = 16
+local SLICE = 0.3 -- borde de piedra más fino: los botones son bajitos
 
 local FillChips = {}
 
@@ -65,6 +67,10 @@ function FillChips.mount(panel: Frame)
 		local fill = Config.Monetization.fills[key]
 		local button = Style.button(row, key, COLORS[index] or COLORS[1], "")
 		button.LayoutOrder = index
+		local skin = button:FindFirstChild("Piedra")
+		if skin and skin:IsA("ImageLabel") then
+			skin.SliceScale = SLICE
+		end
 		-- Un tercio del panel cada uno (el panel se angosta en pantallas chicas).
 		button.Size = UDim2.new(1 / 3, -GAP, 1, 0)
 		local limit = Instance.new("UISizeConstraint")

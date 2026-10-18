@@ -6,6 +6,7 @@
 	Va en la pila de avisos, arriba y debajo del panel de hambre, así nunca tapa
 	al jugador ni su cartel. Cae desde arriba con rebote, un brillo la cruza,
 	saltan chispas en las esquinas y el ícono gira sobre rayos de su color.
+	El fondo es una placa de pizarra (Interface/Kit) teñida apenas de su color.
 	Se desvanece entera (CanvasGroup) y se borra sola.
 ]]
 
@@ -13,12 +14,15 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Kit = require(script.Parent.Interface.Kit)
 local Style = require(script.Parent.Interface.Style)
 local ToastFx = require(script.Parent.ToastFx)
 
 local TWEENS = UIConfig.Tweens
 local HEIGHT = 64
 local WHITE = Color3.new(1, 1, 1)
+local SLICE = 0.4 -- borde de la pizarra (la tarjeta es más baja que una ventana)
+local TINT = 0.55 -- cuánto se acerca el color del aviso al blanco para teñir la piedra
 
 local ToastBanner = {}
 
@@ -26,12 +30,6 @@ local function tween(target: Instance, info: TweenInfo, goal: { [string]: any })
 	local run = TweenService:Create(target, info, goal)
 	run:Play()
 	return run
-end
-
-local function round(target: GuiObject, radius: number)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, radius)
-	corner.Parent = target
 end
 
 local function body(holder: Frame, color: Color3): CanvasGroup
@@ -42,25 +40,9 @@ local function body(holder: Frame, color: Color3): CanvasGroup
 	group.Parent = holder
 	local card = Instance.new("Frame")
 	card.Name = "Fondo"
-	card.BackgroundColor3 = WHITE
-	card.BorderSizePixel = 0
 	card.Position = UDim2.fromOffset(3, 3)
 	card.Size = UDim2.new(1, -6, 1, -6)
-	round(card, 18)
-	local fill = Instance.new("UIGradient")
-	fill.Rotation = 90
-	fill.Color =
-		ColorSequence.new(color:Lerp(Color3.new(0, 0, 0), 0.55), Color3.fromRGB(14, 16, 34))
-	fill.Parent = card
-	local stroke = Instance.new("UIStroke")
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	stroke.Color = WHITE
-	stroke.Thickness = 3
-	stroke.Parent = card
-	local edge = Instance.new("UIGradient")
-	edge.Color = ColorSequence.new(color:Lerp(WHITE, 0.55), color)
-	edge.Rotation = 90
-	edge.Parent = stroke
+	Kit.skin(card, "panel", color:Lerp(WHITE, TINT)).SliceScale = SLICE
 	card.Parent = group
 	return group
 end

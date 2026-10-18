@@ -3,9 +3,10 @@
 	NextGoal
 
 	"Siguiente meta" cuando ya terminó el tutorial (mismo lugar que su panel):
-	siempre hay algo claro que perseguir, con su barra. Elige entre
+	siempre hay algo claro que perseguir, con su barra, en una placa de piedra
+	(Interface/Kit) con el título dorado. Elige entre
 		- algo que YA puede hacer: comprar la siguiente caña o renacer
-		  (la tarjeta se pone verde);
+		  (la piedra se tiñe de verde);
 		- si no, la meta más avanzada entre el siguiente estanque y el siguiente
 		  título (monstruos llenados) y la siguiente caña (monedas).
 	Se recalcula cada segundo como mucho. Solo lee atributos del jugador.
@@ -24,13 +25,16 @@ local Titles = require(ReplicatedStorage.Shared.Titles)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local ATTR = Protocol.PlayerAttributes
-local CARDS = Style.PALETTE.Cards
 local TITLES = Config.Social.titles
 local PONDS = Config.Progression.ponds
+local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
+local READY_TINT = Color3.fromRGB(140, 255, 140) -- piedra verdosa: ya se puede
+local WHITE = Color3.new(1, 1, 1)
 
 type Goal = { icon: string, text: string, fraction: number, ready: boolean }
 
@@ -122,8 +126,11 @@ function NextGoal.start(screen: ScreenGui)
 	-- Como el tutorial: en PC en la columna izquierda; en pantallas táctiles abajo
 	-- al centro (a la izquierda estorbaría al joystick).
 	local touchOnly = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
-	local card =
-		CardParts.card(if touchOnly then screen else Layout.left(), "SiguienteMeta", CARDS.Blue, 12)
+	local card = Instance.new("Frame")
+	card.Name = "SiguienteMeta"
+	card.Parent = if touchOnly then screen else Layout.left()
+	local skin = Kit.skin(card, "panel")
+	skin.SliceScale = PLATE_SLICE
 	card.LayoutOrder = 21
 	if touchOnly then
 		card.AnchorPoint = Vector2.new(0.5, 1)
@@ -134,7 +141,8 @@ function NextGoal.start(screen: ScreenGui)
 	card.Visible = false
 	local icon: GuiObject? = nil
 	local iconKind = ""
-	local head = Style.text(card, "Titulo", 16, Color3.fromRGB(255, 225, 90), 2)
+	local head = Style.text(card, "Titulo", 16, nil, 2)
+	Kit.gold(head)
 	head.Text = "SIGUIENTE META"
 	head.TextXAlignment = Enum.TextXAlignment.Left
 	head.Position = UDim2.fromOffset(52, 4)
@@ -144,10 +152,9 @@ function NextGoal.start(screen: ScreenGui)
 	text.TextWrapped = true
 	text.Position = UDim2.fromOffset(52, 20)
 	text.Size = UDim2.new(1, -58, 0, 30)
-	local bar = CardParts.bar(card, CARDS.Green, 14)
+	local bar = CardParts.bar(card, Style.PALETTE.Cards.Green, 14)
 	bar.track.Position = UDim2.fromOffset(52, 52)
 	bar.track.Size = UDim2.new(1, -60, 0, 16)
-	local painted: Color3? = nil
 
 	local function refresh()
 		local tutorialDone = number(player, ATTR.Tutorial) >= #Config.Retention.tutorial
@@ -170,11 +177,7 @@ function NextGoal.start(screen: ScreenGui)
 		end
 		text.Text = goal.text
 		bar.set(goal.fraction, `{math.floor(math.clamp(goal.fraction, 0, 1) * 100)}%`)
-		local color = if goal.ready then CARDS.Green else CARDS.Blue
-		if color ~= painted then
-			painted = color
-			CardParts.paint(card, color)
-		end
+		Kit.tint(skin, if goal.ready then READY_TINT else WHITE)
 	end
 
 	local pending = false

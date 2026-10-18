@@ -2,12 +2,13 @@
 --[[
 	BoostBanner
 
-	Banner verde arriba de la TIENDA: "¡Impulsa el entrenamiento del
-	servidor!", el salto de nivel (x2 → x4), cuánto le queda (en rosa) y el
-	botón con el precio. Lo que muestra sale de RobuxOffers.boost.
+	Banner arriba de la TIENDA, de pizarra teñida de verde (Interface/Kit):
+	"¡Impulsa el entrenamiento del servidor!" en dorado, el salto de nivel
+	(x2 → x4), cuánto le queda (en amarillo) y el botón con el precio. Lo que muestra sale de RobuxOffers.boost.
 ]]
 
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local RobuxOffers = require(script.Parent.RobuxOffers)
@@ -15,6 +16,7 @@ local RobuxOffers = require(script.Parent.RobuxOffers)
 type Offer = RobuxOffers.Offer
 
 local PALETTE = Style.PALETTE
+local TINT = Color3.fromRGB(150, 235, 150) -- pizarra verdosa (el verde del impulso)
 
 local BoostBanner = {}
 
@@ -28,11 +30,7 @@ function BoostBanner.new(
 	banner.Name = "Impulso"
 	banner.LayoutOrder = order
 	banner.Size = UDim2.new(1, -8, 0, 136)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 16)
-	corner.Parent = banner
-	Style.border(banner, 4)
-	ShopParts.sunburst(banner, PALETTE.Cards.Green)
+	Kit.skin(banner, "panel", TINT)
 	banner.Parent = parent
 
 	local icon = Icons.view(banner, "bolt")
@@ -45,13 +43,14 @@ function BoostBanner.new(
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Position = UDim2.new(0.2, 8, 0, 10)
 	title.Size = UDim2.new(0.56, -8, 0.3, 0)
+	Kit.gold(title)
 
 	local jump = Style.text(banner, "Nivel", 40, nil, 3.5)
 	jump.TextXAlignment = Enum.TextXAlignment.Left
 	jump.Position = UDim2.new(0.2, 8, 0.36, 0)
 	jump.Size = UDim2.new(0.56, -8, 0.32, 0)
 
-	local timer = Style.text(banner, "Tiempo", 22, Color3.fromRGB(255, 235, 110), 2.5) -- amarillo: se lee sobre el verde
+	local timer = Style.text(banner, "Tiempo", 22, Color3.fromRGB(255, 235, 110), 2.5) -- amarillo: se lee sobre la piedra
 	timer.TextXAlignment = Enum.TextXAlignment.Left
 	timer.Position = UDim2.new(0.2, 8, 0.7, 0)
 	timer.Size = UDim2.new(0.56, -8, 0.22, 0)

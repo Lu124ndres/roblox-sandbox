@@ -3,8 +3,9 @@
 	ToastFx
 
 	Efectos de los avisos: entrada con rebote y salida desvanecida de los
-	avisos chicos, y el brillo, las chispas y el ícono sobre rayos de las
-	tarjetas grandes (ToastBanner).
+	avisos chicos (una placa de piedra con texto con contorno, Interface/Kit),
+	y el brillo, las chispas y el ícono sobre rayos de las tarjetas grandes
+	(ToastBanner).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -12,10 +13,12 @@ local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Icons = require(script.Parent.Interface.Icons)
-local Ui = require(script.Parent.Ui)
+local Kit = require(script.Parent.Interface.Kit)
+local Style = require(script.Parent.Interface.Style)
 
 local TWEENS = UIConfig.Tweens
 local WHITE = Color3.new(1, 1, 1)
+local SMALL_SLICE = 0.3 -- borde de la placa de los avisos chicos (son bajitos)
 
 local ToastFx = {}
 
@@ -35,9 +38,15 @@ end
 
 function ToastFx.fadeOut(target: GuiObject, label: TextLabel, seconds: number)
 	task.delay(seconds, function()
-		local stroke = target:FindFirstChildOfClass("UIStroke")
-		if stroke then
-			TweenService:Create(stroke, TWEENS.Fade, { Transparency = 1 }):Play()
+		for _, holder in { target, label } do
+			local stroke = holder:FindFirstChildOfClass("UIStroke")
+			if stroke then
+				TweenService:Create(stroke, TWEENS.Fade, { Transparency = 1 }):Play()
+			end
+		end
+		local skin = target:FindFirstChild("Piedra")
+		if skin and skin:IsA("ImageLabel") then
+			TweenService:Create(skin, TWEENS.Fade, { ImageTransparency = 1 }):Play()
 		end
 		TweenService:Create(target, TWEENS.Fade, { BackgroundTransparency = 1 }):Play()
 		local fade = TweenService:Create(
@@ -129,15 +138,19 @@ end
 
 -- Aviso chico de una línea en la pila; se borra solo.
 function ToastFx.small(stack: Frame, order: number, text: string, color: Color3, seconds: number)
-	local toast = Ui.panel("Aviso", stack)
+	local toast = Instance.new("Frame")
+	toast.Name = "Aviso"
 	toast.LayoutOrder = order
 	toast.Size = UDim2.new(1, 0, 0, 40)
+	Kit.skin(toast, "panel").SliceScale = SMALL_SLICE
+	toast.Parent = stack
 	local limit = Instance.new("UISizeConstraint")
 	limit.MaxSize = Vector2.new(460, 40)
 	limit.Parent = toast
-	local label = Ui.label("Texto", toast, UIConfig.Fonts.Body, UIConfig.TextSizes.Body)
-	label.Size = UDim2.new(1, -16, 1, -8)
-	label.Position = UDim2.fromOffset(8, 4)
+	local label = Style.text(toast, "Texto", UIConfig.TextSizes.Body, nil, 2)
+	label.FontFace = UIConfig.Fonts.Body
+	label.Size = UDim2.new(1, -20, 1, -10)
+	label.Position = UDim2.fromOffset(10, 5)
 	label.Text = text
 	label.TextColor3 = color
 	ToastFx.popIn(toast)
