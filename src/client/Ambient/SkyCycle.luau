@@ -7,7 +7,8 @@
 	cambian: mañana, mediodía, atardecer y noche estrellada (SkyMoods).
 	Encima se mezclan el ambiente del cráter (ZoneMood; con el desierto del
 	minotauro, el de SkyMoods.desert según CraterMode.sandBlend, y con la lava
-	del dragón, el de SkyMoods.lair según CraterMode.lavaBlend) y el amanecer
+	del dragón, el de SkyMoods.lair según CraterMode.lavaBlend, y con el hielo
+	del zorro, el de SkyMoods.ice según CraterMode.iceBlend) y el amanecer
 	del descanso (RestDawn: al llenar al monstruo sale el sol). Lighting se
 	escribe cada SkyUpdateSeconds (UIConfig.Performance) o si la hora o las
 	mezclas cambian de más. Workspace.HoraFija congela la hora.
@@ -30,6 +31,7 @@ local DAY_SHARE = 0.75 -- fracción del ciclo que es de día (6:00 a 19:00)
 local MOODS = SkyMoods.day
 local DESERT = SkyMoods.desert
 local LAIR = SkyMoods.lair
+local ICE = SkyMoods.ice
 local DAWN = SkyMoods.dawn
 
 type Mood = SkyMoods.Mood
@@ -86,18 +88,27 @@ local function mix(x: number, y: number, t: number): number
 end
 
 -- El ambiente del cráter: el de lava, el de la guarida mientras está la lava del
--- dragón (lair 0..1) o el del desierto mientras está la arena (hot 0..1).
-local function craterMood(hot: number, lair: number): Mood
+-- dragón (lair 0..1), el del desierto mientras está la arena (hot 0..1) o el del
+-- lago helado mientras está el hielo (ice 0..1).
+local function craterMood(hot: number, lair: number, ice: number): Mood
 	local c = SkyMoods.crater
-	local hour = mix(SkyMoods.craterHour, SkyMoods.lairHour, lair)
+	local hour = mix(mix(SkyMoods.craterHour, SkyMoods.lairHour, lair), SkyMoods.desertHour, hot)
+	local brightness = mix(mix(c.brightness, LAIR.brightness, lair), DESERT.brightness, hot)
+	local density = mix(mix(c.density, LAIR.density, lair), DESERT.density, hot)
 	return {
-		hour = mix(hour, SkyMoods.desertHour, hot),
-		brightness = mix(mix(c.brightness, LAIR.brightness, lair), DESERT.brightness, hot),
-		atmosphere = c.atmosphere:Lerp(LAIR.atmosphere, lair):Lerp(DESERT.atmosphere, hot),
-		decay = c.decay:Lerp(LAIR.decay, lair):Lerp(DESERT.decay, hot),
-		density = mix(mix(c.density, LAIR.density, lair), DESERT.density, hot),
-		tint = c.tint:Lerp(LAIR.tint, lair):Lerp(DESERT.tint, hot),
-		ambient = c.ambient:Lerp(LAIR.ambient, lair):Lerp(DESERT.ambient, hot),
+		hour = mix(hour, SkyMoods.iceHour, ice),
+		brightness = mix(brightness, ICE.brightness, ice),
+		atmosphere = c.atmosphere
+			:Lerp(LAIR.atmosphere, lair)
+			:Lerp(DESERT.atmosphere, hot)
+			:Lerp(ICE.atmosphere, ice),
+		decay = c.decay:Lerp(LAIR.decay, lair):Lerp(DESERT.decay, hot):Lerp(ICE.decay, ice),
+		density = mix(density, ICE.density, ice),
+		tint = c.tint:Lerp(LAIR.tint, lair):Lerp(DESERT.tint, hot):Lerp(ICE.tint, ice),
+		ambient = c.ambient
+			:Lerp(LAIR.ambient, lair)
+			:Lerp(DESERT.ambient, hot)
+			:Lerp(ICE.ambient, ice),
 	}
 end
 
@@ -106,8 +117,8 @@ function SkyCycle.start()
 	local correction = Lighting:FindFirstChildOfClass("ColorCorrectionEffect")
 	local baseSaturation = if correction then correction.Saturation else 0
 	local baseContrast = if correction then correction.Contrast else 0
-	local lastHour, lastZone, lastDawn, lastHot, lastLair, sinceWrite =
-		-1, -1, -1, -1, -1, math.huge
+	local lastHour, lastZone, lastDawn, lastHot, lastLair, lastIce, sinceWrite =
+		-1, -1, -1, -1, -1, -1, math.huge
 	RunService.RenderStepped:Connect(function(dt: number)
 		sinceWrite += dt
 		local hour = SkyCycle.currentHour()
@@ -116,16 +127,19 @@ function SkyCycle.start()
 		local zone = ZoneMood.blend() * (1 - 0.8 * dawn)
 		local hot = CraterMode.sandBlend()
 		local lair = CraterMode.lavaBlend()
+		local ice = CraterMode.iceBlend()
 		local moved = math.abs(hour - lastHour) > Performance.SkyClockStep
 			or math.abs(zone - lastZone) > Performance.SkyZoneStep
 			or math.abs(dawn - lastDawn) > Performance.SkyZoneStep
 			or math.abs(hot - lastHot) > Performance.SkyZoneStep
 			or math.abs(lair - lastLair) > Performance.SkyZoneStep
+			or math.abs(ice - lastIce) > Performance.SkyZoneStep
 		if sinceWrite < Performance.SkyUpdateSeconds and not moved then
 			return
 		end
-		sinceWrite, lastHour, lastZone, lastDawn, lastHot, lastLair = 0, hour, zone, dawn, hot, lair
-		local crater = craterMood(hot, lair)
+		sinceWrite, lastHour, lastZone, lastDawn = 0, hour, zone, dawn
+		lastHot, lastLair, lastIce = hot, lair, ice
+		local crater = craterMood(hot, lair, ice)
 		local a, b, t = moodAt(hour)
 		local brightness = mix(mix(a.brightness, b.brightness, t), crater.brightness, zone)
 		-- En el cráter el sol va a su hora (por el camino corto); con el amanecer,
@@ -159,6 +173,8 @@ function SkyCycle.start()
 				SkyMoods.desertContrast,
 				hot
 			)
+			saturation = mix(saturation, SkyMoods.iceSaturation, ice)
+			contrast = mix(contrast, SkyMoods.iceContrast, ice)
 			correction.Saturation = mix(baseSaturation, saturation, zone)
 			correction.Contrast = mix(baseContrast, contrast, zone)
 		end

@@ -24,12 +24,14 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local CraterDrain = require(script.Parent.CraterDrain)
+local CraterMode = require(script.Parent.CraterMode)
 local CraterVents = require(script.Parent.CraterVents)
 
 local L = WorldLayout
 local WATER = L.waterLevel
 local CENTER = WorldZones.craterCenter
 local LAKE_COLOR = Color3.fromRGB(4, 52, 66) -- oscuro: lago de 400 de hondo
+local LAKE_ICE = Color3.fromRGB(18, 92, 116) -- con el hielo del zorro: de glaciar, más claro
 local LAKE_TRANSPARENCY = 0.7 -- clara: se ve al gigante bajo el agua
 local LAKE_REFLECTANCE = 0.12 -- poco reflejo: si no, la bruma naranja lo vuelve beige
 local LAKE_WAVES = 0.32 -- un poco más agitada que el mar
@@ -167,12 +169,12 @@ function CraterWater.start(getBlend: () -> number)
 	local terrain = Workspace.Terrain
 	local seaColor, seaClear = terrain.WaterColor, terrain.WaterTransparency
 	local seaShine, seaWaves = terrain.WaterReflectance, terrain.WaterWaveSize
-	local shown = -1
+	local shown, shownIce = -1, -1
 	RunService.Heartbeat:Connect(function()
-		local blend = getBlend()
-		if math.abs(blend - shown) > 0.01 then
-			shown = blend
-			terrain.WaterColor = seaColor:Lerp(LAKE_COLOR, blend)
+		local blend, ice = getBlend(), CraterMode.iceBlend()
+		if math.abs(blend - shown) > 0.01 or math.abs(ice - shownIce) > 0.01 then
+			shown, shownIce = blend, ice
+			terrain.WaterColor = seaColor:Lerp(LAKE_COLOR:Lerp(LAKE_ICE, ice), blend)
 			terrain.WaterTransparency = seaClear + (LAKE_TRANSPARENCY - seaClear) * blend
 			if not ClientSettings.get("lowFx") then -- el modo rápido apaga olas y reflejos
 				terrain.WaterReflectance = seaShine + (LAKE_REFLECTANCE - seaShine) * blend

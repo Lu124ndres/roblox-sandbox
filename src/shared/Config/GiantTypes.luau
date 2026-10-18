@@ -21,6 +21,7 @@ export type GiantDef = {
 	season: { from: number, to: number }?, -- de evento: solo sale entre esas fechas (unix UTC)
 	lava: boolean?, -- con él el cráter se llena de lava en vez de agua (vuela: el dragón)
 	sand: boolean?, -- con él el fondo del cráter es un desierto de arena en vez de agua
+	ice: boolean?, -- con él el cráter sigue con agua, pero con témpanos, escarcha y aire frío
 }
 export type AngerConfig = {
 	graceSeconds: number, -- segundos sin comer antes de empezar a enojarse

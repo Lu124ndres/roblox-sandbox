@@ -11,7 +11,9 @@
 	Con el desierto del minotauro (CraterMode "sand") no hay chispas ni
 	relámpagos: la bruma se vuelve polvo y el aire es el de DesertAir. Con la
 	lava del dragón ("lava") la bruma y las chispas bajan a ras de la lava
-	(está más abajo que el agua) y el resto del aire es el de LairAir.
+	(está más abajo que el agua) y el resto del aire es el de LairAir. Con el
+	hielo del zorro ("ice") tampoco hay chispas: la bruma es fría y azulada y
+	el resto del aire es el de IceAir.
 
 	SkyCycle lee ZoneMood.blend() para mezclar la luz del día con la del cráter.
 ]]
@@ -36,6 +38,7 @@ local BLEND_SHARPNESS = 1.5 -- qué tan rápido cambia el ambiente al entrar o s
 local LIGHTNING_MIN_SECONDS, LIGHTNING_MAX_SECONDS = 14, 30
 local MIST_LAVA = ColorSequence.new(Color3.fromRGB(255, 170, 120), Color3.fromRGB(200, 90, 60))
 local MIST_DUST = ColorSequence.new(Color3.fromRGB(236, 206, 160), Color3.fromRGB(196, 150, 104))
+local MIST_FROST = ColorSequence.new(Color3.fromRGB(232, 244, 255), Color3.fromRGB(176, 210, 238))
 
 local ZoneMood = {}
 
@@ -105,10 +108,11 @@ local function craterEffects()
 	embers.Parent = fog
 
 	-- En el desierto: sin chispas de lava y la bruma es polvo. Con la lava: a su altura.
+	-- Con el hielo: sin chispas y la bruma es fría.
 	local function desert(mode: CraterMode.Mode)
-		local sand = mode == "sand"
-		embers.Enabled = not sand
-		mist.Color = if sand then MIST_DUST else MIST_LAVA
+		local sand, ice = mode == "sand", mode == "ice"
+		embers.Enabled = not sand and not ice
+		mist.Color = if sand then MIST_DUST elseif ice then MIST_FROST else MIST_LAVA
 		local surface = if mode == "lava" then Guarida.lava else WorldLayout.waterLevel
 		fog.CFrame = CFrame.new(WorldZones.craterCenter + Vector3.new(0, surface + 3, 0))
 	end

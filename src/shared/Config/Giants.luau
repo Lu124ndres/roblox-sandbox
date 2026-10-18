@@ -95,6 +95,7 @@ local Giants: Types.GiantsConfig = {
 			food = 1500,
 			targetMinutes = 25,
 			modelBase = "ZorroDeAgua",
+			ice = true, -- agua con hielo: témpanos, escarcha y cristales (Ambient/IceLair)
 			rouletteWeight = 5,
 			released = false,
 			inRoulette = true,

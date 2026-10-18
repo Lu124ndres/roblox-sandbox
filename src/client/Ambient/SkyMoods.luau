@@ -6,8 +6,9 @@
 	interpola), el del Cráter del Abismo (luz de lava), el del desierto del
 	minotauro (sol alto y polvo: reemplaza al del cráter mientras está la
 	arena), el de la guarida volcánica del dragón (más roja, mientras está la
-	lava) y el amanecer del descanso (al llenar al monstruo sale el sol: luz
-	clara y cálida).
+	lava), el del lago helado del zorro (luz fría y niebla azulada, mientras
+	está el hielo) y el amanecer del descanso (al llenar al monstruo sale el
+	sol: luz clara y cálida).
 ]]
 
 export type Mood = {
@@ -130,6 +131,21 @@ SkyMoods.lair =
 SkyMoods.lairHour = 17
 SkyMoods.lairSaturation = 0.18
 SkyMoods.lairContrast = 0.16
+
+-- Lago helado (CraterMode "ice"): sol de media tarde, frío, niebla azulada algo
+-- más espesa, sombras azules y colores limpios (menos saturados que la lava).
+SkyMoods.ice = mood(
+	0,
+	2.3,
+	rgb(198, 226, 248),
+	rgb(120, 162, 206),
+	0.34,
+	rgb(232, 244, 255),
+	rgb(158, 186, 218)
+)
+SkyMoods.iceHour = 14.5
+SkyMoods.iceSaturation = 0.04
+SkyMoods.iceContrast = 0.1
 
 -- Amanecer del descanso: mañana clara y dorada; el sol sube hasta dawnHour.
 SkyMoods.dawn = mood(
