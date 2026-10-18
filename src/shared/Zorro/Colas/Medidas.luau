@@ -21,7 +21,9 @@
 		           desfase por tramo (0.3..0.5 rad) y las fases de sus senos; el
 		           mismo en todos los clientes
 	Cuerpo: una cápsula de la cadera al cuello (a, b, radius) donde no entra ninguna
-	punta, y el piso (floor, el alto de las patas) del que no bajan.
+	punta (el radio cubre las placas de los hombros), el piso (floor, el alto de las
+	patas) del que no bajan y el alto del modelo (height: BodyInfo.bajada va en
+	fracción de él).
 ]]
 
 local Azar = require(script.Parent.Parent.Parent.Minotauro.Azar)
@@ -34,6 +36,7 @@ export type Cola = {
 	tramos: { Tramo },
 	angle: number,
 	out: number,
+	solo: boolean, -- la única cola (la cría): al envolver o enroscar va entera a un costado
 	root: Vector3,
 	segs: { Vector3 },
 	fanAxis: Vector3,
@@ -55,9 +58,12 @@ export type Medidas = {
 	b: Vector3,
 	radius: number,
 	floor: number,
+	height: number, -- alto del modelo al enlazar (mismo espacio que el reposo)
 	hip: number,
 	unit: number, -- alto de la cadera sobre el piso: la unidad de los empujes
 }
+
+local RADIUS = 1.1 -- radio de la cápsula, en distancias entre hombros
 
 local Medidas = {}
 
@@ -118,6 +124,7 @@ local function measureTail(rig: Rig.Rig, tail: Rig.Tail, center: Vector3, unit: 
 		tramos = tramos,
 		angle = angle,
 		out = 0,
+		solo = false,
 		root = points[1],
 		segs = segs,
 		fanAxis = f.forward,
@@ -163,6 +170,7 @@ function Medidas.bind(rig: Rig.Rig): Medidas?
 	end
 	for _, cola in colas do
 		cola.out = if widest > 1e-3 then cola.angle / widest else 0
+		cola.solo = #colas == 1
 	end
 	-- De izquierda a derecha por su ángulo en el abanico (el de Rig.tails mira solo el
 	-- último hueso: con las colas en S dos vecinas del medio pueden salir al revés).
@@ -173,8 +181,9 @@ function Medidas.bind(rig: Rig.Rig): Medidas?
 		colas = colas,
 		a = hip,
 		b = neck,
-		radius = (left - right).Magnitude * 0.8,
+		radius = (left - right).Magnitude * RADIUS,
 		floor = floor,
+		height = rig.model:GetExtentsSize().Y,
 		hip = hip.Y,
 		unit = unit,
 	}

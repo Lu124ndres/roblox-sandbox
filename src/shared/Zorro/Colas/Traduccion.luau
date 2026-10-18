@@ -15,7 +15,8 @@
 		tailSide (lado: el signo), tailGusto (gusto)
 	El latigazo es una hora, no se suma: va en `extra` (se copia encima).
 	El cuerpo: giro (rad/s), avance (cuánto se corre el centro, altos/s), subida
-	(de pose.dy y crouch, altos/s) y sacudida (pose.shake).
+	(de pose.dy y crouch, altos/s), sacudida (pose.shake) y bajada (cuánto está la
+	base debajo de la de parado: el piso de las puntas sube con ella).
 ]]
 
 local Pose = require(script.Parent.Parent.Pose)
@@ -73,7 +74,7 @@ function Traduccion.body(
 	dt: number
 ): Tipos.BodyInfo
 	local b = s.body
-	local dy = (pose.dy or 0) - (pose.crouch or 0) * 0.06 -- como lo baja Zorro/init
+	local dy = (pose.dy or 0) - (pose.crouch or 0) * Pose.CROUCH_DROP -- como Zorro/init
 	local last, lastDy = s.center, s.dy
 	local moved = if last then Vector3.new(center.X - last.X, 0, center.Z - last.Z) else nil
 	local run = if moved then moved.Magnitude / dt / math.max(height, 1) else 0
@@ -81,6 +82,7 @@ function Traduccion.body(
 	b.avance = if run > MAX_RUN then 0 else run
 	b.subida = if lastDy then (dy - lastDy) / dt else 0
 	b.sacudida = pose.shake or 0
+	b.bajada = math.max(0, -dy)
 	s.center, s.dy = center, dy
 	return b
 end

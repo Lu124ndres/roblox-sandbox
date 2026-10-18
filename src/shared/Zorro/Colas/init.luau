@@ -11,7 +11,7 @@
 		3. Cadena: los resortes los persiguen (casi críticos, más blandos hacia
 		   la punta, con tope de 45° por junta y el látigo de tramo a tramo);
 		4. Limites: separación entre vecinas y ninguna punta en el cuerpo ni bajo
-		   el agua (si no cabe, la cola se acerca al reposo lo justo);
+		   el agua (si alguna no cabe, todas se acercan al reposo lo justo);
 		5. escribe Bone.Transform (solo si cambió más que un umbral).
 	detail: la cámara está cerca y no hay modo rápido (lo decide ZorroStand). Lejos
 	hace menos trabajo con la misma silueta: pasos de resorte de 1/30 s, la onda
@@ -37,7 +37,8 @@ local HZ_ROOT, HZ_TIP = 2.4, 1.1 -- rigidez de la raíz y de la punta (por el pe
 local OPEN_DAMPING = 0.5 -- el abanico se pasa ~15 % y vuelve
 local OPEN_HZ_CENTER, OPEN_HZ_EDGE = 1.5, 0.75 -- cascada: el centro abre primero
 -- Empuje del cuerpo: giro (rad/s), carrera (altos/s), subida (altos/s), frenazo (altos/s²).
-local K_TURN, K_RUN, K_RISE, K_ACCEL = 0.15, 0.15, 0.09, 0.025
+-- La carrera pliega poco: plegar saca a cada cola de su capa y las cruza.
+local K_TURN, K_RUN, K_RISE, K_ACCEL = 0.15, 0.03, 0.09, 0.025
 local NEAR_STEP, FAR_STEP = 1 / 120, 1 / 30
 local FAR_CHECK_EVERY = 4
 local WRITE_NEAR, WRITE_FAR = 0.0005, 0.004 -- rad: menos que esto no se vuelve a escribir
@@ -52,8 +53,9 @@ export type Colas = {
 	chains: { Cadena.Cadena },
 	opens: { Resorte.Resorte },
 	openHz: { number },
-	room: { number },
+	room: { number }, -- el mismo para todas (ver step)
 	restOk: { boolean },
+	restLow: { number }, -- alto del último hueso o la punta (el más bajo) en reposo
 	gaps: { number },
 	fan: { { number } },
 	fold: { { number } },
@@ -80,6 +82,7 @@ function Colas.new(rig: Rig.Rig, profile: Etapas.Profile): Colas?
 		openHz = {},
 		room = {},
 		restOk = {},
+		restLow = {},
 		gaps = Limites.gaps(med.colas),
 		fan = {},
 		fold = {},
@@ -96,6 +99,7 @@ function Colas.new(rig: Rig.Rig, profile: Etapas.Profile): Colas?
 		c.openHz[i] = (OPEN_HZ_CENTER + (OPEN_HZ_EDGE - OPEN_HZ_CENTER) * edge) * profile.peso
 		c.room[i] = 1
 		c.restOk[i] = Limites.restFits(cola, med, minY)
+		c.restLow[i] = Limites.restLow(cola)
 		c.fan[i], c.fold[i] = table.create(cola.n, 0), table.create(cola.n, 0)
 		c.written[i] = table.create(cola.n * 2, math.huge)
 	end
@@ -163,15 +167,21 @@ function Colas.step(
 	c.started = true
 	Limites.separate(med.colas, c.fan, c.gaps)
 	local wrap = math.clamp(m.envolver + m.enroscar, 0, 1)
-	local minY = med.floor + med.unit * (FLOOR_STAND + (FLOOR_WRAP - FLOOR_STAND) * wrap)
+	local minY = med.floor
+		+ med.unit * (FLOOR_STAND + (FLOOR_WRAP - FLOOR_STAND) * wrap)
+		+ med.height * (body.bajada or 0) -- sentado o echado, el piso queda más cerca
 	local check = detail or c.frame % FAR_CHECK_EVERY == 0
 	local eps = if detail then WRITE_NEAR else WRITE_FAR
-	for i, cola in med.colas do
-		if check and c.restOk[i] then
-			local room = Limites.room(cola, med, c.fan[i], c.fold[i], minY)
-			local back = dt * ROOM_BACK * (if detail then 1 else FAR_CHECK_EVERY)
-			c.room[i] = math.min(room, c.room[i] + back) -- entra al instante, sale de a poco
+	if check then
+		-- Un solo lugar para todas (Limites.fit): el abanico no se desarma.
+		local fit = Limites.fit(med, c.fan, c.fold, c.restOk, c.restLow, minY)
+		local back = dt * ROOM_BACK * (if detail then 1 else FAR_CHECK_EVERY)
+		local shared = math.min(fit, c.room[1] + back) -- entra al instante, sale de a poco
+		for i in med.colas do
+			c.room[i] = shared
 		end
+	end
+	for i in med.colas do
 		write(c, i, c.room[i], eps)
 	end
 end

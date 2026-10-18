@@ -4,8 +4,9 @@
 
 	Lo que no puede pasar, después de los resortes:
 		gaps(colas)      el ángulo mínimo entre cada cola y su vecina de la derecha
-		                 (por el orden de Rig.tails): un tercio del de reposo, como
-		                 mucho 0.15 rad
+		                 (por el orden de Rig.tails): el 70 % del de reposo, como
+		                 mucho 0.45 rad (las puntas curvas de dos vecinas se acercan
+		                 más que su ángulo: medido en tools/blender/zorro_v2_poses.py)
 		separate(...)    si dos vecinas se acercan más que eso en el abanico, se
 		                 abren las dos por igual desde la raíz (la corrección crece
 		                 de a poco con la falta: no salta)
@@ -15,6 +16,9 @@
 		                 último hueso no entran en el cuerpo (la cápsula de Medidas)
 		                 ni bajan de minY; si no, cuánto acercarla al reposo
 		                 (búsqueda binaria, 4 pasos)
+		fit(...)         el room de todas juntas (el menor): si una choca, todas se
+		                 acercan igual al reposo, así dos vecinas no se cruzan. El piso
+		                 de cada una nunca sube por encima de su reposo (restLow)
 		leer(...)        lo que quedó escrito en cada tramo y lo peor de los
 		                 límites (para depurar: Colas.leer y Colas/Prueba)
 	La cinemática compone los giros como los huesos: cada junta gira alrededor de
@@ -23,8 +27,8 @@
 
 local Medidas = require(script.Parent.Medidas)
 
-local GAP_SHARE = 1 / 3
-local GAP_MAX = 0.15
+local GAP_SHARE = 0.7
+local GAP_MAX = 0.45
 
 local Limites = {}
 
@@ -131,6 +135,30 @@ function Limites.room(
 		end
 	end
 	return lo
+end
+
+-- Alto del último hueso o de la punta (el más bajo) en reposo.
+function Limites.restLow(c: Medidas.Cola): number
+	local zeros = table.create(c.n, 0)
+	local last, tip = Limites.tip(c, zeros, zeros, 0)
+	return math.min(last.Y, tip.Y)
+end
+
+function Limites.fit(
+	m: Medidas.Medidas,
+	fan: { { number } },
+	fold: { { number } },
+	restOk: { boolean },
+	restLow: { number },
+	minY: number
+): number
+	local out = 1
+	for i, cola in m.colas do
+		if restOk[i] then
+			out = math.min(out, Limites.room(cola, m, fan[i], fold[i], math.min(minY, restLow[i])))
+		end
+	end
+	return out
 end
 
 export type Lectura = {

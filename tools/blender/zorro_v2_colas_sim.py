@@ -1,21 +1,17 @@
 r"""
-Las colas del Zorro de agua v2 con la misma cuenta que el juego (src/shared/Zorro/Colas), parte 1:
-Azar (Minotauro/Azar), Onda, Medidas y Estados, pasados línea por línea a Python. La parte 2
-(zorro_v2_colas_paso.py) tiene Mezcla, Cadena, Limites y el paso de Colas.step.
-No usa Blender: solo numpy, así se puede probar con cualquier Python. Lo cargan con exec
-zorro_v2_poses.py y rig_zorro_v2.py.
+Las colas del Zorro de agua v2 con la cuenta del juego (src/shared/Zorro/Colas), parte 1: Azar
+(Minotauro/Azar), Onda, Medidas y Estados, pasados línea por línea a Python (solo numpy). La parte 2
+(zorro_v2_colas_paso.py) tiene Mezcla, Cadena, Limites y Colas.step. Lo cargan con exec
+zorro_v2_poses.py y rig_zorro_v2.py. Si cambia algo en src/shared/Zorro/Colas, se cambia aquí.
 
-Espacio: el de Blender (x = izquierda del zorro, -y = frente, z arriba). Los ejes del cuerpo son los
-de Zorro/Rig.bind: derecha de HombroIzq a HombroDer (-x), arriba z y adelante = arriba x derecha
-(-y). Las cuentas de Medidas son productos punto y cruz, que no cambian con el giro (propio) que
-hace el FBX al pasar a Roblox, así que dan lo mismo que en el juego.
-Si cambia algo en src/shared/Zorro/Colas, hay que cambiarlo aquí también.
+Espacio: el de Blender (x = izquierda del zorro, -y = frente, z arriba). Ejes del cuerpo de
+Zorro/Rig.bind: derecha de HombroIzq a HombroDer (-x), arriba z y adelante = arriba x derecha (-y).
+Medidas usa productos punto y cruz: no cambian con el giro del FBX al pasar a Roblox.
 """
 import math
 import numpy as np
 
-TAU = 2 * math.pi
-T32 = 2 ** 32
+TAU, T32 = 2 * math.pi, 2 ** 32
 DER, ARR, ADE = np.array((-1.0, 0, 0)), np.array((0, 0, 1.0)), np.array((0, -1.0, 0))
 # Zorro/Etapas: cómo mueve las colas cada etapa.
 PERFILES = {
@@ -34,8 +30,7 @@ def signo(x):
     return 0 if x == 0 else math.copysign(1, x)
 
 
-def unidad(v):
-    return v / np.linalg.norm(v)
+unidad = lambda v: v / np.linalg.norm(v)  # noqa: E731
 
 
 def rot(eje, ang):
@@ -83,8 +78,12 @@ def _cola(pos, num, n, centro, unit):
                 phases=[0.0] + [TAU * azar(seed, 10 + k) for k in range(1, 9)])
 
 
-def medidas(pos):
-    """Medidas.bind. pos: {hueso: np.array} posición de reposo de cada hueso."""
+RADIO = 1.1  # Medidas: radio de la cápsula del cuerpo, en distancias entre hombros
+
+
+def medidas(pos, alto=None):
+    """Medidas.bind. pos: {hueso: np.array} posición de reposo de cada hueso; alto: el del modelo
+    (GetExtentsSize().Y), en el mismo espacio."""
     hip, neck = pos["Cadera"], pos["Cuello1"]
     floor = min(pos[n][2] for n in ("PieIzq", "PieDer", "ManoIzq", "ManoDer") if n in pos)
     unit = max(hip[2] - floor, 1e-3)
@@ -98,10 +97,10 @@ def medidas(pos):
             colas.append(_cola(pos, num, n, centro, unit))
     widest = max(abs(c["angle"]) for c in colas)
     for c in colas:
-        c["out"] = c["angle"] / widest if widest > 1e-3 else 0.0
+        c["out"], c["solo"] = (c["angle"] / widest if widest > 1e-3 else 0.0), len(colas) == 1
     colas.sort(key=lambda c: c["angle"])
-    return dict(colas=colas, a=hip, b=neck, floor=floor, unit=unit,
-                radius=np.linalg.norm(pos["HombroIzq"] - pos["HombroDer"]) * 0.8)
+    return dict(colas=colas, a=hip, b=neck, floor=floor, unit=unit, height=alto or 0.0,
+                radius=np.linalg.norm(pos["HombroIzq"] - pos["HombroDer"]) * RADIO)
 
 
 # --- Zorro/Colas/Onda -------------------------------------------------------------------
@@ -142,8 +141,10 @@ def onda_pulse(tau):
 
 
 # --- Zorro/Colas/Estados ----------------------------------------------------------------
-WRAP = dict(side=1.75, spread=0.55, root=0.0, curl=-0.6)  # sentado
-CURL = dict(side=1.95, spread=0.6, root=-0.2, curl=-0.85)  # dormido
+WRAP = dict(side=1.75, spread=0.9, root=0.0, curl=-0.25)  # sentado
+CURL = dict(side=1.95, spread=0.95, root=-0.2, curl=-0.25)  # dormido
+RUN_ALPHA, RUN_FOLD = 0.0, 0.2  # correr: se pliegan atrás (sin juntarse: se cruzarían)
+FOLD_WAVE, FOLD_MAX = 0.25, 1.2  # la onda de plegar (por la de abrir) y el tope del pliegue total
 
 
 def _pesos(n):
@@ -161,11 +162,11 @@ def objetivos(c, m, abierto, drive_fan, drive_fold, perfil, t, fino=True):
     k = 1 / total if total > 1 else 1
     e, s = m["envolver"] * k, m["enroscar"] * k
     lado = signo(c["out"]) if abs(c["out"]) > 0.15 else m["lado"]
-    hacia = lambda p: lado * (p["side"] - (1 - abs(c["out"])) * p["spread"]) - c["angle"]
+    hacia = lambda p: lado * (p["side"] - (1 - abs(c["out"])) * (0 if c["solo"] else p["spread"])) - c["angle"]
     wa = e * hacia(WRAP) + s * hacia(CURL)
     free = 1 - e - s
-    alpha = (-0.12 * relax + 0.15 * m["alerta"] - 0.45 * m["correr"]) * c["out"] * free + wa
-    fold = 0.15 * relax - 0.25 * m["alerta"] + 0.9 * m["correr"] - 0.2 * abierto
+    alpha = (-0.12 * relax + 0.15 * m["alerta"] + RUN_ALPHA * m["correr"]) * c["out"] * free + wa
+    fold = 0.15 * relax - 0.25 * m["alerta"] + RUN_FOLD * m["correr"] - 0.2 * abierto
     room = max(0.0, 1 - abs(c["angle"]) / 1.75)
     opening = abierto * perfil["abanico"] * c["out"] * room * free
     amp = (0.15 * perfil["fuerza"] * m["calma"] * (1 - 0.3 * min(abierto, 1)) * (1 - 0.6 * m["alerta"])
@@ -183,7 +184,7 @@ def objetivos(c, m, abierto, drive_fan, drive_fold, perfil, t, fino=True):
             f += 0.12 * abierto * fuera * math.sqrt(room)  # la punta rompe hacia afuera
         g += (e * WRAP["root"] + s * CURL["root"]) if j == 1 else (e * WRAP["curl"] + s * CURL["curl"]) * (0.4 + 0.6 * u)
         f += a * _suma(c, t, j, ritmo, fino, 0, 1)
-        g += 0.5 * a * _suma(c, t, j, ritmo, fino, 3, 0.83)
+        g += FOLD_WAVE * a * _suma(c, t, j, ritmo, fino, 3, 0.83)
         if m["alerta"] > 0:
             f += m["alerta"] * 0.02 * math.sin(TAU * 3.1 * t + c["phases"][6] - j * 0.4)
         if m["meneo"] > 0:
@@ -195,4 +196,5 @@ def objetivos(c, m, abierto, drive_fan, drive_fold, perfil, t, fino=True):
             g += perfil["latigo"] * 0.3 * (0.6 + 0.4 * reach) * onda_pulse(t - m["latigazo"] - i * 0.05)
         fans.append(f + drive_fan * tipward)
         folds.append(g + drive_fold * tipward)
-    return fans, folds
+    k = min(1.0, FOLD_MAX / max(abs(sum(folds)), 1e-9))  # tope del pliegue total de la cola
+    return fans, [g * k for g in folds]

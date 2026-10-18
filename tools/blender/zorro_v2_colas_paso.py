@@ -1,22 +1,21 @@
 r"""
-Las colas del Zorro de agua v2 con la misma cuenta que el juego (src/shared/Zorro/Colas), parte 2:
-Mezcla, Cadena, Limites y Colas.step, más simular() (como Colas/Prueba: 60 cuadros por segundo,
-sin escribir huesos) y las escenas de Colas/Prueba. Necesita la parte 1 (zorro_v2_colas_sim.py)
-cargada antes. Siempre corre "de cerca" (detail = true: pasos de 1/120 s y la onda con ruido).
+Las colas del Zorro de agua v2 con la cuenta del juego (src/shared/Zorro/Colas), parte 2: Mezcla,
+Cadena, Limites y Colas.step, más simular() (como Colas/Prueba: 60 cuadros por segundo, sin escribir
+huesos). Necesita la parte 1 (zorro_v2_colas_sim.py). Corre "de cerca" (pasos de 1/120 s, con ruido).
 
     simular(med, etapa, plan, segundos) -> [cuadro]   plan(u) da (Intent, BodyInfo) a los u s
     cuadro: {"u", "angulos": {hueso: (fan, fold)}, "maxJoint", "minGap", "minTip", "room"}
-    giro_tramo(med, hueso, fan, fold) -> matriz 3x3 del tramo en los ejes del cuerpo
 """
 
 INICIO = 1000.0  # hora ficticia (Colas/Prueba)
 MAX_JOINT = math.radians(45)
+GAP_SHARE, GAP_MAX = 0.7, 0.45  # Limites.gaps: el hueco mínimo entre vecinas
+K_TURN, K_RUN, K_RISE, K_ACCEL = 0.15, 0.03, 0.09, 0.025  # empuje del cuerpo (Colas)
 
 
 def resorte(s, objetivo, dt, hz, amort):
     """Resorte.step (s = [x, v]), en pasos de 1/120 s."""
-    w = TAU * hz
-    pasos = max(1, math.ceil(dt / (1 / 120)))
+    w, pasos = TAU * hz, max(1, math.ceil(dt / (1 / 120)))
     h = dt / pasos
     for _ in range(pasos):
         s[1] += (w * w * (objetivo - s[0]) - 2 * amort * w * s[1]) * h
@@ -135,9 +134,9 @@ def simular(med, etapa, plan, segundos, fps=60):
     p, colas = PERFILES[etapa], med["colas"]
     st = dict(mix=dict(calma=1.0, alto=0.0, alerta=0.0, meneo=0.0, gusto=0.0, envolver=0.0, enroscar=0.0,
                        lado=1.0, correr=0.0, sacudida=0.0, latigazo=None), springs={}, rise=0.0, accel=0.0)
-    gaps = [min((b["angle"] - a["angle"]) / 3, 0.15) if b["angle"] > a["angle"] else 0.0
+    gaps = [min((b["angle"] - a["angle"]) * GAP_SHARE, GAP_MAX) if b["angle"] > a["angle"] else 0.0
             for a, b in zip(colas, colas[1:])]
-    cadenas, abre, abre_hz, room, rest_ok = [], [], [], [], []
+    cadenas, abre, abre_hz, room, rest_ok, rest_low = [], [], [], [], [], []
     min_z0 = med["floor"] + med["unit"] * 0.3
     for c in colas:
         n = c["n"]
@@ -146,15 +145,16 @@ def simular(med, etapa, plan, segundos, fps=60):
         abre, room = abre + [[0.0, 0.0]], room + [1.0]
         abre_hz.append((1.5 + (0.75 - 1.5) * abs(c["out"])) * p["peso"])
         rest_ok.append(_cabe(c, med, [0.0] * n, [0.0] * n, 0, min_z0))
+        rest_low.append(min(q[2] for q in punta(c, [0.0] * n, [0.0] * n, 0)))  # Limites.restLow
     dt, cuadros = 1 / fps, []
     for f in range(math.ceil(segundos * fps) + 1):
         u = f * dt
         intent, body = plan(u)
-        body = dict(dict(giro=0.0, avance=0.0, subida=0.0, sacudida=0.0), **body)
+        body = dict(dict(giro=0.0, avance=0.0, subida=0.0, sacudida=0.0, bajada=0.0), **body)
         m = mezcla_paso(st, intent, body, dt)
-        turn = 0.15 * clamp(body["giro"], -3, 3) * p["latigo"]
-        run = 0.15 * clamp(body["avance"], 0, 3) * p["latigo"]
-        vert = (0.09 * st["rise"] + 0.025 * st["accel"]) * p["latigo"]
+        turn = K_TURN * clamp(body["giro"], -3, 3) * p["latigo"]
+        run = K_RUN * clamp(body["avance"], 0, 3) * p["latigo"]
+        vert = (K_RISE * st["rise"] + K_ACCEL * st["accel"]) * p["latigo"]
         abierto_pedido = clamp(intent.get("abanico", 0.0), 0, 1.5)
         fans, folds = [], []
         for i, c in enumerate(colas):
@@ -172,11 +172,12 @@ def simular(med, etapa, plan, segundos, fps=60):
             fans, folds = fans + [list(ch["fanX"])], folds + [list(ch["foldX"])]
         separar(colas, fans, gaps)
         wrap = clamp(m["envolver"] + m["enroscar"], 0, 1)
-        min_z = med["floor"] + med["unit"] * (0.3 + (0.04 - 0.3) * wrap)
+        min_z = med["floor"] + med["unit"] * (0.3 + (0.04 - 0.3) * wrap) + med["height"] * body["bajada"]
+        fit = min([lugar(c, med, fans[i], folds[i], min(min_z, rest_low[i]))  # Limites.fit
+                   for i, c in enumerate(colas) if rest_ok[i]], default=1.0)
+        room = [min(fit, room[0] + dt * 2)] * len(colas)
         angulos, max_joint, at, min_tip = {}, 0.0, [], math.inf
         for i, c in enumerate(colas):
-            if rest_ok[i]:
-                room[i] = min(lugar(c, med, fans[i], folds[i], min_z), room[i] + dt * 2)
             fs, gs = [], []
             for j, hueso in enumerate(c["huesos"]):
                 a, b = fans[i][j] * room[i], folds[i][j] * room[i]
@@ -188,13 +189,12 @@ def simular(med, etapa, plan, segundos, fps=60):
                 fs, gs = fs + [a], gs + [b]
             at.append(c["angle"] + sum(fs))
             min_tip = min(min_tip, (punta(c, fs, gs)[1][2] - med["floor"]) / med["unit"])
-        cuadros.append(dict(u=u, angulos=angulos, maxJoint=max_joint, minTip=min_tip, room=list(room),
-                            minGap=min([b - a for a, b in zip(at, at[1:])], default=math.inf)))
+        gap = min([b - a for a, b in zip(at, at[1:])], default=math.inf)
+        cuadros.append(dict(u=u, angulos=angulos, maxJoint=max_joint, minTip=min_tip, room=room, minGap=gap))
     return cuadros
 
 
 def giro_tramo(med, hueso, fan, fold):
-    """El Transform que escribe Colas (fan alrededor de adelante, fold alrededor del eje de la
-    cola), en los ejes del cuerpo."""
+    """El Transform que escribe Colas (fan por adelante, fold por el eje de la cola)."""
     c = next(c for c in med["colas"] if hueso in c["huesos"])
     return rot(ADE, fan) @ rot(c["fold_axis"], fold)

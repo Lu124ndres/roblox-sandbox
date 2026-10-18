@@ -10,7 +10,7 @@
 		alerta    abierto y alto; la onda se achica y tiembla un poco
 		abanico   lucirse: el borde se abre (open: el resorte de cada cola, que se
 		          pasa un poco) y la punta rompe hacia afuera como una ola
-		correr    se pliegan atrás y se juntan (corriente hacia atrás)
+		correr    se pliegan atrás (corriente hacia atrás), cada una en su capa
 		envolver  sentado: cada cola baja por su costado (las del centro, por
 		          `lado`) y la punta se curva hacia adelante, alrededor de las patas
 		enroscar  dormido: más abajo y más curvadas, la punta hacia la nariz; la
@@ -31,12 +31,23 @@ local Tipos = require(script.Parent.Tipos)
 
 local TAU = math.pi * 2
 local WAVE = 0.15 -- rad por tramo de la onda de reposo (en la punta)
+-- La de plegar, en proporción: cada cola vive en su capa de profundidad (el abanico gira
+-- dentro de ella); plegar la saca de la capa, así que esa onda va chica.
+local FOLD_WAVE = 0.25
+-- Tope del pliegue total de una cola (la suma de sus tramos): pasados ~90° la punta cruza
+-- al otro lado del abanico, sea cual sea la forma de la cola. Con el empuje de la carrera
+-- y el enroscado de dormir la suma podía pasar de 2 rad.
+local FOLD_MAX = 1.2
 local MAX_SPREAD = 1.75 -- el abanico abierto no pasa de 100° de la vertical
 -- side: a qué ángulo del abanico bajan las del borde; spread: cuánto más arriba quedan
 -- las del centro (así no se cruzan); root: pliegue atrás en la raíz; curl: por tramo
 -- desde el segundo (- = hacia adelante, alrededor del cuerpo; crece hacia la punta).
-local WRAP = { side = 1.75, spread = 0.55, root = 0, curl = -0.6 } -- sentado
-local CURL = { side = 1.95, spread = 0.6, root = -0.2, curl = -0.85 } -- dormido
+-- Medido con las poses del zorro v2 (tools/blender/zorro_v2_poses.py): con más curl la
+-- punta de la cola de abajo pasa por la capa de la del medio y se cruzan.
+local WRAP = { side = 1.75, spread = 0.9, root = 0, curl = -0.25 } -- sentado
+local CURL = { side = 1.95, spread = 0.95, root = -0.2, curl = -0.25 } -- dormido
+-- Correr: se pliegan atrás sin juntarse (juntarlas las cruza).
+local RUN_ALPHA, RUN_FOLD = 0, 0.2
 local CENTER = 0.15 -- |out| menor: cola del centro, baja por `lado`
 local BREATH_SECONDS = 4.6
 
@@ -78,7 +89,10 @@ local function wrapped(c: Medidas.Cola, m: Tipos.Mezcla): (number, number, numbe
 	local e, s = m.envolver * k, m.enroscar * k
 	local side = if math.abs(c.out) > CENTER then math.sign(c.out) else m.lado
 	local function toward(p: typeof(WRAP)): number
-		return side * (p.side - (1 - math.abs(c.out)) * p.spread) - c.angle
+		-- Una cola sola no deja lugar a otras: baja entera por su costado (lado) y rodea
+		-- el cuerpo por ahí; si no, el enroscado la cerraría sobre el lomo.
+		local spread = if c.solo then 0 else p.spread
+		return side * (p.side - (1 - math.abs(c.out)) * spread) - c.angle
 	end
 	return e * toward(WRAP) + s * toward(CURL), e, s
 end
@@ -100,8 +114,9 @@ function Estados.targets(
 	local relax = (1 - m.alerta) * (1 - m.correr)
 	local wrapAlpha, e, s = wrapped(c, m)
 	local free = 1 - e - s -- lo que queda de los otros estados al envolver o enroscar
-	local alpha = (-0.12 * relax + 0.15 * m.alerta - 0.45 * m.correr) * c.out * free + wrapAlpha
-	local fold = 0.15 * relax - 0.25 * m.alerta + 0.9 * m.correr - 0.2 * open
+	local alpha = (-0.12 * relax + 0.15 * m.alerta + RUN_ALPHA * m.correr) * c.out * free
+		+ wrapAlpha
+	local fold = 0.15 * relax - 0.25 * m.alerta + RUN_FOLD * m.correr - 0.2 * open
 	-- Abre más las del medio del lado y casi nada las que ya están de costado: el
 	-- orden se mantiene y el borde no pasa de MAX_SPREAD.
 	local room = math.max(0, 1 - math.abs(c.angle) / MAX_SPREAD)
@@ -135,7 +150,7 @@ function Estados.targets(
 			foldJ += (e * WRAP.curl + s * CURL.curl) * (0.4 + 0.6 * u)
 		end
 		fanJ += a * Onda.fan(c, t, j, ritmo, fine)
-		foldJ += 0.5 * a * Onda.fold(c, t, j, ritmo, fine)
+		foldJ += FOLD_WAVE * a * Onda.fold(c, t, j, ritmo, fine)
 		if m.alerta > 0 then
 			fanJ += m.alerta * 0.02 * math.sin(TAU * 3.1 * t + c.phases[6] - j * 0.4)
 		end
@@ -154,6 +169,16 @@ function Estados.targets(
 		end
 		fanOut[j] = fanJ + driveFan * tipward
 		foldOut[j] = foldJ + driveFold * tipward
+	end
+	local total = 0
+	for j = 1, n do
+		total += foldOut[j]
+	end
+	if math.abs(total) > FOLD_MAX then
+		local k = FOLD_MAX / math.abs(total)
+		for j = 1, n do
+			foldOut[j] *= k
+		end
 	end
 end
 

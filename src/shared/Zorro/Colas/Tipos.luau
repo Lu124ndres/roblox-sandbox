@@ -33,6 +33,8 @@
 		subida    velocidad vertical (altos por segundo, + sube): en el salto se
 		          arrastran; al caer, el frenazo les da un latigazo
 		sacudida  0..1: se sacude; una onda fuerte de la raíz a la punta
+		bajada    0..1 (opcional): cuánto está la base debajo de la de parado, en
+		          fracción del alto (sentado, echado): el piso de las puntas sube igual
 ]]
 
 export type Intent = {
@@ -53,6 +55,7 @@ export type BodyInfo = {
 	avance: number,
 	subida: number,
 	sacudida: number,
+	bajada: number?,
 }
 
 -- La mezcla suavizada que usa Colas por dentro (Intent ya resuelto y suavizado,

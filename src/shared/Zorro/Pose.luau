@@ -28,8 +28,15 @@ local Rig = require(script.Parent.Rig)
 export type Pose = { [string]: number }
 
 local TAU = math.pi * 2
+-- La reverencia dobla las delanteras (por bow): con menos, el pecho baja y las manos
+-- se hunden en el agua (medido en tools/blender/zorro_v2_poses.py).
+local BOW_BEND = 1.5
 
 local Pose = {}
+
+-- Cuánto baja la base al agacharse (fracción del alto, por crouch): lo que acortan las
+-- patas dobladas. Lo usan Zorro/init y Colas/Traduccion.
+Pose.CROUCH_DROP = 0.035
 
 function Pose.add(into: Pose, from: Pose, k: number?)
 	local weight = k or 1
@@ -144,8 +151,8 @@ function Pose.apply(rig: Rig.Rig, p: Pose, t: number, turn: number, dt: number)
 		Rig.turn(rig, `Oreja{s}`, -ear * 0.6, 0, ear * 0.3 * side + quiver * side)
 	end
 	-- Patas: la reverencia dobla las de adelante; agacharse, las cuatro.
-	leg(rig, true, "Izq", v("stepFL"), bow * 0.9 + crouch, 0)
-	leg(rig, true, "Der", v("stepFR"), bow * 0.9 + crouch, 0)
+	leg(rig, true, "Izq", v("stepFL"), bow * BOW_BEND + crouch, 0)
+	leg(rig, true, "Der", v("stepFR"), bow * BOW_BEND + crouch, 0)
 	leg(rig, false, "Izq", v("stepHL"), crouch - bow * 0.15, 0)
 	leg(rig, false, "Der", v("stepHR"), crouch - bow * 0.15, 0)
 end

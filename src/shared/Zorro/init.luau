@@ -155,7 +155,7 @@ function Zorro.new(center: Vector3): Motion
 		state.trail = body.trail
 		state.fan += (math.clamp(pose.tailFan or 0, 0, 1) - state.fan) * (1 - math.exp(-dt * 4))
 		state.height = info.height
-		local dy = (pose.dy or 0) * info.height - (pose.crouch or 0) * info.height * 0.06
+		local dy = ((pose.dy or 0) - (pose.crouch or 0) * Pose.CROUCH_DROP) * info.height
 		local base = ground + Vector3.new(0, info.lift + dy, 0)
 		local placed, pivot = Pivote.build(base, heading, body, info.height)
 		state.center = placed
