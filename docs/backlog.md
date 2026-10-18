@@ -264,10 +264,11 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 ## Evento 2 — Zorro de agua (v1.2)
 
 - [ ] Fijar su multiplicador (provisional x20).
-- [ ] Modelo del Zorro de agua (v2 de bloques, 4 etapas; la E3 espera aprobación).
+- [x] Modelo del Zorro de agua (v2 de bloques, 4 etapas, en el juego).
 - [x] Colas con animación propia (`Zorro/Colas`).
 - [x] Hábitat de agua con hielo (modo `ice`) y contrato `Zorro/Guarida`.
 - [x] Sonidos y VFX del zorro (voces por etapa, cubitos de agua, espuma, hielo).
-- [ ] Rutina, conductas y mirar al público con el modelo v2 (ola 3).
+- [x] Rutina, conductas y mirar al público con el modelo v2 (ola 3).
+- [ ] Témpanos menos regulares y párpados de la cría y el joven (ola 4).
 - [ ] Fuegos fatuos (oleadas de esferas).
 - [ ] Ambiente nocturno y anuncio previo.

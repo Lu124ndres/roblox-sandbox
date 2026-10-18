@@ -778,3 +778,21 @@ recalcula al entrar o salir alguien y cada 15 s (`Feeding/FoodResize`). Como la 
 una fracción, agrandar la comida no borra lo comido ni frena a nadie: solo hace que a cada uno
 le cueste lo suyo. `GiantFood` sigue siendo la única fórmula del tamaño.
 
+## 2026-10-18 — El movimiento del zorro tiene un dueño por hueso
+
+**Contexto:** cinco agentes escribían el movimiento del zorro a la vez (ola 3). **Decisión:**
+todos hablan por la pose (una tabla de números que se suman) y cada hueso tiene un solo módulo
+que lo escribe: `Pose` (tronco, cuello, cabeza, mandíbula, orejas), `Patas` (las cuatro patas),
+`Cara` (párpados y puntas de orejas, solo con la cámara cerca) y `Colas`. Las conductas, comer y
+la rutina solo suman claves (`sit`, `scratch`, `emoFeliz`, `tailWrap`…); nunca llaman a
+`Rig.turn`. Los contratos están en `Zorro/Tipos`. Antes de lanzar los agentes se escribieron
+los módulos vacíos ya conectados, así cada uno trabajó en sus archivos sin pisar a otro.
+
+## 2026-10-18 — La rutina del zorro se mide, no se estima
+
+**Contexto:** la guía pide que el monstruo mire a la rampa ≥ 70 % del tiempo. **Decisión:**
+`Zorro/Rutina.medir(etapa, segundos)` simula la rutina con la hora del servidor y devuelve el %
+de frente y el tramo más largo de espaldas; se corre en Play. Las rutas entre témpanos van en
+zigzag cuando el tramo derecho le mostraría la cola a la puerta, y la E4 (287 studs) solo cabe
+en el centro del lago: gira en el lugar y no camina.
+

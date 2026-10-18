@@ -2673,3 +2673,34 @@ en 211 líneas).
 (22.6 M de peces) subió la barra un 15 %: hacen falta ~7 viajes, no uno.
 
 **Qué se rompió:** nada visto.
+
+---
+
+## 2026-10-18 (16) — Zorro de agua v2: cuatro etapas en el juego y movimiento completo (olas 2 y 3)
+
+**Qué se hizo:**
+
+- **Modelo (ola 2):** E1, E2 y E4 salieron de la E3 aprobada, en paralelo (tres agentes más
+  uno de poses y rig). Las poses extremas con la cuenta real del juego (`zorro_v2_poses.py`)
+  dieron 7 de 29 limpias en la E3 ya aprobada: las colas vecinas compartían profundidad y se
+  cruzaban hasta en reposo, y el muslo, el brazo y el cuello chocaban con el torso. Segunda
+  vuelta en las cuatro etapas: cada cola en su capa de profundidad, juntas con cuñas y espigas, y
+  el código de las colas con tope al pliegue. Las cuatro aprobadas por el usuario, con rig, FBX
+  y textura; importadas a `ServerStorage.ZorroDeAguaE<n>_v2` y activas (`modelSuffix = "_v2"`).
+- **Movimiento (ola 3, cinco agentes):** antes de lanzarlos, `Zorro/Tipos` y un dueño por hueso
+  (Pose, Patas, Cara, Colas). Cuerpo y patas (sentarse, echarse, enroscarse, rascarse, lamerse,
+  estirarse, el paso de cuatro patas con IK y la picada), mirada al jugador y cara (parpadeo
+  sincronizado, cinco gestos, puntas de orejas con inercia), 16 conductas de zorro por etapa,
+  rutina entre los témpanos de frente a la puerta, comer por etapa y pose propia de evolución.
+
+**Probado en Studio (Play):** las cuatro etapas publican el v2 con `BaseHeight` 16.5, 44, 82.5
+y 165; comen sin errores; `Rutina.medir` da de frente a la puerta 83 %, 92 %, 92 % y 100 %
+(E1-E4) con el tramo más largo de espaldas en 1.5 s; con el atributo `ZorroConducta` se vieron
+centinela, dormir, rascarse, aullido, salto y la cría persiguiendo su cola. Consola sin errores.
+
+**Qué se rompió:** un commit (edf4411) se llevó tres `git rm` de otra sesión por el índice
+compartido; desde entonces, `git commit -- <rutas>`. Rojo duplicó una vez ~80 scripts en Studio
+(se arregló reconectando el plugin).
+
+**Qué sigue:** témpanos menos regulares y párpados de la cría y el joven (ola 4, en curso); el
+rascado no llega a la oreja con piezas rígidas (se rasca el cuello).

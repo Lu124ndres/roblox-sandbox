@@ -3,10 +3,8 @@
 Rehacer el Zorro de agua en bloques, en cuatro etapas, siguiendo `docs/guia_crear_monstruo.md`.
 Es el primer monstruo hecho con **olas de agentes paralelos** (guía, sección 12).
 
-**Estado (2026-10-18):** las cuatro etapas aprobadas por el usuario, con poses medidas, rig, FBX
-y textura. Importadas en Studio (`ServerStorage.ZorroDeAguaE<n>_v2`, IDs en `Assets`,
-`modelSuffix = "_v2"`) y probadas en Play. Sigue la ola 3 (movimiento). Las colas, el hábitat y los sonidos ya están en el juego y se probaron con
-el zorro E4 actual.
+**Estado (2026-10-18):** terminado salvo la ola 4 (arreglos). Las cuatro etapas están en el
+juego con su movimiento completo (ola 3), probadas en Play.
 
 ## Identidad
 
@@ -133,9 +131,28 @@ cubitos de agua y el contorno de enojo, comen sin errores y la consola queda lim
 ~287 × 287 studs y entra en el lago (380 de diámetro). El E4 anterior (`ZorroDeAguaE4_code`)
 queda en ServerStorage sin uso.
 
+## Movimiento (ola 3, 2026-10-18)
+
+Un dueño por hueso (decisiones.md) y la pose como bus de números; contratos en `Zorro/Tipos`.
+
+| Sistema | Módulos | Qué hace |
+|---|---|---|
+| Cuerpo | `Pose/` (`init`, `Tronco`) | Tronco, cuello y cabeza; `Pose.drop(pose, etapa)` = cuánto baja la base. |
+| Patas | `Patas/` (`init`, `Plano`, `Ajustes`) | IK de dos huesos por pata, el paso de cuatro patas (`walk`, `walkPhase`), `sit`, `lie`, `curl`, `scratch`, `paw*`, `stretch`, `spine`, `pounce`; números medidos por etapa en `Ajustes`. |
+| Mirada | `Mirada/` | Mira al jugador de este cliente (cono, inercia, episodios de mirar el agua, el cielo o su cola); `lookHold` la apaga. |
+| Cara | `Cara/` (`Gestos`, `Parpadeo`, `Puntas`) | Parpadeo sincronizado, cinco gestos (`emo*`), puntas de las orejas con resorte. Solo con la cámara cerca. |
+| Conductas | `Conductas/` | 16: rascarse, lamerse, sacudida, salto en picada, reverencia, bostezo, ladear, orejas, dormir, perseguir la cola, olfatear, centinela, abanico, aullido, probar el hielo y fuegos fatuos, con pesos por etapa. |
+| Rutina | `init`, `Rumbo`, `Habitos`, `Rutina/` | Ciclos por etapa entre los lugares de `Guarida`, rutas en zigzag de cara a la puerta, conductas sin repetir, comer manda, evolución quieta. `Rutina.medir` y el modo de prueba `workspace:SetAttribute("ZorroConducta", "<nombre>")`. |
+| Comer y evolución | `Comer/`, `Evolucion` | Bocados por etapa (la cría torpe, la forma final con calma y majestad), gestos y colas por gusto; evolución: se agacha, se sacude y aúlla con el abanico (`OWN_POSE`). |
+
+Medido: poses en Blender E1 33/42, E2-E4 38/42 limpias (fallan solo las colas con todas las
+juntas a 45° a la vez); de frente a la puerta 83/92/92/100 % con el tramo de espaldas más largo
+en 1.5 s. Límites que no se pudieron: el rascado no llega a la oreja (rasca el cuello) y, al
+enroscarse, la nariz no llega a la cola.
+
 ## Pasos que faltan
 
-1. **Ola 3:** locomoción e IK, mirada y cara (parpadeo, gestos), conductas y rutina (el catálogo de
-   la biblia, mirar al público ≥ 70 %, usar `Zorro/Guarida`), comer y evolución.
-2. **Arreglos vistos en Play:** témpanos grandes menos regulares; luz duplicada de `ZorroFx`
-   (`LuzGema`) con la de `ZorroAgua` (`BrilloOjos`); campos `ice` y `at` en `Zorro.Event`.
+1. **Ola 4 (en curso):** témpanos menos regulares (`Ambient/IceParts`, `IceFloes`) y párpados de la
+   E1 y la E2 que tapen el ojo cerrado (hoy queda ~28 % visible de frente): FBX nuevos que el
+   usuario reimporta.
+2. Guardar el lugar (Ctrl+S) y publicar (Alt+P).

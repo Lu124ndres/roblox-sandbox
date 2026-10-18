@@ -149,6 +149,17 @@ idéntico (comparar `estadisticas.json`).
 - **Placas acorazadas con grietas de lava (E4):** las vetas son continuas, de una celda, y siguen
   las juntas de las placas. Nada de puntitos sueltos: el usuario lo notó. Las piezas acorazadas
   se tocan cara con cara.
+- **Varias colas (o tentáculos, plumas) en abanico** (Zorro v2): cada una en su **capa de
+  profundidad**. Si dos tramos de colas distintas se solapan de frente, entre sus franjas de
+  profundidad queda al menos una celda; lo mismo entre dos tramos no seguidos de una misma cola
+  (paso ≥ la mitad del hondo + media celda). Hondo de 3 celdas o menos; una cola y su espejo,
+  ≥ 2 celdas de separación y 0.45 rad de hueco en reposo. Con nueve colas se calcula
+  (`zorro_v2_e4_capas.py`). Sin esto se cruzan hasta con el vaivén de reposo.
+- **Tramos gruesos** (más de 4 celdas): cada uno nace 2 celdas por debajo de la punta del
+  anterior; si no, a 45° la esquina abre rendija (sube medio ancho × sen 45°).
+- **Patas que se pliegan bajo el cuerpo** (sentarse, echarse): la pata gira sobre una espiga de
+  1×1 o redondeada metida en el padre, con cuñas arriba; la junta Cadera/Columna, corrida hacia
+  adelante hasta donde termina el muslo.
 
 ### Revisión de la etapa
 
@@ -160,6 +171,9 @@ idéntico (comparar `estadisticas.json`).
    normales invertidas.
 4. Poses extremas: la meta es ≥ 19 de 24 limpias y el ciclo entero de aleteo o paso, limpio.
    Umbrales: atraviesa 0.3 celdas, junta 1.0, hueco 0.2.
+   **Antes de mostrarle la etapa maestra al usuario**, con la cuenta real del juego (los ejes de
+   `<Criatura>/Rig` y las poses de su código). Lección del zorro: la E3 se aprobó a la vista y
+   después dio 7 de 29 poses limpias; hubo que rehacer las cuatro etapas.
 5. **Mostrar al usuario y esperar.** Si dice "no me gusta", se vuelve a la biblia, no a los
    detalles.
 
@@ -626,6 +640,20 @@ huesos y del hábitat elegido, que se fijan en la biblia.
 - Al terminar: borrar los worktrees y ramas ya unidos (`git worktree remove`, `git branch -d`).
 - Si el usuario detiene un agente por error, no se puede reanudar: se lanza uno nuevo y se le
   indica dónde quedó el avance a medias.
+- Si un agente se corta por un error de la API o el límite de uso, su trabajo queda guardado:
+  se le manda un mensaje (`SendMessage`) y sigue desde donde quedó.
+- **Antes de la ola de movimiento**, la sesión principal deja en main los módulos vacíos ya
+  conectados (uno por dueño de huesos) y el tipo de los contratos (`<Criatura>/Tipos`), y escribe
+  un documento de contrato con las claves de la pose de cada sistema. Así cinco agentes
+  trabajaron a la vez sin pisarse (Zorro v2, ola 3).
+- **El índice de git es compartido** con otras sesiones que trabajan en el mismo directorio:
+  `git commit -m "..." -- <rutas>` (solo esas rutas), nunca un `git commit` a secas.
+- **Rojo no admite un archivo y una carpeta con el mismo nombre** (`Cara.luau` y `Cara/`): al
+  dividir un módulo, el archivo pasa a `Cara/init.luau`.
+- **Studio en las pruebas:** el vigilante de FPS activa solo el modo rápido cuando el MCP lo pone
+  lento, y entonces no salen la cara ni las partículas: antes de juzgar, se fija
+  `{"lowFx":false,"lowFxChosen":true}` en el atributo `Settings` del jugador y al final se
+  restaura.
 
 ---
 
