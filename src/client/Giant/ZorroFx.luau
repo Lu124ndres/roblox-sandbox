@@ -3,13 +3,14 @@
 	ZorroFx
 
 	Los efectos que van pegados al zorro de agua (en sus huesos) y los fuegos fatuos:
-		gema      la gema de la frente late con una luz cian
 		bruma     las puntas de las colas sueltan bruma de agua (más con las colas
 		          abiertas: abanico, aullido)
 		pisadas   cada pata que pisa el agua deja una onda
 		fuegos    orbes de agua que brillan, suben en espiral alrededor del zorro y
 		          se apagan (el truco "fuegos" y su ataque se llaman Fuegos fatuos)
 	La cantidad sigue el modo de efectos reducidos (fxScale = 0 no emite).
+	La luz de la cabeza es solo la de ZorroAgua (BrilloOjos: ojos y marca de la
+	frente); la v2 no tiene gema y dos luces en el mismo hueso se sumaban.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -28,7 +29,6 @@ local PAWS = { "ManoIzq", "ManoDer", "PieIzq", "PieDer" }
 export type Orb = { part: Part, born: number, angle: number, radius: number, rise: number }
 export type ZorroFx = {
 	rig: any,
-	light: PointLight?,
 	mists: { ParticleEmitter },
 	orbs: { Orb },
 	folder: Folder,
@@ -60,16 +60,6 @@ function ZorroFx.attach(rig: any): ZorroFx
 	local folder = Instance.new("Folder")
 	folder.Name = "FuegosFatuos"
 	folder.Parent = Workspace
-	local light: PointLight? = nil
-	local head = rig.bones.Cabeza
-	if head then
-		local l = Instance.new("PointLight")
-		l.Name = "LuzGema"
-		l.Color = CYAN
-		l.Shadows = false
-		l.Parent = head
-		light = l
-	end
 	local mists = {}
 	for _, tail in rig.tails do
 		local tip = rig.bones[tail.tip]
@@ -77,7 +67,7 @@ function ZorroFx.attach(rig: any): ZorroFx
 			table.insert(mists, mist(tip))
 		end
 	end
-	return { rig = rig, light = light, mists = mists, orbs = {}, folder = folder, nextPaw = 0 }
+	return { rig = rig, mists = mists, orbs = {}, folder = folder, nextPaw = 0 }
 end
 
 -- Lanza `count` orbes alrededor del zorro.
@@ -110,16 +100,11 @@ function ZorroFx.orbs(fx: ZorroFx, motion: Zorro.Motion, count: number)
 	end
 end
 
--- Cada cuadro: luz de la gema, bruma de las colas, ondas de las pisadas, orbes.
+-- Cada cuadro: bruma de las colas, ondas de las pisadas, orbes.
 function ZorroFx.update(fx: ZorroFx, motion: Zorro.Motion, fxScale: number, visible: boolean)
 	local state = motion.state
 	local s = state.height / BASE_HEIGHT
 	local rate = if visible then fxScale else 0
-	if fx.light then
-		fx.light.Range = math.clamp(state.height * 0.5, 8, 60)
-		fx.light.Brightness = (1.2 + 0.6 * math.sin(os.clock() * 2.4) + 2 * state.fan)
-			* (if visible then 1 else 0)
-	end
 	for _, m in fx.mists do
 		m.Size = NumberSequence.new(0.6 * s, 1.8 * s)
 		m.Speed = NumberRange.new(0.5 * s, 1.5 * s)
@@ -154,9 +139,6 @@ end
 
 function ZorroFx.destroy(fx: ZorroFx)
 	fx.folder:Destroy()
-	if fx.light then
-		fx.light:Destroy()
-	end
 	for _, m in fx.mists do
 		m:Destroy()
 	end

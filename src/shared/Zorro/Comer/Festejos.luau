@@ -11,9 +11,14 @@
 		         agua detrás; frena derrapando y ladra
 		gran     (30, y cada 30 más) la carrera y, de vuelta en su lugar, el salto
 		         mortal con el aullido largo y los fuegos fatuos
+		lucirse  (5, adulto y forma final: ya no persigue su cola) reverencia de
+		         juego mirando al público, se yergue y abre el abanico entero en
+		         cascada, ladra contento
+	Qué etapa hace cuál: Comer/Elegir (la forma final tiene los suyos en Final).
 	El círculo de la carrera se cierra en el mismo lugar y las vueltas son
-	enteras: al terminar no queda corrido ni girado.
-	Eventos: yip, swirl (remolino de agua), happy, dash, skid y los de Grandes.
+	enteras: al terminar no queda corrido ni girado. Su radio (ctx.radius) lo da
+	Comer/Pivote para que quepa en el lago con el lugar donde está.
+	Eventos: yip, swirl (remolino de agua), happy, dash, skid, fan y los de Grandes.
 ]]
 
 local Clip = require(script.Parent.Clip)
@@ -52,6 +57,11 @@ local function cola(u: number, ctx: Clip.Ctx): Pose.Pose
 		tailWag = 1.2 * hold(u, 0, 0.1, 0.9, 1),
 		tailFan = 0.6 * busy,
 		tailLift = 0.4 * hold(u, 0, 0.1, 0.9, 1),
+		tailGusto = busy,
+		emoFeliz = hold(u, 0, 0.1, 0.84, 0.9),
+		emoSorpresa = 0.5 * hold(u, 0.84, 0.88, 0.92, 1), -- mareado
+		earTipL = 0.4 * busy * math.sin(phase * 0.5),
+		earTipR = -0.4 * busy * math.sin(phase * 0.5 + 1),
 	}
 end
 
@@ -80,35 +90,49 @@ local function carrera(u: number, ctx: Clip.Ctx): Pose.Pose
 		tailFan = 0.3 * speed + 0.4 * bark,
 		tailCalm = -0.4 * speed,
 		tailWag = 1 * bark,
+		tailGusto = 0.6 * speed + bark,
+		emoFeliz = hold(u, 0, 0.1, 0.92, 1),
 		trail = math.min(1, speed * 1.6),
 	}
-	return Clip.mix(p, Clip.gallop(a * math.max(3, r * 14), speed))
+	-- En un círculo chico (lejos del centro del lago) trota en vez de galopar.
+	return Clip.mix(p, Clip.gallop(a * math.max(3, r * 14), speed * math.clamp(r / 0.3, 0.5, 1)))
 end
 
--- Primero la carrera (más rápida que la de 15) y después el salto mortal con su
--- aullido; sin soltar la pose de comer entre los dos (take sigue en 1).
-local RUN_SECONDS = 3.2
-local RUN_PART = RUN_SECONDS / (RUN_SECONDS + Grandes.mortal.seconds)
-local function gran(u: number, ctx: Clip.Ctx): Pose.Pose
-	local p = if u < RUN_PART
-		then carrera(u / RUN_PART, ctx)
-		else Grandes.mortal.pose((u - RUN_PART) / (1 - RUN_PART), ctx)
-	p.take = hold(u, 0, 0.04, 0.97, 1)
-	return p
+local function lucirse(u: number, ctx: Clip.Ctx): Pose.Pose
+	local s = ctx.side
+	local bow = hold(u, 0, 0.12, 0.22, 0.34)
+	local proud = hold(u, 0.26, 0.4, 0.82, 0.98)
+	local bark = bell(span(u, 0.68, 0.8))
+	return {
+		take = hold(u, 0, 0.1, 0.9, 1),
+		bow = (if ctx.stage >= 4 then 0.55 else 0.75) * bow,
+		lean = -0.05 * bow + 0.1 * proud,
+		lookYaw = 0.3 * s * bow - 0.12 * s * proud,
+		lookPitch = 0.18 * proud + 0.15 * bark,
+		tilt = 0.15 * s * proud,
+		jaw = 0.5 * bark + 0.08 * proud,
+		earL = 0.4 * bow + 0.3 * proud,
+		earR = 0.3 * bow + 0.4 * proud,
+		tailLift = 0.5 * bow + 0.55 * proud,
+		tailFan = 0.2 * bow + 1.3 * proud,
+		tailAlert = 0.25 * proud,
+		tailWag = 0.6 * bow + 0.7 * bell(span(u, 0.7, 1)),
+		tailGusto = proud,
+		emoFeliz = hold(u, 0, 0.1, 0.88, 1),
+		lookHold = hold(u, 0, 0.1, 0.88, 1),
+	}
 end
 
-local granEvents: { Clip.Event } = {}
-for _, e in
-	{ { at = 0.12, kind = "dash" }, { at = 0.5, kind = "yip" }, { at = 0.88, kind = "skid" } }
-do
-	table.insert(granEvents, { at = e.at * RUN_PART, kind = e.kind })
-end
-for _, e in Grandes.mortal.events do
-	table.insert(
-		granEvents,
-		{ at = RUN_PART + e.at * (1 - RUN_PART), kind = e.kind, rare = e.rare }
-	)
-end
+local carreraCorta: Clip.Clip = { -- la del gran festejo: más rápida
+	name = "carrera",
+	seconds = 3.2,
+	events = {
+		{ at = 0.12, kind = "dash" },
+		{ at = 0.5, kind = "yip" },
+		{ at = 0.88, kind = "skid" },
+	},
+	pose = carrera,
+}
 
 local CLIPS: { [string]: Clip.Clip } = {
 	cola = {
@@ -134,11 +158,16 @@ local CLIPS: { [string]: Clip.Clip } = {
 		},
 		pose = carrera,
 	},
-	gran = {
-		name = "gran",
-		seconds = RUN_SECONDS + Grandes.mortal.seconds,
-		events = granEvents,
-		pose = gran,
+	gran = Clip.seq("gran", carreraCorta, Grandes.mortal),
+	lucirse = {
+		name = "lucirse",
+		seconds = 2.4,
+		events = {
+			{ at = 0.3, kind = "fan" },
+			{ at = 0.72, kind = "yip" },
+			{ at = 0.86, kind = "happy" },
+		},
+		pose = lucirse,
 	},
 }
 

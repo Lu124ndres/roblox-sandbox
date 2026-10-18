@@ -10,6 +10,8 @@
 		         va a hacer algo grande), salta alto, da un salto mortal hacia atrás
 		         con las patas recogidas y traga arriba; cae con un gran salpicón y
 		         aúlla de alegría con las colas abiertas
+	Las hacen la cría, el joven y el adulto; la forma final tiene su majestad
+	(Comer/Final). La sorpresa del pez raro la pone Comer/Animo en la cara.
 	En el aire las patas se recogen y las orejas van atrás; las colas se quedan
 	atrás del movimiento (las arrastra Comer con la velocidad del cuerpo).
 	Eventos: crouch, hop, launch, glitter (gotas y burbujas brillantes), gulp,
@@ -70,6 +72,8 @@ local CLIPS: { [string]: Clip.Clip } = {
 				tailFan = 1.1 * air + 0.4 * bell(span(u, 0.72, 1)),
 				tailLift = 0.3 * air,
 				tailWag = 1 * bell(span(u, 0.72, 1)),
+				tailGusto = bell(span(u, 0.7, 1)),
+				emoFeliz = hold(u, 0.45, 0.55, 0.9, 1),
 			}
 			Clip.mix(p, airborne(air, 0.3))
 			p.earL = (p.earL or 0) + 0.5 * bell(span(u, 0.74, 1))
@@ -117,6 +121,9 @@ local CLIPS: { [string]: Clip.Clip } = {
 				tailCalm = -0.4 * howl,
 				earL = -0.5 * howl,
 				earR = -0.5 * howl,
+				tailGusto = howl,
+				emoFeliz = hold(u, 0.42, 0.5, 0.93, 1),
+				eyesClosed = 0.5 * howl,
 			}
 			return Clip.mix(p, airborne(air, tuck))
 		end,

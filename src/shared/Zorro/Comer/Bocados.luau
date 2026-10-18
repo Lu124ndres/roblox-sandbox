@@ -16,6 +16,8 @@
 		sacude   sacude la cabeza de lado a lado como con una presa y traga
 		relamer  cuando dejan de darle: se relame dos veces, ladea la cabeza
 		         contento y menea las colas
+	Todas miran el bocado (Clip.mira) hasta tragarlo. La cría tiene además
+	el brinco torpe (Comer/Cria) y la forma final el bocado en calma (Comer/Final).
 	Eventos: gulp (traga), slap (el manotazo, con el lado de la pata), drops
 	(gotas que salen de la boca), hop / hopLand (el brinco), lick (se relame).
 ]]
@@ -63,7 +65,7 @@ local CLIPS: { [string]: Clip.Clip } = {
 				tailWag = 0.6 * bell(span(u, 0.25, 1)),
 				tailLift = 0.2 * bell(span(u, 0.25, 1)),
 			}
-			return Clip.mix(p, gulp(u, 0.36, 0.64, ctx.side))
+			return Clip.mix(Clip.mix(p, gulp(u, 0.36, 0.64, ctx.side)), Clip.mira(u, 0, 0.5))
 		end,
 	},
 	zarpazo = {
@@ -87,7 +89,8 @@ local CLIPS: { [string]: Clip.Clip } = {
 				tailWag = 0.9 * bell(span(u, 0.1, 1)),
 				tailLift = 0.3 * bell(span(u, 0.1, 1)),
 			}
-			return Clip.mix(p, gulp(u, 0.56, 0.84, ctx.side))
+			-- Mira la pata que golpea y el pez en el agua hasta tragarlo.
+			return Clip.mix(Clip.mix(p, gulp(u, 0.56, 0.84, ctx.side)), Clip.mira(u, 0, 0.7))
 		end,
 	},
 	brinco = {
@@ -117,7 +120,7 @@ local CLIPS: { [string]: Clip.Clip } = {
 				earR = -0.35 * air + 0.45 * bell(span(u, 0.66, 1)),
 				tailWag = 0.8 * bell(span(u, 0.62, 1)),
 			}
-			return Clip.mix(p, gulp(u, 0.45, 0.66, ctx.side))
+			return Clip.mix(Clip.mix(p, gulp(u, 0.45, 0.66, ctx.side)), Clip.mira(u, 0, 0.5))
 		end,
 	},
 	sacude = {
@@ -139,7 +142,7 @@ local CLIPS: { [string]: Clip.Clip } = {
 				shake = 0.12 * f,
 				tailWag = 0.7 * bell(span(u, 0.3, 1)),
 			}
-			return Clip.mix(p, gulp(u, 0.6, 0.86, ctx.side))
+			return Clip.mix(Clip.mix(p, gulp(u, 0.6, 0.86, ctx.side)), Clip.mira(u, 0, 0.62))
 		end,
 	},
 	relamer = {

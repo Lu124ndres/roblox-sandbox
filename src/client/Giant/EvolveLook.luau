@@ -36,7 +36,8 @@ local ACCENTS: { [string]: { accent: Color3, core: Color3 } } = {
 		core = Color3.fromRGB(255, 92, 24),
 	},
 	DragonMarino = { accent = Color3.fromRGB(70, 255, 160), core = Color3.fromRGB(255, 150, 60) },
-	ZorroDeAgua = { accent = Color3.fromRGB(70, 225, 255), core = Color3.fromRGB(210, 255, 255) },
+	-- Paleta v2 (docs/plan_zorro_v2.md): cian claro de agua (#4CCBEA) y espuma (#E6F7FF).
+	ZorroDeAgua = { accent = Color3.fromRGB(76, 203, 234), core = Color3.fromRGB(230, 247, 255) },
 	OrcaFantasma = { accent = Color3.fromRGB(175, 110, 255), core = Color3.fromRGB(130, 255, 205) },
 }
 local FALLBACK = { accent = UIConfig.Colors.Coins, core = Color3.fromRGB(255, 255, 255) }

@@ -10,12 +10,15 @@
 		- en el salto mortal las colas se quedan atrás de la vuelta;
 		- al girar sobre sí, colas y orejas se arrastran (turn se suma al giro
 		  que ya siguen en Zorro/Pose, con tope para que no se enrosquen).
+	Y topa lo que varias capas suman de la cara (emo*, puntas de las orejas) y
+	de la mirada (lookHold, que también sube con take).
 ]]
 
 local Pose = require(script.Parent.Parent.Pose)
 local Resorte = require(script.Parent.Parent.Parent.Resorte)
 
 local TAU = math.pi * 2
+local EMOTIONS = { "emoFeliz", "emoSorpresa", "eyesClosed", "blink" }
 
 export type Body = {
 	take: number, -- cuánto deja la pose de comer (0..1)
@@ -28,6 +31,8 @@ export type Body = {
 	trail: number, -- 0..1: estela de agua
 	look: number, -- 0..1: mira al jugador de este cliente
 	from: Vector3?,
+	morsel: number, -- 0..1: mira el bocado (el pez venía de fed)
+	fed: Vector3?,
 }
 export type State = { spin: number, flip: number, dy: number, gait: number, rise: Resorte.Resorte }
 
@@ -42,7 +47,14 @@ local function wrap(angle: number): number
 end
 
 -- Lee las claves del cuerpo de la pose (Zorro/Pose no las usa) y arma el Body.
-function Cuerpo.take(s: State, pose: Pose.Pose, dt: number, look: number, from: Vector3?): Body
+function Cuerpo.take(
+	s: State,
+	pose: Pose.Pose,
+	dt: number,
+	look: number,
+	from: Vector3?,
+	fed: Vector3?
+): Body
 	local spin, flip, dy, gait = pose.spinY or 0, pose.flip or 0, pose.dy or 0, pose.gait or 0
 	local spinRate, flipRate = wrap(spin - s.spin) / dt, wrap(flip - s.flip) / dt
 	local rise = Resorte.step(s.rise, (dy - s.dy) / dt, dt, 4, 0.7) -- altos por segundo
@@ -57,6 +69,17 @@ function Cuerpo.take(s: State, pose: Pose.Pose, dt: number, look: number, from: 
 	pose.earL = math.clamp((pose.earL or 0) - ears, -0.9, 0.9)
 	pose.earR = math.clamp((pose.earR or 0) - ears, -0.9, 0.9)
 	pose.tailWag = math.min(pose.tailWag or 0, 1.6)
+	pose.tailGusto = math.clamp(pose.tailGusto or 0, 0, 1)
+	for _, key in EMOTIONS do
+		local value = pose[key]
+		if value then
+			pose[key] = math.clamp(value, 0, 1)
+		end
+	end
+	pose.earTipL = math.clamp(pose.earTipL or 0, -1, 1)
+	pose.earTipR = math.clamp(pose.earTipR or 0, -1, 1)
+	-- Mientras hace lo suyo (take) la Mirada no lo tira hacia el jugador.
+	pose.lookHold = math.clamp(math.max(pose.lookHold or 0, pose.take or 0), 0, 1)
 	local out: Body = {
 		take = math.clamp(pose.take or 0, 0, 1),
 		spin = spin,
@@ -68,6 +91,8 @@ function Cuerpo.take(s: State, pose: Pose.Pose, dt: number, look: number, from: 
 		trail = math.clamp(pose.trail or 0, 0, 1),
 		look = look,
 		from = from,
+		morsel = math.clamp(pose.morsel or 0, 0, 1),
+		fed = fed,
 	}
 	return out
 end

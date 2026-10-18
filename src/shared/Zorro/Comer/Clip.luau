@@ -9,9 +9,12 @@
 		       cero: entran y salen sin saltos.
 		Ctx    side (1 su izquierda, -1 su derecha: alterna para no repetir), lift
 		       (cuánto salta, fracción del alto: la etapa grande salta menos),
-		       radius (radio de la carrera, fracción del alto: cabe en el lago) y
-		       rarity (del pez que la provocó; un festejo grande usa 6).
-	Además de las claves de Zorro/Pose, una reacción puede pedir:
+		       radius (radio de la carrera, fracción del alto: cabe en el lago),
+		       rarity (del pez que la provocó; un festejo grande usa 6) y stage
+		       (1..4: la cría exagera, la forma final se mueve poco).
+	Además de las claves de Zorro/Pose (y las de la cara y las colas del contrato
+	de la ola 3: emo*, eyesClosed, blink, earTipL/R, lookHold, tailGusto), una
+	reacción puede pedir:
 		take        cuánto deja de lado la pose de comer (0..1)
 		spinY       giro de todo el cuerpo sobre sí (rad, + a su izquierda)
 		flip        vuelta de todo el cuerpo hacia atrás (rad: salto mortal)
@@ -19,12 +22,23 @@
 		            frente)
 		gait        fase de las patas al correr (rad): cada media vuelta pisa
 		trail       0..1: deja estela de agua
-	gallop() arma el galope con esa fase; spin y flip terminan en vueltas enteras.
+		morsel      0..1: mira el bocado (Pivote gira la cabeza hacia el pez)
+	gallop() arma el galope con esa fase; spin y flip terminan en vueltas enteras;
+	seq() pega dos reacciones (el gran festejo).
+	mira() es la mirada al bocado: la cabeza va al pez y la Mirada deja de lado al
+	jugador (lookHold) mientras lo atrapa y lo traga.
 ]]
 
+local Curvas = require(script.Parent.Curvas)
 local Pose = require(script.Parent.Parent.Pose)
 
-export type Ctx = { side: number, lift: number, radius: number, rarity: number }
+export type Ctx = {
+	side: number,
+	lift: number,
+	radius: number,
+	rarity: number,
+	stage: number,
+}
 -- rare: el evento solo sale si el pez es al menos así de raro (ctx.rarity).
 export type Event = { at: number, kind: string, rare: number? }
 export type Clip = {
@@ -47,6 +61,38 @@ function Clip.gallop(phase: number, amount: number): Pose.Pose
 		lean = -0.07 * front * amount,
 		dy = 0.025 * math.abs(front) * amount,
 		gait = phase,
+	}
+end
+
+-- Mira el bocado de a hasta b (avance u): la cabeza sigue al pez y la Mirada no
+-- tira hacia el jugador; suelta despacio después de b.
+function Clip.mira(u: number, a: number, b: number): Pose.Pose
+	local on = Curvas.hold(u, a, a + 0.1, b, b + 0.2)
+	return { morsel = on, lookHold = on }
+end
+
+-- Una reacción hecha de dos seguidas (la carrera y el salto mortal): sin soltar la
+-- pose de comer entre las dos (take sigue en 1) y con los eventos de ambas.
+function Clip.seq(name: string, a: Clip, b: Clip): Clip
+	local part = a.seconds / (a.seconds + b.seconds)
+	local events: { Event } = {}
+	for _, e in a.events do
+		table.insert(events, { at = e.at * part, kind = e.kind, rare = e.rare })
+	end
+	for _, e in b.events do
+		table.insert(events, { at = part + e.at * (1 - part), kind = e.kind, rare = e.rare })
+	end
+	return {
+		name = name,
+		seconds = a.seconds + b.seconds,
+		events = events,
+		pose = function(u: number, ctx: Ctx): Pose.Pose
+			local p = if u < part
+				then a.pose(u / part, ctx)
+				else b.pose((u - part) / (1 - part), ctx)
+			p.take = Curvas.hold(u, 0, 0.04, 0.97, 1)
+			return p
+		end,
 	}
 end
 
