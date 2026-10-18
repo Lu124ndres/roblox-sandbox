@@ -504,7 +504,7 @@ FeedThrow manda como mucho un pez cada 0.45 s.
 El cráter es uno solo; lo que cambia es **con qué se llena**, en cada cliente:
 
 1. Una bandera en el `GiantDef` (`lava = true`, `sand = true`, o una nueva en `GiantTypes`).
-2. `CraterDrain` elige el modo y `CraterMode` lo guarda (`water`, `lava`, `sand`, `empty`). Para
+2. `CraterDrain` elige el modo y `CraterMode` lo guarda (`water`, `ice`, `lava`, `sand`, `empty`; `ice` conserva el agua: `isWet()`). Para
    un hábitat nuevo se agrega un modo, su relleno (`Crater<X>`) y sus mezclas de luz
    (`<x>Blend()`).
 3. Lo que acompaña: un módulo que arma todo una vez (como `LavaLair`) y lo sube o hunde con el

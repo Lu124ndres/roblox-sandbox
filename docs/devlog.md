@@ -2155,3 +2155,41 @@ con los tableros, carteles y vitrinas.
 
 **Probado en Studio (Play):** el arco con los tres tableros y el cartel del puente, sin errores.
 Checklist: build, selene (17 avisos) y stylua.
+
+---
+
+## 2026-10-17 (22) — Zorro de agua v2: colas, hábitat de hielo, sonidos y VFX (ola 1)
+
+**Qué se hizo:**
+
+- Primer monstruo hecho con olas de agentes paralelos (guía, sección 12): cuatro agentes a la
+  vez (geometría E3, código base y colas, hábitat, sonidos y VFX) y la integración y la prueba
+  en la sesión principal.
+- **Colas** (`Zorro/Colas/`, pedido del usuario: "animaciones perfectas para la cola"): una
+  cadena de resortes por cola (más blanda hacia la punta, tope de 45° por junta), una onda de la
+  raíz a la punta con tres senos inconmensurables y ruido (fase y ritmo por cola desde la hora
+  del servidor), reacción al giro, la carrera, el salto y la sacudida, estados con mezcla suave
+  (reposo, alerta, lucirse en cascada, correr, sentado, dormir, comer) y límites entre colas
+  vecinas y contra el cuerpo. Es el único que escribe los huesos `Cola*_*`; los trucos y comer
+  le piden un `Intent`. Sirve para 4 tramos (el zorro actual) y 5 (el v2). `Zorro/Etapas`
+  reconoce el sufijo `_v2`.
+- **Hábitat de agua con hielo** (modo `"ice"` de `CraterMode`, bandera `ice` en el
+  `GiantDef`): témpanos, peñones con nieve, racimos de cristales, escarcha y costra en la
+  orilla, nieve, niebla y luz fría. `Zorro/Guarida` es el contrato de los lugares donde se para
+  o duerme, de frente a la rampa.
+- **Sonidos** (19 de ProSoundEffects, en `Assets/Sounds`) con recetas por evento y etapa
+  (`Audio/ZorroRecetas`), y **VFX** (`Effects/ZorroAgua`, `ZorroCubos`, `ZorroPuntas`,
+  `ZorroRafagas`): cubitos de agua que flotan, espuma en las puntas, destellos de hielo y el
+  brillo de los ojos. Los eventos del stand pasaron a `Giant/ZorroEventos`.
+
+**Probado en Studio (Play, modelo actual `ZorroDeAguaE4_code` publicado a mano):** las 11
+escenas de `Colas/Prueba` (junta máxima 0.79 rad, salto máximo entre cuadros 0.035 rad, ningún
+choque); capturas de noche, de día desde la puerta y de costado; comida con raros; cambio a la
+orca (el hielo se hunde y queda el agua) y al dragón (el hielo se va). Consola sin errores ni
+avisos del juego.
+
+**Qué se rompió:** nada visto. Pendiente: los témpanos grandes se ven casi octogonales, el zorro
+queda de espaldas a la puerta (lo arregla la rutina de la ola 3), y sentado y dormido todavía no
+tienen una conducta que los pida.
+
+**Qué sigue:** aprobación de la E3 del modelo de bloques; después E1, E2, E4, poses y rig (ola 2).

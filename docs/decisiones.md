@@ -620,3 +620,20 @@ postura toca, a qué jugador mira) sale de `GetServerTimeNow()` con un hash sin 
 tanto para los efectos (`EvolveFx`) como para la pose (`Minotauro/Evolucion`), y el cambio de
 modelo pasa ahí, tapado por el destello, en vez de apenas llega la etapa.
 
+## 2026-10-17 — El hielo del zorro es un modo del cráter que conserva el agua
+
+**Contexto:** el usuario eligió "agua con hielo" para el zorro de agua. **Decisión:** un modo
+nuevo `"ice"` en `CraterMode` (bandera `ice` en el `GiantDef`) en vez de agua más un adorno
+suelto: así la mezcla de luz (`iceBlend`) sale como en la lava y la arena. Para el resto del
+juego sigue siendo agua (`CraterMode.isWet()`): salpicaduras, peces y pisadas no cambian, y
+`CraterGuard` no necesita nada porque el agua se queda. Las piezas de hielo son locales.
+
+## 2026-10-17 — Las colas del zorro tienen 5 tramos y un solo dueño
+
+**Contexto:** el usuario pidió animaciones perfectas para la cola. **Decisión:** el v2 lleva 5
+tramos por cola (el actual, 4), aunque la forma final quede en 76 huesos (6 más que el tope de
+la guía). Solo `Zorro/Colas` escribe los huesos `Cola*_*`: los trucos, comer y las conductas
+piden un estado y unas intensidades (`Colas/Tipos`, `Intent`), y los valores viejos
+(`tailCalm`, `tailFan`, `tailLift`, `tailWag`) se traducen en `Colas/Traduccion`. Así ninguna
+capa pisa a otra en la cola.
+
