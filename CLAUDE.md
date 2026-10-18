@@ -33,6 +33,8 @@ Documentos en `docs/`:
 - `ideas.md`: ideas fuera de alcance. No se implementan.
 - `ui-assets.md`: seguimiento de assets visuales de ForgeGUI.
 - `blender-pipeline.md`: reglas de exportación (fase 2).
+- `guia_crear_monstruo.md`: cómo se hace un gigante completo (modelo, rig, animación, hábitat,
+  sonidos, VFX). La sigue la skill local `/crear-monstruo`.
 - `alcance.md`: qué es el juego, qué entra en la v1 y con qué números (calibración).
 - `roadmap.md`: versiones públicas (v1 y eventos).
 - `backlog.md`: lista de tareas por hito.
