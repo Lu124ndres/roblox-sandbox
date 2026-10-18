@@ -627,6 +627,8 @@ nuevo `"ice"` en `CraterMode` (bandera `ice` en el `GiantDef`) en vez de agua m�
 suelto: así la mezcla de luz (`iceBlend`) sale como en la lava y la arena. Para el resto del
 juego sigue siendo agua (`CraterMode.isWet()`): salpicaduras, peces y pisadas no cambian, y
 `CraterGuard` no necesita nada porque el agua se queda. Las piezas de hielo son locales.
+Con el hielo, el cráter tiene un **atardecer** (`SkyMoods.iceHour = 17.9`, sol tibio y sombras
+azules), pedido del usuario; las cascadas de lava de la isla se siguen viendo, también a pedido.
 
 ## 2026-10-17 — Las colas del zorro tienen 5 tramos y un solo dueño
 
