@@ -81,6 +81,12 @@ local Textures: { [string]: { string } } = {
 	Faro = {
 		"rbxassetid://87535138846026",
 	},
+	-- Arco del volcán (tools/blender/arco_volcan.py): ServerStorage.PropsMapa.ArcoVolcan,
+	-- malla 111989690973334. La lava (ArcoVolcanLava, malla 127615265814733) no lleva
+	-- textura: PropDresser la pone en Neon.
+	ArcoVolcan = {
+		"rbxassetid://85903901993794",
+	},
 	DragonMarinoE1 = {
 		"rbxassetid://84201486554941",
 		"rbxassetid://121296317760278",

@@ -18,9 +18,12 @@ L = gi.L
 # Medidas del modelo (lo imprime arco_volcan.py): caja (ancho, alto, hondo) y cima de cada pico
 # (x, alto). Si se cambia el modelo, se copian de su salida.
 CAJA = (69.35, 72.84, 18.15)
+# La lava importada mide 0.24 más de alto: unas brasas bajan de la base (lo corrige
+# arco_volcan.py en la próxima exportación). Su caja empieza así de abajo del borde.
+CAJA_LAVA, BAJO_LAVA = (69.35, 73.08, 18.15), 0.24
 PICOS = ((0, 72.74), (-20, 60.57), (20, 60.57))
 HUECO, PILAR_ALTO, R_ADENTRO = 37.0, 26.0, 18.5
-LAVA_NEON = (255, 110, 30)
+LAVA_NEON = (255, 84, 20)  # con el resplandor del Neon se ve naranja; más claro se veía amarillo
 NEGRO = (20, 16, 24)
 PLACA = (38, 30, 38)
 LAVA = ((255, 60, 30), (255, 120, 30), (255, 196, 50), (255, 236, 110), (255, 196, 50), (255, 120, 30), (255, 60, 30))
@@ -62,7 +65,7 @@ def letras(texto, cara, alto, ppe=24):
 def arco(m):
     """Las dos anclas del modelo, con la caja del modelo y apoyadas en el borde."""
     piedra = gi.ancla("ArcoVolcan", m.base, CAJA, m.r, "caja", "Respaldo")
-    lava = gi.ancla("ArcoVolcanLava", m.base, CAJA, m.r, "caja")
+    lava = gi.ancla("ArcoVolcanLava", m.en(0, -BAJO_LAVA), CAJA_LAVA, m.r, "caja")
     lava["attributes"]["Brillo"] = {"Color3": gi.color(LAVA_NEON)}
     return [piedra, lava]
 

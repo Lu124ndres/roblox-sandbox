@@ -2332,3 +2332,13 @@ y la puerta con el respaldo, el cartel y el fuego; vista previa del arco en
 
 **Qué sigue:** importar `ArcoVolcan.fbx` en Studio (Importar 3D) y dejar `ArcoVolcan` y
 `ArcoVolcanLava` en `ServerStorage.PropsMapa`; registrar sus IDs en `Assets/Textures.luau`.
+
+**Después (mismo día):** el usuario importó el FBX; las dos mallas quedaron en
+`ServerStorage.PropsMapa` (malla 111989690973334 con textura 85903901993794, y la lava
+127615265814733) y la textura se registró en `Assets/Textures.luau`. Probado en Play: PropDresser
+pone el arco y la lava en Neon (ahora 255, 84, 20: más claro se veía amarillo) y borra el
+respaldo. La lava importada mide 0.24 más de alto (unas brasas bajan de la base): su ancla
+lleva su propia caja y `arco_volcan.py` ya la iguala para la próxima exportación.
+**Duplicados de Rojo, causa:** hay dos plugins de Rojo en Studio (`RojoManagedPlugin.rbxm` en
+Plugins y el de la Creator Store, 13916111004); conectados los dos, cada cambio se aplica dos
+veces. Hay que dejar uno solo y reconectar.

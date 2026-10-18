@@ -281,7 +281,7 @@ def construir():
     # Simétrica en X e Y: el centro de la caja queda justo sobre el origen (centro de la base).
     ax = max(-a0.x, -b0.x, a1.x, b1.x)
     ay = max(-a0.y, -b0.y, a1.y, b1.y)
-    lo = V((-ax, -ay, 0.0))
+    lo = V((-ax, -ay, min(a0.z, b0.z)))  # las brasas pueden bajar de la base
     hi = V((ax, ay, max(a1.z, b1.z)))
     for m, color in ((s, "basalto3"), (l, "lava")):
         for esquina in (lo, hi):

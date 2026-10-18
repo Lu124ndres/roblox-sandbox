@@ -78,7 +78,7 @@ barra de hambre sube. La Orca crece mientras come.
       luz sobre un loto y carteles con nombre, multiplicador y requisitos con íconos.
 - [x] Orillas sin decoración (no se choca ni se atora nadie) y zona más grande (radio 122).
 - [x] Puerta del cráter: arco volcánico de Blender (`arco_volcan.py`) con lava en Neon.
-- [ ] Importar `assets/blender/ArcoVolcan.fbx` a `ServerStorage.PropsMapa` y registrar IDs.
+- [x] Importar `assets/blender/ArcoVolcan.fbx` a `ServerStorage.PropsMapa` y registrar IDs.
 
 ## H1.7 — Ritmo para servidores de 40-50 (pedido del 2026-10-13)
 
