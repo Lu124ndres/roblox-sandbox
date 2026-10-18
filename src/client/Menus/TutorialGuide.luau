@@ -3,9 +3,11 @@
 	TutorialGuide
 
 	Guía del primer minuto: una placa de piedra (Interface/Kit) con la misión
-	actual (Config.Retention.tutorial, el título en dorado) y su avance, y un marcador en el mundo que
-	flota sobre el destino (el muelle más cercano, el puente y la puerta del
-	volcán, un estanque o la tienda) con la distancia. Desaparece al
+	actual (Config.Retention.tutorial, el título en dorado) y su avance, y una
+	flecha verde que flota junto al jugador y lo lleva por el camino de verdad
+	(GuideArrow y GuidePath: al volcán, por el puente) hasta el destino (el
+	muelle más cercano, la puerta del volcán, un estanque o la tienda). Al
+	llegar, la flecha se va; nada queda puesto en el mapa. Desaparece al
 	terminar. El avance lo decide el servidor (atributos Tutorial y
 	TutorialCount).
 ]]
@@ -14,7 +16,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
-local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
@@ -26,11 +27,13 @@ local InputHints = require(script.Parent.Parent.Interface.InputHints)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
+local GuideArrow = require(script.Parent.GuideArrow)
+local GuidePath = require(script.Parent.GuidePath)
 
 local ATTR = Protocol.PlayerAttributes
 local STEPS = Config.Retention.tutorial
 local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
-local MARKER_SLICE = 0.13 -- la placa de la distancia mide unos 25 píxeles de alto
+local ARRIVE = 12 -- studs del destino a los que la flecha se va
 
 local TutorialGuide = {}
 
@@ -94,35 +97,8 @@ function TutorialGuide.start(screen: ScreenGui)
 	text.Position = UDim2.fromOffset(10, 25)
 	text.Size = UDim2.new(1, -20, 0, 40)
 
-	-- Marcador en el mundo: flecha dorada que flota sobre el destino, siempre visible, con
-	-- la distancia en una placa chica de piedra (como la de la misión).
-	local anchor = Instance.new("Attachment")
-	anchor.Name = "DestinoTutorial"
-	anchor.Parent = Workspace.Terrain
-	local marker = Instance.new("BillboardGui")
-	marker.Size = UDim2.fromOffset(96, 64)
-	marker.AlwaysOnTop = true
-	marker.LightInfluence = 0
-	marker.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	marker.Adornee = anchor
-	marker.Enabled = false
-	marker.Parent = anchor
-	local arrow = Style.text(marker, "Flecha", 48, nil, 3)
-	arrow.Text = "▼"
-	arrow.Size = UDim2.fromScale(1, 0.6)
-	Kit.gold(arrow)
-	local tag = Instance.new("Frame")
-	tag.Name = "Placa"
-	tag.AnchorPoint = Vector2.new(0.5, 0)
-	tag.Position = UDim2.fromScale(0.5, 0.6)
-	tag.Size = UDim2.fromScale(0.86, 0.4)
-	tag.Parent = marker
-	Kit.skin(tag, "panel").SliceScale = MARKER_SLICE
-	local distance = Style.text(tag, "Distancia", UIConfig.TextSizes.Small, nil, 1.5)
-	distance.Position = UDim2.fromOffset(7, 4)
-	distance.Size = UDim2.new(1, -14, 1, -8)
-	distance.ZIndex = 1
-	Kit.gold(distance)
+	local arrow = GuideArrow.new()
+	local route = GuidePath.new()
 
 	local function step(): number
 		local value = player:GetAttribute(ATTR.Tutorial)
@@ -134,7 +110,6 @@ function TutorialGuide.start(screen: ScreenGui)
 		local current = STEPS[index]
 		local loaded = player:GetAttribute(ATTR.DataLoaded) == true
 		panel.Visible = loaded and current ~= nil
-		marker.Enabled = panel.Visible
 		if not current then
 			return
 		end
@@ -158,13 +133,23 @@ function TutorialGuide.start(screen: ScreenGui)
 	RunService.Heartbeat:Connect(function()
 		local current = STEPS[step()]
 		local character = player.Character
-		if not current or not marker.Enabled or not character then
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if not current or not panel.Visible or not (root and root:IsA("BasePart")) then
+			arrow.show(false)
+			route.hide()
 			return
 		end
-		local position = character:GetPivot().Position
+		local position = root.Position
 		local target = targetFor(current.id, position)
-		anchor.WorldPosition = target + Vector3.new(0, 7 + math.sin(os.clock() * 3) * 0.8, 0)
-		distance.Text = `{math.floor((target - position).Magnitude)} m`
+		if (target - position).Magnitude < ARRIVE then
+			arrow.show(false)
+			route.hide()
+			return
+		end
+		local t = os.clock()
+		local ahead = route.update(position, target, t)
+		arrow.place(position, ahead - position, t)
+		arrow.show(true)
 	end)
 end
 

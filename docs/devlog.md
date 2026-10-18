@@ -2391,3 +2391,23 @@ capturas en `docs/capturas/2026-10-18-evento-*.jpg`; el anuncio y la placa con s
 verticales); quedó la de rayos.
 
 **Qué sigue:** probar los eventos en un teléfono (rendimiento de la lluvia y la aurora).
+
+---
+
+## 2026-10-18 (7) — Flecha guía del tutorial, como en los simuladores
+
+**Qué se hizo:** el marcador dorado que flotaba sobre el destino se cambió por una flecha
+verde gruesa que flota junto al jugador, a la altura del pecho, lo sigue y apunta hacia
+donde tiene que ir (`Menus/GuideArrow`), y una fila de chevrones verdes en el piso que corren
+hacia adelante por el camino de verdad, calculado con PathfindingService
+(`Menus/GuidePath`: al volcán va por el puente). Se recalcula si se sale del camino; al
+llegar al destino desaparece. Todo es local: nada queda puesto en el mapa (pedido del
+usuario, con el video de referencia de «Construye la Pirámide»).
+
+**Probado en Studio (Play):** misión 1 desde la aparición, caminando hacia la flecha hasta
+el muelle (`docs/capturas/2026-10-18-flecha-guia.jpg`).
+
+**Qué se rompió:** nada visto. La flecha y los chevrones van 1.3 y 1.4 studs más arriba de lo
+pensado porque el pasto alto del terreno los tapaba.
+
+**Qué sigue:** el video tutorial (tomas en Studio con el minotauro).
