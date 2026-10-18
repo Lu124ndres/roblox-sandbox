@@ -47,6 +47,7 @@ function Proximity.makePrompt(
 	prompt.HoldDuration = 0
 	prompt.MaxActivationDistance = distance
 	prompt.RequiresLineOfSight = false
+	prompt.Style = Enum.ProximityPromptStyle.Custom -- lo dibuja el cliente (Interface/PromptView)
 	prompt.Parent = parent
 	return prompt
 end

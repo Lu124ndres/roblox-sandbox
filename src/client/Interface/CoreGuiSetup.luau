@@ -7,11 +7,14 @@
 	sobre los botones de arriba a la derecha (TIENDA, MEJORAS) no se podía tocar.
 	Las columnas (poder, monedas, kills, renacimientos) salen de leaderstats.
 	SetCoreGuiEnabled puede fallar si Roblox aún no cargó su interfaz, por eso
-	se reintenta unas veces.
+	se reintenta unas veces. También arranca PromptView: los avisos de «E para
+	...» con la temática de la interfaz, en lugar de los de Roblox.
 ]]
 
 local StarterGui = game:GetService("StarterGui")
 local UserInputService = game:GetService("UserInputService")
+
+local PromptView = require(script.Parent.PromptView)
 
 local ATTEMPTS = 10
 local RETRY_SECONDS = 0.5
@@ -19,6 +22,7 @@ local RETRY_SECONDS = 0.5
 local CoreGuiSetup = {}
 
 function CoreGuiSetup.start()
+	PromptView.start()
 	task.spawn(function()
 		for _ = 1, ATTEMPTS do
 			local ok = pcall(function()

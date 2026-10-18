@@ -112,6 +112,7 @@ function SpinStand.start(open: () -> ())
 	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
 	prompt.MaxActivationDistance = 22
 	prompt.RequiresLineOfSight = false
+	prompt.Style = Enum.ProximityPromptStyle.Custom -- lo dibuja Interface/PromptView
 	prompt.Parent = disc
 	prompt.Triggered:Connect(open)
 	model.Parent = Workspace
