@@ -3,9 +3,10 @@
 	OverheadBadges
 
 	Insignias del cartel sobre la cabeza (Overhead), todas dentro de un solo
-	marco: una placa redonda azul noche con degradado, marco de oro y un brillo
-	arriba. Adentro, separados por líneas finas:
-		Monstruos  monstruo panzón (Icons "fed") y cuántos llenó
+	marco: una placa con marco de lava (Interface/Kit, como TIENDA). Adentro,
+	separados por líneas finas:
+		Monstruos  el monstruo alimentado (Icons "fed", el de "monstruos llenados"
+		           del HUD) y cuántos llenó
 		VIP        "VIP" en oro con degradado (solo si tiene el pase)
 		Premium    el ícono de Roblox Premium (solo si es Premium)
 	La placa se ajusta al ancho de lo que se muestra y queda centrada; los
@@ -17,6 +18,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Icons = require(script.Parent.Icons)
+local Kit = require(script.Parent.Kit)
 local Style = require(script.Parent.Style)
 
 export type Badges = {
@@ -29,15 +31,10 @@ local WHITE = Color3.new(1, 1, 1)
 local GOLD = rgb(255, 214, 80)
 -- Ancho de cada parte (fracción del ancho del cartel) y el margen de la placa.
 local WIDTH = { kills = 0.27, vip = 0.17, premium = 0.11, line = 0.012 }
-local SIDES = 0.05
+local SIDES = 0.07 -- un poco más: el marco de lava es más grueso que el de oro
+local PLATE_SLICE = 0.3
 
 local OverheadBadges = {}
-
-local function round(parent: GuiObject)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0.5, 0)
-	corner.Parent = parent
-end
 
 local function gradient(parent: Instance, top: Color3, bottom: Color3)
 	local fill = Instance.new("UIGradient")
@@ -51,27 +48,10 @@ local function plate(row: Frame): (Frame, Frame)
 	back.Name = "Placa"
 	back.AnchorPoint = Vector2.new(0.5, 0.5)
 	back.Position = UDim2.fromScale(0.5, 0.52)
-	back.BackgroundColor3 = WHITE
 	back.BorderSizePixel = 0
-	round(back)
-	gradient(back, rgb(54, 72, 150), rgb(16, 20, 50))
-	local border = Instance.new("UIStroke")
-	border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	border.Color = WHITE
-	border.Thickness = 4
-	border.Parent = back
-	gradient(border, rgb(255, 240, 150), rgb(200, 120, 10))
-	local shine = Instance.new("Frame")
-	shine.Name = "Brillo"
-	shine.BackgroundColor3 = WHITE
-	shine.BackgroundTransparency = 0.82
-	shine.BorderSizePixel = 0
-	shine.Position = UDim2.fromScale(0.06, 0.07)
-	shine.Size = UDim2.fromScale(0.88, 0.3)
-	round(shine)
-	shine.Parent = back
+	Kit.skin(back, "lava").SliceScale = PLATE_SLICE
 	back.Parent = row
-	-- Las partes van en su propio cuadro (el brillo no entra en la fila).
+	-- Las partes van en su propio cuadro (la piel de piedra no entra en la fila).
 	local inside = Instance.new("Frame")
 	inside.Name = "Contenido"
 	inside.BackgroundTransparency = 1

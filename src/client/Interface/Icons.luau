@@ -7,7 +7,9 @@
 	(ImageRectOffset). Si la hoja no tiene ID, se usa el modelo 3D de Icon3D.
 	Hoja 1: coin, crystal, basketFish, skull (ya no es una calavera: el monstruo
 	        alimentado del contador "monstruos llenados"), basket, chest, gift,
-	        gear, fish, ticket, friends, group, fang, fed (cuenco de peces).
+	        gear, fish, ticket, friends, group, fang, cuenco de peces (sin uso),
+	        spin (ruleta), pack (pack de inicio). fed apunta al monstruo
+	        alimentado.
 	Hoja 2: rod, boots, crown, pond, bolt, orca, minotaur, dragon, fox,
 	        giftPink, arrow, meat, sunburst (rayos blancos para teñir), glow.
 	Hoja 3: la anterior del monstruo panzón (ya no se usa: fed va en la hoja 1).
@@ -52,7 +54,10 @@ local CELLS: { [string]: Cell } = {
 	meat = { sheet = 2, index = 11, fallback = "fish:Atun" },
 	sunburst = { sheet = 2, index = 12, fallback = "" },
 	glow = { sheet = 2, index = 13, fallback = "" },
-	fed = { sheet = 1, index = 13, fallback = "skull" },
+	-- El cartel sobre la cabeza y Renacer usan el mismo monstruo alimentado del HUD.
+	fed = { sheet = 1, index = 3, fallback = "skull" },
+	spin = { sheet = 1, index = 14, fallback = "gift" },
+	pack = { sheet = 1, index = 15, fallback = "chest" },
 }
 
 local Icons = {}

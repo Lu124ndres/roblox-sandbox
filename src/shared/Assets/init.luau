@@ -65,8 +65,8 @@ local Assets: Assets = {
 		-- y la referencia volcánica del usuario (assets/ui/iconos/v4/, docs/ui-assets.md).
 		-- Hojas de 4x4 de 256 px. HUD, por filas: moneda, poder, canasta con peces, monstruo
 		-- alimentado / canasta, cofre, regalo, engranaje / pez, boleto, amigos, grupo /
-		-- colmillo, cuenco de peces (insignia de alimentado).
-		IconSheet = "rbxassetid://135004623117532",
+		-- colmillo, cuenco de peces (sin uso), ruleta, pack de inicio.
+		IconSheet = "rbxassetid://110280301406648",
 		-- Hoja 2, por filas: caña, botas, corona, estanque / rayo, orca, minotauro, dragón /
 		-- zorro, regalo rosa, flecha, carne / rayos de fondo (sunburst), brillo redondo.
 		IconSheet2 = "rbxassetid://89496859008486",

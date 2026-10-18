@@ -56,7 +56,7 @@ function SpinWindow.start(screen: ScreenGui)
 		"Ruleta",
 		if wide then Vector2.new(900, 520) else Vector2.new(620, 640)
 	)
-	local hud = HudButtons.top("Ruleta", "chest", window.toggle)
+	local hud = HudButtons.top("Ruleta", "spin", window.toggle)
 	SpinWindow.open = window.open
 	local content = window.content
 

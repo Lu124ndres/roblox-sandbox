@@ -2070,3 +2070,17 @@ llenados" no tenía que ver. Eligió botones de casilla volcánica e íconos pin
 
 **Probado en Studio (Play):** el HUD con los íconos nuevos, sin errores.
 Checklist: build, selene (21 avisos) y stylua.
+
+## 2026-10-17 (18) — Ruleta, pack de inicio y cartel de lava
+
+**Qué se hizo (pedido del usuario):**
+- **Ruleta:** usaba el mismo cofre que TIENDA. Tiene ícono propio, una rueda pintada a mano
+  (Canva, media `MAHYVJpMS6g`), en la hoja HUD celda 14.
+- **Pack de inicio:** un cofre con lazo violeta y el equipo adentro, pintado a mano (media
+  `MAHYVEJ9RZ0`), en la celda 15. El popup lo usa en vez del regalo rosa.
+- **Hoja HUD:** se volvió a subir: `rbxassetid://110280301406648`.
+- **Cartel sobre la cabeza** (`OverheadBadges`): la placa es de lava, con `Kit.skin` "lava"
+  como TIENDA. El ícono de monstruos es el monstruo alimentado del HUD (`fed` apunta a la celda
+  3), no el cuenco de peces.
+
+**Probado en Studio (Play):** el cartel, la ruleta del HUD y el pack de inicio, sin errores.

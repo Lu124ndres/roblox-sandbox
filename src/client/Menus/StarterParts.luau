@@ -37,7 +37,7 @@ function StarterParts.header(content: Frame, discount: number)
 	art.Name = "Regalo"
 	art.Position = UDim2.fromOffset(4, 0)
 	art.Size = UDim2.fromOffset(96, 96)
-	local gift = Icons.view(art, "giftPink")
+	local gift = Icons.view(art, "pack")
 	gift.Position = UDim2.fromOffset(2, -4) -- asoma un poco por arriba
 	gift.Size = UDim2.fromOffset(92, 92)
 	local title = Style.text(content, "Titulo", 44, nil, 3.5)
