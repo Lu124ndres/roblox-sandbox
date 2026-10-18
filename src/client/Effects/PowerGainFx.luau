@@ -121,7 +121,8 @@ function PowerGainFx.mount(screen: ScreenGui)
 	end
 	task.spawn(function()
 		local row = Layout.left():WaitForChild("Stat2", 30)
-		local value = row and row:WaitForChild("Valor", 10)
+		local texts = row and row:WaitForChild("Textos", 10)
+		local value = texts and texts:WaitForChild("Valor", 10)
 		if not (row and value and value:IsA("GuiObject")) then
 			return
 		end

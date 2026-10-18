@@ -36,6 +36,7 @@ local DETAIL_HEIGHT = ROW_HEIGHT - VALUE_HEIGHT
 local DETAIL_MAX_TEXT = 16
 local BADGE_HEIGHT = 20
 local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
+local TEXT_RIGHT = 10 -- margen del texto al canto derecho de la placa
 
 type Row = { value: TextLabel, detail: TextLabel, badge: TextLabel }
 
@@ -64,30 +65,45 @@ local function row(order: number, icon: string, color: Color3): Row
 	local plate = Instance.new("Frame")
 	plate.Name = "Placa"
 	plate.BackgroundTransparency = 1
-	plate.Position = UDim2.fromOffset(ROW_HEIGHT / 2, 2)
-	plate.Size = UDim2.new(1, -ROW_HEIGHT / 2, 1, -4)
+	plate.Position = UDim2.fromOffset(Layout.STAT_PLATE_LEFT, 2)
+	plate.Size = UDim2.new(1, -Layout.STAT_PLATE_LEFT, 1, -4)
 	plate.ZIndex = 0
 	plate.Parent = frame
 	Kit.skin(plate, "panel").SliceScale = PLATE_SLICE
+	-- El ícono, centrado en el canto izquierdo de la placa y a su media altura.
 	local view = Icons.view(frame, icon)
-	view.Size = UDim2.fromOffset(ROW_HEIGHT, ROW_HEIGHT - 4)
+	view.AnchorPoint = Vector2.new(0.5, 0.5)
+	view.Position = UDim2.new(0, Layout.STAT_PLATE_LEFT, 0.5, 0)
+	view.Size = UDim2.fromOffset(Layout.STAT_ICON, ROW_HEIGHT - 4)
 	local badge = Style.text(frame, "Multiplicador", BADGE_HEIGHT, nil, 2)
 	badge.AnchorPoint = Vector2.new(0.5, 1)
-	badge.Position = UDim2.new(0, ROW_HEIGHT / 2, 1, 2)
-	badge.Size = UDim2.fromOffset(ROW_HEIGHT + 10, BADGE_HEIGHT)
+	badge.Position = UDim2.new(0, Layout.STAT_PLATE_LEFT, 1, 2)
+	badge.Size = UDim2.fromOffset(Layout.STAT_ICON + 10, BADGE_HEIGHT)
 	badge.ZIndex = 3
-	-- En táctil el número ocupa toda la fila y no hay línea chica.
+	-- Número y línea chica van en un bloque centrado a media altura de la placa:
+	-- si una fila no tiene línea chica (monedas, o todas en táctil), el número
+	-- queda solo en el medio en vez de pegado arriba.
+	local texts = Instance.new("Frame")
+	texts.Name = "Textos"
+	texts.BackgroundTransparency = 1
+	texts.Position = UDim2.fromOffset(Layout.STAT_TEXT_LEFT, 0)
+	texts.Size = UDim2.new(1, -Layout.STAT_TEXT_LEFT - TEXT_RIGHT, 1, 0)
+	texts.Parent = frame
+	local stack = Instance.new("UIListLayout")
+	stack.SortOrder = Enum.SortOrder.LayoutOrder
+	stack.VerticalAlignment = Enum.VerticalAlignment.Center
+	stack.Parent = texts
+	-- En táctil el número es más grande y no hay línea chica (no se leería).
 	local touch = Device.touch()
-	local value =
-		Style.text(frame, "Valor", if touch then ROW_HEIGHT - 12 else VALUE_HEIGHT - 4, color, 3)
+	local valueHeight = if touch then ROW_HEIGHT - 12 else VALUE_HEIGHT - 4
+	local value = Style.text(texts, "Valor", valueHeight, color, 3)
 	value.TextXAlignment = Enum.TextXAlignment.Left
-	value.Position = UDim2.fromOffset(ROW_HEIGHT + 4, if touch then 6 else 3)
-	value.Size =
-		UDim2.new(1, -ROW_HEIGHT - 14, 0, if touch then ROW_HEIGHT - 12 else VALUE_HEIGHT - 4)
-	local detail = Style.text(frame, "Detalle", DETAIL_MAX_TEXT, nil, 1.5)
+	value.LayoutOrder = 1
+	value.Size = UDim2.new(1, 0, 0, valueHeight)
+	local detail = Style.text(texts, "Detalle", DETAIL_MAX_TEXT, nil, 1.5)
 	detail.TextXAlignment = Enum.TextXAlignment.Left
-	detail.Position = UDim2.fromOffset(ROW_HEIGHT + 4, VALUE_HEIGHT - 3)
-	detail.Size = UDim2.new(1, -ROW_HEIGHT - 14, 0, DETAIL_HEIGHT - 2)
+	detail.LayoutOrder = 2
+	detail.Size = UDim2.new(1, 0, 0, DETAIL_HEIGHT - 2)
 	detail.Visible = not touch
 	return { value = value, detail = detail, badge = badge }
 end
@@ -102,7 +118,7 @@ function Hud.mount(_screen: ScreenGui, player: Player): TextLabel
 	local power = row(2, "crystal", Color3.fromRGB(150, 205, 255))
 	local fish = row(3, "basketFish", COLORS.Fishing)
 	local kills = row(4, "skull", Color3.fromRGB(255, 120, 110))
-	coins.detail.Text = ""
+	coins.detail.Visible = false -- sin línea chica: el número se centra en la placa
 	Kit.gold(coins.value)
 	Kit.gold(coins.badge)
 	Kit.gold(power.badge)
@@ -128,13 +144,14 @@ function Hud.mount(_screen: ScreenGui, player: Player): TextLabel
 		power.badge.Text = multiplier(Perks.powerMultiplier(player))
 		local speed = string.format("%.1f", FishingPower.speed(amount))
 		local perCatch = NumberFormat.short(FishingPower.playerFishPerCatch(player))
-		power.detail.Text = `Velocidad x{speed} · {perCatch} peces por pique`
+		-- Corto, para que entre al mismo tamaño que las otras líneas chicas.
+		power.detail.Text = `Vel. x{speed} · {perCatch}/pique`
 		local capacity = FishingPower.playerCapacity(player)
 		local carried = number(player, ATTR.CarriedFish)
 		set(fish.value, `{NumberFormat.short(carried)}/{NumberFormat.short(capacity)}`)
 		fish.value.TextColor3 = if carried >= capacity then COLORS.Feeding else COLORS.Fishing
 		local full = carried >= capacity
-		fish.detail.Text = if full then "¡Canasta llena! Al volcán" else "peces en la canasta"
+		fish.detail.Text = if full then "¡Llena! Ve al volcán" else "peces en la canasta"
 		fish.badge.Text = "LLENA"
 		fish.badge.TextColor3 = COLORS.Feeding
 		fish.badge.Visible = full

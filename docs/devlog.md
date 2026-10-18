@@ -2193,3 +2193,16 @@ queda de espaldas a la puerta (lo arregla la rutina de la ola 3), y sentado y do
 tienen una conducta que los pida.
 
 **Qué sigue:** aprobación de la E3 del modelo de bloques; después E1, E2, E4, poses y rig (ola 2).
+
+---
+
+## 2026-10-18 — Estadísticas del HUD alineadas y ranking hacia el entrenamiento
+
+**Qué se hizo:**
+
+- **Estadísticas del HUD**: el número y la línea chica van en un bloque (`Textos`) centrado a
+  media altura de la placa, así las monedas (sin línea chica) ya no quedan pegadas arriba con
+  un hueco abajo. El ícono se centra en el canto de la placa. La línea del poder pasó a
+  `Vel. x107.4 · 209K/pique` para salir al mismo tamaño que las otras (antes se encogía a
+  10 px). El regalo por jugar usa los mismos bordes y la misma columna de texto que las
+  estadísticas (`Layout.STAT_PLATE_LEFT` / `STAT_TEXT_LEFT`).

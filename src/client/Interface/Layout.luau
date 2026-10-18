@@ -39,6 +39,12 @@ local Layout = {}
 Layout.BUTTON_SIZE = 88
 Layout.BUTTON_GAP = 10
 Layout.RIGHT_WIDTH = Layout.BUTTON_SIZE * 2 + Layout.BUTTON_GAP
+-- Filas de la columna izquierda: el ícono ocupa los primeros STAT_ICON píxeles,
+-- la placa empieza en su mitad y el texto justo después del ícono. Las comparten
+-- las estadísticas (Hud) y el regalo por jugar (PlaytimeEntry) para quedar alineados.
+Layout.STAT_ICON = 60
+Layout.STAT_PLATE_LEFT = Layout.STAT_ICON / 2
+Layout.STAT_TEXT_LEFT = Layout.STAT_ICON + 4
 
 local left: Frame
 local right: Frame

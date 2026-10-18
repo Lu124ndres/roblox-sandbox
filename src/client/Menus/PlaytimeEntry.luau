@@ -38,8 +38,9 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 	local button = Instance.new("TextButton")
 	button.Name = "Boton"
 	button.Text = ""
-	button.Position = UDim2.fromOffset(ICON / 2, 6)
-	button.Size = UDim2.new(1, -ICON / 2 - 6, 0, HEIGHT - 4)
+	-- Mismo canto izquierdo y derecho que las placas de las estadísticas (Hud).
+	button.Position = UDim2.fromOffset(Layout.STAT_PLATE_LEFT, 6)
+	button.Size = UDim2.new(1, -Layout.STAT_PLATE_LEFT, 0, HEIGHT - 4)
 	button.AutoButtonColor = false
 	local skin = Kit.skin(button, "casilla")
 	skin.SliceScale = SLICE
@@ -60,10 +61,11 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 
 	local icon = Icons.view(holder, "giftPink")
 	icon.AnchorPoint = Vector2.new(0.5, 0.5)
-	icon.Position = UDim2.new(0, ICON / 2, 0.5, 0)
+	icon.Position = UDim2.new(0, Layout.STAT_PLATE_LEFT, 0.5, 0)
 	icon.Size = UDim2.fromOffset(ICON, ICON)
 	icon.ZIndex = 3
-	local left = ICON / 2 + 4
+	-- El texto arranca en la misma columna que los números de las estadísticas.
+	local left = Layout.STAT_TEXT_LEFT - Layout.STAT_PLATE_LEFT
 	local title = Style.text(button, "Titulo", 18, nil, 2)
 	title.Text = "REGALO GRATIS"
 	Kit.gold(title)
