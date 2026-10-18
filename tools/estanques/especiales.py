@@ -1,8 +1,9 @@
 """Piezas que distinguen a un estanque: rana, muelle, cascada, rocas flotantes, cristales y el
-islote del pez dorado del sagrado."""
+islote del sagrado."""
 import math
 
 import generar_isla as gi
+from estanques import agua
 from estanques.forma import AGUA, SUELO, cilindro, elipsoide, orientar
 
 GRIS = ((130, 126, 118), (114, 110, 104), (146, 142, 134))  # gris cálido: el frío se veía violeta
@@ -95,7 +96,7 @@ def roca_flotante(nombre, centro, altura, tono, rng):
 
 
 def islote_sagrado(centro, rng):
-    """Islote de rocas con musgo en el medio del sagrado y el pez dorado saltando de él."""
+    """Islote de rocas con musgo en el medio del sagrado; arriba, un loto celeste."""
     hijos = []
     for k, (dx, dz, s, dy) in enumerate(((0, 0, 7, 0.4), (-3, 2, 5, 0.2), (3, -1.5, 5.4, 0.1), (1, 3, 4, 1.8), (-1, -2.5, 4.4, 2))):
         p = (centro[0] + dx, AGUA + dy, centro[2] + dz)
@@ -103,18 +104,5 @@ def islote_sagrado(centro, rng):
                                **gi.DECORADO))
         hijos.append(elipsoide(f"Musgo{k}", gi.add(p, (0, s * 0.22, 0)), (s * 0.8, s * 0.2, s * 0.7), MUSGO[k % 2], "Grass",
                                **gi.FANTASMA))
-    giro = gi.mat(gi.ry(30), gi.rx(-35))
-    pez = (centro[0], AGUA + 7.5, centro[2])
-    hijos.append(elipsoide("PezDorado", pez, (4, 5.4, 12), gi.ORO, "Metal", giro))
-    for lado in (-1, 1):  # aleta de la cola en V, como dos hojas abiertas
-        aleta = gi.mat(giro, gi.rx(35 * lado))
-        hijos.append(elipsoide(f"Cola{lado}", gi.add(pez, gi.aplicar(giro, (0, 1.4 * lado, 7))), (0.5, 2.2, 4.4), gi.ORO, "Metal",
-                               aleta))
-    for k in range(3):  # el chorro de agua de donde salta
-        p = gi.add(pez, gi.aplicar(giro, (0, 0, -3 - k * 1.6)))
-        hijos.append(elipsoide(f"Salpicon{k}", (p[0], AGUA + 2.2 + k * 0.4, p[2]), (2.4 - k * 0.5, 1, 2.4 - k * 0.5), ESPUMA,
-                               Transparency=0.35, **gi.FANTASMA))
-    brillo = gi.pieza("Brillo", (1, 1, 1), pez, gi.ORO, **gi.INVISIBLE, CanCollide=False)
-    brillo["children"] = [gi.luz(30, 1, gi.ORO)]
-    hijos.append(brillo)
+    hijos.append(agua.loto("Loto", (centro[0], AGUA + 3.3, centro[2]), 2.2, (200, 250, 255), True))
     return gi.grupo("Islote", hijos)

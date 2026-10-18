@@ -21,10 +21,7 @@ TEMAS = {1: temas.prado, 2: temas.juncos, 3: temas.lirios, 4: temas.bambu, 5: te
 def estanque(i):
     tono = gi.COLORES_ESTANQUE[(i - 1) % len(gi.COLORES_ESTANQUE)]
     rng = random.Random(1000 + i)
-    hijos = base.tapa_y_prompt(i, tono)
-    if i != SAGRADO:
-        hijos += base.espiritu(i, tono)
-    hijos += TEMAS[i](i, tono, rng)
+    hijos = base.tapa_y_prompt(i, tono) + base.espiritu(i, tono) + TEMAS[i](i, tono, rng)
     return gi.grupo(f"Estanque{i}", hijos)
 
 

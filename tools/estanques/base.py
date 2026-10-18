@@ -40,20 +40,25 @@ def tapa_y_prompt(i, tono):
 
 def espiritu(i, tono):
     """Loto grande en el centro y, encima, el espíritu del estanque: una esfera de luz del color
-    de su nivel que crece con él (la anima Training/PondFx). Desde el 7, luciérnagas alrededor."""
+    de su nivel que crece con él (la anima Training/PondFx). Desde el 7, luciérnagas alrededor.
+    En el sagrado flota más alto, sobre el loto de su islote (estanques.especiales)."""
     c = centro(i)
-    flor = tuple(min(255, int(v * 0.6 + 255 * 0.4)) for v in tono)
-    hijos = [gi.pieza("HojaCentro", (0.14, 4.6, 4.6), (c[0], AGUA + 0.06, c[2]), agua.NENUFAR[0], "SmoothPlastic", gi.VERTICAL,
-                      "Cylinder", **gi.FANTASMA),
-             agua.loto("LotoCentro", (c[0], AGUA + 0.15, c[2]), 1.5, flor, i >= 9)]
+    sagrado = i == SAGRADO
+    alto = AGUA + (8.5 if sagrado else 4)
+    hijos = []
+    if not sagrado:
+        flor = tuple(min(255, int(v * 0.6 + 255 * 0.4)) for v in tono)
+        hijos += [gi.pieza("HojaCentro", (0.14, 4.6, 4.6), (c[0], AGUA + 0.06, c[2]), agua.NENUFAR[0], "SmoothPlastic", gi.VERTICAL,
+                           "Cylinder", **gi.FANTASMA),
+                  agua.loto("LotoCentro", (c[0], AGUA + 0.15, c[2]), 1.5, flor, i >= 9)]
     lado = 1.8 + i * 0.12
-    bola = gi.pieza("Espiritu", (lado, lado, lado), (c[0], AGUA + 4, c[2]), tono, "Neon", forma="Ball", **gi.FANTASMA)
-    bola["children"] = [gi.luz(18, 1.3, tono)]
+    bola = gi.pieza("Espiritu", (lado, lado, lado), (c[0], alto, c[2]), tono, "Neon", forma="Ball", **gi.FANTASMA)
+    bola["children"] = [gi.luz(24 if sagrado else 18, 1.3, tono)]
     bola["attributes"] = {"Indice": i}
     hijos.append(bola)
     if i >= 7:
         for k in range(3):
-            p = gi.add(c, gi.polar(k * 120, 2.8, 4))
+            p = gi.add(c, gi.polar(k * 120, 2.8, alto))
             hijos.append(gi.pieza(f"Luciernaga{k + 1}", (0.35, 0.35, 0.35), p, LUCIERNAGA, "Neon", forma="Ball", **gi.FANTASMA))
     return hijos
 

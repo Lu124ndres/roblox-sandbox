@@ -69,8 +69,8 @@ def celestial(i, tono, rng):
 
 
 def sagrado(i, tono, rng):
-    """11 · Estanque Sagrado (centro, solo Robux): el pez dorado salta de un islote con musgo,
-    lotos que brillan en celeste, kois, cuatro faroles de piedra y dos árboles sagrados."""
+    """11 · Estanque Sagrado (centro, solo Robux): un islote con musgo y el espíritu flotando
+    alto, lotos que brillan en celeste, kois, cuatro faroles de piedra y dos árboles sagrados."""
     hijos = [especiales.islote_sagrado(centro(i), rng)]
     hijos += nenufares(i, rng, SAGRADOS[1], 12, neon=True, cada=2)
     hijos += orilla(i, rng, BLANCAS, rocas=4, matas=2, macizos=2, evitar=(45, 135, 225, 315), margen=16)

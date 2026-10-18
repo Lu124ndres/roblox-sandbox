@@ -24,7 +24,7 @@ local PondSignView = require(script.Parent.PondSignView)
 
 local PONDS = Config.Progression.ponds
 local SIGN_HEIGHT = 12 -- sobre el espíritu del estanque
-local SACRED_SIGN_HEIGHT = 21 -- sobre el pez dorado del sagrado
+local SACRED_SIGN_HEIGHT = 18 -- sobre el espíritu del sagrado, que flota más alto
 
 local PondSigns = {}
 
