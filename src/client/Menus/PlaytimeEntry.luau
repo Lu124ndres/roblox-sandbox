@@ -2,10 +2,11 @@
 --[[
 	PlaytimeEntry
 
-	Botón grande de los regalos por jugar en la columna izquierda: piedra
-	tallada rosa con el regalo que sobresale, "REGALO GRATIS" y la cuenta regresiva
-	grande. Cuando hay uno listo se vuelve verde, dice ¡RECLAMAR!, late y el
-	regalo se sacude para llamar la atención.
+	Botón grande de los regalos por jugar en la columna izquierda: casilla
+	volcánica (como los botones del HUD) con el regalo que sobresale, "REGALO
+	GRATIS" y la cuenta regresiva grande. Cuando hay uno listo se enciende el
+	marco de lava, dice ¡RECLAMAR!, late y el regalo se sacude para llamar la
+	atención.
 ]]
 
 local TweenService = game:GetService("TweenService")
@@ -15,7 +16,7 @@ local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
-local PALETTE = Style.PALETTE
+local SLICE = 0.32 -- el mismo canto que los botones de la columna (HudButtons)
 local HEIGHT = 58
 local ICON = 70
 local PULSE = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
@@ -40,8 +41,19 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 	button.Position = UDim2.fromOffset(ICON / 2, 6)
 	button.Size = UDim2.new(1, -ICON / 2 - 6, 0, HEIGHT - 4)
 	button.AutoButtonColor = false
-	local skin = Kit.skin(button, "boton", PALETTE.Gift)
+	local skin = Kit.skin(button, "casilla")
+	skin.SliceScale = SLICE
 	Kit.press(button, skin)
+	-- El marco de lava va encima de la casilla y se prende cuando hay un regalo listo.
+	local lava = Instance.new("Frame")
+	lava.Name = "Lava"
+	lava.Size = UDim2.fromScale(1, 1)
+	lava.ZIndex = 1
+	lava.Visible = false
+	local lavaSkin = Kit.skin(lava, "lava")
+	lavaSkin.SliceScale = SLICE
+	Kit.press(button, lavaSkin)
+	lava.Parent = button
 	button.Parent = holder
 	local beat = Instance.new("UIScale")
 	beat.Parent = holder
@@ -58,10 +70,12 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Position = UDim2.fromOffset(left, 3)
 	title.Size = UDim2.new(1, -left - 6, 0.36, 0)
+	title.ZIndex = 2
 	local value = Style.text(button, "Texto", 30, nil, 2.5)
 	value.TextXAlignment = Enum.TextXAlignment.Left
 	value.Position = UDim2.new(0, left, 0.38, 0)
 	value.Size = UDim2.new(1, -left - 6, 0.56, 0)
+	value.ZIndex = 2
 	button.Activated:Connect(onClick)
 
 	local wasReady: boolean? = nil
@@ -82,7 +96,7 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 			return
 		end
 		wasReady = ready
-		Kit.tint(skin, if ready then PALETTE.Buy else PALETTE.Gift)
+		lava.Visible = ready
 		title.Text = if ready then "¡TU REGALO ESTÁ LISTO!" else "REGALO GRATIS"
 		if pulse then
 			pulse:Cancel()

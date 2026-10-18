@@ -2,11 +2,12 @@
 --[[
 	DailyWindow
 
-	Recompensa diaria: 7 casillas de piedra (día 1 a 7) con su regalo y sus
-	monedas; las de la racha ya cobrada en verde con ✓, la de hoy con marco
-	de lava, las que faltan de piedra gris, y
-	el botón grande ¡RECLAMAR!. Debajo, la racha (+10% de monedas y poder
-	por día, shared/RetentionBonus) y lo que trae volver mañana. Se
+	Recompensa diaria como la de los simuladores: un regalo grande asoma sobre
+	el título, los días 1 a 6 en tarjetas de piedra volcánica (Menus/DailyCard)
+	en una grilla de 3 x 2 y el día 7, el gran premio, alto a la derecha. Las
+	cobradas dicen ¡RECLAMADO!, la de hoy tiene marco de lava y el botón
+	¡RECLAMAR!, las que faltan su día. Debajo, la racha (+10% de monedas y poder
+	por día, shared/RetentionBonus) y lo que trae el próximo cobro. Se
 	abre sola al entrar si hoy todavía no se cobró, y el botón Premio del
 	HUD lleva un punto rojo mientras tanto. El servidor decide (ClaimDaily).
 ]]
@@ -21,17 +22,18 @@ local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RetentionBonus = require(ReplicatedStorage.Shared.RetentionBonus)
 local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
+local DailyCard = require(script.Parent.DailyCard)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
 
-local CARDS = Style.PALETTE.Cards
 local ATTR = Protocol.PlayerAttributes
 local DAILY = Config.Retention.daily
 local STREAK = Config.Retention.streakBonus
+local BADGE_SIZE = 112 -- el regalo que asoma sobre la esquina del título
+local BADGE_ROOM = 76 -- cuánto se corre el título para dejarle lugar
 
 local DailyWindow = {}
 
@@ -58,89 +60,101 @@ local function dayReward(player: Player, day: number): string
 	return if spins > 0 then `{coins} y +{spins} giro{if spins == 1 then "" else "s"}` else coins
 end
 
+-- Ícono grande de regalo que asoma sobre la esquina del título (el título se corre a la
+-- derecha para dejarle lugar), como el calendario de los simuladores.
+local function titleBadge(frame: Frame)
+	local heading = frame:FindFirstChild("Encabezado")
+	if heading and heading:IsA("GuiObject") then
+		heading.Position += UDim2.fromOffset(BADGE_ROOM, 0)
+	end
+	local badge = Icons.view(frame, "gift")
+	badge.Name = "IconoTitulo"
+	badge.AnchorPoint = Vector2.new(0.5, 0.5)
+	badge.Position = UDim2.fromOffset(34, 30)
+	badge.Size = UDim2.fromOffset(BADGE_SIZE, BADGE_SIZE)
+	badge.Rotation = -10
+	badge.ZIndex = 5
+end
+
+local function area(parent: Instance, name: string, position: UDim2, size: UDim2): Frame
+	local frame = Instance.new("Frame")
+	frame.Name = name
+	frame.BackgroundTransparency = 1
+	frame.Position = position
+	frame.Size = size
+	frame.Parent = parent
+	return frame
+end
+
 function DailyWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local claimRemote = remotes:WaitForChild(Protocol.Remotes.ClaimDaily) :: RemoteEvent
-	local window = Window.create(screen, "Diario", "Premio diario", Vector2.new(720, 360))
+	local window = Window.create(screen, "Diario", "Premio diario", Vector2.new(880, 520))
 	local hud = HudButtons.top("Premio", "gift", window.toggle)
+	titleBadge(window.frame)
 
-	local row = Instance.new("Frame")
-	row.BackgroundTransparency = 1
-	row.Size = UDim2.new(1, 0, 0.56, 0)
-	row.Parent = window.content
+	-- Días 1 a 6 en una grilla de 3 x 2; el último, alto a la derecha.
+	local grid = area(window.content, "Dias", UDim2.new(), UDim2.fromScale(0.74, 0.84))
 	local layout = Instance.new("UIGridLayout")
-	layout.CellSize = UDim2.new(1 / 7, -8, 1, 0)
-	layout.CellPadding = UDim2.fromOffset(8, 0)
+	layout.CellSize = UDim2.new(1 / 3, -8, 0.5, -6)
+	layout.CellPadding = UDim2.fromOffset(12, 12)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
-	layout.Parent = row
+	layout.Parent = grid
+	local side =
+		area(window.content, "GranPremio", UDim2.new(0.74, 12, 0, 0), UDim2.new(0.26, -12, 0.84, 0))
 
-	local claim = Style.button(window.content, "Reclamar", Style.PALETTE.Buy, "")
-	claim.AnchorPoint = Vector2.new(0.5, 1)
-	claim.Position = UDim2.fromScale(0.5, 1)
-	claim.Size = UDim2.new(0.46, 0, 0.26, 0)
-	local claimText = claim:FindFirstChild("Texto") :: TextLabel
-	local streakLine = Style.text(window.content, "Racha", 26, nil, 2.5)
+	-- Franja de abajo en un hueco de piedra: la racha y lo que trae el próximo cobro.
+	local info = area(window.content, "Racha", UDim2.fromScale(0, 0.865), UDim2.fromScale(1, 0.135))
+	Kit.skin(info, "hondo")
+	local streakLine = Style.text(info, "Racha", 24, nil, 2.5)
 	Kit.gold(streakLine)
-	streakLine.Position = UDim2.fromScale(0, 0.575)
-	streakLine.Size = UDim2.fromScale(1, 0.08)
-	local tomorrowLine = Style.text(window.content, "Manana", 22, nil, 2.5)
-	tomorrowLine.Position = UDim2.fromScale(0, 0.655)
-	tomorrowLine.Size = UDim2.fromScale(1, 0.07)
+	streakLine.Position = UDim2.new(0, 14, 0.08, 0)
+	streakLine.Size = UDim2.new(1, -28, 0.44, 0)
+	local tomorrowLine = Style.text(info, "Manana", 20, nil, 2.5)
+	tomorrowLine.Position = UDim2.new(0, 14, 0.52, 0)
+	tomorrowLine.Size = UDim2.new(1, -28, 0.4, 0)
 
 	local function available(): boolean
 		return player:GetAttribute(ATTR.DataLoaded) == true
 			and number(player, ATTR.DailyDay) ~= today()
 	end
 
-	local function render()
-		for _, child in row:GetChildren() do
-			if child:IsA("Frame") then
-				child:Destroy()
-			end
+	local function claim()
+		if available() then
+			claimRemote:FireServer()
 		end
-		local streak = number(player, ATTR.DailyStreak)
-		local continues = number(player, ATTR.DailyDay) >= today() - 1
-		local done = if available() then (if continues then streak else 0) else streak
-		local nextDay = if available() then done + 1 else 0
-		local highlight = math.min(nextDay, #DAILY)
-		for day = 1, #DAILY do
-			local claimed = day <= math.min(done, #DAILY)
-			-- Casilla de piedra: la de hoy con marco de lava, las cobradas verdes, las
-			-- que faltan de piedra gris.
-			local box = Instance.new("Frame")
-			box.LayoutOrder = day
-			box.Parent = row
-			if day == highlight then
-				Kit.skin(box, "lava")
-			else
-				Kit.skin(box, "boton", if claimed then CARDS.Green else Kit.STONE)
-			end
-			local label = Style.text(box, "Dia", 24, nil, 2.5)
-			label.Text = `Día {day}`
-			Kit.gold(label)
-			label.Position = UDim2.fromScale(0, 0.03)
-			label.Size = UDim2.fromScale(1, 0.2)
-			local gift = Icons.view(box, if day == #DAILY then "chest" else "gift")
-			gift.AnchorPoint = Vector2.new(0.5, 0)
-			gift.Position = UDim2.fromScale(0.5, 0.24)
-			gift.Size = UDim2.fromScale(0.85, 0.45)
-			local coins = Style.text(box, "Monedas", 24, UIConfig.Colors.Coins, 2.5)
-			coins.Text = NumberFormat.short(dayCoins(player, day))
-			coins.Position = UDim2.fromScale(0.04, 0.72)
-			coins.Size = UDim2.fromScale(0.92, 0.22)
-			if claimed then
-				local check = Style.text(box, "Hecho", 60, Style.PALETTE.Buy, 4)
-				check.Text = "✓"
-				check.AnchorPoint = Vector2.new(0.5, 0.5)
-				check.Position = UDim2.fromScale(0.5, 0.46)
-				check.Size = UDim2.fromScale(0.8, 0.5)
-				if gift:IsA("ImageLabel") then
-					gift.ImageTransparency = 0.4
+	end
+
+	local function render()
+		for _, holder in { grid, side } do
+			for _, child in holder:GetChildren() do
+				if child:IsA("Frame") then
+					child:Destroy()
 				end
 			end
 		end
 		local ready = available()
+		local streak = number(player, ATTR.DailyStreak)
+		local continues = number(player, ATTR.DailyDay) >= today() - 1
+		local done = if ready then (if continues then streak else 0) else streak
+		-- Hoy toca el día done + 1 (después del 7, el 7); si ya se cobró, ese es el de mañana.
+		local following = math.min(done + 1, #DAILY)
+		for day = 1, #DAILY do
+			local state: DailyCard.State = if ready and day == following
+				then "today"
+				elseif day <= math.min(done, #DAILY) then "claimed"
+				elseif day == following then "next"
+				else "future"
+			DailyCard.build(if day == #DAILY then side else grid, {
+				day = day,
+				coins = NumberFormat.short(dayCoins(player, day)),
+				spins = Config.Retention.dailySpins[day] or 0,
+				state = state,
+				big = day == #DAILY,
+				onClaim = claim,
+			})
+		end
 		local days = RetentionBonus.streakDays(player)
 		local percent = math.round(RetentionBonus.streakBonus(days) * 100)
 		streakLine.Text =
@@ -150,17 +164,9 @@ function DailyWindow.start(screen: ScreenGui)
 			else ` y +{math.round(STREAK.perDay * 100)}% más`
 		local label = if ready then "Hoy" else "Mañana" -- el próximo cobro es el día days + 1
 		tomorrowLine.Text = `{label}: {dayReward(player, days + 1)}{more}`
-		claimText.Text = if ready then "¡RECLAMAR!" else "Vuelve mañana"
-		local tint = if ready then Style.PALETTE.Buy else Style.PALETTE.Disabled
-		claim.BackgroundColor3 = tint -- la piedra del botón se tiñe sola
 		hud.setAlert(ready)
 	end
 
-	claim.Activated:Connect(function()
-		if available() then
-			claimRemote:FireServer()
-		end
-	end)
 	window.onOpen(render)
 	for _, attribute in { ATTR.DailyDay, ATTR.DailyStreak, ATTR.DataLoaded } do
 		player:GetAttributeChangedSignal(attribute):Connect(render)

@@ -3,10 +3,11 @@
 	SpinWindow
 
 	Ruleta como la de los simuladores (botón Ruleta arriba y la rueda del
-	mundo, SpinStand): la rueda grande (SpinWheelView) con la flecha roja y,
-	abajo, tres botones: azul "Comprar 1" (R$), de lava "¡Girar! (N)" y amarillo
-	"Comprar 5" (R$); debajo, cuándo toca el próximo giro gratis y el próximo
-	giro por jugar. N = giros guardados + el gratis si ya toca. El servidor
+	mundo, SpinStand): la rueda grande (SpinWheelView) sobre un resplandor de
+	lava y, abajo, tres botones: de piedra "Comprar 1" (R$), de lava "¡Girar! (N)"
+	y de piedra "Comprar 5" (R$); debajo, en un hueco tallado, cuándo toca el
+	próximo giro gratis y el próximo giro por jugar (texto dorado).
+	N = giros guardados + el gratis si ya toca. El servidor
 	(Retention/SpinWheel) elige la casilla y avisa con Notice "spin": la rueda
 	gira y frena en ella; el cartel del premio lo pone NoticesMore.
 ]]
@@ -67,14 +68,15 @@ function SpinWindow.start(screen: ScreenGui)
 	local wheel = SpinWheelView.build(holder)
 	wheel.root.AnchorPoint = Vector2.new(0.5, 0)
 	wheel.root.Position = UDim2.fromScale(0.5, 0)
+	SpinParts.glow(wheel.root)
 
 	local row = Instance.new("Frame")
 	row.BackgroundTransparency = 1
 	row.Position = if wide then UDim2.fromScale(0.58, 0.5) else UDim2.fromScale(0, 0.76)
 	row.Size = if wide then UDim2.fromScale(0.42, 0.22) else UDim2.fromScale(1, 0.15)
 	row.Parent = content
-	local buy1 = SpinParts.buyButton(row, "Spin1", PALETTE.Cards.Blue, 0)
-	local buy5 = SpinParts.buyButton(row, "Spin5", PALETTE.Cards.Yellow, 1)
+	local buy1 = SpinParts.buyButton(row, "Spin1", 0)
+	local buy5 = SpinParts.buyButton(row, "Spin5", 1)
 	-- Girar es la acción estrella: botón de lava (gris apagado si no hay giros).
 	local spinButton = Style.lavaButton(if wide then content else row, "Girar", "")
 	spinButton.AnchorPoint = Vector2.new(0.5, 0)
@@ -84,9 +86,10 @@ function SpinWindow.start(screen: ScreenGui)
 		buy1.Size, buy5.Size = UDim2.fromScale(0.48, 1), UDim2.fromScale(0.48, 1)
 	end
 	local spinText = spinButton:FindFirstChild("Texto") :: TextLabel
-	local nextText = Style.text(content, "Proximo", 22, nil, 2)
-	nextText.Position = if wide then UDim2.fromScale(0.58, 0.76) else UDim2.fromScale(0, 0.92)
-	nextText.Size = if wide then UDim2.fromScale(0.42, 0.2) else UDim2.fromScale(1, 0.075)
+	local nextText = SpinParts.slot(content, "Proximo")
+	local slot = nextText.Parent :: Frame
+	slot.Position = if wide then UDim2.fromScale(0.58, 0.74) else UDim2.fromScale(0, 0.905)
+	slot.Size = if wide then UDim2.fromScale(0.42, 0.22) else UDim2.fromScale(1, 0.095)
 	nextText.TextWrapped = wide
 	local spinning = false
 

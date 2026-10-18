@@ -2084,3 +2084,35 @@ Checklist: build, selene (21 avisos) y stylua.
   3), no el cuenco de peces.
 
 **Probado en Studio (Play):** el cartel, la ruleta del HUD y el pack de inicio, sin errores.
+
+## 2026-10-17 (19) — Diario, regalos por jugar, ruleta y amigos
+
+**Qué se hizo (pedido del usuario, con dos referencias de otro juego para el diario y los
+regalos; solo se tomó el formato):**
+- **Premio diario** (`DailyWindow` y el nuevo `DailyCard`): grilla de casillas volcánicas
+  grandes, con el premio arriba, el ícono sobre rayos y el estado abajo:
+  - hoy: lava con ¡RECLAMAR!;
+  - cobrados: ¡RECLAMADO!;
+  - mañana: "Mañana";
+  - el resto: "Día N".
+
+  El Día 7 es una tarjeta alta a la derecha, "¡GRAN PREMIO!", con el cofre sobre el pedestal y
+  cristales. Arriba asoma un regalo y abajo hay un hueco con la racha. Se reclama desde la
+  tarjeta de hoy.
+- **Regalos por jugar** (`PlaytimeWindow` y el nuevo `PlaytimeCard`): grilla de casillas con el
+  tiempo en una placa roja de piedra. La lista está en lava con ¡RECLAMAR!. El último regalo
+  (2 h) va como franja ancha "¡PREMIO FINAL!". `PlaytimeEntry` es una casilla que se enciende en
+  lava cuando hay regalo.
+- **Ruleta** (`tools/ui/generar_ruleta.py` → `assets/ui/ruleta_v2/`):
+  - rueda volcánica con la misma geometría que la anterior, medida por los ángulos de los
+    separadores;
+  - puntero de gema de lava;
+  - ventana con resplandor de lava, Comprar de piedra gris, ¡Girar! de lava y el próximo giro
+    en un hueco;
+  - el soporte de la rueda del mundo pasa a basalto y lava.
+- **Amigos** (`FriendBoostLabel`): placa de piedra en la esquina de abajo a la izquierda. En
+  táctil va 210 px más arriba para no tapar el joystick.
+
+**Probado en Studio (Play):** diario, regalos, ruleta (ventana y mundo) y la placa de amigos,
+sin errores.
+Checklist: build, selene (19 avisos) y stylua.

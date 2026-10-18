@@ -82,6 +82,20 @@ Las referencias no se suben al repo.
 
 La gema azul (`PiedraGema`) sigue siendo la del kit anterior: va en el panel del monstruo.
 
+## Ruleta v2 (piedra volcánica)
+
+Pedido del usuario (2026-10-17): "la ruleta no está con la temática". La rueda y el puntero
+los dibuja `tools/ui/generar_ruleta.py` (PIL y numpy) con la geometría exacta de la rueda
+anterior (1024 px, centro 512, 8 casillas de 45° con la 1 arriba, casillas hasta r = 446 y aro
+hasta r = 508; puntero de 256 px con la punta en (128, 240)), porque `SpinWheelView` pone los
+premios encima con esas medidas. Archivos en `assets/ui/ruleta_v2/` (`_muestra.png` lleva los
+íconos de los premios donde van, solo para revisar). Subidos por el MCP de Studio.
+
+| Nombre | Archivo | Uso | `Assets.UI` |
+|---|---|---|---|
+| RuedaRuleta | rueda.png | Rueda de la ventana Ruleta y de la ruleta del mundo | 86382670718617 |
+| PunteroRuleta | puntero.png | Gema de lava que marca el premio | 71593213487154 |
+
 ## Modelos y texturas de mesh
 
 No salen de ForgeGUI: el modelo viene de Meshy (generado desde el concept art) y las

@@ -55,10 +55,12 @@ local Assets: Assets = {
 		-- Viñeta blanca (bordes opacos, centro transparente) que se tiñe con ImageColor3:
 		-- el brillo azul de los bordes al entrenar (assets/ui/Vineta.png).
 		Vineta = "rbxassetid://94536198570437",
-		-- Ruleta: la rueda de 8 casillas (gris claro/oscuro, aro azul noche con remaches;
-		-- la casilla 1 arriba) y la flecha roja que marca el premio (assets/ui/).
-		RuedaRuleta = "rbxassetid://73843801719045",
-		PunteroRuleta = "rbxassetid://104047378525377",
+		-- Ruleta con la temática de la interfaz: rueda de 8 casillas (piedra volcánica y
+		-- roja de lava, separadores dorados, aro de piedra con grietas de lava y remaches
+		-- dorados; la casilla 1 arriba) y la gema de lava que marca el premio. Las dibuja
+		-- tools/ui/generar_ruleta.py con la geometría de la rueda anterior (assets/ui/ruleta_v2/).
+		RuedaRuleta = "rbxassetid://86382670718617",
+		PunteroRuleta = "rbxassetid://71593213487154",
 		-- Ícono de Roblox Premium que trae Roblox instalado.
 		PremiumIcon = "rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png",
 		-- Íconos pintados a mano, hechos con la IA de Canva sobre un ícono maestro (la moneda)

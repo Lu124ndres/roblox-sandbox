@@ -3,9 +3,10 @@
 	SpinWheelView
 
 	La rueda de la ruleta, como la de los simuladores: la imagen de la rueda
-	(Assets.UI.RuedaRuleta, 8 casillas con la 1 arriba) y, encima de cada
-	casilla, su ícono, su premio cerca del borde y su % cerca del centro; la
-	flecha roja arriba marca la casilla que sale. Todo va en `rotor`, que gira.
+	(Assets.UI.RuedaRuleta: piedra volcánica y lava, 8 casillas con la 1 arriba)
+	y, encima de cada casilla, su ícono, su premio cerca del borde y su % dorado
+	cerca del centro; la gema de lava de arriba marca la casilla que sale. Todo
+	va en `rotor`, que gira.
 	La usan la ventana (SpinWindow) y la rueda del mundo (SpinStand).
 ]]
 
@@ -15,6 +16,7 @@ local TweenService = game:GetService("TweenService")
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local SPIN = require(ReplicatedStorage.Shared.Config.Spin)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local SpinOffers = require(script.Parent.SpinOffers)
 
@@ -87,6 +89,7 @@ function SpinWheelView.build(parent: Instance, textScale: number?): Wheel
 		local value = SpinOffers.percent(index)
 		percent.Text = if value < 1 then string.format("%.1f%%", value) else `{math.round(value)}%`
 		percent.ZIndex = 3
+		Kit.gold(percent)
 	end
 
 	local pointer = Instance.new("ImageLabel")

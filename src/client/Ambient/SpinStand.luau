@@ -49,22 +49,23 @@ function SpinStand.start(open: () -> ())
 	local base = CFrame.lookAt(ground, Vector3.new(0, ground.Y, 0))
 	local model = Instance.new("Model")
 	model.Name = "RuletaMundo"
-	local stone = Color3.fromRGB(120, 128, 146)
+	-- Piedra volcánica con grietas de lava, como la rueda (assets/ui/ruleta_v2/).
+	local stone = Color3.fromRGB(66, 60, 62)
 	part(
 		model,
 		"Base",
 		Vector3.new(SIZE + 4, 1.2, 7),
 		base * CFrame.new(0, 0.6, 0),
 		stone,
-		Enum.Material.Slate
+		Enum.Material.Basalt
 	)
 	part(
 		model,
 		"Escalon",
 		Vector3.new(SIZE, 0.8, 5),
 		base * CFrame.new(0, 1.6, -1.4),
-		stone:Lerp(Color3.new(1, 1, 1), 0.2),
-		Enum.Material.Slate
+		Color3.fromRGB(88, 62, 54),
+		Enum.Material.CrackedLava
 	)
 	for side = -1, 1, 2 do
 		part(
@@ -72,8 +73,8 @@ function SpinStand.start(open: () -> ())
 			`Poste{side}`,
 			Vector3.new(1.4, SIZE * 0.75, 1.4),
 			base * CFrame.new(side * (SIZE / 2 - 1.5), 1.2 + SIZE * 0.375, 1.2),
-			Color3.fromRGB(52, 60, 82),
-			Enum.Material.Metal
+			Color3.fromRGB(46, 40, 42),
+			Enum.Material.Basalt
 		)
 	end
 	local center = base * CFrame.new(0, 2 + SIZE / 2, 0.4)
@@ -82,7 +83,7 @@ function SpinStand.start(open: () -> ())
 		"Rueda",
 		Vector3.new(0.8, SIZE, SIZE),
 		center * CFrame.Angles(0, math.rad(90), 0),
-		Color3.fromRGB(38, 44, 62),
+		Color3.fromRGB(34, 20, 14), -- el contorno oscuro de la rueda
 		Enum.Material.SmoothPlastic
 	)
 	disc.Shape = Enum.PartType.Cylinder
