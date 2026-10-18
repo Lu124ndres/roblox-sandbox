@@ -2341,4 +2341,6 @@ respaldo. La lava importada mide 0.24 más de alto (unas brasas bajan de la base
 lleva su propia caja y `arco_volcan.py` ya la iguala para la próxima exportación.
 **Duplicados de Rojo, causa:** hay dos plugins de Rojo en Studio (`RojoManagedPlugin.rbxm` en
 Plugins y el de la Creator Store, 13916111004); conectados los dos, cada cambio se aplica dos
-veces. Hay que dejar uno solo y reconectar.
+veces. Hay que dejar uno solo y reconectar. **Resuelto:** quedó un solo plugin de Rojo activo;
+en Edit la puerta tiene sus 25 piezas, la zona 1008 y el puente 315 (igual que el archivo) y
+no hay scripts duplicados.
