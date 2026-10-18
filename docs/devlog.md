@@ -2291,6 +2291,8 @@ el radio más grande de la orilla).
 **Qué se rompió:** en Studio hay ~50 módulos y las piezas nuevas del mapa **duplicados**: con
 un solo `rojo serve`, el plugin aplica cada cambio dos veces (parece conectado dos veces).
 Las copias son idénticas y el juego funciona, pero hay que desconectar y reconectar Rojo en
-Studio para limpiarlo. No se borró nada a mano.
+Studio para limpiarlo. No se borró nada a mano. **Resuelto el mismo día:** el usuario
+reconectó Rojo; quedaron 0 scripts duplicados y la zona (2573 partes) y el puente (315)
+iguales al archivo.
 
-**Qué sigue:** reconectar Rojo y comprobar que no queden duplicados.
+**Qué sigue:** nada pendiente de esta tarea.
