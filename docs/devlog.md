@@ -2771,3 +2771,21 @@ paso 2 sobre el puente (13 flechas que suben la rampa hasta la puerta, 88 m); «
 
 **Qué se rompió:** nada visto. Con dos etiquetas de ancho automático en una lista horizontal
 el avance salía antes del título: quedó en un solo texto enriquecido.
+
+**Después (mismo día): que crezca bien y natural.** El crecimiento pasó a `Giant/GiantGrowth`:
+un resorte amortiguado (arranca suave, toma velocidad y frena suave, sin pasarse; llega en ~2 s
+contra más de 5 del exponencial de antes) y un inflarse de 2 % al tragar (a lo sumo cada 0.5 s:
+el chorro de peces no lo hace temblar). Medido cuadro a cuadro en Play con una canasta (+8 % en
+5 s) y bocados del servidor: la Orca pasa de 16.5 a 21.88 studs (lo esperado) subiendo seguido,
+con una ondita en cada bocado.
+
+**Después (mismo día), celular:** el usuario mandó una foto de su teléfono con todo encimado
+arriba: la barra de la orca a media pantalla (los 7 botones redondos ocupaban la barra de
+Roblox entera, así que no cabía y bajaba), el nombre del jugador y los carteles de las
+vitrinas encima, y el aviso del tutorial debajo. Arreglos: en táctil los botones de arriba
+van en **dos filas de 4** (`Layout`, una cuadrícula en vez de la lista), con lo que el panel
+de hambre vuelve a caber en la barra de Roblox y sube solo (`HungerPanel` ahora mide
+cualquier `UIGridStyleLayout`); el aviso del tutorial en celular es la mitad (0.5) y va pegado
+debajo del panel. Probado en el emulador iPhone XR: botones en filas de 4 y 3, panel de
+hambre terminando a 23 px del borde, aviso al 15 % del alto
+(`docs/capturas/2026-10-18-tutorial-movil.jpg`).

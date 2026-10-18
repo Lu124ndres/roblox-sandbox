@@ -9,7 +9,8 @@
 		            Robux, y los atajos de Poder y Monedas
 		barra       botones redondos chicos en la esquina derecha de la barra de
 		            Roblox (premio, colección, códigos, grupo, ajustes): en móvil
-		            no tapan el juego ni los botones de Roblox
+		            van en dos filas de 4, así dejan libre el centro de la barra
+		            para el panel de hambre y no tapan los botones de Roblox
 	Las columnas se achican en pantallas bajas (UIScale según el alto), así en
 	un teléfono acostado no llegan a los botones de Pescar y Saltar.
 	La columna derecha mide lo mismo que sus filas (dos botones de 88 con 10
@@ -32,6 +33,9 @@ local STAT_WIDTH = 250 -- ancho de las filas de estadísticas en PC
 local STAT_WIDTH_TOUCH = 210 -- más angostas en táctil: dejan sitio a la barra de hambre
 local TOP_BUTTON_MIN, TOP_BUTTON_MAX = 26, 36 -- botones redondos de la barra de arriba
 local TOP_BUTTON_TOUCH = 30 -- más chicos en táctil
+local TOP_COLUMNS_TOUCH = 4 -- en táctil, los botones de arriba van en dos filas de 4:
+-- así dejan libre el centro de la barra de Roblox para el panel de hambre
+local TOP_GAP = 6
 
 local Layout = {}
 
@@ -125,6 +129,13 @@ local function placeTopBar()
 	end
 	local largest = if Device.touch() then TOP_BUTTON_TOUCH else TOP_BUTTON_MAX
 	local size = math.clamp(height - 18, TOP_BUTTON_MIN, largest)
+	if Device.touch() then
+		-- Dos filas de 4 que empiezan en la barra de Roblox y bajan por debajo de ella.
+		local width = TOP_COLUMNS_TOUCH * size + (TOP_COLUMNS_TOUCH - 1) * TOP_GAP
+		topBar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
+		topBar.Size = UDim2.fromOffset(width, size * 2 + TOP_GAP)
+		return
+	end
 	topBar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
 	topBar.Size = UDim2.fromOffset(400, size)
 end
@@ -143,12 +154,24 @@ function Layout.mount(screen: ScreenGui, playerGui: Instance)
 	topBar.Name = "Botones"
 	topBar.BackgroundTransparency = 1
 	topBar.Parent = barScreen
-	local list = Instance.new("UIListLayout")
-	list.FillDirection = Enum.FillDirection.Horizontal
-	list.HorizontalAlignment = Enum.HorizontalAlignment.Right
-	list.SortOrder = Enum.SortOrder.LayoutOrder
-	list.Padding = UDim.new(0, 6)
-	list.Parent = topBar
+	if Device.touch() then
+		-- Cuadrícula de 4 columnas: los botones llenan de derecha a izquierda, fila por fila.
+		local grid = Instance.new("UIGridLayout")
+		grid.FillDirection = Enum.FillDirection.Horizontal
+		grid.HorizontalAlignment = Enum.HorizontalAlignment.Right
+		grid.SortOrder = Enum.SortOrder.LayoutOrder
+		grid.FillDirectionMaxCells = TOP_COLUMNS_TOUCH
+		grid.CellPadding = UDim2.fromOffset(TOP_GAP, TOP_GAP)
+		grid.CellSize = UDim2.fromOffset(TOP_BUTTON_TOUCH, TOP_BUTTON_TOUCH)
+		grid.Parent = topBar
+	else
+		local list = Instance.new("UIListLayout")
+		list.FillDirection = Enum.FillDirection.Horizontal
+		list.HorizontalAlignment = Enum.HorizontalAlignment.Right
+		list.SortOrder = Enum.SortOrder.LayoutOrder
+		list.Padding = UDim.new(0, TOP_GAP)
+		list.Parent = topBar
+	end
 	placeTopBar()
 	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeTopBar)
 

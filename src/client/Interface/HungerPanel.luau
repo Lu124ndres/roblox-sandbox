@@ -69,7 +69,8 @@ end
 local function place(panel: Frame)
 	local inset = GuiService.TopbarInset
 	local bar = Layout.topBar()
-	local list = bar:FindFirstChildOfClass("UIListLayout")
+	-- En PC los botones van en una lista; en táctil, en una cuadrícula de dos filas.
+	local list = bar:FindFirstChildWhichIsA("UIGridStyleLayout")
 	local barLeft = bar.AbsolutePosition.X
 		+ bar.AbsoluteSize.X
 		- (if list then list.AbsoluteContentSize.X else 0)
@@ -95,7 +96,7 @@ function HungerPanel.build(screen: ScreenGui): Parts
 	end
 	Layout.onScaleChanged(relayout) -- solo el ancho: el alto lo decide FillChips
 	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(relayout)
-	local barList = Layout.topBar():FindFirstChildOfClass("UIListLayout")
+	local barList = Layout.topBar():FindFirstChildWhichIsA("UIGridStyleLayout")
 	if barList then
 		barList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(relayout)
 	end

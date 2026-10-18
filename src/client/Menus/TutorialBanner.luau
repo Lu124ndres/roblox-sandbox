@@ -21,9 +21,9 @@ local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local WIDTH, HEIGHT = 720, 118
-local SCALE_TOUCH = 0.62
+local SCALE_TOUCH = 0.5
 local TOP = 92 -- píxeles desde arriba: debajo del panel de hambre
-local TOP_TOUCH = 118 -- en celular el panel de hambre baja más y el aviso va debajo del nombre
+local TOP_TOUCH = 74 -- en celular, pegado debajo del panel de hambre (que va en la barra de Roblox)
 local WHITE = Color3.new(1, 1, 1)
 local DONE = Color3.fromRGB(120, 240, 130)
 local GOLD_HEX = "FFD24A"
