@@ -37,10 +37,13 @@ local ShopParts = {}
 -- Viste de piedra sin perder el borde de resaltar (Interface/StoneSkin).
 ShopParts.stone = StoneSkin.dress
 
--- Pinta `frame` de piedra de su color con rayos claros desde el centro.
+-- Pinta `frame` de casilla volcánica con un toque de su color (como las tarjetas de
+-- MEJORAS de la referencia: el color fuerte sobre piedra gris desentonaba) y rayos claros
+-- desde el centro.
+local HINT = 0.5 -- cuánto se aclara el color antes de teñir la piedra oscura
 function ShopParts.sunburst(frame: GuiObject, color: Color3, size: number?)
 	frame.BackgroundColor3 = color
-	ShopParts.stone(frame, "boton", color)
+	ShopParts.stone(frame, "casilla", color:Lerp(Color3.new(1, 1, 1), HINT))
 	if not Icons.has("sunburst") then
 		return
 	end

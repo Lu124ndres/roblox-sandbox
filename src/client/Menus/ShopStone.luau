@@ -33,7 +33,8 @@ function ShopStone.chip(parent: Instance, color: Color3): Frame
 	local chip = Instance.new("Frame")
 	chip.Name = "Chip"
 	ShopParts.sunburst(chip, color)
-	local skin = Kit.skin(chip, "boton", color)
+	-- Casilla volcánica con un toque del color (como las tarjetas de MEJORAS).
+	local skin = Kit.skin(chip, "casilla", color:Lerp(Color3.new(1, 1, 1), 0.5))
 	-- Los rayos van dentro de la piedra: así quedan encima de ella y debajo
 	-- de todo lo demás de la tarjeta.
 	local rays = chip:FindFirstChild("Rayos")

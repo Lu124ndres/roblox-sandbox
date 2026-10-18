@@ -2116,3 +2116,20 @@ regalos; solo se tomó el formato):**
 **Probado en Studio (Play):** diario, regalos, ruleta (ventana y mundo) y la placa de amigos,
 sin errores.
 Checklist: build, selene (19 avisos) y stylua.
+
+## 2026-10-17 (20) — Revisión: todas las tarjetas en casilla volcánica
+
+**Qué se hizo (el usuario: "no todos tienen la misma temática nueva"):** varias pantallas seguían
+con tarjetas de piedra gris teñida de colores fuertes (azul, naranja, violeta). La causa era
+común: `ShopParts.sunburst`, que usan `CardParts.card` y `ShopStone.chip`, vestía la pieza
+"boton" con el color pleno. Ahora es la casilla volcánica con solo un toque del color (`HINT`).
+- **Arreglado de una vez:** Misiones, Renacer, Grupo, la ruleta de monstruos y los chips de la
+  Tienda.
+- **Colección:** las tarjetas pasan a casilla con el color de la rareza suave. Las pestañas son
+  placas oscuras con el nombre en el color de su rareza y canto dorado en la elegida, como
+  MEJORAS.
+
+**Probado en Studio (Play):** Misiones, Renacer, Tienda y Colección, sin errores.
+
+**Queda para decidir:** el mundo sigue con su estilo de mármol y oro, igual que antes: el arco
+con los tableros, carteles y vitrinas.

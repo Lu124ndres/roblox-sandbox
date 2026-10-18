@@ -3,19 +3,23 @@
 	FishDexTabs
 
 	Pestañas de la colección de peces por categoría (rareza): Todos, Común,
-	Poco común, Raro, Épico, Legendario y Mítico, cada una con su color y
-	cuántos llevas de esa categoría ("Raro 2/5"). La elegida se ve encendida
-	y un poco más grande; las demás, apagadas. Si no caben, se deslizan.
+	Poco común, Raro, Épico, Legendario y Mítico, con cuántos llevas de esa
+	categoría ("Raro 2/5"). Placas de piedra volcánica como las de MEJORAS, con
+	el nombre del color de su rareza; la elegida lleva canto dorado y es un poco
+	más grande, las demás quedan en piedra más oscura. Si no caben, se deslizan.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local TAB_HEIGHT = 40 -- la piedra tallada pide algo más de alto que la pestaña plana
 local ALL = "Todos"
+local DIM = Color3.fromRGB(150, 150, 150) -- la piedra de las no elegidas
+local EDGE = Color3.fromRGB(255, 200, 80) -- canto dorado de la elegida
 
 export type Tabs = {
 	height: number,
@@ -30,6 +34,8 @@ type Entry = {
 	button: TextButton,
 	label: TextLabel,
 	scale: UIScale,
+	skin: ImageLabel,
+	edge: UIStroke,
 }
 
 local FishDexTabs = {}
@@ -65,11 +71,8 @@ function FishDexTabs.mount(parent: Instance, top: number, onSelect: (id: string)
 	local function paint()
 		for _, entry in entries do
 			local on = entry.id == selected
-			-- La piedra se tiñe del BackgroundColor3 (Style.button): apagada, más oscura.
-			local h, s, v = entry.color:ToHSV()
-			entry.button.BackgroundColor3 = if on
-				then entry.color
-				else Color3.fromHSV(h, s * 0.7, v * 0.5)
+			Kit.tint(entry.skin, if on then Color3.new(1, 1, 1) else DIM)
+			entry.edge.Enabled = on
 			entry.label.TextTransparency = if on then 0 else 0.25
 			entry.scale.Scale = if on then 1 else 0.92
 		end
@@ -81,6 +84,18 @@ function FishDexTabs.mount(parent: Instance, top: number, onSelect: (id: string)
 		local width = if id == ALL then 104 else math.max(132, 60 + 10 * (utf8.len(name) or 0))
 		button.Size = UDim2.fromOffset(width, TAB_HEIGHT)
 		local label = button:FindFirstChild("Texto") :: TextLabel
+		label.TextColor3 = color -- el color de la rareza, en el nombre
+		local skin = Kit.skin(button, "panel")
+		skin.SliceScale = 0.3
+		Kit.press(button, skin)
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 10)
+		corner.Parent = button
+		local edge = Instance.new("UIStroke")
+		edge.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		edge.Color = EDGE
+		edge.Thickness = 3
+		edge.Parent = button
 		local scale = Instance.new("UIScale")
 		scale.Parent = button
 		button.Activated:Connect(function()
@@ -88,10 +103,16 @@ function FishDexTabs.mount(parent: Instance, top: number, onSelect: (id: string)
 			paint()
 			onSelect(id)
 		end)
-		table.insert(
-			entries,
-			{ id = id, name = name, color = color, button = button, label = label, scale = scale }
-		)
+		table.insert(entries, {
+			id = id,
+			name = name,
+			color = color,
+			button = button,
+			label = label,
+			scale = scale,
+			skin = skin,
+			edge = edge,
+		})
 	end
 	add(ALL, ALL, UIConfig.Colors.Fishing, 0)
 	for index, rarity in Config.Economy.rarities do

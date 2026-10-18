@@ -56,13 +56,15 @@ function FishDexCard.build(parent: Instance, fishId: string, amount: number, ord
 	local fish = FishCatalog.get(fishId)
 	local rarity = FishCatalog.rarity(fishId)
 	local known = amount > 0
-	-- Descubierto: piedra teñida de su rareza. Sin descubrir: un hueco vacío en la piedra.
+	-- Descubierto: casilla volcánica con un toque del color de su rareza (como las
+	-- tarjetas de MEJORAS). Sin descubrir: un hueco vacío en la piedra.
 	local box = Instance.new("Frame")
 	box.Name = `Pez{order}`
 	box.LayoutOrder = order
 	box.Parent = parent
 	if known then
-		Kit.skin(box, "boton", CARD_COLORS[rarity.id] or CARDS.Blue)
+		local color = CARD_COLORS[rarity.id] or CARDS.Blue
+		Kit.skin(box, "casilla", color:Lerp(Color3.new(1, 1, 1), 0.45))
 	else
 		Kit.skin(box, "hondo")
 	end
