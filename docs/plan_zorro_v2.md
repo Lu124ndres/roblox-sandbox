@@ -4,7 +4,8 @@ Rehacer el Zorro de agua en bloques, en cuatro etapas, siguiendo `docs/guia_crea
 Es el primer monstruo hecho con **olas de agentes paralelos** (guía, sección 12).
 
 **Estado (2026-10-18):** las cuatro etapas aprobadas por el usuario, con poses medidas, rig, FBX
-y textura. Sigue la importación a Studio. Las colas, el hábitat y los sonidos ya están en el juego y se probaron con
+y textura. Importadas en Studio (`ServerStorage.ZorroDeAguaE<n>_v2`, IDs en `Assets`,
+`modelSuffix = "_v2"`) y probadas en Play. Sigue la ola 3 (movimiento). Las colas, el hábitat y los sonidos ya están en el juego y se probaron con
 el zorro E4 actual.
 
 ## Identidad
@@ -123,11 +124,18 @@ zorro`).
 - Sonidos (`Assets/Sounds`, `Audio/ZorroRecetas`) y VFX (`Effects/ZorroAgua` y sus partes),
   enganchados por `Giant/ZorroEventos`.
 
+## Studio (2026-10-18)
+
+Los cuatro FBX llegaron con 36, 46, 61 y 76 huesos (con `Raiz` y `Boca`), del tamaño del FBX, la
+boca hacia −Z y sin anclar. En Play, `ModelosGigantes.ZorroDeAguaE<n>` publica el v2 con
+`BaseHeight` 16.5, 44, 82.5 y 165; las cuatro etapas se ven en el cráter con sus colas, los
+cubitos de agua y el contorno de enojo, comen sin errores y la consola queda limpia. La E4 ocupa
+~287 × 287 studs y entra en el lago (380 de diámetro). El E4 anterior (`ZorroDeAguaE4_code`)
+queda en ServerStorage sin uso.
+
 ## Pasos que faltan
 
-1. **Studio:** el usuario importa los 4 FBX con "Mantener huesos de influencia cero"; se pasan a
-   `ServerStorage.ZorroDeAguaE<n>_v2`, IDs en `Assets` y `modelSuffix = "_v2"`.
-2. **Ola 3:** locomoción e IK, mirada y cara (parpadeo, gestos), conductas y rutina (el catálogo de
+1. **Ola 3:** locomoción e IK, mirada y cara (parpadeo, gestos), conductas y rutina (el catálogo de
    la biblia, mirar al público ≥ 70 %, usar `Zorro/Guarida`), comer y evolución.
-3. **Arreglos vistos en Play:** témpanos grandes menos regulares; luz duplicada de `ZorroFx`
+2. **Arreglos vistos en Play:** témpanos grandes menos regulares; luz duplicada de `ZorroFx`
    (`LuzGema`) con la de `ZorroAgua` (`BrilloOjos`); campos `ice` y `at` en `Zorro.Event`.

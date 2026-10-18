@@ -119,6 +119,12 @@ local Assets: Assets = {
 		DragonMarinoE2_v2 = "rbxassetid://120863289975810", -- joven (6,814)
 		DragonMarinoE3_v2 = "rbxassetid://135154957159749", -- adulto (7,282)
 		DragonMarinoE4_v2 = "rbxassetid://129375458738404", -- anciano (10,908)
+		-- Zorro de agua v2 de bloques (rig_zorro_v2.py; docs/plan_zorro_v2.md). Models en
+		-- ServerStorage.ZorroDeAguaE<n>_v2; se usan en lugar de ZorroDeAguaE<n>.
+		ZorroDeAguaE1_v2 = "rbxassetid://136623198338034", -- cría, 1 cola (3,940 triángulos, 36 huesos)
+		ZorroDeAguaE2_v2 = "rbxassetid://121650889617604", -- joven, 3 colas (4,604, 46)
+		ZorroDeAguaE3_v2 = "rbxassetid://84846756727124", -- adulto, 6 colas (7,604, 61)
+		ZorroDeAguaE4_v2 = "rbxassetid://101856396424858", -- forma final, 9 colas (10,332, 76)
 		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.

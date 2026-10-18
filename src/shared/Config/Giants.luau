@@ -95,6 +95,9 @@ local Giants: Types.GiantsConfig = {
 			food = 1500,
 			targetMinutes = 25,
 			modelBase = "ZorroDeAgua",
+			-- Modelo de bloques v2 (docs/plan_zorro_v2.md): ZorroDeAguaE1_v2..E4_v2. Sin esta línea
+			-- el juego busca ZorroDeAguaE<n> (no hay: el E4 de antes es ZorroDeAguaE4_code).
+			modelSuffix = "_v2",
 			ice = true, -- agua con hielo: témpanos, escarcha y cristales (Ambient/IceLair)
 			rouletteWeight = 5,
 			released = false,
