@@ -1,0 +1,1444 @@
+{
+  "umbral_celdas": {
+    "atraviesa": 0.3,
+    "junta": 1.0,
+    "hueco": 0.2
+  },
+  "rig": {
+    "derecha": [
+      -1,
+      0,
+      0
+    ],
+    "arriba": [
+      0,
+      0,
+      1
+    ],
+    "adelante": [
+      0,
+      -1,
+      0
+    ],
+    "alto_bu": 15.5
+  },
+  "reposo": {
+    "cruces": {
+      "Cabeza/Mandibula": 0.0,
+      "Cabeza/OrejaDer": 0.0,
+      "Cabeza/OrejaIzq": 0.0,
+      "Cabeza/ParpadoDer": 0.5,
+      "Cabeza/ParpadoIzq": 0.5,
+      "Cadera/Cola1_1": 0.62,
+      "Cadera/Cola2_1": 0.91,
+      "Cadera/Cola3_1": 0.0,
+      "Cadera/Cola4_1": 0.0,
+      "Cadera/Cola5_1": 0.91,
+      "Cadera/Cola6_1": 0.62,
+      "Cadera/MusloDer": 2.06,
+      "Cadera/MusloIzq": 2.06,
+      "Cola1_1/Cola1_2": 0.98,
+      "Cola1_2/Cola1_3": 1.0,
+      "Cola1_3/Cola1_4": 0.94,
+      "Cola1_4/Cola1_5": 0.91,
+      "Cola2_1/Cola2_2": 1.0,
+      "Cola2_2/Cola2_3": 1.0,
+      "Cola2_3/Cola2_4": 0.98,
+      "Cola2_4/Cola2_5": 1.0,
+      "Cola3_1/Cola3_2": 0.94,
+      "Cola3_2/Cola3_3": 0.94,
+      "Cola3_3/Cola3_4": 1.0,
+      "Cola3_4/Cola3_5": 1.0,
+      "Cola4_1/Cola4_2": 0.94,
+      "Cola4_2/Cola4_3": 0.94,
+      "Cola4_3/Cola4_4": 1.0,
+      "Cola4_4/Cola4_5": 1.0,
+      "Cola5_1/Cola5_2": 1.0,
+      "Cola5_2/Cola5_3": 1.0,
+      "Cola5_3/Cola5_4": 0.98,
+      "Cola5_4/Cola5_5": 1.0,
+      "Cola6_1/Cola6_2": 0.98,
+      "Cola6_2/Cola6_3": 1.0,
+      "Cola6_3/Cola6_4": 0.94,
+      "Cola6_4/Cola6_5": 0.91,
+      "Cuello1/Cuello2": 0.0,
+      "Cuello2/Cabeza": 1.0,
+      "MusloDer/PiernaDer": 0.0,
+      "MusloIzq/PiernaIzq": 0.0,
+      "Pecho/BrazoDer": 1.94,
+      "Pecho/BrazoIzq": 1.94,
+      "Pecho/Cuello1": 1.0,
+      "Pecho/HombroDer": 0.0,
+      "Pecho/HombroIzq": 0.0,
+      "PiernaDer/TobilloDer": 0.0,
+      "PiernaIzq/TobilloIzq": 0.0
+    },
+    "huecos": {
+      "BrazoIzq": 1.0,
+      "BrazoDer": 1.0
+    }
+  },
+  "colas_medidas": [
+    {
+      "cola": "Cola1",
+      "angulo_rad": -1.352,
+      "out": -1.0
+    },
+    {
+      "cola": "Cola2",
+      "angulo_rad": -0.695,
+      "out": -0.514
+    },
+    {
+      "cola": "Cola3",
+      "angulo_rad": -0.359,
+      "out": -0.265
+    },
+    {
+      "cola": "Cola4",
+      "angulo_rad": 0.359,
+      "out": 0.265
+    },
+    {
+      "cola": "Cola5",
+      "angulo_rad": 0.695,
+      "out": 0.514
+    },
+    {
+      "cola": "Cola6",
+      "angulo_rad": 1.352,
+      "out": 1.0
+    }
+  ],
+  "juego": {
+    "escenas_colas": {
+      "colas_abanico_max": {
+        "maxJoint_rad": 0.293,
+        "minGap_rad": 0.23,
+        "minTip_altos_cadera": 0.606,
+        "minRoom": 1.0
+      },
+      "colas_plegadas_correr": {
+        "maxJoint_rad": 0.248,
+        "minGap_rad": 0.229,
+        "minTip_altos_cadera": 0.565,
+        "minRoom": 1.0
+      },
+      "colas_dormir": {
+        "maxJoint_rad": 0.057,
+        "minGap_rad": 0.33,
+        "minTip_altos_cadera": 0.778,
+        "minRoom": 0.0
+      },
+      "colas_sentado": {
+        "maxJoint_rad": 0.243,
+        "minGap_rad": 0.245,
+        "minTip_altos_cadera": 0.51,
+        "minRoom": 0.125
+      },
+      "colas_meneo_max": {
+        "maxJoint_rad": 0.299,
+        "minGap_rad": 0.228,
+        "minTip_altos_cadera": 0.525,
+        "minRoom": 1.0
+      },
+      "colas_latigazo": {
+        "maxJoint_rad": 0.241,
+        "minGap_rad": 0.235,
+        "minTip_altos_cadera": 0.574,
+        "minRoom": 1.0
+      },
+      "colas_salto": {
+        "maxJoint_rad": 0.191,
+        "minGap_rad": 0.426,
+        "minTip_altos_cadera": 0.463,
+        "minRoom": 1.0
+      },
+      "colas_sacudida": {
+        "maxJoint_rad": 0.456,
+        "minGap_rad": 0.224,
+        "minTip_altos_cadera": 0.397,
+        "minRoom": 1.0
+      },
+      "colas_aullido": {
+        "maxJoint_rad": 0.231,
+        "minGap_rad": 0.306,
+        "minTip_altos_cadera": 0.824,
+        "minRoom": 1.0
+      },
+      "colas_reverencia": {
+        "maxJoint_rad": 0.397,
+        "minGap_rad": 0.154,
+        "minTip_altos_cadera": 0.381,
+        "minRoom": 1.0
+      },
+      "colas_comer": {
+        "maxJoint_rad": 0.217,
+        "minGap_rad": 0.215,
+        "minTip_altos_cadera": 0.525,
+        "minRoom": 1.0
+      }
+    },
+    "contacto_celdas": {
+      "sentado": 1.91,
+      "dormir": 1.09,
+      "rascarse_oreja": 0.01,
+      "rascarse_sin_esquivar_choques": 0.0,
+      "lamerse_pata": 1.07
+    },
+    "bajada": {
+      "sentado": 0.152,
+      "dormir": 0.238
+    }
+  },
+  "poses": {
+    "mirar_arriba_45": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "mirar_abajo_45": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "mirar_izq_60": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "mirar_der_60": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "aullido_boca_max": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "PieDer": 0.36,
+        "PieIzq": 0.36
+      }
+    },
+    "parpados_cerrados": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "orejas_planas": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "orejas_adelante": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "reverencia": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "ManoDer": 1.28,
+        "ManoIzq": 1.28
+      }
+    },
+    "sentado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "Cola1_1": 1.02,
+        "Cola1_2": 3.31,
+        "Cola1_3": 4.08,
+        "Cola1_4": 4.13,
+        "Cola1_5": 2.99,
+        "Cola6_1": 0.94,
+        "Cola6_2": 3.29,
+        "Cola6_3": 3.73,
+        "Cola6_4": 3.71,
+        "Cola6_5": 2.55,
+        "ManoDer": 0.87,
+        "ManoIzq": 0.87,
+        "TobilloDer": 0.67,
+        "TobilloIzq": 0.67
+      }
+    },
+    "dormir_echado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "AntebrazoDer": 2.04,
+        "AntebrazoIzq": 1.89,
+        "BrazoDer": 1.08,
+        "BrazoIzq": 0.94,
+        "Cola1_1": 1.04,
+        "Cola1_2": 3.09,
+        "Cola1_3": 2.37,
+        "Cola1_4": 1.54,
+        "Cola6_1": 1.04,
+        "Cola6_2": 3.09,
+        "Cola6_3": 2.37,
+        "Cola6_4": 1.54,
+        "ManoDer": 2.13,
+        "ManoIzq": 1.98,
+        "MusloDer": 0.37,
+        "MusloIzq": 0.37,
+        "PieDer": 2.01,
+        "PieIzq": 2.01,
+        "PiernaDer": 3.31,
+        "PiernaIzq": 3.31,
+        "TobilloDer": 3.23,
+        "TobilloIzq": 3.23
+      }
+    },
+    "salto_agachado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "ManoDer": 0.5,
+        "ManoIzq": 0.5,
+        "PieDer": 0.64,
+        "PieIzq": 0.64
+      }
+    },
+    "salto_estirado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "paso_FL_HR": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "paso_FR_HL": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "rascarse_oreja": {
+      "atraviesa": [
+        {
+          "piezas": [
+            "Cadera",
+            "PiernaIzq"
+          ],
+          "celdas": 1.23
+        },
+        {
+          "piezas": [
+            "Columna",
+            "PiernaIzq"
+          ],
+          "celdas": 1.13
+        },
+        {
+          "piezas": [
+            "MusloIzq",
+            "Cola3_1"
+          ],
+          "celdas": 1.31
+        },
+        {
+          "piezas": [
+            "OrejaIzq",
+            "PieIzq"
+          ],
+          "celdas": 0.83
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Cabeza"
+          ],
+          "celdas": 0.81
+        }
+      ],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "PieDer": 0.41
+      }
+    },
+    "lamerse_pata": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "sacudida": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "ManoDer": 0.56,
+        "PieDer": 0.74
+      }
+    },
+    "comer": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "ManoDer": 1.53,
+        "ManoIzq": 1.53
+      }
+    },
+    "colas_abanico_max": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_plegadas_correr": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_dormir": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_sentado": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_meneo_max": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_latigazo": {
+      "atraviesa": [],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_juntas_45_afuera": {
+      "atraviesa": [
+        {
+          "piezas": [
+            "Cola1_5",
+            "Cola6_5"
+          ],
+          "celdas": 1.1
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola1_2"
+          ],
+          "celdas": 1.12
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola1_3"
+          ],
+          "celdas": 1.12
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola6_2"
+          ],
+          "celdas": 1.12
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola6_3"
+          ],
+          "celdas": 1.12
+        }
+      ],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {
+        "Cola1_5": 6.12,
+        "Cola6_5": 6.12
+      }
+    },
+    "colas_juntas_45_adentro": {
+      "atraviesa": [
+        {
+          "piezas": [
+            "Cola1_5",
+            "Cola6_5"
+          ],
+          "celdas": 1.38
+        },
+        {
+          "piezas": [
+            "Cola2_3",
+            "Cola5_4"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola2_4",
+            "Cola5_3"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola2_4",
+            "Cola5_4"
+          ],
+          "celdas": 1.41
+        },
+        {
+          "piezas": [
+            "Cola2_4",
+            "Cola5_5"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola5_4"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola5_5"
+          ],
+          "celdas": 0.76
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola6_2"
+          ],
+          "celdas": 0.33
+        },
+        {
+          "piezas": [
+            "Cola3_2",
+            "Cola4_3"
+          ],
+          "celdas": 0.84
+        },
+        {
+          "piezas": [
+            "Cola3_3",
+            "Cola4_2"
+          ],
+          "celdas": 0.84
+        },
+        {
+          "piezas": [
+            "Cola3_3",
+            "Cola4_3"
+          ],
+          "celdas": 0.78
+        },
+        {
+          "piezas": [
+            "Cola3_3",
+            "Cola4_4"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola3_4",
+            "Cola4_3"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola3_4",
+            "Cola4_4"
+          ],
+          "celdas": 0.44
+        },
+        {
+          "piezas": [
+            "Cola3_4",
+            "Cola5_1"
+          ],
+          "celdas": 0.76
+        },
+        {
+          "piezas": [
+            "Cola3_5",
+            "Cola5_1"
+          ],
+          "celdas": 1.11
+        },
+        {
+          "piezas": [
+            "Cola4_4",
+            "Cola2_1"
+          ],
+          "celdas": 0.76
+        },
+        {
+          "piezas": [
+            "Cola4_5",
+            "Cola2_1"
+          ],
+          "celdas": 1.11
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola1_2"
+          ],
+          "celdas": 0.33
+        }
+      ],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_juntas_45_atras": {
+      "atraviesa": [
+        {
+          "piezas": [
+            "Cadera",
+            "Cola3_5"
+          ],
+          "celdas": 0.93
+        },
+        {
+          "piezas": [
+            "Cadera",
+            "Cola4_5"
+          ],
+          "celdas": 0.93
+        },
+        {
+          "piezas": [
+            "Cola1_2",
+            "Cola6_5"
+          ],
+          "celdas": 1.26
+        },
+        {
+          "piezas": [
+            "Cola1_3",
+            "Cola6_4"
+          ],
+          "celdas": 0.5
+        },
+        {
+          "piezas": [
+            "Cola1_3",
+            "Cola6_5"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola1_4",
+            "Cola6_3"
+          ],
+          "celdas": 0.5
+        },
+        {
+          "piezas": [
+            "Cola1_4",
+            "Cola6_4"
+          ],
+          "celdas": 0.96
+        },
+        {
+          "piezas": [
+            "Cola1_4",
+            "Cola6_5"
+          ],
+          "celdas": 1.35
+        },
+        {
+          "piezas": [
+            "Cola1_5",
+            "Cola6_2"
+          ],
+          "celdas": 1.26
+        },
+        {
+          "piezas": [
+            "Cola1_5",
+            "Cola6_3"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola1_5",
+            "Cola6_4"
+          ],
+          "celdas": 1.35
+        },
+        {
+          "piezas": [
+            "Cola1_5",
+            "Cola6_5"
+          ],
+          "celdas": 1.01
+        },
+        {
+          "piezas": [
+            "Cola2_3",
+            "Cola6_5"
+          ],
+          "celdas": 0.8
+        },
+        {
+          "piezas": [
+            "Cola2_4",
+            "Cola1_2"
+          ],
+          "celdas": 1.28
+        },
+        {
+          "piezas": [
+            "Cola2_4",
+            "Cola1_3"
+          ],
+          "celdas": 1.26
+        },
+        {
+          "piezas": [
+            "Cola2_4",
+            "Cola1_4"
+          ],
+          "celdas": 0.41
+        },
+        {
+          "piezas": [
+            "Cola2_4",
+            "Cola6_5"
+          ],
+          "celdas": 1.41
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola1_1"
+          ],
+          "celdas": 0.66
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola1_2"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola1_3"
+          ],
+          "celdas": 0.33
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola1_5"
+          ],
+          "celdas": 0.48
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola5_5"
+          ],
+          "celdas": 1.13
+        },
+        {
+          "piezas": [
+            "Cola2_5",
+            "Cola6_5"
+          ],
+          "celdas": 0.48
+        },
+        {
+          "piezas": [
+            "Cola3_3",
+            "Cola2_1"
+          ],
+          "celdas": 0.52
+        },
+        {
+          "piezas": [
+            "Cola3_3",
+            "Cola2_2"
+          ],
+          "celdas": 1.15
+        },
+        {
+          "piezas": [
+            "Cola3_3",
+            "Cola2_3"
+          ],
+          "celdas": 0.51
+        },
+        {
+          "piezas": [
+            "Cola3_4",
+            "Cola1_1"
+          ],
+          "celdas": 0.6
+        },
+        {
+          "piezas": [
+            "Cola3_4",
+            "Cola1_2"
+          ],
+          "celdas": 1.13
+        },
+        {
+          "piezas": [
+            "Cola3_4",
+            "Cola2_2"
+          ],
+          "celdas": 1.06
+        },
+        {
+          "piezas": [
+            "Cola3_4",
+            "Cola2_5"
+          ],
+          "celdas": 0.94
+        },
+        {
+          "piezas": [
+            "Cola3_5",
+            "Cola1_1"
+          ],
+          "celdas": 0.77
+        },
+        {
+          "piezas": [
+            "Cola3_5",
+            "Cola5_5"
+          ],
+          "celdas": 0.47
+        },
+        {
+          "piezas": [
+            "Cola4_3",
+            "Cola5_1"
+          ],
+          "celdas": 0.52
+        },
+        {
+          "piezas": [
+            "Cola4_3",
+            "Cola5_2"
+          ],
+          "celdas": 1.15
+        },
+        {
+          "piezas": [
+            "Cola4_3",
+            "Cola5_3"
+          ],
+          "celdas": 0.51
+        },
+        {
+          "piezas": [
+            "Cola4_4",
+            "Cola5_2"
+          ],
+          "celdas": 1.06
+        },
+        {
+          "piezas": [
+            "Cola4_4",
+            "Cola5_5"
+          ],
+          "celdas": 0.94
+        },
+        {
+          "piezas": [
+            "Cola4_4",
+            "Cola6_1"
+          ],
+          "celdas": 0.6
+        },
+        {
+          "piezas": [
+            "Cola4_4",
+            "Cola6_2"
+          ],
+          "celdas": 1.13
+        },
+        {
+          "piezas": [
+            "Cola4_5",
+            "Cola2_5"
+          ],
+          "celdas": 0.47
+        },
+        {
+          "piezas": [
+            "Cola4_5",
+            "Cola6_1"
+          ],
+          "celdas": 0.77
+        },
+        {
+          "piezas": [
+            "Cola5_3",
+            "Cola1_5"
+          ],
+          "celdas": 0.8
+        },
+        {
+          "piezas": [
+            "Cola5_4",
+            "Cola1_5"
+          ],
+          "celdas": 1.41
+        },
+        {
+          "piezas": [
+            "Cola5_4",
+            "Cola6_2"
+          ],
+          "celdas": 1.28
+        },
+        {
+          "piezas": [
+            "Cola5_4",
+            "Cola6_3"
+          ],
+          "celdas": 1.26
+        },
+        {
+          "piezas": [
+            "Cola5_4",
+            "Cola6_4"
+          ],
+          "celdas": 0.41
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola1_5"
+          ],
+          "celdas": 0.48
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola6_1"
+          ],
+          "celdas": 0.66
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola6_2"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola6_3"
+          ],
+          "celdas": 0.33
+        },
+        {
+          "piezas": [
+            "Cola5_5",
+            "Cola6_5"
+          ],
+          "celdas": 0.48
+        }
+      ],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    },
+    "colas_juntas_45_adelante": {
+      "atraviesa": [
+        {
+          "piezas": [
+            "BrazoDer",
+            "Cola4_5"
+          ],
+          "celdas": 0.37
+        },
+        {
+          "piezas": [
+            "BrazoIzq",
+            "Cola3_5"
+          ],
+          "celdas": 0.37
+        },
+        {
+          "piezas": [
+            "Cola1_1",
+            "Cola1_3"
+          ],
+          "celdas": 0.55
+        },
+        {
+          "piezas": [
+            "Cola1_5",
+            "Cola6_5"
+          ],
+          "celdas": 1.38
+        },
+        {
+          "piezas": [
+            "Cola2_1",
+            "Cola1_5"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola2_2",
+            "Cola1_5"
+          ],
+          "celdas": 0.66
+        },
+        {
+          "piezas": [
+            "Cola2_2",
+            "Cola2_4"
+          ],
+          "celdas": 1.04
+        },
+        {
+          "piezas": [
+            "Cola3_2",
+            "Cola2_5"
+          ],
+          "celdas": 0.3
+        },
+        {
+          "piezas": [
+            "Cola4_2",
+            "Cola5_5"
+          ],
+          "celdas": 0.3
+        },
+        {
+          "piezas": [
+            "Cola5_1",
+            "Cola6_5"
+          ],
+          "celdas": 1.0
+        },
+        {
+          "piezas": [
+            "Cola5_2",
+            "Cola5_4"
+          ],
+          "celdas": 1.04
+        },
+        {
+          "piezas": [
+            "Cola5_2",
+            "Cola6_5"
+          ],
+          "celdas": 0.66
+        },
+        {
+          "piezas": [
+            "Cola6_1",
+            "Cola6_3"
+          ],
+          "celdas": 0.55
+        },
+        {
+          "piezas": [
+            "HombroDer",
+            "Cola4_5"
+          ],
+          "celdas": 0.34
+        },
+        {
+          "piezas": [
+            "HombroIzq",
+            "Cola3_5"
+          ],
+          "celdas": 0.34
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Cola3_4"
+          ],
+          "celdas": 0.65
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Cola3_5"
+          ],
+          "celdas": 1.73
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Cola4_4"
+          ],
+          "celdas": 0.65
+        },
+        {
+          "piezas": [
+            "Pecho",
+            "Cola4_5"
+          ],
+          "celdas": 1.73
+        }
+      ],
+      "junta": [],
+      "hueco": [],
+      "bajo_piso": {}
+    }
+  },
+  "barridos": {
+    "colas_abanico_max": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_plegadas_correr": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_dormir": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_sentado": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_meneo_max": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_latigazo": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_salto": {
+      "muestras": 11,
+      "con_problemas": {}
+    },
+    "colas_sacudida": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_aullido": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_reverencia": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "colas_comer": {
+      "muestras": 9,
+      "con_problemas": {}
+    },
+    "paso": {
+      "muestras": 24,
+      "con_problemas": {}
+    }
+  },
+  "limites_cuerpo": {
+    "mirar_arriba": {
+      "tope_probado": 1.2,
+      "limpio_hasta": 1.2
+    },
+    "mirar_abajo": {
+      "tope_probado": 1.2,
+      "limpio_hasta": 0.844
+    },
+    "mirar_a_un_lado": {
+      "tope_probado": 1.6,
+      "limpio_hasta": 1.6
+    },
+    "ladear": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 0.559
+    },
+    "boca": {
+      "tope_probado": 1.1,
+      "limpio_hasta": 1.1
+    },
+    "orejas_adelante": {
+      "tope_probado": 1.5,
+      "limpio_hasta": 1.5
+    },
+    "orejas_atras": {
+      "tope_probado": 1.5,
+      "limpio_hasta": 1.5
+    },
+    "reverencia": {
+      "tope_probado": 1.2,
+      "limpio_hasta": 0.928
+    },
+    "agacharse": {
+      "tope_probado": 1.2,
+      "limpio_hasta": 1.2
+    },
+    "estirarse": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 0.781
+    },
+    "levantar_pata_delantera": {
+      "tope_probado": 1.5,
+      "limpio_hasta": 1.143
+    },
+    "levantar_pata_trasera": {
+      "tope_probado": 1.5,
+      "limpio_hasta": 1.5
+    },
+    "inclinarse_atras": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "inclinarse_adelante": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "sacudida": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    },
+    "brazo_adelante": {
+      "tope_probado": 1.8,
+      "limpio_hasta": 0.872
+    },
+    "brazo_atras": {
+      "tope_probado": 1.8,
+      "limpio_hasta": 0.9
+    },
+    "muslo_adelante": {
+      "tope_probado": 2.4,
+      "limpio_hasta": 0.816
+    },
+    "muslo_afuera": {
+      "tope_probado": 1.6,
+      "limpio_hasta": 1.6
+    },
+    "columna_de_lado": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 0.258
+    },
+    "parpado_abajo": {
+      "tope_probado": 1.5707963267948966,
+      "limpio_hasta": 1.5707963267948966
+    },
+    "punta_de_oreja": {
+      "tope_probado": 1.0,
+      "limpio_hasta": 1.0
+    }
+  },
+  "tolerancia_colas": [
+    {
+      "par": [
+        "Cola1",
+        "Cola2"
+      ],
+      "gap_reposo_rad": 0.657,
+      "se_acercan_sin_cruzar_rad": 0.655,
+      "gap_de_limites_rad": 0.45,
+      "gap_que_haria_falta_rad": 0.003
+    },
+    {
+      "par": [
+        "Cola2",
+        "Cola3"
+      ],
+      "gap_reposo_rad": 0.336,
+      "se_acercan_sin_cruzar_rad": 0.335,
+      "gap_de_limites_rad": 0.235,
+      "gap_que_haria_falta_rad": 0.001
+    },
+    {
+      "par": [
+        "Cola3",
+        "Cola4"
+      ],
+      "gap_reposo_rad": 0.718,
+      "se_acercan_sin_cruzar_rad": 0.715,
+      "gap_de_limites_rad": 0.45,
+      "gap_que_haria_falta_rad": 0.003
+    },
+    {
+      "par": [
+        "Cola4",
+        "Cola5"
+      ],
+      "gap_reposo_rad": 0.336,
+      "se_acercan_sin_cruzar_rad": 0.335,
+      "gap_de_limites_rad": 0.235,
+      "gap_que_haria_falta_rad": 0.001
+    },
+    {
+      "par": [
+        "Cola5",
+        "Cola6"
+      ],
+      "gap_reposo_rad": 0.657,
+      "se_acercan_sin_cruzar_rad": 0.655,
+      "gap_de_limites_rad": 0.45,
+      "gap_que_haria_falta_rad": 0.003
+    }
+  ],
+  "juntas_45_por_cola": {
+    "Cola2_afuera": [
+      "Cola2_5/Cola1_2",
+      "Cola2_5/Cola1_3"
+    ],
+    "Cola5_afuera": [
+      "Cola5_5/Cola6_2",
+      "Cola5_5/Cola6_3"
+    ],
+    "Cola3_adentro": [
+      "Cola3_3/Cola4_2",
+      "Cola3_3/Cola4_3",
+      "Cola3_4/Cola4_3",
+      "Cola3_4/Cola5_1",
+      "Cola3_5/Cola5_1"
+    ],
+    "Cola4_adentro": [
+      "Cola3_2/Cola4_3",
+      "Cola3_3/Cola4_3",
+      "Cola3_3/Cola4_4",
+      "Cola4_4/Cola2_1",
+      "Cola4_5/Cola2_1"
+    ],
+    "Cola1_atras": [
+      "Cola1_5/Cola6_3",
+      "Cola1_5/Cola6_4"
+    ],
+    "Cola2_atras": [
+      "Cola2_4/Cola1_2",
+      "Cola2_4/Cola1_3",
+      "Cola2_5/Cola1_1",
+      "Cola2_5/Cola1_2"
+    ],
+    "Cola3_atras": [
+      "Cadera/Cola3_5",
+      "Cola3_3/Cola2_1",
+      "Cola3_3/Cola2_2",
+      "Cola3_4/Cola1_1",
+      "Cola3_4/Cola1_2",
+      "Cola3_4/Cola2_2",
+      "Cola3_5/Cola1_1"
+    ],
+    "Cola4_atras": [
+      "Cadera/Cola4_5",
+      "Cola4_3/Cola5_1",
+      "Cola4_3/Cola5_2",
+      "Cola4_4/Cola5_2",
+      "Cola4_4/Cola6_1",
+      "Cola4_4/Cola6_2",
+      "Cola4_5/Cola6_1"
+    ],
+    "Cola5_atras": [
+      "Cola5_4/Cola6_2",
+      "Cola5_4/Cola6_3",
+      "Cola5_5/Cola6_1",
+      "Cola5_5/Cola6_2"
+    ],
+    "Cola6_atras": [
+      "Cola1_3/Cola6_5",
+      "Cola1_4/Cola6_5"
+    ],
+    "Cola1_adelante": [
+      "Cola1_1/Cola1_3",
+      "Cola2_1/Cola1_5",
+      "Cola2_2/Cola1_5"
+    ],
+    "Cola2_adelante": [
+      "Cola2_2/Cola2_4",
+      "Cola3_2/Cola2_2",
+      "Cola3_3/Cola2_2"
+    ],
+    "Cola3_adelante": [
+      "BrazoIzq/Cola3_5",
+      "HombroIzq/Cola3_5",
+      "Pecho/Cola3_4",
+      "Pecho/Cola3_5"
+    ],
+    "Cola4_adelante": [
+      "BrazoDer/Cola4_5",
+      "HombroDer/Cola4_5",
+      "Pecho/Cola4_4",
+      "Pecho/Cola4_5"
+    ],
+    "Cola5_adelante": [
+      "Cola4_2/Cola5_2",
+      "Cola4_3/Cola5_2",
+      "Cola5_2/Cola5_4"
+    ],
+    "Cola6_adelante": [
+      "Cola5_1/Cola6_5",
+      "Cola5_2/Cola6_5",
+      "Cola6_1/Cola6_3"
+    ]
+  },
+  "limpias": {
+    "cuantas": 24,
+    "de": 29,
+    "nombres": [
+      "mirar_arriba_45",
+      "mirar_abajo_45",
+      "mirar_izq_60",
+      "mirar_der_60",
+      "aullido_boca_max",
+      "parpados_cerrados",
+      "orejas_planas",
+      "orejas_adelante",
+      "reverencia",
+      "sentado",
+      "dormir_echado",
+      "salto_agachado",
+      "salto_estirado",
+      "paso_FL_HR",
+      "paso_FR_HL",
+      "lamerse_pata",
+      "sacudida",
+      "comer",
+      "colas_abanico_max",
+      "colas_plegadas_correr",
+      "colas_dormir",
+      "colas_sentado",
+      "colas_meneo_max",
+      "colas_latigazo"
+    ]
+  }
+}

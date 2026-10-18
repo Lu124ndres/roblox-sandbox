@@ -51,9 +51,9 @@ def giros(p, faldon=0.0):
 
 
 def subida(p):
-    """Cuánto sube la base (BU): pose.dy x alto - crouch x alto x 0.06, como Zorro/init."""
+    """Cuánto sube la base (BU): pose.dy x alto - crouch x alto x CROUCH_DROP, como Zorro/init."""
     p = p or {}
-    return (p.get("dy", 0.0) - 0.06 * p.get("crouch", 0.0)) * (ALTO_BU or 0.0)
+    return (p.get("dy", 0.0) - CROUCH_DROP * p.get("crouch", 0.0)) * (ALTO_BU or 0.0)
 
 
 def matrices(p, faldon=0.0):
@@ -142,6 +142,7 @@ for nombre, lista in BARRIDOS.items():
     datos["barridos"][nombre] = {"muestras": len(lista), "con_problemas": peor}
 datos["limites_cuerpo"] = limites_cuerpo(reposo)
 datos["tolerancia_colas"] = tolerancia_colas(reposo)
+datos["juntas_45_por_cola"] = juntas_por_cola(reposo)
 sc, cam, sol = estudio(ALTO_BU)
 sc.cycles.samples = 16
 for nombre, (entrada, angulo, elev, *enfoque) in POSES.items():

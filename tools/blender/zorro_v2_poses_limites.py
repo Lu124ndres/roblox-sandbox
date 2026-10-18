@@ -7,9 +7,12 @@ posar(), revisar() y MED):
     tolerancia_colas(reposo)  por cada par de colas vecinas (en el orden de Zorro/Colas): cuánto
                             pueden doblarse una hacia la otra (el giro del abanico repartido parejo
                             entre los tramos) antes de atravesarse, contra el gap que deja
-                            Limites.gaps (min(gap de reposo / 3, 0.15)): si el gap de Limites es
+                            Limites.gaps (min(gap de reposo x GAP_SHARE, GAP_MAX)): si el gap de Limites es
                             más chico que (gap de reposo - tolerancia), la separación del juego
                             deja que se crucen
+    juntas_por_cola(reposo)  la prueba de 45° en cada junta (como colas_juntas_45_*), pero de a una
+                            cola: qué atraviesa cada una sola (las poses colas_juntas_45_* doblan las
+                            seis a la vez, media vuelta cada una: ahí se cruzan entre ellas)
 Sirve para elegir topes en Pose.luau y valores de Limites.luau/Estados.luau con números medidos.
 """
 CLAVES = [  # (nombre, entrada(x), tope que se prueba)
@@ -75,6 +78,18 @@ def tolerancia_colas(reposo):
             mid = (lo + hi) / 2
             lo, hi = (lo, mid) if cruzan(mid) else (mid, hi)
         out.append({"par": sorted(par), "gap_reposo_rad": round(gap, 3), "se_acercan_sin_cruzar_rad": round(lo, 3),
-                    "gap_de_limites_rad": round(min(gap / 3, 0.15), 3),
+                    "gap_de_limites_rad": round(min(gap * GAP_SHARE, GAP_MAX), 3),
                     "gap_que_haria_falta_rad": round(gap - lo, 3)})
+    return out
+
+
+def juntas_por_cola(reposo):
+    out = {}
+    for caso in ("afuera", "adentro", "atras", "adelante"):
+        todas = _juntas(caso)
+        for c in MED["colas"]:
+            posar({"colas": {h: todas[h] for h in c["huesos"][1:]}})
+            malos = [f"{a['piezas'][0]}/{a['piezas'][1]}" for a in revisar(reposo)[0]]
+            if malos:
+                out[f"{c['huesos'][0][:-2]}_{caso}"] = malos
     return out

@@ -12,17 +12,21 @@ nace es horizontal (h) en los tramos empinados y vertical (v) en los tendidos. R
       desde el centro de su punta) y centrado en esa línea: tapa la junta al doblarse;
     - dos tramos seguidos en la misma dirección nunca miden lo mismo de ancho (4, 6, ...): sus
       costados nunca quedan en el mismo plano;
-    - cada tramo va más atrás en y que el anterior y comparte con él al menos una celda. El paso
-      crece de la cola de arriba a la de abajo (A 2, B 3, C 4): de perfil el abanico se abre
-      hacia atrás y arriba como un abanico, no como una escalera;
-    - las raíces arrancan en el borde de atrás de la grupa (y 7 y 8) y los planos y de A, B y C
-      están elegidos para que dos colas distintas que se tocan o se solapan un poco nunca tengan
-      caras en el mismo plano con la misma orientación. Una cola y su espejo comparten planos:
-      no se tocan.
-El pivote de cada tramo es el centro del borde donde nace (en y, el medio de la celda que comparte
-con el tramo anterior). Cada tramo lleva una veta clara de una celda a lo largo, en la misma línea
-que la del anterior: se lee como una franja de luz. La punta es de espuma y rompe como ola: una
-cresta que sube y un labio que se enrula hacia arriba y afuera, con cristalitos de hielo.
+    - cada tramo va más atrás en y que el anterior y comparte con él al menos una celda;
+Reglas de las franjas (para que las colas no se crucen al moverse): cada cola vive en su capa de
+profundidad. Una cola se mueve en el abanico girando alrededor del eje y, así que si dos tramos
+que se tapan en x-z tienen franjas y separadas, el abanico nunca los cruza:
+    - dos tramos de colas distintas que se solapan en x-z no comparten franja: entre ellos queda
+      al menos una celda en y (si solo se tocan o están a menos de 1.5 celdas, no comparten);
+    - lo mismo dos tramos no seguidos de una misma cola (el 2 y el 4 de la B se solapan): el paso
+      por tramo es al menos la mitad del hondo más media celda;
+    - capas, de adelante hacia atrás: A (y 4), B (y 8) y C (y 13). La B da pasos de 2 y la A de 1:
+      la distancia entre las dos crece hacia arriba, donde la A se tapa con tramos más altos de la
+      B. La punta de la C se curva sobre los tramos medios de la B, por eso la C va detrás;
+    - hondo de 3 o menos (2 en la A, que da pasos de 1), así las capas caben detrás de la grupa;
+    - la raíz de la B toca la cara de atrás de la grupa (y 8) y deja una celda al muslo; la de la A
+      sube del lomo (z 13) y la de la C apoya en la base de las colas (Cadera, zorro_v2_e3_cuerpo.py).
+La cola central y su espejo comparten capa: van separadas 2 celdas en x (raíz en x 4).
 """
 
 # Direcciones de la cuadrícula (paso en x, paso en z), con x hacia afuera.
@@ -31,11 +35,11 @@ VERT, P12, P11, P21, HORIZ = (0, 1), (1, 2), (1, 1), (2, 1), (1, 0)
 # (izquierda, espejo, centro de la raíz (x, z), y del primer tramo, paso en y, hondo,
 #  [(dirección, borde, ancho, largo)])
 COLAS_ABANICO = [
-    ("Cola3", "Cola4", (3, 12), 7, 2, 4,  # A, la central: sube vertical y se abre 1:2 -> 1:1
-     [(VERT, "h", 4, 3), (VERT, "h", 6, 4), (P12, "h", 4, 3), (P12, "h", 6, 3), (P11, "h", 4, 2)]),
-    ("Cola2", "Cola5", (4, 9), 8, 3, 4,  # B, la del medio: 1:2 -> 1:1 -> 2:1 y la punta se levanta
+    ("Cola3", "Cola4", (4, 13), 4, 1, 2,  # A, la central: sube vertical y se abre 1:2 -> 1:1
+     [(VERT, "h", 4, 3), (VERT, "h", 6, 3), (P12, "h", 4, 3), (P12, "h", 6, 3), (P11, "h", 4, 2)]),
+    ("Cola2", "Cola5", (4, 9), 8, 2, 3,  # B, la del medio: 1:2 -> 1:1 -> 2:1 y la punta se levanta
      [(P12, "h", 4, 3), (P12, "h", 6, 3), (P11, "h", 4, 3), (P21, "v", 6, 2), (P11, "h", 4, 2)]),
-    ("Cola1", "Cola6", (3, 7), 8, 4, 5,  # C, la de abajo: 1:1 -> 2:1 -> horizontal y la punta sube
+    ("Cola1", "Cola6", (3, 7), 13, 2, 3,  # C, la de abajo: 1:1 -> 2:1 -> horizontal y la punta sube
      [(P11, "h", 4, 2), (P21, "v", 6, 2), (HORIZ, "v", 6, 3), (HORIZ, "v", 4, 3), (P12, "h", 4, 3)]),
 ]
 COLOR_TRAMO = ("raiz", "cuerpo", "cuerpo", "claro", "espuma")
@@ -80,14 +84,17 @@ def franjas(pol, w):
 def ola(nombre, pol, y, pieza):
     """Cresta de espuma sobre la punta (borde de arriba horizontal, de xl a xr): sube dos celdas
     inclinada 1:2 hacia afuera y encima el labio, de dos celdas, que se enrula hacia arriba y
-    afuera y vuela por encima del costado. Dos cristalitos de hielo: adelante del labio y atrás."""
+    afuera y vuela por encima del costado. Dos cristalitos de hielo: uno bajo el rulo del labio
+    (dentro de la franja si el hondo deja, así no invade la capa de la vecina de adelante) y otro
+    asomando atrás."""
     (xl, zt), (xr, _) = sorted(pol[2:], key=lambda p: p[0])
     cresta = [(xl, zt), (xr, zt), (xr + 1, zt + 2), (xl + 1, zt + 2)]
     labio = [(xl + 1, zt + 2), (xr + 1, zt + 2), (xr + 3, zt + 3), (xr + 2, zt + 4), (xl + 3, zt + 4)]
     prisma(nombre, "Cola", "espuma", pieza(cresta), y, "y")
     prisma(nombre, "Cola", "espuma", pieza(labio), y, "y")
     cubo = lambda x, z: [(x, z), (x + 1, z), (x + 1, z + 1), (x, z + 1)]
-    prisma(nombre, "Cola", "hielo", pieza(cubo(xr + 1, zt + 2)), (y[0] - 1, y[0]), "y")
+    frente = (y[0] + 1, y[0] + 2) if y[1] - y[0] >= 3 else (y[0] - 1, y[0])
+    prisma(nombre, "Cola", "hielo", pieza(cubo(xr + 1, zt + 2)), frente, "y")
     prisma(nombre, "Cola", "hielo", pieza(cubo(xl + 2, zt + 3)), (y[1], y[1] + 1), "y")
 
 

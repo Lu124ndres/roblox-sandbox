@@ -13,7 +13,13 @@ todavía no existen (sentado, echado, rascarse, lamerse, párpados) llevan `hues
 resolver() cuando hay un contacto.
 """
 Q = math.radians(45)
+# Cuánto pesan los choques en resolver() (sobre la distancia al contacto), medido: 1.0 en el echado
+# esquiva las patas plegadas bajo la grupa; en rascarse, más peso hace que la pata no llegue.
+K_CHOQUE = globals().get("K_CHOQUE") or {"sentado": 0.3, "dormir": 1.0, "rascarse": 0.05, "lamerse": 0.6}
 CARA = ["Cabeza", "Mandibula", "OrejaIzq", "OrejaDer", "OrejaPuntaIzq", "OrejaPuntaDer", "ParpadoIzq", "ParpadoDer"]
+
+
+BAJADA = {"sentado": 0.0, "dormir": 0.0}  # fracción del alto: la llena armar_poses()
 
 
 def entre(u, a, b):
@@ -24,8 +30,11 @@ def entre(u, a, b):
 ESCENAS = {
     "colas_abanico_max": (lambda u: ({"abanico": 1.5 * entre(u, 0.5, 9), "alto": 0.5 * entre(u, 0.5, 9)}, {}), 4, "abanico"),
     "colas_plegadas_correr": (lambda u: ({}, {"avance": 3 * entre(u, 0.5, 9)}), 3, "final"),
-    "colas_dormir": (lambda u: ({"enroscar": entre(u, 0.5, 9), "calma": 0.3}, {}), 6, "final"),
-    "colas_sentado": (lambda u: ({"envolver": entre(u, 0.5, 9)}, {}), 5, "final"),
+    # Sentado y echado: la base baja lo que baja en la pose del cuerpo (BodyInfo.bajada).
+    "colas_dormir": (lambda u: ({"enroscar": entre(u, 0.5, 9), "calma": 0.3},
+                                {"bajada": BAJADA["dormir"] * entre(u, 0.5, 9)}), 6, "final"),
+    "colas_sentado": (lambda u: ({"envolver": entre(u, 0.5, 9)}, {"bajada": BAJADA["sentado"] * entre(u, 0.5, 9)}),
+                      5, "final"),
     "colas_meneo_max": (lambda u: ({"meneo": 1.6, "gusto": 1}, {}), 3, "fan"),
     "colas_latigazo": (lambda u: ({"latigazo": INICIO + 0.5}, {}), 2, "fold"),
     "colas_salto": (lambda u: ({"alto": -0.15}, {"subida": entre(u, 0.5, 1.47) * 0.35 * math.pi / 0.97
@@ -87,13 +96,14 @@ def _contactos():
         adelante = (m["Cabeza"].to_3x3() @ V((0, -1, 0))).z
         return (_z(m, "ManoIzq", mano_abajo) + _z(m, "PieIzq", talon) + _z(m, "PieIzq", punta_pie)
                 + _z(m, "Cadera", ref("Cadera", 0.5, 1, 0), 0.5) + recta + abs(adelante) * C)
-    r["sentado"] = resolver({}, libres, sentado)
+    r["sentado"] = resolver({}, libres, sentado, k_choque=K_CHOQUE["sentado"])
     libres = {"dy": (-0.45, 0, -0.25), "Cadera.0": (-0.3, 0.3, 0), "BrazoIzq.0": (-1.6, 1.8, 1.2),
               "AntebrazoIzq.0": (-2.0, 1.6, 0.3), "ManoIzq.0": (-1.5, 1.5, 0), "MusloIzq.0": (-0.5, 2.6, 1.6),
-              "PiernaIzq.0": (-2.8, 0.5, -2.0), "TobilloIzq.0": (-0.5, 2.8, 1.5), "PieIzq.0": (-1.5, 1.5, 0)}
-    echado = {"lookYaw": -1.0, "lookPitch": -0.5, "huesos": {"Columna": (0, -0.3, 0), "Pecho": (0, -0.3, 0)}}
+              "PiernaIzq.0": (-2.2, 0.5, -1.8), "TobilloIzq.0": (-0.5, 1.2, 1.0), "PieIzq.0": (-1.5, 1.5, 0)}
+    # El lomo se dobla de lado hasta su límite limpio (columna_de_lado, ~0.25 rad por hueso).
+    echado = {"lookYaw": -1.0, "lookPitch": -0.4, "huesos": {"Columna": (0, -0.25, 0), "Pecho": (0, -0.25, 0)}}
     panza = [("Pecho", ref("Pecho", 0.5, 0.5, 0)), ("Cadera", ref("Cadera", 0.5, 0.5, 0))]
-    r["dormir"] = resolver(echado, libres, lambda m: (
+    r["dormir"] = resolver(echado, libres, k_choque=K_CHOQUE["dormir"], costo=lambda m: (
         sum(_z(m, h, p, 0.5) for h, p in panza) + _z(m, "ManoIzq", mano_abajo)
         + _z(m, "AntebrazoIzq", ref("AntebrazoIzq", 0.5, 0.5, 0)) + _z(m, "PieIzq", talon) + _z(m, "PieIzq", punta_pie)))
     libres = {"lookYaw": (0, 1.3, 0.8), "lookPitch": (-1.0, 0.4, -0.4), "tilt": (-0.8, 0.8, 0.3),
@@ -103,14 +113,15 @@ def _contactos():
     garra, oreja = ref("PieIzq", 0.5, 0.1, 0.5), ref("OrejaIzq", 0.5, 1, 0.5, dy=0.5)  # detrás de la oreja
     rascar = lambda m: (punto(m, "PieIzq", garra) - punto(m, "OrejaIzq", oreja)).length
     llega = resolver({"earL": 0.3, "jaw": 0.1}, libres, rascar, k_choque=0)  # primero, que llegue
-    r["rascarse_oreja"] = resolver({"earL": 0.3, "jaw": 0.1}, libres, rascar, k_choque=0.05, inicio=llega[2])
+    r["rascarse_oreja"] = resolver({"earL": 0.3, "jaw": 0.1}, libres, rascar, k_choque=K_CHOQUE["rascarse"],
+                                   inicio=llega[2])
     r["rascarse_sin_esquivar_choques"] = llega
     libres = {"lookPitch": (-1.2, 0.3, -0.6), "lookYaw": (-0.2, 1.0, 0.3), "tilt": (-0.6, 0.6, 0),
               "HombroIzq.0": (-0.5, 0.8, 0.2), "BrazoIzq.0": (0, 1.8, 1.0), "BrazoIzq.2": (-0.6, 0.6, 0),
               "AntebrazoIzq.0": (-2.2, 0.5, -1.0), "ManoIzq.0": (-1.2, 1.2, 0)}
     menton = ref("Mandibula", 0.5, 0.25, 0, dz=-0.7)  # debajo del mentón, donde lame
-    r["lamerse_pata"] = resolver({"jaw": 0.35, "earL": 0.2, "earR": 0.2}, libres, lambda m: (
-        punto(m, "ManoIzq", mano_arriba) - punto(m, "Mandibula", menton)).length)
+    lamer = lambda m: (punto(m, "ManoIzq", mano_arriba) - punto(m, "Mandibula", menton)).length
+    r["lamerse_pata"] = resolver({"jaw": 0.35, "earL": 0.2, "earR": 0.2}, libres, lamer, k_choque=K_CHOQUE["lamerse"])
     espejar(r["sentado"][0])
     espejar(r["dormir"][0])
     return r
@@ -118,8 +129,11 @@ def _contactos():
 
 def armar_poses():
     global MED, POSES, BARRIDOS, INFO
-    MED = medidas({n: np.array(tuple(p)) for n, (_, p) in HUESOS.items()})
+    MED = medidas({n: np.array(tuple(p)) for n, (_, p) in HUESOS.items()}, ALTO_BU)
     BARRIDOS, INFO, colas = {}, {"escenas_colas": {}, "contacto_celdas": {}}, {}
+    cont = _contactos()
+    BAJADA.update({n: max(0.0, -cont[n][0].get("dy", 0.0)) for n in BAJADA})
+    INFO["bajada"] = {n: round(b, 3) for n, b in BAJADA.items()}
     for nombre, (plan, seg, como) in ESCENAS.items():
         cuadros = simular(MED, ETAPA, plan, seg)
         colas[nombre] = _elegir(cuadros, como)["angulos"]
@@ -131,7 +145,6 @@ def armar_poses():
             "minRoom": round(min(min(q["room"]) for q in cuadros), 3)}
         BARRIDOS[nombre] = [(f"{q['u']:.2f}", {"colas": q["angulos"]}) for q in vivos[::max(1, len(vivos) // 8)]]
     BARRIDOS["paso"] = [(f"{f:.2f}", pasos(f)) for f in (2 * math.pi * i / 24 for i in range(24))]
-    cont = _contactos()
     INFO["contacto_celdas"] = {n: round(c[1] / C, 2) for n, c in cont.items()}
     ear = lambda k: {"earL": k, "earR": k}
     POSES = {

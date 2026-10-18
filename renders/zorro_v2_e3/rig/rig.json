@@ -1,0 +1,72 @@
+{
+  "triangulos": 7604,
+  "huesos": 61,
+  "huesos_que_deforman": 59,
+  "huesos_del_contrato_que_faltan": [],
+  "huesos_fuera_del_contrato": [],
+  "sin_pesos": {
+    "Raiz": {
+      "deforma": false,
+      "vertices": 0
+    },
+    "Boca": {
+      "deforma": false,
+      "vertices": 0
+    }
+  },
+  "colores_en_la_paleta": 14,
+  "pesos": {
+    "vertices_con_mas_de_un_hueso": 0,
+    "grupos_en_huesos_sin_pesos": []
+  },
+  "error_maximo_celdas_por_pose": {
+    "mirar_arriba_45": 6e-06,
+    "mirar_abajo_45": 6e-06,
+    "mirar_izq_60": 6e-06,
+    "mirar_der_60": 6e-06,
+    "aullido_boca_max": 9e-06,
+    "parpados_cerrados": 6e-06,
+    "orejas_planas": 7e-06,
+    "orejas_adelante": 6e-06,
+    "reverencia": 1e-05,
+    "sentado": 8e-06,
+    "dormir_echado": 9e-06,
+    "salto_agachado": 6e-06,
+    "salto_estirado": 1.2e-05,
+    "paso_FL_HR": 9e-06,
+    "paso_FR_HL": 9e-06,
+    "rascarse_oreja": 8e-06,
+    "lamerse_pata": 8e-06,
+    "sacudida": 8e-06,
+    "comer": 9e-06,
+    "colas_abanico_max": 1.1e-05,
+    "colas_plegadas_correr": 1.1e-05,
+    "colas_dormir": 8e-06,
+    "colas_sentado": 9e-06,
+    "colas_meneo_max": 1e-05,
+    "colas_latigazo": 9e-06,
+    "colas_juntas_45_afuera": 8e-06,
+    "colas_juntas_45_adentro": 1e-05,
+    "colas_juntas_45_atras": 1e-05,
+    "colas_juntas_45_adelante": 1e-05,
+    "barrido_colas_abanico_max": 1.1e-05,
+    "barrido_colas_plegadas_correr": 1.2e-05,
+    "barrido_colas_dormir": 1.1e-05,
+    "barrido_colas_sentado": 1.4e-05,
+    "barrido_colas_meneo_max": 1.2e-05,
+    "barrido_colas_latigazo": 1.2e-05,
+    "barrido_colas_salto": 1e-05,
+    "barrido_colas_sacudida": 1e-05,
+    "barrido_colas_aullido": 1.3e-05,
+    "barrido_colas_reverencia": 1.3e-05,
+    "barrido_colas_comer": 1.2e-05,
+    "barrido_paso": 1e-05
+  },
+  "error_maximo_celdas": 1.4e-05,
+  "escala_studs_por_bu": 5.3226,
+  "medidas_studs": {
+    "ancho_x": 100.677,
+    "largo_y": 114.435,
+    "alto_z": 82.5
+  }
+}

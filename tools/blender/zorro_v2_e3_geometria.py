@@ -10,7 +10,7 @@ hielo en la espuma de las puntas.
 Proporciones (31 módulos de alto: la espuma de las colas más altas):
     patas    z 0..10        cuerpo z 8..14 (y -9..8, ancho 8)
     cabeza   z 16..22       hocico hasta y -18, orejas hasta z 27
-    colas    hasta z 31     abanico curvo de y 7 a y 30 y de x -19 a 19 (zorro_v2_e3_colas.py)
+    colas    hasta z 31     abanico curvo en tres capas de y 4 a y 25 y de x -19 a 19 (zorro_v2_e3_colas.py)
 El cuerpo está en zorro_v2_e3_cuerpo.py, las colas en zorro_v2_e3_colas.py y las formas que no son
 bloques (prisma, par_prisma) en dragon_v2_formas.py.
 Ejes: x = izquierda del zorro, -y = frente, z arriba; parado en z = 0, centrado en x.
@@ -67,7 +67,7 @@ def construir():
 # el hijo. Pivotes de BIBLIA.md, 7; los de las colas, en el centro del borde donde nace cada tramo.
 ARTICULACIONES = [
     ("Cadera", None, (0, 5, 11)),
-    ("Columna", "Cadera", (0, 2, 11)),
+    ("Columna", "Cadera", (0, -1, 11)),  # el tramo de atrás del lomo es de la Cadera
     ("Pecho", "Columna", (0, -3, 11)),
     ("Cuello1", "Pecho", (0, -7, 14)),
     ("Cuello2", "Cuello1", (0, -8, 16)),
@@ -89,7 +89,7 @@ _ARTS_COLAS, _PUNTAS_COLAS = articulaciones_colas()
 ARTICULACIONES += _ARTS_COLAS
 # Cola de cada hueso (celdas, lado izquierdo): hacia el hijo, o hacia donde apunta la pieza.
 COLAS = {
-    "Cadera": (0, 2, 11), "Columna": (0, -3, 11), "Pecho": (0, -7, 14), "Cuello1": (0, -8, 16),
+    "Cadera": (0, -1, 11), "Columna": (0, -3, 11), "Pecho": (0, -7, 14), "Cuello1": (0, -8, 16),
     "Cuello2": (0, -9, 17), "Cabeza": (0, -9, 22), "Mandibula": (0, -16, 16),
     "Oreja{l}": (2.5, -9.5, 25), "OrejaPunta{l}": (3, -9.5, 27), "Parpado{l}": (2.5, -15, 21.5),
     "Hombro{l}": (2.5, -5.5, 10), "Brazo{l}": (2.5, -5.5, 6), "Antebrazo{l}": (2.5, -5.5, 2),

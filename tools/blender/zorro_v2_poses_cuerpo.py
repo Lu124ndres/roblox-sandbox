@@ -16,6 +16,10 @@ por coordenadas sobre matrices(), sin mirar choques (eso lo revisa después revi
 import copy
 
 
+BOW_BEND = 1.5  # Pose.luau: cuánto doblan las delanteras en la reverencia (por bow)
+CROUCH_DROP = 0.035  # Zorro/init: cuánto baja la base al agacharse (fracción del alto, por crouch)
+
+
 def _pata(r, delantera, s, lift, bend):
     """leg() de Pose.luau (swing siempre 0 en Pose.apply)."""
     if delantera:
@@ -50,8 +54,8 @@ def locales(e):
     for s, k in (("Izq", "earL"), ("Der", "earR")):
         lado = 1 if s == "Izq" else -1  # -(rig.side): la Izq está a la izquierda (side -1)
         r[f"Oreja{s}"] = (-v(k) * 0.6, 0, v(k) * 0.3 * lado + temblor * lado)
-    _pata(r, True, "Izq", v("stepFL"), bow * 0.9 + crouch)
-    _pata(r, True, "Der", v("stepFR"), bow * 0.9 + crouch)
+    _pata(r, True, "Izq", v("stepFL"), bow * BOW_BEND + crouch)
+    _pata(r, True, "Der", v("stepFR"), bow * BOW_BEND + crouch)
     _pata(r, False, "Izq", v("stepHL"), crouch - bow * 0.15)
     _pata(r, False, "Der", v("stepHR"), crouch - bow * 0.15)
     r.update(e.get("huesos", {}))
