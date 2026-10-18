@@ -2,7 +2,7 @@
 
 El terreno (pasto, senderos de arena, la hoya y la orilla de barro de cada estanque) lo arma
 server/World/GardenShape con la misma forma de orilla que estanques.forma. Acá salen las
-piezas: en cada estanque la tapa, el prompt, el espíritu de luz y los nenúfares
+piezas: en cada estanque la tapa, el prompt, el loto del centro, los nenúfares, el contorno de luz
 (estanques.base), con el color de lotos y los kois de su tema (estanques.temas); alrededor,
 el seto del borde (estanques.jardin). En la orilla no hay nada: los jugadores no chocan.
 
@@ -19,7 +19,7 @@ from estanques.forma import SAGRADO
 def estanque(i):
     tono = gi.COLORES_ESTANQUE[(i - 1) % len(gi.COLORES_ESTANQUE)]
     rng = random.Random(1000 + i)
-    hijos = base.tapa_y_prompt(i, tono) + base.espiritu(i, tono) + temas.tema(i, rng)
+    hijos = base.tapa_y_prompt(i, tono) + base.loto_centro(i, tono) + temas.tema(i, rng)
     hijos.append(base.brillo_orilla(i, tono))
     return gi.grupo(f"Estanque{i}", hijos)
 

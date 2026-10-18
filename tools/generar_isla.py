@@ -335,11 +335,8 @@ def tablones_x(nombre, x0, x1, z0, z1):
 
 
 # --- Aparición, entrada y cabaña ----------------------------------------------------------
-# La plaza grande sigue de mármol claro con oro; la aparición y el arco de entrada son de
-# basalto con lava (ver "Temática volcánica" arriba).
-MARMOL_CLARO = (238, 233, 224)
-HIERRO_NEGRO = (40, 40, 46)
-LUZ_FAROLA = (255, 214, 150)
+# El arco de entrada es de basalto con lava (ver "Temática volcánica" arriba); la aparición
+# es solo un punto invisible dentro del jardín.
 SETO = ((52, 122, 64), (62, 138, 72))
 ANGULOS_CAMINO = [L["spawnAngle"], L["shopAngle"], L["campAngle"], L["lighthouseAngle"], L["bridgeAngle"]]
 
@@ -352,22 +349,6 @@ def anillo_con_huecos(nombre, radio, n, ancho, alto, y_tope, colores, material, 
     """anillo_tallado alrededor del origen, sin los bloques que caen sobre un camino."""
     piezas = anillo_tallado(nombre, 0, 0, radio, n, ancho, alto, y_tope, colores, material, **extra)
     return [p for k, p in enumerate(piezas) if not sobre_camino(k * 360 / n, margen)]
-
-
-def farola(nombre, x, z, y, alto=8, piedra=(MARMOL_CLARO, "Marble"), oro=ORO):
-    """Farola: base de piedra (mármol o basalto), poste de hierro negro, anillo de oro y farol
-    de luz cálida."""
-    farol_ = pieza("Farol", (1.1, 1.5, 1.1), (x, y + alto + 0.75, z), LUZ_FAROLA, "Neon", **DECORADO)
-    farol_["children"] = [luz(18, 0.8, LUZ_FAROLA)]  # suave: el mármol blanco no se encandila
-    largo = alto - 1
-    return grupo(nombre, [
-        pieza("Base", (1.8, 1, 1.8), (x, y + 0.5, z), *piedra),
-        pieza("Poste", (largo, 0.45, 0.45), (x, y + 1 + largo / 2, z), HIERRO_NEGRO, "Metal", VERTICAL, "Cylinder"),
-        pieza("Anillo", (0.3, 0.9, 0.9), (x, y + alto - 0.1, z), oro, "Metal", VERTICAL, "Cylinder", **DECORADO),
-        farol_,
-        pieza("Techo", (1.6, 0.25, 1.6), (x, y + alto + 1.6, z), HIERRO_NEGRO, "Metal", **DECORADO),
-        pieza("Remate", (0.55, 0.55, 0.55), (x, y + alto + 2, z), oro, "Metal", ry(45), **DECORADO),
-    ])
 
 
 def placa(nombre, pos, r, texto, ancho, alto, cara="Back"):
@@ -391,33 +372,20 @@ def pilar(nombre, p, y0, alto, ancho=2.4, r=I3, caras=(), tramos=3, espejo=1):
 
 
 def aparicion():
-    """Plataforma redonda de basalto donde se aparece, dentro del jardín de entrenamiento,
-    mirando al volcán (+Z)."""
+    """Dónde se aparece, dentro del jardín de entrenamiento, mirando al volcán (+Z). Es
+    invisible (pedido del usuario: sin plataforma) pero sólida y a ras del pasto: el terreno
+    lo arma el servidor al arrancar y, sin ella, el primero en entrar caería al vacío."""
     x, z = L["spawnPosition"]
     return {
         "name": "Aparicion", "className": "SpawnLocation",
         "properties": {
             "Anchored": True, "Neutral": True, "Duration": 0, "Size": [1, 14, 14], "Shape": "Cylinder",
             # Cilindro de pie; su LookVector (-Z local) apunta al volcán (+Z del mundo).
-            "CFrame": cf((x, L["plateauHeight"] + 0.3, z), mat(base_con_z((0, 0, -1)), rz(90))),
+            "CFrame": cf((x, L["plateauHeight"] - 0.4, z), mat(base_con_z((0, 0, -1)), rz(90))),
             "Color": color(ROCA_VOLCANICA), "Material": "Basalt", "TopSurface": "Smooth", "BottomSurface": "Smooth",
+            "Transparency": 1, "CanCollide": True, "CanTouch": True, "CanQuery": False, "CastShadow": False,
         },
     }
-
-
-def plaza_aparicion():
-    """Escalón de basalto con filo de oro mate alrededor de la aparición, un círculo de lava
-    sobre la plataforma y cuatro farolas de basalto."""
-    a = 90  # hacia el volcán
-    c = (L["spawnPosition"][0], 0, L["spawnPosition"][1])
-    y = L["plateauHeight"]
-    hijos = anillo_tallado("Oro", c[0], c[2], 7.05, 48, 0.4, 0.9, y + 0.85, ORO_MATE, "Metal", **DECORADO)
-    hijos += anillo_tallado("Escalon", c[0], c[2], 9.2, 48, 4.2, 0.7, y + 0.35, ROCA_VOLCANICA_OSCURA, "Basalt")
-    hijos += anillo_tallado("Emblema", c[0], c[2], 4.5, 32, 0.35, 0.1, y + 0.83, VETA_LAVA, "Neon", **FANTASMA)
-    for k in range(4):
-        p = add(c, polar(a + 45 + k * 90, 12.5, 0))
-        hijos.append(farola(f"Farola{k}", p[0], p[2], y, 7, (ROCA_VOLCANICA_OSCURA, "Basalt"), ORO_MATE))
-    return grupo("PlazaAparicion", hijos)
 
 
 def tablero(nombre, pos, r, ancho, alto):
@@ -1058,7 +1026,6 @@ def main():
         puente(),
         crater(),
         aparicion(),
-        plaza_aparicion(),
         arco_entrada(),
         cabana(),
         faro(),

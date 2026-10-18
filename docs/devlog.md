@@ -2568,3 +2568,26 @@ fps sin tirones, y la barra sigue subiendo después de soltar (0.026 → 0.054 e
 anterior dio 15 fps: era la prueba del zorro de otra sesión corriendo a la vez en Studio.
 
 **Qué se rompió:** nada visto.
+
+---
+
+## 2026-10-18 (13) — Sin plataforma de aparición ni orbes; el contorno de luz se asienta
+
+**Qué se hizo:**
+
+- **Aparición sin plataforma:** fuera la plataforma de basalto y la plaza (escalón, emblema y
+  farolas). Queda el SpawnLocation invisible, sólido y a ras del pasto: el terreno lo arma el
+  servidor al arrancar y, sin algo sólido, el primero en entrar caía al vacío (pasó en la
+  prueba). Ojo: Rojo no devuelve una propiedad a su valor por defecto al quitarla del
+  archivo, por eso `CanCollide`/`CanTouch` van explícitos.
+- **Sin orbe ni luciérnagas** en los estanques (queda el loto grande del centro). Los carteles
+  bajaron a 9 studs.
+- **Contorno de luz asentado:** va 1.2 studs por fuera del agua, sobre el barro, y el cliente
+  (`Training/PondFx`) baja cada tramo con un rayo hasta el suelo del terreno (reintenta hasta
+  que el servidor termina de armarlo). Ahora es el contorno el que dice si el estanque está
+  abierto: brilla en Neon de su color o se apaga, liso y oscuro.
+
+**Probado en Studio (Play):** los 484 tramos asentados a 0.12 studs del suelo; el estanque 1
+abierto en Neon y el 10 cerrado; el jugador aparece sobre el sendero, sin plataforma.
+
+**Qué se rompió:** nada visto.

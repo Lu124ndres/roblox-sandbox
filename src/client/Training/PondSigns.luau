@@ -22,7 +22,7 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local PondSignView = require(script.Parent.PondSignView)
 
 local PONDS = Config.Progression.ponds
-local SIGN_HEIGHT = 12 -- sobre el espíritu del estanque
+local SIGN_HEIGHT = 9 -- sobre el loto del centro
 local SACRED_SIGN_HEIGHT = 15 -- el cartel del sagrado es más grande
 
 local PondSigns = {}
