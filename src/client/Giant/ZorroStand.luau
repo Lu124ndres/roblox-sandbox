@@ -4,96 +4,33 @@
 
 	Une el zorro de agua (ReplicatedStorage.Shared.Zorro) con el cliente: el módulo
 	lo gira, lo anima y hace sus trucos; aquí sus eventos se vuelven sonidos y
-	efectos del juego (respetan volumen, alcance y modo rápido) y ZorroFx pone la
-	luz de la gema, la bruma de las colas, las ondas de las pisadas y los fuegos:
-		howl    aullido: un llamado largo y agudo, ondas en el agua y temblor
-		fan     abanico de colas: destellos cian en las puntas y un soplo
-		crouch  se agacha para saltar: el agua se agita
-		land    cae del salto: gran salpicón, ondas y temblor
-		shake   se sacude: gotas por todo el cuerpo
-		happy   reverencia de juego: corazones
-		orbs    fuegos fatuos: orbes de agua que suben a su alrededor
-	Los de su animación al comer (fed: cada pez, los raros y los combos) los
-	pone ZorroComerFx, y ZorroEstela la estela de agua cuando corre.
+	efectos del juego (ZorroEventos: voces, ondas y temblor), ZorroAgua pone los
+	cubitos de agua, la espuma de las puntas y el brillo de los ojos, y ZorroFx la
+	bruma de las colas, las ondas de las pisadas y los fuegos.
+	Las colas hacen todo su trabajo (detail) con la cámara cerca y sin modo rápido;
+	lejos, Zorro/Colas hace menos con la misma silueta.
 	Solo los modelos con huesos de zorro (Cola1_1 y HombroIzq).
 	Misma forma que OrcaSwim para que GiantBody use uno u otro.
 ]]
 
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Capas = require(ReplicatedStorage.Shared.Zorro.Comer.Capas)
 local Zorro = require(ReplicatedStorage.Shared.Zorro)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
-local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
-local Fx = require(script.Parent.Parent.Effects.Fx)
+local Distance = require(script.Parent.Parent.Effects.Distance)
+local ZorroAgua = require(script.Parent.Parent.Effects.ZorroAgua)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local OrcaSwim = require(script.Parent.OrcaSwim)
 local ZorroComerFx = require(script.Parent.ZorroComerFx)
+local ZorroEventos = require(script.Parent.ZorroEventos)
 local ZorroEstela = require(script.Parent.Parent.Effects.ZorroEstela)
 local ZorroFx = require(script.Parent.ZorroFx)
 
-local SHAKE_REACH = 260
-local CYAN = Color3.fromRGB(110, 255, 240)
+-- Detalle de las colas: más cerca que esto de la cámara (altos del zorro + studs); para
+-- perderlo hay que alejarse un 15 % más (así no cambia a cada rato en el borde).
+local DETAIL_HEIGHTS, DETAIL_STUDS, DETAIL_MARGIN = 2.5, 40, 1.15
 
 local ZorroStand = {}
-
-local function shake(position: Vector3, magnitude: number, seconds: number)
-	local character = Players.LocalPlayer.Character
-	if not character then
-		return
-	end
-	local near = 1 - (character:GetPivot().Position - position).Magnitude / SHAKE_REACH
-	if near > 0 then
-		CameraShake.shake(magnitude * near, seconds)
-	end
-end
-
-local function play(motion: Zorro.Motion, fx: ZorroFx.ZorroFx?, event: Zorro.Event)
-	local kind = event.kind
-	local height = motion.state.height
-	local water = motion.water()
-	local size = math.max(1, height / 12)
-	if kind == "howl" then
-		Sounds.play("OrcaCall", motion.top(), 1.45)
-		Sounds.play("Roar", motion.top(), 1.6)
-		for k = 1, 3 do
-			task.delay(k * 0.35, Fx.ring, water, height * (0.5 + k * 0.3), 1.6)
-		end
-		shake(motion.top(), 0.35, 1.6)
-	elseif kind == "fan" then
-		Sounds.play("Whoosh", motion.top(), 0.7)
-		local rig = motion.state.rig
-		for _, tail in (if rig then rig.tails else {}) do
-			local tip = motion.point(`{tail.prefix}4`)
-			if tip then
-				Fx.sparkle(tip, CYAN, 8)
-			end
-		end
-	elseif kind == "crouch" then
-		Fx.ring(water, height * 0.4, 0.8)
-	elseif kind == "land" then
-		Sounds.play("BigSplash", water)
-		Fx.splash(water, 2.2 * size)
-		Fx.ring(water, height * 0.9, 1.5)
-		shake(water, 0.5, 0.6)
-	elseif kind == "shake" then
-		Sounds.play("Whoosh", motion.top(), 1.3)
-		for _, bone in { "Pecho", "Cadera", "Cabeza" } do
-			local at = motion.point(bone)
-			if at then
-				Fx.splash(at, 0.9 * size)
-			end
-		end
-	elseif kind == "happy" then
-		Fx.hearts(motion.top(), 5)
-	elseif kind == "orbs" and fx then
-		Sounds.play("CoinPop", motion.top(), 0.6)
-		ZorroFx.orbs(fx, motion, math.max(1, math.round(6 * ClientSettings.fxScale())))
-		Fx.sparkle(motion.top(), CYAN, 20)
-	elseif kind ~= "orbs" then
-		ZorroComerFx.play(motion, event)
-	end
-end
 
 function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 	if
@@ -105,8 +42,10 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 	end
 	local motion = Zorro.new(center)
 	local fx: ZorroFx.ZorroFx? = nil
+	local agua: ZorroAgua.Agua? = nil
 	local fxFor: any = nil
 	local estela = ZorroEstela.new()
+	local detailed = true
 	return {
 		step = function(
 			dt: number,
@@ -116,10 +55,18 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 			anger: number,
 			inner: Model?
 		)
-			local pivot = motion.step(
-				dt,
-				{ height = height, lift = lift, spin = spin, anger = anger, inner = inner }
-			)
+			local reach = (height * DETAIL_HEIGHTS + DETAIL_STUDS)
+				* (if detailed then DETAIL_MARGIN else 1)
+			detailed = Distance.fromCamera(motion.state.center) < reach
+				and not ClientSettings.get("lowFx")
+			local pivot = motion.step(dt, {
+				height = height,
+				lift = lift,
+				spin = spin,
+				anger = anger,
+				inner = inner,
+				detail = detailed,
+			})
 			local rig = motion.state.rig
 			if rig ~= fxFor then
 				if fx then
@@ -127,15 +74,22 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 				end
 				fxFor = rig
 				fx = if rig then ZorroFx.attach(rig) else nil
+				if agua then
+					agua.destroy()
+				end
+				agua = if rig then ZorroAgua.attach(rig) else nil
 			end
 			if fx then
 				ZorroFx.update(fx, motion, ClientSettings.fxScale(), lift > -height)
+			end
+			if agua then
+				agua.step(dt, height, Capas.stageFor(height), lift > -height)
 			end
 			local events = motion.state.events
 			if #events > 0 then
 				motion.state.events = {}
 				for _, event in events do
-					play(motion, fx, event)
+					ZorroEventos.play(motion, fx, agua, event)
 				end
 			end
 			ZorroComerFx.step(motion)
@@ -158,6 +112,9 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 			ZorroEstela.destroy(estela)
 			if fx then
 				ZorroFx.destroy(fx)
+			end
+			if agua then
+				agua.destroy()
 			end
 			motion.destroy()
 		end,

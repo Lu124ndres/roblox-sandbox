@@ -122,6 +122,28 @@ local Sounds: { [string]: string } = {
 	ZorroBubbles = "rbxassetid://9125408740", -- "Bubble Magic Many Gurgly Floating By Very Wet 1" (2.7 s)
 	ZorroShimmer = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
 	ZorroPaw = "rbxassetid://9117946641", -- "Puddle Stomps Small Water Splashes 3" (0.5 s): pisadas, manotazo
+	-- ZorroDeAgua (v2: voz, agua y hielo; todo de ProSoundEffects, licencia de Roblox). Capas
+	-- por evento y etapa en client/Audio/ZorroRecetas; tono y volumen en client/Audio/ZorroVoces.
+	ZorroWhimper = "rbxassetid://9113952462", -- "Coyote Cu Whimpering Yelping Crying 16" (2.7 s): gañido de cría
+	ZorroYelp = "rbxassetid://9113955093", -- "Coyotes Gruff Barking 6" (0.5 s): chillido de cría
+	ZorroBark = "rbxassetid://9113956178", -- "Coyotes Gruff Barking 14" (1.1 s): ladrido corto
+	ZorroHowlYoung = "rbxassetid://9113950627", -- "Coyote Barks Howls Cries Echo 7" (2.3 s): aullido chico
+	ZorroHowlDeep = "rbxassetid://9120790553", -- "Wolf Howl Two Versions 2" (5.2 s): adulto y forma final
+	ZorroRumble = "rbxassetid://9114344093", -- "Energy Presence 8" (3.8 s): retumbo grave desde el adulto
+	ZorroYawn = "rbxassetid://9116308659", -- "Lion Roar Tired 12" (1.5 s): bostezo (agudo en la cría)
+	ZorroSniff = "rbxassetid://9119305209", -- "Sniff Breathe In 5" (2.4 s): olfatea
+	ZorroGrowl = "rbxassetid://9120788137", -- "Wolf Growl 3" (2.3 s): gruñido suave (bajito)
+	ZorroBite = "rbxassetid://9119055965", -- "Shark Bite Smaller Teeth Snaps 5" (0.3 s): tarascón
+	ZorroStepWater = "rbxassetid://9125703168", -- "Mud Puddle Splash Shallow Water Impacts Hits 18" (0.8 s)
+	ZorroSplash = "rbxassetid://9117823374", -- "Pool Jumps Splashes Water Impact Swimming 4" (2.3 s): cae de un salto
+	ZorroSplashDeep = "rbxassetid://9119476512", -- "Splash Deep Thunking Impact 2" (3.6 s): caída grande
+	ZorroShakeSwish = "rbxassetid://9118859146", -- "Seahorse Splash Fast 402" (2.2 s): se sacude
+	ZorroDrip = "rbxassetid://9120548576", -- "Water Exit Out Of Water Light Dribble Drip 1" (2.1 s): gotas
+	ZorroTailSwish = "rbxassetid://9114455379", -- "Fish Pass By 302" (2.0 s): silbido de las colas
+	ZorroWhoosh = "rbxassetid://9120720147", -- "Whoosh Giant Swish By 5" (2.5 s): salto en picada grande
+	ZorroIceCrack = "rbxassetid://9125610927", -- "Ice Cubes Drop Falling To Floor Few At A Time 1" (1.2 s)
+	ZorroIceCrackBig = "rbxassetid://9114858588", -- "Ice Crackle Large Block Cracks 3" (3.7 s): témpano grande
+	ZorroIceTink = "rbxassetid://9114861568", -- "Ice Cube Drops 1" (0.9 s): tintineo de cristales
 	-- Música (con licencia de Roblox: APM y DistroKid, se pueden usar en cualquier juego)
 	MusicIsland = "rbxassetid://128770946473000", -- "The Fisherman's Small Boat" (2:39)
 	MusicCrater = "rbxassetid://1843867314", -- "Tension Repeat Drones 29" (2:04)
