@@ -194270,7 +194270,7 @@
        }
       },
       {
-       "name": "GrietaFrente0",
+       "name": "GrietaFondo0",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -194280,17 +194280,17 @@
          0.08
         ],
         "CFrame": [
-         25.552,
+         25.648,
          11.075,
-         -113.8,
+         -112.2,
          -0.996,
-         -0.0894,
+         0.0894,
          -0.0,
-         -0.0894,
+         0.0894,
          0.996,
          0.0,
          0.0,
-         0.0,
+         -0.0,
          -1.0
         ],
         "Color": [
@@ -194308,7 +194308,7 @@
        }
       },
       {
-       "name": "GrietaFrente1",
+       "name": "GrietaFondo1",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -194318,17 +194318,17 @@
          0.08
         ],
         "CFrame": [
-         25.616,
+         25.584,
          16.425,
-         -113.8,
+         -112.2,
          -0.9936,
-         0.1129,
+         -0.1129,
          -0.0,
-         0.1129,
+         -0.1129,
          0.9936,
          0.0,
          0.0,
-         -0.0,
+         0.0,
          -1.0
         ],
         "Color": [
@@ -194526,7 +194526,7 @@
        }
       },
       {
-       "name": "GrietaFrente0",
+       "name": "GrietaFondo0",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -194536,17 +194536,17 @@
          0.08
         ],
         "CFrame": [
-         10.448,
+         10.352,
          11.075,
-         -113.8,
+         -112.2,
          -0.996,
-         0.0894,
+         -0.0894,
          -0.0,
-         0.0894,
+         -0.0894,
          0.996,
          0.0,
          0.0,
-         -0.0,
+         0.0,
          -1.0
         ],
         "Color": [
@@ -194564,7 +194564,7 @@
        }
       },
       {
-       "name": "GrietaFrente1",
+       "name": "GrietaFondo1",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -194574,17 +194574,17 @@
          0.08
         ],
         "CFrame": [
-         10.384,
+         10.416,
          16.425,
-         -113.8,
+         -112.2,
          -0.9936,
-         -0.1129,
+         0.1129,
          -0.0,
-         -0.1129,
+         0.1129,
          0.9936,
          0.0,
          0.0,
-         0.0,
+         -0.0,
          -1.0
         ],
         "Color": [
@@ -194717,7 +194717,7 @@
        "name": "Texto",
        "className": "SurfaceGui",
        "properties": {
-        "Face": "Back",
+        "Face": "Front",
         "SizingMode": "PixelsPerStud",
         "PixelsPerStud": 40,
         "LightInfluence": 0
@@ -195179,7 +195179,7 @@
        }
       },
       {
-       "name": "GrietaFrente0",
+       "name": "GrietaFondo0",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -195189,17 +195189,17 @@
          0.08
         ],
         "CFrame": [
-         -10.448,
+         -10.352,
          11.075,
-         -113.8,
+         -112.2,
          -0.996,
-         -0.0894,
+         0.0894,
          -0.0,
-         -0.0894,
+         0.0894,
          0.996,
          0.0,
          0.0,
-         0.0,
+         -0.0,
          -1.0
         ],
         "Color": [
@@ -195217,7 +195217,7 @@
        }
       },
       {
-       "name": "GrietaFrente1",
+       "name": "GrietaFondo1",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -195227,17 +195227,17 @@
          0.08
         ],
         "CFrame": [
-         -10.384,
+         -10.416,
          16.425,
-         -113.8,
+         -112.2,
          -0.9936,
-         0.1129,
+         -0.1129,
          -0.0,
-         0.1129,
+         -0.1129,
          0.9936,
          0.0,
          0.0,
-         -0.0,
+         0.0,
          -1.0
         ],
         "Color": [
@@ -195435,7 +195435,7 @@
        }
       },
       {
-       "name": "GrietaFrente0",
+       "name": "GrietaFondo0",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -195445,17 +195445,17 @@
          0.08
         ],
         "CFrame": [
-         -25.552,
+         -25.648,
          11.075,
-         -113.8,
+         -112.2,
          -0.996,
-         0.0894,
+         -0.0894,
          -0.0,
-         0.0894,
+         -0.0894,
          0.996,
          0.0,
          0.0,
-         -0.0,
+         0.0,
          -1.0
         ],
         "Color": [
@@ -195473,7 +195473,7 @@
        }
       },
       {
-       "name": "GrietaFrente1",
+       "name": "GrietaFondo1",
        "className": "Part",
        "properties": {
         "Anchored": true,
@@ -195483,17 +195483,17 @@
          0.08
         ],
         "CFrame": [
-         -25.616,
+         -25.584,
          16.425,
-         -113.8,
+         -112.2,
          -0.9936,
-         -0.1129,
+         0.1129,
          -0.0,
-         -0.1129,
+         0.1129,
          0.9936,
          0.0,
          0.0,
-         0.0,
+         -0.0,
          -1.0
         ],
         "Color": [
@@ -195626,7 +195626,7 @@
        "name": "Texto",
        "className": "SurfaceGui",
        "properties": {
-        "Face": "Back",
+        "Face": "Front",
         "SizingMode": "PixelsPerStud",
         "PixelsPerStud": 40,
         "LightInfluence": 0
@@ -195987,7 +195987,7 @@
        "name": "Texto",
        "className": "SurfaceGui",
        "properties": {
-        "Face": "Back",
+        "Face": "Front",
         "SizingMode": "PixelsPerStud",
         "PixelsPerStud": 40,
         "LightInfluence": 0

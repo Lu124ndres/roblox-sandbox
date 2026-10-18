@@ -2206,3 +2206,16 @@ tienen una conducta que los pida.
   `Vel. x107.4 · 209K/pique` para salir al mismo tamaño que las otras (antes se encogía a
   10 px). El regalo por jugar usa los mismos bordes y la misma columna de texto que las
   estadísticas (`Layout.STAT_PLATE_LEFT` / `STAT_TEXT_LEFT`).
+- **Salón de la fama**: los tableros de poder, monstruos y renacimientos, sus títulos y las
+  vetas de lava de sus pilares miran ahora al centro de la isla (cara `Front`), y se leen
+  desde la zona de entrenamiento en vez de desde la aparición (`generar_isla.py`,
+  `RankingBoards`).
+
+**Probado en Studio (Play):** medidas de las placas (monedas centradas exacto, todas las líneas
+chicas a 16 px, regalo con el mismo canto que las estadísticas) y captura de los tres tableros
+desde el centro de la isla.
+
+**Qué se rompió:** nada visto. Desde la aparición los tableros se ven ahora de espaldas (piedra
+negra lisa).
+
+**Qué sigue:** revisar el HUD en el emulador de móvil (pendiente del backlog).

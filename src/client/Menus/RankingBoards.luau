@@ -4,7 +4,8 @@
 
 	Dibuja el ranking global en los tableros del salón de la fama de la entrada
 	(TableroPoder, TableroKills y TableroRenacimientos del mapa) con lo que publica el servidor en
-	ReplicatedStorage.Rankings (Leaderboards): top 10 con nombre y valor.
+	ReplicatedStorage.Rankings (Leaderboards): top 10 con nombre y valor. Se dibujan
+	por la cara que mira hacia adentro, hacia la zona de entrenamiento.
 
 	Estilo de la interfaz (Interface/Kit): una placa de piedra volcánica con cada
 	puesto en un hueco tallado; el 1, 2 y 3 en oro, plata y bronce, el resto en
@@ -61,7 +62,7 @@ end
 
 local function surface(part: BasePart): Board
 	local gui = Instance.new("SurfaceGui")
-	gui.Face = Enum.NormalId.Back -- mira hacia la aparición (como los carteles)
+	gui.Face = Enum.NormalId.Front -- mira al centro de la isla: se lee desde el entrenamiento
 	gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
 	gui.PixelsPerStud = PIXELS_PER_STUD
 	gui.LightInfluence = 0.15 -- la piedra ya es oscura: que la sombra no la apague

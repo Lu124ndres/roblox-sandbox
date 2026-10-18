@@ -618,8 +618,8 @@ def plaza_aparicion():
 
 
 def tablero(nombre, pos, r, ancho, alto):
-    """Tablero del ranking (lo dibuja RankingBoards por la cara de atrás): piedra casi negra
-    con un filo de oro mate y un marco de basalto."""
+    """Tablero del ranking (lo dibuja RankingBoards por la cara de adelante, -Z local, la que
+    mira al centro de la isla): piedra casi negra con un filo de oro mate y un marco de basalto."""
     return [
         pieza(nombre, (ancho, alto, 0.5), pos, PIEDRA_NEGRA, "Slate", r),
         pieza(f"Marco{nombre}", (ancho + 1, alto + 1, 0.3), pos, ROCA_VOLCANICA_OSCURA, "Basalt", r, **DECORADO),
@@ -644,18 +644,19 @@ def arco_entrada():
         hijos.append(pieza(f"Moldura{k}", (19.7, 0.3, 3.2), add(base, (0, y + dy, 0)), ORO_MATE, "Metal", r, **DECORADO))
     # El texto mira hacia afuera (+Z local = hacia la aparición).
     hijos += placa("Cartel", add(base, (0, y + 12.6, 0)), r, "LAGUNA DE LOS GIGANTES", 12.6, 2.6)
-    # Salón de la fama: dos tableros grandes a los lados del arco y uno sobre él.
+    # Salón de la fama: dos tableros grandes a los lados del arco y uno sobre él. Miran hacia
+    # adentro (-Z local, cara Front): se leen desde la zona de entrenamiento del centro.
     for lado, nombre, titulo in ((-1, "TableroPoder", "TOP PODER"), (1, "TableroKills", "TOP MONSTRUOS")):
         p = add(base, aplicar(r, (18 * lado, 0, 2)))
         hijos.append(pieza(f"Pedestal{nombre}", (14, 3.2, 3), (p[0], y + 1.6, p[2]), ROCA_VOLCANICA, "Basalt", r))
         hijos.append(pieza(f"Banda{nombre}", (14.3, 0.35, 3.3), (p[0], y + 3, p[2]), ORO_MATE, "Metal", r, **DECORADO))
         hijos += tablero(nombre, (p[0], y + 10.4, p[2]), r, 12, 14)
         for k in (-1, 1):
-            hijos.append(pilar(f"Pilar{nombre}{k}", add(p, aplicar(r, (7.6 * k, 0, 0))), y, 17, 1.6, r, (1,), 2, k))
-        hijos += placa(f"Titulo{nombre}", (p[0], y + 19.2, p[2]), r, titulo, 11, 2)
+            hijos.append(pilar(f"Pilar{nombre}{k}", add(p, aplicar(r, (7.6 * k, 0, 0))), y, 17, 1.6, r, (-1,), 2, k))
+        hijos += placa(f"Titulo{nombre}", (p[0], y + 19.2, p[2]), r, titulo, 11, 2, "Front")
     hijos.append(pieza("BaseTablero", (19, 1, 3), add(base, (0, y + 18, 0)), ROCA_VOLCANICA_OSCURA, "Basalt", r))
     hijos += tablero("TableroRenacimientos", add(base, (0, y + 22.6, 0)), r, 17, 8)
-    hijos += placa("TituloTableroRenacimientos", add(base, (0, y + 28, 0)), r, "TOP RENACIMIENTOS", 13, 2)
+    hijos += placa("TituloTableroRenacimientos", add(base, (0, y + 28, 0)), r, "TOP RENACIMIENTOS", 13, 2, "Front")
     return grupo("ArcoEntrada", hijos)
 
 
