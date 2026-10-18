@@ -29,3 +29,6 @@ assets/_descartados/
 Claude outputs/
 .claude/
 *.fbm/
+
+# Caché de Python de tools/
+__pycache__/

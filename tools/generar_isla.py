@@ -295,22 +295,14 @@ def cartel(nombre, pos, r, texto, ancho, alto, cara="Front"):
 
 
 # --- Zona de entrenamiento ------------------------------------------------------------
-# Un color por estanque, del más débil (verde) al más fuerte (dorado).
+# Un color por estanque, del más débil (verde) al más fuerte (dorado). Las piezas de la zona
+# de entrenamiento salen de tools/estanques.
 COLORES_ESTANQUE = (
     (120, 220, 120), (90, 210, 200), (90, 170, 255), (130, 120, 255), (190, 110, 255),
     (255, 110, 200), (255, 90, 90), (255, 150, 60), (255, 205, 60), (255, 245, 170),
     (120, 245, 255),  # 11: el sagrado del centro (solo Robux)
 )
-SAGRADO = L["trainingPondCount"] + 1  # mismo índice que WorldZones.SACRED_POND
 ORO = (255, 200, 70)
-
-
-def angulo_estanque(i):
-    """Misma fórmula que WorldZones.pondAngle (i empieza en 1)."""
-    paso = 360 / L["trainingPondCount"]
-    return L["spawnAngle"] + paso / 2 + (i - 1) * paso
-
-
 
 
 def anillo_tallado(nombre, cx, cz, radio, n, ancho, alto, y_tope, colores, material, **extra):
@@ -325,120 +317,11 @@ def anillo_tallado(nombre, cx, cz, radio, n, ancho, alto, y_tope, colores, mater
     return hijos
 
 
-MARMOL = ((246, 243, 237), (238, 234, 227))
-MARMOL_LOSA = ((226, 221, 212), (216, 211, 202))
-
-
-def bolardo(nombre, x, z, y, tono):
-    """Bolardo de mármol con tapa de luz del color del estanque y remate de oro."""
-    return grupo(nombre, [
-        pieza("Pilar", (0.9, 2.2, 0.9), (x, y + 1.1, z), MARMOL[0], "Marble"),
-        pieza("Banda", (1.0, 0.18, 1.0), (x, y + 1.9, z), ORO, "Metal", **DECORADO),
-        dict(pieza("Luz", (0.7, 0.5, 0.7), (x, y + 2.45, z), tono, "Neon", **FANTASMA), children=[luz(10, 0.7, tono)]),
-        pieza("Remate", (1.0, 0.2, 1.0), (x, y + 2.8, z), ORO, "Metal", **DECORADO),
-    ])
-
-
-def estanque(i):
-    """Estanque i, limpio: losa de mármol alrededor con filo de oro, borde ancho de mármol
-    perfectamente redondo (tapa el canto del agua del terreno) con una línea de luz del color
-    de su nivel por dentro y oro por fuera, un pedestal en el centro con el cristal flotante
-    (lo anima PondFx), un aro de luz bajo el agua y bolardos. El agua es terreno
-    (TerrainBuilder). La pieza "Estanque" lleva el ProximityPrompt."""
-    sagrado = i == SAGRADO
-    a = 90 if sagrado else angulo_estanque(i)
-    centro = (0, 0, 0) if sagrado else polar(a, L["trainingPondRingRadius"], 0)
-    cx, cz = centro[0], centro[2]
-    y = L["plateauHeight"]
-    agua = L["trainingPondWaterTop"]
-    R = L["sacredPondRadius"] if sagrado else L["trainingPondRadius"]
-    n = 72 if sagrado else 48  # bloques de cada anillo: de lejos es un círculo perfecto
-    tono = COLORES_ESTANQUE[(i - 1) % len(COLORES_ESTANQUE)]
-    dentro, fuera = R - 2.2, R + 1.5  # el borde tapa el canto dentado del agua del terreno
-    losa_fuera = fuera + 4.6
-    hijos = []
-    # Losa de mármol alrededor (sobre el empedrado) con su filo de oro.
-    hijos += anillo_tallado("Losa", cx, cz, (fuera + losa_fuera) / 2 - 0.1, n, losa_fuera - fuera + 0.2, 0.6, y + 0.25,
-                            MARMOL_LOSA, "Marble")
-    hijos += anillo_tallado("FiloLosa", cx, cz, losa_fuera, n, 0.35, 0.65, y + 0.3, ORO, "Metal", **DECORADO)
-    # Borde ancho y redondo; baja bajo el agua para tapar el canto del terreno.
-    hijos += anillo_tallado("Borde", cx, cz, (dentro + fuera) / 2, n, fuera - dentro, 3.4, y + 1.2, MARMOL[0], "Marble")
-    hijos += anillo_tallado("BrilloTope", cx, cz, dentro + 0.35, n, 0.28, 0.08, y + 1.26, tono, "Neon", **FANTASMA)
-    hijos += anillo_tallado("Oro", cx, cz, fuera - 0.2, n, 0.4, 0.1, y + 1.28, ORO, "Metal", **DECORADO, CanCollide=False)
-    # Tapa invisible apenas bajo el agua: se camina por el estanque sin hundirse.
-    tapa_y = agua - L["pondCoverDepth"] - 0.5
-    hijos.append(pieza("Tapa", (1, 2 * R + 1, 2 * R + 1), (cx, tapa_y, cz), tono, "SmoothPlastic", VERTICAL, "Cylinder",
-                       Transparency=1, CanQuery=False, CanTouch=False, CastShadow=False))
-    # Aro de luz bajo el agua: brilla a través de ella.
-    hijos += anillo_tallado("Runa", cx, cz, R * 0.5, 24, 0.35, 0.15, agua - 1.3, tono, "Neon", **FANTASMA)
-    if sagrado:  # el pez dorado de la plaza, ahora en medio del agua sagrada
-        hijos.append(estatua_central(1.2, agua))
-    else:
-        # Pedestal de mármol en el centro: el cristal flota encima.
-        fondo = L["trainingPondFloor"]
-        alto = agua + 0.5 - fondo
-        hijos.append(pieza("Pedestal", (alto, 3.2, 3.2), (cx, fondo + alto / 2, cz), MARMOL[0], "Marble", VERTICAL, "Cylinder",
-                           **DECORADO))
-        hijos.append(pieza("PedestalOro", (0.25, 3.5, 3.5), (cx, agua + 0.4, cz), ORO, "Metal", VERTICAL, "Cylinder", **FANTASMA))
-        hijos.append(pieza("PedestalLuz", (0.08, 2.2, 2.2), (cx, agua + 0.54, cz), tono, "Neon", VERTICAL, "Cylinder", **FANTASMA))
-        lado = 1.2 + i * 0.12  # el cristal crece con el nivel
-        cristal = pieza("CristalFlotante", (lado, lado, lado), (cx, agua + 3.6, cz), tono, "Neon", mat(rx(45), rz(35)), **FANTASMA)
-        cristal["children"] = [luz(18, 1.3, tono)]
-        cristal["attributes"] = {"Indice": i}
-        hijos.append(cristal)
-    if i >= 7:  # órbitas de cristalitos (en el sagrado, alrededor de la estatua)
-        for k in range(6 if sagrado else 3):
-            p = add((cx, 0, cz), polar(k * (60 if sagrado else 120), 7 if sagrado else 2.6, 0))
-            hijos.append(pieza(f"Orbita{k + 1}", (0.6, 0.6, 0.6), (p[0], agua + 3.6, p[2]), tono, "Neon", mat(rx(45), rz(35)), **FANTASMA))
-    # Modelo 3D del borde con su losa y filo de oro (BordeEstanque / BordeSagrado de Blender).
-    hijos.append(ancla("BordeSagrado" if sagrado else "BordeEstanque", (cx, y - 2.2, cz), (2 * losa_fuera, 3.4, 2 * losa_fuera),
-                       I3, "ancho", "Losa,FiloLosa,Borde,Oro"))
-    # Bolardos sobre la losa.
-    cuantos = 8 if sagrado else 4
-    for k in range(cuantos):
-        p = add((cx, 0, cz), polar(a + 45 + k * 360 / cuantos, (fuera + losa_fuera) / 2, 0))
-        hijos.append(bolardo(f"Bolardo{k + 1}", p[0], p[2], y + 0.25, tono))
-    # Pieza del ProximityPrompt en el centro del agua; alcanza a todo el borde. El sagrado es
-    # más grande: lleva 4 alrededor de la estatua para que el prompt llegue desde cualquier lado.
-    puntos = [polar(45 + k * 90, R * 0.62, 0) for k in range(4)] if sagrado else [(0, 0, 0)]
-    for k, q in enumerate(puntos):
-        marcador = pieza("Estanque", (2, 1, 2), (cx + q[0], agua + 1, cz + q[2]), tono, **INVISIBLE, CanCollide=False)
-        marcador["attributes"] = {"Indice": i}
-        hijos.append(marcador)
-    return grupo(f"Estanque{i}", hijos)
-
-
-def estatua_central(e=1.8, agua=None):
-    """Pez dorado sobre un pedestal: el centro de la zona de entrenamiento. e = escala.
-    Con `agua`, sale del estanque sagrado: una columna desde el fondo en lugar de la base."""
-    y = L["plateauHeight"]
-    giro = mat(ry(30), rx(-35))
-    fondo = L["trainingPondFloor"]
-    base = (pieza("Base", (1.2, 14 * e, 14 * e), (0, y + 0.6, 0), (150, 146, 140), "Cobblestone", VERTICAL, "Cylinder")
-            if agua is None else
-            pieza("Columna", (y + 1.2 - fondo, 6.6 * e, 6.6 * e), (0, (y + 1.2 + fondo) / 2, 0), (176, 170, 160), "Marble", VERTICAL, "Cylinder"))
-    hijos = [
-        base,
-        pieza("Pedestal", (6 * e, 6 * e, 6 * e), (0, y + 1.2 + 3 * e, 0), (200, 194, 184), "Marble", VERTICAL, "Cylinder"),
-        pieza("Corona", (0.8 * e, 7.4 * e, 7.4 * e), (0, y + 1.2 + 6.2 * e, 0), ORO, "Metal", VERTICAL, "Cylinder"),
-    ]
-    centro = (0, y + 1.2 + 10.5 * e, 0)
-    cuerpo = pieza("PezDorado", (1, 1, 1), centro, ORO, "Metal", giro)
-    cuerpo["children"] = [{"name": "Forma", "className": "SpecialMesh",
-                           "properties": {"MeshType": "Sphere", "Scale": [3.4 * e, 4.6 * e, 10 * e]}}]
-    hijos.append(cuerpo)
-    hijos.append(pieza("Cola", (0.5 * e, 5 * e, 3.6 * e), add(centro, aplicar(giro, (0, 0, 5.6 * e))), ORO, "Metal", mat(giro, rz(45))))
-    brillo = pieza("Brillo", (1, 1, 1), centro, ORO, **INVISIBLE, CanCollide=False)
-    brillo["children"] = [luz(26, 1, ORO)]
-    hijos.append(brillo)
-    hijos.append(cartel("Cartel", (0, y + 1.2 + 2.2 * e, -3.1 * e), I3, "ZONA DE ENTRENAMIENTO" if agua is None else "ESTANQUE SAGRADO", 4.4 * e, 0.9 * e))
-    return grupo("Estatua", hijos)
-
-
 def zona_entrenamiento():
-    y = L["plateauHeight"]
-    hijos = [grupo("Estanques", [estanque(i + 1) for i in range(SAGRADO)], "Folder"), borde_plaza()]
-    return grupo("ZonaEntrenamiento", hijos)
+    """Jardín de entrenamiento con estanques naturales: vive en tools/estanques."""
+    from estanques import zona_entrenamiento as jardin  # importa este módulo: va adentro
+
+    return jardin()
 
 
 # --- Muelles y puntos de pesca ---------------------------------------------------------
@@ -565,26 +448,6 @@ def pilar(nombre, p, y0, alto, ancho=2.4, r=I3, caras=(), tramos=3, espejo=1):
     if caras:
         hijos += grieta("Grieta", (p[0], 0, p[2]), r, ancho, y0 + 2.4, y0 + 1.2 + alto * 0.7, caras, tramos, espejo)
     return grupo(nombre, hijos)
-
-
-def borde_plaza():
-    """Bordillo de mármol con filo de oro alrededor de la plaza, setos con flores por
-    fuera y farolas por dentro; todo abre paso a los caminos."""
-    y, R = L["plateauHeight"], L["plazaRadius"]
-    hijos = anillo_con_huecos("Bordillo", R - 0.4, 120, 2.2, 1.2, y + 0.45, MARMOL_CLARO, "Marble", 4.5)
-    hijos += anillo_con_huecos("FiloOro", R - 1.45, 120, 0.3, 1.2, y + 0.5, ORO, "Metal", 4.5, **DECORADO)
-    seto = anillo_con_huecos("Seto", R + 2.6, 120, 2.6, 2.6, y + 1.8, SETO, "Grass", 7.5)
-    hijos += seto
-    for k, s in enumerate(seto[::3]):  # flores sobre el seto
-        p = s["properties"]["CFrame"]
-        hijos.append(pieza(f"Flor{k}", (0.8, 0.8, 0.8), (p[0], y + 2.05, p[2]), FLORES[k % len(FLORES)], "SmoothPlastic",
-                           forma="Ball", **FANTASMA))
-    for k in range(18):  # farolas por dentro del bordillo
-        a = 10 + k * 20
-        if not sobre_camino(a, 6):
-            p = polar(a, R - 4, 0)
-            hijos.append(farola(f"Farola{k}", p[0], p[2], y))
-    return grupo("BordePlaza", hijos)
 
 
 def aparicion():
