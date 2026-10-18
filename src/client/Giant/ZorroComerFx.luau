@@ -84,7 +84,7 @@ function ZorroComerFx.play(motion: Zorro.Motion, event: Zorro.Event)
 		ZorroVoces.play("ZorroYip", motion.top(), stage, "voice")
 	elseif kind == "thanks" then
 		ZorroVoces.play("ZorroYipDouble", motion.top(), stage, "voice")
-		Fx.hearts(motion.top(), 3)
+		Fx.sparkle(motion.top(), CYAN, 8)
 	elseif kind == "glitter" then
 		ZorroGotas.glitter(state.center, h, power)
 		Fx.sparkle(motion.top(), CYAN, 10 + 4 * power)

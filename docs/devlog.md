@@ -2632,3 +2632,25 @@ vigilante de FPS activa solo el modo rápido (partículas y pisadas en 0) cuando
 vuelve lento; con FPS normales se ven. Sin errores nuestros en la consola.
 
 **Qué sigue:** guardar el lugar en Studio (los modelos viven en el `.rbxl`).
+
+---
+
+## 2026-10-18 (14) — La barra sube a la par de los peces, sin corazones, contornos siempre encendidos
+
+**Qué se hizo:**
+
+- **Barra a la par** (pedido del usuario: «alimento todos los peces rápido pero la barra sube
+  lento»): la comida de cada pez entra a la barra en cuanto se lanza. Se borró
+  `Feeding/FoodBank` y el tope por persona `minSoloSeconds` (una persona sola ya no tiene un
+  mínimo de 3 minutos). El tamaño de la barra lo sigue calculando `GiantFood` con el ritmo de
+  todo el servidor, así que solo igual hacen falta varios viajes. No se sacan más peces de los
+  que le faltan a la etapa (`GiantService.remainingFood`).
+- **Sin corazones** al alimentar ni en los momentos de alegría de la orca, el dragón, el
+  minotauro y el zorro: se cambiaron por chispas y se borró `Fx.hearts`.
+- **Contornos siempre encendidos:** los estanques cerrados ya no se apagan (parecía que no
+  tenían luz); brillan del mismo color, más tenues.
+
+**Probado en Studio (Play):** canasta de 20 peces: en 0.25 s se vació y la barra pasó de 0 a
+0.19, y no siguió subiendo después de soltar. Los 11 contornos en Neon (6 tenues: cerrados).
+
+**Qué se rompió:** nada visto.

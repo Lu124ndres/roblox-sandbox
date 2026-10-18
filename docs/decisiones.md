@@ -761,3 +761,12 @@ parte que los lleva y pegados a un hueso (nunca se separan). **Lo no obvio:**
   color: las luces del traje son tenues y la de la vitrina sale del botón, desde abajo.
 - La capa no sigue a ninguna parte del cuerpo: la mueve el estilo con `fx.pose` cada cuadro
   (sube con la velocidad, suavizado, y ondea con dos ondas desfasadas).
+
+## 2026-10-18 — Sin tope de alimentar por persona
+
+**Contexto:** el tope `minSoloSeconds` (una persona sola no llena un monstruo en menos de 3
+minutos) primero frenaba los peces y después hacía que la barra subiera más lento que ellos.
+**Decisión (pedido del usuario):** se quitó: la comida entra con cada pez. El equilibrio queda
+en `GiantFood`, que dimensiona la barra con lo que el servidor puede pescar y entregar
+(`targetMinutes`), así que un jugador solo sigue necesitando varios viajes.
+

@@ -95,10 +95,9 @@ local function stageEnd(): number
 	return GIANTS.stageThresholds[GiantStages.stageFor(progress) + 1] or 1
 end
 
--- Comida que le falta para llenarse del todo (FeedingService no saca más peces que esto:
--- lo lanzado entra de a poco, Feeding/FoodBank, y espera durante las evoluciones).
-function GiantService.remainingTotal(): number
-	return math.max(0, (1 - progress) * totalFood)
+-- Comida que le falta para terminar la etapa (FeedingService no saca más peces que esto).
+function GiantService.remainingFood(): number
+	return math.max(0, (stageEnd() - progress) * totalFood)
 end
 
 function GiantService.getPhase(): Protocol.GiantPhase
@@ -166,9 +165,8 @@ local function advance(fraction: number, userId: number, food: number, capped: b
 end
 
 -- Suma al gigante actual: `count` peces que se ven volar (fishId = la especie más rara,
--- para el efecto) y `food` de comida que entra a la barra. Pueden ir por separado: los
--- peces se lanzan al momento y su comida entra de a poco (Feeding/FoodBank). El servidor
--- ya validó quién y cuánto.
+-- para el efecto) y `food` de comida que entra a la barra. El servidor ya validó quién y
+-- cuánto.
 function GiantService.feed(food: number, feeder: Player, count: number, fishId: string)
 	if not GiantService.isFeeding() then
 		return

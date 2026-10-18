@@ -3,7 +3,7 @@
 	Fx
 
 	Efectos visuales locales reutilizables: salpicaduras, ondas en el agua,
-	destellos, chorro del gigante y corazones. Todo es del cliente (no viaja
+	destellos y chorro del gigante. Todo es del cliente (no viaja
 	por la red) y se limpia solo. Las texturas son las de partículas que
 	trae Roblox instaladas (Assets.Particles), así que no hay nada que subir.
 ]]
@@ -141,33 +141,6 @@ function Fx.spout(position: Vector3, scale: number)
 	task.delay(1, function()
 		jet.Enabled = false
 	end)
-end
-
--- Corazones que suben y se desvanecen (cuando el gigante come).
-function Fx.hearts(position: Vector3, count: number)
-	for index = 1, count do
-		local anchor =
-			anchorAt(position + Vector3.new(math.random(-3, 3), 0, math.random(-3, 3)), 2.5)
-		local billboard = Instance.new("BillboardGui")
-		billboard.Size = UDim2.fromOffset(46, 46)
-		billboard.AlwaysOnTop = true
-		billboard.LightInfluence = 0
-		billboard.Adornee = anchor
-		local label = Instance.new("TextLabel")
-		label.Size = UDim2.fromScale(1, 1)
-		label.BackgroundTransparency = 1
-		label.Text = "♥"
-		label.TextScaled = true
-		label.TextColor3 = Color3.fromRGB(255, 110, 150)
-		label.TextStrokeTransparency = 0.4
-		label.Parent = billboard
-		billboard.Parent = anchor
-		local info =
-			TweenInfo.new(1.6 + index * 0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		TweenService:Create(billboard, info, { StudsOffset = Vector3.new(0, 7, 0) }):Play()
-		TweenService:Create(label, info, { TextTransparency = 1, TextStrokeTransparency = 1 })
-			:Play()
-	end
 end
 
 return Fx

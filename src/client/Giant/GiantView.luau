@@ -99,7 +99,6 @@ local function onFed(body: GiantBody.Body, character: Model, fishId: string)
 	end
 	local top = body.mouth()
 	Sounds.play("Chomp", top)
-	Fx.hearts(top, 4)
 	Fx.sparkle(top, UIConfig.Colors.Coins, 16)
 	for _ = 1, if body.flies then 0 else 3 do
 		GroundFx.splash(waterAround(body, 0.3), 1.4 * math.sqrt(scale))

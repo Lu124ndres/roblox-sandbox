@@ -111,7 +111,7 @@ local function play(motion: Minotauro.Motion, kind: string, place: MinoSuelo.Pla
 	elseif kind == "flex" then
 		Fx.sparkle(motion.top(), UIConfig.Colors.Coins, 24)
 	elseif kind == "happy" then
-		Fx.hearts(motion.top(), 5)
+		Fx.sparkle(motion.top(), UIConfig.Colors.Coins, 14)
 	elseif not MinoComer.play(motion, kind, ground, place.sand, shake) then
 		impact(kind, ground, motion.state.height, profile.stomp, place.sand)
 	end

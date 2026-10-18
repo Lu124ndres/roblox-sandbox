@@ -89,7 +89,7 @@ function ZorroEventos.play(
 		ZorroVoces.event("shake", voz)
 	elseif kind == "happy" then
 		ZorroVoces.event("happy", voz)
-		Fx.hearts(motion.top(), 5)
+		Fx.sparkle(motion.top(), Color3.fromRGB(150, 235, 255), 14)
 	elseif kind == "orbs" then
 		if fx then
 			Sounds.play("CoinPop", motion.top(), 0.6)

@@ -28,7 +28,6 @@ local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local DragonFeast = require(script.Parent.Parent.Effects.DragonFeast)
 local DragonKit = require(script.Parent.Parent.Effects.DragonKit)
 local DragonSmoke = require(script.Parent.Parent.Effects.DragonSmoke)
-local Fx = require(script.Parent.Parent.Effects.Fx)
 
 local SAVOR_EVERY = 1.2 -- s
 local SHAKE_REACH = 220
@@ -84,7 +83,6 @@ function DragonComer.new(motion: Dragon.Motion): Comer
 				then (from - mouth).Unit
 				else forward
 			DragonSmoke.nostrils(mouth, toward:Lerp(forward, 0.4), 0.4 * s)
-			Fx.hearts(mouth, 6)
 		elseif kind == "treat" then
 			DragonFeast.sparkles(mouth, color, 0.6 * s)
 		elseif kind == "treatFlare" then

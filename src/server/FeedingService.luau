@@ -8,9 +8,9 @@
 	al apretar y FeedRequest(false) al soltar; al soltar se corta. Los peces salen
 	parejos, delivery.fishPerSecond por segundo (x1.35 por renacimiento) o, si es
 	más rápido, la canasta llena en delivery.basketSeconds (RebirthMath.
-	deliveryPerSecond); su comida entra a la barra de a poco (Feeding/FoodBank):
-	una persona nunca llena más de 1/minSoloSeconds de la barra por segundo. Cada
-	lote suma a la misión "food" el % de la barra que aportó.
+	deliveryPerSecond), y su comida entra a la barra al mismo tiempo (la barra sube a
+	la par de los peces, pedido del usuario). Cada lote suma a la misión "food" el %
+	de la barra que aportó.
 	Cada lote cobra sus monedas una vez (multiplicadas por el gigante actual)
 	y avanza al gigante una vez. Antes de cada lote se valida en el servidor
 	que el jugador siga en la orilla (WorldZones.isOnCraterShore). El poder de pesca ya rindió
@@ -28,7 +28,6 @@ local Perks = require(ReplicatedStorage.Shared.Perks)
 local RebirthMath = require(ReplicatedStorage.Shared.RebirthMath)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Basket = require(script.Parent.Feeding.Basket)
-local FoodBank = require(script.Parent.Feeding.FoodBank)
 local GiantService = require(script.Parent.GiantService)
 local PlayerData = require(script.Parent.PlayerData)
 local Quests = require(script.Parent.Retention.Quests)
@@ -57,9 +56,8 @@ end
 
 -- Entrega peces mientras el jugador mantiene apretado: salen de la canasta al ritmo de
 -- RebirthMath.deliveryPerSecond (renacimientos o canasta llena en basketSeconds), parejos,
--- y su comida entra a la barra de a poco (Feeding/FoodBank: nunca más de 1/minSoloSeconds
--- de la barra por segundo; una persona sola tarda al menos minSoloSeconds). No se sacan
--- más peces de los que el gigante todavía necesita. Se corta si suelta, sale de la orilla,
+-- y su comida entra a la barra en el mismo momento. No se sacan más peces de los que le
+-- faltan a la etapa (si evoluciona, espera y sigue). Se corta si suelta, sale de la orilla,
 -- se va, se vacía la canasta o el gigante se llena (si evoluciona, espera). Devuelve
 -- cuántos peces entregó y cuántas monedas cobró.
 local function deliver(player: Player): (number, number)
@@ -87,7 +85,7 @@ local function deliver(player: Player): (number, number)
 		-- Lo que se junta mientras no alcanza para un pez se guarda (hasta 1 s).
 		fishCredit = math.min(fishCredit + perSecond * dt, math.max(1, perSecond))
 		local count = math.floor(fishCredit)
-		local room = GiantService.remainingTotal() - FoodBank.pending()
+		local room = GiantService.remainingFood()
 		if count >= 1 and room > 0 then
 			local taken, took, food, baseCoins = PlayerData.takeFishBatch(player, count, room)
 			if took == 0 then
@@ -100,8 +98,7 @@ local function deliver(player: Player): (number, number)
 					* GiantService.getCurrent().multiplier
 					* Perks.coinMultiplier(player)
 			)
-			GiantService.feed(0, player, took, Basket.rarest(taken)) -- los peces vuelan ya
-			FoodBank.add(player, food) -- su comida entra de a poco
+			GiantService.feed(food, player, took, Basket.rarest(taken))
 			PlayerData.addCoins(player, earned)
 			Quests.add(player, "food", food / GiantService.getFood() * 100)
 			fed += took
@@ -162,7 +159,6 @@ end
 function FeedingService.init()
 	-- FeedRequest(mantiene: boolean): el servidor mira dónde está el jugador.
 	Remotes.FeedRequest.OnServerEvent:Connect(RateLimit.wrap("FeedRequest", 4, 6, onFeed))
-	FoodBank.start(GiantService)
 	Players.PlayerRemoving:Connect(function(player: Player)
 		lastRequestAt[player] = nil
 		streaming[player] = nil

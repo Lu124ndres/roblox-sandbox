@@ -8,9 +8,9 @@
 		  no sigue la curva de la orilla, así que cada tramo baja con un rayo
 		  hasta el barro (si no, quedaba flotando). El terreno lo arma el
 		  servidor al arrancar: se reintenta hasta encontrarlo;
-		- brilla del color del estanque si el jugador lo tiene abierto, y se
-		  apaga (liso y oscuro) si todavía no: de un vistazo se sabe a cuáles
-		  puede entrar.
+		- brilla siempre del color del estanque: fuerte si el jugador lo tiene
+		  abierto y más tenue (semitransparente) si todavía no, así de un
+		  vistazo se sabe a cuáles puede entrar sin que ninguno quede apagado.
 ]]
 
 local Players = game:GetService("Players")
@@ -24,7 +24,7 @@ local LIFT = 0.12 -- sobre el suelo, para que no parpadee con el terreno
 local PROBE = 12 -- studs arriba y abajo del tramo donde se busca el suelo
 local RETRY_SECONDS = 1
 local MAX_TRIES = 40
-local LOCKED_SHADE = 0.35 -- cuánto se oscurece el color cuando está cerrado
+local LOCKED_SEE_THROUGH = 0.55 -- cerrado: el mismo color, más tenue
 
 type Rim = { index: number, parts: { BasePart }, color: Color3, open: boolean? }
 
@@ -88,8 +88,9 @@ local function paint(rim: Rim, open: boolean)
 	end
 	rim.open = open
 	for _, part in rim.parts do
-		part.Material = if open then Enum.Material.Neon else Enum.Material.SmoothPlastic
-		part.Color = if open then rim.color else rim.color:Lerp(Color3.new(0, 0, 0), LOCKED_SHADE)
+		part.Material = Enum.Material.Neon
+		part.Color = rim.color
+		part.Transparency = if open then 0 else LOCKED_SEE_THROUGH
 	end
 end
 

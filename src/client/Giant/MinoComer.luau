@@ -67,10 +67,9 @@ function MinoComer.play(
 		Fx.sparkle(top, UIConfig.Colors.Coins, 24)
 		shake(top, 0.2 / motion.state.profile.voice, 0.8)
 	elseif kind == "joy" then
-		Fx.hearts(top, 6)
 		Fx.sparkle(top, PINK, 20)
 	elseif kind == "wink" then
-		Fx.hearts(top, 1)
+		Fx.sparkle(top, PINK, 4)
 	elseif kind == "burp" then
 		MinoComerFx.burp(motion.mouth(), scale)
 	elseif kind == "clap" then

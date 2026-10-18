@@ -15,9 +15,10 @@
 	renacer (x Rebirth.feedGrowth por renacimiento) o, si es más rápido, la
 	canasta llena en basketSeconds (RebirthMath.deliveryPerSecond), en pasos
 	de stepSeconds.
-	Tope por persona: nunca más de 1/minSoloSeconds de la barra por segundo
-	(una sola persona tarda al menos 5 min; varios, menos). Los lotes se
-	anuncian a los clientes y el progreso se publica a lo sumo cada broadcastSeconds.
+	La comida de cada pez entra a la barra en cuanto se lanza: la barra sube a la
+	par de los peces (pedido del usuario; antes había un tope por persona,
+	minSoloSeconds). Los lotes se anuncian a los clientes y el progreso se publica
+	a lo sumo cada broadcastSeconds.
 
 	Crecen por etapas: cada etapa empieza en stageThresholds[i] de la barra y
 	mide stageHeightsInPlayers[i] veces el alto de un jugador. Con un jugador
@@ -152,7 +153,6 @@ local Giants: Types.GiantsConfig = {
 	delivery = {
 		stepSeconds = 0.1, -- pasos cortos: los peces salen parejos, no a tirones
 		fishPerSecond = 10, -- un pez cada 0.1 s sin renacer (pedido del usuario: fluido y rápido)
-		minSoloSeconds = 180, -- una persona sola tarda al menos esto en llenar un monstruo
 		broadcastSeconds = 0.15,
 		basketSeconds = 5, -- una canasta llena se vacía en 5 s como mucho
 	},
