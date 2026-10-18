@@ -18,6 +18,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Capas = require(ReplicatedStorage.Shared.Zorro.Comer.Capas)
 local Zorro = require(ReplicatedStorage.Shared.Zorro)
+local CraterMode = require(script.Parent.Parent.Ambient.CraterMode)
 local Distance = require(script.Parent.Parent.Effects.Distance)
 local ZorroAgua = require(script.Parent.Parent.Effects.ZorroAgua)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
@@ -69,6 +70,7 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 				inner = inner,
 				detail = detailed,
 				lookAt = if character then character:GetPivot().Position else nil,
+				ice = CraterMode.get() == "ice",
 			})
 			local rig = motion.state.rig
 			if rig ~= fxFor then
