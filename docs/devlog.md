@@ -1986,3 +1986,16 @@ las cuatro inspiradas en una imagen suya: un dragón oscuro estilo wyvern de ala
 
 **Qué sigue:** importar los cuatro FBX a Studio, poner sus IDs en `Assets` y `modelSuffix = "_v2"`
 en el dragón, y probarlo.
+
+## 2026-10-17 (14) — El dragón marino v2 en el juego
+
+**Qué se hizo:** el usuario importó los cuatro FBX y los pasé a `ServerStorage.DragonMarinoE<n>_v2`.
+- **Revisión por MCP:** 32 huesos, medidas exactas y orientación igual que el minotauro.
+- **Código:** IDs de malla y textura en `Assets`, y `modelSuffix = "_v2"` en el dragón.
+- **Juego:** `GiantTemplates` los publica con alto base 16.5 / 44 / 82.5 / 165.
+
+**Probado en Studio (Play):** las cuatro etapas vuelan con su tamaño. La cría y el anciano comieron
+12 peces cada uno, con raros. Consola sin errores.
+Checklist: build, selene (28 avisos viejos) y stylua.
+
+**Qué sigue:** guardar el lugar (los modelos viven en el `.rbxl`) y publicar.

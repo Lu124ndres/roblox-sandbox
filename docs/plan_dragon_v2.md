@@ -4,8 +4,8 @@ Rehacer el Dragón marino E1..E4 en el estilo de bloques del Minotauro v2
 (`docs/plan_minotauro_v2.md`, `docs/estilo_modelos.md`): bloques, placas y cuñas sobre la
 cuadrícula, bisel de 0.12 módulos, una pieza rígida por hueso, animación solo por código.
 
-**Estado: las cuatro etapas hechas y aprobadas (2026-10-17), rediseño "referencia".** Falta
-importarlas a Studio (paso 5).
+**Estado: las cuatro etapas hechas, aprobadas y en el juego (2026-10-17), rediseño
+"referencia".**
 
 Decisiones del usuario: guarida volcánica de lava, llega en pose de **planeo** (como espera
 `Dragon/Rig`) y presupuesto de triángulos de 8k / 10k / 12k / 15k. El primer diseño era de **mar y
@@ -185,7 +185,10 @@ internas de la cáscara quedan en el mismo plano).
 4. **Rig y FBX** de las cuatro (hecho): `rig_dragon_v2.py --etapa <n>` →
    `assets/blender/DragonMarinoE<n>_v2.fbx` y `assets/textures/DragonMarinoE<n>_v2_color.png`;
    32 huesos (30 que deforman), un hueso por vértice, error máximo ≤ 0.00002 celdas.
-5. **Studio:** importar a mano con "Mantener huesos de influencia cero" a
-   `ServerStorage.DragonMarinoE<n>_v2`, IDs en `Assets` y `modelSuffix = "_v2"` en el Dragón
-   (`Config/Giants.luau`): `GiantTemplates` lo publica con el nombre de siempre.
+5. **Studio** (hecho, 2026-10-17): importados a mano con "Mantener huesos de influencia cero" y
+   movidos a `ServerStorage.DragonMarinoE<n>_v2` (32 huesos; 9.9 / 26.4 / 49.5 / 99 studs de
+   envergadura, boca hacia −Z, ala izquierda en −X). IDs de malla y textura en
+   `Assets.Meshes` y `Assets.Textures`; `modelSuffix = "_v2"` en el Dragón (`Config/Giants.luau`):
+   `GiantTemplates` los publica como `DragonMarinoE<n>` con alto base 16.5 / 44 / 82.5 / 165.
+   Probado en Play: las cuatro etapas vuelan, la cría y el anciano comen, consola sin errores.
 6. **Documentación:** `import_dragon_v2.md`, devlog, guía de estilo.

@@ -100,6 +100,12 @@ local Assets: Assets = {
 		MinotauroE2_v2 = "rbxassetid://105048502299348", -- joven (4,946)
 		MinotauroE3_v2 = "rbxassetid://112201493043935", -- adulto (4,276)
 		MinotauroE4_v2 = "rbxassetid://123237644499937", -- forma final (5,916)
+		-- Dragón marino v2 de bloques (rig_dragon_v2.py, 32 huesos; docs/plan_dragon_v2.md).
+		-- Models en ServerStorage.DragonMarinoE<n>_v2; se usan en lugar de DragonMarinoE<n>.
+		DragonMarinoE1_v2 = "rbxassetid://130204213631093", -- cría (6,796 triángulos)
+		DragonMarinoE2_v2 = "rbxassetid://120863289975810", -- joven (6,814)
+		DragonMarinoE3_v2 = "rbxassetid://135154957159749", -- adulto (7,282)
+		DragonMarinoE4_v2 = "rbxassetid://129375458738404", -- anciano (10,908)
 		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.

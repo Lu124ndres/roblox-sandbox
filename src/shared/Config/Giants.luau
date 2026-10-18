@@ -79,6 +79,9 @@ local Giants: Types.GiantsConfig = {
 			food = 900,
 			targetMinutes = 15,
 			modelBase = "DragonMarino",
+			-- Modelo de bloques v2 (docs/plan_dragon_v2.md): DragonMarinoE1_v2..E4_v2. Sin esta
+			-- línea vuelve todo al actual.
+			modelSuffix = "_v2",
 			rouletteWeight = 15,
 			released = true,
 			inRoulette = true,
