@@ -78,13 +78,18 @@ local Assets: Assets = {
 		EquipoRod = "rbxassetid://79873240212746", -- 20 cañas
 		EquipoBasket = "rbxassetid://125162908853974", -- 14 canastas
 		EquipoBoots = "rbxassetid://122825125598846", -- 14 botas
-		-- Kit "piedra" de la interfaz (tools/ui/generar_kit_piedra.py → assets/ui/kit_piedra/):
+		-- Kit de la interfaz: piedra volcánica con grietas de lava, hecho con la IA de Canva sobre
+		-- las referencias del usuario (tools/ui/recortar_kit_canva.py → assets/ui/kit_canva/).
 		-- 9-slice; los cortes están en Interface/Kit.
-		PiedraPanel = "rbxassetid://96013070309197", -- pizarra con borde biselado
-		PiedraHondo = "rbxassetid://132510118089766", -- hueco hundido (barras, listas)
-		PiedraBoton = "rbxassetid://134425626904491", -- botón casi blanco: se tiñe
-		PiedraLava = "rbxassetid://91067841385407", -- botón con marco de lava (TIENDA)
-		PiedraGema = "rbxassetid://96530857668285", -- cristal azul de adorno
+		PiedraPanel = "rbxassetid://137296723636788", -- panel con grietas de lava
+		PiedraHondo = "rbxassetid://120432474669335", -- hueco tallado (barras, contadores)
+		PiedraBoton = "rbxassetid://130492460203337", -- botón de piedra gris con canto dorado (MEJORAS)
+		PiedraLava = "rbxassetid://80491001045798", -- botón rojo con marco de lava (TIENDA)
+		PiedraCasilla = "rbxassetid://103089949967085", -- casilla de objeto de piedra con lava
+		PiedraCristales = "rbxassetid://71352910897295", -- cristales oscuros junto a los títulos
+		PiedraPedestal = "rbxassetid://76404155830524", -- pedestal volcánico (detalle de MEJORAS)
+		-- Gema azul del kit anterior (tools/ui/generar_kit_piedra.py): panel del monstruo.
+		PiedraGema = "rbxassetid://96530857668285",
 	},
 
 	Meshes = {

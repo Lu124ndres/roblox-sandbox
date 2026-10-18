@@ -2,10 +2,10 @@
 --[[
 	ShopTabs
 
-	Pestañas de MEJORAS (Cañas / Canastas / Botas): botones de piedra teñidos
-	de su color, con el ícono del nivel que tienes y "Nv 3/20". La elegida
-	sube un poco, brilla en su color y lleva canto blanco y título dorado; las
-	otras quedan en piedra más oscura.
+	Pestañas de MEJORAS (Cañas / Canastas / Botas): placas de piedra volcánica
+	con grietas de lava (como la referencia del usuario), con el ícono del nivel
+	que tienes, el título dorado y "Nv 3/20". La elegida sube un poco y lleva
+	canto dorado; las otras quedan en piedra más oscura.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -16,13 +16,9 @@ local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local PALETTE = Style.PALETTE
-local TAB_COLORS: { [string]: Color3 } = {
-	Rod = PALETTE.Cards.Orange,
-	Basket = PALETTE.Cards.Green,
-	Boots = PALETTE.Cards.Blue,
-}
-
-local DIM = 0.4 -- cuánto se oscurece la piedra de las pestañas no elegidas
+local DIM = Color3.fromRGB(150, 150, 150) -- la piedra de las pestañas no elegidas
+local EDGE = Color3.fromRGB(255, 200, 80) -- canto dorado de la elegida
+local TAB_SLICE = 0.35
 local STONE_CORNER = 10
 
 type Tab = {
@@ -31,6 +27,7 @@ type Tab = {
 	level: TextLabel,
 	title: TextLabel,
 	edge: UIStroke,
+	skin: ImageLabel,
 }
 
 export type Tabs = {
@@ -46,7 +43,10 @@ local function tabButton(
 	index: number,
 	TOP: number
 ): Tab
-	local button = Style.button(content, `Pestana{category}`, TAB_COLORS[category], "")
+	local button = Style.button(content, `Pestana{category}`, PALETTE.Panel, "")
+	local skin = Kit.skin(button, "panel")
+	skin.SliceScale = TAB_SLICE
+	Kit.press(button, skin)
 	button.Position = UDim2.new((index - 1) * 0.215, 0, 0, 0)
 	button.Size = UDim2.new(0.205, 0, 0, TOP - 6)
 	local icon = GearIcons.view(button, category, 1)
@@ -63,16 +63,16 @@ local function tabButton(
 	level.TextXAlignment = Enum.TextXAlignment.Left
 	level.Position = UDim2.new(0, TOP, 0.56, 0)
 	level.Size = UDim2.new(1, -TOP - 8, 0.34, 0)
-	-- Canto blanco de la elegida, siguiendo la esquina redonda de la piedra.
+	-- Canto dorado de la elegida, siguiendo la esquina de la piedra.
 	local corner = Instance.new("UICorner")
 	corner.CornerRadius = UDim.new(0, STONE_CORNER)
 	corner.Parent = button
 	local edge = Instance.new("UIStroke")
 	edge.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	edge.Color = Color3.new(1, 1, 1)
+	edge.Color = EDGE
 	edge.Thickness = 3
 	edge.Parent = button
-	return { button = button, icon = icon, level = level, title = title, edge = edge }
+	return { button = button, icon = icon, level = level, title = title, edge = edge, skin = skin }
 end
 
 function ShopTabs.build(content: Frame, top: number): Tabs
@@ -87,14 +87,8 @@ function ShopTabs.build(content: Frame, top: number): Tabs
 			GearIcons.paint(tab.icon, category, level)
 			tab.level.Text = `Nv {level}/{#Upgrades.list(category)}`
 			tab.button.Position = UDim2.new(tab.button.Position.X.Scale, 0, 0, if on then -4 else 2)
-			-- Style.button tiñe la piedra al cambiar BackgroundColor3.
-			local color = TAB_COLORS[category]
-			tab.button.BackgroundColor3 = if on then color else color:Lerp(Color3.new(0, 0, 0), DIM)
+			Kit.tint(tab.skin, if on then Color3.new(1, 1, 1) else DIM)
 			tab.edge.Enabled = on
-			local gold = tab.title:FindFirstChildOfClass("UIGradient")
-			if gold then
-				gold.Enabled = on -- las no elegidas, título blanco
-			end
 		end
 	end
 	local function onPick(callback: (Upgrades.Category) -> ())

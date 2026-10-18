@@ -2030,3 +2030,24 @@ Checklist: build, selene (21 avisos, antes 28) y stylua.
 - Revisar en un teléfono, sobre todo el panel del monstruo dentro de la barra de Roblox y los
   bordes finos de las piezas chicas.
 - `AngerMeter` y `Style.robuxBadge` siguen con el estilo anterior.
+
+## 2026-10-17 (16) — La interfaz con piezas hechas en Canva
+
+**Qué se hizo:** con una nueva referencia (la tienda MEJORAS en piedra volcánica con grietas de
+lava y los botones MEJORAS y TIENDA), el usuario pidió las piezas "en Canva para mayor
+exactitud".
+- **Piezas:** siete, con la IA de Canva a partir de sus imágenes: panel, botón gris con canto
+  dorado, botón de lava, casilla, hueco, cristales y pedestal. Se les quitó el fondo y se
+  exportaron en alta.
+- **Recorte:** se reescalaron para que el canto mida lo mismo que en el kit anterior
+  (`tools/ui/recortar_kit_canva.py`).
+- **Kit:** `Interface/Kit` las usa con sus nuevos cortes. Se suman la pieza `casilla` y
+  `Kit.crystals` (en los títulos). El botón ya es gris, así que el tinte se ajusta: el gris lo
+  deja igual y un color se aclara.
+- **MEJORAS:** queda como la referencia:
+  - pestañas de piedra oscura con canto dorado en la elegida;
+  - casillas oscuras con "TIENES" en piedra gris;
+  - pedestal volcánico detrás del detalle.
+
+**Probado en Studio (Play):** MEJORAS, Tienda y HUD, con capturas y sin errores.
+Checklist: build, selene (21 avisos) y stylua.

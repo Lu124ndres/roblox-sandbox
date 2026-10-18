@@ -50,6 +50,38 @@ Son 9-slice; los cortes están en `Interface/Kit`.
 | PiedraLava | lava.png | TIENDA y botones estrella | 91067841385407 | subido |
 | PiedraGema | gema.png | Gemas de adorno | 96530857668285 | subido |
 
+## Kit "lava" de la interfaz (Canva)
+
+Reemplaza las piezas del kit "piedra" (2026-10-17): el usuario pasó una captura de la tienda
+MEJORAS en piedra volcánica con grietas de lava y los botones MEJORAS (piedra gris con canto
+dorado) y TIENDA (marco de lava), y pidió hacerlo "en Canva para mayor exactitud".
+
+**Cómo se hizo:**
+1. Las dos referencias se subieron a Canva. Cada pieza se generó con la IA de Canva usando la
+   referencia, con el prompt "Game UI asset in exactly the same hand-painted style as the
+   reference…, no text, even borders for 9-slice, isolated on white".
+2. Se quitó el fondo en Canva.
+3. Se colocó cada pieza en una página de un diseño auxiliar y se exportó como PNG transparente:
+   `assets/ui/kit_canva/crudo/`.
+4. `tools/ui/recortar_kit_canva.py` las recorta y las achica para que el canto mida lo mismo
+   que en el kit anterior: los `SliceScale` de cada pantalla siguen valiendo. Los cortes quedan
+   en `cortes.json`.
+5. Se subieron por el MCP de Studio.
+
+Las referencias no se suben al repo.
+
+| Nombre | Archivo | Uso | `Assets.UI` |
+|---|---|---|---|
+| PiedraPanel | panel.png | Ventanas y placas del HUD | 137296723636788 |
+| PiedraHondo | hueco.png | Huecos tallados | 120432474669335 |
+| PiedraBoton | boton.png | Botones (piedra gris con canto dorado; se tiñe) | 130492460203337 |
+| PiedraLava | lava.png | TIENDA y botones estrella | 80491001045798 |
+| PiedraCasilla | casilla.png | Casillas de MEJORAS y arte del detalle | 103089949967085 |
+| PiedraCristales | cristales.png | Cristales junto a los títulos | 71352910897295 |
+| PiedraPedestal | pedestal.png | Pedestal del detalle de MEJORAS | 76404155830524 |
+
+La gema azul (`PiedraGema`) sigue siendo la del kit anterior: va en el panel del monstruo.
+
 ## Modelos y texturas de mesh
 
 No salen de ForgeGUI: el modelo viene de Meshy (generado desde el concept art) y las

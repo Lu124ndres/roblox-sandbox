@@ -12,6 +12,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Assets = require(ReplicatedStorage.Shared.Assets)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
@@ -60,6 +61,17 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	status.Position = UDim2.fromScale(0.05, 0.02)
 	status.Size = UDim2.fromScale(0.9, 0.065)
 	Kit.gold(status)
+
+	-- Pedestal volcánico detrás del nombre y los datos (oscurecido: el texto va encima).
+	local pedestal = Instance.new("ImageLabel")
+	pedestal.Name = "Pedestal"
+	pedestal.BackgroundTransparency = 1
+	pedestal.Image = Assets.UI.PiedraPedestal
+	pedestal.ImageColor3 = Color3.fromRGB(150, 150, 150)
+	pedestal.ScaleType = Enum.ScaleType.Fit
+	pedestal.Position = UDim2.fromScale(0.03, 0.36)
+	pedestal.Size = UDim2.fromScale(0.94, 0.62)
+	pedestal.Parent = panel
 
 	local art = box(panel, "Arte", WHITE)
 	art.ClipsDescendants = true
@@ -121,7 +133,7 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 				child:Destroy() -- la piedra, los rayos y el ícono del nivel anterior
 			end
 		end
-		ShopParts.sunburst(art, tier, 1.6)
+		Kit.skin(art, "casilla", tier:Lerp(WHITE, 0.6))
 		icon = GearIcons.view(art, spec.category, spec.level)
 		local image = icon :: ImageLabel
 		image.AnchorPoint = Vector2.new(0.5, 0.5)

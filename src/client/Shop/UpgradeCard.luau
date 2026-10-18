@@ -87,7 +87,9 @@ function UpgradeCard.new(parent: Instance, spec: CardSpec): Card
 	card.BackgroundColor3 = if isOwned or isNext then tier else tier:Lerp(BLACK, 0.55)
 	-- El borde queda escondido bajo la piedra y se ve al elegirla o si es la siguiente.
 	Style.border(card, 3)
-	local skin = ShopParts.stone(card, "boton", card.BackgroundColor3)
+	-- Casilla de piedra volcánica con lava (la referencia del usuario): oscura, con un toque
+	-- del color del nivel; las bloqueadas más apagadas.
+	local skin = ShopParts.stone(card, "casilla", card.BackgroundColor3:Lerp(WHITE, 0.55))
 	Kit.press(card, skin)
 	local stroke = card:FindFirstChildOfClass("UIStroke") :: UIStroke
 	card.Parent = parent
@@ -110,7 +112,7 @@ function UpgradeCard.new(parent: Instance, spec: CardSpec): Card
 	if level == spec.owned then
 		strip(card, PALETTE.Buy, "EQUIPADA", false)
 	elseif isOwned then
-		strip(card, PALETTE.Buy:Lerp(BLACK, 0.35), "TIENES", false)
+		strip(card, Kit.STONE, "TIENES", false) -- placa de piedra gris, como en la referencia
 	elseif isNext then
 		strip(card, Kit.STONE, NumberFormat.short(spec.price), true)
 		local ribbon = Style.text(card, "Siguiente", 18, PALETTE.Coins, 2)

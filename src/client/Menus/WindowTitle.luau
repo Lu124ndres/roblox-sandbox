@@ -3,7 +3,7 @@
 	WindowTitle
 
 	Título de una ventana (Window): letras doradas enormes, un poco inclinadas,
-	con una gema azul a cada lado (Interface/Kit). El tamaño de la letra se
+	con cristales oscuros a cada lado (Interface/Kit). El tamaño de la letra se
 	elige midiendo el texto, para que título y gemas quepan en `room` (unidades
 	de la ventana, que luego escala su UIScale; así las gemas quedan pegadas al
 	texto en cualquier pantalla).
@@ -57,7 +57,7 @@ function WindowTitle.make(parent: Instance, title: string, room: number, height:
 	if stroke then
 		stroke.Thickness = 4.5
 	end
-	Kit.gems(holder, GEM)
+	Kit.crystals(holder, GEM * 1.3)
 	return holder
 end
 
