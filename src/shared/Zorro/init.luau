@@ -28,13 +28,14 @@ local Feeders = require(script.Parent.Orca.OrcaMotion.Feeders)
 local Colas = require(script.Colas)
 local Traduccion = require(script.Colas.Traduccion)
 local Comer = require(script.Comer)
+local Etapas = require(script.Etapas)
+local Mirada = require(script.Mirada)
 local Pivote = require(script.Comer.Pivote)
 local Pose = require(script.Pose)
 local Rig = require(script.Rig)
+local Rumbo = require(script.Rumbo)
 local Trucos = require(script.Trucos)
 
-local TURN_SPEED = 0.8 -- rad/s como mucho al darse vuelta
-local LOOK_EVERY = 18 -- segundos entre vueltas para mirar a otro lado
 local BITE_SECONDS = 0.16
 local WATER = WorldLayout.waterLevel
 
@@ -57,6 +58,7 @@ export type Info = {
 	anger: number,
 	inner: Model?,
 	detail: boolean?,
+	lookAt: Vector3?,
 }
 export type Motion = {
 	state: State,
@@ -71,10 +73,6 @@ export type Motion = {
 }
 
 local Zorro = {}
-
-local function angleTowards(d: Vector3): number
-	return math.atan2(-d.X, -d.Z) -- Angles(0, y, 0) mira a (-sin y, 0, -cos y)
-end
 
 function Zorro.new(center: Vector3): Motion
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
@@ -101,19 +99,8 @@ function Zorro.new(center: Vector3): Motion
 		feeding += ((if direction then 1 else 0) - feeding) * (1 - math.exp(-dt * 2))
 		local w = feeding * feeding * (3 - 2 * feeding)
 
-		-- Hacia dónde mira: quien le da de comer o, cada tanto, otro lado del lago.
-		local target: number
-		if direction then
-			target = angleTowards(direction)
-		else
-			local slot = math.floor(now / LOOK_EVERY)
-			target = ((slot * 2654435761) % 1000) / 1000 * math.pi * 2
-		end
-		local delta = (target - yaw + math.pi) % (math.pi * 2) - math.pi
-		local turn = math.clamp(delta * 2.5, -TURN_SPEED, TURN_SPEED) * dt
-		yaw += turn
-		turnRate = turn / dt
-		local turning = math.clamp(math.abs(turnRate) / TURN_SPEED * 1.5, 0, 1)
+		local turning
+		yaw, turnRate, turning = Rumbo.step(yaw, direction, now, dt)
 		-- Pasos: cada media vuelta de la fase pisa un par de patas.
 		local before = math.floor(stepPhase / math.pi)
 		stepPhase += dt * 6 * (if turning > 0.05 then 1 else 0)
@@ -160,8 +147,19 @@ function Zorro.new(center: Vector3): Motion
 		local placed, pivot = Pivote.build(base, heading, body, info.height)
 		state.center = placed
 		local giro, rig, colas = turnRate + body.turn, state.rig, state.colas
+		local ctx = {
+			now = now,
+			dt = dt,
+			etapa = Etapas.forModel(if rigFor then rigFor.Name else nil).etapa,
+			height = info.height,
+			center = placed,
+			heading = heading + body.spin,
+			lookAt = info.lookAt,
+			detail = info.detail ~= false,
+		}
+		Mirada.add(pose, ctx)
 		if rig then
-			Pose.apply(rig, pose, now, giro, dt)
+			Pose.apply(rig, pose, giro, ctx)
 		end
 		if colas then
 			local move = Traduccion.body(tracking, pose, giro, placed, info.height, dt)

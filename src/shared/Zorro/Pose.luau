@@ -23,14 +23,14 @@
 	a Zorro/Colas (Colas/Traduccion), el único que escribe los huesos Cola*_*.
 ]]
 
+local Cara = require(script.Parent.Cara)
+local Patas = require(script.Parent.Patas)
 local Rig = require(script.Parent.Rig)
+local Tipos = require(script.Parent.Tipos)
 
 export type Pose = { [string]: number }
 
 local TAU = math.pi * 2
--- La reverencia dobla las delanteras (por bow): con menos, el pecho baja y las manos
--- se hunden en el agua (medido en tools/blender/zorro_v2_poses.py).
-local BOW_BEND = 1.5
 
 local Pose = {}
 
@@ -99,29 +99,10 @@ function Pose.steps(phase: number, amount: number): Pose
 	}
 end
 
-local function leg(
-	rig: Rig.Rig,
-	front: boolean,
-	s: string,
-	lift: number,
-	bend: number,
-	swing: number
-)
-	if front then
-		Rig.turn(rig, `Hombro{s}`, swing * 0.4, 0, 0)
-		Rig.turn(rig, `Brazo{s}`, 0.35 * lift + swing * 0.6 - bend * 0.5, 0, 0)
-		Rig.turn(rig, `Antebrazo{s}`, -1.1 * lift + bend * 0.9, 0, 0)
-		Rig.turn(rig, `Mano{s}`, -0.8 * lift - bend * 0.4, 0, 0)
-	else
-		Rig.turn(rig, `Muslo{s}`, 0.3 * lift + swing * 0.5 + bend * 0.5, 0, 0)
-		Rig.turn(rig, `Pierna{s}`, -0.4 * lift - bend * 0.9, 0, 0)
-		Rig.turn(rig, `Tobillo{s}`, 0.7 * lift + bend * 0.8, 0, 0)
-		Rig.turn(rig, `Pie{s}`, -0.5 * lift - bend * 0.4, 0, 0)
-	end
-end
-
--- turn: rad/s del giro del cuerpo (las orejas lo siguen tarde).
-function Pose.apply(rig: Rig.Rig, p: Pose, t: number, turn: number, dt: number)
+-- turn: rad/s del giro del cuerpo (las orejas lo siguen tarde). Las patas las escribe
+-- Zorro/Patas y la cara (párpados, puntas de las orejas) Zorro/Cara, solo con detalle.
+function Pose.apply(rig: Rig.Rig, p: Pose, turn: number, ctx: Tipos.Contexto)
+	local t, dt = ctx.now, ctx.dt
 	local function v(key: string): number
 		return p[key] or 0
 	end
@@ -150,11 +131,10 @@ function Pose.apply(rig: Rig.Rig, p: Pose, t: number, turn: number, dt: number)
 		)
 		Rig.turn(rig, `Oreja{s}`, -ear * 0.6, 0, ear * 0.3 * side + quiver * side)
 	end
-	-- Patas: la reverencia dobla las de adelante; agacharse, las cuatro.
-	leg(rig, true, "Izq", v("stepFL"), bow * BOW_BEND + crouch, 0)
-	leg(rig, true, "Der", v("stepFR"), bow * BOW_BEND + crouch, 0)
-	leg(rig, false, "Izq", v("stepHL"), crouch - bow * 0.15, 0)
-	leg(rig, false, "Der", v("stepHR"), crouch - bow * 0.15, 0)
+	Patas.apply(rig, p, t, dt)
+	if ctx.detail then
+		Cara.apply(rig, p, ctx)
+	end
 end
 
 return table.freeze(Pose)

@@ -13,6 +13,7 @@
 	Misma forma que OrcaSwim para que GiantBody use uno u otro.
 ]]
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Capas = require(ReplicatedStorage.Shared.Zorro.Comer.Capas)
@@ -59,6 +60,7 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 				* (if detailed then DETAIL_MARGIN else 1)
 			detailed = Distance.fromCamera(motion.state.center) < reach
 				and not ClientSettings.get("lowFx")
+			local character = Players.LocalPlayer.Character
 			local pivot = motion.step(dt, {
 				height = height,
 				lift = lift,
@@ -66,6 +68,7 @@ function ZorroStand.attach(template: Model?, center: Vector3): OrcaSwim.Swim?
 				anger = anger,
 				inner = inner,
 				detail = detailed,
+				lookAt = if character then character:GetPivot().Position else nil,
 			})
 			local rig = motion.state.rig
 			if rig ~= fxFor then
