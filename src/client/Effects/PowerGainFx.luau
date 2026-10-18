@@ -121,8 +121,7 @@ function PowerGainFx.mount(screen: ScreenGui)
 	end
 	task.spawn(function()
 		local row = Layout.left():WaitForChild("Stat2", 30)
-		local texts = row and row:WaitForChild("Textos", 10)
-		local value = texts and texts:WaitForChild("Valor", 10)
+		local value = row and row:WaitForChild("Valor", 10)
 		if not (row and value and value:IsA("GuiObject")) then
 			return
 		end
@@ -130,7 +129,7 @@ function PowerGainFx.mount(screen: ScreenGui)
 		local label = Style.text(row, "Ganancia", 26, LIGHT, 2.5)
 		label.TextXAlignment = Enum.TextXAlignment.Left
 		label.AnchorPoint = Vector2.new(0, 0.5)
-		label.Position = UDim2.new(1, 6, 0, 21)
+		label.Position = UDim2.new(1, 6, 0.5, 0)
 		label.Size = UDim2.fromOffset(150, 28)
 		label.TextTransparency = 1
 		local stroke = label:FindFirstChildOfClass("UIStroke") :: UIStroke
