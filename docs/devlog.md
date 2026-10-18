@@ -2456,3 +2456,20 @@ caminaba fuera de él y solo se ponían al día al detenerse (el camino se recal
 10 studs más adelante; el camino se recalcula a los 10 studs y cada 0.6 s. Probado: moviendo
 al jugador 33.6 studs de lado a 22 studs/s, la flecha más cercana nunca quedó a más de
 11.9 studs (la separación normal de la cinta).
+
+---
+
+## 2026-10-18 (10) — Flechas guía en línea recta
+
+**Qué se hizo (pedido del usuario: «que sea recta la línea, que no se curve ni
+desaparezcan»):** `GuidePath` ya no usa PathfindingService. Es una fila recta de 6 flechas
+amarillas que sale del jugador y apunta al destino de la misión, en tramos rectos (al volcán:
+primero a la entrada del puente, después por el puente; lo decide `TutorialGuide`). Siempre
+se ven todas y opacas; una onda suave las recorre hacia adelante. Al cambiar de tramo la fila
+gira suave. Si el destino está más cerca que la fila, solo se ven las que caben.
+
+**Probado en Studio (Play):** desvío de la recta 0.00 studs y las 6 visibles y opacas, quieto
+y caminando de lado a 22 studs/s (`docs/capturas/2026-10-18-flecha-guia.jpg`).
+
+**Qué se rompió:** nada visto. La primera partida de la prueba corrió con el código viejo
+(Studio ya estaba en Play cuando Rojo sincronizó): hubo que detenerla y volver a empezar.

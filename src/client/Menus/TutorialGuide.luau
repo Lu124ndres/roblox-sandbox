@@ -4,8 +4,9 @@
 
 	Guía del primer minuto: una placa de piedra (Interface/Kit) con la misión
 	actual (Config.Retention.tutorial, el título en dorado) y su avance, y una
-	cinta de flechas amarillas flotando que avanzan por el camino de verdad
-	(GuidePath y GuideArrow: al volcán, por el puente) hasta el destino (el
+	línea recta de flechas amarillas flotando que sale del jugador y apunta al
+	destino, en tramos rectos (GuidePath y GuideArrow: al volcán, primero a la
+	entrada del puente y después por el puente) hasta el destino (el
 	muelle más cercano, la puerta del volcán, un estanque o la tienda). Al
 	llegar, las flechas se van; nada queda puesto en el mapa. Desaparece al
 	terminar. El avance lo decide el servidor (atributos Tutorial y
@@ -128,7 +129,7 @@ function TutorialGuide.start(screen: ScreenGui)
 	InputHints.onChange(refresh)
 	refresh()
 
-	RunService.Heartbeat:Connect(function()
+	RunService.Heartbeat:Connect(function(dt: number)
 		local current = STEPS[step()]
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
@@ -142,7 +143,7 @@ function TutorialGuide.start(screen: ScreenGui)
 			route.hide()
 			return
 		end
-		route.update(position, target, os.clock())
+		route.update(position, target, os.clock(), dt)
 	end)
 end
 
