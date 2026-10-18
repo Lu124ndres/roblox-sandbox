@@ -7,27 +7,38 @@
 		       Boca (punto), OrejaIzq, OrejaDer
 		Pecho > Hombro > Brazo > Antebrazo > Mano    (Izq/Der)
 		Cadera > Muslo > Pierna > Tobillo > Pie      (Izq/Der)
-		Cadera > Cola<n>_1 > _2 > _3 > _4            (n = 1..9)
+		Cadera > Cola<n>_1 > _2 > ... > _<tramos>    (n = 1..9; 4 tramos en el
+		         zorro actual, 5 en el v2)
+	Detalle opcional (v2): OrejaPunta{l} (hija de Oreja) y Parpado{l}. Ningún
+	módulo los exige: turn() salta los huesos que el modelo no tiene.
 	Al enlazar se miden los ejes del CUERPO (derecha: de un hombro al otro; arriba:
 	la vertical del modelo; adelante) y se pasan al espacio de cada hueso: así no
 	importa cómo los orientó el importador. turn() gira un hueso con cabeceo
 	(+ = la punta sube / la pata va adelante), giro (+ = a su izquierda) y alabeo
 	(alrededor del eje largo del cuerpo). side: -1 izquierda, +1 derecha, 0 al medio.
-	tails: las colas que tiene el modelo, de izquierda a derecha, con su lado (-1..1).
+	tails: las colas que tiene el modelo, de izquierda a derecha, con su lado (-1..1),
+	cuántos tramos tiene (segments, contando _1, _2… mientras existan) y el
+	nombre del último (tip). rest y frame: el reposo de cada hueso y los ejes del
+	cuerpo en el espacio del pivote (los usa Zorro/Colas para medir).
 ]]
 
 local Resorte = require(script.Parent.Parent.Resorte)
 
 export type Axes = { pitch: Vector3, yaw: Vector3, roll: Vector3 }
-export type Tail = { prefix: string, side: number }
+export type Tail = { prefix: string, side: number, segments: number, tip: string }
+export type Frame = { right: Vector3, up: Vector3, forward: Vector3 }
 export type Rig = {
 	model: Model,
 	bones: { [string]: Bone },
 	axes: { [string]: Axes },
 	side: { [string]: number },
 	tails: { Tail },
+	rest: { [string]: CFrame }, -- reposo de cada hueso en el espacio del pivote
+	frame: Frame,
 	springs: { [string]: Resorte.Resorte },
 }
+
+local MAX_TAILS = 12 -- se buscan Cola1..Cola12 (la forma final tiene 9)
 
 local Rig = {}
 
@@ -52,8 +63,10 @@ function Rig.bind(model: Model): Rig?
 	local forward = up:Cross(rightAxis).Unit
 	local axes: { [string]: Axes } = {}
 	local side: { [string]: number } = {}
+	local rests: { [string]: CFrame } = {}
 	for name, bone in bones do
-		local rest = (pivot:Inverse() * bone.WorldCFrame).Rotation -- sin Transform: reposo
+		rests[name] = pivot:Inverse() * bone.WorldCFrame -- sin Transform: reposo
+		local rest = rests[name].Rotation
 		axes[name] = {
 			pitch = rest:VectorToObjectSpace(rightAxis),
 			yaw = rest:VectorToObjectSpace(up),
@@ -62,15 +75,23 @@ function Rig.bind(model: Model): Rig?
 		local offset = (at(bone) - at(root)):Dot(rightAxis)
 		side[name] = if math.abs(offset) < 1e-3 then 0 else math.sign(offset)
 	end
-	-- Colas: su lado según hacia dónde se abre la punta (-1 izquierda .. 1 derecha).
+	-- Colas: su lado según hacia dónde se abre la punta (-1 izquierda .. 1 derecha),
+	-- medido del primer tramo al último.
 	local tails: { Tail } = {}
 	local spread = 0
-	for n = 1, 9 do
-		local first, last = bones[`Cola{n}_1`], bones[`Cola{n}_4`]
-		if first and last then
+	for n = 1, MAX_TAILS do
+		local segments = 0
+		while bones[`Cola{n}_{segments + 1}`] do
+			segments += 1
+		end
+		if segments >= 2 then
+			local first, last = bones[`Cola{n}_1`], bones[`Cola{n}_{segments}`]
 			local lateral = (at(last) - at(first)):Dot(rightAxis)
 			spread = math.max(spread, math.abs(lateral))
-			table.insert(tails, { prefix = `Cola{n}_`, side = lateral })
+			table.insert(
+				tails,
+				{ prefix = `Cola{n}_`, side = lateral, segments = segments, tip = last.Name }
+			)
 		end
 	end
 	for _, tail in tails do
@@ -85,6 +106,8 @@ function Rig.bind(model: Model): Rig?
 		axes = axes,
 		side = side,
 		tails = tails,
+		rest = rests,
+		frame = { right = rightAxis, up = up, forward = forward },
 		springs = {},
 	}
 end

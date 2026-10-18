@@ -15,10 +15,12 @@
 		tailFan / tailLift         colas: más abiertas / más arriba
 		tailWag                    colas: meneo rápido de contento
 		tailCalm                   colas: cuánto ondulan en reposo (1 = normal)
+		tailAlert / tailWrap /     colas: alerta, envolver las patas (sentado),
+		tailCurl / tailSide        enroscarse (dormido) y hacia qué lado
 		shake                      sacudida de todo el cuerpo (0..1)
 		dy                         salto (fracción del alto)
-	Las colas ondulan como llamas de agua: una onda que sube por cada cola, cada
-	una con su fase, y siguen los giros del cuerpo tarde (resortes).
+	apply() NO toca las colas: las claves tail* son un pedido que Zorro/init pasa
+	a Zorro/Colas (Colas/Traduccion), el único que escribe los huesos Cola*_*.
 ]]
 
 local Rig = require(script.Parent.Rig)
@@ -111,7 +113,7 @@ local function leg(
 	end
 end
 
--- turn: rad/s del giro del cuerpo (las colas y las orejas lo siguen tarde).
+-- turn: rad/s del giro del cuerpo (las orejas lo siguen tarde).
 function Pose.apply(rig: Rig.Rig, p: Pose, t: number, turn: number, dt: number)
 	local function v(key: string): number
 		return p[key] or 0
@@ -146,24 +148,6 @@ function Pose.apply(rig: Rig.Rig, p: Pose, t: number, turn: number, dt: number)
 	leg(rig, true, "Der", v("stepFR"), bow * 0.9 + crouch, 0)
 	leg(rig, false, "Izq", v("stepHL"), crouch - bow * 0.15, 0)
 	leg(rig, false, "Der", v("stepHR"), crouch - bow * 0.15, 0)
-
-	-- Colas: llamas de agua. Cada una sube su onda con su propia fase; se abren,
-	-- se levantan y se menean; al girar el cuerpo se quedan atrás y alcanzan.
-	local calm, fan, lift, wag = v("tailCalm"), v("tailFan"), v("tailLift"), v("tailWag")
-	local drag = Rig.follow(rig, "ColasArrastre", -turn * 0.18, dt, 1.1, 0.5)
-	for k, tail in rig.tails do
-		local offset = k * 0.83
-		for j = 1, 4 do
-			local reach = j / 4
-			local name = `{tail.prefix}{j}`
-			local swirl = (0.22 * calm + 0.08 * fan) * reach * math.sin(t * 1.8 + offset - j * 0.7)
-			local bob = 0.13 * calm * reach * math.sin(t * 1.2 + offset * 1.3 - j * 0.6)
-			local wagging = wag * 0.16 * math.sin(t * 13 + offset - j * 0.5)
-			local spread = if j == 1 then fan * 0.35 * tail.side else 0
-			local up = if j == 1 then -lift * 0.35 else -lift * 0.08
-			Rig.turn(rig, name, bob + up, 0, swirl + wagging + spread + drag * reach)
-		end
-	end
 end
 
 return table.freeze(Pose)

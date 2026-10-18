@@ -72,7 +72,7 @@ function ZorroFx.attach(rig: any): ZorroFx
 	end
 	local mists = {}
 	for _, tail in rig.tails do
-		local tip = rig.bones[`{tail.prefix}4`]
+		local tip = rig.bones[tail.tip]
 		if tip then
 			table.insert(mists, mist(tip))
 		end
