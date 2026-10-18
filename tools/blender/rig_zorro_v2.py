@@ -63,7 +63,13 @@ colas = colas_geometria
 armar_y_medir()
 colas = colas_huesos
 partes = piezas()
-posar({})
+# Las piezas se unen en su reposo de la geometría. posar({}) ya no sirve para esto: desde
+# que Patas tiene IK, la pose vacía deja las patas y las colas posadas (el FBX salía mal).
+from mathutils import Matrix
+
+for _pieza in partes:
+    _pieza.matrix_world = Matrix.Identity(4)
+bpy.context.view_layer.update()
 ESCALA = ALTO_JUEGO / ALTO_BU  # studs por BU: por el alto, como GiantTemplates mide a los que caminan
 malla = unir(partes)
 colores = paleta(malla)
