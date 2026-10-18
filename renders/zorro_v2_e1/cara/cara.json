@@ -1,0 +1,140 @@
+{
+  "etapa": 1,
+  "muestras_ojo": 451,
+  "casos": {
+    "abierto": {
+      "visible": {
+        "frente": 0.987,
+        "frente_alto": 0.818,
+        "tres_cuartos": 0.991
+      },
+      "ceja_celdas": {
+        "adentro": 0.0,
+        "afuera": 0.0
+      },
+      "choques": []
+    },
+    "parpadeo_medio": {
+      "visible": {
+        "frente": 0.548,
+        "frente_alto": 0.383,
+        "tres_cuartos": 0.675
+      },
+      "ceja_celdas": {
+        "adentro": -0.64,
+        "afuera": -0.64
+      },
+      "choques": []
+    },
+    "feliz": {
+      "visible": {
+        "frente": 0.675,
+        "frente_alto": 0.507,
+        "tres_cuartos": 0.703
+      },
+      "ceja_celdas": {
+        "adentro": -0.22,
+        "afuera": -0.34
+      },
+      "choques": []
+    },
+    "enojo": {
+      "visible": {
+        "frente": 0.803,
+        "frente_alto": 0.694,
+        "tres_cuartos": 0.858
+      },
+      "ceja_celdas": {
+        "adentro": -0.4,
+        "afuera": -0.04
+      },
+      "choques": []
+    },
+    "sueno": {
+      "visible": {
+        "frente": 0.51,
+        "frente_alto": 0.349,
+        "tres_cuartos": 0.651
+      },
+      "ceja_celdas": {
+        "adentro": -0.73,
+        "afuera": -0.76
+      },
+      "choques": []
+    },
+    "asco": {
+      "visible": {
+        "frente": 0.732,
+        "frente_alto": 0.569,
+        "tres_cuartos": 0.797
+      },
+      "ceja_celdas": {
+        "adentro": -0.51,
+        "afuera": -0.38
+      },
+      "choques": []
+    },
+    "cerrado": {
+      "visible": {
+        "frente": 0.268,
+        "frente_alto": 0.129,
+        "tres_cuartos": 0.514
+      },
+      "ceja_celdas": {
+        "adentro": -1.91,
+        "afuera": -1.91
+      },
+      "choques": []
+    }
+  },
+  "barrido_cierre": {
+    "1.30": {
+      "visible": {
+        "frente": 0.299,
+        "frente_alto": 0.182,
+        "tres_cuartos": 0.542
+      },
+      "choques": 0
+    },
+    "1.40": {
+      "visible": {
+        "frente": 0.268,
+        "frente_alto": 0.129,
+        "tres_cuartos": 0.514
+      },
+      "choques": 0
+    },
+    "1.50": {
+      "visible": {
+        "frente": 0.268,
+        "frente_alto": 0.263,
+        "tres_cuartos": 0.552
+      },
+      "choques": 0
+    },
+    "1.57": {
+      "visible": {
+        "frente": 0.255,
+        "frente_alto": 0.378,
+        "tres_cuartos": 0.467
+      },
+      "choques": 0
+    },
+    "1.65": {
+      "visible": {
+        "frente": 0.255,
+        "frente_alto": 0.411,
+        "tres_cuartos": 0.476
+      },
+      "choques": 0
+    },
+    "1.75": {
+      "visible": {
+        "frente": 0.299,
+        "frente_alto": 0.45,
+        "tres_cuartos": 0.495
+      },
+      "choques": 0
+    }
+  }
+}
