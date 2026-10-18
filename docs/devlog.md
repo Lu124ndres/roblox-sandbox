@@ -2215,7 +2215,16 @@ tienen una conducta que los pida.
 chicas a 16 px, regalo con el mismo canto que las estadísticas) y captura de los tres tableros
 desde el centro de la isla.
 
+- **Etiqueta de amigos en táctil**: subía 210 px fijos desde abajo y en un teléfono acostado
+  quedaba encima de las monedas, tapando su «x1.44». Ahora en táctil va arriba a la izquierda,
+  bajo la barra de Roblox (el único hueco libre: abajo está el joystick y en el medio la
+  columna). En PC sigue abajo a la izquierda.
+
+**Probado en Studio (emulador iPhone XR):** número, ícono y placa con el mismo centro en las
+cuatro filas, regalo alineado con las placas y la etiqueta de amigos sin encimarse. En PC la
+etiqueta sigue abajo a la izquierda.
+
 **Qué se rompió:** nada visto. Desde la aparición los tableros se ven ahora de espaldas (piedra
 negra lisa).
 
-**Qué sigue:** revisar el HUD en el emulador de móvil (pendiente del backlog).
+**Qué sigue:** nada pendiente de esta tarea.

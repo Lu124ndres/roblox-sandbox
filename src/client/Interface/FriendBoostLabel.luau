@@ -4,8 +4,9 @@
 
 	En la esquina de abajo a la izquierda (pedido del usuario), en una placa de
 	piedra volcánica: "Amigos +20%" con el ícono de amigos, o "Invita amigos:
-	+10% c/u" si no hay ninguno. En táctil va más arriba, para no quedar sobre
-	el joystick de Roblox (taparía los toques para moverse). Siempre
+	+10% c/u" si no hay ninguno. En táctil va arriba a la izquierda, bajo la
+	barra de Roblox: abajo está el joystick (taparía los toques para moverse) y
+	a media altura la columna de estadísticas. Siempre
 	se puede tocar: abre la invitación de Roblox (SocialService), y si un
 	amigo nuevo entra por ella los dos ganan premio (server/Social/Referrals).
 	Sube 10 % por cada amigo de Roblox en el servidor (hasta 5). Lo calcula
@@ -30,7 +31,6 @@ local FriendBoostLabel = {}
 local HEIGHT = 34
 local WIDTH = 250
 local MARGIN = 12
-local TOUCH_LIFT = 210 -- en táctil, por encima del joystick
 
 function FriendBoostLabel.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
@@ -38,15 +38,16 @@ function FriendBoostLabel.start(screen: ScreenGui)
 	frame.Text = ""
 	frame.AutoButtonColor = false
 	frame.Name = "ImpulsoAmigos"
-	frame.AnchorPoint = Vector2.new(0, 1)
 	frame.Size = UDim2.fromOffset(WIDTH, HEIGHT)
 	Kit.press(frame, Kit.skin(frame, "panel"))
 	local skin = frame:FindFirstChild("Piedra") :: ImageLabel
 	skin.SliceScale = 0.28
 	Layout.scaleWith(frame)
 	local function place()
-		local lift = if Device.touch() then TOUCH_LIFT else 0
-		frame.Position = UDim2.new(0, MARGIN, 1, -MARGIN - lift)
+		local touch = Device.touch()
+		frame.AnchorPoint = Vector2.new(0, if touch then 0 else 1)
+		frame.Position =
+			UDim2.new(0, MARGIN, if touch then 0 else 1, if touch then MARGIN else -MARGIN)
 	end
 	place()
 	Device.onResize(place)
