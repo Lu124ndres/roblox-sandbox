@@ -2,8 +2,8 @@
 --[[
 	PlaytimeEntry
 
-	Botón grande de los regalos por jugar en la columna izquierda: tarjeta
-	rosa con el regalo que sobresale, "REGALO GRATIS" y la cuenta regresiva
+	Botón grande de los regalos por jugar en la columna izquierda: piedra
+	tallada rosa con el regalo que sobresale, "REGALO GRATIS" y la cuenta regresiva
 	grande. Cuando hay uno listo se vuelve verde, dice ¡RECLAMAR!, late y el
 	regalo se sacude para llamar la atención.
 ]]
@@ -11,6 +11,7 @@
 local TweenService = game:GetService("TweenService")
 
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
@@ -26,15 +27,6 @@ export type Entry = {
 
 local PlaytimeEntry = {}
 
-local function paint(button: TextButton, color: Color3)
-	button.BackgroundColor3 = color
-	local old = button:FindFirstChildOfClass("UIGradient")
-	if old then
-		old:Destroy()
-	end
-	Style.gradient(button, color)
-end
-
 function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 	local holder = Instance.new("Frame")
 	holder.Name = "RegalosTiempo"
@@ -47,11 +39,9 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 	button.Text = ""
 	button.Position = UDim2.fromOffset(ICON / 2, 6)
 	button.Size = UDim2.new(1, -ICON / 2 - 6, 0, HEIGHT - 4)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 14)
-	corner.Parent = button
-	Style.border(button, 3)
-	paint(button, PALETTE.Gift)
+	button.AutoButtonColor = false
+	local skin = Kit.skin(button, "boton", PALETTE.Gift)
+	Kit.press(button, skin)
 	button.Parent = holder
 	local beat = Instance.new("UIScale")
 	beat.Parent = holder
@@ -62,8 +52,9 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 	icon.Size = UDim2.fromOffset(ICON, ICON)
 	icon.ZIndex = 3
 	local left = ICON / 2 + 4
-	local title = Style.text(button, "Titulo", 18, Color3.fromRGB(255, 240, 250), 2)
+	local title = Style.text(button, "Titulo", 18, nil, 2)
 	title.Text = "REGALO GRATIS"
+	Kit.gold(title)
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Position = UDim2.fromOffset(left, 3)
 	title.Size = UDim2.new(1, -left - 6, 0.36, 0)
@@ -91,7 +82,7 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 			return
 		end
 		wasReady = ready
-		paint(button, if ready then PALETTE.Buy else PALETTE.Gift)
+		Kit.tint(skin, if ready then PALETTE.Buy else PALETTE.Gift)
 		title.Text = if ready then "¡TU REGALO ESTÁ LISTO!" else "REGALO GRATIS"
 		if pulse then
 			pulse:Cancel()

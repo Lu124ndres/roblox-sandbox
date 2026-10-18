@@ -2,8 +2,9 @@
 --[[
 	DailyWindow
 
-	Recompensa diaria: 7 tarjetas de regalo (día 1 a 7) con rayos y sus
-	monedas; las de la racha ya cobrada en verde con ✓, la de hoy dorada y
+	Recompensa diaria: 7 casillas de piedra (día 1 a 7) con su regalo y sus
+	monedas; las de la racha ya cobrada en verde con ✓, la de hoy con marco
+	de lava, las que faltan de piedra gris, y
 	el botón grande ¡RECLAMAR!. Debajo, la racha (+10% de monedas y poder
 	por día, shared/RetentionBonus) y lo que trae volver mañana. Se
 	abre sola al entrar si hoy todavía no se cobró, y el botón Premio del
@@ -22,7 +23,7 @@ local RetentionBonus = require(ReplicatedStorage.Shared.RetentionBonus)
 local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Icons = require(script.Parent.Parent.Interface.Icons)
-local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
@@ -79,7 +80,8 @@ function DailyWindow.start(screen: ScreenGui)
 	claim.Position = UDim2.fromScale(0.5, 1)
 	claim.Size = UDim2.new(0.46, 0, 0.26, 0)
 	local claimText = claim:FindFirstChild("Texto") :: TextLabel
-	local streakLine = Style.text(window.content, "Racha", 26, UIConfig.Colors.Coins, 2.5)
+	local streakLine = Style.text(window.content, "Racha", 26, nil, 2.5)
+	Kit.gold(streakLine)
 	streakLine.Position = UDim2.fromScale(0, 0.575)
 	streakLine.Size = UDim2.fromScale(1, 0.08)
 	local tomorrowLine = Style.text(window.content, "Manana", 22, nil, 2.5)
@@ -104,23 +106,19 @@ function DailyWindow.start(screen: ScreenGui)
 		local highlight = math.min(nextDay, #DAILY)
 		for day = 1, #DAILY do
 			local claimed = day <= math.min(done, #DAILY)
+			-- Casilla de piedra: la de hoy con marco de lava, las cobradas verdes, las
+			-- que faltan de piedra gris.
 			local box = Instance.new("Frame")
 			box.LayoutOrder = day
-			local corner = Instance.new("UICorner")
-			corner.CornerRadius = UDim.new(0, 12)
-			corner.Parent = box
-			Style.border(box, if day == highlight then 5 else 3)
-			ShopParts.sunburst(
-				box,
-				if claimed then CARDS.Green elseif day == highlight then CARDS.Yellow else CARDS.Blue
-			)
 			box.Parent = row
 			if day == highlight then
-				local stroke = box:FindFirstChildOfClass("UIStroke") :: UIStroke
-				stroke.Color = Color3.new(1, 1, 1)
+				Kit.skin(box, "lava")
+			else
+				Kit.skin(box, "boton", if claimed then CARDS.Green else Kit.STONE)
 			end
 			local label = Style.text(box, "Dia", 24, nil, 2.5)
 			label.Text = `Día {day}`
+			Kit.gold(label)
 			label.Position = UDim2.fromScale(0, 0.03)
 			label.Size = UDim2.fromScale(1, 0.2)
 			local gift = Icons.view(box, if day == #DAILY then "chest" else "gift")
@@ -154,12 +152,7 @@ function DailyWindow.start(screen: ScreenGui)
 		tomorrowLine.Text = `{label}: {dayReward(player, days + 1)}{more}`
 		claimText.Text = if ready then "¡RECLAMAR!" else "Vuelve mañana"
 		local tint = if ready then Style.PALETTE.Buy else Style.PALETTE.Disabled
-		claim.BackgroundColor3 = tint
-		local gradient = claim:FindFirstChildOfClass("UIGradient")
-		if gradient then
-			gradient:Destroy()
-		end
-		Style.gradient(claim, tint)
+		claim.BackgroundColor3 = tint -- la piedra del botón se tiñe sola
 		hud.setAlert(ready)
 	end
 

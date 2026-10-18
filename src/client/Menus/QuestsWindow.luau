@@ -18,7 +18,7 @@ local Workspace = game:GetService("Workspace")
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local QUESTS = require(ReplicatedStorage.Shared.Config.Quests)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local QuestRow = require(script.Parent.QuestRow)
@@ -63,7 +63,8 @@ function QuestsWindow.start(screen: ScreenGui)
 	chest.title.Text = "Cofre: cumple las tres"
 	chest.reward.Text = NumberFormat.short(QUESTS.bonus.coins)
 	QuestRow.setBoost(chest, QUESTS.bonus.boostMinutes)
-	local reset = Style.text(window.content, "Reinicio", 20, UIConfig.Colors.TextMuted, 2)
+	local reset = Style.text(window.content, "Reinicio", 20, nil, 2)
+	Kit.gold(reset)
 	reset.LayoutOrder = 99
 	reset.Size = UDim2.new(1, 0, 0, 24)
 

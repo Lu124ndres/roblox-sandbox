@@ -19,10 +19,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Kit = require(script.Parent.Kit)
 
 export type Mode = "keyboard" | "gamepad" | "touch"
 
-local COLORS = UIConfig.Colors
+local KEY_SLICE = 0.14 -- canto de la tecla de piedra (la insignia mide unos 20 px)
 local PLAYSTATION_NAMES: { [Enum.KeyCode]: string } = {
 	[Enum.KeyCode.ButtonX] = "Cuadrado",
 	[Enum.KeyCode.ButtonY] = "Triángulo",
@@ -118,15 +119,9 @@ function InputHints.badge(button: GuiObject, key: string, pad: Enum.KeyCode): Fr
 	badge.AnchorPoint = Vector2.new(0.5, 0.5)
 	badge.Position = UDim2.fromScale(0.84, 0.14)
 	badge.Size = UDim2.fromScale(0.3, 0.3)
-	badge.BackgroundColor3 = Color3.fromRGB(18, 26, 40)
 	badge.ZIndex = button.ZIndex + 2
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0.3, 0)
-	corner.Parent = badge
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = COLORS.Text
-	stroke.Thickness = 2
-	stroke.Parent = badge
+	-- Tecla de piedra gris tallada (canto fino: la insignia es chica) con la letra dorada.
+	Kit.skin(badge, "boton", Kit.STONE).SliceScale = KEY_SLICE
 	local text = Instance.new("TextLabel")
 	text.BackgroundTransparency = 1
 	text.Position = UDim2.fromScale(0.1, 0.14)
@@ -134,9 +129,9 @@ function InputHints.badge(button: GuiObject, key: string, pad: Enum.KeyCode): Fr
 	text.Text = key
 	text.TextScaled = true
 	text.FontFace = UIConfig.Fonts.Title
-	text.TextColor3 = COLORS.Text
 	text.ZIndex = badge.ZIndex + 1
 	text.Parent = badge
+	Kit.gold(text)
 	local glyph = Instance.new("ImageLabel")
 	glyph.BackgroundTransparency = 1
 	glyph.Position = UDim2.fromScale(0.08, 0.08)

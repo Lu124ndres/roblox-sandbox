@@ -13,6 +13,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 export type Entry = { icon: string, label: string }
@@ -36,6 +37,7 @@ function RebirthParts.speedCard(
 	card.Size = UDim2.new(0.4, 0, 0, 138)
 	local head = Style.text(card, "Titulo", 26, nil, 2.5)
 	head.Text = title
+	Kit.gold(head)
 	head.Position = UDim2.fromScale(0, 0.05)
 	head.Size = UDim2.fromScale(1, 0.2)
 	local fish = Icons.view(card, "fish")
@@ -104,6 +106,7 @@ function RebirthParts.listCard(
 	card.Size = UDim2.new(0.48, 0, 0, 132)
 	local head = Style.text(card, "Titulo", 24, nil, 2.5)
 	head.Text = title
+	Kit.gold(head)
 	head.Position = UDim2.fromScale(0.04, 0.04)
 	head.Size = UDim2.fromScale(0.92, 0.22)
 	local row = Instance.new("Frame")

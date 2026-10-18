@@ -2,7 +2,8 @@
 --[[
 	ShareLine
 
-	Fila de aportes debajo del panel del monstruo (mientras come): a la
+	Fila de aportes debajo del panel del monstruo (mientras come), en una
+	ranura de piedra: a la
 	izquierda tu aporte ("Tú: 12%") y a la derecha los 3 que más aportaron
 	con medalla ("🥇 Ana 40%  🥈 Leo 20%  🥉 Sam 9%"). Competencia sana:
 	todos ven quién está empujando más. Lee lo que publica el servidor
@@ -15,10 +16,12 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local Kit = require(script.Parent.Kit)
 local Style = require(script.Parent.Style)
 
 local MEDALS = { "🥇", "🥈", "🥉" }
-local ROW_HEIGHT = 20
+local ROW_HEIGHT = 22
+local INSET = 8 -- margen del texto dentro de la ranura de piedra
 
 local ShareLine = {}
 
@@ -39,14 +42,17 @@ function ShareLine.mount(panel: Frame)
 	row.Size = UDim2.new(1, 0, 0, ROW_HEIGHT)
 	row.Visible = false
 	row.Parent = panel
-	local mine = Style.text(row, "Tu", 18, Color3.fromRGB(255, 225, 90), 2)
+	Kit.skin(row, "hondo").SliceScale = 0.22 -- ranura fina tallada bajo el panel
+	local mine = Style.text(row, "Tu", 18, nil, 2)
 	mine.TextXAlignment = Enum.TextXAlignment.Left
-	mine.Size = UDim2.fromScale(0.28, 1)
+	mine.Position = UDim2.fromOffset(INSET, 2)
+	mine.Size = UDim2.new(0.28, -INSET, 1, -4)
+	Kit.gold(mine)
 	local top = Style.text(row, "Top", 18, nil, 2)
 	top.TextXAlignment = Enum.TextXAlignment.Right
 	top.AnchorPoint = Vector2.new(1, 0)
-	top.Position = UDim2.fromScale(1, 0)
-	top.Size = UDim2.fromScale(0.72, 1)
+	top.Position = UDim2.new(1, -INSET, 0, 2)
+	top.Size = UDim2.new(0.72, -INSET, 1, -4)
 
 	local function refresh()
 		local raw = state:GetAttribute(Protocol.GiantAttributes.TopShares)

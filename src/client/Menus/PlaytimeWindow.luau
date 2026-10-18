@@ -4,8 +4,9 @@
 
 	Regalos por tiempo jugado (Config.Retention.playtime): en la columna
 	izquierda, un aviso "Regalo en 4:32" (o "¡Regalo listo!") que abre la
-	ventana con los 8 regalos: los listos en verde con ¡RECLAMAR!, los que
-	faltan con su cuenta regresiva y los cobrados con ✓. El tiempo cuenta
+	ventana con los 8 regalos en casillas de piedra: los listos con marco de
+	lava y ¡RECLAMAR!, los que faltan (piedra gris) con su cuenta regresiva y
+	los cobrados (verdes) con ✓. El tiempo cuenta
 	desde que entró al servidor (atributo RegalosDesde); el servidor decide.
 ]]
 
@@ -18,8 +19,8 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local PlaytimeEntry = require(script.Parent.PlaytimeEntry)
 local Window = require(script.Parent.Window)
@@ -96,13 +97,11 @@ function PlaytimeWindow.start(screen: ScreenGui)
 		box.Text = ""
 		box.LayoutOrder = index
 		box.AutoButtonColor = false
-		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0, 12)
-		corner.Parent = box
-		Style.border(box, 3)
+		box.BackgroundTransparency = 1
 		box.Parent = grid
 		local time = Style.text(box, "Tiempo", 22, nil, 2.5)
 		time.Text = if gift.minutes >= 60 then `{gift.minutes / 60} h` else `{gift.minutes} min`
+		Kit.gold(time)
 		time.Position = UDim2.fromScale(0, 0.03)
 		time.Size = UDim2.fromScale(1, 0.16)
 		local picture = Icons.view(box, if index == #GIFTS then "chest" else "giftPink")
@@ -137,13 +136,16 @@ function PlaytimeWindow.start(screen: ScreenGui)
 			local state = stateOf(index)
 			if state ~= shown[index] then
 				shown[index] = state
-				CardParts.paint(
-					card.box,
-					if state == "claimed"
-						then CARDS.Green
-						elseif state == "ready" then CARDS.Yellow
-						else CARDS.Blue
-				)
+				-- Listo: marco de lava. Cobrado: piedra verde. Esperando: piedra gris.
+				if state == "ready" then
+					Kit.skin(card.box, "lava")
+				else
+					Kit.skin(
+						card.box,
+						"boton",
+						if state == "claimed" then CARDS.Green else Kit.STONE
+					)
+				end
 				card.check.Visible = state == "claimed"
 				card.status.TextColor3 = if state == "ready"
 					then Style.PALETTE.Buy

@@ -4,7 +4,7 @@
 
 	Ruleta como la de los simuladores (botón Ruleta arriba y la rueda del
 	mundo, SpinStand): la rueda grande (SpinWheelView) con la flecha roja y,
-	abajo, tres botones: azul "Comprar 1" (R$), verde "¡Girar! (N)" y amarillo
+	abajo, tres botones: azul "Comprar 1" (R$), de lava "¡Girar! (N)" y amarillo
 	"Comprar 5" (R$); debajo, cuándo toca el próximo giro gratis y el próximo
 	giro por jugar. N = giros guardados + el gratis si ya toca. El servidor
 	(Retention/SpinWheel) elige la casilla y avisa con Notice "spin": la rueda
@@ -28,6 +28,7 @@ local Window = require(script.Parent.Window)
 
 local ATTR = Protocol.PlayerAttributes
 local PALETTE = Style.PALETTE
+local LIT = Color3.new(1, 1, 1) -- lava encendida (sin teñir)
 
 local SpinWindow = {}
 
@@ -74,7 +75,8 @@ function SpinWindow.start(screen: ScreenGui)
 	row.Parent = content
 	local buy1 = SpinParts.buyButton(row, "Spin1", PALETTE.Cards.Blue, 0)
 	local buy5 = SpinParts.buyButton(row, "Spin5", PALETTE.Cards.Yellow, 1)
-	local spinButton = Style.button(if wide then content else row, "Girar", PALETTE.Buy, "")
+	-- Girar es la acción estrella: botón de lava (gris apagado si no hay giros).
+	local spinButton = Style.lavaButton(if wide then content else row, "Girar", "")
 	spinButton.AnchorPoint = Vector2.new(0.5, 0)
 	spinButton.Position = if wide then UDim2.fromScale(0.79, 0.12) else UDim2.fromScale(0.5, 0)
 	spinButton.Size = if wide then UDim2.fromScale(0.42, 0.3) else UDim2.fromScale(0.36, 1)
@@ -107,7 +109,7 @@ function SpinWindow.start(screen: ScreenGui)
 		local count = available()
 		local can = count > 0 and not spinning
 		spinText.Text = if spinning then "Girando..." else `¡Girar! ({count})`
-		SpinParts.paint(spinButton, if can then PALETTE.Buy else PALETTE.Disabled)
+		SpinParts.paint(spinButton, if can then LIT else PALETTE.Disabled)
 		local lines = {}
 		local free = freeLeft()
 		table.insert(

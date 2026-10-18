@@ -7,8 +7,8 @@
 	con los peces por segundo al alimentar y el bono para siempre de monedas
 	y poder (x1.25 por renacimiento, RebirthMath.bonusMultiplier); las
 	barras con ícono de monedas y poder que pide (verdes al alcanzar); qué se
-	reinicia (roja) y qué te quedas (verde) con íconos; y el botón grande,
-	que late cuando ya alcanza (piezas en RebirthParts). El botón del HUD
+	reinicia (roja) y qué te quedas (verde) con íconos; y el botón grande de
+	lava, que late cuando ya alcanza (gris apagado si no) (piezas en RebirthParts). El botón del HUD
 	lleva un punto rojo cuando ya alcanza. Lo decide el
 	servidor (remote Rebirth, Retention/Rebirth). En táctil es ancha: a la
 	izquierda lo de ahora/al renacer y el botón, a la derecha qué pasa.
@@ -23,6 +23,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(ReplicatedStorage.Shared.RebirthMath)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local RebirthParts = require(script.Parent.RebirthParts)
@@ -31,6 +32,7 @@ local WindowLayout = require(script.Parent.WindowLayout)
 
 local ATTR = Protocol.PlayerAttributes
 local CARDS = Style.PALETTE.Cards
+local LIT = Color3.new(1, 1, 1) -- lava encendida (sin teñir)
 local PULSE = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 local NUDGE = TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 
@@ -58,7 +60,8 @@ function RebirthWindow.start(screen: ScreenGui)
 	arrow.Size = UDim2.fromOffset(80, 80)
 	arrow.Rotation = 90
 	TweenService:Create(arrow, NUDGE, { Position = UDim2.new(0.5, 8, 0, 69) }):Play()
-	local count = Style.text(content, "Veces", 24, Color3.fromRGB(255, 236, 200), 2)
+	local count = Style.text(content, "Veces", 24, nil, 2)
+	Kit.gold(count)
 	count.Position = UDim2.fromOffset(0, 146)
 	count.Size = UDim2.new(1, 0, 0, 28)
 	-- Lo que pide: monedas y poder, una barra con ícono para cada uno.
@@ -81,11 +84,13 @@ function RebirthWindow.start(screen: ScreenGui)
 		resets.Position, keeps.Position = UDim2.fromOffset(0, 0), UDim2.fromOffset(0, 168)
 		resets.Size, keeps.Size = UDim2.new(1, 0, 0, 152), UDim2.new(1, 0, 0, 152)
 	end
-	local button = Style.button(content, "Renacer", Style.PALETTE.Buy, "¡RENACER!")
+	-- La acción estrella: botón de lava (se apaga a piedra gris mientras no alcanza).
+	local button = Style.lavaButton(content, "Renacer", "¡RENACER!")
 	button.AnchorPoint = Vector2.new(0.5, 1)
 	button.Position = UDim2.new(0.5, 0, 1, -4)
-	button.Size = UDim2.new(if side ~= content then 0.7 else 0.52, 0, 0, 70)
+	button.Size = UDim2.new(if side ~= content then 0.7 else 0.52, 0, 0, 74)
 	local buttonText = button:FindFirstChild("Texto") :: TextLabel
+	local lava = button:FindFirstChild("Piedra") :: ImageLabel
 	local beat = Instance.new("UIScale")
 	beat.Parent = button
 	local pulse = TweenService:Create(beat, PULSE, { Scale = 1.06 })
@@ -118,13 +123,7 @@ function RebirthWindow.start(screen: ScreenGui)
 			then "¡RENACER!"
 			elseif have < cost then "Te faltan monedas"
 			else "Te falta poder"
-		local tint = if ready then Style.PALETTE.Buy else Style.PALETTE.Disabled
-		button.BackgroundColor3 = tint
-		local gradient = button:FindFirstChildOfClass("UIGradient")
-		if gradient then
-			gradient:Destroy()
-		end
-		Style.gradient(button, tint)
+		Kit.tint(lava, if ready then LIT else Style.PALETTE.Disabled)
 		hud.setAlert(ready)
 		if ready then
 			pulse:Play()

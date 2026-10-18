@@ -3,13 +3,14 @@
 	SpinParts
 
 	Botones de la ventana de la ruleta (SpinWindow): el de comprar giros con
-	Robux (Spin1 / Spin5, con la etiqueta verde del precio) y el repintado de
-	un botón cuando cambia de color.
+	Robux (Spin1 / Spin5, con la etiqueta verde del precio) y el teñido de la
+	piedra de un botón cuando cambia de color.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Purchases = require(script.Parent.Purchases)
 
@@ -17,16 +18,16 @@ local PRODUCTS = Config.Monetization.spinProducts
 
 local SpinParts = {}
 
+-- Tiñe la piedra del botón (también la del de lava: blanco = encendido).
 function SpinParts.paint(button: TextButton, color: Color3)
 	if button.BackgroundColor3 == color then
 		return
 	end
 	button.BackgroundColor3 = color
-	local old = button:FindFirstChildOfClass("UIGradient")
-	if old then
-		old:Destroy()
+	local skin = button:FindFirstChild("Piedra")
+	if skin and skin:IsA("ImageLabel") then
+		Kit.tint(skin, color)
 	end
-	Style.gradient(button, color)
 end
 
 function SpinParts.buyButton(parent: Instance, key: string, color: Color3, x: number): TextButton

@@ -3,7 +3,7 @@
 	QuestRow
 
 	Una tarjeta de la ventana MISIONES (QuestsWindow): rayos azules o verdes,
-	ícono del tipo de misión, texto, barra, premio en monedas, etiqueta de
+	ícono del tipo de misión en un hueco de piedra, texto, barra, premio en monedas, etiqueta de
 	impulso y ✓ al cumplirla.
 ]]
 
@@ -12,6 +12,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 
@@ -59,6 +60,15 @@ function QuestRow.make(parent: Instance, order: number, wide: boolean?): Row
 	local box = CardParts.card(parent, `Mision{order}`, CARDS.Blue)
 	box.LayoutOrder = order
 	box.Size = UDim2.new(1, -8, 0, ROW_HEIGHT)
+	-- El ícono va en un hueco tallado en la piedra (como el del monstruo en el HUD).
+	local socket = Instance.new("Frame")
+	socket.Name = "Hueco"
+	socket.AnchorPoint = Vector2.new(0.5, 0.5)
+	socket.Position = UDim2.new(0, ROW_HEIGHT / 2 + 4, 0.5, 0)
+	socket.Size = UDim2.fromOffset(ROW_HEIGHT - 12, ROW_HEIGHT - 12)
+	socket.ZIndex = 1
+	socket.Parent = box
+	Kit.skin(socket, "hondo")
 	local title = Style.text(box, "Texto", 26, nil, 2.5)
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.TextWrapped = wide == true
@@ -95,7 +105,8 @@ function QuestRow.setIcon(row: Row, kind: string)
 	local view = Icons.view(row.box, kind)
 	view.AnchorPoint = Vector2.new(0.5, 0.5)
 	view.Position = UDim2.new(0, ROW_HEIGHT / 2 + 4, 0.5, 0)
-	view.Size = UDim2.fromOffset(ROW_HEIGHT - 14, ROW_HEIGHT - 14)
+	view.Size = UDim2.fromOffset(ROW_HEIGHT - 22, ROW_HEIGHT - 22)
+	view.ZIndex = 2 -- encima del hueco
 	row.icon, row.kind = view, kind
 end
 

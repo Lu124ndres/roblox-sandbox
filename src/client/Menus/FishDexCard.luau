@@ -2,8 +2,8 @@
 --[[
 	FishDexCard
 
-	Una tarjeta de la colección (FishDex) con el estilo de la TIENDA: fondo
-	con rayos del color de su rareza (gris oscuro si falta descubrirlo), el
+	Una casilla de la colección (FishDex): piedra teñida del color de su
+	rareza (un hueco oscuro en la piedra si falta descubrirlo), el
 	pez en 3D dentro de un ViewportFrame (o su silueta con un candado), el
 	nombre y la rareza con la cantidad pescada. El giro lo hace FishDex,
 	solo con la ventana abierta, con el model que devuelve build.
@@ -14,12 +14,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local CARDS = Style.PALETTE.Cards
-local SILHOUETTE = Color3.fromRGB(20, 26, 36)
-local LOCKED = Color3.fromRGB(52, 58, 76)
+-- Silueta plana (luz ambiente blanca, sin sol), un poco más clara que el fondo del hueco.
+local SILHOUETTE = Color3.fromRGB(64, 70, 88)
 -- Color de la tarjeta por rareza (los de UIConfig.RarityColors son para texto).
 local CARD_COLORS: { [string]: Color3 } = {
 	Comun = Color3.fromRGB(120, 132, 156),
@@ -56,25 +56,22 @@ function FishDexCard.build(parent: Instance, fishId: string, amount: number, ord
 	local fish = FishCatalog.get(fishId)
 	local rarity = FishCatalog.rarity(fishId)
 	local known = amount > 0
-	local box = CardParts.card(
-		parent,
-		`Pez{order}`,
-		if known then CARD_COLORS[rarity.id] or CARDS.Blue else LOCKED,
-		14
-	)
+	-- Descubierto: piedra teñida de su rareza. Sin descubrir: un hueco vacío en la piedra.
+	local box = Instance.new("Frame")
+	box.Name = `Pez{order}`
 	box.LayoutOrder = order
-	if not known then
-		local rays = box:FindFirstChild("Rayos")
-		if rays then
-			rays:Destroy() -- sin descubrir: tarjeta lisa, oscura
-		end
+	box.Parent = parent
+	if known then
+		Kit.skin(box, "boton", CARD_COLORS[rarity.id] or CARDS.Blue)
+	else
+		Kit.skin(box, "hondo")
 	end
 
 	local view = Instance.new("ViewportFrame")
 	view.BackgroundTransparency = 1
 	view.Position = UDim2.fromScale(0.04, 0.04)
 	view.Size = UDim2.fromScale(0.92, 0.58)
-	view.Ambient = if known then Color3.fromRGB(200, 200, 210) else Color3.new(0, 0, 0)
+	view.Ambient = if known then Color3.fromRGB(200, 200, 210) else Color3.new(1, 1, 1)
 	view.LightColor = if known then Color3.new(1, 1, 1) else Color3.new(0, 0, 0)
 	view.Parent = box
 	local world = Instance.new("WorldModel")
@@ -102,6 +99,9 @@ function FishDexCard.build(parent: Instance, fishId: string, amount: number, ord
 
 	local name = Style.text(box, "Nombre", 22, nil, 2.5)
 	name.Text = if known and fish then fish.displayName else "???"
+	if not known then
+		Kit.gold(name)
+	end
 	name.Position = UDim2.fromScale(0.04, 0.63)
 	name.Size = UDim2.fromScale(0.92, 0.17)
 	local info = Style.text(box, "Info", 17, nil, 2)

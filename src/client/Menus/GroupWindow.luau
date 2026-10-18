@@ -20,6 +20,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
@@ -42,17 +43,13 @@ local function step(parent: Instance, y: number, icon: string): Step
 	local card = CardParts.card(parent, "Paso", CARDS.Blue, 12)
 	card.Position = UDim2.fromOffset(0, y)
 	card.Size = UDim2.new(1, 0, 0, STEP_HEIGHT)
-	local box = Instance.new("Frame")
+	local box = Instance.new("Frame") -- casilla: un hueco tallado en la piedra
 	box.Name = "Casilla"
-	box.BackgroundColor3 = Color3.new(1, 1, 1)
 	box.AnchorPoint = Vector2.new(0, 0.5)
 	box.Position = UDim2.new(0, 12, 0.5, 0)
 	box.Size = UDim2.fromOffset(38, 38)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = box
-	Style.border(box, 3)
 	box.Parent = card
+	Kit.skin(box, "hondo").SliceScale = 0.3
 	local tick = Style.text(box, "Hecho", 40, PALETTE.Buy, 3)
 	tick.Text = "✓"
 	tick.Size = UDim2.fromScale(1, 1)
@@ -151,12 +148,7 @@ function GroupWindow.start(screen: ScreenGui)
 		claim.AutoButtonColor = ready
 		local tint = if ready then PALETTE.Buy else PALETTE.Disabled
 		if claim.BackgroundColor3 ~= tint then
-			claim.BackgroundColor3 = tint
-			local gradient = claim:FindFirstChildOfClass("UIGradient")
-			if gradient then
-				gradient:Destroy()
-			end
-			Style.gradient(claim, tint)
+			claim.BackgroundColor3 = tint -- la piedra del botón se tiñe sola
 		end
 		hud.setAlert(ready)
 	end

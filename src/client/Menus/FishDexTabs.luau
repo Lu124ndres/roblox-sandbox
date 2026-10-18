@@ -14,7 +14,7 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Style = require(script.Parent.Parent.Interface.Style)
 
-local TAB_HEIGHT = 34
+local TAB_HEIGHT = 40 -- la piedra tallada pide algo más de alto que la pestaña plana
 local ALL = "Todos"
 
 export type Tabs = {
@@ -23,7 +23,14 @@ export type Tabs = {
 	counts: (found: { [string]: number }, total: { [string]: number }) -> (),
 }
 
-type Entry = { id: string, name: string, button: TextButton, label: TextLabel, scale: UIScale }
+type Entry = {
+	id: string,
+	name: string,
+	color: Color3,
+	button: TextButton,
+	label: TextLabel,
+	scale: UIScale,
+}
 
 local FishDexTabs = {}
 
@@ -58,7 +65,11 @@ function FishDexTabs.mount(parent: Instance, top: number, onSelect: (id: string)
 	local function paint()
 		for _, entry in entries do
 			local on = entry.id == selected
-			entry.button.BackgroundTransparency = if on then 0 else 0.55
+			-- La piedra se tiñe del BackgroundColor3 (Style.button): apagada, más oscura.
+			local h, s, v = entry.color:ToHSV()
+			entry.button.BackgroundColor3 = if on
+				then entry.color
+				else Color3.fromHSV(h, s * 0.7, v * 0.5)
 			entry.label.TextTransparency = if on then 0 else 0.25
 			entry.scale.Scale = if on then 1 else 0.92
 		end
@@ -79,7 +90,7 @@ function FishDexTabs.mount(parent: Instance, top: number, onSelect: (id: string)
 		end)
 		table.insert(
 			entries,
-			{ id = id, name = name, button = button, label = label, scale = scale }
+			{ id = id, name = name, color = color, button = button, label = label, scale = scale }
 		)
 	end
 	add(ALL, ALL, UIConfig.Colors.Fishing, 0)

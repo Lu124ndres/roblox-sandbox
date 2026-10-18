@@ -11,8 +11,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
-local Ui = require(script.Parent.Parent.Ui)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
 
@@ -32,6 +32,13 @@ function CodesWindow.start(screen: ScreenGui)
 	local window = Window.create(screen, "Codigos", "Códigos", Vector2.new(460, 250))
 	HudButtons.top("Códigos", "ticket", window.toggle)
 
+	-- La caja va en un hueco tallado (la piedra va en un marco aparte: si fuera
+	-- hija de la caja, taparía el texto).
+	local slot = Instance.new("Frame")
+	slot.Name = "Hueco"
+	slot.Size = UDim2.new(1, 0, 0.32, 0)
+	slot.Parent = window.content
+	Kit.skin(slot, "hondo")
 	local box = Instance.new("TextBox")
 	box.Name = "Codigo"
 	box.PlaceholderText = "Escribe un código"
@@ -41,22 +48,18 @@ function CodesWindow.start(screen: ScreenGui)
 	box.TextScaled = true
 	box.TextColor3 = COLORS.Text
 	box.PlaceholderColor3 = COLORS.TextMuted
-	box.BackgroundColor3 = COLORS.Track
-	box.Size = UDim2.new(1, 0, 0.32, 0)
-	Ui.corner(box, 12)
-	Style.border(box, 3)
-	box.Parent = window.content
-	local padding = Instance.new("UIPadding")
-	padding.PaddingLeft, padding.PaddingRight = UDim.new(0, 12), UDim.new(0, 12)
-	padding.PaddingTop, padding.PaddingBottom = UDim.new(0, 6), UDim.new(0, 6)
-	padding.Parent = box
+	box.BackgroundTransparency = 1
+	box.Position = UDim2.fromOffset(16, 10)
+	box.Size = UDim2.new(1, -32, 1, -20)
+	box.ZIndex = 2
+	box.Parent = slot
 
-	local status = Style.text(window.content, "Estado", 22, COLORS.TextMuted, 1.5)
+	local status = Style.text(window.content, "Estado", 22, COLORS.TextMuted, 2)
 	status.Position = UDim2.fromScale(0, 0.36)
 	status.Size = UDim2.new(1, 0, 0.2, 0)
 	status.Text = "Búscalos en el grupo y las redes del juego"
 
-	local button = Style.button(window.content, "Canjear", COLORS.Robux, "Canjear")
+	local button = Style.button(window.content, "Canjear", Style.PALETTE.Buy, "Canjear")
 	button.AnchorPoint = Vector2.new(0.5, 1)
 	button.Position = UDim2.fromScale(0.5, 1)
 	button.Size = UDim2.new(0.5, 0, 0.3, 0)
