@@ -691,3 +691,14 @@ se borró `requiredPower` de `Config/Progression` y del tipo `PondDef`. Las kill
 al renacer, así que un estanque abierto queda abierto. De paso, `Perks.affectsPonds` ya no
 reacciona al poder (que sube cada tick), y el cartel muestra el avance («4/15 monstruos»).
 
+## 2026-10-18 — Los eventos se anuncian con el cielo
+
+**Contexto:** el usuario no notaba cuándo había evento ni cuál era. **Decisión:** el cielo
+entero cambia con cada evento (`EventSky`, la última capa que mezcla `SkyCycle`), con efectos
+propios en el mundo (`EventFx`/`EventShapes`) y un anuncio grande (`EventIntro`). Para teñir
+el cielo hace falta `Atmosphere.Haze` (con solo `Color` apenas cambia): como `SkyCycle` no lo
+toca, `EventSky` guarda el valor de antes y lo devuelve al terminar. Los relámpagos usan su
+propio `ColorCorrectionEffect` para no pelear con el de `SkyCycle`. La aurora son rayos
+verticales (`Beam` con transparencia que se apaga arriba y abajo): las piezas planas y las
+cintas horizontales se veían como bloques.
+

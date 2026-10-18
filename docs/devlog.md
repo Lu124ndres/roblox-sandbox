@@ -2360,3 +2360,34 @@ muestra la calavera con «4/15 monstruos». Se quitó `requiredPower` de la conf
 **Qué sigue:** revisar la curva de kills de `Config/Progression` si los estanques altos se
 sienten lejos sin el atajo del poder.
 
+
+---
+
+## 2026-10-18 (6) — Eventos que se ven en el cielo y HUD sin palabras
+
+**Qué se hizo:**
+
+- **Cielo de evento** (`Ambient/EventSky`, mezclado por `SkyCycle` encima de todo): cada
+  evento pinta el cielo entero con hora, luz, color, bruma (`Haze`) y resplandor propios.
+  Pesca dorada: atardecer dorado y naranja; Frenesí: tarde turquesa eléctrica; Lluvia de
+  monedas: amanecer rosado; Poder doble: noche violeta. Entra y sale en 2.5 s; en el cráter
+  pesa algo menos para que se siga viendo el hábitat.
+- **Efectos en el mundo** (`Ambient/EventFx` y `EventShapes`, solo en el cliente):
+  destellos dorados que caen, lluvia celeste con relámpagos y trueno, monedas de oro que
+  llueven girando y una aurora de rayos celestes y violetas que ondula. En modo rápido, menos
+  partículas y monedas y sin aurora.
+- **Anuncio grande** al empezar (`Menus/EventIntro`): ícono del evento sobre rayos que giran,
+  el nombre enorme en su color y qué da. La placa del evento lleva su ícono y late mientras
+  dura; el aviso chico de `Notices` se quitó para no repetir. Ícono por evento en
+  `Config/Events`.
+- **HUD sin palabras:** las estadísticas son ícono, número grande y multiplicador (fuera
+  «monstruos llenados», «peces en la canasta» y la velocidad); el cartel de los estanques
+  dice «4/15».
+
+**Probado en Studio (Play):** los cuatro eventos con el comando de admin `event`, con
+capturas en `docs/capturas/2026-10-18-evento-*.jpg`; el anuncio y la placa con su ícono.
+
+**Qué se rompió:** nada visto. La aurora pasó por tres intentos (bloques, cintas, rayos
+verticales); quedó la de rayos.
+
+**Qué sigue:** probar los eventos en un teléfono (rendimiento de la lluvia y la aurora).

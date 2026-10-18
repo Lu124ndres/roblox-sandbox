@@ -9,7 +9,8 @@
 	minotauro, el de SkyMoods.desert según CraterMode.sandBlend, y con la lava
 	del dragón, el de SkyMoods.lair según CraterMode.lavaBlend, y con el hielo
 	del zorro, el de SkyMoods.ice según CraterMode.iceBlend) y el amanecer
-	del descanso (RestDawn: al llenar al monstruo sale el sol). Lighting se
+	del descanso (RestDawn: al llenar al monstruo sale el sol), y arriba de
+	todo, el cielo del evento del servidor (EventSky). Lighting se
 	escribe cada SkyUpdateSeconds (UIConfig.Performance) o si la hora o las
 	mezclas cambian de más. Workspace.HoraFija congela la hora.
 ]]
@@ -22,6 +23,7 @@ local Workspace = game:GetService("Workspace")
 local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CraterMode = require(script.Parent.CraterMode)
+local EventSky = require(script.Parent.EventSky)
 local RestDawn = require(script.Parent.RestDawn)
 local SkyMoods = require(script.Parent.SkyMoods)
 local ZoneMood = require(script.Parent.ZoneMood)
@@ -119,6 +121,8 @@ function SkyCycle.start()
 	local baseContrast = if correction then correction.Contrast else 0
 	local lastHour, lastZone, lastDawn, lastHot, lastLair, lastIce, sinceWrite =
 		-1, -1, -1, -1, -1, -1, math.huge
+	local lastEvent = -1
+	EventSky.start()
 	RunService.RenderStepped:Connect(function(dt: number)
 		sinceWrite += dt
 		local hour = SkyCycle.currentHour()
@@ -134,11 +138,12 @@ function SkyCycle.start()
 			or math.abs(hot - lastHot) > Performance.SkyZoneStep
 			or math.abs(lair - lastLair) > Performance.SkyZoneStep
 			or math.abs(ice - lastIce) > Performance.SkyZoneStep
+			or math.abs(EventSky.blend() - lastEvent) > Performance.SkyZoneStep
 		if sinceWrite < Performance.SkyUpdateSeconds and not moved then
 			return
 		end
 		sinceWrite, lastHour, lastZone, lastDawn = 0, hour, zone, dawn
-		lastHot, lastLair, lastIce = hot, lair, ice
+		lastHot, lastLair, lastIce, lastEvent = hot, lair, ice, EventSky.blend()
 		local crater = craterMood(hot, lair, ice)
 		local a, b, t = moodAt(hour)
 		local brightness = mix(mix(a.brightness, b.brightness, t), crater.brightness, zone)
@@ -178,6 +183,7 @@ function SkyCycle.start()
 			correction.Saturation = mix(baseSaturation, saturation, zone)
 			correction.Contrast = mix(baseContrast, contrast, zone)
 		end
+		EventSky.mixInto(Lighting, atmosphere, correction, zone)
 	end)
 end
 

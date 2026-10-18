@@ -12,7 +12,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local Events = require(ReplicatedStorage.Shared.Config.Events)
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
@@ -120,16 +119,8 @@ function Notices.start(toasts: Toasts.Toasts)
 			}
 			Sounds.play(if a == "ok" then "LegendaryCatch" else "Click")
 			toasts.banner(texts[a] or "", if a == "ok" then COLORS.Coins else COLORS.Warning)
-		elseif kind == "event" and type(a) == "string" then
-			for _, event in Events.kinds do
-				if event.id == a then
-					Sounds.play("StageUp")
-					toasts.banner(
-						`{event.name} {event.text} por {Events.durationMinutes} min`,
-						event.color
-					)
-				end
-			end
+		elseif kind == "event" then
+			return -- lo anuncia en grande EventIntro (lo arranca EventTimer)
 		elseif kind == "quest" and type(a) == "string" and type(b) == "string" then
 			Sounds.play("LegendaryCatch")
 			toasts.banner(`¡Misión cumplida! {a}: {b}`, COLORS.Success)

@@ -11,6 +11,9 @@
 		biteDelay  multiplica la espera hasta que pica (0.5 = el doble de rápido)
 		coins      multiplica las monedas
 		power      multiplica el poder
+	Cada uno tiene su color y su ícono (Interface/Icons) para el anuncio y la
+	placa del HUD; su cielo y sus efectos en el mundo están en client/Ambient
+	(EventSky, EventFx).
 ]]
 
 export type EventDef = {
@@ -18,6 +21,7 @@ export type EventDef = {
 	name: string,
 	text: string,
 	color: Color3,
+	icon: string, -- Interface/Icons
 	luck: number?,
 	biteDelay: number?,
 	coins: number?,
@@ -41,6 +45,7 @@ local Events: EventsConfig = {
 			name = "¡Pesca dorada!",
 			text = "+100% suerte",
 			color = Color3.fromRGB(255, 200, 40),
+			icon = "fish",
 			luck = 1,
 		},
 		{
@@ -48,6 +53,7 @@ local Events: EventsConfig = {
 			name = "¡Frenesí!",
 			text = "Pican el doble de rápido",
 			color = Color3.fromRGB(60, 200, 255),
+			icon = "bolt",
 			biteDelay = 0.5,
 		},
 		{
@@ -55,6 +61,7 @@ local Events: EventsConfig = {
 			name = "¡Lluvia de monedas!",
 			text = "x2 monedas",
 			color = Color3.fromRGB(255, 170, 40),
+			icon = "coin",
 			coins = 2,
 		},
 		{
@@ -62,6 +69,7 @@ local Events: EventsConfig = {
 			name = "¡Poder doble!",
 			text = "x2 poder",
 			color = Color3.fromRGB(150, 110, 255),
+			icon = "crystal",
 			power = 2,
 		},
 	},
