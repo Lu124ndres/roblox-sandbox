@@ -759,8 +759,9 @@ parte que los lleva y pegados a un hueso (nunca se separan). **Lo no obvio:**
   ponerla a mano en `SurfaceAppearance.EmissiveMaskContent` (se puede por `execute_luau`).
 - Una `PointLight` dentro del cuerpo ilumina de frente toda la armadura y la deja de un solo
   color: las luces del traje son tenues y la de la vitrina sale del botón, desde abajo.
-- La capa no sigue a ninguna parte del cuerpo: la mueve el estilo con `fx.pose` cada cuadro
-  (sube con la velocidad, suavizado, y ondea con dos ondas desfasadas).
+- Huesos que no siguen al cuerpo los mueve el estilo con `fx.pose` cada cuadro. Se usó para una
+  capa del Rey del Mar, pero se quitó (mismo día, pedido del usuario): chocaba con la canasta de
+  peces que el juego cuelga en la espalda de todos. En su lugar va un espaldar.
 
 ## 2026-10-18 — Sin tope de alimentar por persona
 

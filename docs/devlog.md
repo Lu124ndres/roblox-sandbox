@@ -2704,3 +2704,18 @@ compartido; desde entonces, `git commit -- <rutas>`. Rojo duplicó una vez ~80 s
 
 **Qué sigue:** témpanos menos regulares y párpados de la cría y el joven (ola 4, en curso); el
 rascado no llega a la oreja con piezas rígidas (se rasca el cuello).
+
+---
+
+## 2026-10-18 (15) — El Rey del Mar sin capa
+
+**Qué se hizo (pedido del usuario):** la capa chocaba con la canasta de peces de la espalda, así
+que se quitó (con su cuello alto, broches y los huesos `Capa1`/`Capa2`) y se borró
+`Shared/Trajes/Capa`. En la espalda va un espaldar con filo de oro, escamas, el emblema del
+tridente con rayos y una gema 3D. 14,232 triángulos, 16 huesos.
+
+**Probado:** en Blender (todas las poses, `renders/rey_del_mar_v2/poses_revision.png`). Antes de
+quitarla, en Play: el Rey del Mar puesto caminando dejaba ondas de agua y la capa volaba.
+
+**Qué sigue:** importar `assets/blender/TrajeReyDelMar_v2.fbx` en Studio, cambiarlo en
+`ServerStorage.TrajeReyDelMar` con la misma máscara de brillo y actualizar sus IDs en `Assets`.

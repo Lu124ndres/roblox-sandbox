@@ -1,9 +1,9 @@
 """
 Ficha del Rey del Mar v2 (pase de 149 R$): mitad Poseidón, mitad caballero. Armadura turquesa
 grabada con escamas y filos de oro en relieve, peto con gema de mar, gorguera, hombreras de
-concha en capas con cristales, brazales y grebas con aletas, rodilleras, punteras de oro,
-corona de dos pisos con gemas, cresta y aletas, y una capa real con cuello alto que ondea
-(huesos Capa1 y Capa2, los mueve su estilo en el juego). La cara se elige entre varias
+concha en capas con cristales, espaldar con el emblema del tridente, brazales y grebas con
+aletas, rodilleras, punteras de oro y corona de dos pisos con gemas, cresta y aletas. Sin capa:
+chocaba con la canasta de peces que el juego cuelga en la espalda. La cara se elige entre varias
 (traje_v2_rey_del_mar_cara.py, variable TRAJE_CARA). Accesorios en ..._piezas.py y dibujos
 en ..._dibujo.py.
 """
@@ -25,8 +25,6 @@ COLORES = {
     "mar_oscuro": (12, 66, 98),
     "oro": (242, 192, 64),
     "oro_oscuro": (186, 128, 30),
-    "capa": (28, 48, 128),
-    "capa_forro": (18, 26, 70),
     "gema": (40, 214, 255),
     "ojo": (60, 228, 255),
     "coral": (246, 104, 84),
@@ -42,7 +40,7 @@ REGIONES = {
     "cara": ((0.0, 0.5, 0.5, 1.0), (-0.66, 4.06, 0.66, 5.16)),
     "pecho": ((0.5, 0.5, 1.0, 1.0), (-0.96, 2.42, 0.96, 3.98)),  # el frente del peto
     "armadura": ((0.0, 0.0, 0.5, 0.5), (-3.3, -0.3, 3.3, 7.0)),  # envuelve (proyección "caja")
-    "capa": ((0.5, 0.0, 0.75, 0.5), (1.25, 0.55, -1.25, 4.80)),  # vista desde atrás, con el cuello
+    "espalda": ((0.5, 0.0, 0.75, 0.5), (0.96, 2.42, -0.96, 3.98)),  # el espaldar, visto desde atrás
 }
 
 TORSO = dict(k=2, tramos={"base": (2.0, 1.0, 0.0, 0.12), "falda": (2.04, 1.12, 0.0, 0.14),
@@ -81,13 +79,6 @@ SOMBRERO = dict(k=4, tramos={"aro": (1.32, 1.24, 0.0, 0.25), "domo": (1.14, 1.06
                          (5.58, 0, "domo2"), (5.62, 0, "domo3")])
 PUENTES = {"cuello": "piel", "hombro": "mar_oscuro", "cadera": "mar_oscuro", "union_sombrero": "mar"}
 
-HUESOS_EXTRA = {
-    "Capa1": ((0, 0.56, 3.95), (0, 0.56, 2.3), "Pecho"),
-    "Capa2": ((0, 0.56, 2.3), (0, 0.56, 0.62), "Capa1"),
-}
-# Poses de revisión: al caminar la capa vuela hacia atrás.
-POSES_EXTRA = {"caminar": {"Capa1": [((1, 0, 0), 50)], "Capa2": [((1, 0, 0), 15)]},
-               "sentado": {"Capa1": [((1, 0, 0), 25)]}}
 ARMADURA = ("caja", "armadura")
 
 

@@ -1,15 +1,15 @@
 """
 Dibujos del Rey del Mar v2 (los usa traje_v2_textura.py): la cara (según TRAJE_CARA, en
 ..._cara.py); el frente del peto con degradado, pectorales, filigrana de oro y escamas; la
-armadura grabada con escamas que envuelve el cuerpo; y la capa con doble borde de oro, olas,
-estrellas y el emblema del tridente con rayos. Formas en studs.
+armadura grabada con escamas que envuelve el cuerpo; y el espaldar con filo de oro y el emblema
+del tridente con rayos. Formas en studs.
 """
 import math
 import numpy as np
 from PIL import Image
 import traje_v2_rey_del_mar_cara as CARA
 
-OLA, ESCAMA, ESCAMA_LUZ = (40, 66, 158), (16, 100, 128), (40, 150, 176)
+ESCAMA, ESCAMA_LUZ = (16, 100, 128), (40, 150, 176)
 LUZ, SOMBRA, BLANCO = (36, 146, 172), (12, 80, 108), (255, 255, 255)
 
 
@@ -68,45 +68,23 @@ def armadura(L):
     escamas(L, -3.4, 3.4, -0.4, 7.1, 0.17)
 
 
-def capa(L):
-    degradado(L, (18, 30, 92), (34, 58, 146))
-    z = 1.0
-    while z < 3.9:  # olas suaves
-        L.trazo([(x / 10, z + 0.05 * math.sin(x * 0.9 + z * 3)) for x in range(-14, 15)], 0.03, OLA)
-        z += 0.28
-    azar = np.random.default_rng(4)
-    for x, zz in azar.uniform((-0.85, 1.0), (0.85, 3.8), (45, 2)):  # estrellitas de oro esparcidas
-        if math.hypot(x, zz - 2.75) > 0.78:
-            L.ovalo(x, zz, 0.018, 0.018, "oro")
-    for s in (-1, 1):  # doble borde de oro (la capa se abre hacia abajo)
-        L.trazo([(s * 0.93, 3.98), (s * 1.08, 0.62)], 0.05, "oro")
-        L.trazo([(s * 0.84, 3.9), (s * 0.98, 0.8)], 0.018, "oro")
-    L.caja(-1.5, 0.4, 1.5, 0.78, "oro")
-    for i in range(-6, 7):
-        L.ovalo(i * 0.2, 0.78, 0.1, 0.06, (24, 40, 110))
-    L.caja(-1.5, 3.92, 1.5, 4.0, "oro")
-    # Cuello alto: filo de oro siguiendo su forma, olas y una concha con gema al centro.
+def espalda(L):
+    """El espaldar: degradado, escamas abajo, filo de oro y el emblema del tridente en un aro."""
+    degradado(L, (14, 92, 120), (30, 140, 166))
+    escamas(L, -1.0, 1.0, 2.40, 3.00, 0.14)
+    L.caja(-1.0, 3.00, 1.0, 3.04, "oro")
     for s in (-1, 1):
-        L.trazo([(s * 0.70, 3.98), (s * 0.88, 4.66)], 0.04, "oro")
-    L.caja(-1.0, 4.64, 1.0, 4.9, "oro")
-    for i in range(-3, 4):
-        L.trazo([(i * 0.18 - 0.08, 4.12), (i * 0.18 - 0.03, 4.17), (i * 0.18 + 0.04, 4.16)], 0.018, "oro")
-    for k in range(7):
-        a = math.pi * (0.1 + 0.8 * k / 6)
-        L.trazo([(0, 4.30), (0.2 * math.cos(a), 4.30 + 0.2 * math.sin(a))], 0.02, "oro")
-    L.ovalo(0, 4.32, 0.05, 0.05, "gema", 1.0)
-    for k in range(16):  # emblema: rayos, aro, tridente y gema
-        a = k / 16 * math.tau
-        L.trazo([(0.55 * math.cos(a), 2.75 + 0.55 * math.sin(a)), (0.72 * math.cos(a), 2.75 + 0.72 * math.sin(a))],
-                0.02, "oro")
-    L.trazo([(0.48 * math.cos(a / 20 * math.tau), 2.75 + 0.48 * math.sin(a / 20 * math.tau)) for a in range(21)],
-            0.06, "oro")
-    L.caja(-0.03, 2.35, 0.03, 3.15, "oro")
-    L.caja(-0.22, 2.92, 0.22, 2.97, "oro")
-    for x, alto in ((-0.2, 3.13), (0, 3.22), (0.2, 3.13)):
-        L.poligono([(x - 0.045, 2.95), (x + 0.045, 2.95), (x, alto)], "oro")
-    L.ovalo(0, 2.75, 0.07, 0.07, "gema", 1.0)
-    L.ovalo(-0.02, 2.77, 0.02, 0.02, BLANCO, 1.0)
+        L.trazo([(s * 0.9, 2.5), (s * 0.9, 3.9)], 0.04, "oro")
+        L.trazo(espiral(s * 0.6, 3.72, 0.13, 1.4, s), 0.022, "oro")
+    L.trazo([(0.42 * math.cos(a / 24 * math.tau), 3.33 + 0.42 * math.sin(a / 24 * math.tau)) for a in range(25)],
+            0.045, "oro")
+    for k in range(12):  # rayos del emblema
+        a = k / 12 * math.tau
+        L.trazo([(0.46 * math.cos(a), 3.33 + 0.46 * math.sin(a)), (0.58 * math.cos(a), 3.33 + 0.58 * math.sin(a))],
+                0.018, "oro")
+    for i in range(-4, 5):  # olas grabadas arriba
+        x = i * 0.2
+        L.trazo([(x - 0.1, 3.88), (x - 0.05, 3.93), (x + 0.02, 3.92), (x + 0.04, 3.88)], 0.018, LUZ)
 
 
-DIBUJOS = {"cara": CARA.DIBUJO, "pecho": pecho, "armadura": armadura, "capa": capa}
+DIBUJOS = {"cara": CARA.DIBUJO, "pecho": pecho, "armadura": armadura, "espalda": espalda}

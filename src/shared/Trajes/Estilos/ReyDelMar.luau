@@ -4,18 +4,18 @@
 
 	Majestuoso: camina derecho, con poco vaivén de brazos, la barbilla en
 	alto y mirando despacio su reino. En la vitrina posa de héroe: puño al
-	cielo, la otra mano adelante y un paso al frente. Efectos: aura del mar (Trajes/Aura) más suave que antes (el traje
-	tiene mucho detalle y no se tapa), luz de agua en la visera y la gema del
-	pecho, destellos en la corona y los cristales de las hombreras, la capa
-	que ondea y gotea (Trajes/Capa), el brillo de las gemas que titila y
-	ondas de agua en cada pisada (Trajes/Huellas).
+	cielo, la otra mano adelante y un paso al frente.
+	Efectos: aura del mar (Trajes/Aura) más suave que antes (el traje tiene
+	mucho detalle y no se tapa), luz suave de agua en la gema del pecho,
+	destellos en la visera, la corona y los cristales de las hombreras, el
+	brillo de las gemas que titila y ondas de agua en cada pisada
+	(Trajes/Huellas). Sin capa: chocaba con la canasta de la espalda.
 	Puntos en altos del traje, medidos en el modelo (tools/blender/traje_v2_rey_del_mar*.py).
 ]]
 
 local Tipos = require(script.Parent.Parent.Tipos)
 
 local Aura = require(script.Parent.Parent.Aura)
-local Capa = require(script.Parent.Parent.Capa)
 local Huellas = require(script.Parent.Parent.Huellas)
 local Particulas = require(script.Parent.Parent.Particulas)
 
@@ -28,7 +28,6 @@ local VISOR = Vector3.new(0, 0.112, -0.108) -- desde Cabeza: la ranura en T
 local CROWN_GEM = Vector3.new(0, 0.248, -0.106) -- desde Cabeza: la gema de la aguja
 local CHEST_GEM = Vector3.new(0, 0.15, -0.106) -- desde Pecho
 local CRYSTALS = Vector3.new(0.15, 0.123, -0.042) -- desde cada Brazo (x según el lado)
-local CAPE_HEM = Vector3.new(0, -0.27, 0) -- desde Capa2: el borde de abajo
 
 local function pulse(now: number, every: number, length: number): number
 	local t = now % every
@@ -150,19 +149,6 @@ local style: Tipos.Style = {
 			local name = if side < 0 then "BrazoIzq" else "BrazoDer"
 			sparkle(fx, fx.socket(name, CRYSTALS * Vector3.new(side, 1, 1)), 3, 0.06)
 		end
-		Aura.add(fx, fx.socket("Capa2", CAPE_HEM), { -- la capa gotea
-			texture = T.Burbuja,
-			colors = { rgb(200, 245, 255), WATER },
-			size = { 0.02, 0.01 },
-			alpha = { 0.2, 1 },
-			life = { 0.6, 1 },
-			speed = { 0, 0.03 },
-			accel = Vector3.new(0, -1.2, 0),
-			rate = 6,
-			light = 0.6,
-			spread = 60,
-		})
-		local cape = Capa.new(fx)
 		local steps = Huellas.new(fx, {
 			kind = "agua",
 			color = rgb(150, 235, 255),
@@ -172,7 +158,6 @@ local style: Tipos.Style = {
 		})
 		local glow = Aura.glow(fx)
 		return function(ctx: Tipos.Context)
-			cape(ctx)
 			steps(ctx)
 			local shimmer = math.sin(ctx.now * 2.3)
 			glow(1.3 + 0.45 * shimmer)

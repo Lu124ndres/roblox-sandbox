@@ -1,6 +1,6 @@
 """
-Accesorios del Rey del Mar v2 (sin la cara, que está en ..._cara.py): capa con cuello alto y
-broches, peto con filo de oro y gema 3D, gorguera, hebilla, faldones que siguen a las piernas,
+Accesorios del Rey del Mar v2 (sin la cara, que está en ..._cara.py): peto y espaldar con
+filo de oro y gemas 3D, gorguera, hebilla, faldones que siguen a las piernas,
 hombreras de concha en capas (nervios, láminas, cresta y cristales), brazales y grebas con
 aletas, rodilleras con gema, punteras de oro, y la corona de dos pisos con gemas, cresta y
 aletas del casco. Cada pieza es un tubo cerrado metido un poco en lo que la lleva.
@@ -9,7 +9,6 @@ import traje_v2_base as B
 import traje_v2_rey_del_mar_cara as CARA
 from traje_v2_formas import pieza, placa
 
-CAPA_Y = 0.56
 ARMADURA = ("caja", "armadura")
 
 
@@ -25,39 +24,17 @@ def rombo(nombre, z, y, ancho, alto, hueso, fondo=0.12, x=0.0):
                           (z + alto, x, y + 0.02, 0.05, 0.05, 0.02)], hueso, "gema")
 
 
-def capa():
-    zs = [3.98, 3.84, 3.55, 3.2, 2.85, 2.55, 2.3, 2.05, 1.75, 1.4, 1.05, 0.62]
-    anillos = [(z, 0.0, CAPA_Y - 0.025 * (1 - t), 2.0 + 0.3 * t, 0.07, 0.03)
-               for z, t in ((z, (3.98 - z) / 3.36) for z in zs)]
-
-    def pesos(co):
-        if co.z > 2.6:
-            t = B.suave(co.z, (3.65, 0.15))
-            return {"Pecho": t, "Capa1": 1 - t}
-        t = B.suave(co.z, (2.3, 0.3))
-        return {"Capa1": t, "Capa2": 1 - t}
-
-    def color(c, n):
-        if n.y > 0.6:
-            return "region", "capa"
-        return "paleta", "capa_forro" if n.y < -0.6 else "oro"
-
-    cuello = [(3.94, 0, 0.62, 1.46, 0.08, 0.03), (4.30, 0, 0.70, 1.66, 0.08, 0.03),
-              (4.62, 0, 0.80, 1.84, 0.08, 0.03), (4.70, 0, 0.82, 1.80, 0.06, 0.025)]
-    out = [pieza("capa", anillos, color=color, pesos=pesos, fx=[-1, -0.5, 0, 0.5, 1]),
-           pieza("cuello_capa", cuello, "Pecho", color)]
-    for s in (1, -1):  # broches de la capa sobre el peto
-        out.append(pieza(f"broche{s}", placa(3.72, 3.92, s * 0.72, -0.585, 0.22, 0.06), "Pecho", "oro"))
-        out.append(rombo(f"broche_gema{s}", 3.82, -0.60, 0.1, 0.07, "Pecho", 0.06, s * 0.72))
-    return out
-
-
 def torso():
     out = [pieza("filo_peto", placa(2.44, 3.97, 0, -0.52, 1.66, 0.08, w1=1.94), "Pecho", "oro"),
            pieza("peto", placa(2.47, 3.94, 0, -0.535, 1.58, 0.11, w1=1.86), "Pecho",
                  frente_o(("region", "pecho"), ("paleta", "oro"))),
            pieza("engaste", placa(3.02, 3.64, 0, -0.585, 0.50, 0.08), "Pecho", "oro"),
            rombo("gema_pecho", 3.33, -0.63, 0.34, 0.27, "Pecho", 0.14),
+           pieza("filo_espaldar", placa(2.44, 3.97, 0, 0.52, 1.66, 0.08, w1=1.94), "Pecho", "oro"),
+           pieza("espaldar", placa(2.47, 3.94, 0, 0.535, 1.58, 0.11, w1=1.86), "Pecho",
+                 lambda c, n: ("region", "espalda") if n.y > 0.6 else ("paleta", "oro")),
+           pieza("engaste_espalda", placa(3.10, 3.56, 0, 0.585, 0.40, 0.08), "Pecho", "oro"),
+           rombo("gema_espalda", 3.33, 0.62, 0.26, 0.2, "Pecho", 0.12),
            pieza("gorguera", [(3.92, 0, 0, 1.40, 1.12, 0.3), (4.02, 0, 0, 1.46, 1.18, 0.32),
                               (4.14, 0, 0, 1.36, 1.08, 0.28)], "Pecho", "oro", k=4),
            rombo("gema_gorguera", 4.03, -0.60, 0.12, 0.08, "Pecho", 0.08),
@@ -143,4 +120,4 @@ def corona():
 
 
 def accesorios():
-    return capa() + torso() + hombreras() + extremidades() + corona() + CARA.piezas()
+    return torso() + hombreras() + extremidades() + corona() + CARA.piezas()
