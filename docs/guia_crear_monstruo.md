@@ -580,15 +580,49 @@ Más trucos en la memoria del proyecto (`studio-mcp-testing`).
 
 ---
 
-## 12. Trabajo en paralelo con agentes
+## 12. Reparto en agentes paralelos (la forma normal de trabajar)
 
-- Uno por etapa (o por sistema: rutina, hábitat, sonidos), con `isolation: "worktree"`. **Lo
-  primero que hace cada agente es `git merge --ff-only main`**, porque el worktree puede nacer de
-  un commit viejo.
-- **Archivos propios explícitos** y una lista de archivos compartidos que no se tocan. Si hace
-  falta un cambio compartido, el agente lo explica en su informe y lo aplica la sesión principal.
-- Sin commit si hay geometría nueva sin aprobar. La sesión principal copia los resultados a main,
-  hace la alineación y le muestra todo al usuario.
+Pedido del usuario (2026-10-17): **las tareas de un monstruo se reparten en agentes que
+trabajan en paralelo.** La sesión principal no modela ni programa todo en serie: reparte,
+integra, prueba en Studio y habla con el usuario. Lo que no depende de otra cosa se lanza a la
+vez, en una sola tanda de llamadas.
+
+### Olas de trabajo
+
+| Ola | Cuándo | Agentes en paralelo | La sesión principal |
+|---|---|---|---|
+| 1 | Biblia escrita | **Geometría E3** (Blender: geometría, bloques, renders). **Código base** (`<Criatura>/Rig`, `Etapas`, `Medidas` y el stand vacío, contra el contrato de huesos de la biblia). **Hábitat** (relleno, decoraciones, aire y luz). **Sonidos y VFX** (busca los assets y arma `Sounds` y las recetas). | Prepara los contratos compartidos y revisa los renders de la E3 con el usuario. |
+| 2 | E3 aprobada | **E1**, **E2** y **E4** (una por agente). **Poses y rig de la E3** (`<c>_v2_poses.py`, `rig_<c>_v2.py`, FBX). Siguen los de la ola 1 si no terminaron. | Alinea las cuatro etapas y las muestra. |
+| 3 | FBX en Studio | Uno por sistema de movimiento: **locomoción e IK**, **mirada y cara** (gestos, parpadeo), **secundaria** (colas, orejas, resortes), **conductas y rutina** (`Habitos`, `Posturas/`, `Trucos/`), **comer** (`Comer/`) y **evolución**. | Importa con el usuario, prueba en Play, integra y hace los commits. |
+| 4 | Sistemas unidos | Agentes de **arreglos** con la lista de lo visto en Play, uno por área. | Prueba final, docs y cierre. |
+
+Lo que sí espera: la geometría de E1, E2 y E4 espera la aprobación de la E3 (lección del
+dragón, sección 1), y la prueba en Play espera la importación del usuario. El código base, el
+hábitat y los sonidos **no esperan** la aprobación de la geometría: dependen del contrato de
+huesos y del hábitat elegido, que se fijan en la biblia.
+
+### Reglas para cada agente
+
+- `isolation: "worktree"`. **Lo primero que hace es `git merge --ff-only main`**, porque el
+  worktree puede nacer de un commit viejo.
+- El encargo trae todo lo que necesita, porque el agente empieza sin contexto: rutas absolutas a
+  la biblia, la referencia y esta guía (con las secciones que le tocan), **archivos propios**,
+  la lista de **compartidos que no toca**, el contrato que tiene que cumplir (huesos, tipos o
+  funciones de otro agente) y el **informe** que devuelve (archivos, medidas, renders, qué probó,
+  qué queda flojo y un párrafo para el plan).
+- **Contratos antes de lanzar:** si dos agentes se tocan (por ejemplo, la secundaria y las
+  conductas escriben huesos de la cola), la sesión principal escribe primero el contrato (un
+  tipo en `<Criatura>/Tipos.luau`, quién escribe cada hueso y en qué capa) y se lo da a los dos.
+- Si hace falta un cambio en un archivo compartido, el agente lo explica en su informe y lo
+  aplica la sesión principal.
+- **Blender:** varios agentes pueden correr Blender en segundo plano (`-b`) a la vez, cada uno con
+  sus archivos. El MCP de Blender (la ventana abierta) es uno solo: no se reparte.
+- **Studio:** es uno solo y compartido. Los agentes no usan Play ni cambian el lugar; como mucho,
+  consultas de solo lectura (`script_grep`, `search_asset`, `inspect_instance`). Las pruebas en
+  Play las hace la sesión principal, una por vez.
+- **Commits:** los agentes no hacen commit. La sesión principal copia o une sus archivos a main,
+  pasa el checklist y hace un commit por tarea. Si hay geometría sin aprobar, no hay commit.
+- De 3 a 5 agentes por ola. Más que eso cuesta integrarlos y probarlos.
 - Al terminar: borrar los worktrees y ramas ya unidos (`git worktree remove`, `git branch -d`).
 - Si el usuario detiene un agente por error, no se puede reanudar: se lanza uno nuevo y se le
   indica dónde quedó el avance a medias.
