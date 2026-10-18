@@ -3,7 +3,7 @@
 	FishingController
 
 	La pesca del jugador local: muestra el botón Pescar cuando está en la
-	orilla o en un muelle, lo gira hacia el agua al lanzar y, cuando pica, el
+	playa, lo gira hacia el agua al lanzar y, cuando pica, el
 	minijuego de recoger: el botón TIRA y la barra (ReelBar) que sube con
 	cada toque. No decide nada: cada toque es un ReelIn; el servidor cuenta. La caña, el corcho y el pez los
 	dibuja FishingVisuals para todos los jugadores.

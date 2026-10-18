@@ -3,8 +3,8 @@
 	ShoreCast
 
 	Decide si un jugador puede pescar desde donde está y dónde cae su corcho.
-	Se pesca desde cualquier punto de la orilla o de los muelles de la isla
-	principal: basta con estar entre fishingBandInner y fishingBandOuter del
+	Se pesca desde cualquier punto de la playa de la isla principal (no hay
+	muelles): basta con estar entre fishingBandInner y fishingBandOuter del
 	centro, de pie (no nadando) y a la altura de la arena o de la cubierta.
 	En el cráter del gigante no se pesca.
 

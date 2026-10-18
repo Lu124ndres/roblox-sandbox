@@ -49,14 +49,11 @@ local PATHS: { { Vector2 } } = {}
 local function addPath(angle: number, toRadius: number)
 	table.insert(PATHS, { polar(angle, L.plazaRadius - 2), polar(angle, toRadius) })
 end
-addPath(L.spawnAngle, L.spawnRadius + 6)
+addPath(L.spawnAngle, L.plateauRadius - 2) -- por el arco de la entrada, a la playa
 addPath(L.shopAngle, L.shopRadius - 4)
 addPath(L.campAngle, L.campRadius - 8)
 addPath(L.lighthouseAngle, L.plateauRadius - 2)
 addPath(L.bridgeAngle, L.bridgeStartRadius + 4)
-for _, angle in L.pierAngles do
-	addPath(angle, L.pierStartRadius + 2)
-end
 
 local LIGHTHOUSE = polar(L.lighthouseAngle, L.lighthouseRadius)
 local CRATER = Vector2.new(L.craterCenter[1], L.craterCenter[2])

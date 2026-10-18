@@ -68,7 +68,7 @@ local function fillPlayer(page: Page)
 	})
 	page.section("Mover")
 	page.row("Llevar a", {
-		{ text = "Muelle", name = "tp", value = "muelle" },
+		{ text = "Orilla", name = "tp", value = "orilla" },
 		{ text = "Volcán", name = "tp", value = "volcan" },
 		{ text = "Plaza", name = "tp", value = "plaza" },
 		{ text = "Tienda", name = "tp", value = "tienda" },

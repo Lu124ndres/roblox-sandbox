@@ -3,7 +3,7 @@
 	FishingButtons
 
 	Los botones grandes de la pesca, pensados para el pulgar en móvil:
-		Pescar     turquesa. Sale cuando el jugador está en la orilla o en un muelle.
+		Pescar     turquesa. Sale cuando el jugador está en la playa.
 		Alimentar  coral, en el mismo lugar; sale en la orilla del volcán con peces.
 		¡TIRA!     rojo, en el mismo lugar y un poco más grande (el pulgar no se
 		           mueve): se toca rápido para recoger (la barra es ReelBar).

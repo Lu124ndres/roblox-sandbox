@@ -6,7 +6,7 @@
 	cuándo pica, si se llegó a tiempo y qué pez sale.
 
 	Flujo por jugador:
-		1. Pide lanzar (CastRequest) desde la orilla o un muelle; ShoreCast
+		1. Pide lanzar (CastRequest) desde la playa; ShoreCast
 		   valida el lugar y calcula dónde cae el corcho -> lanza ("casting").
 		2. El corcho cae -> espera ("waiting"). Tras un tiempo aleatorio (más
 		   corto con poder y con los pases con traje) pica ("bite"): ahí se

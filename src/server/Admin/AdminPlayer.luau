@@ -11,7 +11,7 @@
 		Rod, Basket, Boots              nivel de esa mejora; maxUpgrades: las tres al máximo
 		pass                            clave: pone o quita ese pase (prueba trajes y ventajas)
 		playtime                        minutos: adelanta los regalos por tiempo
-		tp                              "muelle", "volcan", "plaza" o "tienda"
+		tp                              "orilla", "volcan", "plaza" o "tienda"
 		visit, bring                    el admin va con el jugador / lo trae a su lado
 		reset                           "progress" o "all": como recién llegado (AdminReset)
 ]]
@@ -83,13 +83,13 @@ end
 
 local function place(name: string): Vector3?
 	local L = WorldLayout
-	if name == "muelle" then
-		return polar(L.pierAngles[1], L.pierStartRadius + L.pierLength - 4, L.deckHeight + 4)
+	if name == "orilla" then
+		return polar(L.pierAngles[1], L.shoreRadius - 6, L.plateauHeight + 4)
 	elseif name == "volcan" then
 		local _, finish = WorldZones.bridgeEnds()
 		return finish + Vector3.new(0, 4, 0)
 	elseif name == "plaza" then
-		return polar(L.spawnAngle, L.spawnRadius, L.plateauHeight + 4)
+		return WorldZones.spawnPoint() + Vector3.new(0, 4, 0)
 	elseif name == "tienda" then
 		return polar(L.shopAngle, L.shopRadius - 10, L.plateauHeight + 4)
 	end
