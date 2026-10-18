@@ -74,6 +74,25 @@ function WorldZones.pondRadius(index: number): number
 	return if index >= WorldZones.SACRED_POND then L.sacredPondRadius else L.trainingPondRadius
 end
 
+-- Orilla natural: radio del agua del estanque `index` en la dirección `angle` (radianes,
+-- medido como math.atan2(dz, dx) desde su centro). Ondula en 2, 3 y 5 lóbulos con una
+-- fase propia por estanque, así ninguno es un círculo ni se parece al de al lado.
+-- Misma fórmula que borde() en tools/estanques/forma.py.
+function WorldZones.pondEdge(index: number, angle: number): number
+	local wobble = L.pondWobble
+	local shape = 1
+		+ wobble[1] * math.sin(2 * angle + 1.7 * index)
+		+ wobble[2] * math.sin(3 * angle + 2.9 * index)
+		+ wobble[3] * math.sin(5 * angle + 0.8 * index)
+	return WorldZones.pondRadius(index) * shape
+end
+
+-- El radio más grande que puede tener la orilla (para la tapa y los alcances).
+function WorldZones.pondMaxRadius(index: number): number
+	local wobble = L.pondWobble
+	return WorldZones.pondRadius(index) * (1 + wobble[1] + wobble[2] + wobble[3])
+end
+
 -- Puente: del borde de la meseta a la puerta del cráter, en línea recta.
 -- Misma geometría que puente() en tools/generar_isla.py.
 function WorldZones.bridgeEnds(): (Vector3, Vector3)

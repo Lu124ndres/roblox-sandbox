@@ -35,6 +35,16 @@ export type WorldLayout = {
 	trainingPondWaterTop: number,
 	sacredPondRadius: number, -- estanque sagrado del centro (solo Robux)
 	pondCoverDepth: number, -- tapa invisible: el piso queda así de hondo bajo el agua
+	-- Orilla natural: el radio del agua ondula con estas amplitudes (fracción del radio)
+	-- en 2, 3 y 5 lóbulos (WorldZones.pondEdge), con una franja de barro alrededor.
+	pondWobble: { number },
+	pondBankWidth: number,
+	-- Jardín de la zona de entrenamiento: sendero de tierra en anillo por fuera de los
+	-- estanques, senderos rectos hacia el centro y un claro alrededor del sagrado.
+	gardenRingRadius: number,
+	gardenPathHalfWidth: number,
+	gardenSpokeAngles: { number },
+	gardenClearingRadius: number,
 	pierAngles: { number },
 	pierStartRadius: number,
 	pierLength: number,

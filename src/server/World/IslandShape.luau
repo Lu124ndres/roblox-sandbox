@@ -7,8 +7,8 @@
 	la convierte en vóxeles. Todo sale de WorldLayout, igual que las piezas de
 	tools/generar_isla.py.
 
-	Isla principal: meseta de pasto, playa, plaza de piedra con 10 estanques
-	de entrenamiento, caminos, lomas, rocas y el promontorio del faro.
+	Isla principal: meseta de pasto, playa, el jardín de entrenamiento con sus
+	estanques naturales (GardenShape), caminos, lomas, rocas y el promontorio del faro.
 	Cráter del Abismo: su forma está en CraterShape (lago, acantilado, paseo,
 	montañas con vetas de lava y ladera hacia el mar).
 ]]
@@ -16,13 +16,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
-local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local CraterShape = require(script.Parent.CraterShape)
+local GardenShape = require(script.Parent.GardenShape)
 
 local L = WorldLayout
 local MATERIAL = Enum.Material
 local PATH_HALF_WIDTH = 4.5
-local POND_RIM_WIDTH = 1.6
 
 local IslandShape = {}
 
@@ -45,7 +44,7 @@ local function polar(angleDegrees: number, radius: number): Vector2
 	return Vector2.new(math.cos(a), math.sin(a)) * radius
 end
 
--- Caminos de piedra: de la plaza hacia cada destino.
+-- Caminos de piedra: del jardín de entrenamiento hacia cada destino.
 local PATHS: { { Vector2 } } = {}
 local function addPath(angle: number, toRadius: number)
 	table.insert(PATHS, { polar(angle, L.plazaRadius - 2), polar(angle, toRadius) })
@@ -61,13 +60,6 @@ end
 
 local LIGHTHOUSE = polar(L.lighthouseAngle, L.lighthouseRadius)
 local CRATER = Vector2.new(L.craterCenter[1], L.craterCenter[2])
-
-local PONDS: { { center: Vector2, radius: number } } = {}
-for index = 1, WorldZones.SACRED_POND do
-	local center = WorldZones.pondCenter(index)
-	PONDS[index] =
-		{ center = Vector2.new(center.X, center.Z), radius = WorldZones.pondRadius(index) }
-end
 
 local function distanceToSegment(point: Vector2, a: Vector2, b: Vector2): number
 	local ab = b - a
@@ -117,19 +109,7 @@ local function mainIsland(point: Vector2): (number, Enum.Material, number)
 	end
 
 	if radius <= L.plazaRadius then
-		material = MATERIAL.Cobblestone
-		-- Estanques de entrenamiento: borde de piedra y fondo de arena con agua propia.
-		for _, pond in PONDS do
-			local d = (point - pond.center).Magnitude
-			if d < pond.radius then
-				local bowl = (d / pond.radius) ^ 2
-				height = L.trainingPondFloor
-					+ bowl * (L.trainingPondWaterTop - L.trainingPondFloor - 0.6)
-				material, waterTop = MATERIAL.Sand, L.trainingPondWaterTop
-			elseif d < pond.radius + POND_RIM_WIDTH then
-				material = MATERIAL.Slate
-			end
-		end
+		return GardenShape.sample(point, height)
 	elseif radius <= L.plateauRadius then
 		for _, path in PATHS do
 			if distanceToSegment(point, path[1], path[2]) <= PATH_HALF_WIDTH then
