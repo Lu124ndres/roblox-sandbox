@@ -32,3 +32,6 @@ Claude outputs/
 
 # Caché de Python de tools/
 __pycache__/
+
+# Copias de respaldo automáticas de Blender
+*.blend1
