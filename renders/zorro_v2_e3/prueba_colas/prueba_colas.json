@@ -1,0 +1,522 @@
+{
+  "afuera": {
+    "rendijas": [],
+    "peor": {
+      "junta": "Cola3_2>3",
+      "sale": 0.14,
+      "despegue_celdas": 0.41
+    },
+    "juntas": [
+      {
+        "junta": "Cola3_1>2",
+        "sale": 0.15,
+        "despegue_celdas": 0.27
+      },
+      {
+        "junta": "Cola3_2>3",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola3_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola3_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola4_1>2",
+        "sale": 0.15,
+        "despegue_celdas": 0.27
+      },
+      {
+        "junta": "Cola4_2>3",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola4_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola4_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola2_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola2_2>3",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola2_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola2_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola5_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola5_2>3",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola5_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola5_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola1_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola1_2>3",
+        "sale": 0.1,
+        "despegue_celdas": 0.12
+      },
+      {
+        "junta": "Cola1_3>4",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola1_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola6_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola6_2>3",
+        "sale": 0.1,
+        "despegue_celdas": 0.12
+      },
+      {
+        "junta": "Cola6_3>4",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola6_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      }
+    ]
+  },
+  "adentro": {
+    "rendijas": [],
+    "peor": {
+      "junta": "Cola3_2>3",
+      "sale": 0.14,
+      "despegue_celdas": 0.41
+    },
+    "juntas": [
+      {
+        "junta": "Cola3_1>2",
+        "sale": 0.15,
+        "despegue_celdas": 0.27
+      },
+      {
+        "junta": "Cola3_2>3",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola3_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola3_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola4_1>2",
+        "sale": 0.15,
+        "despegue_celdas": 0.27
+      },
+      {
+        "junta": "Cola4_2>3",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola4_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola4_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola2_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola2_2>3",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola2_3>4",
+        "sale": 0.2,
+        "despegue_celdas": 0.39
+      },
+      {
+        "junta": "Cola2_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola5_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola5_2>3",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola5_3>4",
+        "sale": 0.2,
+        "despegue_celdas": 0.39
+      },
+      {
+        "junta": "Cola5_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola1_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola1_2>3",
+        "sale": 0.1,
+        "despegue_celdas": 0.16
+      },
+      {
+        "junta": "Cola1_3>4",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola1_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola6_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola6_2>3",
+        "sale": 0.1,
+        "despegue_celdas": 0.16
+      },
+      {
+        "junta": "Cola6_3>4",
+        "sale": 0.14,
+        "despegue_celdas": 0.41
+      },
+      {
+        "junta": "Cola6_4>5",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      }
+    ]
+  },
+  "atras": {
+    "rendijas": [],
+    "peor": {
+      "junta": "Cola2_2>3",
+      "sale": 0.26,
+      "despegue_celdas": 0.81
+    },
+    "juntas": [
+      {
+        "junta": "Cola3_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola3_2>3",
+        "sale": 0.02,
+        "despegue_celdas": 0.19
+      },
+      {
+        "junta": "Cola3_3>4",
+        "sale": 0.01,
+        "despegue_celdas": 0.13
+      },
+      {
+        "junta": "Cola3_4>5",
+        "sale": 0.06,
+        "despegue_celdas": 0.56
+      },
+      {
+        "junta": "Cola4_1>2",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola4_2>3",
+        "sale": 0.02,
+        "despegue_celdas": 0.19
+      },
+      {
+        "junta": "Cola4_3>4",
+        "sale": 0.01,
+        "despegue_celdas": 0.13
+      },
+      {
+        "junta": "Cola4_4>5",
+        "sale": 0.06,
+        "despegue_celdas": 0.56
+      },
+      {
+        "junta": "Cola2_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.38
+      },
+      {
+        "junta": "Cola2_2>3",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola2_3>4",
+        "sale": 0.05,
+        "despegue_celdas": 0.09
+      },
+      {
+        "junta": "Cola2_4>5",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola5_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.38
+      },
+      {
+        "junta": "Cola5_2>3",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola5_3>4",
+        "sale": 0.05,
+        "despegue_celdas": 0.09
+      },
+      {
+        "junta": "Cola5_4>5",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola1_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.14
+      },
+      {
+        "junta": "Cola1_2>3",
+        "sale": 0.04,
+        "despegue_celdas": 0.16
+      },
+      {
+        "junta": "Cola1_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola1_4>5",
+        "sale": 0.06,
+        "despegue_celdas": 0.17
+      },
+      {
+        "junta": "Cola6_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.14
+      },
+      {
+        "junta": "Cola6_2>3",
+        "sale": 0.04,
+        "despegue_celdas": 0.16
+      },
+      {
+        "junta": "Cola6_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola6_4>5",
+        "sale": 0.06,
+        "despegue_celdas": 0.17
+      }
+    ]
+  },
+  "adelante": {
+    "rendijas": [],
+    "peor": {
+      "junta": "Cola2_2>3",
+      "sale": 0.26,
+      "despegue_celdas": 0.81
+    },
+    "juntas": [
+      {
+        "junta": "Cola3_1>2",
+        "sale": 0.06,
+        "despegue_celdas": 0.06
+      },
+      {
+        "junta": "Cola3_2>3",
+        "sale": 0.04,
+        "despegue_celdas": 0.19
+      },
+      {
+        "junta": "Cola3_3>4",
+        "sale": 0.01,
+        "despegue_celdas": 0.13
+      },
+      {
+        "junta": "Cola3_4>5",
+        "sale": 0.06,
+        "despegue_celdas": 0.56
+      },
+      {
+        "junta": "Cola4_1>2",
+        "sale": 0.06,
+        "despegue_celdas": 0.06
+      },
+      {
+        "junta": "Cola4_2>3",
+        "sale": 0.04,
+        "despegue_celdas": 0.19
+      },
+      {
+        "junta": "Cola4_3>4",
+        "sale": 0.01,
+        "despegue_celdas": 0.13
+      },
+      {
+        "junta": "Cola4_4>5",
+        "sale": 0.06,
+        "despegue_celdas": 0.56
+      },
+      {
+        "junta": "Cola2_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.38
+      },
+      {
+        "junta": "Cola2_2>3",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola2_3>4",
+        "sale": 0.12,
+        "despegue_celdas": 0.38
+      },
+      {
+        "junta": "Cola2_4>5",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola5_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.38
+      },
+      {
+        "junta": "Cola5_2>3",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola5_3>4",
+        "sale": 0.12,
+        "despegue_celdas": 0.38
+      },
+      {
+        "junta": "Cola5_4>5",
+        "sale": 0.26,
+        "despegue_celdas": 0.81
+      },
+      {
+        "junta": "Cola1_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.14
+      },
+      {
+        "junta": "Cola1_2>3",
+        "sale": 0.04,
+        "despegue_celdas": 0.16
+      },
+      {
+        "junta": "Cola1_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola1_4>5",
+        "sale": 0.22,
+        "despegue_celdas": 0.49
+      },
+      {
+        "junta": "Cola6_1>2",
+        "sale": 0.1,
+        "despegue_celdas": 0.14
+      },
+      {
+        "junta": "Cola6_2>3",
+        "sale": 0.04,
+        "despegue_celdas": 0.16
+      },
+      {
+        "junta": "Cola6_3>4",
+        "sale": 0.0,
+        "despegue_celdas": 0.0
+      },
+      {
+        "junta": "Cola6_4>5",
+        "sale": 0.22,
+        "despegue_celdas": 0.49
+      }
+    ]
+  }
+}
