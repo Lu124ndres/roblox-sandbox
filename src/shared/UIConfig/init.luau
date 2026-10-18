@@ -142,7 +142,7 @@ local UIConfig: UIConfig = {
 		ToastSeconds = 2.2,
 		BannerSeconds = 2.8,
 		-- Alimentar: los peces vuelan del jugador a la boca del gigante.
-		FeedThrowSeconds = 1.1,
+		FeedThrowSeconds = 0.75,
 		-- Pesca
 		BobberSize = 0.9,
 		CastArcHeight = 7,

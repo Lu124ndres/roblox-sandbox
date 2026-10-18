@@ -27,9 +27,11 @@ local FedBroadcast = {}
 
 local pending: { [number]: Pending } = {}
 local scheduled = false
+local lastFlush = 0
 
 local function flush()
 	scheduled = false
+	lastFlush = os.clock()
 	local batch = {}
 	for userId, entry in pending do
 		table.insert(batch, { userId = userId, count = entry.count, fishId = entry.fishId })
@@ -57,7 +59,14 @@ function FedBroadcast.add(userId: number, count: number, fishId: string)
 	end
 	if not scheduled then
 		scheduled = true
-		task.delay(DELIVERY.broadcastSeconds, flush)
+		-- Si hace rato que no se manda nada (recién empezó a alimentar), sale ya: el
+		-- primer pez vuela sin esperar. Después, a lo sumo uno cada broadcastSeconds.
+		local wait = math.max(0, DELIVERY.broadcastSeconds - (os.clock() - lastFlush))
+		if wait <= 0 then
+			task.defer(flush)
+		else
+			task.delay(wait, flush)
+		end
 	end
 end
 

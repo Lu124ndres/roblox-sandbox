@@ -150,10 +150,10 @@ local Giants: Types.GiantsConfig = {
 		maxFeedMinutes = 20, -- si no se llena en esto, se va (y paga la kill igual)
 	},
 	delivery = {
-		stepSeconds = 0.25,
-		fishPerSecond = 6, -- un pez cada 0.17 s sin renacer (al principio no se siente lento)
+		stepSeconds = 0.1, -- pasos cortos: los peces salen parejos, no a tirones
+		fishPerSecond = 10, -- un pez cada 0.1 s sin renacer (pedido del usuario: fluido y rápido)
 		minSoloSeconds = 180, -- una persona sola tarda al menos esto en llenar un monstruo
-		broadcastSeconds = 0.25,
+		broadcastSeconds = 0.15,
 		basketSeconds = 5, -- una canasta llena se vacía en 5 s como mucho
 	},
 	sizing = {

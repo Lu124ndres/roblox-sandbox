@@ -2540,3 +2540,31 @@ otro servidor»: cada Play detenido deja el bloqueo de sesión hasta que vence (
 **Después (mismo día):** probado pescar desde la playa sin muelles (x=30, z=-155): tres
 lanzamientos seguidos, el pez sale a los 1.4 s y la vuelta completa (lanzar, picar, recoger,
 mostrar) dura 2.2-3.4 s. El bloqueo del guardado era una partida del usuario abierta a la vez.
+
+---
+
+## 2026-10-18 (12) — Alimentar fluido: chorro parejo de peces y la comida entra de a poco
+
+**Qué se hizo (pedido del usuario: «que sea smooth y satisfactorio, no que se trabe»):**
+
+- **Los peces salen a ritmo completo y la comida entra de a poco** (`Feeding/FoodBank`). Antes la
+  regla de equilibrio (una persona sola tarda al menos `minSoloSeconds` en llenar un monstruo)
+  frenaba cuántos peces salían: con una canasta grande se veía un goteo de ~1 pez por segundo.
+  Ahora salen al ritmo de la entrega y su comida se guarda y entra a la barra al ritmo de esa
+  misma regla (la barra sigue subiendo después de soltar). No se sacan más peces de los que el
+  gigante entero necesita (`GiantService.remainingTotal`); la comida guardada espera durante
+  las evoluciones y se descarta si el gigante deja de comer. `GiantService.feed` acepta peces
+  sin comida (solo el vuelo).
+- **Entrega más fina:** pasos de 0.1 s (antes 0.25), 10 peces por segundo sin renacer (antes 6) y
+  lotes a los clientes cada 0.15 s; el primero sale al instante (`FedBroadcast`).
+- **Cliente parejo** (`Giant/FeedThrow`): los peces de cada lote entran a la fila de su jugador y
+  un solo bucle los suelta a intervalos iguales (no ráfagas con huecos). Vuelo de 0.75 s (antes
+  1.1). Peces reusados (`Giant/FeedPool`) y onda y chispas de la mordida reusadas
+  (`Giant/FeedBurst`); el «fiu» y la mordida no se repiten más de una vez cada ~0.08 s.
+
+**Probado en Studio (Play):** canasta de 20 peces: el primero sale a los 0.05 s, la canasta se
+vacía en menos de 1 s (esta cuenta tiene renacimientos), hasta 8 peces en el aire a la vez, 60
+fps sin tirones, y la barra sigue subiendo después de soltar (0.026 → 0.054 en 5 s). Una prueba
+anterior dio 15 fps: era la prueba del zorro de otra sesión corriendo a la vez en Studio.
+
+**Qué se rompió:** nada visto.

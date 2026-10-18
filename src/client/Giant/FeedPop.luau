@@ -13,7 +13,6 @@
 	COMBO_SECONDS entre uno y otro). Todo local y se limpia solo.
 ]]
 
-local Debris = game:GetService("Debris")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
@@ -22,18 +21,16 @@ local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
-local Fx = require(script.Parent.Parent.Effects.Fx)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
+local FeedBurst = require(script.Parent.FeedBurst)
 
 local COMBO_SECONDS = 1.3
+local CHOMP_GAP = 0.08 -- el sonido de la mordida no se repite más seguido que esto
 local WORDS = { "¡ÑAM!", "¡ÑAM!", "¡RICO!", "¡ÑAM ÑAM!", "¡DELICIOSO!", "¡FESTÍN!" }
 
 local FeedPop = {}
 
-local combo, lastLocal = 0, 0
-local folder = Instance.new("Folder")
-folder.Name = "ComidaEfectos"
-folder.Parent = Workspace
+local combo, lastLocal, lastChomp = 0, 0, 0
 
 function FeedPop.color(fishId: string): Color3
 	local rarity = FishCatalog.rarity(fishId)
@@ -60,26 +57,6 @@ function FeedPop.trail(model: Model, color: Color3)
 	trail.FaceCamera = true
 	trail.WidthScale = NumberSequence.new(1, 0)
 	trail.Parent = body
-end
-
--- Onda de choque: una esfera de neón que se abre y se apaga.
-local function shockwave(position: Vector3, radius: number, color: Color3)
-	local ball = Instance.new("Part")
-	ball.Shape = Enum.PartType.Ball
-	ball.Material = Enum.Material.Neon
-	ball.Color = color
-	ball.Transparency = 0.25
-	ball.Anchored, ball.CanCollide, ball.CanQuery, ball.CanTouch = true, false, false, false
-	ball.CastShadow = false
-	ball.Size = Vector3.one * radius * 0.3
-	ball.Position = position
-	ball.Parent = folder
-	TweenService:Create(
-		ball,
-		TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-		{ Size = Vector3.one * radius * 2.2, Transparency = 1 }
-	):Play()
-	Debris:AddItem(ball, 0.4)
 end
 
 -- "¡ÑAM! x5" que salta, sube y se desvanece. Hay uno solo a la vez: con el
@@ -151,10 +128,10 @@ end
 function FeedPop.chomp(position: Vector3, color: Color3, size: number, isLocal: boolean)
 	local radius = math.clamp(size * 0.12, 2, 14)
 	if ClientSettings.fxScale() > 0 then
-		shockwave(position, radius, color)
+		FeedBurst.shockwave(position, radius, color)
 	end
-	Fx.sparkle(position, color, 10)
-	Fx.sparkle(position, UIConfig.Colors.Coins, 6)
+	FeedBurst.sparkle(position, color, 10)
+	FeedBurst.sparkle(position, UIConfig.Colors.Coins, 6)
 	if not isLocal then
 		return
 	end
@@ -162,8 +139,11 @@ function FeedPop.chomp(position: Vector3, color: Color3, size: number, isLocal: 
 	combo = if now - lastLocal <= COMBO_SECONDS then combo + 1 else 1
 	lastLocal = now
 	local step = math.min(combo, 12)
-	Sounds.play("Chomp", position, 0.9 + step * 0.05)
-	Sounds.play("CoinPop", position, 1 + step * 0.06)
+	if now - lastChomp >= CHOMP_GAP then
+		lastChomp = now
+		Sounds.play("Chomp", position, 0.9 + step * 0.05)
+		Sounds.play("CoinPop", position, 1 + step * 0.06)
+	end
 	local text = WORDS[math.min(1 + combo // 4, #WORDS)]
 	if combo >= 2 then
 		text ..= ` x{combo}`
@@ -176,7 +156,7 @@ function FeedPop.chomp(position: Vector3, color: Color3, size: number, isLocal: 
 	)
 	if combo % 5 == 0 then
 		CameraShake.shake(0.12 + math.min(combo, 30) * 0.006, 0.25)
-		Fx.sparkle(position, UIConfig.Colors.Coins, 24)
+		FeedBurst.sparkle(position, UIConfig.Colors.Coins, 24)
 	end
 end
 
