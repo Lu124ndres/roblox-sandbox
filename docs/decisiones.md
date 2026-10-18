@@ -671,3 +671,15 @@ corriente rápida (`isOnBridge`), las paredes invisibles y hacia dónde miran lo
 la guarida del zorro. No se volvieron a poner flechas en el piso (se habían quitado el
 2026-10-15). El fuego de los braseros es la instancia `Fire` de Roblox: no necesita asset.
 
+## 2026-10-18 — El arco del volcán es de Blender aunque sigamos en fase 1
+
+**Contexto:** el usuario pidió una puerta del cráter más grande con una referencia de un arco
+volcánico de bloques y dijo «usa blender para el marco». **Decisión:** excepción a la fase 1,
+como el faro y los props del mapa: el arco sale de `tools/blender/arco_volcan.py` y entra por
+`PropDresser`, con un respaldo de primitivas si falta. En Roblox una malla tiene un solo
+material, así que la lava es una **segunda malla** con la misma caja que la piedra (cubitos
+mínimos en las esquinas de la caja común) y las dos se ponen con ajuste `"caja"` sin
+desfasarse; el atributo `Brillo` del ancla la pone en Neon. Fuego y humo son instancias
+`Fire`/`Smoke` (sin assets). La decoración de la orilla de los estanques se quitó entera:
+estorbaba al caminar y el usuario la vio mal resuelta.
+

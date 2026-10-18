@@ -839,26 +839,10 @@ def calavera(nombre, centro, escala):
 
 
 def puerta_abismo():
-    """Puerta de basalto con calaveras de ojos rojos donde el puente toca el cráter."""
-    a = L["bridgeAngle"] + 180  # del cráter hacia la isla
-    r = base_con_z(direccion(a))  # +Z local apunta a la isla
-    base = polar_crater(a, L["craterRimOuter"] - 3, 0)
-    hijos = []
-    for lado in (-1, 1):
-        p = add(base, aplicar(r, (lado * (L["bridgeWidth"] / 2 + 2.5), 0, 0)))
-        for k, (alto, ancho) in enumerate(((10, 6), (9, 5), (8, 4))):
-            y0 = RIM_Y + sum(h for h, _ in ((10, 6), (9, 5), (8, 4))[:k])
-            hijos.append(pieza(f"Columna{lado}_{k}", (ancho, alto, ancho), (p[0], y0 + alto / 2, p[2]), BASALTO[k % 3], "Basalt",
-                               mat(r, ry(k * 17 * lado))))
-        hijos.append(calavera(f"Calavera{lado}", (p[0], RIM_Y + 29.5, p[2]), 4.2))
-    viga = add(base, (0, RIM_Y + 24, 0))
-    hijos.append(pieza("Viga", (L["bridgeWidth"] + 12, 2.2, 2.4), viga, BASALTO[0], "Basalt", r))
-    hijos += placa_volcanica("Letrero", (16, 3, 0.4), add(viga, (0, -2.6, 0)), r, "CRÁTER DEL ABISMO", "Back")
-    for lado in (-1, 1):  # cadenas colgando de la viga
-        for k in range(6):
-            p = add(viga, aplicar(r, (lado * 4.5, -2 - k * 1.3, 0.8)))
-            hijos.append(pieza(f"Eslabon{lado}_{k}", (0.35, 1.2, 0.7), p, HIERRO, "Metal", mat(r, ry(90 * (k % 2))), **DECORADO))
-    return grupo("PuertaDelAbismo", hijos)
+    """Puerta del cráter: vive en tools/puerta.py."""
+    from puerta import puerta_abismo as construir  # importa este módulo: va adentro
+
+    return construir()
 
 
 def cresta(nombre, angulo, rho, humo=False):

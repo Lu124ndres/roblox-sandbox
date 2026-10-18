@@ -10,6 +10,8 @@
 		           "ancho" (escala pareja por el ancho) o "caja" (toma el tamaño del Ancla)
 		Reemplaza  prefijos de nombre, separados por coma, de las piezas de primitivas
 		           que el modelo reemplaza (se borran: el modelo 3D las sustituye)
+		Brillo     (opcional, Color3) el modelo va en Neon de ese color: la lava del
+		           arco del volcán brilla sola, sin depender de cómo se importó
 	Si PropsMapa no está (o le falta ese modelo), el mapa queda con las primitivas.
 ]]
 
@@ -43,6 +45,12 @@ local function place(anchor: BasePart, template: MeshPart): MeshPart
 		mesh:PivotTo(base)
 	end
 	mesh.Name = anchor:GetAttribute("Prop") :: string
+	local glow = anchor:GetAttribute("Brillo")
+	if typeof(glow) == "Color3" then
+		mesh.Material = Enum.Material.Neon
+		mesh.Color = glow
+		mesh.TextureID = "" -- el Neon se ve del color de la pieza
+	end
 	mesh.Parent = anchor.Parent
 	return mesh
 end

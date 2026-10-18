@@ -2296,3 +2296,39 @@ reconectó Rojo; quedaron 0 scripts duplicados y la zona (2573 partes) y el puen
 iguales al archivo.
 
 **Qué sigue:** nada pendiente de esta tarea.
+
+---
+
+## 2026-10-18 (4) — Jardín despejado y más grande; arco del volcán en Blender
+
+**Qué se hizo:**
+
+- **Estanques sin decoración en la orilla** (pedido del usuario: estaba mal resuelta y los
+  jugadores chocaban o se atoraban): fuera rocas, juncos, flores, árboles, bambú, hongos,
+  faroles, cascada, muelle y rocas flotantes, y también el prado y los faroles del borde.
+  Queda el agua con nenúfares y lotos (color propio por estanque), el espíritu de luz, los
+  kois (7 a 11), los senderos y el seto. Se borraron `tierra.py`, `especiales.py` y
+  `temas_altos.py`; los temas son una tabla en `tools/estanques/temas.py`. Los estanques se
+  llaman ahora por una piedra de su color (Jade, Turquesa, Zafiro... Dorado, Celestial).
+- **Zona más grande:** `plazaRadius` 108 → 122, anillo de estanques 80 → 90, estanques de
+  12.5 → 14 (sagrado 18 → 20), sendero en anillo 102 → 116. La aparición, la tienda y el
+  campamento se corrieron 14 studs hacia afuera y las lomas también. El prompt de entrenar
+  llega a 22 studs (antes 18) para alcanzar la orilla.
+- **Puerta del cráter:** arco volcánico de bloques hecho en Blender
+  (`tools/blender/arco_volcan.py`, referencia del usuario): pilares de basalto en hiladas,
+  ríos de lava por los bordes que siguen por el arco, grietas, tres picos con cráter de lava,
+  cuernos, zócalos y brasas. Dos mallas con la misma caja (`ArcoVolcan` 4488 triángulos,
+  `ArcoVolcanLava` 2916) en `assets/blender/ArcoVolcan.fbx`. En el juego (`tools/puerta.py`)
+  las ponen dos anclas con ajuste "caja"; la lava va en Neon naranja por el atributo nuevo
+  `Brillo` de `PropDresser`. Fuego y humo en los tres picos, cartel colgado bajo la clave con
+  letras blancas de borde negro y franja de lava en el umbral. Mientras el modelo no esté en
+  `PropsMapa` se ve un respaldo de basalto.
+
+**Probado en Studio (Play):** vista general del jardín (`docs/capturas/2026-10-18-jardin-despejado.jpg`)
+y la puerta con el respaldo, el cartel y el fuego; vista previa del arco en
+`assets/blender/render/ArcoVolcan.png`.
+
+**Qué se rompió:** nada visto.
+
+**Qué sigue:** importar `ArcoVolcan.fbx` en Studio (Importar 3D) y dejar `ArcoVolcan` y
+`ArcoVolcanLava` en `ServerStorage.PropsMapa`; registrar sus IDs en `Assets/Textures.luau`.
