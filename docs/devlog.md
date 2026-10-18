@@ -2536,3 +2536,7 @@ BillboardGui con AlwaysOnTop: para verlo hubo que apagarlo un momento.
 
 **Qué se rompió:** al probar seguido, el guardado expulsa con «Tus datos siguen abiertos en
 otro servidor»: cada Play detenido deja el bloqueo de sesión hasta que vence (180 s).
+
+**Después (mismo día):** probado pescar desde la playa sin muelles (x=30, z=-155): tres
+lanzamientos seguidos, el pez sale a los 1.4 s y la vuelta completa (lanzar, picar, recoger,
+mostrar) dura 2.2-3.4 s. El bloqueo del guardado era una partida del usuario abierta a la vez.
