@@ -42,14 +42,14 @@ local conducta: Tipos.Conducta = {
 		local licking = C.hold(s, b - 0.1, b + 0.1, c - 0.1, c + 0.15)
 		local lick = math.max(0, C.beat(s, b, c, n)) * licking
 		return {
-			sit = sit,
+			sit = sit * C.peso(etapa, 1, 1, 0, 0), -- E3/E4 parados: sentados la pata no llega
 			pawL = if side > 0 then lift else 0,
 			pawR = if side > 0 then 0 else lift,
 			lookPitch = -0.32 * lift - 0.06 * lick,
 			lookYaw = side * 0.15 * lift,
 			tilt = -side * 0.1 * lift,
 			lookHold = lift,
-			jaw = 0.12 * licking + 0.18 * lick,
+			jaw = 0.2 * licking + 0.12 * lick, -- cerrada, la mandíbula roza la pata
 			eyesClosed = 0.35 * licking,
 			emoFeliz = 0.3 * lift,
 			earL = -0.1 * lift + (if side > 0 then 0.05 * lick else 0),

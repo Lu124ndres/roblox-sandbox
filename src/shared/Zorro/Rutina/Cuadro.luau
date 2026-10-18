@@ -7,11 +7,9 @@
 		                 comer (va hacia la orilla de quien le da de comer si está
 		                 lejos, y la mira), el lago vacío (vuelve al centro) o
 		                 evolucionar (quieto, de frente a la rampa)
-		bajada(pose)     cuánto baja la base (fracción del alto): salto, agacharse,
-		                 sentarse y echarse
+		bajada(pose, etapa)  cuánto baja la base (fracción del alto): el salto menos
+		                 Pose.drop (agacharse, sentarse, echarse, caminar; medido por etapa)
 	Los eventos van en Rutina/Sonidos y la pose en Rutina/Capas.
-	SIT_DROP y LIE_DROP: lo que bajan las patas dobladas al sentarse y echarse; si
-	Zorro/Pose los define (los mide quien escribe las patas), se usan los suyos.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -27,8 +25,6 @@ local LAKE = WorldLayout.craterLakeRadius
 local CENTER = WorldZones.craterCenter
 local NEAR_LAKE, NEAR_HEIGHT = 0.45, 0.5 -- come sin moverse si la orilla está a menos de esto
 local HURRY = 1.5 -- va a comer más rápido que de paseo
-local SIT_DROP = (Pose :: any).SIT_DROP or 0.04
-local LIE_DROP = (Pose :: any).LIE_DROP or 0.1
 
 local Cuadro = {}
 
@@ -68,11 +64,9 @@ function Cuadro.meta(
 	return nil
 end
 
-function Cuadro.bajada(pose: Pose.Pose): number
-	return (pose.dy or 0)
-		- (pose.crouch or 0) * Pose.CROUCH_DROP
-		- math.clamp(pose.sit or 0, 0, 1) * SIT_DROP
-		- math.clamp(pose.lie or 0, 0, 1) * LIE_DROP
+-- Lo exacto por etapa lo da Pose.drop (agacharse, sentarse, echarse, estirarse, caminar).
+function Cuadro.bajada(pose: Pose.Pose, etapa: number): number
+	return (pose.dy or 0) - Pose.drop(pose, etapa)
 end
 
 return table.freeze(Cuadro)

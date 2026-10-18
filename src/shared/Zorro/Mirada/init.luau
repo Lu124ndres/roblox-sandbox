@@ -53,7 +53,10 @@ local KEEP = 0.3 -- parte del mirar alrededor que queda mientras mira
 local OTHER = 0.85 -- cuánto manda la mirada al agua, al cielo o a la cola
 local WEIGHT_TIME = 0.45 -- s: entra y sale suave
 local EAR = 0.15 -- para más la oreja del lado del jugador
-local YAW_LIMIT, PITCH_DOWN, PITCH_UP = 1.6, -0.8, 1.1 -- topes medidos del cuello y la cabeza
+local YAW_LIMIT, PITCH_UP = 1.6, 1.1 -- topes medidos del cuello y la cabeza
+-- Mirar abajo, por etapa: en la cría, con la cabeza primero, a más de 0.58 se abre la junta
+-- Cabeza/Cuello2 (tools/blender/zorro_v2_poses.py).
+local PITCH_DOWN = { -0.55, -0.8, -0.8, -0.8 }
 -- Resorte de la cabeza por etapa: la cría mira rápido; la forma final, lenta y con peso.
 local HZ = { 1.3, 1.1, 0.9, 0.7 }
 
@@ -168,7 +171,7 @@ function Mirada.add(pose: Pose, ctx: Tipos.Contexto, memo: Memo?)
 		return
 	end
 	blend(pose, "lookYaw", sYaw, m.weight, -YAW_LIMIT, YAW_LIMIT)
-	blend(pose, "lookPitch", sPitch, m.weight, PITCH_DOWN, PITCH_UP)
+	blend(pose, "lookPitch", sPitch, m.weight, PITCH_DOWN[math.clamp(ctx.etapa, 1, 4)], PITCH_UP)
 	-- Mirando al jugador: ladea la cabeza curioso y para más la oreja de su lado.
 	pose.tilt = (pose.tilt or 0) + m.tilt
 	local left = 0.675 + 0.325 * math.clamp(sYaw * 3, -1, 1) -- 1 si está a su izquierda

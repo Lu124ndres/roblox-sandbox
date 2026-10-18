@@ -45,7 +45,7 @@ local HABITOS: { Habito } = {
 		lugares = { Centro = 3, Puerta = 2.5, Orilla = 2.5, Fondo = 0, Vigia = 0 },
 		racha = 3,
 		velocidad = 0.7,
-		zancada = 0.3,
+		zancada = 0.22, -- con 0.3 la mano y el pie del mismo lado se cruzan (zorro_v2_poses)
 		pisadas = 1,
 		giro = 2.2,
 		arranque = 0.6,
