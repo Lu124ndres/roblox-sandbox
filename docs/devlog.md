@@ -2228,3 +2228,42 @@ etiqueta sigue abajo a la izquierda.
 negra lisa).
 
 **Qué sigue:** nada pendiente de esta tarea.
+
+---
+
+## 2026-10-18 (2) — La zona de entrenamiento es un jardín de estanques naturales
+
+**Qué se hizo:**
+
+- **Terreno** (`server/World/GardenShape`): la plaza empedrada pasó a ser pasto con un
+  sendero de arena en anillo, cinco senderos hacia el centro y un claro alrededor del sagrado.
+  Cada estanque es una hoya de barro de orilla ondulada (`WorldZones.pondEdge`), con una
+  franja de barro alrededor.
+- **Piezas** (paquete nuevo `tools/estanques/`): en todos, nenúfares con lotos, rocas medio
+  hundidas, juncos con totoras, flores y un espíritu de luz sobre un loto grande en el centro
+  (antes, cristal sobre pedestal de mármol). Y un tema por estanque: 1 Prado (margaritas y una
+  rana), 2 Juncos (juncal y muellecito), 3 Lirios (lirios azules, hortensia y piedras para
+  cruzar), 4 Bambú (bosquecito y farol de piedra), 5 Hongos (hongos gigantes que brillan),
+  6 Cerezo (cerezo y pétalos en el agua), 7 Arce (arces rojos y luciérnagas), 8 Cascada
+  (montículo con agua que cae y farolillos de papel), 9 Dorado (lotos de oro y kois),
+  10 Celestial (rocas que flotan con cristales) y el Sagrado (islote con el pez dorado
+  saltando, lotos celestes, kois, faroles y dos árboles sagrados). Alrededor, setos con
+  flores, faroles de piedra junto al sendero y árboles y macizos en el prado. La isla bajó
+  de 8060 a 6944 partes.
+- **Vida** (`Training/PondLife`): los kois nadan en círculo, las rocas celestiales flotan y
+  la cascada suelta bruma. `PondFx` anima ahora al espíritu y a las luciérnagas.
+- **Carteles** (`Training/PondSignView`): nombre del estanque, ícono de poder con «x3» en el
+  color del nivel y una cápsula con los requisitos con íconos (calavera «6» o cristal
+  «150K»), «Pase sagrado» con el ícono de Robux o «¡Abierto! Entrenar» en verde. El del
+  estanque en el que uno entrena se esconde. Nombres y colores en `UIConfig/Ponds`.
+
+**Probado en Studio (Play):** capturas de día y de noche de todos los estanques
+(`docs/capturas/2026-10-18-jardin-entrenamiento.jpg`, `...-estanque-cascada.jpg`); entrenar
+con E en el estanque 1 (estado `training`, el poder sube cada tick); kois y rocas se mueven;
+el cartel se esconde al entrenar y vuelve al parar. Consola sin errores del juego.
+
+**Qué se rompió:** nada visto. Las vitrinas de trajes siguen de mármol y oro (son de la
+tienda, no del jardín).
+
+**Qué sigue:** probar varios jugadores en el mismo estanque natural (la tapa invisible cubre
+el radio más grande de la orilla).

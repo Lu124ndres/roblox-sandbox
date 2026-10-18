@@ -76,7 +76,7 @@ export type GiantDef = GiantTypes.GiantDef
 export type GiantsConfig = GiantTypes.GiantsConfig
 
 export type ProgressionConfig = {
-	ponds: { PondDef }, -- uno por estanque, en orden alrededor de la plaza
+	ponds: { PondDef }, -- uno por estanque, en orden alrededor del jardín
 	biteSpeedDivisor: number, -- velocidad de pique = 1 + sqrt(poder) / divisor
 	capacityPerRoot: number, -- capacidad = (carryCapacity + esto x sqrt(poder)) x canasta
 	castsToFill: { start: number, perRod: number, min: number }, -- lanzamientos para llenarla

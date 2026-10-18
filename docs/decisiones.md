@@ -639,3 +639,25 @@ piden un estado y unas intensidades (`Colas/Tipos`, `Intent`), y los valores vie
 (`tailCalm`, `tailFan`, `tailLift`, `tailWag`) se traducen en `Colas/Traduccion`. Así ninguna
 capa pisa a otra en la cola.
 
+## 2026-10-18 — La zona de entrenamiento es un jardín de estanques naturales
+
+**Contexto:** el usuario pidió que los estanques dejaran de parecer fuentes (círculos de
+mármol con oro sobre una plaza empedrada) y fueran naturales, cada uno con algo que lo
+distinga. **Decisión:**
+
+- **La orilla ondula con una fórmula compartida** (`WorldZones.pondEdge`, tres senos con
+  fase por estanque, amplitudes en `pondWobble` de `WorldLayoutData.json`) que copia
+  `tools/estanques/forma.py`. El terreno (`server/World/GardenShape`) y las piezas (rocas,
+  juncos) usan la misma curva, así nada queda flotando ni dentro del pasto.
+- **Senderos de arena, no de `Ground`:** el color de un material de terreno es global y la
+  guarida de lava (`LairGround`) le cambia el de `Ground` a ceniza. La arena y el barro
+  (`Mud`, orillas) no los toca nadie más.
+- **Las piezas viven en el paquete `tools/estanques/`** y no en `generar_isla.py` (que ya
+  pasaba de 1300 líneas). Importa `generar_isla` para reusar sus utilidades; cada estanque
+  tiene su semilla, así cambiar uno no mueve los demás ni el resto de la isla.
+- **Todo sigue siendo primitivas** (fase 1): esferas estiradas con `SpecialMesh` para
+  pétalos, hojas y rocas redondas. El borde de Blender `BordeEstanque`/`BordeSagrado` queda
+  sin uso en `PropsMapa` (las rocas de orilla sí usan `Roca1..3`).
+- **El cartel del estanque en el que uno entrena se esconde:** medido en studs, de cerca
+  tapaba el nombre y el título del jugador.
+- Los multiplicadores y requisitos **no cambiaron** (`Config/Progression`); solo cómo se ven.

@@ -2,11 +2,14 @@
 --[[
 	PondFx
 
-	Vida de los estanques de entrenamiento (las piezas vienen del mapa):
-		- el cristal del centro flota, gira y suelta destellos de su color;
-		- en los estanques x20 o más, tres cristalitos orbitan a su alrededor;
-		- si el jugador todavía no lo desbloqueó, el cristal se ve apagado y
+	Vida de los estanques de entrenamiento (las piezas vienen del mapa,
+	tools/estanques):
+		- el espíritu del estanque (la esfera de luz sobre el loto del centro)
+		  flota y suelta destellos de su color;
+		- desde el estanque 7, tres luciérnagas vuelan a su alrededor;
+		- si el jugador todavía no lo desbloqueó, el espíritu se ve apagado y
 		  quieto, sin destellos: de un vistazo se sabe a cuáles puede entrar.
+	Los kois, las rocas que flotan y la bruma de la cascada son de PondLife.
 	Solo se animan los estanques cerca de la cámara (PondAnimateDistance), y
 	los destellos de los lejanos se apagan.
 ]]
@@ -24,12 +27,11 @@ local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 
 local ANIMATE_DISTANCE = Performance.PondAnimateDistance
 -- Bloqueado: del color del estanque pero liso (sin neón, destellos ni luz).
--- El cristal (Glass) se veía casi negro, sobre todo de noche.
 local LOCKED_MATERIAL = Enum.Material.SmoothPlastic
 
 type Pond = {
 	index: number,
-	crystal: BasePart,
+	spirit: BasePart,
 	base: CFrame,
 	color: Color3,
 	orbiters: { BasePart },
@@ -41,7 +43,7 @@ type Pond = {
 
 local PondFx = {}
 
-local function sparklesFor(crystal: BasePart, color: Color3): ParticleEmitter
+local function sparklesFor(spirit: BasePart, color: Color3): ParticleEmitter
 	local emitter = Instance.new("ParticleEmitter")
 	emitter.Texture = Assets.Particles.Sparkle
 	emitter.Color = ColorSequence.new(color)
@@ -56,7 +58,7 @@ local function sparklesFor(crystal: BasePart, color: Color3): ParticleEmitter
 	emitter.SpreadAngle = Vector2.new(180, 180)
 	emitter.Acceleration = Vector3.new(0, -2, 0)
 	emitter.Rate = 10
-	emitter.Parent = crystal
+	emitter.Parent = spirit
 	FxQuality.scaleEmitter(emitter)
 	return emitter
 end
@@ -66,20 +68,21 @@ local function collect(map: Instance): { Pond }
 	for _, descendant in map:GetDescendants() do
 		local index = descendant:GetAttribute(Protocol.Map.PondIndexAttribute)
 		if
-			descendant.Name == "CristalFlotante"
+			descendant.Name == "Espiritu"
 			and descendant:IsA("BasePart")
 			and type(index) == "number"
 		then
 			local orbiters = {}
 			for k = 1, 3 do
-				local orbiter = descendant.Parent and descendant.Parent:FindFirstChild(`Orbita{k}`)
+				local orbiter = descendant.Parent
+					and descendant.Parent:FindFirstChild(`Luciernaga{k}`)
 				if orbiter and orbiter:IsA("BasePart") then
 					table.insert(orbiters, orbiter)
 				end
 			end
 			table.insert(ponds, {
 				index = index,
-				crystal = descendant,
+				spirit = descendant,
 				base = descendant.CFrame,
 				color = descendant.Color,
 				orbiters = orbiters,
@@ -105,14 +108,14 @@ function PondFx.start()
 			if not force and open == pond.open then
 				continue
 			end
-			pond.crystal.Color = pond.color
-			pond.crystal.Material = if open then Enum.Material.Neon else LOCKED_MATERIAL
+			pond.spirit.Color = pond.color
+			pond.spirit.Material = if open then Enum.Material.Neon else LOCKED_MATERIAL
 			pond.open = open
 			pond.sparkles.Enabled = open and pond.near
 			if pond.light then
 				pond.light.Enabled = open
 			end
-			pond.crystal:SetAttribute("Abierto", open)
+			pond.spirit:SetAttribute("Abierto", open)
 		end
 	end
 	player.AttributeChanged:Connect(function(name: string)
@@ -135,7 +138,7 @@ function PondFx.start()
 				local open = pond.open
 				local bob = if open then math.sin(t * 1.6 + pond.index) * 0.45 else 0
 				local spin = if open then t * 0.8 else 0
-				pond.crystal.CFrame = CFrame.new(pond.base.Position + Vector3.new(0, bob, 0))
+				pond.spirit.CFrame = CFrame.new(pond.base.Position + Vector3.new(0, bob, 0))
 					* CFrame.Angles(0, spin, 0)
 					* pond.base.Rotation
 				for k, orbiter in pond.orbiters do

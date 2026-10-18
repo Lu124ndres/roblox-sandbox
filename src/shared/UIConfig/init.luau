@@ -17,6 +17,7 @@
 ]]
 
 local FishColors = require(script.FishColors)
+local Ponds = require(script.Ponds)
 local RodLooks = require(script.RodLooks)
 local Sounds = require(script.Sounds)
 
@@ -27,8 +28,9 @@ export type UIConfig = {
 	-- Un color por estado de la barra de hambre (25 %, 50 %, 75 %, 100 %).
 	HungerStageColors: { Color3 },
 
-	-- Color de cada estanque de entrenamiento, del más débil al más fuerte.
+	-- Color y nombre de cada estanque de entrenamiento, del más débil al más fuerte.
 	PondColors: { Color3 },
+	PondNames: { string },
 
 	-- Color de cada pez por id de Config.Economy.fish.
 	FishColors: { [string]: Color3 },
@@ -93,19 +95,8 @@ local UIConfig: UIConfig = {
 		Color3.fromRGB(255, 122, 100),
 	},
 
-	PondColors = {
-		Color3.fromRGB(120, 220, 120),
-		Color3.fromRGB(90, 210, 200),
-		Color3.fromRGB(90, 170, 255),
-		Color3.fromRGB(130, 120, 255),
-		Color3.fromRGB(190, 110, 255),
-		Color3.fromRGB(255, 110, 200),
-		Color3.fromRGB(255, 90, 90),
-		Color3.fromRGB(255, 150, 60),
-		Color3.fromRGB(255, 205, 60),
-		Color3.fromRGB(255, 245, 170),
-		Color3.fromRGB(120, 245, 255), -- sagrado
-	},
+	PondColors = Ponds.Colors,
+	PondNames = Ponds.Names,
 
 	FishColors = FishColors.Fish,
 	RarityColors = FishColors.Rarity,

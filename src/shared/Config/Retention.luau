@@ -30,7 +30,7 @@ local Retention: Types.RetentionConfig = {
 			goal = 1,
 			coins = 50,
 		},
-		{ id = "entrenar", text = "Entrena en un estanque de la plaza", goal = 1, coins = 50 },
+		{ id = "entrenar", text = "Entrena en un estanque del jardín", goal = 1, coins = 50 },
 		{ id = "comprar", text = "Compra una mejora en la tienda", goal = 1, coins = 100 },
 	},
 	tutorialBonus = 200,

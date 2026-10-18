@@ -72,6 +72,10 @@ barra de hambre sube. La Orca crece mientras come.
       rojo desde el abismo, relámpagos, murciélagos, ambiente de terror, gruñidos.
 - [x] Quien cae al lago del cráter vuelve a la puerta (no hay forma de salir nadando).
 - [ ] Definir los multiplicadores y requisitos finales de los 10 estanques.
+- [x] Rework de la zona (pedido del 2026-10-18): jardín de pasto con senderos de arena y
+      estanques naturales de orilla irregular, cada uno con su tema (prado, juncos, lirios,
+      bambú, hongos, cerezo, arce, cascada, dorado, celestial y el sagrado), espíritu de
+      luz sobre un loto y carteles con nombre, multiplicador y requisitos con íconos.
 
 ## H1.7 — Ritmo para servidores de 40-50 (pedido del 2026-10-13)
 
