@@ -2,38 +2,40 @@
 --[[
 	TutorialGuide
 
-	Guía del primer minuto: una placa de piedra (Interface/Kit) con la misión
-	actual (Config.Retention.tutorial, el título en dorado) y su avance, y una
-	línea recta de flechas amarillas flotando que sale del jugador y apunta al
-	destino, en tramos rectos (GuidePath y GuideArrow: al volcán, primero a la
-	entrada del puente y después por el puente) hasta el destino (el
-	playa más cercana, la puerta del volcán, un estanque o la tienda). Al
-	llegar, las flechas se van; nada queda puesto en el mapa. Desaparece al
-	terminar. El avance lo decide el servidor (atributos Tutorial y
-	TutorialCount).
+	Guía del primer minuto, pensada para que se entienda sin leer de más
+	(pedido del usuario): arriba, la instrucción grande de la misión y su
+	avance (TutorialBanner); en el mundo, una fila de flechas amarillas que
+	sale del jugador y llega hasta el destino (GuidePath) y, en el destino,
+	un pilar de luz con un cartel y la distancia (GuideMarker).
+
+	Cada misión (Config.Retention.tutorial) tiene sus tramos: al volcán, primero
+	«¡CRUZA EL PUENTE!» hasta la entrada del puente y, ya en él, «¡ALIMENTA A
+	...!» hasta la puerta del cráter (desde ahí se alimenta). Al llegar al
+	destino las flechas se van y queda el aviso. Al cumplir un paso, «¡LISTO!»
+	y pasa al siguiente. El avance lo decide el servidor (atributos Tutorial
+	y TutorialCount); nada queda puesto en el mapa.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
-local Ui = require(script.Parent.Parent.Ui)
+local GiantName = require(script.Parent.Parent.GiantName)
 local InputHints = require(script.Parent.Parent.Interface.InputHints)
-local Kit = require(script.Parent.Parent.Interface.Kit)
-local Layout = require(script.Parent.Parent.Interface.Layout)
-local Style = require(script.Parent.Parent.Interface.Style)
+local GuideMarker = require(script.Parent.GuideMarker)
 local GuidePath = require(script.Parent.GuidePath)
+local TutorialBanner = require(script.Parent.TutorialBanner)
 
 local ATTR = Protocol.PlayerAttributes
 local STEPS = Config.Retention.tutorial
-local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
-local ARRIVE = 12 -- studs del destino a los que la flecha se va
+local ARRIVE = 12 -- studs del destino a los que las flechas se van
+local DONE_SECONDS = 1.4 -- lo que se ve «¡LISTO!» antes del paso siguiente
+
+type Leg = { target: Vector3, label: string, title: string, hint: string }
 
 local TutorialGuide = {}
 
@@ -42,76 +44,122 @@ local function polar(angle: number, radius: number, y: number): Vector3
 	return Vector3.new(math.cos(a) * radius, y, math.sin(a) * radius)
 end
 
--- A dónde tiene que ir el jugador para la misión `id`.
-local function targetFor(id: string, position: Vector3): Vector3
+-- Cómo se hace la acción según con qué juega: «Mantén E» o «Toca PESCAR».
+local function how(verb: string, button: string): string
+	if InputHints.mode() == "touch" then
+		return `Toca {button}`
+	end
+	return `{verb} {InputHints.action()}`
+end
+
+-- El tramo actual de la misión `id`: adónde ir, qué dice el cartel del destino y qué
+-- dice el aviso grande.
+local function legFor(id: string, position: Vector3, count: number, goal: number): Leg
 	if id == "pescar" then
-		-- La playa más cercana: hacia afuera de la isla desde donde está el jugador.
 		local angle = math.deg(math.atan2(position.Z, position.X))
-		return polar(angle, WorldLayout.shoreRadius - 5, WorldLayout.waterLevel + 1)
+		return {
+			target = polar(angle, WorldLayout.shoreRadius - 5, WorldLayout.waterLevel + 1),
+			label = "PLAYA",
+			title = `¡PESCA {goal} PECES!`,
+			hint = `{how("Mantén", "PESCAR")} en la playa · llevas {count}`,
+		}
 	elseif id == "alimentar" then
 		local start, finish = WorldZones.bridgeEnds()
 		local onTheWay = WorldZones.isOnBridge(position)
 			or WorldZones.distanceToCrater(position) < WorldLayout.craterBaseRadius
-		return if onTheWay then finish else start
+		if onTheWay then
+			return {
+				target = finish,
+				label = "PUERTA DEL VOLCÁN",
+				title = `¡ALIMENTA A {string.upper(GiantName.current())}!`,
+				hint = `{how("Mantén", "ALIMENTAR")} en la puerta del volcán`,
+			}
+		end
+		return {
+			target = start,
+			label = "PUENTE",
+			title = "¡CRUZA EL PUENTE!",
+			hint = "Sigue las flechas hasta el volcán",
+		}
 	elseif id == "entrenar" then
-		return WorldZones.pondCenter(1)
+		return {
+			target = WorldZones.pondCenter(1),
+			label = "ESTANQUE",
+			title = "¡ENTRENA EN EL ESTANQUE!",
+			hint = `{how("Aprieta", "ENTRENAR")} junto al agua`,
+		}
 	end
-	return polar(WorldLayout.shopAngle, WorldLayout.shopRadius, WorldLayout.plateauHeight)
+	return {
+		target = polar(WorldLayout.shopAngle, WorldLayout.shopRadius, WorldLayout.plateauHeight),
+		label = "TIENDA",
+		title = "¡COMPRA UNA MEJORA!",
+		hint = `{how("Aprieta", "MEJORAS")} en la tienda`,
+	}
 end
 
 function TutorialGuide.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	-- En PC, en la columna izquierda debajo de las estadísticas. En pantallas
-	-- táctiles, abajo al centro: a la izquierda estorbaría al joystick.
-	local touchOnly = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
-	local panel = Ui.panel("Mision", if touchOnly then screen else Layout.left())
-	panel.LayoutOrder = 20
-	panel.Size = UDim2.fromOffset(230, 70)
-	panel.Visible = false
-	Kit.skin(panel, "panel").SliceScale = PLATE_SLICE
-	if touchOnly then
-		-- Un poco a la izquierda del centro: a la derecha abajo van Pescar y ¡TIRA!.
-		panel.AnchorPoint = Vector2.new(0.5, 1)
-		panel.Position = UDim2.new(0.5, -40, 1, -8)
-		Layout.scaleWith(panel)
-	end
-	local title = Style.text(panel, "Titulo", UIConfig.TextSizes.Small, nil, 2)
-	Kit.gold(title)
-	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Position = UDim2.fromOffset(10, 6)
-	title.Size = UDim2.new(1, -20, 0, 18)
-	local text = Ui.label("Texto", panel, UIConfig.Fonts.Body, UIConfig.TextSizes.Small)
-	text.TextXAlignment = Enum.TextXAlignment.Left
-	text.TextYAlignment = Enum.TextYAlignment.Top
-	text.TextWrapped = true
-	text.Position = UDim2.fromOffset(10, 25)
-	text.Size = UDim2.new(1, -20, 0, 40)
-
+	local banner = TutorialBanner.new(screen)
 	local route = GuidePath.new()
+	local marker = GuideMarker.new()
+	local shownStep, shownTitle = -1, ""
+	local celebrating = false
 
 	local function step(): number
 		local value = player:GetAttribute(ATTR.Tutorial)
 		return (if type(value) == "number" then value else 0) + 1
 	end
 
-	local function refresh()
+	local function count(): number
+		local value = player:GetAttribute(ATTR.TutorialCount)
+		return if type(value) == "number" then value else 0
+	end
+
+	local function position(): Vector3?
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		return if root and root:IsA("BasePart") then root.Position else nil
+	end
+
+	local refresh: () -> ()
+
+	-- Al cumplir un paso: «¡LISTO!» un momento y después el siguiente.
+	local function celebrate(nextIndex: number)
+		celebrating = true
+		banner.done()
+		task.delay(DONE_SECONDS, function()
+			celebrating = false
+			if step() == nextIndex then
+				refresh()
+			end
+		end)
+	end
+
+	-- Pone en el aviso grande el tramo actual (o lo esconde si el tutorial terminó).
+	refresh = function()
 		local index = step()
 		local current = STEPS[index]
 		local loaded = player:GetAttribute(ATTR.DataLoaded) == true
-		panel.Visible = loaded and current ~= nil
-		if not current then
+		if not loaded or not current then
+			banner.show(false)
+			shownStep = -1
 			return
 		end
-		local count = player:GetAttribute(ATTR.TutorialCount)
-		local progress = if current.goal > 1
-			then ` ({if type(count) == "number" then count else 0}/{current.goal})`
-			else ""
-		title.Text = `Misión {index}/{#STEPS}`
-		-- Las tres primeras se hacen con el botón de acción: se dice cuál.
-		local key = if index <= 3 and InputHints.mode() ~= "touch"
-			then ` ({InputHints.action()})`
-			else ""
-		text.Text = current.text .. key .. progress
+		if shownStep ~= -1 and shownStep ~= index then
+			shownStep = index
+			shownTitle = ""
+			celebrate(index)
+			return
+		end
+		if celebrating then
+			return
+		end
+		shownStep = index
+		local leg = legFor(current.id, position() or Vector3.zero, count(), current.goal)
+		shownTitle = leg.title
+		local progress = if current.goal > 1 then `{count()}/{current.goal}` else ""
+		banner.set(leg.title, progress, leg.hint)
+		banner.show(true)
 	end
 	for _, attribute in { ATTR.Tutorial, ATTR.TutorialCount, ATTR.DataLoaded } do
 		player:GetAttributeChangedSignal(attribute):Connect(refresh)
@@ -121,19 +169,24 @@ function TutorialGuide.start(screen: ScreenGui)
 
 	RunService.Heartbeat:Connect(function(dt: number)
 		local current = STEPS[step()]
-		local character = player.Character
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		if not current or not panel.Visible or not (root and root:IsA("BasePart")) then
+		local at = position()
+		if not current or shownStep == -1 or not at then
+			route.hide()
+			marker.show(false)
+			return
+		end
+		local leg = legFor(current.id, at, count(), current.goal)
+		if leg.title ~= shownTitle and not celebrating then -- cambió de tramo (subió al puente)
+			refresh()
+		end
+		local distance = (leg.target - at).Magnitude
+		marker.place(leg.target, leg.label, distance)
+		marker.show(true)
+		if distance < ARRIVE then
 			route.hide()
 			return
 		end
-		local position = root.Position
-		local target = targetFor(current.id, position)
-		if (target - position).Magnitude < ARRIVE then
-			route.hide()
-			return
-		end
-		route.update(position, target, os.clock(), dt)
+		route.update(at, leg.target, os.clock(), dt)
 	end)
 end
 

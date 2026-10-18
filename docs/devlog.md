@@ -2719,3 +2719,55 @@ quitarla, en Play: el Rey del Mar puesto caminando dejaba ondas de agua y la cap
 
 **Qué sigue:** importar `assets/blender/TrajeReyDelMar_v2.fbx` en Studio, cambiarlo en
 `ServerStorage.TrajeReyDelMar` con la misma máscara de brillo y actualizar sus IDs en `Assets`.
+
+---
+
+## 2026-10-18 (16) — Los monstruos crecen con cada pez
+
+**Qué se hizo (pedido del usuario: que empiecen pequeños y crezcan conforme los alimentan,
+acercándose al tamaño de la siguiente evolución):** el alto ya no salta solo al evolucionar.
+`GiantStages.heightAt(progreso, etapa)` lo saca de la barra: dentro de cada etapa crece en
+proporción hacia el 85 % del camino al alto de la siguiente (`Config.Giants.growth`); el último
+estirón llega junto con el cambio de forma. La forma final sigue de 30 a 36 jugadores hasta
+llenarse. Si se enoja y la barra baja, no encoge (`GiantBody.grow` guarda el alto más grande).
+Lo elegido con el usuario: etapa 1 del mismo tamaño que antes, 85 % del camino, sigue creciendo
+en la final, no encoge.
+
+**Qué se rompió (y se arregló antes de probar):** el zorro sacaba su etapa del alto, la "más
+cercana": con el crecimiento continuo se daba por evolucionado antes de tiempo. Ahora toma la
+etapa más alta que ya alcanzó (`Zorro/Comer/Capas.stageFor`).
+
+**Probado en Studio (Play):** con la Orca y el comando `fill` (suma a la barra), el alto medido
+coincide con el esperado: 16.5, 25.2, 38.5 (E1 al 0, 12 y 24 %), 47.0 al evolucionar (E2, 28 %),
+61.4 (E2, 40 %) y 198 con la barra llena (E4).
+
+---
+
+## 2026-10-18 (16) — Tutorial que se entiende: aviso grande, flechas hasta el destino y marcador
+
+**Qué se hizo (pedido del usuario: «mucho más fácil de entender, letras grandes, más flechas,
+que lleguen hasta donde tienes que ir, sin dañar lo visual»):**
+
+- **Aviso grande** (`Menus/TutorialBanner`): arriba al centro, el título en blanco con borde
+  («¡PESCA 5 PECES!»), el avance en dorado al final («2/5») y debajo cómo se hace («Mantén E
+  en la playa · llevas 2»; en celular «Toca PESCAR…»). Entra con rebote, late suave y al
+  cumplir un paso muestra «¡LISTO!» en verde 1.4 s antes del siguiente. En celular es un 62 %
+  y va un poco más abajo para no pisar el nombre del jugador. Reemplaza la placa chica de
+  «Misión 1/4» de abajo a la izquierda.
+- **Flechas hasta el destino** (`Menus/GuidePath`): hasta 32 flechas cada 6 studs (la isla
+  entera), siguen la pendiente del terreno y las lejanas van un poco transparentes para no
+  saturar. Antes eran 6 (35 studs) y el final del camino no se veía.
+- **Marcador del destino** (`Menus/GuideMarker`): pilar de luz amarillo y cartel con el
+  lugar («PLAYA», «PUERTA DEL VOLCÁN», «ESTANQUE», «TIENDA») y la distancia, visible de lejos.
+- **Tramos con su propio aviso** (`Menus/TutorialGuide`): al volcán primero «¡CRUZA EL
+  PUENTE!» hasta la entrada del puente y, ya en él, «¡ALIMENTA A LA ORCA!» (con el nombre del
+  gigante que esté) hasta la puerta del cráter, que es desde donde se alimenta. El servidor y
+  las misiones no cambiaron.
+
+**Probado en Studio (Play):** paso 1 desde la aparición (17 flechas hasta el pilar en la
+playa, 110 m; `docs/capturas/2026-10-18-tutorial-flechas.jpg` y `...-tutorial-aviso.jpg`);
+paso 2 sobre el puente (13 flechas que suben la rampa hasta la puerta, 88 m); «¡LISTO!» →
+«¡CRUZA EL PUENTE!» al cumplir; emulador iPhone XR (aviso al 16 % del alto, texto táctil).
+
+**Qué se rompió:** nada visto. Con dos etiquetas de ancho automático en una lista horizontal
+el avance salía antes del título: quedó en un solo texto enriquecido.
