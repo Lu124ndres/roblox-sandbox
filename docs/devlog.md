@@ -2449,3 +2449,10 @@ paso máximo fue 0.18 studs y el giro máximo 0.4° por cuadro (antes saltaban 8
 aparecer y desaparecer).
 
 **Qué se rompió:** nada visto.
+
+**Después (mismo día):** las flechas se quedaban en el camino viejo mientras el jugador
+caminaba fuera de él y solo se ponían al día al detenerse (el camino se recalculaba a los
+16 studs y cada 1.5 s). Ahora la cinta sale del jugador en cada cuadro y se une al camino
+10 studs más adelante; el camino se recalcula a los 10 studs y cada 0.6 s. Probado: moviendo
+al jugador 33.6 studs de lado a 22 studs/s, la flecha más cercana nunca quedó a más de
+11.9 studs (la separación normal de la cinta).

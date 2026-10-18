@@ -9,9 +9,9 @@
 
 	Las flechas se deslizan sin parar hacia adelante por el camino, como una
 	cinta: aparecen suave delante del jugador, avanzan y se desvanecen al final
-	de la fila. Su posición y su dirección salen solo del camino (no del
-	jugador): al caminar no giran ni saltan. El camino se recalcula solo si
-	cambia el destino o si el jugador se aleja mucho de él. Todo solo en este
+	de la fila. La cinta sale del jugador y se une al camino unos pasos más
+	adelante, así lo sigue en cada cuadro mientras camina. El camino se
+	recalcula si cambia el destino o si el jugador se aleja de él. Todo solo en este
 	cliente: no hay nada puesto en el mapa.
 ]]
 
@@ -19,8 +19,9 @@ local PathfindingService = game:GetService("PathfindingService")
 
 local GuideArrow = require(script.Parent.GuideArrow)
 
-local RECOMPUTE_SECONDS = 1.5 -- como mucho, un cálculo cada tanto
-local OFF_PATH = 16 -- studs fuera del camino que fuerzan otro cálculo
+local RECOMPUTE_SECONDS = 0.6 -- como mucho, un cálculo cada tanto
+local OFF_PATH = 10 -- studs fuera del camino que fuerzan otro cálculo
+local JOIN = 10 -- la cinta sale del jugador y se une al camino así de adelante
 local COUNT = 6 -- flechas en la cinta
 local SPACING = 7 -- studs de camino entre flecha y flecha
 local FIRST = 5 -- la cinta empieza así de adelante del jugador
@@ -100,6 +101,19 @@ local function progress(path: Route, position: Vector3): (number, number)
 	return bestS, bestDistance
 end
 
+-- La cinta que se ve: del jugador en línea recta hasta el punto del camino `join` studs
+-- más adelante y de ahí por el camino. Se arma en cada cuadro, así sigue al jugador
+-- mientras camina aunque el camino calculado todavía no se haya puesto al día.
+local function fromPlayer(path: Route, feet: Vector3, join: number): Route
+	local points = { feet, at(path, join) }
+	for k, point in path.points do
+		if path.lengths[k] > join then
+			table.insert(points, point)
+		end
+	end
+	return route(points)
+end
+
 -- 0 en el medio de la cinta, 1 en sus puntas: aparecen y se van de a poco.
 local function fadeAt(along: number): number
 	if along < FADE then
@@ -161,14 +175,15 @@ function GuidePath.new(): Path
 		then
 			compute(feet, target)
 		end
-		local path = current
-		if stale or not path then
+		if stale or not current then
 			hide()
 			return
 		end
+		local path =
+			fromPlayer(current :: Route, feet, math.min(s + JOIN, (current :: Route).total))
 		-- La cinta va de `start` a `finish` por el camino; las flechas avanzan por ella y,
 		-- al llegar al final, vuelven a aparecer al principio (ya invisibles por el fade).
-		local start = s + FIRST
+		local start = FIRST
 		local length = COUNT * SPACING
 		local finish = math.min(start + length, path.total - END_MARGIN)
 		local shift = (t * FLOW) % SPACING
