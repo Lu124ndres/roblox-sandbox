@@ -399,6 +399,73 @@ membrana al plegarla y la abren en el aletazo.
 - que cierre la mano al comer;
 - que, lejos, no cambie nada salvo los detalles.
 
+### Movimientos naturales (lo que lo hace parecer vivo)
+
+El monstruo no "ejecuta animaciones": **se comporta como un animal**. Para cada uno se escribe un
+**catálogo de conductas** sacado de 1 o 2 animales reales parecidos (en la biblia, fase A). Se
+mira cómo lo hace el animal de verdad y se pasa a sus huesos. El minotauro salió bien así (toro:
+resopla, escarba, se sienta pesado); el dragón quedó más mecánico, porque vuela en vueltas y en
+la percha hace poco.
+
+**Catálogo de ejemplo por tipo** (se eligen 10-15 por monstruo):
+
+| Tipo | Animal guía | Conductas |
+|---|---|---|
+| Zorro | zorro, gato | Se rasca la oreja con la pata de atrás; se agarra o se lame la pata; se sacude de la cabeza a la cola; salta en picada sobre algo (como cazando un ratón en la nieve); se estira en reverencia (patas adelante, cola arriba); bosteza; ladea la cabeza curioso; mueve cada oreja por su lado; se enrosca a dormir con la cola en la nariz; persigue su cola; olfatea el suelo y sigue un rastro. |
+| Toro, minotauro | toro, gorila | Resopla; escarba con la pezuña; sacude la cabeza y los cuernos; se rasca el lomo contra una roca; se sienta pesado y apoya los brazos; se golpea el pecho; mira de reojo; patea el suelo antes de cargar; se estira de brazos; dormita cabeceando. |
+| Dragón, volador | ave rapaz, murciélago, lagarto | Se acicala el ala con el hocico; estira un ala y después la otra; sacude las alas al posarse; abre las alas al sol; se rasca el cuello con la pata de atrás; saca la lengua y prueba el aire; ladea la cabeza siguiendo algo; camina sobre la percha apoyado en las muñecas; frena el aterrizaje con un aletazo y pliega las alas; bosteza mostrando el fuego; dormita con la cabeza bajo el ala; se sacuda la lava o el agua como un perro; persigue una brasa con la mirada. |
+| Nadador | orca, delfín | Asoma la cabeza a mirar (como espiando); sopla por el espiráculo; da un coletazo en la superficie; se pone de espaldas y aplaude con las aletas; rueda; salta y cae de costado; nada en círculos cerca de quien le da de comer. |
+
+**Reglas de naturalidad:**
+
+1. **Peso y anticipación.** Antes de un salto se agacha; antes de rugir, toma aire (pecho
+   arriba). El cuerpo carga el peso en un lado antes de levantar una pata.
+2. **Asimetría.** Una oreja, una pata o un ala a la vez. Nada se mueve en espejo perfecto salvo el
+   aleteo.
+3. **Mira lo que hace.** Al rascarse la oreja, la cabeza se inclina hacia la pata. Al acicalarse,
+   el hocico va al ala. Los ojos llegan antes que la cabeza.
+4. **Contacto con su propio cuerpo.** La pata que rasca llega de verdad a la oreja y el hocico
+   toca el ala. Se resuelve con IK hacia un punto del cuerpo (un hueso sin pesos como
+   `Oreja{l}Rascar`). En Blender se verifica que llegue sin atravesar: es una pose extrema más.
+5. **Pausas.** No moverse todo el tiempo. Entre conductas queda quieto respirando 1-4 s y a veces
+   solo mira.
+6. **Sin bucles perfectos.** Duración, cantidad de repeticiones (rascarse 3 a 6 veces) e
+   intensidad salen de `Azar`. Nunca hace dos veces seguidas la misma conducta.
+7. **Por etapa.** La cría juega (persigue la cola, salta, se cae y se levanta); el joven es
+   inquieto; el adulto es seguro; la forma final se mueve poco, lento y con peso.
+8. **Transiciones.** Cada conducta entra y sale por la pose de reposo con curvas suaves
+   (`Trucos/Curvas`); nunca corta de golpe.
+
+**Cómo se hace:** una conducta por archivo (`Posturas/` si es de quieto, `Trucos/` si es de
+lucirse) con sus curvas por hueso, y una entrada en `Habitos` con su peso por etapa. Antes de
+darla por buena:
+
+- se ven en Blender los cuadros clave con los huesos reales, como hace
+  `minotauro_v2_e1_animacion.py`;
+- después se ve en Play con la cámara cerca.
+
+### Mirar al público (no darle la espalda)
+
+Los jugadores llegan por el **puente** hasta la puerta del cráter (`WorldZones.bridgeEnds()`,
+el punto final) y alimentan desde la orilla. **El monstruo se muestra hacia ahí:**
+
+- **Rumbo en reposo:** al llegar a cada lugar de su rutina, gira para quedar de frente al sector
+  de la rampa (±60° de la dirección a la puerta). La meta es ≥ 70 % del tiempo de rutina con la
+  cara hacia ese sector.
+- **Rutas:** los paseos se eligen para que, al caminar o volar, se le vea de costado o de frente,
+  no la cola. Los tramos de espaldas a la rampa son cortos: nunca más de ~3 s seguidos.
+- **Perchas y lugares fijos** (rocas, nido, dunas): se orientan para que, posado, mire hacia la
+  rampa o al centro del cráter con la rampa a la vista.
+- **Mirada a cada jugador:** la cabeza y los ojos (capa 3) miran al jugador de **ese** cliente
+  cuando está cerca de la orilla. Es solo cosmético: cada uno ve que lo mira a él. El rumbo del
+  cuerpo sí es el mismo para todos (sale de la hora del servidor).
+- **Al comer:** gira hacia quien le da de comer; ya lo hacen todos.
+- **Trucos de lucirse** (rugido, salto, fuego): siempre de frente o de costado a la rampa.
+
+**Prueba:** en Play, la cámara en la puerta del cráter durante 60-120 s. Se mide qué parte del
+tiempo `adelante · (puerta − monstruo) > 0.5` (de frente a la rampa) y cuál fue el tramo más
+largo de espaldas. Se repite en las cuatro etapas.
+
 ### Rutina (cuando nadie le da de comer)
 
 Pasea por su hábitat, se sienta, se rasca, bosteza, olfatea, mira a un jugador o al cielo y hace
