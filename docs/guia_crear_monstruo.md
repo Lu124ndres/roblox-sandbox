@@ -167,17 +167,130 @@ idéntico (comparar `estadisticas.json`).
 
 ## 5. Huesos y rig (fase D)
 
-- **Contrato por tipo de criatura**, compartido por las cuatro etapas: los mismos nombres, porque
-  el código anima por nombre. Hay contratos en `docs/inventario_modelos.md` (Minotauro, con 25 +
-  3 de faldón) y en `docs/plan_dragon_v2.md` (Dragón, con 32). `Raiz` (pivote, en la base o en el
-  centro de giro) y `Boca` (de donde sale el fuego o el aliento) van sin pesos.
+Los primeros contratos (Minotauro con 25 huesos más 3 de faldón, Dragón con 32) alcanzan para
+moverse, pero no para **actuar**: no parpadean, no cierran las manos ni hacen gestos. A partir de
+ahora cada monstruo lleva un **rig detallado** en dos capas:
+
+- **Huesos base, obligatorios:** los que ya usa el código para moverse, posarse y comer. Sin
+  ellos el monstruo no funciona.
+- **Huesos de detalle, opcionales:** cara, manos, pies, columna y cola más finas, púas y
+  accesorios. El código los anima **solo si el modelo los tiene**: `Rig.turn` ya ignora un hueso
+  que no existe, así que los modelos viejos siguen andando igual.
+
+### 5.1 Nombres
+
+- En castellano, PascalCase y sin tildes. El lado va al final (`Izq` = izquierda del personaje,
+  +x en Blender) y las cadenas se numeran de la raíz a la punta (`Cola1..Cola8`, `DedoIzq1_1`
+  es el primer dedo y su primera falange).
+- Los mismos nombres en las cuatro etapas. Si una etapa no tiene una pieza (la cría sin barba),
+  ese hueso no existe y el código lo salta.
+- Los **puntos sin pesos** (sockets) también se nombran: `Raiz`, `Boca`, `Ojo{l}Mira` (de donde
+  sale la mirada), `Grieta*` (efectos), `Pie{l}Apoyo` (el punto de contacto con el suelo).
+
+### 5.2 Contrato detallado
+
+Árbol de referencia. Los marcados **(base)** son obligatorios; el resto, de detalle. Hay que
+adaptarlo al tipo de criatura (sección 5.3).
+
+```
+Raiz (base, sin pesos)
+└── Cadera (base)
+    ├── Lomo1 > Lomo2                  columna en 2-3 tramos: torcer, encorvarse, respirar
+    │   └── Pecho (base)
+    │       ├── Panza                  se infla al respirar (se mueve, no se escala)
+    │       ├── Cuello1 (base) > Cuello2 > Cuello3     el cuello reparte el giro de la cabeza
+    │       │   └── Cabeza (base)
+    │       │       ├── Mandibula (base) > Lengua1 > Lengua2
+    │       │       ├── Boca (base, sin pesos)
+    │       │       ├── Labio{l}        comisura: sonrisa, gruñido (muestra los colmillos)
+    │       │       ├── Nariz           resoplar, olfatear
+    │       │       ├── Ceja{l}         enojo, sorpresa, tristeza
+    │       │       ├── Parpado{l}      parpadear, entrecerrar, dormir
+    │       │       ├── Ojo{l}          la pupila mira (ver 5.4)
+    │       │       ├── Oreja{l} > OrejaPunta{l}       orejas con dos tramos
+    │       │       ├── Aleta{l}        aletitas, volantes, papada
+    │       │       └── Melena1..3 / Barba1..2         pelo y barbas con inercia
+    │       ├── Clavicula{l}            subir y bajar el hombro
+    │       │   └── Brazo{l} (base) > Antebrazo{l} (base) > Mano{l} (base)
+    │       │       ├── Dedo{l}1_1 > Dedo{l}1_2       2-3 dedos de 2 falanges
+    │       │       └── Pulgar{l}
+    │       └── Ala{l}1..3 (base, si vuela)
+    │           └── AlaDedo{l}1..3      los dedos del ala: abrir y cerrar la membrana
+    ├── Muslo{l} (base) > Pierna{l} (base) > Pie{l} (base)
+    │   └── Garra{l}1..3 / PieDedos{l}   los dedos del pie se doblan al pisar y al empujar
+    ├── Cola1..Cola8 (base: al menos Cola1..Cola3)    más tramos = curva más suave
+    │   └── ColaPunta                   la pala, el abanico o el mechón de la punta
+    └── Puas1..N                        grupos de púas o placas del lomo que se erizan
+```
+
+**Presupuesto:** de 40 a 70 huesos por modelo. Más que eso cuesta CPU (cada `Bone.Transform`
+se escribe por cuadro) y casi no se nota. Cada hueso es una pieza rígida más, así que también
+suma triángulos: se cuenta dentro del presupuesto de la etapa.
+
+### 5.3 Qué agrega cada tipo de criatura
+
+| Tipo | Además de la base, lo que más rinde |
+|---|---|
+| Bípedo (minotauro) | Párpados, cejas, labios, dedos de las manos (agarrar el pez, puño al rugir), clavículas, Lomo1-2, orejas de 2 tramos, faldón en 3 piezas. |
+| Volador (dragón) | `AlaDedo` (la membrana se abre y se cierra), Cuello1-3, Cola1-8, ColaPunta, párpados, cejas, lengua, púas que se erizan, garras del pie que se cierran al posarse. |
+| Cuadrúpedo | Lomo1-2, las cuatro patas con dedos, orejas de 2 tramos, cola larga con punta, nariz. |
+| Nadador (orca, tiburón) | Columna en 4-6 tramos (la onda del nado), aletas pectorales de 2 tramos, aleta dorsal que se dobla, cola de 2 tramos, párpados, mandíbula y lengua. |
+
+### 5.4 Cómo se modelan las piezas de detalle (bloques rígidos)
+
+Cada hueso nuevo es una pieza más, cortada en su articulación con las reglas de juntas de la
+sección 4. Las de la cara tienen trucos propios, porque `Rig.turn` solo **gira**, no traslada:
+
+- **Párpado:** una placa de una celda delante del ojo, con la bisagra en el borde de arriba del
+  ojo. Abierto, gira hacia arriba y queda escondido dentro de la ceja o el cráneo. Al parpadear
+  baja y tapa el ojo. Va media celda por delante de la cara del ojo para no quedar en el mismo
+  plano.
+- **Pupila:** una pieza aparte con su pivote **detrás del ojo**, en el centro del globo. Girar
+  ese hueso unos pocos grados la desplaza sobre la cara del ojo, así que mira sin trasladar.
+- **Ceja:** una cuña sobre el ojo con el pivote en su punta de adentro. Girada hacia abajo es
+  enojo; hacia arriba, sorpresa o tristeza.
+- **Labio o comisura:** una pieza chica en la esquina de la boca que gira hacia arriba (sonrisa)
+  o hacia afuera y arriba (gruñido: deja ver el colmillo, que va pegado a la Mandibula).
+- **Lengua:** dos tramos dentro de la boca, que asoman cuando la mandíbula se abre del todo.
+- **Dedos:** un bloque por falange de al menos 1 celda de ancho; la uña o garra va pegada a la
+  última. En la E1 (celda de 0.1) caben 2 falanges; en la E4, 3.
+- **Púas que se erizan:** se agrupan de a 2-4 por hueso, con el pivote en la base, para que un
+  hueso no mueva púas de dos tramos del lomo.
+- **Puntos de contacto** (`Pie{l}Apoyo`): un hueso sin pesos en la planta, para que el código
+  apoye el pie sin adivinar la geometría.
+
+### 5.5 Del modelo al juego
+
 - **Ejes medidos al enlazar** (`<Criatura>/Rig.bind`): adelante, derecha y arriba salen de los
-  huesos en la pose de bind, así no importa cómo los orientó el exportador. En los que vuelan,
-  adelante va de la Cadera a la Cabeza: con la cabeza alzada, **la Cadera gira a la altura de la
-  Cabeza** para que adelante = −y exacto.
+  huesos en la pose de bind, así no importa cómo los orientó el exportador. Los ejes de cada
+  hueso de detalle se miden igual. En los que vuelan, adelante va de la Cadera a la Cabeza: con
+  la cabeza alzada, **la Cadera gira a la altura de la Cabeza** para que adelante = −y exacto.
+- `ARTICULACIONES`, `COLAS` y `PUNTOS` de la geometría de cada etapa llevan **todos** los huesos.
+  `CONTRATO` (la lista que revisa el rig) separa los base de los de detalle: si falta un hueso
+  base es un error; si falta uno de detalle es un aviso. **Pendiente:** hoy
+  `minotauro_v2_revision.py` y `rig_*_v2.py` tratan todo `CONTRATO` como obligatorio. Con el
+  primer monstruo de rig detallado se agrega `CONTRATO_DETALLE` a la geometría y se ajustan los
+  dos, comprobando que el Minotauro y el Dragón salgan idénticos. También quedan por escribir
+  `Gestos.luau` y la capa de cara: el primer monstruo que los use los deja como ejemplo.
+- **Poses extremas nuevas** en `<c>_v2_poses.py`:
+  - ojos cerrados;
+  - pupilas en las 4 esquinas;
+  - cejas arriba y abajo;
+  - gruñido;
+  - lengua afuera con la boca al máximo;
+  - manos en puño y abiertas;
+  - dedos del ala cerrados;
+  - púas erizadas;
+  - cola de 8 tramos enroscada;
+  - garras cerradas.
+
+  Se exige lo mismo que al resto: nada atraviesa ni se separa, y el párpado cerrado no queda en
+  el mismo plano que el ojo.
 - **FBX:** `apply_scale_options="FBX_SCALE_UNITS"`, `axis_forward="-Z"`, `axis_up="Y"`,
   `primary_bone_axis="Y"`, `secondary_bone_axis="X"` y `add_leaf_bones=False`. Una malla, un
   hueso por vértice y la textura de paleta (256 px, un cuadro por color) embebida.
+- En Studio se revisa que llegue la cantidad de huesos esperada, contando los sin pesos
+  ("Mantener huesos de influencia cero").
 
 ---
 
@@ -242,6 +355,49 @@ src/client/Effects/<Criatura>*.luau     partículas y efectos propios
   a 1.4 rad (`Dragon/Alas`, `MAX_AMP`).
 - **Eventos:** `state.events` (`step`, `stomp`, `roar`, `land`, `sit`, `evolve`, ...). El stand
   los convierte en sonido (`<Criatura>Voces`) y efectos.
+
+### Capas de animación detallada
+
+Cada cuadro, la pose se arma **sumando capas** en este orden. Cada capa solo toca sus huesos y
+salta los que el modelo no tiene.
+
+| Capa | Huesos | Qué hace |
+|---|---|---|
+| 1. Base | Cadera, Lomo, Pecho, Panza | Respirar (el pecho cabecea y la panza baja y sube; más lento y hondo en la forma final) y mecerse. |
+| 2. Locomoción | patas, Garra, Pie{l}Apoyo | Paso o aleteo de la etapa. Los pies se apoyan con IK de dos huesos (Muslo y Pierna) sobre el suelo real; los dedos se doblan al apoyar y empujan al despegar. |
+| 3. Mirada | Cuello1..3, Cabeza, Ojo{l} | Mirar a un jugador, al pez o al cielo. El giro se reparte: ojos ~20 % (llegan primero), cabeza ~50 %, cuello ~30 % (llega último). Los ojos tienen tope. |
+| 4. Cara | Parpado, Ceja, Labio, Nariz, Oreja | Un gesto por emoción (tabla abajo), más el parpadeo y los gestos sueltos (resoplar, mover una oreja). |
+| 5. Acción | lo que pida el truco, la postura, comer o evolucionar | Sus curvas (`Trucos/Curvas`) con anticipación (se carga al revés), golpe y recuperación; se mezclan por peso y nunca cortan de golpe. |
+| 6. Secundaria | Oreja, Cola, Lengua, Melena, Barba, Aleta, Puas, AlaDedo | Resortes que siguen al padre con retraso. La rigidez baja hacia la punta de cada cadena (la punta llega más tarde) y cada cadena tiene su tope de giro, para que no entre en resonancia con el ritmo de un truco. |
+
+**Gestos** (`<Criatura>/Gestos.luau`): una tabla de emociones (`calma`, `feliz`, `enojado`,
+`sorpresa`, `sueño`, `asco`) con el valor de cada hueso de la cara. La capa 4 pasa de un gesto
+a otro en ~0.2 s. De dónde sale el gesto:
+
+- el enojo del servidor;
+- `FedInfo`: un raro da sorpresa y luego alegría, una racha da festejo;
+- la rutina: dormitar da sueño.
+
+**Parpadeo:** cada 2-6 s, con el instante sacado de `Azar` (el mismo en todos los clientes). Se
+cierra en ~0.06 s, queda cerrado ~0.05 s y se abre en ~0.12 s; a veces parpadea dos veces. Con
+el gesto `sueño` los párpados quedan a medias, y cerrados cuando dormita.
+
+**Manos:** se cierran en puño al rugir o al hacer fuerza, agarran el pez al comer (los dedos se
+cierran al llegar el bocado) y se abren al festejar. En el ala, los `AlaDedo` cierran la
+membrana al plegarla y la abren en el aletazo.
+
+**Rendimiento:**
+
+- Las capas 4 y 6 de detalle (cara, dedos, pelo) solo corren si la cámara está cerca
+  (`Effects/Distance`) y no está el modo rápido (`FxQuality`). Lejos, el monstruo se mueve
+  igual, pero sin gestos.
+- Se escribe `Bone.Transform` solo si el valor cambió más que un umbral.
+- Todos los ejes de los huesos se miden una sola vez, en `Rig.bind`.
+
+**Prueba:** en Play, la cámara cerca de la cabeza (sección 11). Se revisa:
+- que parpadee, mire al jugador y se enoje;
+- que cierre la mano al comer;
+- que, lejos, no cambie nada salvo los detalles.
 
 ### Rutina (cuando nadie le da de comer)
 
