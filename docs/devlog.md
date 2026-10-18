@@ -2267,3 +2267,30 @@ tienda, no del jardín).
 
 **Qué sigue:** probar varios jugadores en el mismo estanque natural (la tapa invisible cubre
 el radio más grande de la orilla).
+
+---
+
+## 2026-10-18 (3) — El puente al volcán se rehace y el sagrado se queda sin pez
+
+**Qué se hizo:**
+
+- **Puente** (módulo nuevo `tools/puente.py`): la superficie por donde se camina no cambió
+  (`bridgeEnds`, `isOnBridge`, la corriente y la cara de los monstruos siguen iguales). Ahora
+  tiene un **portal** de entrada en la isla (columnas de basalto con vetas de lava, braseros
+  con fuego y el cartel «AL CRÁTER DEL ABISMO» en el dintel), una **calzada** de basalto con
+  camino central de losas y dos canales de lava que van del naranja al rojo, una **baranda**
+  con filo de oro, 26 pilares (braseros con fuego cada tres) y estandartes rojos, y **arcos**
+  de piedra entre cuatro pilas que bajan hasta el fondo del mar, con vetas de lava.
+- **Estanque sagrado:** sin el pez dorado (pedido del usuario). En el islote hay un loto
+  celeste y encima flota el espíritu del sagrado, como en los demás estanques (se enciende
+  con el pase). El cartel bajó a 18 studs.
+
+**Probado en Studio (Play):** capturas del puente de costado y desde la entrada
+(`docs/capturas/2026-10-18-puente-volcan.jpg`, `...-puente-portal.jpg`) y del sagrado.
+
+**Qué se rompió:** en Studio hay ~50 módulos y las piezas nuevas del mapa **duplicados**: con
+un solo `rojo serve`, el plugin aplica cada cambio dos veces (parece conectado dos veces).
+Las copias son idénticas y el juego funciona, pero hay que desconectar y reconectar Rojo en
+Studio para limpiarlo. No se borró nada a mano.
+
+**Qué sigue:** reconectar Rojo y comprobar que no queden duplicados.

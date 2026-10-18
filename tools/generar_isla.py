@@ -754,7 +754,6 @@ def campamento():
 
 
 # --- Puente y Cráter del Abismo -------------------------------------------------------
-PIEDRA_PUENTE = (150, 146, 140)
 BASALTO = ((38, 34, 42), (48, 44, 54), (30, 28, 34))
 AZUL_PODER = (150, 200, 255)  # color del poder (UIConfig.Colors.Power)
 PIZARRA_OSCURA = (58, 56, 66)
@@ -821,47 +820,10 @@ def polar_crater(angulo, rho, y):
 
 
 def puente():
-    """Puente de piedra de una sola rampa lisa y ancha desde la isla hasta la puerta del
-    cráter. Misma geometría que WorldZones.bridgeEnds. Sobre él se camina más rápido
-    (BridgeBoost en el cliente)."""
-    d = direccion(L["bridgeAngle"])
-    inicio = polar(L["bridgeAngle"], L["bridgeStartRadius"], CUBIERTA_Y)
-    fin = add(CRATER, d, -(L["craterRimOuter"] - 2))
-    fin = (fin[0], DECK_ABISMO, fin[2])
-    largo = math.dist((inicio[0], inicio[2]), (fin[0], fin[2]))
-    subida = fin[1] - inicio[1]
-    largo3d = math.hypot(largo, subida)
-    pendiente = math.degrees(math.atan2(subida, largo))
-    r = mat(base_con_z(d), rx(-pendiente))  # +Z local sube hacia el cráter
-    ancho = L["bridgeWidth"]
-    medio = tuple((inicio[k] + fin[k]) / 2 for k in range(3))
+    """Puente al cráter: vive en tools/puente.py."""
+    from puente import puente as construir  # importa este módulo: va adentro
 
-    def sobre(x, y, z):
-        """Punto en el plano del puente: x lateral, y sobre la cubierta, z a lo largo."""
-        return add(medio, aplicar(r, (x, y, z)))
-
-    hijos = [pieza("Cubierta", (ancho, 1.2, largo3d + 2), sobre(0, -0.6, 0), PIEDRA_PUENTE, "Cobblestone", r)]
-    for lado in (-1, 1):
-        hijos.append(pieza(f"Bordillo{lado}", (1.8, 2.6, largo3d + 2), sobre(lado * (ancho / 2 - 0.9), 1.3, 0), variar(PIEDRA_PUENTE, 12), "Cobblestone", r))
-        hijos.append(pieza(f"Remate{lado}", (2.2, 0.5, largo3d + 2), sobre(lado * (ancho / 2 - 0.9), 2.85, 0), variar(PIEDRA_PUENTE, 20), "Slate", r))
-        hijos.append(pieza(f"Muro{lado}", (0.6, 8, largo3d + 2), sobre(lado * (ancho / 2 - 0.6), 4, 0), PIEDRA_PUENTE, r=r, **INVISIBLE))
-    for k in range(1, 5):  # pilares hasta el fondo del mar, uno a cada lado
-        t = k / 5
-        for lado in (-1, 1):
-            p = sobre(lado * (ancho / 2 - 4), -1.2, -largo3d / 2 + largo3d * t)
-            hijos.append(pieza(f"Pilar{k}_{lado}", (7, p[1] - L["seaFloorHeight"], 7), (p[0], (p[1] + L["seaFloorHeight"]) / 2, p[2]),
-                               variar(PIEDRA_PUENTE, 8), "Cobblestone", base_con_z(d)))
-    for k in range(7):  # faroles: cálidos cerca de la isla, verdes y fríos cerca del cráter
-        t = (k + 0.5) / 7
-        tono = tuple(int(LUZ_CALIDA[c] + ((120, 255, 170)[c] - LUZ_CALIDA[c]) * t) for c in range(3))
-        for lado in (-1, 1):
-            p = sobre(lado * (ancho / 2 - 0.6), 1.8, -largo3d / 2 + largo3d * t)
-            caja = pieza(f"Luz{k}_{lado}", (1, 1.4, 1), (p[0], p[1] + 5, p[2]), tono, "Neon", **DECORADO)
-            caja["children"] = [luz(18, 1.2, tono)]
-            hijos += [poste(f"Farol{k}_{lado}", p[0], p[2], p[1] + 4.5, p[1], 0.5, HIERRO), caja]
-    # Cartel junto a la entrada, legible desde la plaza.
-    hijos.append(cartel("Cartel", (inicio[0] - ancho / 2 - 4, CUBIERTA_Y + 4, inicio[2] - 1), I3, "AL CRÁTER DEL ABISMO", 9, 1.8))
-    return grupo("Puente", hijos)
+    return construir()
 
 
 def calavera(nombre, centro, escala):

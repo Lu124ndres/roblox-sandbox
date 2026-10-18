@@ -661,3 +661,13 @@ distinga. **Decisión:**
 - **El cartel del estanque en el que uno entrena se esconde:** medido en studs, de cerca
   tapaba el nombre y el título del jugador.
 - Los multiplicadores y requisitos **no cambiaron** (`Config/Progression`); solo cómo se ven.
+
+## 2026-10-18 — El puente al volcán cambia de piel, no de forma
+
+**Contexto:** el usuario pidió rehacer la rampa al volcán («muy simple»). **Decisión:** solo
+cambia lo que la rodea (portal, calzada, baranda, arcos, en `tools/puente.py`); la superficie
+y sus extremos siguen siendo los de `WorldZones.bridgeEnds`, porque de ellos dependen la
+corriente rápida (`isOnBridge`), las paredes invisibles y hacia dónde miran los monstruos y
+la guarida del zorro. No se volvieron a poner flechas en el piso (se habían quitado el
+2026-10-15). El fuego de los braseros es la instancia `Fire` de Roblox: no necesita asset.
+
