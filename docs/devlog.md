@@ -1999,3 +1999,34 @@ en el dragón, y probarlo.
 Checklist: build, selene (28 avisos viejos) y stylua.
 
 **Qué sigue:** guardar el lugar (los modelos viven en el `.rbxl`) y publicar.
+
+## 2026-10-17 (15) — La interfaz en piedra tallada
+
+**Qué se hizo:** el usuario pidió rehacer toda la interfaz (tienda, botones, etc.) con el estilo
+de dos imágenes suyas: el panel del monstruo en pizarra con gemas, y MEJORAS de piedra gris con
+texto dorado y TIENDA con marco de lava.
+- **Kit:** `tools/ui/generar_kit_piedra.py` dibuja con PIL cinco 9-slice (panel, hueco, botón que
+  se tiñe, lava y gema), subidos por el MCP. `Interface/Kit` arma las piezas (`skin`, `gold`,
+  `gems`, `tint`, `press`).
+- **Base:** `Style.button` pasa a ser piedra teñida y sigue a `BackgroundColor3`, así siguen
+  andando los que apagan o pintan botones. Se suma `Style.lavaButton`. `Window` lleva panel de
+  piedra, título dorado con gemas (`WindowTitle`) y X roja.
+- **Cuatro sesiones en paralelo, cada una con sus archivos:**
+  - HUD: panel del monstruo, botones laterales y de arriba, contadores, banners y toasts;
+  - MEJORAS y las piezas compartidas (`CardParts`, `ShopParts`, nuevo `StoneSkin`);
+  - tienda de Robux y ofertas (nuevo `ShopStone`), pack de inicio y regalar;
+  - el resto de las ventanas: misiones, renacer, ajustes, códigos, diario, colección, ruleta,
+    tiempo de juego y grupo.
+
+**Probado en Studio (Play):** HUD, MEJORAS, Tienda, Pack de inicio, Diario, Ajustes y Colección,
+con capturas y sin errores.
+
+**Qué se rompió:** el título "TIENDA" salía cortado ("TIEND"): `WindowTitle` medía el texto
+justo. Se le dio holgura.
+
+Checklist: build, selene (21 avisos, antes 28) y stylua.
+
+**Qué sigue:**
+- Revisar en un teléfono, sobre todo el panel del monstruo dentro de la barra de Roblox y los
+  bordes finos de las piezas chicas.
+- `AngerMeter` y `Style.robuxBadge` siguen con el estilo anterior.

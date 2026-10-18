@@ -2,8 +2,9 @@
 --[[
 	Window
 
-	Ventana estilo simulador: panel oscuro (o de madera), borde negro grueso,
-	título enorme arriba a la izquierda y X roja. Solo una abierta a la vez.
+	Ventana estilo simulador: panel de piedra tallada (Interface/Kit), título
+	enorme dorado arriba a la izquierda con una gema a cada lado y X de piedra
+	roja. Solo una abierta a la vez.
 	En táctil ocupa casi toda la pantalla. `onAnyChange` avisa de toda ventana
 	que se abre o cierra (GamepadNav lleva el mando adentro).
 ]]
@@ -12,11 +13,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Device = require(script.Parent.Parent.Interface.Device)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local WindowLayout = require(script.Parent.WindowLayout)
+local WindowTitle = require(script.Parent.WindowTitle)
 
 local PALETTE = Style.PALETTE
 local TITLE_HEIGHT = 34 -- cuánto sobresale el título por encima del panel
@@ -47,7 +49,7 @@ end
 Window.fit = WindowLayout.fit
 Window.share = WindowLayout.share
 
--- `panelColor`: color del fondo (por defecto el oscuro de la tienda).
+-- `panelColor`: ya no se usa (todas las ventanas son de piedra); queda por compatibilidad.
 function Window.create(
 	screen: ScreenGui,
 	name: string,
@@ -73,19 +75,10 @@ function Window.create(
 	panel.Position = UDim2.fromOffset(0, TITLE_HEIGHT)
 	panel.Size = UDim2.new(1, 0, 1, -TITLE_HEIGHT)
 	panel.Parent = frame
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 18)
-	corner.Parent = panel
-	Style.gradient(panel, panelColor or PALETTE.Panel)
-	Style.border(panel, 5)
+	Kit.skin(panel, "panel")
 
-	local heading = Style.text(frame, "Titulo", 64, nil, 4.5)
-	heading.Text = TextCase.upper(title)
-	heading.TextXAlignment = Enum.TextXAlignment.Left
-	heading.Position = UDim2.fromOffset(14, 0)
-	heading.Size = UDim2.new(0.7, 0, 0, TITLE_HEIGHT + 30)
-	heading.ZIndex = 3
-	heading.Rotation = -2
+	-- El marco mide siempre `maxSize` en sus unidades (WindowLayout.resize lo topa ahí).
+	WindowTitle.make(frame, title, math.min(maxSize.X * 0.8, maxSize.X - 110), TITLE_HEIGHT + 30)
 
 	local closeButton = Style.button(frame, "Cerrar", PALETTE.Close, "X")
 	closeButton.AnchorPoint = Vector2.new(0.5, 0.5)

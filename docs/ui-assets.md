@@ -34,6 +34,22 @@ Mientras un asset no exista, su entrada en `Assets.luau` queda como
 |---|---|---|---|---|
 | PanelBackground *(ejemplo)* | ui | Fondo de paneles de menú | "flat rounded panel, dark slate, subtle border, transparent background, 9-slice friendly" | pendiente |
 
+## Kit "piedra" de la interfaz
+
+Pedido del usuario (2026-10-17): rehacer la interfaz con piedra oscura tallada, texto dorado,
+marco de lava para lo importante y gemas azules. **No sale de ForgeGUI:** lo dibuja
+`tools/ui/generar_kit_piedra.py` (PIL y numpy). Las imágenes van a `assets/ui/kit_piedra/`
+(`_muestra.png` es solo para revisar) y se subieron por el MCP de Studio (`upload_image`).
+Son 9-slice; los cortes están en `Interface/Kit`.
+
+| Nombre | Archivo | Uso | `Assets.UI` | Estado |
+|---|---|---|---|---|
+| PiedraPanel | panel.png | Ventanas, placas del HUD | 96013070309197 | subido |
+| PiedraHondo | panel_hondo.png | Huecos: barras, listas, casillas | 132510118089766 | subido |
+| PiedraBoton | boton.png | Botones (casi blanco, se tiñe) | 134425626904491 | subido |
+| PiedraLava | lava.png | TIENDA y botones estrella | 91067841385407 | subido |
+| PiedraGema | gema.png | Gemas de adorno | 96530857668285 | subido |
+
 ## Modelos y texturas de mesh
 
 No salen de ForgeGUI: el modelo viene de Meshy (generado desde el concept art) y las

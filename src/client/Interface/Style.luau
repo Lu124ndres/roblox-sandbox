@@ -3,14 +3,16 @@
 	Style
 
 	Estilo "simulador" de la interfaz: números grandes con contorno negro
-	grueso, botones de colores con degradado y borde negro, y la insignia
-	verde de precio en Robux. Todo con fuentes y colores de UIConfig.
+	grueso, botones de piedra tallada teñidos de su color (Interface/Kit: el
+	gris lleva el texto dorado) y la insignia verde de precio en Robux. Todo
+	con fuentes y colores de UIConfig.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Kit = require(script.Parent.Kit)
 
 local COLORS = UIConfig.Colors
 local OUTLINE = Color3.fromRGB(20, 20, 24)
@@ -72,8 +74,11 @@ function Style.text(
 	return label
 end
 
--- Borde negro grueso alrededor de un cuadro o botón.
+-- Borde negro grueso alrededor de un cuadro o botón (no en los de piedra: la piedra trae su borde).
 function Style.border(frame: GuiObject, thickness: number?)
+	if frame:FindFirstChild("Piedra") then
+		return
+	end
 	local stroke = Instance.new("UIStroke")
 	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	stroke.Color = OUTLINE
@@ -93,22 +98,46 @@ function Style.gradient(frame: GuiObject, color: Color3)
 	gradient.Parent = frame
 end
 
--- Botón de color con degradado, borde negro, esquinas redondas y texto con contorno.
+-- Botón de piedra tallada teñido de `color`, con texto con contorno (dorado si el color es
+-- gris: el botón de piedra de MEJORAS). Si después le cambian BackgroundColor3, la piedra
+-- se tiñe del color nuevo (así siguen andando los que lo apagan o lo pintan).
 function Style.button(parent: Instance, name: string, color: Color3, text: string): TextButton
 	local button = Instance.new("TextButton")
 	button.Name = name
 	button.Text = ""
-	button.AutoButtonColor = true
+	button.AutoButtonColor = false
 	button.BackgroundColor3 = color
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 12)
-	corner.Parent = button
-	Style.gradient(button, color)
-	Style.border(button)
+	local skin = Kit.skin(button, "boton", color)
+	Kit.press(button, skin)
 	local label = Style.text(button, "Texto", 30, nil, 2)
-	label.Size = UDim2.new(1, -10, 1, -8)
-	label.Position = UDim2.fromOffset(5, 4)
+	label.Size = UDim2.new(1, -14, 1, -12)
+	label.Position = UDim2.fromOffset(7, 5)
 	label.Text = text
+	local _, saturation = color:ToHSV()
+	if saturation < 0.18 then
+		Kit.gold(label)
+	end
+	button:GetPropertyChangedSignal("BackgroundColor3"):Connect(function()
+		Kit.tint(skin, button.BackgroundColor3)
+	end)
+	button.BackgroundTransparency = 1
+	button.Parent = parent
+	return button
+end
+
+-- Botón con marco de lava (lo más importante: TIENDA, comprar con Robux). Texto dorado.
+function Style.lavaButton(parent: Instance, name: string, text: string): TextButton
+	local button = Instance.new("TextButton")
+	button.Name = name
+	button.Text = ""
+	button.AutoButtonColor = false
+	local skin = Kit.skin(button, "lava")
+	Kit.press(button, skin)
+	local label = Style.text(button, "Texto", 30, nil, 2)
+	label.Size = UDim2.new(1, -18, 1, -16)
+	label.Position = UDim2.fromOffset(9, 7)
+	label.Text = text
+	Kit.gold(label)
 	button.Parent = parent
 	return button
 end

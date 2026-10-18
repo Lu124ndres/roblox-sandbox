@@ -78,6 +78,13 @@ local Assets: Assets = {
 		EquipoRod = "rbxassetid://79873240212746", -- 20 cañas
 		EquipoBasket = "rbxassetid://125162908853974", -- 14 canastas
 		EquipoBoots = "rbxassetid://122825125598846", -- 14 botas
+		-- Kit "piedra" de la interfaz (tools/ui/generar_kit_piedra.py → assets/ui/kit_piedra/):
+		-- 9-slice; los cortes están en Interface/Kit.
+		PiedraPanel = "rbxassetid://96013070309197", -- pizarra con borde biselado
+		PiedraHondo = "rbxassetid://132510118089766", -- hueco hundido (barras, listas)
+		PiedraBoton = "rbxassetid://134425626904491", -- botón casi blanco: se tiñe
+		PiedraLava = "rbxassetid://91067841385407", -- botón con marco de lava (TIENDA)
+		PiedraGema = "rbxassetid://96530857668285", -- cristal azul de adorno
 	},
 
 	Meshes = {
