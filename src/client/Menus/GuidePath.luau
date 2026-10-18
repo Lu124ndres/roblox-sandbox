@@ -3,15 +3,16 @@
 	GuidePath
 
 	El camino de la guía: con PathfindingService calcula por dónde se llega de
-	verdad al destino (al volcán se va por el puente, no en línea recta) y pone
-	delante del jugador una fila de flechas flotando a la altura del pecho
-	(GuideArrow), que apuntan por el camino.
+	verdad al destino (al volcán se va por el puente, no en línea recta), lo
+	redondea (sin esquinas) y por él avanza una fila de flechas flotando a la
+	altura del pecho (GuideArrow), como en los simuladores.
 
-	Las flechas están clavadas en el mundo: cada una ocupa una marca fija del
-	camino (cada SPACING studs) y mira hacia donde sigue el camino ahí. Cuando
-	el jugador camina no giran ni se corren: la que deja atrás se va y aparece
-	otra al final. El camino solo se recalcula si cambia el destino o si el
-	jugador se aleja mucho de él. Todo solo en este cliente.
+	Las flechas se deslizan sin parar hacia adelante por el camino, como una
+	cinta: aparecen suave delante del jugador, avanzan y se desvanecen al final
+	de la fila. Su posición y su dirección salen solo del camino (no del
+	jugador): al caminar no giran ni saltan. El camino se recalcula solo si
+	cambia el destino o si el jugador se aleja mucho de él. Todo solo en este
+	cliente: no hay nada puesto en el mapa.
 ]]
 
 local PathfindingService = game:GetService("PathfindingService")
@@ -20,22 +21,43 @@ local GuideArrow = require(script.Parent.GuideArrow)
 
 local RECOMPUTE_SECONDS = 1.5 -- como mucho, un cálculo cada tanto
 local OFF_PATH = 16 -- studs fuera del camino que fuerzan otro cálculo
-local LOOK_AHEAD = 9 -- la flecha del jugador apunta a este punto del camino
-local COUNT = 5 -- flechas a la vista
-local SPACING = 8 -- studs de camino entre flecha y flecha
-local FIRST = 7 -- la primera, al menos así de adelante del jugador
+local COUNT = 6 -- flechas en la cinta
+local SPACING = 7 -- studs de camino entre flecha y flecha
+local FIRST = 5 -- la cinta empieza así de adelante del jugador
+local FLOW = 9 -- studs por segundo que avanzan las flechas
+local FADE = 0.3 -- fracción de la cinta en la que aparecen y se desvanecen
 local HEIGHT = 3.2 -- sobre el suelo del camino (el pecho de un jugador)
-local SCALE = 0.85
-local TURN_SPAN = 3 -- studs a cada lado para medir la dirección (suaviza las curvas)
+local SCALE = 0.9
+local TURN_SPAN = 4 -- studs a cada lado para medir la dirección
+local ROUNDING = 3 -- pasadas de redondeo del camino (Chaikin)
+local END_MARGIN = 6 -- antes del destino la cinta se acaba
 
 export type Path = {
-	update: (position: Vector3, target: Vector3, t: number) -> Vector3,
+	update: (position: Vector3, target: Vector3, t: number) -> (),
 	hide: () -> (),
 }
 
 local GuidePath = {}
 
 type Route = { points: { Vector3 }, lengths: { number }, total: number }
+
+-- Corta cada esquina en dos (Chaikin): tras unas pasadas el camino es una curva suave.
+local function round(points: { Vector3 }): { Vector3 }
+	for _ = 1, ROUNDING do
+		if #points < 3 then
+			break
+		end
+		local smooth = { points[1] }
+		for k = 1, #points - 1 do
+			local a, b = points[k], points[k + 1]
+			table.insert(smooth, a:Lerp(b, 0.25))
+			table.insert(smooth, a:Lerp(b, 0.75))
+		end
+		table.insert(smooth, points[#points])
+		points = smooth
+	end
+	return points
+end
 
 local function route(points: { Vector3 }): Route
 	local lengths, total = { 0 }, 0
@@ -78,6 +100,16 @@ local function progress(path: Route, position: Vector3): (number, number)
 	return bestS, bestDistance
 end
 
+-- 0 en el medio de la cinta, 1 en sus puntas: aparecen y se van de a poco.
+local function fadeAt(along: number): number
+	if along < FADE then
+		return 1 - along / FADE
+	elseif along > 1 - FADE then
+		return (along - (1 - FADE)) / FADE
+	end
+	return 0
+end
+
 function GuidePath.new(): Path
 	local arrows: { GuideArrow.Shape } = {}
 	for k = 1, COUNT do
@@ -101,7 +133,8 @@ function GuidePath.new(): Path
 					table.insert(found, waypoint.Position)
 				end
 			end
-			current = route(if #found >= 2 then found else { from, to }) -- sin camino: en línea recta
+			-- Sin camino: en línea recta.
+			current = route(round(if #found >= 2 then found else { from, to }))
 			computing = false
 		end)
 	end
@@ -114,7 +147,7 @@ function GuidePath.new(): Path
 		end
 	end
 
-	local function update(position: Vector3, target: Vector3, t: number): Vector3
+	local function update(position: Vector3, target: Vector3, t: number)
 		local feet = position - Vector3.new(0, 3, 0)
 		local stale = current == nil or goal == nil or (goal :: Vector3 - target).Magnitude > 4
 		local s, away = 0, 0
@@ -131,13 +164,18 @@ function GuidePath.new(): Path
 		local path = current
 		if stale or not path then
 			hide()
-			return target
+			return
 		end
-		-- Marcas fijas del camino: la primera que queda al menos FIRST studs adelante.
-		local first = math.floor((s + FIRST) / SPACING) + 1
+		-- La cinta va de `start` a `finish` por el camino; las flechas avanzan por ella y,
+		-- al llegar al final, vuelven a aparecer al principio (ya invisibles por el fade).
+		local start = s + FIRST
+		local length = COUNT * SPACING
+		local finish = math.min(start + length, path.total - END_MARGIN)
+		local shift = (t * FLOW) % SPACING
 		for k, arrow in arrows do
-			local mark = (first + k - 1) * SPACING
-			if mark > path.total - 4 then
+			local offset = ((k - 1) * SPACING + shift) % length
+			local mark = start + offset
+			if mark > finish then
 				for _, item in arrow do
 					item.part.Transparency = 1
 				end
@@ -149,13 +187,10 @@ function GuidePath.new(): Path
 			if flat.Magnitude < 1e-3 then
 				continue
 			end
-			local bob = math.sin(t * 2.4 + mark * 0.35) * 0.3
-			local floating = spot + Vector3.new(0, HEIGHT + bob, 0)
-			-- La última se asoma un poco transparente: el camino sigue.
-			local fade = if k == COUNT then 0.45 else 0
+			local floating = spot + Vector3.new(0, HEIGHT, 0)
+			local fade = fadeAt(offset / math.max(finish - start, 1))
 			GuideArrow.pose(arrow, CFrame.lookAt(floating, floating + flat.Unit), fade)
 		end
-		return at(path, s + LOOK_AHEAD) + Vector3.new(0, 3, 0)
 	end
 
 	return { update = update, hide = hide }

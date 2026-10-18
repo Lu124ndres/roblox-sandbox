@@ -4,11 +4,10 @@
 
 	Guía del primer minuto: una placa de piedra (Interface/Kit) con la misión
 	actual (Config.Retention.tutorial, el título en dorado) y su avance, y una
-	flecha amarilla que flota junto al jugador y una fila de flechas flotando
-	que lo llevan por el camino de verdad
-	(GuideArrow y GuidePath: al volcán, por el puente) hasta el destino (el
+	cinta de flechas amarillas flotando que avanzan por el camino de verdad
+	(GuidePath y GuideArrow: al volcán, por el puente) hasta el destino (el
 	muelle más cercano, la puerta del volcán, un estanque o la tienda). Al
-	llegar, la flecha se va; nada queda puesto en el mapa. Desaparece al
+	llegar, las flechas se van; nada queda puesto en el mapa. Desaparece al
 	terminar. El avance lo decide el servidor (atributos Tutorial y
 	TutorialCount).
 ]]
@@ -28,7 +27,6 @@ local InputHints = require(script.Parent.Parent.Interface.InputHints)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
-local GuideArrow = require(script.Parent.GuideArrow)
 local GuidePath = require(script.Parent.GuidePath)
 
 local ATTR = Protocol.PlayerAttributes
@@ -98,7 +96,6 @@ function TutorialGuide.start(screen: ScreenGui)
 	text.Position = UDim2.fromOffset(10, 25)
 	text.Size = UDim2.new(1, -20, 0, 40)
 
-	local arrow = GuideArrow.new()
 	local route = GuidePath.new()
 
 	local function step(): number
@@ -131,26 +128,21 @@ function TutorialGuide.start(screen: ScreenGui)
 	InputHints.onChange(refresh)
 	refresh()
 
-	RunService.Heartbeat:Connect(function(dt: number)
+	RunService.Heartbeat:Connect(function()
 		local current = STEPS[step()]
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if not current or not panel.Visible or not (root and root:IsA("BasePart")) then
-			arrow.show(false)
 			route.hide()
 			return
 		end
 		local position = root.Position
 		local target = targetFor(current.id, position)
 		if (target - position).Magnitude < ARRIVE then
-			arrow.show(false)
 			route.hide()
 			return
 		end
-		local t = os.clock()
-		local ahead = route.update(position, target, t)
-		arrow.place(position, ahead - position, t, dt)
-		arrow.show(true)
+		route.update(position, target, os.clock())
 	end)
 end
 

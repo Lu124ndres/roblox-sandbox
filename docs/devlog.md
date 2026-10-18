@@ -2433,3 +2433,19 @@ pensado porque el pasto alto del terreno los tapaba.
 camino no cambian mientras el jugador camina; flechas amarillas camino al muelle.
 
 **Qué se rompió:** nada visto.
+
+---
+
+## 2026-10-18 (9) — Flechas guía que fluyen
+
+**Qué se hizo:** sin la flecha del jugador (pedido del usuario). Las flechas del camino ahora
+son una cinta: avanzan deslizándose sin parar por el camino (9 studs/s), aparecen y se
+desvanecen suave en las puntas de la fila y son planas como las de los simuladores. El
+camino de PathfindingService se redondea (Chaikin, 3 pasadas) para que no giren en seco en
+las esquinas. Siguen saliendo solo del camino, no del jugador: no se tuercen al caminar.
+
+**Probado en Studio (Play):** siguiendo cada flecha cuadro a cuadro durante 90 cuadros, el
+paso máximo fue 0.18 studs y el giro máximo 0.4° por cuadro (antes saltaban 8 studs al
+aparecer y desaparecer).
+
+**Qué se rompió:** nada visto.
