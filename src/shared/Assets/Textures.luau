@@ -53,12 +53,7 @@ local Textures: { [string]: { string } } = {
 		"rbxassetid://85563111169953",
 		"rbxassetid://87177939844055",
 	},
-	TrajeMarinero = {
-		"rbxassetid://113460336252700",
-		"rbxassetid://102842851756367",
-		"rbxassetid://97686605758520",
-		"rbxassetid://72251172173704",
-	},
+	TrajeMarinero = { "rbxassetid://133730397975971" }, -- v2: paleta y dibujos, en el TextureID
 	TrajeDiosDelVolcan = {
 		"rbxassetid://125619571040084",
 		"rbxassetid://77768817509140",

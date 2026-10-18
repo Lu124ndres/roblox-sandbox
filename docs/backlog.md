@@ -241,6 +241,9 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
       Clientes y servidores, 2 jugadores).
 - [ ] Con el lugar publicado: comprar de prueba cada uno (Studio cobra en modo prueba).
 - [ ] Revisar el balance de x1024 de poder/monedas con telemetría (¿tope más bajo?).
+- [x] Marinero v2: el traje de todos rehecho en Blender por script, una sola malla sin
+      piezas sueltas y con texturas nítidas (`tools/blender/marinero_v2*.py`).
+- [ ] Rey del Mar y Dios del Volcán con el mismo método del Marinero v2 (si el usuario lo pide).
 - [ ] Página del juego: icono 512×512, 3+ miniaturas o video, nombre, descripción, género.
 - [ ] Cuestionario de madurez y cumplimiento (el cráter tiene calaveras y terror suave).
 - [ ] Ajustes del lugar: 50 jugadores, dispositivos, tipo de avatar, acceso a la API.

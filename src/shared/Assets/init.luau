@@ -128,7 +128,10 @@ local Assets: Assets = {
 		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.
-		TrajeMarinero = "rbxassetid://75806050701803",
+		-- Marinero v2 de bloques (tools/blender/marinero_v2.py): una sola malla cerrada, paleta
+		-- plana y cara, pecho y espalda dibujados (5,332 triángulos, 16 huesos). El de Meshy
+		-- quedó en ServerStorage.Respaldos.TrajeMarinero_meshy.
+		TrajeMarinero = "rbxassetid://140300273939135",
 		TrajeDiosDelVolcan = "rbxassetid://137998127570612",
 		TrajeReyDelMar = "rbxassetid://137608233485403",
 		DragonMarinoE1 = "rbxassetid://122661699655092", -- cría (15,679 triángulos)

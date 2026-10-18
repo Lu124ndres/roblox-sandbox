@@ -702,3 +702,26 @@ propio `ColorCorrectionEffect` para no pelear con el de `SkyCycle`. La aurora so
 verticales (`Beam` con transparencia que se apaga arriba y abajo): las piezas planas y las
 cintas horizontales se veían como bloques.
 
+
+## 2026-10-18 — El Marinero v2 es una sola malla de tubos con puentes en los pivotes
+
+**Contexto:** el Marinero de Meshy tenía la textura horneada sobre UVs automáticas (cuadritos
+con bordes dentados) y estaba cortado en piezas rígidas en hombros y cadera, que se abrían al
+moverse. **Decisión:** modelarlo por script como bloques redondeados (tubos de anillos con
+tapas en cuadrícula, `marinero_v2_tubos.py`) unidos en una sola malla cerrada. Las uniones que
+giran mucho (hombros, caderas, cuello y gorra) son un **puente corto centrado en el pivote**:
+al girar la parte, el puente casi no se mueve, así que no hay estiramiento visible ni hueco.
+Codo, muñeca, cintura, rodilla y tobillo son piel continua con una franja de pesos suave.
+**Lo no obvio:**
+- En codo y rodilla el pivote está corrido hacia el lado de adentro del doblez (y = -0.28 y
+  +0.26) y la franja es ancha (±0.18 y ±0.20, anillos cada ~0.08). Con el pivote al centro,
+  el lado de adentro se comprime más de lo que mide la franja, los anillos se cruzan y las
+  caras se dan vuelta (en Roblox se verían como un agujero).
+- El pivote del hombro está alto (z 3.785, el brazo mide 2 hasta z 4): lo que queda del brazo
+  sobre el pivote baja y asoma junto al torso al levantar el brazo.
+- Arriba de la pierna, la mitad del peso queda en la Cadera: el borde no se inclina y no se
+  abre una cuña bajo el torso al caminar.
+- Los bordes de color están lejos de las articulaciones (la manga termina sobre el codo y la
+  bota sobre el tobillo): se estira un color liso, que no se nota.
+- Colores planos por celda de paleta (64 px) en vez de horneado: cada cara toma el centro de
+  su celda, sin costuras. Solo cara, pecho y espalda llevan dibujo, con proyección plana.

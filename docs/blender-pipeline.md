@@ -110,6 +110,22 @@ confirmar en la vista previa de "Importar 3D" que esté parado y mirando al fren
 6. El aura de los trajes de pase: `src/shared/Trajes/Aura.luau` (lenguas de fuego o agua,
    motas, destellos, halo, onda en el piso y contorno) con texturas propias (abajo).
 
+### Marinero v2 (el traje de todos, desde cero)
+
+El Marinero ya no sale de Meshy ni de los pasos de arriba. Se arma entero por script:
+
+1. `python tools/blender/marinero_v2_textura.py`: dibuja la textura (cara, pecho, espalda y
+   paleta) con PIL en `assets/blender/marinero_v2/Marinero_color.png`.
+2. `blender -b --factory-startup --python tools/blender/marinero_v2.py`: malla de una pieza
+   (`marinero_v2_cuerpo.py` + `marinero_v2_tubos.py`), pesos, 16 huesos y
+   `assets/blender/TrajeMarinero_v2.fbx`. Imprime `aristas_abiertas` y `caras_degeneradas`:
+   las dos tienen que dar 0.
+3. `blender -b --factory-startup --python tools/blender/marinero_v2_vistas.py`: renders en
+   reposo y en poses extremas (`renders/marinero_v2/`). Las poses giran los huesos con la
+   misma cuenta que el juego.
+4. Importar como los otros trajes (paso 4 de arriba). Medidas y colores en
+   `marinero_v2_datos.py`.
+
 ## Dragón marino (4 etapas que vuelan)
 
 1. `hornear.py` como los trajes (E1..E4 entre 15,600 y 19,100 triángulos).

@@ -2473,3 +2473,35 @@ y caminando de lado a 22 studs/s (`docs/capturas/2026-10-18-flecha-guia.jpg`).
 
 **Qué se rompió:** nada visto. La primera partida de la prueba corrió con el código viejo
 (Studio ya estaba en Play cuando Rojo sincronizó): hubo que detenerla y volver a empezar.
+
+---
+
+## 2026-10-18 (11) — Marinero v2: el traje de todos, sin piezas sueltas ni texturas rotas
+
+**Qué se hizo (pedido del usuario: un avatar sin tirones ni piezas sueltas; el de antes se veía
+raro de texturas):** el Marinero se rehízo desde cero en Blender por script
+(`tools/blender/marinero_v2*.py`), con la misma identidad (gorra blanca con banda marino,
+barba, chaleco abierto, pañuelo rojo, mangas a rayas, botas). El usuario eligió estilo de
+bloques Roblox, piel fija y cara dibujada.
+
+- **Una sola malla cerrada:** cada parte es un tubo de anillos redondeados; cabeza, gorra,
+  brazos y piernas se unen al torso con un puente corto justo en su pivote.
+- **Texturas nítidas:** colores planos de una paleta, y cara, pecho y espalda dibujados con
+  PIL (`marinero_v2_textura.py`). Nada de horneado.
+- **Mismos 16 huesos:** el juego lo mueve sin cambiar código. 5,332 triángulos (el de Meshy
+  rondaba 15,000).
+- En Studio: `ServerStorage.TrajeMarinero` es el nuevo; el de Meshy quedó en
+  `ServerStorage.Respaldos.TrajeMarinero_meshy`. IDs nuevos en `Assets` (malla 140300273939135,
+  textura 133730397975971).
+
+**Qué se rompió (y se arregló antes de importar):** en los renders de poses extremas
+(`renders/marinero_v2/`) aparecieron tres cosas: un pliegue negro detrás de la rodilla a 90°
+(los anillos se cruzaban), un pedazo de manga que asomaba junto al torso al levantar el brazo
+(pivote del hombro bajo) y caras de área cero en el tobillo (dos anillos iguales a la misma
+altura). Ver `docs/decisiones.md`.
+
+**Probado en Studio (Play):** el jugador lleva el traje nuevo con sus 16 huesos, el rig mueve
+15 (la Raiz no se anima), la caña sale de la mano y la consola no muestra errores nuestros.
+
+**Qué sigue:** guardar el lugar en Studio (el modelo vive en el `.rbxl`). Si gusta, el mismo
+método para el Rey del Mar y el Dios del Volcán.
