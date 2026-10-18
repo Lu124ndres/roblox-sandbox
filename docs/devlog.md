@@ -2133,3 +2133,25 @@ común: `ShopParts.sunburst`, que usan `CardParts.card` y `ShopStone.chip`, vest
 
 **Queda para decidir:** el mundo sigue con su estilo de mármol y oro, igual que antes: el arco
 con los tableros, carteles y vitrinas.
+
+## 2026-10-17 (21) — El arco, los tableros y los carteles del mundo en volcánico
+
+**Qué se hizo (el usuario eligió: tableros del arco, carteles del mundo y el arco de mármol):**
+- **Isla** (`tools/generar_isla.py`, regenerado `world/Isla.model.json`):
+  - El arco de entrada, la plaza y la plataforma de aparición pasan a basalto con molduras de
+    oro mate.
+  - 20 grietas de lava (Neon) en los pilares; el emblema de la plataforma es un círculo de lava.
+  - Los tableros tienen fondo de piedra casi negra con marco de basalto y filo dorado.
+  - Placas nuevas (`placa_volcanica`) para los títulos TOP, "Laguna de los Gigantes", el letrero
+    del abismo y los carteles de la cabaña, el puente y el estanque sagrado: piedra oscura, borde
+    de lava y letras doradas con contorno (`letras_oro`).
+  - Constantes nuevas (`ROCA_VOLCANICA`, `VETA_LAVA`, `ORO_MATE`…): `MARMOL_CLARO` y `ORO` siguen
+    para el resto de la isla, que no cambió (comparado pieza por pieza).
+- **Tableros** (`RankingBoards`): placa de piedra, cada puesto en un hueco tallado, 1-2-3 en
+  oro, plata y bronce, contorno grueso. TOP RENACIMIENTOS va en dos columnas. Las filas toman el
+  alto de los puestos que hay (mínimo 5): con pocos jugadores no quedan chicas.
+- **Estanques** (`PondSigns`): placas de piedra con el multiplicador dorado. **Tutorial**
+  (`TutorialGuide`): flecha dorada y la distancia en una placa de piedra.
+
+**Probado en Studio (Play):** el arco con los tres tableros y el cartel del puente, sin errores.
+Checklist: build, selene (17 avisos) y stylua.

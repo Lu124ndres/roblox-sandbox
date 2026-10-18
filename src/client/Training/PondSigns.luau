@@ -2,11 +2,12 @@
 --[[
 	PondSigns
 
-	Cartel flotante sobre cada estanque de entrenamiento, como los simuladores:
-	"25x" enorme con degradado y contorno del color de su nivel, debajo
-	"Requisito: 3 kills o 25K poder" (o "¡Abierto! Entrenar [E]") del mismo
-	color, sobre una franja de luz de ese color que se desvanece a los lados.
-	Se actualiza cuando cambia el poder o las kills del jugador.
+	Cartel flotante sobre cada estanque de entrenamiento, como los simuladores,
+	con el estilo de la interfaz (Interface/Kit): una placa de piedra volcánica
+	con "25x" enorme en dorado y debajo "Requisito: 3 kills o 25K poder" (o
+	"¡Abierto! Entrenar [E]") del color del nivel del estanque, ambos con
+	contorno marrón oscuro. Cerrado, la placa se apaga un poco. Se actualiza
+	cuando cambia el poder o las kills del jugador.
 ]]
 
 local Players = game:GetService("Players")
@@ -18,52 +19,65 @@ local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local PONDS = Config.Progression.ponds
 local SIGN_HEIGHT = 10 -- sobre el cristal flotante
 local SACRED_SIGN_HEIGHT = 21
 local WHITE = Color3.new(1, 1, 1)
+local CLOSED = Color3.fromRGB(170, 166, 170) -- la piedra apagada de un estanque cerrado
+-- El cartel se mide en studs, así que sus píxeles cambian con la distancia: el canto de la
+-- placa y el contorno de las letras se ajustan a su alto en pantalla.
+local PANEL_EDGE = 44 -- píxeles del canto en la imagen de la placa (Kit)
+local EDGE_SHARE = 0.09 -- el canto, como fracción del alto del cartel
+local OUTLINE_SHARE: { [string]: number } = { big = 0.028, small = 0.016 }
 
 local PondSigns = {}
 
-type Sign = { requirement: TextLabel, multiplier: TextLabel, glow: Frame }
+type Sign = { requirement: TextLabel, multiplier: TextLabel, plate: ImageLabel }
 
--- Texto grande con contorno oscuro del color del estanque y degradado blanco → color.
+-- El multiplicador en dorado; el requisito en el color del estanque (degradado claro →
+-- color). Los dos con contorno marrón oscuro, como el texto dorado del kit.
 local function text(parent: Instance, name: string, color: Color3, big: boolean): TextLabel
 	local label = Style.text(parent, name, if big then 200 else 80, WHITE, if big then 5 else 3)
 	label.ZIndex = 2
+	if big then
+		Kit.gold(label)
+		return label
+	end
 	local fill = Instance.new("UIGradient")
 	fill.Rotation = 90
-	fill.Color = if big
-		then ColorSequence.new(color:Lerp(WHITE, 0.55), color)
-		else ColorSequence.new(color:Lerp(WHITE, 0.25), color)
+	fill.Color = ColorSequence.new(color:Lerp(WHITE, 0.45), color)
 	fill.Parent = label
 	local outline = label:FindFirstChildOfClass("UIStroke")
 	if outline then
-		outline.Color = color:Lerp(Color3.new(0, 0, 0), 0.72)
+		outline.Color = Kit.GOLD_OUTLINE
 	end
 	return label
 end
 
--- Fondo de luz del color del estanque que se desvanece hacia los costados.
-local function glow(parent: Instance, color: Color3): Frame
+-- Placa de piedra volcánica que ocupa todo el cartel; su canto y los contornos de las
+-- letras siguen al alto del cartel en pantalla.
+local function plate(billboard: BillboardGui, labels: { [string]: TextLabel }): ImageLabel
 	local frame = Instance.new("Frame")
-	frame.Name = "Brillo"
-	frame.BackgroundColor3 = color
-	frame.BackgroundTransparency = 0.4
-	frame.BorderSizePixel = 0
+	frame.Name = "Placa"
 	frame.Size = UDim2.fromScale(1, 1)
-	local fade = Instance.new("UIGradient")
-	fade.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 1),
-		NumberSequenceKeypoint.new(0.2, 0.1),
-		NumberSequenceKeypoint.new(0.8, 0.1),
-		NumberSequenceKeypoint.new(1, 1),
-	})
-	fade.Parent = frame
-	frame.Parent = parent
-	return frame
+	frame.Parent = billboard
+	local skin = Kit.skin(frame, "panel")
+	local function fit()
+		local height = frame.AbsoluteSize.Y
+		skin.SliceScale = math.max(0.05, height * EDGE_SHARE / PANEL_EDGE)
+		for size, label in labels do
+			local stroke = label:FindFirstChildOfClass("UIStroke")
+			if stroke then
+				stroke.Thickness = math.clamp(height * OUTLINE_SHARE[size], 1, 8)
+			end
+		end
+	end
+	frame:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
+	fit()
+	return skin
 end
 
 local function build(index: number): Sign
@@ -77,20 +91,21 @@ local function build(index: number): Sign
 	billboard.Size = if sacred then UDim2.fromScale(20, 8) else UDim2.fromScale(16, 6.4) -- en studs
 	billboard.MaxDistance = 110
 	billboard.LightInfluence = 0
+	billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	billboard.Adornee = anchor
 	billboard.Parent = anchor
 	local base = UIConfig.PondColors[index] or UIConfig.Colors.Text
 	local h, sat = base:ToHSV()
 	local color = Color3.fromHSV(h, math.max(sat, 0.7), 1) -- vivo, como los simuladores
-	local back = glow(billboard, color)
 	local multiplier = text(billboard, "Multiplicador", color, true)
-	multiplier.Position = UDim2.fromScale(0, 0.02)
-	multiplier.Size = UDim2.fromScale(1, 0.62)
+	multiplier.Position = UDim2.fromScale(0.06, 0.08)
+	multiplier.Size = UDim2.fromScale(0.88, 0.54)
 	multiplier.Text = `{PONDS[index].multiplier}x`
 	local requirement = text(billboard, "Requisito", color, false)
-	requirement.Position = UDim2.fromScale(0.04, 0.64)
-	requirement.Size = UDim2.fromScale(0.92, 0.3)
-	return { requirement = requirement, multiplier = multiplier, glow = back }
+	requirement.Position = UDim2.fromScale(0.07, 0.63)
+	requirement.Size = UDim2.fromScale(0.86, 0.26)
+	local back = plate(billboard, { big = multiplier, small = requirement })
+	return { requirement = requirement, multiplier = multiplier, plate = back }
 end
 
 function PondSigns.start()
@@ -110,7 +125,7 @@ function PondSigns.start()
 				sign.requirement.Text =
 					`Requisito: {FishingPower.pondRequirement(PONDS[index], true)}`
 			end
-			sign.glow.BackgroundTransparency = if open then 0.3 else 0.5
+			sign.plate.ImageColor3 = if open then WHITE else CLOSED
 			sign.multiplier.TextTransparency = if open then 0 else 0.15
 		end
 	end

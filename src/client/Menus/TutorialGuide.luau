@@ -27,10 +27,10 @@ local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
-local COLORS = UIConfig.Colors
 local ATTR = Protocol.PlayerAttributes
 local STEPS = Config.Retention.tutorial
 local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
+local MARKER_SLICE = 0.13 -- la placa de la distancia mide unos 25 píxeles de alto
 
 local TutorialGuide = {}
 
@@ -94,24 +94,35 @@ function TutorialGuide.start(screen: ScreenGui)
 	text.Position = UDim2.fromOffset(10, 25)
 	text.Size = UDim2.new(1, -20, 0, 40)
 
-	-- Marcador en el mundo: flecha que flota sobre el destino, siempre visible.
+	-- Marcador en el mundo: flecha dorada que flota sobre el destino, siempre visible, con
+	-- la distancia en una placa chica de piedra (como la de la misión).
 	local anchor = Instance.new("Attachment")
 	anchor.Name = "DestinoTutorial"
 	anchor.Parent = Workspace.Terrain
 	local marker = Instance.new("BillboardGui")
-	marker.Size = UDim2.fromOffset(90, 58)
+	marker.Size = UDim2.fromOffset(96, 64)
 	marker.AlwaysOnTop = true
 	marker.LightInfluence = 0
+	marker.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	marker.Adornee = anchor
 	marker.Enabled = false
 	marker.Parent = anchor
-	local arrow = Ui.label("Flecha", marker, UIConfig.Fonts.Title, 48)
+	local arrow = Style.text(marker, "Flecha", 48, nil, 3)
 	arrow.Text = "▼"
-	arrow.TextColor3 = COLORS.Coins
-	arrow.Size = UDim2.fromScale(1, 0.65)
-	local distance = Ui.label("Distancia", marker, UIConfig.Fonts.Title, UIConfig.TextSizes.Small)
-	distance.Position = UDim2.fromScale(0, 0.65)
-	distance.Size = UDim2.fromScale(1, 0.35)
+	arrow.Size = UDim2.fromScale(1, 0.6)
+	Kit.gold(arrow)
+	local tag = Instance.new("Frame")
+	tag.Name = "Placa"
+	tag.AnchorPoint = Vector2.new(0.5, 0)
+	tag.Position = UDim2.fromScale(0.5, 0.6)
+	tag.Size = UDim2.fromScale(0.86, 0.4)
+	tag.Parent = marker
+	Kit.skin(tag, "panel").SliceScale = MARKER_SLICE
+	local distance = Style.text(tag, "Distancia", UIConfig.TextSizes.Small, nil, 1.5)
+	distance.Position = UDim2.fromOffset(7, 4)
+	distance.Size = UDim2.new(1, -14, 1, -8)
+	distance.ZIndex = 1
+	Kit.gold(distance)
 
 	local function step(): number
 		local value = player:GetAttribute(ATTR.Tutorial)

@@ -222,21 +222,76 @@ def farol(nombre, x, z, y_base=CUBIERTA_Y, alto=6):
     ])
 
 
-def cartel(nombre, pos, r, texto, ancho, alto, cara="Front"):
-    tabla = pieza("Tabla", (ancho, alto, 0.4), pos, MADERA_CLARA, "WoodPlanks", r, **DECORADO)
-    tabla["children"] = [{
+# --- Temática volcánica: arco de entrada, plaza de aparición y carteles -------------------
+# Como la interfaz (Interface/Kit): basalto oscuro con grietas de lava, filos de oro mate y
+# letras de oro con contorno marrón. El resto de la isla sigue con su mármol y su madera.
+ROCA_VOLCANICA = (56, 50, 58)  # fustes, vigas y pedestales
+ROCA_VOLCANICA_OSCURA = (40, 36, 44)  # zócalos, capiteles y marcos
+PIEDRA_NEGRA = (22, 19, 24)  # fondo de placas y tableros: el oro resalta encima
+VETA_LAVA = (255, 110, 30)  # grietas y filos encendidos (Neon)
+ORO_MATE = (200, 150, 64)  # molduras finas
+CONTORNO_ORO = (42, 22, 8)  # = Kit.GOLD_OUTLINE
+DEGRADADO_ORO = ((0, (255, 246, 170)), (0.45, (255, 214, 82)), (1, (222, 128, 30)))  # = Kit.GOLD
+FREDOKA = {"Font": {"family": "rbxasset://fonts/families/FredokaOne.json", "weight": "Regular", "style": "Normal"}}
+
+
+def letras_oro(texto, cara, alto, relleno=(0.94, 0.8), ppe=40):
+    """SurfaceGui con letras de oro, como Kit.gold: texto blanco teñido por un degradado
+    vertical (el degradado multiplica el color) y contorno marrón según el alto."""
+    w, h = relleno
+    grosor = max(2, round(alto * ppe * h * 0.05, 1))
+    puntos = [{"time": t, "color": color(c)} for t, c in DEGRADADO_ORO]
+    return {
         "name": "Texto", "className": "SurfaceGui",
-        "properties": {"Face": cara, "SizingMode": "PixelsPerStud", "PixelsPerStud": 40, "LightInfluence": 1},
+        "properties": {"Face": cara, "SizingMode": "PixelsPerStud", "PixelsPerStud": ppe, "LightInfluence": 0},
         "children": [{
             "name": "Etiqueta", "className": "TextLabel",
             "properties": {
-                "Size": {"UDim2": [[1, 0], [1, 0]]}, "BackgroundTransparency": 1, "Text": texto, "TextScaled": True,
-                "TextColor3": color(MADERA_OSCURA),
-                "FontFace": {"Font": {"family": "rbxasset://fonts/families/FredokaOne.json", "weight": "Regular", "style": "Normal"}},
+                "Size": {"UDim2": [[w, 0], [h, 0]]}, "Position": {"UDim2": [[round((1 - w) / 2, 4), 0], [round((1 - h) / 2, 4), 0]]},
+                "BackgroundTransparency": 1, "Text": texto, "TextScaled": True, "TextColor3": [1, 1, 1], "FontFace": FREDOKA,
             },
+            "children": [
+                {"name": "Contorno", "className": "UIStroke",
+                 "properties": {"Color": color(CONTORNO_ORO), "Thickness": grosor, "LineJoinMode": "Round"}},
+                {"name": "Oro", "className": "UIGradient",
+                 "properties": {"Rotation": 90, "Color": {"ColorSequence": {"keypoints": puntos}}}},
+            ],
         }],
-    }]
-    return tabla
+    }
+
+
+def placa_volcanica(nombre, tam, pos, r, texto, cara):
+    """Placa de piedra casi negra con letras de oro, un filo de lava encendida y un marco de
+    basalto escalonados por detrás (más delgados: solo asoman por el borde)."""
+    ancho, alto, fondo = tam
+    tabla = pieza(nombre, tam, pos, PIEDRA_NEGRA, "Slate", r, **DECORADO)
+    tabla["children"] = [letras_oro(texto, cara, alto)]
+    return [
+        pieza(f"{nombre}Marco", (ancho + 0.7, alto + 0.7, fondo * 0.5), pos, ROCA_VOLCANICA_OSCURA, "Basalt", r, **DECORADO),
+        pieza(f"{nombre}Lava", (ancho + 0.24, alto + 0.24, fondo * 0.75), pos, VETA_LAVA, "Neon", r, **FANTASMA),
+        tabla,
+    ]
+
+
+def grieta(nombre, p, r, ancho, y0, y1, caras, tramos=3, espejo=1):
+    """Veta de lava en zigzag sobre las caras ±Z locales de un fuste cuadrado de `ancho`
+    centrado en p: pocas piezas Neon finas, como las grietas de la piedra de la interfaz."""
+    xs = [x * ancho * espejo for x in (0.12, -0.18, 0.2, -0.06)][: tramos + 1]
+    ys = [y0 + (y1 - y0) * k / tramos for k in range(tramos + 1)]
+    hijos = []
+    for cara in caras:
+        for k in range(tramos):
+            dx, dy = (xs[k + 1] - xs[k]) * cara, ys[k + 1] - ys[k]
+            centro = add(p, aplicar(r, ((xs[k] + xs[k + 1]) / 2 * cara, (ys[k] + ys[k + 1]) / 2, cara * ancho / 2)))
+            giro = mat(r, rz(math.degrees(math.atan2(-dx, dy))))
+            hijos.append(pieza(f"{nombre}{'Frente' if cara > 0 else 'Fondo'}{k}", (0.18, math.hypot(dx, dy) + 0.12, 0.08),
+                               centro, VETA_LAVA, "Neon", giro, **FANTASMA))
+    return hijos
+
+
+def cartel(nombre, pos, r, texto, ancho, alto, cara="Front"):
+    """Cartel del mundo (puente, cabaña, estanque sagrado): placa volcánica con letras de oro."""
+    return grupo(nombre, placa_volcanica("Tabla", (ancho, alto, 0.4), pos, r, texto, cara))
 
 
 # --- Zona de entrenamiento ------------------------------------------------------------
@@ -457,12 +512,12 @@ def muelle(indice, angulo):
 
 
 # --- Aparición, entrada y cabaña ----------------------------------------------------------
-# --- Plaza, entrada y aparición (diseño limpio: mármol claro, oro y farolas) ------------
+# La plaza grande sigue de mármol claro con oro; la aparición y el arco de entrada son de
+# basalto con lava (ver "Temática volcánica" arriba).
 MARMOL_CLARO = (238, 233, 224)
 HIERRO_NEGRO = (40, 40, 46)
 LUZ_FAROLA = (255, 214, 150)
 SETO = ((52, 122, 64), (62, 138, 72))
-PLACA = (24, 30, 48)
 ANGULOS_CAMINO = [L["spawnAngle"], L["shopAngle"], L["campAngle"], L["lighthouseAngle"], L["bridgeAngle"]] + L["pierAngles"]
 
 
@@ -476,47 +531,40 @@ def anillo_con_huecos(nombre, radio, n, ancho, alto, y_tope, colores, material, 
     return [p for k, p in enumerate(piezas) if not sobre_camino(k * 360 / n, margen)]
 
 
-def farola(nombre, x, z, y, alto=8):
-    """Farola: base de mármol, poste de hierro negro, anillo de oro y farol de luz cálida."""
+def farola(nombre, x, z, y, alto=8, piedra=(MARMOL_CLARO, "Marble"), oro=ORO):
+    """Farola: base de piedra (mármol o basalto), poste de hierro negro, anillo de oro y farol
+    de luz cálida."""
     farol_ = pieza("Farol", (1.1, 1.5, 1.1), (x, y + alto + 0.75, z), LUZ_FAROLA, "Neon", **DECORADO)
     farol_["children"] = [luz(18, 0.8, LUZ_FAROLA)]  # suave: el mármol blanco no se encandila
     largo = alto - 1
     return grupo(nombre, [
-        pieza("Base", (1.8, 1, 1.8), (x, y + 0.5, z), MARMOL_CLARO, "Marble"),
+        pieza("Base", (1.8, 1, 1.8), (x, y + 0.5, z), *piedra),
         pieza("Poste", (largo, 0.45, 0.45), (x, y + 1 + largo / 2, z), HIERRO_NEGRO, "Metal", VERTICAL, "Cylinder"),
-        pieza("Anillo", (0.3, 0.9, 0.9), (x, y + alto - 0.1, z), ORO, "Metal", VERTICAL, "Cylinder", **DECORADO),
+        pieza("Anillo", (0.3, 0.9, 0.9), (x, y + alto - 0.1, z), oro, "Metal", VERTICAL, "Cylinder", **DECORADO),
         farol_,
         pieza("Techo", (1.6, 0.25, 1.6), (x, y + alto + 1.6, z), HIERRO_NEGRO, "Metal", **DECORADO),
-        pieza("Remate", (0.55, 0.55, 0.55), (x, y + alto + 2, z), ORO, "Metal", ry(45), **DECORADO),
+        pieza("Remate", (0.55, 0.55, 0.55), (x, y + alto + 2, z), oro, "Metal", ry(45), **DECORADO),
     ])
 
 
 def placa(nombre, pos, r, texto, ancho, alto, cara="Back"):
-    """Placa azul noche con borde y letras de oro (carteles de la entrada)."""
-    tabla = pieza(nombre, (ancho, alto, 0.5), pos, PLACA, "SmoothPlastic", r, **DECORADO)
-    tabla["children"] = [{
-        "name": "Texto", "className": "SurfaceGui",
-        "properties": {"Face": cara, "SizingMode": "PixelsPerStud", "PixelsPerStud": 40, "LightInfluence": 0},
-        "children": [{"name": "Etiqueta", "className": "TextLabel", "properties": {
-            "Size": {"UDim2": [[0.94, 0], [0.8, 0]]}, "Position": {"UDim2": [[0.03, 0], [0.1, 0]]},
-            "BackgroundTransparency": 1, "Text": texto, "TextScaled": True,
-            "TextColor3": color((255, 214, 90)), "TextStrokeTransparency": 0.2, "TextStrokeColor3": color((60, 30, 0)),
-            "FontFace": {"Font": {"family": "rbxasset://fonts/families/FredokaOne.json", "weight": "Regular", "style": "Normal"}},
-        }}],
-    }]
-    marco = pieza(f"{nombre}Marco", (ancho + 0.5, alto + 0.5, 0.35), pos, ORO, "Metal", r, **DECORADO)
-    return [marco, tabla]
+    """Placa volcánica de la entrada (título del arco y del salón de la fama)."""
+    return placa_volcanica(nombre, (ancho, alto, 0.5), pos, r, texto, cara)
 
 
-def pilar(nombre, p, y0, alto, ancho=2.4):
-    """Pilar cuadrado de mármol con zócalo, bandas de oro y capitel."""
-    return grupo(nombre, [
-        pieza("Zocalo", (ancho + 1, 1.2, ancho + 1), (p[0], y0 + 0.6, p[2]), MARMOL_CLARO, "Marble"),
-        pieza("Fuste", (ancho, alto, ancho), (p[0], y0 + 1.2 + alto / 2, p[2]), MARMOL_CLARO, "Marble"),
-        pieza("BandaBaja", (ancho + 0.3, 0.3, ancho + 0.3), (p[0], y0 + 1.5, p[2]), ORO, "Metal", **DECORADO),
-        pieza("BandaAlta", (ancho + 0.3, 0.3, ancho + 0.3), (p[0], y0 + alto + 0.9, p[2]), ORO, "Metal", **DECORADO),
-        pieza("Capitel", (ancho + 0.8, 0.8, ancho + 0.8), (p[0], y0 + alto + 1.6, p[2]), MARMOL_CLARO, "Marble"),
-    ])
+def pilar(nombre, p, y0, alto, ancho=2.4, r=I3, caras=(), tramos=3, espejo=1):
+    """Pilar cuadrado de basalto con zócalo, bandas de oro mate, capitel y, en `caras`
+    (±1: +Z o -Z local de r), una grieta de lava en el fuste."""
+    hijos = [
+        pieza("Zocalo", (ancho + 1, 1.2, ancho + 1), (p[0], y0 + 0.6, p[2]), ROCA_VOLCANICA_OSCURA, "Basalt"),
+        pieza("Fuste", (ancho, alto, ancho), (p[0], y0 + 1.2 + alto / 2, p[2]), ROCA_VOLCANICA, "Basalt"),
+        pieza("BandaBaja", (ancho + 0.3, 0.3, ancho + 0.3), (p[0], y0 + 1.5, p[2]), ORO_MATE, "Metal", **DECORADO),
+        pieza("BandaAlta", (ancho + 0.3, 0.3, ancho + 0.3), (p[0], y0 + alto + 0.9, p[2]), ORO_MATE, "Metal", **DECORADO),
+        pieza("Capitel", (ancho + 0.8, 0.8, ancho + 0.8), (p[0], y0 + alto + 1.6, p[2]), ROCA_VOLCANICA_OSCURA, "Basalt"),
+    ]
+    if caras:
+        hijos += grieta("Grieta", (p[0], 0, p[2]), r, ancho, y0 + 2.4, y0 + 1.2 + alto * 0.7, caras, tramos, espejo)
+    return grupo(nombre, hijos)
 
 
 def borde_plaza():
@@ -540,7 +588,7 @@ def borde_plaza():
 
 
 def aparicion():
-    """Plataforma redonda de mármol donde se aparece (mira hacia la laguna)."""
+    """Plataforma redonda de basalto donde se aparece (mira hacia la laguna)."""
     a = L["spawnAngle"]
     d = direccion(a)
     return {
@@ -549,35 +597,39 @@ def aparicion():
             "Anchored": True, "Neutral": True, "Duration": 0, "Size": [1, 14, 14], "Shape": "Cylinder",
             # Cilindro de pie que sigue mirando a la laguna: su LookVector (-Z local) apunta al centro.
             "CFrame": cf(polar(a, L["spawnRadius"], L["plateauHeight"] + 0.3), mat(base_con_z(d), rz(90))),
-            "Color": color(MARMOL_CLARO), "Material": "Marble", "TopSurface": "Smooth", "BottomSurface": "Smooth",
+            "Color": color(ROCA_VOLCANICA), "Material": "Basalt", "TopSurface": "Smooth", "BottomSurface": "Smooth",
         },
     }
 
 
 def plaza_aparicion():
-    """Anillos de oro y mármol alrededor de la aparición y cuatro farolas."""
+    """Escalón de basalto con filo de oro mate alrededor de la aparición, un círculo de lava
+    sobre la plataforma y cuatro farolas de basalto."""
     a = L["spawnAngle"]
     c = polar(a, L["spawnRadius"], 0)
     y = L["plateauHeight"]
-    hijos = anillo_tallado("Oro", c[0], c[2], 7.05, 48, 0.4, 0.9, y + 0.85, ORO, "Metal", **DECORADO)
-    hijos += anillo_tallado("Escalon", c[0], c[2], 9.2, 48, 4.2, 0.7, y + 0.35, MARMOL_CLARO, "Marble")
-    hijos += anillo_tallado("Emblema", c[0], c[2], 4.5, 32, 0.35, 0.1, y + 0.83, ORO, "Metal", **FANTASMA)
+    hijos = anillo_tallado("Oro", c[0], c[2], 7.05, 48, 0.4, 0.9, y + 0.85, ORO_MATE, "Metal", **DECORADO)
+    hijos += anillo_tallado("Escalon", c[0], c[2], 9.2, 48, 4.2, 0.7, y + 0.35, ROCA_VOLCANICA_OSCURA, "Basalt")
+    hijos += anillo_tallado("Emblema", c[0], c[2], 4.5, 32, 0.35, 0.1, y + 0.83, VETA_LAVA, "Neon", **FANTASMA)
     for k in range(4):
         p = add(c, polar(a + 45 + k * 90, 12.5, 0))
-        hijos.append(farola(f"Farola{k}", p[0], p[2], y, 7))
+        hijos.append(farola(f"Farola{k}", p[0], p[2], y, 7, (ROCA_VOLCANICA_OSCURA, "Basalt"), ORO_MATE))
     return grupo("PlazaAparicion", hijos)
 
 
 def tablero(nombre, pos, r, ancho, alto):
-    """Tablero del ranking (lo dibuja RankingBoards por la cara de atrás) con marco de oro."""
+    """Tablero del ranking (lo dibuja RankingBoards por la cara de atrás): piedra casi negra
+    con un filo de oro mate y un marco de basalto."""
     return [
-        pieza(nombre, (ancho, alto, 0.5), pos, PLACA, "SmoothPlastic", r),
-        pieza(f"Marco{nombre}", (ancho + 0.8, alto + 0.8, 0.3), pos, ORO, "Metal", r, **DECORADO),
+        pieza(nombre, (ancho, alto, 0.5), pos, PIEDRA_NEGRA, "Slate", r),
+        pieza(f"Marco{nombre}", (ancho + 1, alto + 1, 0.3), pos, ROCA_VOLCANICA_OSCURA, "Basalt", r, **DECORADO),
+        pieza(f"Filo{nombre}", (ancho + 0.24, alto + 0.24, 0.4), pos, ORO_MATE, "Metal", r, **DECORADO),
     ]
 
 
 def arco_entrada():
-    """Arco de mármol con bandas de oro y la placa de la laguna, y el salón de la fama:
+    """Arco de basalto con grietas de lava, molduras de oro mate y la placa de la laguna, y
+    el salón de la fama:
     los tableros grandes del ranking global (Leaderboards / RankingBoards) a los lados
     del arco (poder y monstruos) y sobre él (renacimientos)."""
     a = L["spawnAngle"]
@@ -586,22 +638,22 @@ def arco_entrada():
     y = L["plateauHeight"]
     hijos = []
     for lado in (-1, 1):
-        hijos.append(pilar(f"Pilar{lado}", add(base, aplicar(r, (8 * lado, 0, 0))), y, 13))
-    hijos.append(pieza("Viga", (19.5, 1.8, 3), add(base, (0, y + 16.4, 0)), MARMOL_CLARO, "Marble", r))
+        hijos.append(pilar(f"Pilar{lado}", add(base, aplicar(r, (8 * lado, 0, 0))), y, 13, r=r, caras=(1, -1), espejo=lado))
+    hijos.append(pieza("Viga", (19.5, 1.8, 3), add(base, (0, y + 16.4, 0)), ROCA_VOLCANICA, "Basalt", r))
     for k, dy in enumerate((15.45, 17.35)):
-        hijos.append(pieza(f"Moldura{k}", (19.7, 0.3, 3.2), add(base, (0, y + dy, 0)), ORO, "Metal", r, **DECORADO))
+        hijos.append(pieza(f"Moldura{k}", (19.7, 0.3, 3.2), add(base, (0, y + dy, 0)), ORO_MATE, "Metal", r, **DECORADO))
     # El texto mira hacia afuera (+Z local = hacia la aparición).
     hijos += placa("Cartel", add(base, (0, y + 12.6, 0)), r, "LAGUNA DE LOS GIGANTES", 12.6, 2.6)
     # Salón de la fama: dos tableros grandes a los lados del arco y uno sobre él.
     for lado, nombre, titulo in ((-1, "TableroPoder", "TOP PODER"), (1, "TableroKills", "TOP MONSTRUOS")):
         p = add(base, aplicar(r, (18 * lado, 0, 2)))
-        hijos.append(pieza(f"Pedestal{nombre}", (14, 3.2, 3), (p[0], y + 1.6, p[2]), MARMOL_CLARO, "Marble", r))
-        hijos.append(pieza(f"Banda{nombre}", (14.3, 0.35, 3.3), (p[0], y + 3, p[2]), ORO, "Metal", r, **DECORADO))
+        hijos.append(pieza(f"Pedestal{nombre}", (14, 3.2, 3), (p[0], y + 1.6, p[2]), ROCA_VOLCANICA, "Basalt", r))
+        hijos.append(pieza(f"Banda{nombre}", (14.3, 0.35, 3.3), (p[0], y + 3, p[2]), ORO_MATE, "Metal", r, **DECORADO))
         hijos += tablero(nombre, (p[0], y + 10.4, p[2]), r, 12, 14)
         for k in (-1, 1):
-            hijos.append(pilar(f"Pilar{nombre}{k}", add(p, aplicar(r, (7.6 * k, 0, 0))), y, 17, 1.6))
+            hijos.append(pilar(f"Pilar{nombre}{k}", add(p, aplicar(r, (7.6 * k, 0, 0))), y, 17, 1.6, r, (1,), 2, k))
         hijos += placa(f"Titulo{nombre}", (p[0], y + 19.2, p[2]), r, titulo, 11, 2)
-    hijos.append(pieza("BaseTablero", (19, 1, 3), add(base, (0, y + 18, 0)), MARMOL_CLARO, "Marble", r))
+    hijos.append(pieza("BaseTablero", (19, 1, 3), add(base, (0, y + 18, 0)), ROCA_VOLCANICA_OSCURA, "Basalt", r))
     hijos += tablero("TableroRenacimientos", add(base, (0, y + 22.6, 0)), r, 17, 8)
     hijos += placa("TituloTableroRenacimientos", add(base, (0, y + 28, 0)), r, "TOP RENACIMIENTOS", 13, 2)
     return grupo("ArcoEntrada", hijos)
@@ -975,17 +1027,7 @@ def puerta_abismo():
         hijos.append(calavera(f"Calavera{lado}", (p[0], RIM_Y + 29.5, p[2]), 4.2))
     viga = add(base, (0, RIM_Y + 24, 0))
     hijos.append(pieza("Viga", (L["bridgeWidth"] + 12, 2.2, 2.4), viga, BASALTO[0], "Basalt", r))
-    letrero = pieza("Letrero", (16, 3, 0.4), add(viga, (0, -2.6, 0)), BASALTO[2], "Basalt", r, **DECORADO)
-    letrero["children"] = [{
-        "name": "Texto", "className": "SurfaceGui",
-        "properties": {"Face": "Back", "SizingMode": "PixelsPerStud", "PixelsPerStud": 40, "LightInfluence": 0},
-        "children": [{"name": "Etiqueta", "className": "TextLabel", "properties": {
-            "Size": {"UDim2": [[1, 0], [1, 0]]}, "BackgroundTransparency": 1, "Text": "CRÁTER DEL ABISMO", "TextScaled": True,
-            "TextColor3": color((255, 70, 50)), "TextStrokeTransparency": 0, "TextStrokeColor3": color((20, 0, 0)),
-            "FontFace": {"Font": {"family": "rbxasset://fonts/families/Creepster.json", "weight": "Regular", "style": "Normal"}},
-        }}],
-    }]
-    hijos.append(letrero)
+    hijos += placa_volcanica("Letrero", (16, 3, 0.4), add(viga, (0, -2.6, 0)), r, "CRÁTER DEL ABISMO", "Back")
     for lado in (-1, 1):  # cadenas colgando de la viga
         for k in range(6):
             p = add(viga, aplicar(r, (lado * 4.5, -2 - k * 1.3, 0.8)))
