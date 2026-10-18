@@ -99,7 +99,28 @@ desde Studio; pasa a `moderado` cuando se confirme a mano en Creator Hub.
 | OrcaE1Normal | textura (normal) | `assets/textures/OrcaE1_normal.png` | `79662647526007` | subido |
 | OrcaE1Roughness | textura (rugosidad) | `assets/textures/OrcaE1_roughness.png` | `86419609055550` | subido |
 
-## Íconos del HUD
+## Íconos v4 (pintados a mano, Canva)
+
+Reemplazan a las hojas 1 y 2 (2026-10-17). El usuario dijo que los anteriores "se ven muy IA",
+pidió mantener el formato y eligió el estilo **pintado a mano**: pinceladas visibles, tonos
+terrosos, contorno marrón y nada de brillo plástico.
+
+**Cómo se hicieron:**
+1. Primero un ícono maestro, la moneda (Canva media `MAHYVFfkyU0`).
+2. Cada ícono se generó con la IA de Canva usando la moneda y la referencia volcánica como
+   guía de estilo.
+3. Se quitó el fondo en Canva y se exportó en PNG transparente de 1024 px.
+4. Cada uno se encajó en 236 px dentro de una celda de 256.
+
+Los archivos están en `assets/ui/iconos/v4/`: hojas, íconos sueltos, `crudo/` y `crudo2/`. Las
+tablas de media de Canva de cada ícono quedan en el devlog del 2026-10-17 (17).
+
+| Hoja | Archivo | `Assets.UI` | Celdas (por filas) |
+|---|---|---|---|
+| 1 (HUD) | `v4/iconos_v4_hud.png` | IconSheet = 135004623117532 | moneda, poder, canasta con peces, **monstruo alimentado** (reemplaza la calavera de "monstruos llenados"), canasta, cofre, regalo, engranaje, pez, boleto, amigos, grupo, colmillo, cuenco de peces (insignia `fed`) |
+| 2 | `v4/iconos_v4_hoja2.png` | IconSheet2 = 97933580602007 → 89496859008486 | caña, botas, corona, estanque, rayo, orca, minotauro, dragón (el nuevo), zorro, regalo rosa, flecha, carne, rayos y brillo (copiados de la hoja anterior) |
+
+## Íconos del HUD (v3, reemplazados por los v4)
 
 Imágenes estilo 3D generadas con IA (Canva, mismo prompt base: "Game UI icon for a Roblox
 simulator, glossy 3D cartoon render style, thick dark outline... on a plain white

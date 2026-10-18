@@ -61,16 +61,15 @@ local Assets: Assets = {
 		PunteroRuleta = "rbxassetid://104047378525377",
 		-- Ícono de Roblox Premium que trae Roblox instalado.
 		PremiumIcon = "rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png",
-		-- Íconos del HUD: imágenes estilo 3D generadas con IA (Canva), recortadas a fondo
-		-- transparente y juntadas en una hoja de 4x4 (256 px cada uno), subida con el
-		-- Gestor de recursos. Fuentes y hoja en assets/ui/iconos/ (iconos_hud_v3.png).
-		-- Orden por filas: moneda, poder, canasta, kills / tienda, robux, premio, ajustes /
-		-- pez, códigos, amigos, grupo / colmillo.
-		IconSheet = "rbxassetid://134398496257992",
-		-- Hoja 2 (assets/ui/iconos/iconos_hoja2.png), por filas: caña, botas, corona,
-		-- estanque / rayo, orca, minotauro, dragón / zorro, regalo rosa, flecha,
-		-- carne / rayos de fondo (sunburst), brillo redondo.
-		IconSheet2 = "rbxassetid://97933580602007",
+		-- Íconos pintados a mano, hechos con la IA de Canva sobre un ícono maestro (la moneda)
+		-- y la referencia volcánica del usuario (assets/ui/iconos/v4/, docs/ui-assets.md).
+		-- Hojas de 4x4 de 256 px. HUD, por filas: moneda, poder, canasta con peces, monstruo
+		-- alimentado / canasta, cofre, regalo, engranaje / pez, boleto, amigos, grupo /
+		-- colmillo, cuenco de peces (insignia de alimentado).
+		IconSheet = "rbxassetid://135004623117532",
+		-- Hoja 2, por filas: caña, botas, corona, estanque / rayo, orca, minotauro, dragón /
+		-- zorro, regalo rosa, flecha, carne / rayos de fondo (sunburst), brillo redondo.
+		IconSheet2 = "rbxassetid://89496859008486",
 		-- Hoja 3 (assets/ui/iconos/iconos_hoja3.png): monstruo panzón (monstruos llenados).
 		IconSheet3 = "rbxassetid://99850577116916",
 		-- Equipo de la tienda (Canva, recortado): un ícono por nivel, 5 columnas de 200 px,

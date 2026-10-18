@@ -2051,3 +2051,22 @@ exactitud".
 
 **Probado en Studio (Play):** MEJORAS, Tienda y HUD, con capturas y sin errores.
 Checklist: build, selene (21 avisos) y stylua.
+
+## 2026-10-17 (17) — Íconos pintados a mano y botones laterales volcánicos
+
+**Qué se hizo:** al usuario no le gustaron los botones laterales y dijo que los íconos "se ven muy
+IA". Pidió íconos nuevos en Canva con el mismo formato, y que la calavera de "monstruos
+llenados" no tenía que ver. Eligió botones de casilla volcánica e íconos pintados a mano.
+- **Ícono maestro:** la moneda (Canva media `MAHYVFfkyU0`). Dos sesiones generaron con ella como
+  guía las dos hojas de 4x4, quitaron el fondo, exportaron y subieron:
+  - HUD: `rbxassetid://135004623117532`;
+  - hoja 2: `rbxassetid://89496859008486`.
+- **Íconos que cambian de sujeto:** el contador de monstruos llenados lleva un monstruo verde
+  contento con un pez en la boca, y la insignia `fed` sobre la cabeza es un cuenco de peces.
+- **Botones laterales** (`HudButtons`): casillas volcánicas sin tinte; TIENDA sigue de lava.
+  También pasan a casilla los botones de arriba y la placa "Próximo evento". `Style.robuxBadge`
+  es ahora una placa chica de piedra verde.
+- `Interface/Icons` apunta `fed` a la hoja 1.
+
+**Probado en Studio (Play):** el HUD con los íconos nuevos, sin errores.
+Checklist: build, selene (21 avisos) y stylua.

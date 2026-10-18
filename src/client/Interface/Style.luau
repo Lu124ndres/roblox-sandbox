@@ -149,24 +149,21 @@ function Style.robuxBadge(parent: Instance, price: number?): TextLabel
 	badge.AnchorPoint = Vector2.new(1, 0.5)
 	badge.Position = UDim2.new(1, 4, 0, 0)
 	badge.Size = UDim2.fromOffset(62, 24)
-	badge.BackgroundColor3 = COLORS.Robux
 	badge.ZIndex = 5
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(1, 0)
-	corner.Parent = badge
-	Style.border(badge, 2)
+	-- Placa chica de piedra teñida de verde, con el canto fino para su tamaño.
+	Kit.skin(badge, "boton", COLORS.Robux).SliceScale = 0.2
 	local icon = Instance.new("ImageLabel")
 	icon.BackgroundTransparency = 1
 	icon.Image = Assets.UI.RobuxIcon
 	icon.AnchorPoint = Vector2.new(0, 0.5)
-	icon.Position = UDim2.new(0, 3, 0.5, 0)
-	icon.Size = UDim2.new(0, 20, 1, -2)
+	icon.Position = UDim2.new(0, 5, 0.5, 0)
+	icon.Size = UDim2.new(0, 19, 1, -4)
 	icon.ScaleType = Enum.ScaleType.Fit
 	icon.ZIndex = 6
 	icon.Parent = badge
 	local label = Style.text(badge, "Robux", 20, nil, 1.5)
-	label.Position = UDim2.fromOffset(22, 1)
-	label.Size = UDim2.new(1, -26, 1, -2)
+	label.Position = UDim2.fromOffset(24, 2)
+	label.Size = UDim2.new(1, -29, 1, -4)
 	label.ZIndex = 6
 	label.Text = if price then tostring(price) else "..."
 	badge.Parent = parent

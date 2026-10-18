@@ -2,15 +2,15 @@
 --[[
 	Icons
 
-	Íconos de la interfaz: imágenes estilo 3D (generadas con IA y recortadas)
-	en hojas de 4x4 (256 px cada uno); cada ícono es un recorte de su hoja
-	(ImageRectOffset). Las fuentes están en assets/ui/iconos. Si la hoja no
-	tiene ID, se usa el modelo 3D de Icon3D.
-	Hoja 1: coin, crystal, basketFish, skull, basket, chest, gift, gear, fish,
-	        ticket, friends, group, fang.
+	Íconos de la interfaz: pintados a mano (Canva, assets/ui/iconos/v4) en hojas
+	de 4x4 (256 px cada uno); cada ícono es un recorte de su hoja
+	(ImageRectOffset). Si la hoja no tiene ID, se usa el modelo 3D de Icon3D.
+	Hoja 1: coin, crystal, basketFish, skull (ya no es una calavera: el monstruo
+	        alimentado del contador "monstruos llenados"), basket, chest, gift,
+	        gear, fish, ticket, friends, group, fang, fed (cuenco de peces).
 	Hoja 2: rod, boots, crown, pond, bolt, orca, minotaur, dragon, fox,
 	        giftPink, arrow, meat, sunburst (rayos blancos para teñir), glow.
-	Hoja 3: fed (monstruo panzón con un pez: monstruos llenados).
+	Hoja 3: la anterior del monstruo panzón (ya no se usa: fed va en la hoja 1).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -52,7 +52,7 @@ local CELLS: { [string]: Cell } = {
 	meat = { sheet = 2, index = 11, fallback = "fish:Atun" },
 	sunburst = { sheet = 2, index = 12, fallback = "" },
 	glow = { sheet = 2, index = 13, fallback = "" },
-	fed = { sheet = 3, index = 0, fallback = "skull" },
+	fed = { sheet = 1, index = 13, fallback = "skull" },
 }
 
 local Icons = {}

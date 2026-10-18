@@ -2,11 +2,12 @@
 --[[
 	HudButtons
 
-	Botones del menú con ícono (Icons) y nombre dorado, de piedra tallada
-	(Interface/Kit):
+	Botones del menú con ícono (Icons) y nombre dorado, en la "casilla
+	volcánica" (Interface/Kit): piedra oscura con grietas de lava, como las
+	tarjetas de MEJORAS de la referencia del usuario.
 		HudButtons.side   grandes, en la columna derecha (Tienda, Mejoras), centrados;
-		                  piedra gris, salvo los de LAVA (la TIENDA, con marco de lava)
-		HudButtons.top    cuadraditos de piedra en la esquina derecha de la barra de
+		                  casilla, salvo los de LAVA (la TIENDA, con marco de lava)
+		HudButtons.top    casillas chicas en la esquina derecha de la barra de
 		                  Roblox (Premio, Peces, Códigos, Grupo, Ajustes)
 	Cada módulo agrega el suyo y decide qué hace al tocarlo. Un punto rojo
 	avisa que hay algo nuevo (por ejemplo, el premio diario).
@@ -25,7 +26,11 @@ local Sounds = require(script.Parent.Parent.Audio.Sounds)
 
 local COLORS = UIConfig.Colors
 local SIDE_SIZE = Layout.BUTTON_SIZE
-local TOP_SLICE = 0.2 -- borde de piedra más fino en los botones chicos de arriba
+-- Grosor del canto: el de la casilla mide 34 px en la imagen; a 0.32 queda en unos 10 px
+-- sobre un botón de 88 (como las tarjetas de la referencia), y más fino en los de arriba.
+local SIDE_SLICE = 0.32
+local TOP_SLICE = 0.16
+local INSET = 10 -- lo que ocupa el canto en los grandes: el ícono queda dentro
 -- Los laterales que llevan el marco de lava (lo más importante).
 local LAVA: { [string]: boolean } = { Tienda = true }
 -- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
@@ -70,8 +75,8 @@ local function press(button: TextButton, onClick: () -> ())
 	end)
 end
 
--- Botón de piedra con ícono y nombre dorado abajo; lo usan también los atajos de
--- Robux. `lava`: con el marco de lava (si no, piedra gris). Todo el cuadro (ícono y
+-- Casilla con ícono y nombre dorado abajo; lo usan también los atajos de
+-- Robux. `lava`: con el marco de lava (si no, la casilla oscura). Todo el cuadro (ícono y
 -- nombre) es el botón: el ícono y el nombre no reciben toques, así el toque
 -- siempre llega al botón aunque caiga sobre el dibujo.
 function HudButtons.iconButton(
@@ -88,19 +93,20 @@ function HudButtons.iconButton(
 	button.Active = true
 	button.Size = UDim2.fromOffset(size, size + 4)
 	button.Parent = parent
-	local skin = if lava then Kit.skin(button, "lava") else Kit.skin(button, "boton", Kit.STONE)
+	local skin = Kit.skin(button, if lava then "lava" else "casilla")
+	skin.SliceScale = SIDE_SLICE
 	Kit.press(button, skin)
-	-- El ícono asoma un poco sobre el borde de arriba, como en los simuladores.
+	-- El ícono, centrado arriba dentro del canto; el nombre, abajo.
 	local view = Icons.view(button, icon)
 	view.AnchorPoint = Vector2.new(0.5, 0)
-	view.Position = UDim2.new(0.5, 0, 0, -2)
-	view.Size = UDim2.fromOffset(size - 8, size - 24)
+	view.Position = UDim2.new(0.5, 0, 0, INSET - 4)
+	view.Size = UDim2.fromOffset(size - 2 * INSET - 2, size - 26)
 	view.Active = false
 	view.Interactable = false
-	local label = Style.text(button, "Nombre", 20, nil, 2)
+	local label = Style.text(button, "Nombre", 19, nil, 2)
 	label.AnchorPoint = Vector2.new(0.5, 1)
-	label.Position = UDim2.new(0.5, 0, 1, -6)
-	label.Size = UDim2.new(1, -10, 0, 22)
+	label.Position = UDim2.new(0.5, 0, 1, -7)
+	label.Size = UDim2.new(1, -12, 0, 20)
 	label.Active = false
 	label.Interactable = false
 	label.Text = TextCase.upper(text)
@@ -150,7 +156,7 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	button.Size = UDim2.fromScale(1, 1)
 	local aspect = Instance.new("UIAspectRatioConstraint")
 	aspect.Parent = button
-	local skin = Kit.skin(button, "boton", Kit.STONE)
+	local skin = Kit.skin(button, "casilla")
 	skin.SliceScale = TOP_SLICE
 	Kit.press(button, skin)
 	button.Parent = bar
@@ -158,7 +164,7 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	local view = Icons.view(button, icon)
 	view.AnchorPoint = Vector2.new(0.5, 0.5)
 	view.Position = UDim2.fromScale(0.5, 0.5)
-	view.Size = UDim2.fromScale(0.9, 0.9)
+	view.Size = UDim2.fromScale(0.8, 0.8) -- dentro del canto
 	press(button, onClick)
 	local dot = alertDot(button)
 	dot.Size = UDim2.fromOffset(11, 11)

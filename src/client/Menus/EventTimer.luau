@@ -5,9 +5,10 @@
 	En la columna derecha, debajo del entrenamiento del servidor: el evento
 	del servidor activo (nombre, qué da y cuánto le queda, con su color) o,
 	si no hay, cuánto falta para el siguiente ("Evento en 4:12"), en una
-	placa de piedra teñida del color del evento (gris si no hay) con el
-	nombre dorado (Interface/Kit). La
-	cuenta del siguiente da una razón para quedarse. Lo decide el servidor
+	placa de piedra oscura con grietas de lava (la casilla de Interface/Kit,
+	como los botones de al lado) con el nombre dorado; durante un evento la
+	piedra y el detalle toman su color. La cuenta del siguiente da una razón
+	para quedarse. Lo decide el servidor
 	(server/Social/EventScheduler); aquí solo se muestra.
 ]]
 
@@ -21,7 +22,9 @@ local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local REFRESH_SECONDS = 0.5
-local IDLE_COLOR = Kit.STONE -- piedra gris mientras no hay evento
+local SLICE_SCALE = 0.32 -- el mismo canto que los botones de la columna
+local EVENT_TINT = 0.45 -- cuánto se tiñe la piedra del color del evento (0 = nada)
+local IDLE_COLOR = Color3.new(1, 1, 1) -- la casilla tal cual mientras no hay evento
 
 local EventTimer = {}
 
@@ -35,24 +38,27 @@ function EventTimer.start()
 	pill.Name = "EventoServidor"
 	pill.LayoutOrder = 2
 	pill.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, 54)
-	local skin = Kit.skin(pill, "boton", IDLE_COLOR)
+	local skin = Kit.skin(pill, "casilla")
+	skin.SliceScale = SLICE_SCALE
 	pill.Parent = Layout.right()
 	local icon = Icons.view(pill, "bolt")
 	icon.AnchorPoint = Vector2.new(0, 0.5)
-	icon.Position = UDim2.new(0, 2, 0.5, 0)
-	icon.Size = UDim2.fromOffset(46, 46)
-	local title = Style.text(pill, "Nombre", 22, nil, 2)
-	title.Position = UDim2.fromOffset(48, 4)
-	title.Size = UDim2.new(1, -54, 0, 24)
+	icon.Position = UDim2.new(0, 7, 0.5, 0)
+	icon.Size = UDim2.fromOffset(40, 40)
+	local title = Style.text(pill, "Nombre", 21, nil, 2)
+	title.Position = UDim2.fromOffset(50, 6)
+	title.Size = UDim2.new(1, -60, 0, 23)
 	Kit.gold(title)
 	local detail = Style.text(pill, "Detalle", 17, nil, 2)
-	detail.Position = UDim2.fromOffset(48, 29)
-	detail.Size = UDim2.new(1, -54, 0, 20)
+	detail.Position = UDim2.fromOffset(50, 29)
+	detail.Size = UDim2.new(1, -60, 0, 18)
 	local painted: Color3? = nil
+	-- La casilla ya es oscura: un tinte entero (Kit.tint) la apagaría del todo, así
+	-- que se mezcla blanco con el color del evento.
 	local function paint(color: Color3)
 		if painted ~= color then
 			painted = color
-			Kit.tint(skin, color)
+			skin.ImageColor3 = IDLE_COLOR:Lerp(color, EVENT_TINT)
 		end
 	end
 
@@ -63,7 +69,7 @@ function EventTimer.start()
 				paint(kind.color)
 				title.Text = kind.name
 				detail.Text = `{kind.text} · {clock(ServerEvents.secondsLeft())}`
-				detail.TextColor3 = UIConfig.Colors.Text
+				detail.TextColor3 = kind.color:Lerp(UIConfig.Colors.Text, 0.35)
 			else
 				local wait = ServerEvents.secondsToNext()
 				paint(IDLE_COLOR)

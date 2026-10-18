@@ -4,8 +4,8 @@
 
 	Atajos de Robux siempre a la vista en la columna derecha, debajo de
 	Tienda y Robux: el siguiente nivel de Poder y de Monedas ("x4 Poder")
-	con su precio en una insignia verde. Son de piedra gris con el nombre
-	dorado, como MEJORAS (HudButtons.iconButton). Tocarlos abre la compra de Roblox.
+	con su precio en una placa de piedra verde (Style.robuxBadge). Son casillas
+	volcánicas con el nombre dorado, como MEJORAS (HudButtons.iconButton). Tocarlos abre la compra de Roblox.
 	Lo que muestran sale de RobuxOffers (lo mismo que la tienda de Robux).
 ]]
 
