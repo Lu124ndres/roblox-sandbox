@@ -3,13 +3,15 @@
 	CardParts
 
 	Piezas comunes de las ventanas con el estilo de la TIENDA y el premio
-	diario (misiones, renacer, pack de inicio, regalos por jugar):
-		card     cuadro redondo con borde negro, color, degradado y rayos
+	diario (misiones, renacer, pack de inicio, regalos por jugar), de piedra
+	tallada (Interface/Kit):
+		card     tarjeta de piedra teñida de su color, con rayos
 		paint    vuelve a pintar una tarjeta (quita los rayos y el degradado viejos)
-		bar      barra de avance con borde, relleno con degradado y texto encima
+		bar      barra de avance en un hueco de piedra, relleno con degradado y texto
 		iconText ícono + texto en una fila (premios: moneda y cantidad)
 ]]
 
+local Kit = require(script.Parent.Kit)
 local ShopParts = require(script.Parent.ShopParts)
 local Icons = require(script.Parent.Icons)
 local Style = require(script.Parent.Style)
@@ -22,6 +24,10 @@ export type Bar = {
 }
 
 local TRACK_COLOR = Color3.fromRGB(28, 30, 40)
+-- Las barras son finas (hasta 16 de alto): el hueco de piedra con el canto chico,
+-- y el relleno metido RIM píxeles para no tapar el canto.
+local TRACK_SLICE = 0.34
+local RIM = 3
 
 local CardParts = {}
 
@@ -34,14 +40,11 @@ function CardParts.paint(frame: GuiObject, color: Color3)
 	ShopParts.sunburst(frame, color)
 end
 
-function CardParts.card(parent: Instance, name: string, color: Color3, radius: number?): Frame
+-- `_radius` ya no se usa (la piedra trae su esquina); queda por compatibilidad.
+function CardParts.card(parent: Instance, name: string, color: Color3, _radius: number?): Frame
 	local card = Instance.new("Frame")
 	card.Name = name
 	card.ClipsDescendants = false
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, radius or 14)
-	corner.Parent = card
-	Style.border(card, 3)
 	ShopParts.sunburst(card, color)
 	card.Parent = parent
 	return card
@@ -60,20 +63,24 @@ function CardParts.bar(parent: Instance, color: Color3, textSize: number?): Bar
 	local track = Instance.new("Frame")
 	track.Name = "Barra"
 	track.BackgroundColor3 = TRACK_COLOR
-	track.ClipsDescendants = true
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(1, 0)
-	corner.Parent = track
-	Style.border(track, 2.5)
+	Kit.skin(track, "hondo").SliceScale = TRACK_SLICE
 	track.Parent = parent
+	local groove = Instance.new("Frame") -- el fondo del hueco: recorta el relleno
+	groove.Name = "Hueco"
+	groove.BackgroundTransparency = 1
+	groove.ClipsDescendants = true
+	groove.Position = UDim2.fromOffset(RIM, RIM)
+	groove.Size = UDim2.new(1, -RIM * 2, 1, -RIM * 2)
+	groove.Parent = track
 	local fill = Instance.new("Frame")
 	fill.Name = "Relleno"
 	fill.BorderSizePixel = 0
 	fill.Size = UDim2.fromScale(0, 1)
-	local fillCorner = corner:Clone()
+	local fillCorner = Instance.new("UICorner")
+	fillCorner.CornerRadius = UDim.new(0, 6)
 	fillCorner.Parent = fill
 	repaintFill(fill, color)
-	fill.Parent = track
+	fill.Parent = groove
 	local shine = Instance.new("Frame") -- brillo arriba, como la barra de hambre
 	shine.Name = "Brillo"
 	shine.BorderSizePixel = 0

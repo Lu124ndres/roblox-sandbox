@@ -3,17 +3,20 @@
 	UpgradeDetail
 
 	Panel grande de la izquierda en MEJORAS: muestra el nivel elegido en la
-	cuadrícula (al abrir, el siguiente por comprar). Ícono grande sobre rayos
-	del color de su rareza, nombre, qué da comparado con lo que tienes ahora
-	(x2 → x3), una barra de cuánto te falta juntar y los botones para comprar
-	con monedas o Robux. Solo se compra el siguiente nivel.
+	cuadrícula (al abrir, el siguiente por comprar). Va en un hueco de piedra:
+	ícono grande sobre piedra y rayos del color de su rareza, nombre dorado,
+	qué da comparado con lo que tienes ahora (x2 → x3), una barra de cuánto te
+	falta juntar y los botones para comprar: con monedas el de lava (lo
+	principal) y con Robux el verde. Solo se compra el siguiente nivel.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
+local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local GearIcons = require(script.Parent.Parent.Interface.GearIcons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 
@@ -51,20 +54,20 @@ end
 function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () -> ()): Detail
 	local panel = box(parent, "Detalle", PALETTE.Panel)
 	panel.Size = UDim2.new(0.37, -8, 1, 0)
-	Style.border(panel, 3)
+	Kit.skin(panel, "hondo")
 
-	local status = Style.text(panel, "Estado", 26, PALETTE.Coins, 2.5)
-	status.Position = UDim2.fromScale(0.05, 0.015)
-	status.Size = UDim2.fromScale(0.9, 0.07)
+	local status = Style.text(panel, "Estado", 26, nil, 2.5)
+	status.Position = UDim2.fromScale(0.05, 0.02)
+	status.Size = UDim2.fromScale(0.9, 0.065)
+	Kit.gold(status)
 
 	local art = box(panel, "Arte", WHITE)
 	art.ClipsDescendants = true
 	art.Position = UDim2.fromScale(0.06, 0.09)
 	art.Size = UDim2.fromScale(0.88, 0.36)
-	Style.border(art, 3)
 	local icon: ImageLabel? = nil
 	local levelChip = Style.text(panel, "Nivel", 20, WHITE, 2)
-	levelChip.Position = UDim2.fromScale(0.09, 0.095)
+	levelChip.Position = UDim2.fromScale(0.1, 0.1)
 	levelChip.Size = UDim2.fromScale(0.4, 0.06)
 	levelChip.TextXAlignment = Enum.TextXAlignment.Left
 	levelChip.ZIndex = 4
@@ -72,6 +75,7 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	local name = Style.text(panel, "Nombre", 30, WHITE, 2.5)
 	name.Position = UDim2.fromScale(0.04, 0.46)
 	name.Size = UDim2.fromScale(0.92, 0.08)
+	Kit.gold(name)
 
 	local stats = Instance.new("Frame")
 	stats.Name = "Datos"
@@ -83,16 +87,9 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	statList.Padding = UDim.new(0, 2)
 	statList.Parent = stats
 
-	local track = box(panel, "Barra", Color3.fromRGB(20, 22, 34))
-	track.Position = UDim2.fromScale(0.06, 0.71)
-	track.Size = UDim2.fromScale(0.88, 0.065)
-	Style.border(track, 2)
-	local fill = box(track, "Lleno", PALETTE.Coins)
-	Style.gradient(fill, PALETTE.Coins)
-	local need = Style.text(track, "Falta", 20, WHITE, 2)
-	need.Position = UDim2.fromScale(0.03, 0.08)
-	need.Size = UDim2.fromScale(0.94, 0.84)
-	need.ZIndex = 3
+	local bar = CardParts.bar(panel, PALETTE.Coins, 20)
+	bar.track.Position = UDim2.fromScale(0.06, 0.71)
+	bar.track.Size = UDim2.fromScale(0.88, 0.065)
 
 	local buttons = Instance.new("Frame")
 	buttons.BackgroundTransparency = 1
@@ -101,7 +98,10 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	buttons.Parent = panel
 	local coinsButton = ShopParts.price(buttons, PALETTE.Buy, "coins")
 	coinsButton.button.Activated:Connect(onCoins)
-	local robuxButton = ShopParts.price(buttons, PALETTE.RobuxAlt, "robux")
+	-- Comprar con monedas es lo principal: marco de lava (como TIENDA). Se viste
+	-- encima de la piedra verde, así que ya no se tiñe al cambiar de color.
+	Kit.press(coinsButton.button, Kit.skin(coinsButton.button, "lava"))
+	local robuxButton = ShopParts.price(buttons, PALETTE.Buy, "robux")
 	robuxButton.button.Activated:Connect(onRobux)
 	local note = Style.text(buttons, "Nota", 24, SOFT, 2)
 	note.Size = UDim2.fromScale(1, 1)
@@ -117,8 +117,8 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	local function update(spec: DetailSpec)
 		local tier = GearIcons.tierColor(spec.category, spec.level)
 		for _, child in art:GetChildren() do
-			if not child:IsA("UICorner") and not child:IsA("UIStroke") then
-				child:Destroy()
+			if not child:IsA("UICorner") then
+				child:Destroy() -- la piedra, los rayos y el ícono del nivel anterior
 			end
 		end
 		ShopParts.sunburst(art, tier, 1.6)
@@ -150,12 +150,13 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 
 		local isNext = spec.level == spec.owned + 1
 		local afford = spec.coins >= spec.def.price
-		track.Visible = isNext
-		fill.Size =
-			UDim2.fromScale(math.clamp(spec.coins / math.max(spec.def.price, 1), 0.02, 1), 1)
-		need.Text = if afford
-			then "¡Te alcanza!"
-			else `Te faltan {NumberFormat.short(spec.def.price - spec.coins)}`
+		bar.track.Visible = isNext
+		bar.set(
+			math.clamp(spec.coins / math.max(spec.def.price, 1), 0.02, 1),
+			if afford
+				then "¡Te alcanza!"
+				else `Te faltan {NumberFormat.short(spec.def.price - spec.coins)}`
+		)
 		coinsButton.button.Visible = isNext
 		robuxButton.button.Visible = isNext and spec.robux ~= nil
 		-- Sin monedas sigue verde y responde (el servidor avisa cuánto falta).

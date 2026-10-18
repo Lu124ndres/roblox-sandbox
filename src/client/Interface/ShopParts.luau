@@ -2,12 +2,14 @@
 --[[
 	ShopParts
 
-	Piezas de las tiendas estilo simulador (TIENDA, MEJORAS, premio):
-		sunburst  fondo de color con rayos blancos que giran despacio
-		price     botón con ícono (Robux o moneda) y precio
-		gift      botón rosa cuadrado con el regalo
-		section   título de sección con una línea a la derecha
-		tag       etiqueta inclinada ("¡Mejor oferta!", "x4")
+	Piezas de las tiendas estilo simulador (TIENDA, MEJORAS, premio), de
+	piedra tallada (Interface/Kit):
+		stone     viste un cuadro de piedra sin perder su borde de resaltar
+		sunburst  piedra teñida de su color con rayos claros que giran despacio
+		price     placa de piedra con ícono (Robux o moneda) y precio
+		gift      botón de piedra rosa cuadrado con el regalo
+		section   título de sección dorado con una línea dorada y una gema
+		tag       etiqueta de piedra inclinada ("¡Mejor oferta!", "x4")
 		scroller  lista con scroll para secciones y tarjetas
 ]]
 
@@ -17,9 +19,12 @@ local TweenService = game:GetService("TweenService")
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Icons = require(script.Parent.Icons)
+local Kit = require(script.Parent.Kit)
+local StoneSkin = require(script.Parent.StoneSkin)
 local Style = require(script.Parent.Style)
 
 local SPIN = TweenInfo.new(40, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1)
+local LINE_GOLD = Color3.fromRGB(255, 206, 92)
 
 export type Price = {
 	button: TextButton,
@@ -29,10 +34,13 @@ export type Price = {
 
 local ShopParts = {}
 
--- Pinta `frame` con su color, degradado y rayos claros desde el centro.
+-- Viste de piedra sin perder el borde de resaltar (Interface/StoneSkin).
+ShopParts.stone = StoneSkin.dress
+
+-- Pinta `frame` de piedra de su color con rayos claros desde el centro.
 function ShopParts.sunburst(frame: GuiObject, color: Color3, size: number?)
 	frame.BackgroundColor3 = color
-	Style.gradient(frame, color)
+	ShopParts.stone(frame, "boton", color)
 	if not Icons.has("sunburst") then
 		return
 	end
@@ -44,7 +52,7 @@ function ShopParts.sunburst(frame: GuiObject, color: Color3, size: number?)
 	-- Cuadrado del alto del cuadro: los rayos se apagan antes del borde (no hace
 	-- falta recortar) y pueden girar sin salirse.
 	rays.Size = UDim2.fromScale(size or 1, size or 1)
-	rays.ImageTransparency = 0.55
+	rays.ImageTransparency = 0.72 -- suaves: que se vea la piedra
 	rays.ZIndex = 0 -- debajo del ícono y los textos de la tarjeta
 	Icons.paint(rays, "sunburst")
 	local square = Instance.new("UIAspectRatioConstraint")
@@ -54,7 +62,7 @@ function ShopParts.sunburst(frame: GuiObject, color: Color3, size: number?)
 	TweenService:Create(rays, SPIN, { Rotation = 360 }):Play()
 end
 
--- Botón de precio: `currency` "robux" o "coins".
+-- Placa de precio: `currency` "robux" o "coins" (las monedas, con el número dorado).
 function ShopParts.price(parent: Instance, color: Color3, currency: string): Price
 	local button = Style.button(parent, "Precio", color, "")
 	local text = button:FindFirstChild("Texto") :: TextLabel
@@ -68,28 +76,23 @@ function ShopParts.price(parent: Instance, color: Color3, currency: string): Pri
 		icon = image
 	else
 		icon = Icons.view(button, "coin")
+		Kit.gold(text)
 	end
 	icon.AnchorPoint = Vector2.new(0, 0.5)
-	icon.Position = UDim2.new(0, 6, 0.5, 0)
-	icon.Size = UDim2.new(0.3, 0, 0.8, 0)
+	icon.Position = UDim2.new(0, 8, 0.5, 0)
+	icon.Size = UDim2.fromScale(0.3, 0.72)
 	local square = Instance.new("UIAspectRatioConstraint")
 	square.Parent = icon
 	text.AnchorPoint = Vector2.new(1, 0.5)
-	text.Position = UDim2.new(1, -6, 0.5, 0)
-	text.Size = UDim2.new(0.72, -10, 0.7, 0)
+	text.Position = UDim2.new(1, -8, 0.5, 0)
+	text.Size = UDim2.new(0.72, -12, 0.66, 0)
 	local function set(value: string, enabled: boolean)
 		text.Text = value
 		button.Active = enabled
-		button.AutoButtonColor = enabled
-		local tint = if enabled then color else Style.PALETTE.Disabled
-		button.BackgroundColor3 = tint
-		local gradient = button:FindFirstChildOfClass("UIGradient")
-		if gradient then
-			gradient:Destroy()
-		end
-		Style.gradient(button, tint)
+		-- La piedra se tiñe sola al cambiar BackgroundColor3 (Style.button).
+		button.BackgroundColor3 = if enabled then color else Style.PALETTE.Disabled
 		icon.Visible = enabled
-		text.Size = if enabled then UDim2.new(0.72, -10, 0.7, 0) else UDim2.new(1, -12, 0.7, 0)
+		text.Size = if enabled then UDim2.new(0.72, -12, 0.66, 0) else UDim2.new(1, -16, 0.66, 0)
 	end
 	return { button = button, label = text, set = set }
 end
@@ -99,7 +102,7 @@ function ShopParts.gift(parent: Instance): TextButton
 	local icon = Icons.view(button, if Icons.has("giftPink") then "giftPink" else "gift")
 	icon.AnchorPoint = Vector2.new(0.5, 0.5)
 	icon.Position = UDim2.fromScale(0.5, 0.5)
-	icon.Size = UDim2.fromScale(0.85, 0.85)
+	icon.Size = UDim2.fromScale(0.78, 0.78)
 	return button
 end
 
@@ -117,15 +120,29 @@ function ShopParts.section(parent: Instance, order: number, text: string): Frame
 	label.TextScaled = false
 	label.TextSize = 30
 	label.Size = UDim2.fromScale(0, 1)
+	Kit.gold(label)
 	local line = Instance.new("Frame")
 	line.Name = "Linea"
 	line.AnchorPoint = Vector2.new(1, 0.5)
-	line.Position = UDim2.fromScale(1, 0.5)
-	line.Size = UDim2.new(0.55, 0, 0, 4)
-	line.BackgroundColor3 = Color3.new(1, 1, 1)
-	line.BackgroundTransparency = 0.6
+	line.Position = UDim2.new(1, -14, 0.5, 0)
+	line.Size = UDim2.new(0.55, -14, 0, 4)
+	line.BackgroundColor3 = LINE_GOLD
+	line.BackgroundTransparency = 0.2
 	line.BorderSizePixel = 0
+	local edge = Instance.new("UIStroke")
+	edge.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	edge.Color = Kit.GOLD_OUTLINE
+	edge.Thickness = 1.5
+	edge.Parent = line
 	line.Parent = holder
+	local gem = Instance.new("ImageLabel")
+	gem.Name = "Gema"
+	gem.BackgroundTransparency = 1
+	gem.Image = Assets.UI.PiedraGema
+	gem.AnchorPoint = Vector2.new(1, 0.5)
+	gem.Position = UDim2.fromScale(1, 0.5)
+	gem.Size = UDim2.fromOffset(20, 26)
+	gem.Parent = holder
 	return holder
 end
 
@@ -135,13 +152,11 @@ function ShopParts.tag(parent: Instance, text: string, color: Color3): TextLabel
 	tag.BackgroundColor3 = color
 	tag.Rotation = -8
 	tag.ZIndex = 4
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = tag
-	Style.border(tag, 2.5)
+	-- Las etiquetas son chicas: el canto de la piedra más fino para que entre.
+	Kit.skin(tag, "boton", color).SliceScale = 0.24
 	local label = Style.text(tag, "Texto", 22, nil, 2)
-	label.Size = UDim2.new(1, -8, 1, -4)
-	label.Position = UDim2.fromOffset(4, 2)
+	label.Size = UDim2.new(1, -10, 1, -6)
+	label.Position = UDim2.fromOffset(5, 3)
 	label.ZIndex = 5
 	label.Text = text
 	tag.Parent = parent
@@ -155,6 +170,7 @@ function ShopParts.scroller(parent: Instance): ScrollingFrame
 	list.BorderSizePixel = 0
 	list.Size = UDim2.fromScale(1, 1)
 	list.ScrollBarThickness = 8
+	list.ScrollBarImageColor3 = LINE_GOLD
 	list.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	list.CanvasSize = UDim2.new()
 	list.Parent = parent

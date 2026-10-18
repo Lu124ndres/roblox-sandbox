@@ -3,11 +3,13 @@
 	UpgradeCard
 
 	Tarjeta de un nivel en la cuadrícula de MEJORAS: el ícono del equipo
-	(GearIcons) sobre el color de su rareza, "Nv N" y abajo el estado:
-		equipada      franja verde "EQUIPADA"
-		comprada      franja verde oscura "TIENES"
-		la siguiente  franja dorada con el precio y la cinta "¡SIGUIENTE!" (late)
-		bloqueada     ícono oscurecido y el precio en gris
+	(GearIcons) sobre piedra teñida del color de su rareza, "Nv N" y abajo el
+	estado en una placa de piedra:
+		equipada      placa verde "EQUIPADA"
+		comprada      placa verde oscura "TIENES"
+		la siguiente  placa gris con el precio dorado y la cinta "¡SIGUIENTE!"
+		              (el canto late en dorado)
+		bloqueada     piedra e ícono oscurecidos y el precio en gris
 	Tocarla la selecciona: el panel de la izquierda (UpgradeDetail) la muestra.
 ]]
 
@@ -17,6 +19,8 @@ local TweenService = game:GetService("TweenService")
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local GearIcons = require(script.Parent.Parent.Interface.GearIcons)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
+local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local PALETTE = Style.PALETTE
@@ -43,15 +47,12 @@ local function strip(card: TextButton, color: Color3, text: string, coin: boolea
 	local bar = Instance.new("Frame")
 	bar.Name = "Estado"
 	bar.AnchorPoint = Vector2.new(0.5, 1)
-	bar.Position = UDim2.new(0.5, 0, 1, -6)
-	bar.Size = UDim2.new(1, -12, 0.22, 0)
+	bar.Position = UDim2.new(0.5, 0, 1, -7)
+	bar.Size = UDim2.new(1, -14, 0.22, 0)
 	bar.BackgroundColor3 = color
 	bar.BorderSizePixel = 0
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 8)
-	corner.Parent = bar
-	Style.gradient(bar, color)
-	Style.border(bar, 2)
+	bar.ZIndex = 2
+	Kit.skin(bar, "boton", color).SliceScale = 0.24 -- placa chica: canto fino
 	bar.Parent = card
 	local left = 0.06
 	if coin then
@@ -65,8 +66,11 @@ local function strip(card: TextButton, color: Color3, text: string, coin: boolea
 	end
 	local label = Style.text(bar, "Texto", 22, WHITE, 2)
 	label.Text = text
-	label.Position = UDim2.fromScale(left, 0.1)
-	label.Size = UDim2.fromScale(0.96 - left, 0.8)
+	label.Position = UDim2.fromScale(left, 0.14)
+	label.Size = UDim2.fromScale(0.94 - left, 0.72)
+	if coin and color == Kit.STONE then
+		Kit.gold(label) -- el precio a pagar, dorado sobre piedra gris (como MEJORAS)
+	end
 	return label
 end
 
@@ -81,17 +85,16 @@ function UpgradeCard.new(parent: Instance, spec: CardSpec): Card
 	card.Text = ""
 	card.AutoButtonColor = false
 	card.BackgroundColor3 = if isOwned or isNext then tier else tier:Lerp(BLACK, 0.55)
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 14)
-	corner.Parent = card
-	Style.gradient(card, card.BackgroundColor3)
+	-- El borde queda escondido bajo la piedra y se ve al elegirla o si es la siguiente.
 	Style.border(card, 3)
+	local skin = ShopParts.stone(card, "boton", card.BackgroundColor3)
+	Kit.press(card, skin)
 	local stroke = card:FindFirstChildOfClass("UIStroke") :: UIStroke
 	card.Parent = parent
 
 	local icon = GearIcons.view(card, spec.category, level)
 	icon.AnchorPoint = Vector2.new(0.5, 0)
-	icon.Position = UDim2.fromScale(0.5, 0.06)
+	icon.Position = UDim2.fromScale(0.5, 0.07)
 	icon.Size = UDim2.fromScale(0.82, 0.66)
 	if not isOwned and not isNext then
 		icon.ImageColor3 = Color3.fromRGB(70, 70, 80)
@@ -100,7 +103,7 @@ function UpgradeCard.new(parent: Instance, spec: CardSpec): Card
 	local chip = Style.text(card, "Nivel", 20, WHITE, 2)
 	chip.Text = `Nv {level}`
 	chip.TextXAlignment = Enum.TextXAlignment.Left
-	chip.Position = UDim2.fromOffset(8, 4)
+	chip.Position = UDim2.fromOffset(10, 6)
 	chip.Size = UDim2.new(0.6, 0, 0.16, 0)
 	chip.ZIndex = 2
 
@@ -109,9 +112,10 @@ function UpgradeCard.new(parent: Instance, spec: CardSpec): Card
 	elseif isOwned then
 		strip(card, PALETTE.Buy:Lerp(BLACK, 0.35), "TIENES", false)
 	elseif isNext then
-		strip(card, PALETTE.Coins, NumberFormat.short(spec.price), true)
+		strip(card, Kit.STONE, NumberFormat.short(spec.price), true)
 		local ribbon = Style.text(card, "Siguiente", 18, PALETTE.Coins, 2)
 		ribbon.Text = "¡SIGUIENTE!"
+		Kit.gold(ribbon)
 		ribbon.Rotation = 12
 		ribbon.AnchorPoint = Vector2.new(1, 0)
 		ribbon.Position = UDim2.new(1, 4, 0, 2)

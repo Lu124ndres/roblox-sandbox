@@ -3,7 +3,8 @@
 	ShopWindow
 
 	Ventana MEJORAS: arriba las pestañas Cañas / Canastas / Botas (con el
-	ícono de lo que tienes y "Nv 3/20") y tus monedas. A la izquierda el
+	ícono de lo que tienes y "Nv 3/20") y tus monedas en una placa de piedra
+	honda, en dorado. A la izquierda el
 	panel grande del nivel elegido (UpgradeDetail) con los botones de compra;
 	a la derecha la cuadrícula de todos los niveles (UpgradeCard). Al abrir
 	queda elegido el siguiente por comprar. Solo dibuja; ShopController le
@@ -17,6 +18,7 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Icons = require(script.Parent.Parent.Interface.Icons)
+local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Window = require(script.Parent.Parent.Menus.Window)
@@ -56,18 +58,21 @@ function ShopWindow.mount(
 	local tabs = ShopTabs.build(content, TOP)
 
 	local wallet = Instance.new("Frame")
-	wallet.BackgroundTransparency = 1
+	wallet.Name = "Billetera"
 	wallet.AnchorPoint = Vector2.new(1, 0)
-	wallet.Position = UDim2.new(1, -6, 0, 4)
-	wallet.Size = UDim2.new(0.33, 0, 0, TOP - 14)
+	wallet.Position = UDim2.new(1, -6, 0, 2)
+	wallet.Size = UDim2.new(0.3, 0, 0, TOP - 10)
 	wallet.Parent = content
+	Kit.skin(wallet, "hondo")
 	local coinIcon = Icons.view(wallet, "coin")
-	coinIcon.AnchorPoint = Vector2.new(1, 0.5)
-	coinIcon.Position = UDim2.fromScale(1, 0.5)
-	coinIcon.Size = UDim2.fromOffset(44, 44)
+	coinIcon.AnchorPoint = Vector2.new(0, 0.5)
+	coinIcon.Position = UDim2.new(0, 8, 0.5, 0)
+	coinIcon.Size = UDim2.fromOffset(36, 36)
 	local coins = Style.text(wallet, "Monedas", 34, PALETTE.Coins, 3)
 	coins.TextXAlignment = Enum.TextXAlignment.Right
-	coins.Size = UDim2.new(1, -50, 1, 0)
+	coins.Position = UDim2.fromOffset(48, 6)
+	coins.Size = UDim2.new(1, -62, 1, -12)
+	Kit.gold(coins)
 
 	local body = Instance.new("Frame")
 	body.BackgroundTransparency = 1
