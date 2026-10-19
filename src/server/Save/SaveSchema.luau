@@ -48,6 +48,7 @@ export type SaveData = {
 	spinAt: number, -- unix en que vuelve a tocar la ruleta gratis (v9, ver SaveExtra)
 	spins: number, -- giros de ruleta guardados (v10)
 	coinBoostUntil: number, -- unix en que termina el x2 monedas de la ruleta (v10)
+	playMinutes: number, -- minutos jugados en total (v11, para la telemetría)
 }
 
 local SaveSchema = {}
@@ -55,8 +56,9 @@ local SaveSchema = {}
 -- 2: kills; 3: mejoras de la tienda; 4: tutorial, diario, ajustes, insignias;
 -- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie;
 -- 8: renacer, misiones, pack de inicio; 9: ruleta gratis; 10: giros guardados y
--- x2 monedas (8 a 10 en SaveExtra; lo que falta en un guardado viejo queda en 0)
-SaveSchema.VERSION = 10
+-- x2 monedas; 11: minutos jugados (8 a 11 en SaveExtra; lo que falta en un guardado
+-- viejo queda en 0)
+SaveSchema.VERSION = 11
 
 function SaveSchema.default(): SaveData
 	return {
@@ -86,6 +88,7 @@ function SaveSchema.default(): SaveData
 		spinAt = 0,
 		spins = 0,
 		coinBoostUntil = 0,
+		playMinutes = 0,
 	}
 end
 

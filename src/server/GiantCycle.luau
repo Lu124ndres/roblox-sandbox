@@ -40,6 +40,7 @@ local Remotes = require(script.Parent.Remotes)
 local RestArena = require(script.Parent.RestArena)
 local GiantChoice = require(script.Parent.Monetization.GiantChoice)
 local RestTime = require(script.Parent.Monetization.RestTime)
+local Analytics = require(script.Parent.Analytics)
 
 local CYCLE = Config.Giants.cycle
 local ATTRS = Protocol.GiantAttributes
@@ -87,6 +88,7 @@ end
 local function cycle(tired: boolean)
 	local current = GiantService.getCurrent()
 	local paid = GiantRewards.payKills(current.id) -- +1 kill a los que le dieron algo
+	Analytics.giantDone(current, tired, paid)
 	if tired then
 		for _, player in Players:GetPlayers() do
 			Remotes.Notice:FireClient(

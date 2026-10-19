@@ -16,6 +16,7 @@ local PlayerData = require(script.Parent.Parent.PlayerData)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
 local SaveService = require(script.Parent.Parent.Save.SaveService)
+local Analytics = require(script.Parent.Parent.Analytics)
 
 local Rebirth = {}
 
@@ -25,6 +26,7 @@ local function rebirth(player: Player)
 		return
 	end
 	local count = save.rebirths + 1
+	Analytics.rebirth(player, count, save) -- antes de reiniciar: lo que pierde
 	PlayerData.edit(player, function(data)
 		data.coins = 0
 		data.power = 0

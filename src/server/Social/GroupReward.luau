@@ -67,7 +67,7 @@ local function claim(player: Player)
 		data.groupClaimed = true
 	end)
 	local reward = { coins = GROUP.coins, boostMinutes = GROUP.boostMinutes }
-	Rewards.give(player, reward)
+	Rewards.give(player, reward, "grupo")
 	reply("ok", Rewards.describe(reward, Config.Social.personalBoostMultiplier))
 end
 

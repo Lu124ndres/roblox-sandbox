@@ -2,7 +2,7 @@
 --[[
 	SaveExtra
 
-	Campos del guardado que llegaron en las versiones 8 a 10 (SaveSchema los
+	Campos del guardado que llegaron en las versiones 8 a 11 (SaveSchema los
 	declara y llama a read; en un guardado viejo faltan y quedan en 0):
 		rebirths     veces que renació (Retention/Rebirth)
 		quests       misiones del día: día UTC, avance y cuáles se cumplieron
@@ -10,6 +10,7 @@
 		spinAt       unix en que vuelve a tocar la ruleta gratis (v9, Retention/SpinWheel)
 		spins        giros de ruleta guardados (v10)
 		coinBoostUntil  unix en que termina el x2 monedas de la ruleta (v10)
+		playMinutes  minutos jugados en total, en todas las sesiones (v11, Analytics/Sesion)
 ]]
 
 export type QuestsSave = {
@@ -41,13 +42,14 @@ end
 
 local count = SaveExtra.count
 
--- Lee lo de las versiones 8 a 10 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
+-- Lee lo de las versiones 8 a 11 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
 function SaveExtra.read(source: { [string]: any }, data: any)
 	data.rebirths = count(source.rebirths)
 	data.starterPack = source.starterPack == true
 	data.spinAt = count(source.spinAt)
 	data.spins = count(source.spins)
 	data.coinBoostUntil = count(source.coinBoostUntil)
+	data.playMinutes = count(source.playMinutes)
 	local saved = source.quests
 	if type(saved) == "table" then
 		data.quests.day = count(saved.day)

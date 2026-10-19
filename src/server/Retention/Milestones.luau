@@ -41,7 +41,7 @@ function Milestones.caught(player: Player, fishId: string, added: number, firstT
 	end
 	local coins =
 		math.floor((RETENTION.discoveryCoins[rarity.id] or 0) * Perks.coinMultiplier(player))
-	PlayerData.addCoins(player, coins)
+	PlayerData.addCoins(player, coins, "coleccion")
 	Remotes.Notice:FireClient(player, "newFish", fishId, coins)
 	local save = PlayerData.read(player)
 	if not save then
@@ -56,7 +56,7 @@ function Milestones.caught(player: Player, fishId: string, added: number, firstT
 	end
 	-- Hito de la colección (cada 6 especies) o la colección completa.
 	local prize = math.floor(Collection.reward(player, found) * Perks.coinMultiplier(player))
-	PlayerData.addCoins(player, prize)
+	PlayerData.addCoins(player, prize, "coleccion")
 	if found >= Collection.total then
 		Remotes.Notice:FireClient(player, "collection", prize)
 		Badges.award(player, "Coleccion")

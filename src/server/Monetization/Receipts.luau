@@ -30,6 +30,7 @@ local GiantFill = require(script.Parent.GiantFill)
 local Gifts = require(script.Parent.Gifts)
 local Grants = require(script.Parent.Grants)
 local ServerBoost = require(script.Parent.ServerBoost)
+local Analytics = require(script.Parent.Parent.Analytics)
 
 local MONETIZATION = Config.Monetization
 
@@ -123,6 +124,8 @@ local function process(receipt: { [string]: any }): Enum.ProductPurchaseDecision
 	if not persist(player, purchaseId) then
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
+	local spent = receipt.CurrencySpent
+	Analytics.robux(player, key, if type(spent) == "number" then spent else 0, recipient ~= player)
 	return Enum.ProductPurchaseDecision.PurchaseGranted
 end
 

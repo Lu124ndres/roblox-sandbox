@@ -29,6 +29,8 @@ local GiantFill = require(script.Parent.GiantFill)
 local Passes = require(script.Parent.Passes)
 local Remotes = require(script.Parent.Parent.Remotes)
 local ServerBoost = require(script.Parent.ServerBoost)
+local Analytics = require(script.Parent.Parent.Analytics)
+local Bus = require(script.Parent.Parent.Analytics.Bus)
 
 local MONETIZATION = Config.Monetization
 local PONDS = Config.Progression.ponds
@@ -49,6 +51,7 @@ local function unlockPond(player: Player, pond: number): string
 	PlayerData.edit(player, function(save)
 		save.ponds[tostring(pond)] = true
 	end)
+	Analytics.pondBought(player, pond)
 	return `Estanque x{PONDS[pond].multiplier}`
 end
 
@@ -74,6 +77,7 @@ local function starterPack(player: Player): string
 		save.coins += pack.coins
 		save.boostUntil = math.max(save.boostUntil, os.time()) + pack.boostMinutes * 60
 	end)
+	Bus.coins(player, pack.coins, "pack")
 	raiseUpgrade(player, "Rod", pack.rod)
 	raiseUpgrade(player, "Basket", pack.basket)
 	raiseUpgrade(player, "Boots", pack.boots)

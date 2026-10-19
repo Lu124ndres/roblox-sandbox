@@ -24,6 +24,7 @@ local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
+local Bus = require(script.Parent.Analytics.Bus)
 local Basket = require(script.Parent.Feeding.Basket)
 local ProfilePublish = require(script.Parent.ProfilePublish)
 local SaveSchema = require(script.Parent.Save.SaveSchema)
@@ -81,13 +82,15 @@ function PlayerData.isLoaded(player: Player): boolean
 	return dataByPlayer[player] ~= nil
 end
 
-function PlayerData.addCoins(player: Player, amount: number)
+-- source: de dónde vienen, para la telemetría ("alimentar", "diario"...; Analytics/Bus).
+function PlayerData.addCoins(player: Player, amount: number, source: string?)
 	local data = dataByPlayer[player]
 	if not data or amount <= 0 then
 		return
 	end
 	data.save.coins += math.floor(amount)
 	ProfilePublish.coins(player, data.save)
+	Bus.coins(player, math.floor(amount), source or "otro")
 end
 
 function PlayerData.addPower(player: Player, amount: number)
@@ -99,14 +102,15 @@ function PlayerData.addPower(player: Player, amount: number)
 	ProfilePublish.power(player, data.save)
 end
 
--- Cobra monedas si le alcanzan; devuelve false si no.
-function PlayerData.spendCoins(player: Player, amount: number): boolean
+-- Cobra monedas si le alcanzan; devuelve false si no. sink: en qué se gastan (telemetría).
+function PlayerData.spendCoins(player: Player, amount: number, sink: string?): boolean
 	local data = dataByPlayer[player]
 	if not data or amount < 0 or data.save.coins < amount then
 		return false
 	end
 	data.save.coins -= math.floor(amount)
 	ProfilePublish.coins(player, data.save)
+	Bus.spend(player, math.floor(amount), sink or "otro")
 	return true
 end
 
@@ -126,9 +130,11 @@ function PlayerData.addKill(player: Player, giantId: string)
 		return
 	end
 	local amount = Perks.killMultiplier(player)
+	local before = data.save.kills
 	data.save.kills += amount
 	data.save.killsByGiant[giantId] = (data.save.killsByGiant[giantId] or 0) + amount
 	ProfilePublish.kills(player, data.save)
+	Bus.kill(player, before, data.save.kills)
 end
 
 function PlayerData.getPower(player: Player): number
@@ -160,12 +166,14 @@ function PlayerData.addFish(player: Player, fishId: string, count: number): numb
 	local room = PlayerData.getCapacity(player) - Basket.total(save.carried)
 	local added = math.clamp(math.floor(count), 0, math.max(0, room))
 	if added > 0 then
+		local caughtBefore = save.stats.fishCaught
 		Basket.add(save.carried, fishId, added)
 		save.species[fishId] = (save.species[fishId] or 0) + added
 		save.stats.fishCaught += added
 		data.lastCatchAt = os.clock()
 		ProfilePublish.carried(player, save)
 		ProfilePublish.species(player, save, fishId)
+		Bus.catch(player, fishId, added, caughtBefore)
 	end
 	return added
 end

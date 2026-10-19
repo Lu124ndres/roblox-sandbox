@@ -13,9 +13,10 @@ export type Reward = { coins: number?, boostMinutes: number? }
 
 local Rewards = {}
 
-function Rewards.give(player: Player, reward: Reward)
+-- source: de dónde vienen las monedas, para la telemetría ("misiones", "ruleta"...).
+function Rewards.give(player: Player, reward: Reward, source: string?)
 	if reward.coins and reward.coins > 0 then
-		PlayerData.addCoins(player, reward.coins)
+		PlayerData.addCoins(player, reward.coins, source)
 	end
 	local minutes = reward.boostMinutes
 	if minutes and minutes > 0 then

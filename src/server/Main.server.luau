@@ -43,11 +43,13 @@ local HabitatService = require(script.Parent.World.HabitatService)
 local PropDresser = require(script.Parent.World.PropDresser)
 local TerrainBuilder = require(script.Parent.World.TerrainBuilder)
 local TrainingService = require(script.Parent.TrainingService)
+local Analytics = require(script.Parent.Analytics)
 
 local map = Workspace:WaitForChild(Protocol.Map.Root)
 
 GiantTemplates.publish()
 SaveService.init()
+Analytics.init()
 GiantService.init(map)
 GiantMood.init()
 GiantCycle.init(map)

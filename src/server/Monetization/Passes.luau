@@ -16,6 +16,7 @@ local Assets = require(ReplicatedStorage.Shared.Assets)
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Remotes = require(script.Parent.Parent.Remotes)
+local Analytics = require(script.Parent.Parent.Analytics)
 
 local PASSES = Config.Monetization.passes
 local PREFIX = Protocol.PlayerAttributes.PassPrefix
@@ -74,6 +75,7 @@ function Passes.init()
 			local key = keyFor(passId)
 			if purchased and key then
 				Passes.grant(player, key)
+				Analytics.robux(player, `Pase{key}`, PASSES[key].robux, false)
 				Remotes.Notice:FireClient(
 					player,
 					"purchase",

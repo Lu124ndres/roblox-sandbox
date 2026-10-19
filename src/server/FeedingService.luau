@@ -100,7 +100,7 @@ local function deliver(player: Player): (number, number)
 					* Perks.coinMultiplier(player)
 			)
 			GiantService.feed(food, player, took, Basket.rarest(taken))
-			PlayerData.addCoins(player, earned)
+			PlayerData.addCoins(player, earned, "alimentar")
 			Quests.add(player, "food", food / GiantService.getFood() * 100)
 			fed += took
 			coins += earned

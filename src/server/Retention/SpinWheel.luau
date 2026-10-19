@@ -25,6 +25,7 @@ local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
 local Rewards = require(script.Parent.Parent.Social.Rewards)
 local SpinTimer = require(script.Parent.SpinTimer)
+local Analytics = require(script.Parent.Parent.Analytics)
 
 local SpinWheel = {}
 
@@ -54,7 +55,7 @@ end
 local function give(player: Player, prize: SPIN.Prize): string
 	local minutes = prize.minutes or 0
 	if prize.kind == "boost" then
-		Rewards.give(player, { boostMinutes = minutes })
+		Rewards.give(player, { boostMinutes = minutes }, "ruleta")
 		return `{minutes} min de x{Config.Social.personalBoostMultiplier} poder`
 	elseif prize.kind == "coinBoost" then
 		PlayerData.edit(player, function(save)
@@ -75,7 +76,7 @@ local function give(player: Player, prize: SPIN.Prize): string
 		return `¡Llenaste {percent}% del monstruo para todos!`
 	end
 	local coins = SpinWheel.coins(player, prize) -- "fill" sin monstruo comiendo: monedas
-	Rewards.give(player, { coins = coins })
+	Rewards.give(player, { coins = coins }, "ruleta")
 	return `+{NumberFormat.short(coins)} monedas`
 end
 
@@ -98,6 +99,7 @@ local function claim(player: Player)
 	end)
 	local text = give(player, SPIN.prizes[index])
 	Remotes.Notice:FireClient(player, "spin", index, text)
+	Analytics.spin(player, index, free)
 end
 
 function SpinWheel.init()

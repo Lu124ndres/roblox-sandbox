@@ -20,6 +20,7 @@ local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
+local Analytics = require(script.Parent.Parent.Analytics)
 
 local DAILY = Config.Retention.daily
 
@@ -45,8 +46,9 @@ local function claim(player: Player)
 		data.daily.streak = streak
 		data.spins += spins
 	end)
-	PlayerData.addCoins(player, coins)
+	PlayerData.addCoins(player, coins, "diario")
 	Remotes.Notice:FireClient(player, "daily", streak, coins)
+	Analytics.daily(player, streak)
 	if spins > 0 then
 		Remotes.Notice:FireClient(player, "spinsGained", spins, "daily")
 	end

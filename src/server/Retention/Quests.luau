@@ -68,7 +68,7 @@ local function pay(player: Player, title: string, coins: number, boostMinutes: n
 		coins = coinsFor(player, coins),
 		boostMinutes = boostMinutes,
 	}
-	Rewards.give(player, reward)
+	Rewards.give(player, reward, "misiones")
 	local text = Rewards.describe(reward, Config.Social.personalBoostMultiplier)
 	Remotes.Notice:FireClient(player, "quest", title, text)
 end

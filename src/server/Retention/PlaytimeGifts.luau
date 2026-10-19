@@ -50,7 +50,7 @@ local function claim(player: Player, index: unknown)
 	player:SetAttribute(ATTR.PlaytimeClaimed, claimed + bit)
 	local coins = if gift.coins then RewardScale.share(player, gift.coins, gift.share) else nil
 	local reward = { coins = coins, boostMinutes = gift.boostMinutes }
-	Rewards.give(player, reward)
+	Rewards.give(player, reward, "regalos")
 	local text = Rewards.describe(reward, Config.Social.personalBoostMultiplier)
 	Remotes.Notice:FireClient(player, "playtime", index, text)
 end

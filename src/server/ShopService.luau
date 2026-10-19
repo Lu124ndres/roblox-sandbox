@@ -20,6 +20,7 @@ local Milestones = require(script.Parent.Retention.Milestones)
 local Proximity = require(script.Parent.Proximity)
 local RateLimit = require(script.Parent.RateLimit)
 local Remotes = require(script.Parent.Remotes)
+local Analytics = require(script.Parent.Analytics)
 
 local PROMPT_DISTANCE = 12
 local REQUEST_COOLDOWN = 0.3 -- segundos entre compras del mismo jugador
@@ -61,11 +62,12 @@ local function onBuy(player: Player, category: unknown)
 		reply(player, "max", kind, level)
 		return
 	end
-	if not PlayerData.spendCoins(player, nextDef.price) then
+	if not PlayerData.spendCoins(player, nextDef.price, `tienda:{kind}`) then
 		reply(player, "poor", kind, level)
 		return
 	end
 	PlayerData.setUpgrade(player, kind, level + 1)
+	Analytics.upgrade(player, kind, level + 1)
 	if kind == "Boots" then
 		applyWalkSpeed(player)
 	end

@@ -16,6 +16,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local Remotes = require(script.Parent.Parent.Remotes)
 local Badges = require(script.Parent.Badges)
+local Analytics = require(script.Parent.Parent.Analytics)
 
 local STEPS = Config.Retention.tutorial
 
@@ -48,8 +49,10 @@ function Tutorial.progress(player: Player, stepId: string, amount: number)
 	end)
 	PlayerData.addCoins(
 		player,
-		step.coins + (if finished then Config.Retention.tutorialBonus else 0)
+		step.coins + (if finished then Config.Retention.tutorialBonus else 0),
+		"tutorial"
 	)
+	Analytics.tutorial(player, index)
 	Remotes.Notice:FireClient(player, "tutorial", index, step.coins)
 	if finished then
 		Badges.award(player, "Tutorial")

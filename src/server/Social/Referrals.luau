@@ -45,7 +45,7 @@ local function check(player: Player)
 	end
 	local multiplier = Config.Social.personalBoostMultiplier
 	local welcome = { coins = REFERRAL.newCoins, boostMinutes = REFERRAL.newBoostMinutes }
-	Rewards.give(player, welcome)
+	Rewards.give(player, welcome, "invitaciones")
 	Remotes.Notice:FireClient(
 		player,
 		"purchase",
@@ -55,7 +55,7 @@ local function check(player: Player)
 	if inviter and PlayerData.isLoaded(inviter) then
 		local thanks =
 			{ coins = REFERRAL.inviterCoins, boostMinutes = REFERRAL.inviterBoostMinutes }
-		Rewards.give(inviter, thanks)
+		Rewards.give(inviter, thanks, "invitaciones")
 		Remotes.Notice:FireClient(
 			inviter,
 			"purchase",

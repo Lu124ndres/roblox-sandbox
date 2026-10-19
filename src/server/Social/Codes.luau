@@ -48,7 +48,7 @@ local function redeem(player: Player, raw: unknown)
 	PlayerData.edit(player, function(data)
 		data.codes[key] = true
 	end)
-	Rewards.give(player, code)
+	Rewards.give(player, code, "codigos")
 	Remotes.Notice:FireClient(
 		player,
 		"code",
