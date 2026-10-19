@@ -329,6 +329,8 @@ El MCP de Studio **no importa FBX**: lo hace el usuario.
    `BaseHeight` (16.5, 44, 82.5 y 165).
 7. Se le recuerda al usuario: **Ctrl+S** (los modelos viven en el `.rbxl`) y **Alt+P** para
    publicar.
+8. Después de guardar con Ctrl+S: ejecutar `bash tools/respaldo_rbxl.sh` (copia el `.rbxl` con
+   fecha y hora a `~/RespaldosJuegoRoblox`, fuera del repo, y deja los últimos 20).
 
 Registro de la importación: `docs/import_<criatura>_v2.md` o el paso 5 del plan.
 
@@ -666,4 +668,5 @@ huesos y del hábitat elegido, que se fijan en la biblia.
 - El plan de la criatura (`docs/plan_<criatura>_v2.md`): estado, paleta, filas por etapa,
   articulaciones, resultado de las poses y pasos.
 - `docs/ui-assets.md` si faltan íconos o retratos. El README, si deja de describir el juego.
-- Recordar al usuario **guardar (Ctrl+S) y publicar (Alt+P)**.
+- Recordar al usuario **guardar (Ctrl+S), respaldar (`bash tools/respaldo_rbxl.sh`) y publicar
+  (Alt+P)**.
