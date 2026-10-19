@@ -77,8 +77,10 @@ ARTICULACIONES = [
     ("Oreja{l}", "Cabeza", (3.5, -11, 25)),
     ("OrejaPunta{l}", "Oreja{l}", (4.5, -11, 29)),
     # Bisagra del párpado: abierto es una ceja fina sobre el ojo (z 23..24) y se esconde en la
-    # frente; girando 90° sobre x baja delante del ojo (y -18..-17) y lo tapa entero (z 20..23).
-    ("Parpado{l}", "Cabeza", (3, -15.5, 21.5)),
+    # frente; cerrado (1.4 rad, Cara/Parpadeo) baja delante del ojo y lo tapa entero, de z 19.8 a
+    # 23.8. Abajo queda un poco por delante del ojo (no comparte el plano del costado de adentro,
+    # x 1) y arriba entra un poco en él, donde la cuña de x 6 tapa el costado de afuera.
+    ("Parpado{l}", "Cabeza", (3, -15.25, 21.25)),
     # Hombro y brazo giran en el mismo lugar: el centro de la espiga, en el borde de abajo del
     # pecho. El muslo, igual, en el borde de abajo de la cadera.
     ("Hombro{l}", "Pecho", (3, -4, 8)),

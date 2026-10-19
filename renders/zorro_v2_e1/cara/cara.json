@@ -16,73 +16,73 @@
     },
     "parpadeo_medio": {
       "visible": {
-        "frente": 0.548,
-        "frente_alto": 0.383,
-        "tres_cuartos": 0.675
+        "frente": 0.516,
+        "frente_alto": 0.34,
+        "tres_cuartos": 0.646
       },
       "ceja_celdas": {
-        "adentro": -0.64,
-        "afuera": -0.64
+        "adentro": -0.24,
+        "afuera": 0.06
       },
       "choques": []
     },
     "feliz": {
       "visible": {
-        "frente": 0.675,
-        "frente_alto": 0.507,
-        "tres_cuartos": 0.703
+        "frente": 0.662,
+        "frente_alto": 0.44,
+        "tres_cuartos": 0.679
       },
       "ceja_celdas": {
-        "adentro": -0.22,
-        "afuera": -0.34
+        "adentro": 0.04,
+        "afuera": 0.07
       },
       "choques": []
     },
     "enojo": {
       "visible": {
         "frente": 0.803,
-        "frente_alto": 0.694,
-        "tres_cuartos": 0.858
+        "frente_alto": 0.67,
+        "tres_cuartos": 0.854
       },
       "ceja_celdas": {
-        "adentro": -0.4,
-        "afuera": -0.04
+        "adentro": -0.18,
+        "afuera": 0.41
       },
       "choques": []
     },
     "sueno": {
       "visible": {
-        "frente": 0.51,
-        "frente_alto": 0.349,
-        "tres_cuartos": 0.651
+        "frente": 0.465,
+        "frente_alto": 0.301,
+        "tres_cuartos": 0.594
       },
       "ceja_celdas": {
-        "adentro": -0.73,
-        "afuera": -0.76
+        "adentro": -0.31,
+        "afuera": -0.01
       },
       "choques": []
     },
     "asco": {
       "visible": {
-        "frente": 0.732,
+        "frente": 0.72,
         "frente_alto": 0.569,
-        "tres_cuartos": 0.797
+        "tres_cuartos": 0.802
       },
       "ceja_celdas": {
-        "adentro": -0.51,
-        "afuera": -0.38
+        "adentro": -0.18,
+        "afuera": 0.22
       },
       "choques": []
     },
     "cerrado": {
       "visible": {
-        "frente": 0.268,
-        "frente_alto": 0.129,
-        "tres_cuartos": 0.514
+        "frente": 0.013,
+        "frente_alto": 0.024,
+        "tres_cuartos": 0.104
       },
       "ceja_celdas": {
-        "adentro": -1.91,
-        "afuera": -1.91
+        "adentro": -1.4,
+        "afuera": -0.77
       },
       "choques": []
     }
@@ -90,49 +90,49 @@
   "barrido_cierre": {
     "1.30": {
       "visible": {
-        "frente": 0.299,
-        "frente_alto": 0.182,
-        "tres_cuartos": 0.542
+        "frente": 0.146,
+        "frente_alto": 0.014,
+        "tres_cuartos": 0.212
       },
       "choques": 0
     },
     "1.40": {
       "visible": {
-        "frente": 0.268,
-        "frente_alto": 0.129,
-        "tres_cuartos": 0.514
+        "frente": 0.013,
+        "frente_alto": 0.024,
+        "tres_cuartos": 0.104
       },
       "choques": 0
     },
     "1.50": {
       "visible": {
-        "frente": 0.268,
-        "frente_alto": 0.263,
-        "tres_cuartos": 0.552
+        "frente": 0.019,
+        "frente_alto": 0.024,
+        "tres_cuartos": 0.118
       },
       "choques": 0
     },
     "1.57": {
       "visible": {
-        "frente": 0.255,
-        "frente_alto": 0.378,
-        "tres_cuartos": 0.467
+        "frente": 0.032,
+        "frente_alto": 0.053,
+        "tres_cuartos": 0.175
       },
       "choques": 0
     },
     "1.65": {
       "visible": {
-        "frente": 0.255,
-        "frente_alto": 0.411,
-        "tres_cuartos": 0.476
+        "frente": 0.019,
+        "frente_alto": 0.172,
+        "tres_cuartos": 0.198
       },
       "choques": 0
     },
     "1.75": {
       "visible": {
-        "frente": 0.299,
-        "frente_alto": 0.45,
-        "tres_cuartos": 0.495
+        "frente": 0.045,
+        "frente_alto": 0.378,
+        "tres_cuartos": 0.231
       },
       "choques": 0
     }

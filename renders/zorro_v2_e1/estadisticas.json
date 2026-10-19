@@ -1,5 +1,5 @@
 {
-  "bloques": 89,
+  "bloques": 93,
   "bloques_por_parte": {
     "ManoIzq": 2,
     "ManoDer": 2,
@@ -23,8 +23,8 @@
     "Cuello1": 1,
     "Cuello2": 1,
     "Cabeza": 14,
-    "ParpadoIzq": 1,
-    "ParpadoDer": 1,
+    "ParpadoIzq": 3,
+    "ParpadoDer": 3,
     "Mandibula": 3,
     "OrejaIzq": 3,
     "OrejaDer": 3,
@@ -36,7 +36,7 @@
     "Cola1_4": 3,
     "Cola1_5": 5
   },
-  "triangulos": 3940,
+  "triangulos": 4084,
   "triangulos_ocultos_quitados": {
     "ManoIzq": 4,
     "ManoDer": 4,
@@ -50,6 +50,8 @@
     "Columna": 6,
     "Cadera": 4,
     "Cabeza": 48,
+    "ParpadoIzq": 4,
+    "ParpadoDer": 4,
     "Mandibula": 6,
     "OrejaIzq": 4,
     "OrejaDer": 4,
@@ -82,8 +84,8 @@
     "Cuello1": 44,
     "Cuello2": 56,
     "Cabeza": 616,
-    "ParpadoIzq": 44,
-    "ParpadoDer": 44,
+    "ParpadoIzq": 116,
+    "ParpadoDer": 116,
     "Mandibula": 114,
     "OrejaIzq": 152,
     "OrejaDer": 152,

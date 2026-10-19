@@ -76,9 +76,11 @@ def cabeza():
     # que sube hasta arriba de la frente alta del joven.
     par_prisma(c, c, "ojo", [(1, 19), (3, 19), (4, 21), (2, 21)], (-14, -13), eje="y")
     bloque(c, c, "marca", (-1, 1), (-14, -13), (20, 23))
-    # Párpado: abierto es una ceja fina encima del ojo, al ras de su cara, y se esconde en la
-    # frente. Con la bisagra en y = -13, z = 20 baja 90° y queda delante del ojo, de z 19 a 21.
-    par_prisma("Parpado{lado}", c, "cuerpo", [(-14, 21), (-12, 21), (-13, 22), (-14, 22)], (1, 4), eje="x")
+    # Párpado: abierto es una ceja fina encima del ojo, al ras de su cara, y el resto se esconde en
+    # la frente (3 celdas de hondo: cerrado tapa los 2 de alto del ojo y su borde de arriba).
+    # Atrás, en cuña 2:1: lo que asoma por el chaflán de la frente, en la punta de afuera de la
+    # ceja, es casi lo mismo que antes. Cerrado, arriba entra un poco en el ojo y tapa su borde.
+    par_prisma("Parpado{lado}", c, "cuerpo", [(-14, 21), (-11, 21), (-13, 22), (-14, 22)], (1, 4), eje="x")
     # Mandíbula de espuma: termina tres celdas antes del cuello (al mirar abajo no llega a la
     # pechera), con la esquina de atrás en cuña.
     m = "Mandibula"

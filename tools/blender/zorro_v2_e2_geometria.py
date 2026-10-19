@@ -75,7 +75,9 @@ ARTICULACIONES = [
     ("Mandibula", "Cabeza", (0, -11, 16)),
     ("Oreja{l}", "Cabeza", (2.5, -9, 23.5)),  # media celda arriba de la cabeza
     ("OrejaPunta{l}", "Oreja{l}", (2.5, -9, 25)),
-    ("Parpado{l}", "Cabeza", (2.5, -13, 20)),  # bisagra detrás del ojo: abierto, ceja fina
+    # Bisagra del párpado, detrás del ojo: abierto es una ceja fina; cerrado (1.4 rad, Cara/Parpadeo)
+    # tapa el ojo entero, de z 18.9 (apoyado en el hocico) a 21.9.
+    ("Parpado{l}", "Cabeza", (2.5, -12.75, 20)),
     ("Hombro{l}", "Pecho", (2.5, -5.5, 13)),
     ("Brazo{l}", "Hombro{l}", (2.5, -5.5, 9.5)),  # media celda debajo del pecho
     ("Antebrazo{l}", "Brazo{l}", (2.5, -5.5, 5)),

@@ -90,8 +90,14 @@ def cabeza():
     ojo = [(1, 20), (4, 20), (5, 22), (5, 23), (2, 23), (1, 21)]
     par_prisma(c, c, "ojo", ojo, (-17, -16), eje="y")
     bloque(c, c, "marca", (-1, 1), (-17, -16), (22, 25))
-    # Párpado: abierto es una ceja fina encima del ojo, al ras de su cara, y se esconde en la frente.
-    par_prisma("Parpado{lado}", c, "cuerpo", [(-17, 23), (-14, 23), (-15, 24), (-17, 24)], (1, 5), eje="x")
+    # Párpado: abierto es una ceja fina encima del ojo, al ras de su cara, y el resto se esconde en
+    # la frente (4 celdas de hondo: cerrado tapa los 3 de alto del ojo y su borde de arriba). La
+    # parte de adentro llega a x 6 abajo, en cuña: cerrado, cubre el costado del ojo (x 5) sin quedar
+    # en su mismo plano, y en reposo no asoma del cráneo. Atrás termina en cuña 1:1, paralela a la
+    # espiga de la oreja: con la oreja adelante no la toca.
+    par_prisma("Parpado{lado}", c, "cuerpo", [(-17, 23), (-15, 23), (-15, 24), (-17, 24)], (1, 5), eje="x")
+    par_prisma("Parpado{lado}", c, "cuerpo", [(1, 23), (6, 23), (5, 24), (1, 24)], (-15, -14), eje="y")
+    par_prisma("Parpado{lado}", c, "cuerpo", [(-14, 23), (-13, 23), (-14, 24)], (1, 5), eje="x")
     # Mandíbula de espuma, más angosta que el hocico: termina antes del cuello, con la esquina de
     # atrás en cuña.
     m = "Mandibula"
