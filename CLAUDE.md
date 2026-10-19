@@ -77,6 +77,10 @@ Documentos en `docs/`:
   en Workspace).
 - Permitido en runtime: Play/Stop, simular input y disparar AdminCommand para pruebas.
   Prohibido editar cualquier instancia gestionada por Rojo.
+- La prohibición aplica a cambios persistentes en modo Edit sobre instancias de Rojo. En Play
+  todo está permitido porque se descarta al parar. En Edit se permite clonar módulos para
+  pruebas solo dentro de una carpeta temporal fuera de Rojo, destruyendo el clon al terminar y
+  verificando que no quedó.
 
 ## Estándares Luau
 
