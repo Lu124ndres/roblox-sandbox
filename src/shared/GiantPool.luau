@@ -3,10 +3,12 @@
 	GiantPool
 
 	Qué monstruos pueden salir ahora en la ruleta (y comprarse para el
-	siguiente): los que tienen inRoulette y, si son de evento (season), solo
-	entre sus fechas. Lo usan el servidor (GiantCycle, GiantChoice) y el
-	cliente (RouletteView, RestChips). restMultiplier: cuánto multiplica el
-	entrenamiento de la guarida en el descanso (el del monstruo que se llenó).
+	siguiente): los lanzados (released) que tienen inRoulette y, si son de
+	evento (season), solo entre sus fechas. Lo usan el servidor (GiantCycle,
+	GiantChoice) y el cliente (RouletteView, RestChips, RobuxOffers). Un
+	monstruo sin lanzar solo aparece con la orden de admin `giant`, para
+	pruebas. restMultiplier: cuánto multiplica el entrenamiento de la guarida
+	en el descanso (el del monstruo que se llenó).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -17,8 +19,14 @@ local Protocol = require(script.Parent.Protocol)
 
 local GiantPool = {}
 
+-- Se puede ofrecer en la tienda: lanzado y con ruleta (los de evento se muestran
+-- también fuera de sus fechas, bloqueados con "Pronto").
+function GiantPool.listed(def: Config.GiantDef): boolean
+	return def.released and def.inRoulette
+end
+
 function GiantPool.available(def: Config.GiantDef): boolean
-	if not def.inRoulette then
+	if not GiantPool.listed(def) then
 		return false
 	end
 	local season = def.season

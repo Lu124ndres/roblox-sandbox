@@ -58,7 +58,7 @@ function RestChips.mount(panel: Frame)
 
 	local chips: { [string]: TextButton } = {}
 	for index, def in Config.Giants.chain do
-		if not def.inRoulette then
+		if not GiantPool.listed(def) then -- sin lanzar o sin ruleta: no se ofrece
 			continue
 		end
 		local key = `Choose{def.id}`

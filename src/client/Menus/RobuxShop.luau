@@ -18,6 +18,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Style = require(script.Parent.Parent.Interface.Style)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local BoostBanner = require(script.Parent.BoostBanner)
@@ -46,7 +47,7 @@ local RobuxShop = {}
 local function rouletteHasChoice(): boolean
 	local count = 0
 	for _, def in Config.Giants.chain do
-		if def.inRoulette then
+		if GiantPool.listed(def) then
 			count += 1
 		end
 	end
@@ -141,11 +142,13 @@ function RobuxShop.start(screen: ScreenGui)
 	if rouletteHasChoice() then
 		section("Elige el siguiente monstruo")
 		for _, def in Config.Giants.chain do
-			add(
-				GIANT_COLORS[def.id] or CARDS.Red,
-				GiantPortrait.iconFor(def.id),
-				RobuxOffers.choose(def)
-			)
+			if GiantPool.listed(def) then -- los no lanzados no se venden
+				add(
+					GIANT_COLORS[def.id] or CARDS.Red,
+					GiantPortrait.iconFor(def.id),
+					RobuxOffers.choose(def)
+				)
+			end
 		end
 	end
 

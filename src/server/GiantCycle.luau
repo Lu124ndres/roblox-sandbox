@@ -17,7 +17,8 @@
 		   monstruo que se llenó (Orca x2, Minotauro x4, Dragón x10, Zorro x20).
 		   Se ve como en los estanques ("+N poder").
 		3. Ruleta: el que alguien eligió con Robux o, si nadie, al azar entre
-		   los gigantes con inRoulette según su rouletteWeight.
+		   los que GiantPool.candidates da por disponibles (lanzados, con
+		   inRoulette y en sus fechas) según su rouletteWeight.
 		4. Llegada (arriving): sale del agua con la barra en cero y, al
 		   terminar, se le puede volver a dar de comer (feeding).
 	Los peces que cada uno lleva en la canasta se conservan durante todo el ciclo.
