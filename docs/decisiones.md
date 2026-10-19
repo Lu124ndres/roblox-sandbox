@@ -797,3 +797,38 @@ de frente y el tramo más largo de espaldas; se corre en Play. Las rutas entre t
 zigzag cuando el tramo derecho le mostraría la cola a la puerta, y la E4 (287 studs) solo cabe
 en el centro del lago: gira en el lugar y no camina.
 
+
+## 2026-10-19 — Un guardado más nuevo o corrupto no se toca, y la expulsión es el aviso
+
+**Contexto:** revisión del guardado antes de publicar. **Decisión:** `SaveStore.acquire` decide
+dentro de la transformación de `UpdateAsync`: si el registro no es una tabla ("error") o su
+`version` es mayor que `SaveSchema.VERSION` ("newer"), devuelve `nil` y no toma el bloqueo. El
+jugador sale con "No pudimos cargar tus datos" o "El juego se actualizó". **Lo no obvio:**
+- Con "newer" un servidor viejo nunca reescribe datos de un esquema que no entiende. El costo:
+  tras publicar, quien caiga en un servidor viejo es expulsado; conviene reiniciarlos.
+- Al cerrar el servidor (`BindToClose`) los reintentos bajan a 2 para que entren todos los
+  jugadores en los 30 s que da Roblox.
+- Un recibo repetido (`purchaseId` ya en `receipts`) solo se confirma si el guardado sale bien;
+  si el regalo era para otro jugador todavía presente, se guarda primero el suyo.
+- Quien sale durante la carga queda en una tabla débil: su perfil nunca se guarda y el bloqueo
+  se suelta al terminar la carga.
+
+## 2026-10-19 — Telemetría solo del servidor, sumada y por un bus
+
+**Contexto:** 10 eventos de AnalyticsService aprobados por el usuario. **Decisión:**
+`server/Analytics/`; `PlayerData` avisa monedas, peces y kills por `Analytics/Bus` (funciones
+vacías hasta `Analytics.init`) y no requiere a Analytics. **Lo no obvio:**
+- La economía se suma por origen y destino y se manda cada 10 min y al salir: un evento por
+  bocado superaría los límites de Roblox.
+- Los campos personalizados tienen pocos valores posibles (etapa, categoría, renacimientos con
+  tope 10): Roblox descarta las combinaciones de mucha cardinalidad.
+- Los eventos del monstruo son del servidor pero Roblox pide un jugador: van con uno de los que
+  aportaron o cualquiera del servidor.
+- `playMinutes` (esquema v11) cuenta minutos de juego en total para medir cuánto tarda cada
+  renacimiento.
+
+## 2026-10-19 — Los monstruos sin lanzar no se listan en ningún lado
+
+**Decisión:** `GiantPool.listed(def)` (`released` y `inRoulette`) filtra la ruleta, "Elegir el
+siguiente monstruo" de la tienda de Robux y los chips del descanso. La orden de admin `giant`
+busca el monstruo directo en la config y no pasa por el filtro, así se prueba antes de lanzar.
