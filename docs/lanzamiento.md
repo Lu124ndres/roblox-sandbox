@@ -38,8 +38,17 @@ Estado al 16/10/2026. Marcar con [x] lo que se vaya haciendo.
       ruleta de monstruos, descanso, que nadie se quede trabado en el volcán.
 - [ ] **Probar en teléfono real y con mando** (el simulador de Studio no cambia el modo de
       entrada). Revisar botones táctiles y que nada tape al personaje.
-- [ ] **Rendimiento en teléfono gama baja:** muchos efectos (partículas, auras, viñeta,
-      411 modelos del mapa). Medir FPS y memoria con el MicroProfiler; bajar calidad si cae.
+- [ ] **Rendimiento en un teléfono real de gama baja** (Android de 3-4 GB de RAM, tipo
+      Galaxy A0x). El emulador de Studio no emula el procesador ni la GPU: ver
+      `docs/rendimiento.md` (4,748 piezas, 2.3 M de celdas de terreno, 83 luces). En el
+      juego publicado, con el monstruo comiendo y con 3+ jugadores:
+      - FPS con `Shift+F5` (o la consola F9 → Memory): ¿se mantiene en 30 o más en la playa,
+        el muelle y el cráter? Anotar el peor lugar.
+      - Memoria del cliente (F9 → Memory → Total) a los 2 y a los 15 minutos: no debe crecer
+        sin parar (fugas) ni pasar de ~1.5 GB.
+      - Con el modo rápido encendido y apagado: ¿cuánto cambia?
+      - Que no se cierre la app al abrir la tienda, la colección o al empezar el descanso.
+      - Anotar los números en `docs/rendimiento.md` y elegir las mejoras de su tabla.
 - [ ] **Equilibrio con datos reales:** con mucho poder y varios renacimientos se ganan
       ~259K monedas/min. Si se siente roto, bajar `Progression.coinScale.exponent` a 0.4.
 
