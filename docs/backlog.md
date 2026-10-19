@@ -274,7 +274,7 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Hábitat de agua con hielo (modo `ice`) y contrato `Zorro/Guarida`.
 - [x] Sonidos y VFX del zorro (voces por etapa, cubitos de agua, espuma, hielo).
 - [x] Rutina, conductas y mirar al público con el modelo v2 (ola 3).
-- [x] Fuera de la ruleta, la tienda de Robux y "elegir" mientras `released = false`.
-- [ ] Témpanos menos regulares y párpados de la cría y el joven (ola 4).
+- [x] Lanzado: en la ruleta (5 %) y en "elegir" desde el 2026-10-19 (`released = true`).
+- [x] Témpanos menos regulares y párpados de la cría y el joven (ola 4).
 - [ ] Fuegos fatuos (oleadas de esferas).
 - [ ] Ambiente nocturno y anuncio previo.

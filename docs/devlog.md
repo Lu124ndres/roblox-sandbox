@@ -2833,3 +2833,24 @@ alcanza el costo) ni nada que dependa del DataStore o de AnalyticsService reales
 
 **Qué sigue:** las pruebas de `docs/pruebas_guardado.md` con el lugar publicado, el teléfono
 real y elegir mejoras de `docs/rendimiento.md`.
+
+---
+
+## 2026-10-19 — Zorro de agua en la ruleta y ola 4 integrada
+
+**Qué se hizo:**
+- El usuario reimportó la E1 y la E2 con párpados. Los modelos nuevos habían quedado en
+  Workspace y el juego seguía usando los viejos de ServerStorage: los viejos pasaron a
+  `ServerStorage.Respaldos` (`ZorroDeAguaE1_v2_sinparpados`, `..E2_v2_sinparpados`) y los
+  nuevos a ServerStorage (se puede deshacer con Ctrl+Z).
+- Integrada la ola 4: témpanos irregulares con grietas y astillas (`Ambient/IcePolygon`,
+  `IceShards`, `IceMarks`) y los scripts, `.blend`, FBX y renders de los párpados.
+- Pedido del usuario: el Zorro de agua sale en la ruleta (`released = true`, 5 %) y la Orca
+  fantasma sale de la ruleta y de "elegir" (`inRoulette = false`).
+
+**Probado en Studio (Play):** la lista de la ruleta es Orca 50, Minotauro 30, Dragón 15,
+Zorro 5 (2,000 tiradas: 1032/565/300/103); la tienda de Robux muestra al zorro y no a la
+Orca fantasma (solo queda en el panel de admin); E1 y E2 con los meshes nuevos, sin errores.
+
+**Qué se rompió:** nada visto. El producto `ChooseOrcaFantasma` existe en el Creator Hub
+pero ya no se ofrece.
