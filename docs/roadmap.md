@@ -30,7 +30,8 @@ El Dragón marino se suma a la cadena después del Minotauro.
 El Zorro de agua cierra la cadena completa de cuatro gigantes.
 
 - Anuncio previo y ambiente nocturno durante el evento.
-- Zorro de agua (x20 provisional).
+- Zorro de agua (x20 provisional). Ya está en la ruleta desde el 2026-10-19: el evento
+  le suma el ambiente y el ataque.
 - Ataque Fuegos fatuos (oleadas de esferas en secuencia).
 - Revisión de la recompensa del ciclo ahora que el ciclo dura ~35 minutos.
 

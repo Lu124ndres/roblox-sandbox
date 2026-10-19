@@ -31,9 +31,8 @@ Estado al 16/10/2026. Marcar con [x] lo que se vaya haciendo.
       `Assets.Badges`. Las insignias suben la retención y salen en el perfil.
 - [ ] **Grupo:** crear el grupo y poner `groupId` en `Config/Social.luau` (el regalo del grupo
       está apagado con 0). Pedir unirse al grupo + "me gusta" con un premio.
-- [ ] **Zorro de agua sin modelo:** está en la ruleta (5%) y se vende "elegir siguiente", pero
-      se ve como la orca teñida. Modelarlo antes de lanzar o lanzar con él como sorpresa de
-      la primera actualización.
+- [x] **Zorro de agua:** modelo v2 de bloques con sus 4 etapas, en la ruleta (5 %) y en
+      "elegir siguiente" desde el 2026-10-19. La Orca fantasma quedó fuera de los dos.
 - [ ] **Probar con 5-10 personas reales** (amigos): comida según jugadores, kills compartidas,
       ruleta de monstruos, descanso, que nadie se quede trabado en el volcán.
 - [ ] **Probar en teléfono real y con mando** (el simulador de Studio no cambia el modo de

@@ -153,6 +153,8 @@ cobro en `server/Monetization/Receipts` (ProcessReceipt idempotente: guarda los 
 **Terminado y probado en Studio:**
 - Pesca, alimentar, enojo, ciclo completo con descanso y ruleta, crecimiento con la barra.
 - Cinco monstruos con 4 etapas, animación por código, hábitat, sonidos y efectos (sección 5.1).
+  El Zorro de agua v2 está en la ruleta desde el 2026-10-19 (con párpados en la E1/E2 y
+  témpanos irregulares); la Orca fantasma quedó fuera de la ruleta y de "elegir".
 - Tienda, renacer, retención completa, monetización (sin IDs reales), trajes de los pases con
   vitrinas, soporte de móvil y mando.
 - Interfaz rehecha en estilo de **piedra volcánica** (2026-10-17, piezas e íconos de Canva).
@@ -161,11 +163,6 @@ cobro en `server/Monetization/Receipts` (ProcessReceipt idempotente: guarda los 
 - Página del juego en Roblox (nombre, descripciones EN/ES, ícono, miniaturas) en revisión.
 
 **A medias:**
-- **Zorro de agua v2:** las 4 etapas están en el juego con su movimiento completo, con
-  `released = false` en `Config/Giants.luau`: no sale en la ruleta ni en la tienda (solo con
-  la orden de admin `giant ZorroDeAgua:1`).
-  La ola 4 de arreglos (témpanos irregulares y párpados de la E1/E2) está hecha en dos
-  worktrees de agentes y **no integrada**; los FBX nuevos de la E1/E2 hay que reimportarlos.
 - Guardado (esquema v11) y telemetría: implementados, pero **nunca probados con un DataStore
   ni AnalyticsService reales** (en Studio el guardado corre en memoria). Lista de pruebas:
   `docs/pruebas_guardado.md`.
@@ -339,8 +336,8 @@ Definidos en `Config/Giants.luau` (`chain`). Tamaño por etapa: `stageHeightsInP
 | `Orca` | ×2 | 400 | 6 | 50 | agua, arrecife | `OrcaE1..E4` (17 huesos, de Meshy) |
 | `Minotauro` | ×4 | 600 | 10 | 30 | desierto (`sand`) | `MinotauroE1..E4_v2` (bloques) |
 | `DragonMarino` | ×10 | 900 | 15 | 15 | guarida de lava (`lava`) | `DragonMarinoE1..E4_v2` (32 huesos, vuela) |
-| `ZorroDeAgua` | ×20 | 1500 | 25 | 5 | agua con hielo (`ice`) | `ZorroDeAguaE1..E4_v2` (36–76 huesos), `released = false` |
-| `OrcaFantasma` | ×6 | 600 | 10 | 35 | cementerio marino | `OrcaFantasmaE1..E4`, evento Halloween hasta 2026-11-03 |
+| `ZorroDeAgua` | ×20 | 1500 | 25 | 5 | agua con hielo (`ice`) | `ZorroDeAguaE1..E4_v2` (36–76 huesos) |
+| `OrcaFantasma` | ×6 | 600 | 10 | — (`inRoulette = false`) | cementerio marino | `OrcaFantasmaE1..E4`, solo con la orden de admin |
 
 **Cómo llega un modelo al juego:** `server/GiantTemplates.publish()` copia
 `ServerStorage.<modelBase>E<n>` (o `<modelBase>E<n><modelSuffix>` si existe) a
@@ -591,8 +588,7 @@ No hay tests automáticos; las pruebas son en Studio por MCP (y simulaciones pur
   enterrada en Workspace todo el tiempo (`docs/rendimiento.md`, propuestas sin elegir).
 - **Balance sin datos:** la telemetría existe pero todavía sin datos; el escalado con
   renacimientos (hasta ×1024) puede romper la economía.
-- **Zorro de agua:** sin lanzar (`released = false`); ola 4 sin integrar (témpanos y
-  párpados de E1/E2, con FBX que hay que reimportar). Límites de piezas rígidas: el
+- **Zorro de agua:** límites de piezas rígidas: el
   rascado no llega a la oreja, al enroscarse la nariz no llega a la cola, y el abanico de la E4
   es largo hacia atrás.
 - **Modelos fuera de git:** viven en el `.rbxl`; si no se guarda el lugar tras importar, se
