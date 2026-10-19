@@ -11,10 +11,21 @@ Packages/
 # Sistema operativo
 .DS_Store
 
-# Secretos: nunca deben llegar al repo
+# Secretos: nunca deben llegar al repo (claves, tokens, webhooks, cookies).
+# Van en variables de entorno o en los Secrets de Roblox (CLAUDE.md).
 .env
+.env.*
+!.env.example
 *.key
-credentials.json
+*.pem
+*.p12
+*.pfx
+*.secret
+secrets*
+*secrets*.json
+credentials*.json
+*.ROBLOSECURITY
+cookies*.txt
 
 # Modelos de origen pesados (exportaciones de Meshy u otros generadores).
 # Se conservan en disco; al repo solo van el .fbx final y sus texturas.

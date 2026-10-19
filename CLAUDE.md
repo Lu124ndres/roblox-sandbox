@@ -158,6 +158,8 @@ Documentos en `docs/`:
 ## Documentación y commits
 
 - Repositorio público y portafolio. El código se escribe para ser leído.
+- Nunca escribir claves, tokens ni webhooks en el repo; van en variables de entorno o en los
+  Secrets de Roblox.
 - Commits en español, imperativos y descriptivos: `agrega sistema de producción pasiva`,
   no `cambios` ni `fix`.
 - Siempre con rutas explícitas (`git commit -m "..." -- <rutas>`): otras sesiones comparten el
