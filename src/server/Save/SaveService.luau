@@ -9,9 +9,13 @@
 		  mensaje amable antes que arriesgar sus datos.
 		- Cada autosaveSeconds: guarda a todos (y renueva el bloqueo),
 		  repartidos a lo largo del intervalo y no todos en el mismo frame.
-		- Al salir: guarda y suelta el bloqueo.
-		- Al cerrar el servidor (BindToClose): guarda a todos a la vez y
-		  espera a que terminen.
+		- Al salir: guarda y suelta el bloqueo, una sola vez por jugador (al
+		  cerrar el servidor corren a la vez PlayerRemoving y BindToClose).
+		  Si sale mientras carga, la carga suelta el bloqueo y no lo adjunta.
+		- Al cerrar el servidor (BindToClose): guarda a todos a la vez con
+		  menos reintentos (SaveStore.shuttingDown) y espera a que terminen.
+		Nunca se guarda un perfil que no terminó de cargar (PlayerData.snapshot
+		da nil) ni datos corruptos o de una versión más nueva (SaveStore).
 	El estado vive en PlayerData; el DataStore, en SaveStore.
 ]]
 
@@ -26,16 +30,20 @@ local SAVING = Config.Saving
 local LOCKED_MESSAGE = "Tus datos siguen abiertos en otro servidor. Vuelve a entrar en un minuto."
 local ERROR_MESSAGE =
 	"No pudimos cargar tus datos. Vuelve a entrar en un momento; no se perdió nada."
+local NEWER_MESSAGE = "El juego se actualizó. Vuelve a entrar para jugar la versión nueva."
 
 local SaveService = {}
 
 local saving: { [Player]: boolean } = {} -- evita dos guardados del mismo jugador a la vez
+-- Jugadores que ya empezaron a salir (claves débiles: no retienen al Player).
+local gone: { [Player]: boolean } = setmetatable({}, { __mode = "k" }) :: any
+local leaving: { [Player]: boolean } = {} -- salida en curso (guardado final)
 
 local function load(player: Player)
 	PlayerData.prepare(player)
 	for _ = 1, SAVING.lockedRetries do
 		local status, data = SaveStore.acquire(player.UserId)
-		if not player.Parent then
+		if gone[player] or not player.Parent then
 			if status == "ok" and data then
 				SaveStore.write(player.UserId, data, true) -- se fue mientras cargaba: soltar
 			end
@@ -44,8 +52,8 @@ local function load(player: Player)
 		if status == "ok" and data then
 			PlayerData.attach(player, data)
 			return
-		elseif status == "error" then
-			player:Kick(ERROR_MESSAGE)
+		elseif status == "error" or status == "newer" then
+			player:Kick(if status == "newer" then NEWER_MESSAGE else ERROR_MESSAGE)
 			return
 		end
 		task.wait(SAVING.lockedRetrySeconds)
@@ -54,8 +62,8 @@ local function load(player: Player)
 end
 
 local function save(player: Player, release: boolean): boolean
-	if saving[player] then
-		return false
+	if saving[player] or (gone[player] and not release) then
+		return false -- ya salió: solo la salida guarda (no vuelve a tomar el bloqueo)
 	end
 	local data = PlayerData.snapshot(player)
 	if not data then
@@ -68,12 +76,22 @@ local function save(player: Player, release: boolean): boolean
 end
 
 local function onRemoving(player: Player)
+	gone[player] = true
+	if leaving[player] then
+		-- Ya hay una salida en curso (BindToClose y PlayerRemoving a la vez): esperarla.
+		while leaving[player] do
+			task.wait(0.1)
+		end
+		return
+	end
+	leaving[player] = true
 	-- Espera un guardado automático en curso para no soltar el bloqueo antes de tiempo.
 	while saving[player] do
 		task.wait(0.1)
 	end
 	save(player, true)
 	PlayerData.detach(player)
+	leaving[player] = nil
 end
 
 -- Guarda ya (compras con Robux): espera un guardado en curso y devuelve si se escribió.
@@ -110,6 +128,7 @@ function SaveService.init()
 	end)
 
 	game:BindToClose(function()
+		SaveStore.shuttingDown()
 		local pending = 0
 		for _, player in Players:GetPlayers() do
 			pending += 1

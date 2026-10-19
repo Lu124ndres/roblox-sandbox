@@ -7,9 +7,12 @@
 		- Si el jugador no está o sus datos no cargaron: NotProcessedYet
 		  (Roblox vuelve a intentar cuando entre otra vez).
 		- Cada PurchaseId se anota en el guardado de quien pagó; si ya está,
-		  solo se confirma (PurchaseGranted) sin volver a dar nada.
+		  no se vuelve a dar nada, pero solo se confirma (PurchaseGranted)
+		  después de volver a guardar: un reintento de Roblox tras un guardado
+		  fallido no confirma algo que nunca llegó al DataStore.
 		- Se entrega, se anota y se guarda en el momento; solo si el guardado
-		  se escribió se confirma la compra.
+		  se escribió (el de quien pagó y, si era un regalo, el de quien lo
+		  recibió) se confirma la compra. Si no: NotProcessedYet.
 	Qué da cada producto: Grants. Si era un regalo (Gifts), lo recibe el otro
 	jugador y los dos ven el aviso.
 ]]
@@ -31,6 +34,25 @@ local ServerBoost = require(script.Parent.ServerBoost)
 local MONETIZATION = Config.Monetization
 
 local Receipts = {}
+
+-- Regalos entregados cuyo guardado todavía no se confirmó: PurchaseId -> quien lo recibió.
+local unconfirmed: { [string]: Player } = {}
+
+-- Guarda a quien pagó y, si era un regalo, a quien lo recibió (si sigue en el servidor:
+-- si salió, su guardado de salida ya lo llevó). true si todo quedó escrito.
+local function persist(player: Player, purchaseId: string): boolean
+	local recipient = unconfirmed[purchaseId]
+	if recipient and recipient ~= player and recipient.Parent then
+		if not SaveService.saveNow(recipient) then
+			return false
+		end
+	end
+	if not SaveService.saveNow(player) then
+		return false
+	end
+	unconfirmed[purchaseId] = nil
+	return true
+end
 
 -- Entrega `key` a `player` con su aviso (también lo usan las pruebas de Studio).
 function Receipts.grant(player: Player, key: string, giver: Player?): boolean
@@ -71,7 +93,10 @@ local function process(receipt: { [string]: any }): Enum.ProductPurchaseDecision
 	end
 	local purchaseId = tostring(receipt.PurchaseId)
 	if table.find(save.receipts, purchaseId) then
-		return Enum.ProductPurchaseDecision.PurchaseGranted
+		-- Ya se entregó: confirmar solo si quedó guardado (un guardado anterior pudo fallar).
+		return if persist(player, purchaseId)
+			then Enum.ProductPurchaseDecision.PurchaseGranted
+			else Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 	local key = keyFor(receipt.ProductId)
 	if not key then
@@ -91,11 +116,11 @@ local function process(receipt: { [string]: any }): Enum.ProductPurchaseDecision
 		end
 	end)
 	if recipient ~= player then
-		SaveService.saveNow(recipient)
+		unconfirmed[purchaseId] = recipient
 	end
 	-- Si el guardado falla, la compra queda anotada en memoria: el reintento de
-	-- Roblox en este servidor no la vuelve a entregar.
-	if not SaveService.saveNow(player) then
+	-- Roblox en este servidor no la vuelve a entregar, solo vuelve a guardar.
+	if not persist(player, purchaseId) then
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 	return Enum.ProductPurchaseDecision.PurchaseGranted

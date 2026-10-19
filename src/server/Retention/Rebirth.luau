@@ -15,6 +15,7 @@ local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
+local SaveService = require(script.Parent.Parent.Save.SaveService)
 
 local Rebirth = {}
 
@@ -39,6 +40,8 @@ local function rebirth(player: Player)
 		humanoid.WalkSpeed = Upgrades.list("Boots")[1].value
 	end
 	Remotes.Notice:FireAllClients("rebirth", player.DisplayName, count)
+	-- Renacer cambia mucho de golpe: se guarda ya, sin esperar al autoguardado.
+	task.spawn(SaveService.saveNow, player)
 end
 
 function Rebirth.init()
