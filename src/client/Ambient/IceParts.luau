@@ -8,10 +8,13 @@
 		wedge(parent, size, cframe, color, options)   una cuña suelta
 		triangle(parent, a, b, c, thick, color, o)    un triángulo cualquiera con
 		                                              dos cuñas, de grosor `thick`
-		slab(parent, center, edge, sides, thick, color, rng, o)
-		                                              una losa plana e irregular:
-		                                              polígono de `sides` lados con
+		fan(parent, center, corners, thick, color, o) una losa plana sobre un
+		                                              polígono (IceShards.shape) con
 		                                              la cara de arriba en center.Y
+		slab(parent, center, edge, sides, thick, color, rng, o)
+		                                              una losa de `sides` lados sobre
+		                                              un contorno (outline)
+		chunk(parent, rng, at, out, size, color)      un trozo roto y torcido
 		outline(rng, size, bumps)                     un contorno con bultos que
 		                                              nunca entra más que `size`
 	Nada de Glass: el de Roblox refleja el cielo y se ve azul oscuro. El hielo es
@@ -19,6 +22,7 @@
 	que se piden con collide = true (lo que se pisa).
 ]]
 
+local IcePolygon = require(script.Parent.IcePolygon)
 local LairParts = require(script.Parent.LairParts)
 
 local rgb = Color3.fromRGB
@@ -116,8 +120,26 @@ function IceParts.outline(rng: Random, size: number, bumps: number): Edge
 	end
 end
 
--- Losa plana con la cara de arriba en center.Y: un abanico de triángulos desde el
--- centro hasta los vértices del contorno (con algo de azar en el ángulo de cada uno).
+-- Losa plana con la cara de arriba en center.Y sobre el polígono `corners` (Vector2
+-- desde el centro, en orden antihorario), en los triángulos de IcePolygon.triangles.
+function IceParts.fan(
+	parent: Instance,
+	center: Vector3,
+	corners: { Vector2 },
+	thick: number,
+	color: Color3,
+	options: Options?
+)
+	local mid = center - Vector3.new(0, thick / 2, 0)
+	local function at(p: Vector2): Vector3
+		return mid + Vector3.new(p.X, 0, p.Y)
+	end
+	for _, t in IcePolygon.triangles(corners) do
+		IceParts.triangle(parent, at(t[1]), at(t[2]), at(t[3]), thick, color, options)
+	end
+end
+
+-- Losa de `sides` lados sobre un contorno (con algo de azar en el ángulo de cada vértice).
 function IceParts.slab(
 	parent: Instance,
 	center: Vector3,
@@ -128,17 +150,14 @@ function IceParts.slab(
 	rng: Random,
 	options: Options?
 )
-	local mid = center - Vector3.new(0, thick / 2, 0)
 	local spin = rng:NextNumber(0, TAU)
-	local corners: { Vector3 } = {}
+	local corners: { Vector2 } = {}
 	for k = 1, sides do
 		local a = spin + (k + rng:NextNumber(-0.22, 0.22)) / sides * TAU
 		local reach = edge(a) * rng:NextNumber(1, 1.05)
-		table.insert(corners, mid + Vector3.new(math.cos(a), 0, math.sin(a)) * reach)
+		table.insert(corners, Vector2.new(math.cos(a), math.sin(a)) * reach)
 	end
-	for k = 1, sides do
-		IceParts.triangle(parent, mid, corners[k], corners[k % sides + 1], thick, color, options)
-	end
+	IceParts.fan(parent, center, corners, thick, color, options)
 end
 
 -- Pieza de bloque con las opciones del hielo (material Ice si no se dice otro).
@@ -155,6 +174,22 @@ function IceParts.block(
 		collide = o.collide,
 		transparency = o.transparency,
 	})
+end
+
+-- Un trozo de hielo caído, torcido al azar, con el frente hacia `out`.
+function IceParts.chunk(
+	parent: Instance,
+	rng: Random,
+	at: Vector3,
+	out: Vector3,
+	size: Vector3,
+	color: Color3
+): Part
+	local tilt = CFrame.Angles(rng:NextNumber(0.15, 0.5), rng:NextNumber(-0.4, 0.4), 0)
+	local frame = CFrame.lookAt(at, at + out)
+		* tilt
+		* CFrame.Angles(0, 0, rng:NextNumber(-0.3, 0.3))
+	return IceParts.block(parent, size, frame, color)
 end
 
 return table.freeze(IceParts)
