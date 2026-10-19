@@ -27,7 +27,8 @@ Meshy_AI_*/
 # Exportaciones descartadas (acostadas o de prueba) y salidas de Cowork.
 assets/_descartados/
 Claude outputs/
-.claude/
+.claude/*
+!.claude/agents/
 *.fbm/
 
 # Caché de Python de tools/
