@@ -14,7 +14,7 @@ humana o asistida, que escriba código o documentación aquí.
 - **Luau puro**. Sin roblox-ts ni transpiladores.
 - **Rojo 7.7.1** sincroniza `src/` con Studio. El código vive en el sistema de archivos.
 - **MCP de Studio** para inspeccionar y probar el juego en Studio desde el asistente.
-- **Blender**: instalado, sin usar todavía. Entra en la fase 2.
+- **Blender 5.2**: se usa a diario por scripts en `tools/blender/` (monstruos, trajes, props, rigs y FBX).
 - Herramientas gestionadas con **Rokit** (`rokit.toml`): rojo, selene, stylua, wally.
 
 ## Mapa de carpetas
@@ -24,10 +24,10 @@ humana o asistida, que escriba código o documentación aquí.
 | `src/server/` | `ServerScriptService.Server` | Lógica autoritativa: estado de jugadores, economía, validación de remotes, guardado. |
 | `src/client/` | `StarterPlayer.StarterPlayerScripts.Client` | Input, UI, efectos visuales locales. Solo presenta y pide. |
 | `src/shared/` | `ReplicatedStorage.Shared` | Módulos que usan ambos lados: `Config/`, `Assets`, `UIConfig/`, `WorldLayout`, tipos, utilidades puras. `Config` y `UIConfig` son carpetas con `init.luau` y secciones. |
-| `assets/blender/` | — | Archivos `.blend` y exportaciones `.fbx`/`.glb` (fase 2). |
+| `assets/blender/` | — | Archivos `.blend` y exportaciones `.fbx`/`.glb`. |
 | `assets/textures/` | — | PNG fuente de texturas y UI antes de subirlos a Roblox. |
 | `world/` | `Workspace` | Piezas de la isla (`Isla.model.json`). Generado, no se edita a mano. |
-| `tools/` | — | Scripts de desarrollo (`generar_isla.py`). No corren en el juego. |
+| `tools/` | — | Scripts de desarrollo (`generar_isla.py`, `tools/blender/`). No corren en el juego. |
 | `docs/` | — | Documentación del proyecto (ver abajo). |
 | `docs/capturas/` | — | Capturas para el README y el devlog. |
 
@@ -37,8 +37,8 @@ Documentos en `docs/`:
 - `decisiones.md`: registro de decisiones técnicas no obvias.
 - `devlog.md`: bitácora por sesión.
 - `ideas.md`: ideas fuera de alcance. No se implementan.
-- `ui-assets.md`: seguimiento de assets visuales de ForgeGUI.
-- `blender-pipeline.md`: reglas de exportación (fase 2).
+- `ui-assets.md`: seguimiento de los assets visuales de la interfaz.
+- `blender-pipeline.md`: reglas de exportación.
 - `guia_crear_monstruo.md`: cómo se hace un gigante completo (modelo, rig, animación, hábitat,
   sonidos, VFX). La sigue la skill local `/crear-monstruo`.
 - `alcance.md`: qué es el juego, qué entra en la v1 y con qué números (calibración).
@@ -57,8 +57,9 @@ Documentos en `docs/`:
    cualquier cambio hecho ahí. Las piezas se cambian en `tools/generar_isla.py`, el
    terreno en `src/server/World/` y las medidas de ambos en `WorldLayoutData.json`.
 5. **Un módulo, una responsabilidad.** Si un archivo pasa de 200 líneas, se divide.
-6. **Todo `rbxassetid` vive en `src/shared/Assets.luau`**, nunca inline.
-7. **Todos los números de balance viven en `src/shared/Config.luau`**, nunca mágicos.
+6. **Todo `rbxassetid` vive en `src/shared/Assets/`** (`init.luau`, `Textures.luau`, `Products.luau`,
+   `Sounds.luau`), nunca inline.
+7. **Todos los números de balance viven en `src/shared/Config/`**, nunca mágicos.
 8. **`--!strict` en todos los archivos Luau.**
 
 ## Rojo: fuente de verdad
@@ -76,6 +77,9 @@ Documentos en `docs/`:
   scripts incluidos. Solo se puede tocar contenido que Rojo no gestiona (ej. objetos
   temporales en Workspace). Se permite clonar módulos para pruebas solo dentro de una carpeta
   temporal fuera de Rojo, destruyendo el clon al terminar y verificando que no quedó.
+  También se permite revisar los modelos que el usuario importa (huesos, tamaño, orientación) y
+  moverlos a `ServerStorage` dentro de `ChangeHistoryService` (`TryBeginRecording` /
+  `FinishRecording`), para que se pueda deshacer.
 - **Play:** todo está permitido porque se descarta al parar (Play/Stop, simular input,
   disparar AdminCommand para pruebas).
 
@@ -92,12 +96,14 @@ Documentos en `docs/`:
 - En el cliente, maneja `Players.LocalPlayer` y `Character` de forma defensiva (pueden no
   existir aún o reaparecer).
 
-## Blender (MCP)
+## Blender
 
-- No generes mallas ni vértices complejos con Python.
-- Uso permitido: armatures, restricciones de huesos, pivotes y transformaciones compatibles con
-  Roblox, y automatizar exportación `.fbx`/`.gltf` (escala correcta, transformaciones
-  aplicadas, UVs dentro de 0–1).
+- Los monstruos se modelan por código con el método de bloques de `docs/guia_crear_monstruo.md`
+  (skill `/crear-monstruo`). Prohibido modelar formas orgánicas libres vértice por vértice
+  fuera de ese método.
+- Uso permitido además: armatures, restricciones de huesos, pivotes y transformaciones
+  compatibles con Roblox, y automatizar exportación `.fbx`/`.gltf` (escala correcta,
+  transformaciones aplicadas, UVs dentro de 0–1).
 - Antes de exportar, confirma conmigo la escala objetivo si no está definida.
 
 ## Diseño
@@ -112,7 +118,8 @@ Documentos en `docs/`:
 - Revisión de seguridad de remotes antes de cerrar un sistema de red → subagente
   `remote-auditor`.
 - Diseño, escritura de código, arquitectura, Blender y diagnóstico de bugs complejos los hace el
-  agente principal; nunca `infra`.
+  agente principal o los agentes de una ola (`docs/guia_crear_monstruo.md`, sección 12), en su
+  worktree y sin commit; nunca `infra`.
 
 ## Convenciones
 
@@ -126,28 +133,35 @@ Documentos en `docs/`:
   Blender, nada de assets. El objetivo es un juego completo y feo.
 - **FASE 2** (solo cuando la fase 1 esté terminada): reemplazar primitivas por modelos
   de Blender, de una en una. Seguir `docs/blender-pipeline.md`.
-- **Animación**: solo TweenService y CFrame por código (girar, flotar, deslizar paneles).
-  Nada de rigs ni keyframes en este proyecto.
+- **Animación**: todo por código, sin keyframes. TweenService y CFrame para la interfaz y los
+  objetos (girar, flotar, deslizar paneles); los gigantes y los trajes usan rigs con huesos que
+  se animan con `Bone.Transform` (ver `docs/guia_crear_monstruo.md`, sección 7).
 - Si aparece la tentación de mejorar lo visual antes de terminar la fase 1, la idea va a
   `docs/ideas.md` y **no se implementa**.
-- **Excepción: los gigantes.** Usan su modelo final en cuanto existe (hoy, `OrcaE1`), con
-  un marcador de primitivas si falta. Ver `docs/decisiones.md`.
+- **Excepción: los gigantes, los trajes de los pases y piezas clave del mundo** (como el arco
+  del volcán). Usan su modelo de Blender en cuanto existe (los gigantes, modelos v2 de
+  bloques), con un marcador de primitivas si falta. Cada excepción nueva se anota en
+  `docs/decisiones.md`; el resto del mundo sigue en primitivas.
 - **Ambiente y efectos (decidido el 2026-10-12):** el terreno de Roblox, las partículas y
   los sonidos ya entran en el vertical slice. Las piezas siguen siendo primitivas
-  generadas por script; los modelos de Blender siguen siendo fase 2.
+  generadas por script; los modelos de Blender siguen siendo fase 2, salvo las excepciones de
+  arriba.
 
 ## Assets
 
 - Si falta un `rbxassetid`, se deja como `"rbxassetid://0"` (`Assets.MISSING`) y se anota en
   `docs/ui-assets.md`.
-- UI 2D y texturas tileables: **ForgeGUI**. Texturas de mesh y modelos: **Blender**.
-- ForgeGUI no genera animaciones. Es solo imagen estática.
+- UI 2D e íconos: **Canva** (MCP de Canva), con la temática de piedra volcánica. Texturas de
+  mesh y modelos: **Blender**.
+- Las piezas de Canva son imagen estática; las animaciones de la interfaz van por código.
 
 ## Documentación y commits
 
 - Repositorio público y portafolio. El código se escribe para ser leído.
 - Commits en español, imperativos y descriptivos: `agrega sistema de producción pasiva`,
   no `cambios` ni `fix`.
+- Siempre con rutas explícitas (`git commit -m "..." -- <rutas>`): otras sesiones comparten el
+  índice de git y un `git commit` a secas se lleva lo que ellas dejaron preparado.
 - Un commit por tarea, no uno gigante al final.
 - Al terminar una tarea: marcarla en el backlog y agregar entrada en `docs/devlog.md`.
 - Decisiones técnicas no obvias van a `docs/decisiones.md`.
