@@ -2789,3 +2789,17 @@ cualquier `UIGridStyleLayout`); el aviso del tutorial en celular es la mitad (0.
 debajo del panel. Probado en el emulador iPhone XR: botones en filas de 4 y 3, panel de
 hambre terminando a 23 px del borde, aviso al 15 % del alto
 (`docs/capturas/2026-10-18-tutorial-movil.jpg`).
+
+---
+
+## 2026-10-19 — Resumen del proyecto para otros asistentes
+
+**Qué se hizo:** `docs/resumen_proyecto.md`: el juego, el estado, la arquitectura (módulos,
+remotes con sus límites, atributos compartidos), el guardado, los sistemas, el pipeline de
+assets, el flujo de trabajo con Claude, las herramientas, la deuda técnica y las decisiones.
+Revisado contra el código, `docs/` y el historial de git.
+
+**Qué se rompió:** nada.
+
+**Qué sigue:** mantenerlo al día cuando cambie algo grande (la deuda de `CLAUDE.md` está
+anotada en su sección 9).
