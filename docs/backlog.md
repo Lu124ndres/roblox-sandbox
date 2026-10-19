@@ -131,7 +131,9 @@ canasta; dos servidores nunca pisan los mismos datos.
 - [x] Nadie pesca ni entrena hasta que sus datos cargan.
 - [ ] Publicar el lugar y activar "Acceso de Studio a servicios de API".
 - [ ] Prueba con DataStore real: entrar, pescar, entrenar, salir, volver a entrar;
-      cambiar de servidor rápido (bloqueo).
+      cambiar de servidor rápido (bloqueo). Lista completa: `docs/pruebas_guardado.md`.
+- [x] Protecciones: salir durante la carga, cierre con muchos jugadores, datos corruptos o
+      de una versión más nueva (no se pisan) y recibos que solo se confirman guardados.
 
 ## Etapa 2 — Ciclo de gigantes
 
@@ -218,15 +220,18 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
       Salpicón a otro jugador, entregas a la vez, desconectarse pescando o entrenando.
 - [ ] Ping simulado (0.3 s): la ventana de TIRA y el aviso de los ataques son justos.
 - [ ] Emulador de móvil: botones, HUD, tarjeta de captura sin tapar Pescar.
-- [ ] Teléfono real de gama baja: FPS con terreno (~2.8 M de vóxeles) y ~3,900 piezas.
+- [x] Medición en el emulador de gama baja (`docs/rendimiento.md`: 4,748 piezas, 2.3 M de
+      celdas de terreno, 83 luces; propuestas sin implementar, las elige el usuario).
+- [ ] Teléfono real de gama baja: FPS y memoria (pasos en `docs/lanzamiento.md`).
 - [ ] Servidor lleno (8+ clientes locales, luego prueba pública cerrada).
 - [ ] Mando de consola.
 - [ ] Avatares R6 y R15 (brazo con la caña, canasta).
 
 ## Etapa 7 — Publicación
 
-- [ ] Telemetría (AnalyticsService): peces/min, minutos por gigante, cuántos llegan al
-      Minotauro, uso de estanques, móvil vs. PC.
+- [x] Telemetría (AnalyticsService, `server/Analytics/`): embudo de inicio, fin de sesión,
+      monstruo lleno o ido, renacer, economía de monedas, mejoras, estanques, Robux, diario y
+      ruleta. Falta verla con datos del juego publicado.
 - [x] Monetización: Poder y Monedas que se acumulan (x2, x4, x8... desde R$ 3, cada
       nivel más caro), pase VIP, entrenamiento para todo el servidor (15 min; otra compra
       reinicia el tiempo y lo duplica), llenar al monstruo 25/50/75 %, elegir el siguiente
@@ -269,6 +274,7 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Hábitat de agua con hielo (modo `ice`) y contrato `Zorro/Guarida`.
 - [x] Sonidos y VFX del zorro (voces por etapa, cubitos de agua, espuma, hielo).
 - [x] Rutina, conductas y mirar al público con el modelo v2 (ola 3).
+- [x] Fuera de la ruleta, la tienda de Robux y "elegir" mientras `released = false`.
 - [ ] Témpanos menos regulares y párpados de la cría y el joven (ola 4).
 - [ ] Fuegos fatuos (oleadas de esferas).
 - [ ] Ambiente nocturno y anuncio previo.

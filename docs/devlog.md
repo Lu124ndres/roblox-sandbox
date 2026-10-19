@@ -2803,3 +2803,33 @@ Revisado contra el código, `docs/` y el historial de git.
 
 **Qué sigue:** mantenerlo al día cuando cambie algo grande (la deuda de `CLAUDE.md` está
 anotada en su sección 9).
+
+---
+
+## 2026-10-19 — Ocho tareas de mantenimiento antes de publicar
+
+**Qué se hizo:**
+- El Zorro de agua sin lanzar ya no sale en la ruleta, la tienda de Robux ni los chips del
+  descanso (`GiantPool.listed`); la orden `giant ZorroDeAgua:1` sigue funcionando.
+- `CLAUDE.md` al día: rigs por código, Blender a diario, carpetas `Assets/` y `Config/`, método
+  de bloques, revisar modelos importados por MCP, commits con rutas y nada de claves en el repo.
+- `selene src` en cero avisos sin cambiar el comportamiento (sombras, `UDim2.fromScale`...).
+- Guardado y compras: salir durante la carga, cierre del servidor con pocos reintentos, datos
+  corruptos o de una versión más nueva sin pisarlos, recibos repetidos que solo se confirman
+  si se guardó, renacer guarda en el momento. Lista manual: `docs/pruebas_guardado.md`.
+- Telemetría del servidor (`server/Analytics/`, 10 eventos aprobados) y `playMinutes` en el
+  esquema v11.
+- Medición de rendimiento con el emulador Galaxy A06 (`docs/rendimiento.md`) y la prueba en un
+  teléfono real en `docs/lanzamiento.md`.
+- Revisión de secretos en el repo y en todo el historial: nada. Patrones nuevos en
+  `.gitignore`.
+- `tools/respaldo_rbxl.sh`: copias fechadas del `.rbxl` fuera del repo (últimas 20).
+
+**Probado en Studio (Play):** ruleta y tienda sin el zorro, admin forzando `ZorroDeAgua:1`,
+ventanas abiertas sin errores, compra de mejora, sin avisos de Analytics en la salida.
+
+**Qué se rompió:** nada visto. No se pudo probar el renacimiento (la cuenta de prueba no
+alcanza el costo) ni nada que dependa del DataStore o de AnalyticsService reales.
+
+**Qué sigue:** las pruebas de `docs/pruebas_guardado.md` con el lugar publicado, el teléfono
+real y elegir mejoras de `docs/rendimiento.md`.

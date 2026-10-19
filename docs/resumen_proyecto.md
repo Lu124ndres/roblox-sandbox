@@ -161,18 +161,21 @@ cobro en `server/Monetization/Receipts` (ProcessReceipt idempotente: guarda los 
 - Página del juego en Roblox (nombre, descripciones EN/ES, ícono, miniaturas) en revisión.
 
 **A medias:**
-- **Zorro de agua v2:** las 4 etapas están en el juego con su movimiento completo, pero
-  `released = false` en `Config/Giants.luau` (aunque está en la ruleta y se vende "elegirlo").
+- **Zorro de agua v2:** las 4 etapas están en el juego con su movimiento completo, con
+  `released = false` en `Config/Giants.luau`: no sale en la ruleta ni en la tienda (solo con
+  la orden de admin `giant ZorroDeAgua:1`).
   La ola 4 de arreglos (témpanos irregulares y párpados de la E1/E2) está hecha en dos
   worktrees de agentes y **no integrada**; los FBX nuevos de la E1/E2 hay que reimportarlos.
-- Guardado: implementado, pero **nunca probado con un DataStore real** (el lugar no está
-  publicado; en Studio corre en memoria).
+- Guardado (esquema v11) y telemetría: implementados, pero **nunca probados con un DataStore
+  ni AnalyticsService reales** (en Studio el guardado corre en memoria). Lista de pruebas:
+  `docs/pruebas_guardado.md`.
 
 **Planeado (ver `docs/backlog.md`, `docs/lanzamiento.md`, `docs/roadmap.md`):**
 - Publicar: activar acceso a API, crear pases, ~41 productos y 9 insignias en el Creator Hub,
   poner los IDs en `Assets`, cuestionario de madurez, grupo "Giant Feeders".
 - Pruebas con 5–10 personas, en teléfono real de gama baja y con mando.
-- Telemetría (AnalyticsService) para ajustar balance.
+- Ajustar el balance con los datos de la telemetría (`server/Analytics/`).
+- Elegir mejoras de rendimiento de `docs/rendimiento.md`.
 - Eventos por versión: Dragón marino (v1.1), Zorro de agua (v1.2).
 - Ideas fuera de alcance en `docs/ideas.md` (no se implementan).
 
@@ -579,30 +582,31 @@ No hay tests automáticos; las pruebas son en Studio por MCP (y simulaciones pur
 
 ## 9. Problemas conocidos, límites y deuda técnica
 
-- **Sin publicar:** el guardado, las compras, las insignias, el grupo y los rankings nunca se
-  probaron de verdad; todos los IDs de pases y productos están en 0 (`docs/lanzamiento.md`).
+- **Sin publicar:** el guardado, las compras, la telemetría, las insignias, el grupo y los
+  rankings nunca se probaron de verdad (pasos en `docs/pruebas_guardado.md`); todos los IDs de
+  pases y productos están en 0 (`docs/lanzamiento.md`).
 - **Sin pruebas multijugador ni en hardware real:** faltan pruebas con 2+ jugadores, ping
-  simulado, teléfono de gama baja (la isla tiene miles de piezas y ~2.8 M vóxeles de terreno),
-  mando real y avatares R6/R15.
-- **Balance sin datos:** no hay telemetría; el escalado con renacimientos (hasta ×1024) puede
-  romper la economía.
-- **Zorro de agua:** `released = false` pero en la ruleta y a la venta; ola 4 sin integrar
-  (témpanos y párpados de E1/E2, con FBX que hay que reimportar). Límites de piezas rígidas: el
+  simulado, teléfono real de gama baja, mando real y avatares R6/R15. En el emulador: 4,748
+  piezas, 2.3 M de celdas de terreno y 83 luces; la guarida del descanso (905 piezas) vive
+  enterrada en Workspace todo el tiempo (`docs/rendimiento.md`, propuestas sin elegir).
+- **Balance sin datos:** la telemetría existe pero todavía sin datos; el escalado con
+  renacimientos (hasta ×1024) puede romper la economía.
+- **Zorro de agua:** sin lanzar (`released = false`); ola 4 sin integrar (témpanos y
+  párpados de E1/E2, con FBX que hay que reimportar). Límites de piezas rígidas: el
   rascado no llega a la oreja, al enroscarse la nariz no llega a la cola, y el abanico de la E4
   es largo hacia atrás.
 - **Modelos fuera de git:** viven en el `.rbxl`; si no se guarda el lugar tras importar, se
-  pierden. Respaldos en `ServerStorage.Respaldos`.
+  pierden. Respaldos en `ServerStorage.Respaldos` y copias fechadas del `.rbxl` fuera del repo
+  con `tools/respaldo_rbxl.sh` (guarda las últimas 20).
+- **Servidores viejos tras actualizar:** con el esquema v11, un servidor con código viejo
+  expulsa a quien ya tiene datos v11 ("El juego se actualizó") en vez de pisarlos; al
+  publicar conviene reiniciar los servidores.
 - **Rojo:** una vez duplicó ~80 scripts en Studio (se arregló reconectando el plugin);
   conviene revisar duplicados si algo carga código viejo.
-- **`selene src` da 17 avisos** de archivos de UI y servidor (el checklist pide cero).
-- **Documentos y reglas desactualizados:** `CLAUDE.md` todavía dice "nada de rigs ni
-  keyframes", "Blender sin usar" y que los IDs y números viven en `Assets.luau`/`Config.luau`
-  (hoy son carpetas); los gigantes usan rigs animados por código (decisión del 2026-10-17) y
-  Blender se usa a diario. La regla nueva de no generar mallas complejas con Python choca con
-  el pipeline de monstruos v2, que construye la malla por código. `alcance.md` y `roadmap.md`
-  tienen números viejos.
-- **Rendimiento de animación:** cada hueso escrito por cuadro cuesta CPU (la E4 del zorro
-  tiene 76 huesos); los detalles de la cara solo corren con la cámara cerca y sin modo rápido.
+- **`alcance.md` y `roadmap.md`** tienen números viejos.
+- **Rendimiento de animación:** cada hueso escrito por cuadro cuesta CPU, pero poco: la E4 del
+  zorro (76 huesos) tarda 0.30 ms por cuadro en la PC y el Dragón E4, 0.12 ms; los detalles de
+  la cara solo corren con la cámara cerca y sin modo rápido.
 
 ---
 
