@@ -101,7 +101,7 @@ local Giants: Types.GiantsConfig = {
 			modelSuffix = "_v2",
 			ice = true, -- agua con hielo: témpanos, escarcha y cristales (Ambient/IceLair)
 			rouletteWeight = 5,
-			released = false,
+			released = true,
 			inRoulette = true,
 		},
 		{
@@ -115,7 +115,7 @@ local Giants: Types.GiantsConfig = {
 			modelBase = "OrcaFantasma",
 			rouletteWeight = 35,
 			released = true,
-			inRoulette = true,
+			inRoulette = false, -- fuera de la ruleta y de "elegir" (pedido del 2026-10-19)
 			season = { from = 1792195200, to = 1793664000 },
 		},
 	},
