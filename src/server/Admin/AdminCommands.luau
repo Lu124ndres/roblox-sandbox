@@ -11,10 +11,7 @@
 local AdminPlayer = require(script.Parent.AdminPlayer)
 local AdminWorld = require(script.Parent.AdminWorld)
 
-local HANDLERS: { [string]: AdminPlayer.Handler } = {}
-for name, handler in AdminPlayer.HANDLERS do
-	HANDLERS[name] = handler
-end
+local HANDLERS: { [string]: AdminPlayer.Handler } = table.clone(AdminPlayer.HANDLERS)
 for name, handler in AdminWorld.HANDLERS do
 	HANDLERS[name] = handler
 end

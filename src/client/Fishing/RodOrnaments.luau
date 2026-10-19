@@ -22,12 +22,7 @@ local function thickness(z: number, tipZ: number): number
 	return 0.2 - 0.11 * t
 end
 
-local function along(
-	model: Model,
-	tipZ: number,
-	every: number,
-	make: (z: number, d: number, index: number) -> ()
-)
+local function along(tipZ: number, every: number, make: (z: number, d: number, index: number) -> ())
 	local index, z = 1, BLANK_START - every / 2
 	while z > tipZ + 0.3 do
 		make(z, thickness(z, tipZ), index)
@@ -55,14 +50,14 @@ function RodOrnaments.add(model: Model, look: UIConfig.RodLook, tipZ: number, po
 	local style = look.style
 	local darker = look.blank:Lerp(Color3.new(0, 0, 0), 0.3)
 	if style == "bambu" then
-		along(model, tipZ, 0.9, function(z, d, i)
+		along(tipZ, 0.9, function(z, d, i)
 			RodParts.ring(model, `Nudo{i}`, z, d + 0.06, darker, Enum.Material.Wood)
 		end)
 	elseif style == "madera" or style == "fibra" then
 		local wraps = if style == "fibra"
 			then { look.accent, Color3.fromRGB(80, 170, 255) }
 			else { look.accent }
-		along(model, tipZ, 1.6, function(z, d, i)
+		along(tipZ, 1.6, function(z, d, i)
 			RodParts.ring(model, `Hilo{i}`, z, d + 0.04, wraps[(i - 1) % #wraps + 1])
 		end)
 	elseif style == "coral" then
@@ -121,7 +116,7 @@ function RodOrnaments.add(model: Model, look: UIConfig.RodLook, tipZ: number, po
 		veins(model, tipZ, look.accent)
 		RodParts.particles(point, Assets.Particles.Spark, look.accent, 14, 4, 0.25)
 	elseif style == "leviatan" then
-		along(model, tipZ, 0.8, function(z, d, i)
+		along(tipZ, 0.8, function(z, d, i)
 			local fin = RodParts.piece(
 				model,
 				`Aleta{i}`,

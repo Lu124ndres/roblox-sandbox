@@ -55,9 +55,9 @@ local function step(dt: number)
 			if entry.full then
 				-- Resorte: la caña persigue al brazo (pasos chicos para que sea estable).
 				local angle = entry.angle or target
-				local step = math.min(dt, 1 / 30)
-				entry.speed += (SPRING * (target - angle) - DAMPING * entry.speed) * step
-				angle += entry.speed * step
+				local h = math.min(dt, 1 / 30)
+				entry.speed += (SPRING * (target - angle) - DAMPING * entry.speed) * h
+				angle += entry.speed * h
 				entry.angle = angle
 				rod.follow(angle)
 			elseif entry.since >= Performance.RodMidUpdateSeconds then

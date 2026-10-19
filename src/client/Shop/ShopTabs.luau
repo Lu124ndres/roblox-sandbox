@@ -47,7 +47,7 @@ local function tabButton(
 	local skin = Kit.skin(button, "panel")
 	skin.SliceScale = TAB_SLICE
 	Kit.press(button, skin)
-	button.Position = UDim2.new((index - 1) * 0.215, 0, 0, 0)
+	button.Position = UDim2.fromScale((index - 1) * 0.215, 0)
 	button.Size = UDim2.new(0.205, 0, 0, TOP - 6)
 	local icon = GearIcons.view(button, category, 1)
 	icon.AnchorPoint = Vector2.new(0, 0.5)
@@ -56,7 +56,7 @@ local function tabButton(
 	local title = button:FindFirstChild("Texto") :: TextLabel
 	title.Text = Upgrades.titles[category]
 	title.TextXAlignment = Enum.TextXAlignment.Left
-	title.Position = UDim2.new(0, TOP, 0, 5)
+	title.Position = UDim2.fromOffset(TOP, 5)
 	title.Size = UDim2.new(1, -TOP - 8, 0.52, 0)
 	Kit.gold(title)
 	local level = Style.text(button, "Nivel", 18, Color3.fromRGB(255, 240, 210), 2)

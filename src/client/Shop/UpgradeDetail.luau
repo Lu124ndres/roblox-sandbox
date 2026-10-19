@@ -121,7 +121,7 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	local function statRow(text: string, order: number)
 		local row = Style.text(stats, "Dato", 24, SOFT, 2)
 		row.LayoutOrder = order
-		row.Size = UDim2.new(1, 0, 0.48, 0)
+		row.Size = UDim2.fromScale(1, 0.48)
 		row.RichText = true
 		row.Text = text
 	end

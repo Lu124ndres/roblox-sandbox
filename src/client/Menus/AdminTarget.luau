@@ -78,7 +78,7 @@ function AdminTarget.mount(parent: Instance): Target
 
 	local watching: RBXScriptConnection? = nil
 	local rebuild: () -> ()
-	local function select(player: Player)
+	local function choose(player: Player)
 		selected = player
 		if watching then
 			watching:Disconnect()
@@ -108,7 +108,7 @@ function AdminTarget.mount(parent: Instance): Target
 			chip.LayoutOrder = index
 			chip.Size = UDim2.fromOffset(CHIP_WIDTH, CHIP_HEIGHT)
 			chip.Activated:Connect(function()
-				select(player)
+				choose(player)
 			end)
 		end
 	end
@@ -116,12 +116,12 @@ function AdminTarget.mount(parent: Instance): Target
 	Players.PlayerAdded:Connect(rebuild)
 	Players.PlayerRemoving:Connect(function(player)
 		if player == selected then
-			task.defer(select, me)
+			task.defer(choose, me)
 		else
 			task.defer(rebuild)
 		end
 	end)
-	select(me)
+	choose(me)
 
 	return {
 		height = CHIP_HEIGHT + 44,

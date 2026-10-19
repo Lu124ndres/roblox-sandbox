@@ -36,7 +36,7 @@ function BoostBanner.new(
 	local icon = Icons.view(banner, "bolt")
 	icon.AnchorPoint = Vector2.new(0, 0.5)
 	icon.Position = UDim2.new(0, 6, 0.5, 0)
-	icon.Size = UDim2.new(0.2, 0, 0.92, 0)
+	icon.Size = UDim2.fromScale(0.2, 0.92)
 
 	local title = Style.text(banner, "Titulo", 30, nil, 3)
 	title.Text = "¡Impulsa el entrenamiento del servidor!"
@@ -58,7 +58,7 @@ function BoostBanner.new(
 	local button = ShopParts.price(banner, PALETTE.Buy, "robux")
 	button.button.AnchorPoint = Vector2.new(1, 0.5)
 	button.button.Position = UDim2.new(1, -12, 0.5, 0)
-	button.button.Size = UDim2.new(0.22, 0, 0.46, 0)
+	button.button.Size = UDim2.fromScale(0.22, 0.46)
 	button.button.Activated:Connect(function()
 		local current = RobuxOffers.boost()
 		if not current.blocked then

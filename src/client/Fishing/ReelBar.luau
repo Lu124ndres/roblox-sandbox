@@ -88,7 +88,7 @@ function ReelBar.mount(screen: ScreenGui): Bar
 
 	-- Pista con marcas cada 25 %, relleno con brillo y la meta al final.
 	local track = frame("Pista", card, Color3.fromRGB(8, 12, 20))
-	track.Position = UDim2.new(0, 14, 0, 50)
+	track.Position = UDim2.fromOffset(14, 50)
 	track.Size = UDim2.new(1, -56, 0, BAR_HEIGHT)
 	track.ClipsDescendants = true
 	Ui.corner(track, 9)

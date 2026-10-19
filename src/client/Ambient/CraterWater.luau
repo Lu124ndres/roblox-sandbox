@@ -184,8 +184,8 @@ function CraterWater.start(getBlend: () -> number)
 	end)
 	CraterVents.start(folder, getBlend)
 	-- En el descanso el volcán se vacía: sin agua no hay abismo, motas ni fumarolas.
-	CraterDrain.start(function(shown: boolean)
-		folder.Parent = if shown then Workspace else nil
+	CraterDrain.start(function(visible: boolean)
+		folder.Parent = if visible then Workspace else nil
 	end)
 end
 

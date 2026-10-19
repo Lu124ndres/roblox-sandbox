@@ -36,7 +36,7 @@ function CodesWindow.start(screen: ScreenGui)
 	-- hija de la caja, taparía el texto).
 	local slot = Instance.new("Frame")
 	slot.Name = "Hueco"
-	slot.Size = UDim2.new(1, 0, 0.32, 0)
+	slot.Size = UDim2.fromScale(1, 0.32)
 	slot.Parent = window.content
 	Kit.skin(slot, "hondo")
 	local box = Instance.new("TextBox")
@@ -56,13 +56,13 @@ function CodesWindow.start(screen: ScreenGui)
 
 	local status = Style.text(window.content, "Estado", 22, COLORS.TextMuted, 2)
 	status.Position = UDim2.fromScale(0, 0.36)
-	status.Size = UDim2.new(1, 0, 0.2, 0)
+	status.Size = UDim2.fromScale(1, 0.2)
 	status.Text = "Búscalos en el grupo y las redes del juego"
 
 	local button = Style.button(window.content, "Canjear", Style.PALETTE.Buy, "Canjear")
 	button.AnchorPoint = Vector2.new(0.5, 1)
 	button.Position = UDim2.fromScale(0.5, 1)
-	button.Size = UDim2.new(0.5, 0, 0.3, 0)
+	button.Size = UDim2.fromScale(0.5, 0.3)
 
 	local function send()
 		local text = box.Text

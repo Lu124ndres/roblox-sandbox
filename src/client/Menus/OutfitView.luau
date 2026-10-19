@@ -41,7 +41,7 @@ function OutfitView.portrait(card: Frame, passKey: string)
 	local view = Instance.new("ViewportFrame")
 	view.Name = "Personaje"
 	view.BackgroundTransparency = 1
-	view.Position = UDim2.new(0, -8, 0, -30)
+	view.Position = UDim2.fromOffset(-8, -30)
 	view.Size = UDim2.new(0.4, 0, 1, 8)
 	view.ZIndex = 4
 	view.Ambient = Color3.fromRGB(170, 170, 180)

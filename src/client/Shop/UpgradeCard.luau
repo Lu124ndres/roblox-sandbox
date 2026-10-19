@@ -106,7 +106,7 @@ function UpgradeCard.new(parent: Instance, spec: CardSpec): Card
 	chip.Text = `Nv {level}`
 	chip.TextXAlignment = Enum.TextXAlignment.Left
 	chip.Position = UDim2.fromOffset(10, 6)
-	chip.Size = UDim2.new(0.6, 0, 0.16, 0)
+	chip.Size = UDim2.fromScale(0.6, 0.16)
 	chip.ZIndex = 2
 
 	if level == spec.owned then
