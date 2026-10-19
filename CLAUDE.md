@@ -8,11 +8,10 @@ humana o asistida, que escriba código o documentación aquí.
 - Sin saludos, confirmaciones ni resúmenes finales. Ve directo a la solución.
 - Explicaciones breves, pero completas cuando se trate de bugs, red o tipos.
 - Edita los archivos directamente; no pegues scripts completos en el chat.
-- Si algo es ambiguo y cambia el diseño, pregunta antes de implementar.
 
 ## Stack
 
-- **Luau puro** con `--!strict`. Sin roblox-ts ni transpiladores.
+- **Luau puro**. Sin roblox-ts ni transpiladores.
 - **Rojo 7.7.1** sincroniza `src/` con Studio. El código vive en el sistema de archivos.
 - **MCP de Studio** para inspeccionar y probar el juego en Studio desde el asistente.
 - **Blender**: instalado, sin usar todavía. Entra en la fase 2.
@@ -48,9 +47,11 @@ Documentos en `docs/`:
 
 ## Reglas no negociables
 
-1. **El cliente nunca decide estado autoritativo** (dinero, progresión, inventario). Solo pide.
-2. **Todo RemoteEvent valida en el servidor**: tipo de cada argumento, rango de valores y
-   derecho del jugador a ejecutar esa acción. Se asume que todo argumento puede ser malicioso.
+1. **El cliente nunca decide estado autoritativo** (dinero, progresión, inventario, daño).
+   Solo pide; el servidor calcula el resultado.
+2. **Todo RemoteEvent/RemoteFunction valida en el servidor**: tipo (`typeof`) de cada
+   argumento, rangos y longitudes, derecho o posesión del jugador sobre lo que pide, y
+   distancias o cooldowns cuando aplique. Se asume que todo argumento puede ser malicioso.
 3. **Nada de `while true do` sin espera.** Usar eventos de `RunService` o `task.wait`.
 4. **Nunca editar en Studio lo que existe en `src/` o `world/`.** Rojo sobrescribe
    cualquier cambio hecho ahí. Las piezas se cambian en `tools/generar_isla.py`, el
@@ -62,29 +63,24 @@ Documentos en `docs/`:
 
 ## Rojo: fuente de verdad
 
-- Todo el código Luau vive en disco y se sincroniza con Rojo (rutas en el mapa de carpetas).
-- NUNCA escribas ni sobreescribas scripts desde el MCP de Roblox Studio.
 - Para crear servicios, carpetas o instancias, edita `default.project.json` o crea archivos
   `.model.json` / `.meta.json`.
 - Propiedades de servicios (Lighting, SoundService, etc.) también se definen en
   `default.project.json` cuando sea posible.
 
-## MCP de Roblox Studio: solo lectura
+## MCP de Roblox Studio
 
 - Úsalo para inspeccionar propiedades en tiempo de ejecución (posiciones, escalas, UI) y leer
   el Output para depurar.
-- Puede modificar únicamente contenido de runtime que Rojo no gestiona (ej. objetos temporales
-  en Workspace).
-- Permitido en runtime: Play/Stop, simular input y disparar AdminCommand para pruebas.
-  Prohibido editar cualquier instancia gestionada por Rojo.
-- La prohibición aplica a cambios persistentes en modo Edit sobre instancias de Rojo. En Play
-  todo está permitido porque se descarta al parar. En Edit se permite clonar módulos para
-  pruebas solo dentro de una carpeta temporal fuera de Rojo, destruyendo el clon al terminar y
-  verificando que no quedó.
+- **Edit:** prohibido cualquier cambio persistente sobre instancias gestionadas por Rojo,
+  scripts incluidos. Solo se puede tocar contenido que Rojo no gestiona (ej. objetos
+  temporales en Workspace). Se permite clonar módulos para pruebas solo dentro de una carpeta
+  temporal fuera de Rojo, destruyendo el clon al terminar y verificando que no quedó.
+- **Play:** todo está permitido porque se descarta al parar (Play/Stop, simular input,
+  disparar AdminCommand para pruebas).
 
 ## Estándares Luau
 
-- `--!strict` al inicio de todo archivo nuevo o modificado de forma importante.
 - Tipa funciones, parámetros, retornos y tablas. Los tipos compartidos van en
   `src/shared/Config/Types.luau` (o junto a su sección, como `Config/GiantTypes.luau`).
 - Solo `task.wait`, `task.spawn`, `task.defer`, `task.delay`. Prohibido `wait()`, `spawn()`,
@@ -93,16 +89,6 @@ Documentos en `docs/`:
 - Desconecta conexiones y limpia instancias cuando un objeto o jugador se va (evita fugas de
   memoria).
 - Prefiere ModuleScripts para la lógica; los Scripts/LocalScripts solo inicializan.
-
-## Seguridad de red
-
-- El servidor nunca confía en el cliente.
-- En cada RemoteEvent/RemoteFunction del servidor, valida:
-  - tipo de cada argumento (`typeof`), rangos y longitudes,
-  - que el jugador tenga permiso o posesión sobre lo que pide,
-  - distancias o cooldowns cuando aplique (anti-spam / anti-exploit).
-- El servidor calcula los resultados importantes (daño, monedas, inventario); el cliente solo
-  los solicita.
 - En el cliente, maneja `Players.LocalPlayer` y `Character` de forma defensiva (pueden no
   existir aún o reaparecer).
 
@@ -117,21 +103,16 @@ Documentos en `docs/`:
 ## Diseño
 
 - Las decisiones de diseño (UI, mapas, estética, mecánicas, modelos) son mías. Propón opciones,
-  no impongas.
-
-## Verificación
-
-- Tras cambios de código, delega en el subagente `infra`: `rojo build`, `selene src` y
-  `stylua --check src`.
-- No des una tarea por terminada si el build falla.
+  no impongas. Si algo es ambiguo y cambia el diseño, pregunta antes de implementar.
 
 ## Delegación
 
-- Tareas rutinarias (build, búsquedas, lectura de archivos, lint) → subagente `infra`.
+- `rojo build` y `stylua --check src` se corren directamente, sin subagente.
+- Salidas largas (`selene` con muchos avisos, búsquedas grandes en `src/`) → subagente `infra`.
 - Revisión de seguridad de remotes antes de cerrar un sistema de red → subagente
   `remote-auditor`.
-- Arquitectura, sistemas de juego y Blender → agente principal.
-- Nunca delegues diseño, escritura de código ni diagnóstico de bugs complejos a `infra`.
+- Diseño, escritura de código, arquitectura, Blender y diagnóstico de bugs complejos los hace el
+  agente principal; nunca `infra`.
 
 ## Convenciones
 
@@ -157,8 +138,8 @@ Documentos en `docs/`:
 
 ## Assets
 
-- Todo `rbxassetid` vive en `src/shared/Assets.luau`. Si falta uno, se deja como
-  `"rbxassetid://0"` (`Assets.MISSING`) y se anota en `docs/ui-assets.md`.
+- Si falta un `rbxassetid`, se deja como `"rbxassetid://0"` (`Assets.MISSING`) y se anota en
+  `docs/ui-assets.md`.
 - UI 2D y texturas tileables: **ForgeGUI**. Texturas de mesh y modelos: **Blender**.
 - ForgeGUI no genera animaciones. Es solo imagen estática.
 
@@ -176,5 +157,5 @@ Documentos en `docs/`:
 
 1. `rojo build --output build/test.rbxl` compila.
 2. `selene src` sin warnings.
-3. `stylua src` aplicado.
+3. `stylua src` aplicado (`stylua --check src` limpio).
 4. Probado en Studio vía MCP, no solo "debería funcionar".
