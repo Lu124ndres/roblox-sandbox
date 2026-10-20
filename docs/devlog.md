@@ -2940,3 +2940,27 @@ VIP por lo demás), placa dorada con la cinta, y la tarjeta del VIP con el texto
 - "Estanque sagrado" está fuera de oferta y se llama x250, pero la tienda lo vende a 799 R$
   como x50.
 - Actualizar la descripción del pase VIP en Roblox con las ventajas nuevas.
+
+---
+
+## 2026-10-20 (4) — VIP llamativo, etiquetas en el chat, precios y avisos que estorbaban
+
+**Qué se hizo (pedido del usuario):**
+- **VIP más llamativo** (`Interface/OverheadVip`): un destello blanco recorre la placa de oro
+  cada ~3 s, la cinta de la esquina es más grande, con la corona de la hoja 2 y late, y el
+  nombre del jugador va en oro con el brillo que ya tenían los títulos altos.
+- **Chat** (`Interface/ChatTags`, lo arranca `Overhead`): delante del nombre van `[VIP]` en oro
+  (y el nombre en oro) y `[TÍTULO]` en el color del título. Con `TextChatService.OnIncomingMessage`
+  en cada cliente, leyendo los atributos del servidor.
+- **Precios:** mandan los del Creator Hub. El único distinto era el Dios del Volcán: el pase y
+  su regalo cuestan 858 R$ (antes 399 en el juego). Corrección de la entrada anterior: los
+  "Regalar" están activos (lo confirmó el usuario).
+- **Avisos:** fuera el "Espera a que pique..." al lanzar. El "+1 Kill · Orca" al entrar era un
+  error: al cargar los datos, Kills pasa de 0 a lo guardado y contaba como kill nueva; ahora
+  solo cuenta con `DataLoaded` y muestra las que ganó (+4 con el Dios del Volcán).
+
+**Probado en Studio (Play):** al entrar no sale ningún aviso de kills; placa, cinta y nombre
+dorado; el mensaje de chat sale como `[VIP] [APRENDIZ] lu124ndres:` con sus colores.
+
+**Pendiente:** "Estanque sagrado" sigue fuera de oferta en el Creator Hub (x250) y el juego lo
+vende a 799 R$ como x50.

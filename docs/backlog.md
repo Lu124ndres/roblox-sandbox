@@ -292,5 +292,7 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Íconos de las caras del Rey del Mar y del Dios del Volcán (estilo v4).
 - [x] IDs de los 70 productos y los 3 pases en el juego (revisados contra el Creator Hub).
 - [x] VIP: +50% monedas, +50% entrenamiento y placa dorada con cinta VIP.
-- [ ] Activar los productos "Regalar" y el estanque sagrado en el Creator Hub; precio del
-      regalo del Dios del Volcán (858 vs 399).
+- [x] Precios iguales al Creator Hub (Dios del Volcán y su regalo a 858 R$).
+- [x] VIP más llamativo: destello, cinta con corona, nombre dorado y [VIP] [TÍTULO] en el chat.
+- [x] Sin "Espera a que pique" ni el "+1 Kill" falso al entrar.
+- [ ] Estanque sagrado: está fuera de oferta en el Creator Hub (x250); el juego lo vende a 799 R$.
