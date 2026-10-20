@@ -154,7 +154,7 @@ local Giants: Types.GiantsConfig = {
 		stepSeconds = 0.1, -- pasos cortos: los peces salen parejos, no a tirones
 		fishPerSecond = 10, -- un pez cada 0.1 s sin renacer (pedido del usuario: fluido y rápido)
 		broadcastSeconds = 0.15,
-		basketSeconds = 5, -- una canasta llena se vacía en 5 s como mucho
+		basketSeconds = 12, -- una canasta llena se vacía en 12 s como mucho (Rey del Mar 6 s, Dios del Volcán 3 s)
 	},
 	sizing = {
 		activeShare = 0.6, -- el resto del tiempo entrena, compra o pasea

@@ -11,8 +11,9 @@
 		(1 - startProgress) / (gain * fuerza * toques - drain)
 	A 7 toques/s con la caña 1: Común ~0.65 s, Poco común ~1 s, Raro ~1.5 s,
 	Épico ~2.1 s, Legendario ~3 s, Mítico ~4.4 s. Cada nivel de caña suma
-	`strengthPerRodLevel` a la fuerza (caña 10 = x1.9), y los pases con
-	traje la multiplican (ver Config.Monetization.passes).
+	`strengthPerRodLevel` a la fuerza (caña 20 = x1.5: un legendario sigue
+	pidiendo ~9 toques), y los pases con traje la multiplican (Rey del Mar
+	x2, ~4 toques; Dios del Volcán, uno solo; ver Config.Monetization.passes).
 
 	El servidor cuenta los toques (máximo `maxTapsPerSecond`, con `tapBurst`
 	de colchón por el ping) y empieza a bajar la barra `graceSeconds` después
@@ -40,7 +41,7 @@ local Reel: ReelConfig = {
 	graceSeconds = 0.3,
 	maxTapsPerSecond = 14,
 	tapBurst = 4,
-	strengthPerRodLevel = 0.1,
+	strengthPerRodLevel = 0.025,
 	announceFromRarity = 5,
 	byRarity = {
 		{ gain = 0.15, drain = 0.12 }, -- Común
