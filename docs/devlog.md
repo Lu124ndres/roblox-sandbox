@@ -2885,3 +2885,29 @@ vista en el suelo. `GetImageForKeyCode(ButtonR2)` da el dibujo del gatillo.
 
 **Qué se rompió:** nada visto. Los gratis pescan algo más lento que antes desde el principio
 (el pique de un jugador nuevo pasa de 0.8–1.8 s a 1.6–1.8 s).
+
+---
+
+## 2026-10-20 (2) — Aura sin círculos, rayos de las vitrinas e íconos de los trajes
+
+**Qué se hizo (pedido del usuario):**
+- **Aura de captura:** sin el brillo ni los anillos del suelo («eso no es un aura, solo un
+  círculo»). Ahora son lenguas de energía del color de la rareza que suben pegadas al cuerpo
+  (`FuegoFlip` teñido, desde un cilindro invisible del tamaño del jugador), chispas y brasas
+  (`Effects/LightAura`). El destino del tutorial queda con chispas y brasas.
+- **Dios del Volcán:** fuera el charco, el aro de runas y la onda de choque de sus pies
+  (`Trajes/Sello`); quedan las brasas que suben, el halo y el contorno.
+- **Vitrinas:** los rayos de detrás se salían del pedestal al moverse. Era el `StudsOffset` del
+  BillboardGui, que se mide hacia donde mira la cámara: con el pedestal a un lado de la
+  pantalla se corría. Ahora el cliente lo pone cada cuadro por la línea cámara → traje
+  (`StudsOffsetWorldSpace`, `Trajes/Vitrinas`; el servidor deja la distancia en el atributo
+  `Fondo`).
+- **Íconos:** caras del Dios del Volcán y del Rey del Mar pintadas a mano como los v4
+  (`assets/ui/iconos/v4/volcanoGod.png`, `seaKing.png`; ver `docs/ui-assets.md`).
+
+**Probado en Studio (Play):** aura de un legendario y un épico de noche, con efectos completos
+y reducidos, sin círculos; el traje del Dios del Volcán sin aros en los pies; con la cámara de
+lado, los rayos de las dos vitrinas quedan centrados detrás del traje.
+
+**Pendiente:** los íconos no están en ninguna hoja ni subidos a Roblox; el conector de Canva
+solo dio 200 px.

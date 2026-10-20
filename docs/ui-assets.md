@@ -134,6 +134,14 @@ tablas de media de Canva de cada ícono quedan en el devlog del 2026-10-17 (17).
 | 1 (HUD) | `v4/iconos_v4_hud.png` | IconSheet = 135004623117532 | moneda, poder, canasta con peces, **monstruo alimentado** (reemplaza la calavera de "monstruos llenados"), canasta, cofre, regalo, engranaje, pez, boleto, amigos, grupo, colmillo, cuenco de peces (insignia `fed`) |
 | 2 | `v4/iconos_v4_hoja2.png` | IconSheet2 = 97933580602007 → 89496859008486 | caña, botas, corona, estanque, rayo, orca, minotauro, dragón (el nuevo), zorro, regalo rosa, flecha, carne, rayos y brillo (copiados de la hoja anterior) |
 
+**Caras de los trajes de pase** (2026-10-20, sueltos, todavía no están en ninguna hoja ni
+subidos): `v4/volcanoGod.png` (Dios del Volcán) y `v4/seaKing.png` (Rey del Mar), en celda de
+256 como los demás. Se generaron en Canva con la moneda maestra y el minotauro v4 como guía de
+estilo y una captura de cada traje en Studio como guía de diseño; fondo quitado en Canva.
+Media de Canva: Dios `MAHYj4m_JoE`, Rey `MAHYj8u8m8w` (con fondo: `MAHYj5mH0GA`,
+`MAHYj86ZLA8`). El conector solo dio la vista previa de 200 px (`v4/crudo2/`); para una versión
+de 1024 px, descargarlos desde Canva. Caben en las celdas libres 14 y 15 de la hoja 2.
+
 ## Íconos del HUD (v3, reemplazados por los v4)
 
 Imágenes estilo 3D generadas con IA (Canva, mismo prompt base: "Game UI icon for a Roblox

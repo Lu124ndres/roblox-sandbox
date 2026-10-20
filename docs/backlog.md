@@ -287,3 +287,6 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Aura de partículas en vez del cilindro de neón al pescar raros o mejores y en el destino del
       tutorial; sin pilar ni cartel en el destino.
 - [x] RT (R2) en los botones y avisos de pescar y alimentar con mando.
+- [x] Aura sin círculos en el suelo; sin aros a los pies del Dios del Volcán.
+- [x] Rayos de las vitrinas siempre detrás del traje, desde cualquier ángulo.
+- [x] Íconos de las caras del Rey del Mar y del Dios del Volcán (estilo v4).
