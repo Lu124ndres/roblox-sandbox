@@ -22,6 +22,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Basket = require(script.Parent.Feeding.Basket)
 local SaveSchema = require(script.Parent.Save.SaveSchema)
 local Titles = require(ReplicatedStorage.Shared.Titles)
+local Trajes = require(ReplicatedStorage.Shared.Trajes)
 
 local ATTR = Protocol.PlayerAttributes
 local POWER_STAT_SECONDS = 3
@@ -150,6 +151,9 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 		if save.ponds[tostring(index)] then
 			player:SetAttribute(`{ATTR.PondPrefix}{index}`, true)
 		end
+	end
+	if save.outfit ~= "" then
+		player:SetAttribute(Trajes.CHOSEN, save.outfit) -- el traje que eligió (Social/Outfits)
 	end
 end
 

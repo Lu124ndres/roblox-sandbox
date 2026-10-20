@@ -4,7 +4,8 @@
 
 	Ponerse o quitarse el traje de un pase (vitrinas con E y botón Equipar de la
 	TIENDA, remote ElegirTraje). Si ya lo lleva puesto vuelve a Marinero; si no,
-	se lo pone. Solo si tiene el pase. Lo aplica Outfits (atributo TrajeElegido).
+	se lo pone. Solo si tiene el pase. Lo aplica Outfits (atributo TrajeElegido)
+	y queda guardado (save.outfit): al volver a entrar lleva el mismo.
 ]]
 
 local Players = game:GetService("Players")
@@ -15,6 +16,7 @@ local Perks = require(ReplicatedStorage.Shared.Perks)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
+local PlayerData = require(script.Parent.Parent.PlayerData)
 
 local OutfitChoice = {}
 
@@ -27,7 +29,11 @@ function OutfitChoice.toggle(player: Player, passKey: string)
 	local character = player.Character
 	local current = character and character:FindFirstChild(Trajes.FOLDER)
 	local wearing = current and current:GetAttribute("Outfit") == outfit
-	player:SetAttribute(Trajes.CHOSEN, if wearing then Trajes.SAILOR else outfit)
+	local chosen = if wearing then Trajes.SAILOR else outfit
+	player:SetAttribute(Trajes.CHOSEN, chosen)
+	PlayerData.edit(player, function(save)
+		save.outfit = chosen
+	end)
 end
 
 function OutfitChoice.init()
