@@ -2911,3 +2911,32 @@ lado, los rayos de las dos vitrinas quedan centrados detrás del traje.
 
 **Pendiente:** los íconos no están en ninguna hoja ni subidos a Roblox; el conector de Canva
 solo dio 200 px.
+
+---
+
+## 2026-10-20 (3) — IDs de la tienda y VIP mejorado
+
+**Qué se hizo (pedido del usuario, con capturas del Creator Hub):**
+- **IDs:** los 70 productos y los 3 pases de las capturas coinciden uno por uno con
+  `Assets/Products.luau` y `Assets.GamePasses` (los había puesto la sesión de Cowork del
+  2026-10-19 sin commitear; ahora van en un commit). Poder 10 y Monedas 10 cuestan 1300 R$
+  en Roblox: corregido en `Config/Monetization` (la tienda muestra el precio de Roblox).
+- **VIP:** suma +50% monedas (`coinMultiplier`) y +50% entrenamiento (`trainingMultiplier`,
+  el poder que gana entrenando y descansando) a lo que ya daba (+20% suerte, diario x2). Los
+  dos van en `Perks.coinMultiplier` / `powerMultiplier`, así el HUD muestra el x1.5.
+- **Placa VIP sobre la cabeza** (`Interface/OverheadVip`): la placa de insignias pasa de lava
+  a oro y lleva una cinta de lava "VIP" inclinada en la esquina de arriba; se quitó el chip
+  "VIP" del medio. El oro es un degradado con borde marrón: la piedra de `Kit` tintada de
+  dorado quedaba ocre.
+- La descripción del VIP en la tienda se acortó a "+50% monedas y +50% entrenamiento" (la
+  tarjeta muestra dos líneas).
+
+**Probado en Studio (Play):** con el VIP, multiplicador de monedas y de poder x1.98 (x1.5 del
+VIP por lo demás), placa dorada con la cinta, y la tarjeta del VIP con el texto entero.
+
+**Pendiente en el Creator Hub (lo hace el usuario):**
+- Los tres "Regalar" (VIP, Rey del Mar, Dios del Volcán) están desactivados: regalar un pase
+  falla hasta activarlos. "Regalar Dios del Volcán" cuesta 858 R$ y el pase 399.
+- "Estanque sagrado" está fuera de oferta y se llama x250, pero la tienda lo vende a 799 R$
+  como x50.
+- Actualizar la descripción del pase VIP en Roblox con las ventajas nuevas.
