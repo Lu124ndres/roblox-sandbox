@@ -65,7 +65,7 @@ local function giftPass(player: Player, key: string): string
 	PlayerData.edit(player, function(save)
 		save.gifts[key] = true
 	end)
-	Passes.grant(player, key)
+	Passes.acquire(player, key)
 	return MONETIZATION.passes[key].name
 end
 

@@ -50,6 +50,7 @@ export type SaveData = {
 	coinBoostUntil: number, -- unix en que termina el x2 monedas de la ruleta (v10)
 	playMinutes: number, -- minutos jugados en total (v11, para la telemetría)
 	outfit: string, -- traje que eligió en la vitrina ("" = el del mejor pase; v12)
+	passTests: { [string]: boolean }, -- pases puestos (true) o quitados (false) por un admin (v13)
 }
 
 local SaveSchema = {}
@@ -57,9 +58,9 @@ local SaveSchema = {}
 -- 2: kills; 3: mejoras de la tienda; 4: tutorial, diario, ajustes, insignias;
 -- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie;
 -- 8: renacer, misiones, pack de inicio; 9: ruleta gratis; 10: giros guardados y
--- x2 monedas; 11: minutos jugados; 12: traje elegido (8 a 12 en SaveExtra; lo que falta
--- en un guardado viejo queda en 0 o vacío)
-SaveSchema.VERSION = 12
+-- x2 monedas; 11: minutos jugados; 12: traje elegido; 13: pases de prueba del admin (8 a 13
+-- en SaveExtra; lo que falta en un guardado viejo queda en 0 o vacío)
+SaveSchema.VERSION = 13
 
 function SaveSchema.default(): SaveData
 	return {
@@ -91,6 +92,7 @@ function SaveSchema.default(): SaveData
 		coinBoostUntil = 0,
 		playMinutes = 0,
 		outfit = "",
+		passTests = {},
 	}
 end
 

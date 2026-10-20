@@ -147,6 +147,9 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 	for key in save.gifts do
 		player:SetAttribute(`{ATTR.PassPrefix}{key}`, true) -- pase regalado
 	end
+	for key, on in save.passTests do -- puesto o quitado por un admin: manda sobre lo demás
+		player:SetAttribute(`{ATTR.PassPrefix}{key}`, if on then true else nil)
+	end
 	for index in Config.Progression.ponds do
 		if save.ponds[tostring(index)] then
 			player:SetAttribute(`{ATTR.PondPrefix}{index}`, true)

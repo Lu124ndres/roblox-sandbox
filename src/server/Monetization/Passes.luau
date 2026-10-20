@@ -6,6 +6,9 @@
 	Al entrar se pregunta a Roblox cuáles tiene (con reintentos) y se marca
 	Pase_<clave> en el jugador; Perks lee esos atributos. Si compra uno durante la partida, se
 	marca al momento. Los pases con ID 0 todavía no existen y se ignoran.
+	Un pase que un admin quitó para probar (save.passTests = false) no se marca aunque Roblox
+	diga que lo tiene: el creador del juego siempre tiene todos sus pases. Comprarlo o
+	recibirlo de regalo borra esa prueba (acquire).
 ]]
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -17,6 +20,7 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Remotes = require(script.Parent.Parent.Remotes)
 local Analytics = require(script.Parent.Parent.Analytics)
+local PlayerData = require(script.Parent.Parent.PlayerData)
 
 local PASSES = Config.Monetization.passes
 local PREFIX = Protocol.PlayerAttributes.PassPrefix
@@ -34,8 +38,21 @@ local function keyFor(passId: number): string?
 	return nil
 end
 
--- Marca el pase (también lo usa la prueba de Studio).
+-- Marca el pase que Roblox dice que tiene, salvo que un admin se lo haya quitado para probar
+-- (si sus datos aún no cargan, ProfilePublish aplica la prueba al cargarlos).
 function Passes.grant(player: Player, key: string)
+	local save = PlayerData.read(player)
+	if save and save.passTests[key] == false then
+		return
+	end
+	player:SetAttribute(`{PREFIX}{key}`, true)
+end
+
+-- Lo compró o se lo regalaron: vale aunque un admin se lo hubiera quitado para probar.
+function Passes.acquire(player: Player, key: string)
+	PlayerData.edit(player, function(save)
+		save.passTests[key] = nil
+	end)
 	player:SetAttribute(`{PREFIX}{key}`, true)
 end
 
@@ -74,7 +91,7 @@ function Passes.init()
 		function(player: Player, passId: number, purchased: boolean)
 			local key = keyFor(passId)
 			if purchased and key then
-				Passes.grant(player, key)
+				Passes.acquire(player, key)
 				Analytics.robux(player, `Pase{key}`, PASSES[key].robux, false)
 				Remotes.Notice:FireClient(
 					player,

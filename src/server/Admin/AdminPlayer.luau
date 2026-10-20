@@ -146,6 +146,10 @@ AdminPlayer.HANDLERS = {
 		local attribute = `{ATTR.PassPrefix}{value}`
 		local now = target:GetAttribute(attribute) ~= true
 		target:SetAttribute(attribute, if now then true else nil)
+		-- Queda guardado: al volver a entrar sigue así aunque Roblox diga que lo tiene (Passes).
+		PlayerData.edit(target, function(save)
+			save.passTests[value] = now
+		end)
 		return `{Config.Monetization.passes[value].name}: {if now then "puesto" else "quitado"}`
 	end,
 	playtime = function(target, value)

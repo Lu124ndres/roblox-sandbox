@@ -2,7 +2,7 @@
 --[[
 	SaveExtra
 
-	Campos del guardado que llegaron en las versiones 8 a 12 (SaveSchema los
+	Campos del guardado que llegaron en las versiones 8 a 13 (SaveSchema los
 	declara y llama a read; en un guardado viejo faltan y quedan en 0 o vacíos):
 		rebirths     veces que renació (Retention/Rebirth)
 		quests       misiones del día: día UTC, avance y cuáles se cumplieron
@@ -13,6 +13,9 @@
 		playMinutes  minutos jugados en total, en todas las sesiones (v11, Analytics/Sesion)
 		outfit       traje que eligió en la vitrina o la TIENDA (v12, Social/OutfitChoice):
 		             "Marinero", el de un pase, o "" para el del mejor pase que tenga
+		passTests    pases que un admin puso (true) o quitó (false) para probar (v13,
+		             Monetization/Passes): mandan sobre lo que dice Roblox hasta que lo
+		             compre o se lo regalen
 	También flags, que copia los `clave = true` de un mapa guardado.
 ]]
 
@@ -74,7 +77,7 @@ local function outfit(value: unknown): string
 	return ""
 end
 
--- Lee lo de las versiones 8 a 12 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
+-- Lee lo de las versiones 8 a 13 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
 function SaveExtra.read(source: { [string]: any }, data: any)
 	data.rebirths = count(source.rebirths)
 	data.starterPack = source.starterPack == true
@@ -83,6 +86,17 @@ function SaveExtra.read(source: { [string]: any }, data: any)
 	data.coinBoostUntil = count(source.coinBoostUntil)
 	data.playMinutes = count(source.playMinutes)
 	data.outfit = outfit(source.outfit)
+	if type(source.passTests) == "table" then
+		for key, on in source.passTests do
+			if
+				type(key) == "string"
+				and Config.Monetization.passes[key]
+				and type(on) == "boolean"
+			then
+				data.passTests[key] = on
+			end
+		end
+	end
 	local saved = source.quests
 	if type(saved) == "table" then
 		data.quests.day = count(saved.day)
