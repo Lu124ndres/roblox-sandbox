@@ -305,3 +305,13 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [ ] Decorados de bloques (palmeras, rocas, muelles) y suelo de cubos: opciones 2 y 3, a decidir.
 - [ ] Estanque sagrado: ponerlo a la venta a 1200 R$ en el Creator Hub (está fuera de oferta).
       Subir el pase Dios del Volcán a 858 R$ (Roblox dice 496).
+
+## Orca v2 de bloques (2026-10-20)
+
+- [x] Geometría de las 4 etapas (cría, joven, adulta y anciana), aprobada (`docs/plan_orca_v2.md`).
+- [x] Pupilas por código que siguen al jugador (`Giant/GiantEyes`): Minotauro, Dragón y Zorro
+      encima de su ojo; la orca con cuenca en el modelo.
+- [ ] Rig, poses y FBX de las 4 etapas (huesos `Ojo{l}Mira` en la cuenca).
+- [ ] Importar en Studio, IDs en `Assets` y `modelSuffix = "_v2"`.
+- [ ] Adaptar `Shared/Orca` y `OrcaSwim` a los huesos nuevos y probar las pupilas en Play.
+- [ ] Pupila del Minotauro E1 (ojo todo negro) y del Dragón E2 (ojo de 1×1): a decidir.

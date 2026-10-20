@@ -1,7 +1,7 @@
 {
-  "bloques": 112,
+  "bloques": 118,
   "bloques_por_parte": {
-    "Cabeza": 30,
+    "Cabeza": 36,
     "Mandibula": 14,
     "Pecho": 24,
     "Cola1": 10,
@@ -17,9 +17,9 @@
     "AletaColaIzq": 1,
     "AletaColaDer": 1
   },
-  "triangulos": 4468,
+  "triangulos": 4676,
   "triangulos_ocultos_quitados": {
-    "Cabeza": 96,
+    "Cabeza": 128,
     "Mandibula": 46,
     "Pecho": 54,
     "Cola1": 24,
@@ -32,7 +32,7 @@
     "AletaDer2": 2
   },
   "triangulos_por_parte": {
-    "Cabeza": 1152,
+    "Cabeza": 1360,
     "Mandibula": 486,
     "Pecho": 966,
     "Cola1": 392,
@@ -84,12 +84,16 @@
     "huesos_sin_pieza": [
       "Boca",
       "Espiraculo",
+      "OjoDerMira",
+      "OjoIzqMira",
       "Raiz"
     ],
     "huesos_con_varias_piezas": {},
     "huesos_sin_pesos_por_contrato": [
       "Boca",
       "Espiraculo",
+      "OjoDerMira",
+      "OjoIzqMira",
       "Raiz"
     ]
   }

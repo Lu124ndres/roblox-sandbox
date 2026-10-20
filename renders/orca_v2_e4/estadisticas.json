@@ -1,0 +1,102 @@
+{
+  "bloques": 269,
+  "bloques_por_parte": {
+    "Cabeza": 51,
+    "Mandibula": 18,
+    "Pecho": 51,
+    "Cola1": 32,
+    "Cola2": 30,
+    "Cola3": 20,
+    "Cola4": 21,
+    "Cola5": 12,
+    "Dorsal": 12,
+    "AletaIzq": 1,
+    "AletaDer": 2,
+    "AletaIzq2": 7,
+    "AletaDer2": 4,
+    "AletaColaIzq": 4,
+    "AletaColaDer": 4
+  },
+  "triangulos": 10988,
+  "triangulos_ocultos_quitados": {
+    "Cabeza": 204,
+    "Mandibula": 54,
+    "Pecho": 114,
+    "Cola1": 80,
+    "Cola2": 64,
+    "Cola3": 50,
+    "Cola4": 46,
+    "Cola5": 44,
+    "Dorsal": 38,
+    "AletaIzq2": 12,
+    "AletaDer2": 6,
+    "AletaColaIzq": 8,
+    "AletaColaDer": 8
+  },
+  "triangulos_por_parte": {
+    "Cabeza": 2028,
+    "Mandibula": 822,
+    "Pecho": 2058,
+    "Cola1": 1280,
+    "Cola2": 1196,
+    "Cola3": 806,
+    "Cola4": 866,
+    "Cola5": 472,
+    "Dorsal": 550,
+    "AletaIzq": 44,
+    "AletaDer": 88,
+    "AletaIzq2": 272,
+    "AletaDer2": 146,
+    "AletaColaIzq": 180,
+    "AletaColaDer": 180
+  },
+  "partes": 15,
+  "alto_bu": 31.0,
+  "studs_por_bu": 5.3226,
+  "caras_coplanares": [],
+  "normales_hacia_adentro": 0,
+  "bisel": {
+    "min": 0.12,
+    "max": 0.12,
+    "segmentos_distintos_de_1": []
+  },
+  "pendientes": {
+    "cunas_fuera_de_regla": [],
+    "vertices_fuera_de_cuadricula": []
+  },
+  "huesos": {
+    "pieza_a_hueso": {
+      "Cabeza": "Cabeza",
+      "Mandibula": "Mandibula",
+      "Pecho": "Pecho",
+      "Cola1": "Cola1",
+      "Cola2": "Cola2",
+      "Cola3": "Cola3",
+      "Cola4": "Cola4",
+      "Cola5": "Cola5",
+      "Dorsal": "Dorsal",
+      "AletaIzq": "AletaIzq",
+      "AletaDer": "AletaDer",
+      "AletaIzq2": "AletaIzq2",
+      "AletaDer2": "AletaDer2",
+      "AletaColaIzq": "AletaColaIzq",
+      "AletaColaDer": "AletaColaDer"
+    },
+    "piezas_sin_hueso_del_contrato": [],
+    "huesos_sin_pieza": [
+      "Boca",
+      "Espiraculo",
+      "OjoDerMira",
+      "OjoIzqMira",
+      "Raiz"
+    ],
+    "huesos_con_varias_piezas": {},
+    "huesos_sin_pesos_por_contrato": [
+      "Boca",
+      "Espiraculo",
+      "OjoDerMira",
+      "OjoIzqMira",
+      "Raiz"
+    ]
+  }
+}

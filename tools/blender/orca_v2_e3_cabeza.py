@@ -1,5 +1,6 @@
 r"""
-Cabeza de la Orca v2, etapa 3 (adulto): cráneo, hocico, ojos con cejas de enojo, la mancha de orca
+Cabeza de la Orca v2, etapa 3 (adulto): cráneo, hocico, cuencas de los ojos (la pupila la pone
+el código del juego) con cejas de enojo, la mancha de orca
 en cian y la boca abierta con dos filas de dientes. Lo carga orca_v2_e3_geometria.py con exec; usa
 bloque(), par() (de minotauro_v2_bloques.py) y prisma(), par_prisma() (de dragon_v2_formas.py).
 Todo en celdas.
@@ -26,8 +27,7 @@ def cabeza():
     # Por dentro, roja: la pared del fondo y el paladar.
     bloque(c, c, "boca", (-5, 5), (-22, -21), (6, 11))
     bloque(c, c, "boca", (-5, 5), (-29, -22), (10, 11))
-    # Ojos rojos rasgados en la esquina del cráneo: se ven de frente y de costado.
-    par(c, c, "ojo", (6, 8), (-28, -25), (12, 14))
+    cuencas(c)
     # Ceja de enojo: baja hacia adentro.
     par_prisma(c, c, "ceja", [(5, 14), (8, 14), (8, 16), (7, 16)], (-29, -24), eje="y")
     # La mancha de orca, en cian, detrás del ojo y subiendo hacia atrás.
@@ -35,6 +35,18 @@ def cabeza():
                (7, 8), eje="x")
     dientes_arriba(c)
     mandibula()
+
+
+def cuencas(c):
+    """La cuenca de cada ojo: una sola cara oscura, rasgada (2 de alto), que mira afuera y adelante
+    en cuña 1:1 (x - y = 35), para que la pupila de Neon que pone el código se vea de frente y de
+    costado. Va hundida en un marco que asoma una celda como la ceja: la ceja arriba, la mejilla
+    abajo (z 11..12), el poste de atrás y, del lado de adentro, el costado del hocico. Las caras
+    de la cuenca que no son la del ojo quedan tapadas por el marco, el cráneo y el hocico."""
+    par_prisma(c, c, "cuenca", [(6, -29), (8, -27), (6, -27)], (12, 14))
+    par(c, c, "cuerpo", (7, 8), (-27, -24), (12, 14))  # poste de atrás
+    par(c, c, "cuerpo", (7, 8), (-29, -24), (11, 12))  # mejilla, y su punta junto al hocico
+    par(c, c, "cuerpo", (6, 7), (-29, -27), (11, 12))
 
 
 def _diente(arriba, a):

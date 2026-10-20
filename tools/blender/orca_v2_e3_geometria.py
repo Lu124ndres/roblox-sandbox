@@ -2,9 +2,9 @@ r"""
 Orca v2, etapa 3 (adulto, la maestra): los datos de la etapa para minotauro_v2_bloques.py
 (--criatura orca). La biblia es orca_ref/BIBLIA.md (fuera del repo): una orca monstruo de bloques,
 un torpedo largo de placas negro azuladas en anillos que se escalonan hacia la cola, la aleta
-dorsal alta echada hacia atrás, la boca abierta con dos filas de dientes, ojos rojos con cejas de
-enojo y la mancha de orca en cian que brilla, púas grises por todo el lomo, pectorales largas que
-bajan hacia afuera y la cola en V. Detalles: branquias, puntos cian, cicatrices, percebes y algas.
+dorsal alta echada hacia atrás, la boca abierta con dos filas de dientes, cuencas de los ojos
+(la pupila roja la pone el código) con cejas de enojo y la mancha de orca en cian que brilla, púas
+grises por todo el lomo, pectorales largas que bajan hacia afuera y la cola en V. Detalles: branquias, puntos cian, cicatrices, percebes y algas.
 
 Proporciones (31 módulos de alto: de la punta de las pectorales a la de la dorsal):
     pectorales  hasta z 0       panza z 2..5 (blanca, después gris)
@@ -32,7 +32,10 @@ _LADOS = ("Izq", "Der")
 CONTRATO = ["Raiz", "Pecho", "Cabeza", "Mandibula", "Boca", "Espiraculo", "Dorsal"]
 CONTRATO += [f"Cola{n}" for n in range(1, 6)]
 CONTRATO += [f"{h}{l}{k}" for l in _LADOS for h, k in (("Aleta", ""), ("Aleta", "2"), ("AletaCola", ""))]
-CONTRATO_SIN_PESOS = ["Raiz", "Boca", "Espiraculo"]
+# Ojo{l}Mira: el punto de cada ojo para las pupilas por código (GiantEyes), sin pesos.
+_OJOS = [f"Ojo{l}Mira" for l in _LADOS]
+CONTRATO += _OJOS
+CONTRATO_SIN_PESOS = ["Raiz", "Boca", "Espiraculo"] + _OJOS
 
 
 # --- Paleta (sRGB, BIBLIA.md, 2) -----------------------------------------------------------
@@ -53,7 +56,7 @@ COLORES = {n: _lineal(h) for n, h in {
     "pectoral": "#262D3A",
     "pua": "#555E6E",
     "ceja": "#3A4250",
-    "ojo": "#FF2B2B",  # en Roblox, Neon
+    "cuenca": "#0A0C10",  # fondo oscuro del ojo: la pupila roja de Neon la pone el código
     "brillo": "#45E3FF",  # mancha de orca y puntos (Neon)
     "boca": "#4E1520",
     "lengua": "#8C2C3C",

@@ -934,3 +934,34 @@ escribir: si el cliente llegaba antes que los colores del servidor, el mar queda
 viejos guardados en el lugar; ahora lo lee al entrar al cráter. Los colores del terreno no
 cambian su versión (`TerrainVersion`): `style()` corre en cada arranque. Con efectos reducidos
 no hay bloom, rayos de sol, sombras ni reflejos en el agua.
+
+## 2026-10-20 — Pupilas por código encima de los ojos que ya existen
+
+**Contexto:** el usuario pidió que los ojos de los monstruos sigan al jugador.
+**Decisión:**
+- **Minotauro, Dragón y Zorro:** una pupila (y, si la malla trae una pintada, una tapa del color
+  del ojo) como partes del cliente pegadas al hueso `Cabeza`, sin reimportar los 12 FBX.
+- **La Orca v2:** se modela con cuenca y lleva un hueso `Ojo{l}Mira`.
+- **Arranque:** `GiantEyes` se engancha solo a cada gigante que aparece en Workspace (desde
+  `Main`), porque `GiantBody` y `GiantView` ya están en el tope de 200 líneas.
+
+**Lo no obvio:**
+- **`Bone.WorldCFrame` incluye los `Transform`** (medido en Play: da igual que
+  `TransformedWorldCFrame`). La pose de bind se arma multiplicando los `Bone.CFrame` de la
+  cadena desde la MeshPart (`GiantEyes/Medidas.bindInPart`).
+- **Los datos se miden contra el FBX:** en ejes de Blender, normalizados por la caja de la
+  malla, que coincide con `MeshPart.Size`. Así sirven con cualquier escala.
+- **La Orca vieja se salta:** también se llama `OrcaE<n>`, así que sus entradas piden
+  `requiresBone = "OjoIzqMira"` para no ponerle pupilas.
+
+## 2026-10-20 — Orca v2: más corta que la referencia y con cola de orca
+
+**Decisión:**
+- **Proporción:** alto:largo ≈ 1:2, contra ~1:2.5 de la referencia, para que la E4 (165 studs
+  de alto, 335 de largo) entre en el lago del cráter (380).
+- **Cola:** horizontal, de orca, aunque en la referencia de perfil parece vertical. Así encaja
+  con el nado de arriba abajo de `OrcaSwim`.
+
+**Lo no obvio:** el armador común encuadraba por el alto y cortaba la orca. Con
+`ENCUADRE_CAJA = True` en la geometría, la cámara toma la caja entera y la medida sigue siendo
+el alto. La alineación gira las criaturas largas para mostrarlas de perfil.

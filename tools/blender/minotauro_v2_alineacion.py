@@ -12,6 +12,8 @@ en renders/minotauro_v2_alineacion/. No guarda nada más.
 Con --criatura dragon hace lo mismo con el Dragón marino v2 (assets/blender/dragon_v2/,
 renders/dragon_v2_alineacion/), suma una vista desde arriba (arriba.png) y en proporciones.png
 las iguala por el largo, que es como las mide el juego (docs/plan_dragon_v2.md, "Escala").
+Con --criatura orca gira cada etapa 90° (el hocico hacia +x): la fila sale de perfil, que es como
+se lee una criatura larga, y suma la vista desde arriba.
 
 Uso (desde la raíz del repo):
     blender -b --factory-startup --python tools/blender/minotauro_v2_alineacion.py [-- --criatura dragon]
@@ -24,6 +26,7 @@ RAIZ = os.path.normpath(os.path.join(HERE, "..", ".."))
 ARGS = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 CRIATURA = ARGS[ARGS.index("--criatura") + 1] if "--criatura" in ARGS else "minotauro"
 VUELA = CRIATURA == "dragon"  # se mide por el largo y se mira también desde arriba
+LARGA = CRIATURA == "orca"  # el doble de larga que de alta: en fila se mira de perfil
 SALIDA = os.path.join(RAIZ, "renders", f"{CRIATURA}_v2_alineacion")
 HUECO = 0.25  # separación entre etapas, en fracción del ancho de la más grande vecina
 
@@ -38,6 +41,8 @@ def cargar(etapa):
     objs = [o for o in hacia.objects if o is not None and o.type == "MESH" and "hueso" in o]
     for o in objs:
         bpy.context.scene.collection.objects.link(o)
+        if LARGA:
+            o.matrix_world = Matrix.Rotation(math.radians(90), 4, "Z") @ o.matrix_world
         for m in o.data.materials:  # Workbench pinta con el color de vista, no con el del nodo
             nodo = m.node_tree.nodes.get("Principled BSDF") if m.node_tree else None
             if nodo:
@@ -103,7 +108,7 @@ for nombre, grados, ojo in (("frente", 0, 0.0), ("tres_cuartos", 30, 0.25)):
     apuntar(cam, centro, grados, ancho * 4, ancho * 4 * ojo)
     sc.render.filepath = os.path.join(SALIDA, nombre + ".png")
     bpy.ops.render.render(write_still=True)
-if VUELA:
+if VUELA or LARGA:
     cam.location = centro + V((0, 0, ancho * 4))
     cam.rotation_euler = (0, 0, 0)
     sc.render.filepath = os.path.join(SALIDA, "arriba.png")

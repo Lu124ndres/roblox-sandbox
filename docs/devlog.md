@@ -3143,3 +3143,34 @@ pisa el color del mar con el viejo guardado en el lugar.
 **Probado en Studio (Play, hora fija 12 y 17.3, sin evento, con efectos completos):** antes y
 después desde la plaza y la costa. La franja del horizonte a la tarde es el borde del streaming
 (ya pasaba). Opciones 2 (decorados de bloques) y 3 (suelo de cubos) pendientes de decidir.
+
+---
+
+## 2026-10-20 (15) — Orca v2 de bloques y pupilas que siguen al jugador
+
+**Qué se hizo (pedido del usuario):**
+- **Orca v2 de bloques:** las 4 etapas, solo la geometría, sin rig todavía (`docs/plan_orca_v2.md`).
+  - La adulta se hizo primero, como maestra, y tres agentes sacaron de ella la cría, la joven y
+    la anciana en paralelo.
+  - La anciana es la más terrorífica: acorazada con grietas cian, arpones, herida con costillas
+    y colmillos rotos.
+  - Los ojos son una cuenca oscura en diagonal; la pupila roja la pone el código.
+- **Pupilas por código** (`Giant/GiantEyes`) para todos los gigantes:
+  - en Minotauro, Dragón y Zorro van encima del ojo que ya tienen, sin reimportar los FBX;
+  - los ojos de los 12 modelos los mide `tools/blender/ojos_medir.py` contra el FBX y los
+    escribe en `UIConfig/GiantEyesData`;
+  - la orca las usa cuando tenga el hueso `OjoIzqMira`.
+
+**Probado en Studio (Play):** Minotauro E3, Zorro E3 y Dragón E3, con el personaje anclado
+arriba, abajo y a los dos lados.
+- **Seguimiento:** las pupilas van hacia él y vuelven al centro si queda detrás.
+- **Arreglo de la tapa:** en el Minotauro quedaba una celda alta y dejaba ver la pupila pintada,
+  porque `Bone.WorldCFrame` ya incluye la animación (ver `docs/decisiones.md`). Arreglado, la
+  tapa la cubre.
+- **Consola:** limpia.
+- **Orca:** sin probar en el juego, porque todavía no tiene rig. Se revisó en Blender con una
+  pupila simulada.
+
+**Sigue:**
+- rig y FBX de la orca, y adaptar `OrcaSwim`;
+- decidir la pupila del Minotauro E1 (su ojo es todo negro) y la del Dragón E2 (ojo de 1×1).

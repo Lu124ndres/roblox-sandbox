@@ -275,6 +275,90 @@ local data: { [string]: ModelEyes } = {
 			},
 		},
 	},
+	-- assets/blender/orca_v2/e1_bloques.blend
+	OrcaE1 = {
+		bone = "Cabeza",
+		boundsMin = Vector3.new(-1.7, -2.5, 0),
+		boundsMax = Vector3.new(1.7, 2.4946, 3.1),
+		requiresBone = "OjoIzqMira",
+		eyes = {
+			{
+				center = Vector3.new(0.9226, -1.8774, 1.7938),
+				normal = Vector3.new(0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(0.4625, 0.3875),
+			},
+			{
+				center = Vector3.new(-0.9226, -1.8774, 1.7938),
+				normal = Vector3.new(-0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(0.4625, 0.3875),
+			},
+		},
+	},
+	-- assets/blender/orca_v2/e2_bloques.blend
+	OrcaE2 = {
+		bone = "Cabeza",
+		boundsMin = Vector3.new(-5.4, -8.1, 0),
+		boundsMax = Vector3.new(5.4, 8.0839, 8.4),
+		requiresBone = "OjoIzqMira",
+		eyes = {
+			{
+				center = Vector3.new(2.0964, -7.2036, 4.05),
+				normal = Vector3.new(0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(0.7875, 0.825),
+			},
+			{
+				center = Vector3.new(-2.0964, -7.2036, 4.05),
+				normal = Vector3.new(-0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(0.7875, 0.825),
+			},
+		},
+	},
+	-- assets/blender/orca_v2/e3_bloques.blend
+	OrcaE3 = {
+		bone = "Cabeza",
+		boundsMin = Vector3.new(-8.5, -15.5, 0),
+		boundsMax = Vector3.new(8.5, 16.4732, 15.5),
+		requiresBone = "OjoIzqMira",
+		eyes = {
+			{
+				center = Vector3.new(3.494, -14.006, 6.5),
+				normal = Vector3.new(0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(1.1875, 1),
+			},
+			{
+				center = Vector3.new(-3.494, -14.006, 6.5),
+				normal = Vector3.new(-0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(1.1875, 1),
+			},
+		},
+	},
+	-- assets/blender/orca_v2/e4_bloques.blend
+	OrcaE4 = {
+		bone = "Cabeza",
+		boundsMin = Vector3.new(-20.9463, -30, 0),
+		boundsMax = Vector3.new(20.9463, 33, 31),
+		requiresBone = "OjoIzqMira",
+		eyes = {
+			{
+				center = Vector3.new(7.3858, -26.6142, 15.6787),
+				normal = Vector3.new(0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(1.5, 1.5),
+			},
+			{
+				center = Vector3.new(-7.3858, -26.6142, 15.6787),
+				normal = Vector3.new(-0.7071, -0.7071, 0),
+				up = Vector3.new(0, 0, 1),
+				size = Vector2.new(1.5, 1.5),
+			},
+		},
+	},
 }
 
 return data
