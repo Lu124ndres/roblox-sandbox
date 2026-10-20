@@ -11,9 +11,14 @@
 		                                        relleno de lava partido en bloques,
 		                                        destello y porcentaje
 		skipButton(padre) -> TextButton        SALTAR, escondido
+		fadeAll(raiz, segundos)                 desvanece raiz y todo lo de adentro
+
+	Sin CanvasGroup: en teléfonos y consolas lo dibuja a menos resolución y se ve
+	borroso; el fundido baja la transparencia de cada pieza.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 
 local Look = require(ReplicatedStorage.Shared.UIConfig.Loading)
 
@@ -134,8 +139,7 @@ function LoadingParts.skipButton(parent: GuiObject): TextButton
 	local button = Instance.new("TextButton")
 	button.Name = "Saltar"
 	button.AnchorPoint = Vector2.new(1, 1)
-	button.Position = UDim2.new(1, -24, 1, -24)
-	button.Size = UDim2.fromOffset(160, 50)
+	button.Position = UDim2.fromScale(0.96, 0.94) -- el tamaño lo pone LoadingView
 	button.BackgroundColor3 = COLORS.Track
 	button.FontFace = TITLE_FONT
 	button.Text = "SALTAR »"
@@ -155,6 +159,29 @@ function LoadingParts.skipButton(parent: GuiObject): TextButton
 	padding.Parent = button
 	button.Parent = parent
 	return button
+end
+
+function LoadingParts.fadeAll(root: GuiObject, seconds: number)
+	local info = TweenInfo.new(seconds, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	local function fade(item: Instance, goal: { [string]: number })
+		TweenService:Create(item, info, goal):Play()
+	end
+	local items = root:GetDescendants()
+	table.insert(items, root)
+	for _, item in items do
+		if item:IsA("UIStroke") then
+			fade(item, { Transparency = 1 })
+		elseif item:IsA("GuiObject") then
+			if item.BackgroundTransparency < 1 then
+				fade(item, { BackgroundTransparency = 1 })
+			end
+			if item:IsA("TextLabel") or item:IsA("TextButton") then
+				fade(item, { TextTransparency = 1 })
+			elseif item:IsA("ImageLabel") then
+				fade(item, { ImageTransparency = 1 })
+			end
+		end
+	end
 end
 
 return table.freeze(LoadingParts)

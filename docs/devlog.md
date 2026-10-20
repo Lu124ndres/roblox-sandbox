@@ -3086,3 +3086,22 @@ segundo jugador ni forzar un fallo de Roblox desde el MCP.
 "Cargando la isla y el volcán..." y la pantalla se va a los ~9 s con el mapa cargado; la
 consola pasó de cientos de "Asset type does not match" a uno que no viene del juego. No se probó
 en teléfono ni con el juego publicado (en Studio todo está en caché y carga rápido).
+
+---
+
+## 2026-10-20 (11) — Pantalla de carga: espera la isla y se ve bien en teléfono y Xbox
+
+**Qué se hizo (pedido del usuario):**
+- El mapa seguía sin cargar al cerrarse la pantalla: el servidor arma el terreno después de que
+  entra el jugador. Ahora marca `Workspace.MundoListo` al terminar y el cliente marca
+  `ClienteListo`; la pantalla las espera ("Construyendo la isla y el volcán...") antes de
+  cargar el mapa. Se cierra sola a los 90 s y SALTAR aparece a los 15 s.
+- Teléfono: la pantalla cubre todo (antes se veía el mundo a los costados y abajo).
+- Xbox: la barra, los textos y SALTAR se escalan con la pantalla (en la tele eran diminutos).
+- Sin `CanvasGroup`: el fundido baja la transparencia de cada pieza.
+- Las bandadas pasan de `Main.client` a `Ambient/Flocks.luau` para no pasar de 200 líneas.
+
+**Probado en Studio (Play, simulador Xbox One y Samsung Galaxy A06):** el servidor terminó la
+isla a los 19 s de partida y la pantalla se cerró a los 22.4 s con el terreno, los estanques y
+las vitrinas a la vista; en los dos dispositivos cubre la pantalla, la barra y los textos se
+leen y SALTAR no tapa nada. No se probó en un teléfono ni una Xbox reales.

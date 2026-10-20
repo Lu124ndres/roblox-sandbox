@@ -20,7 +20,7 @@ local LoadingParts = require(script.Parent.LoadingParts)
 
 export type View = {
 	gui: ScreenGui,
-	root: CanvasGroup,
+	root: Frame,
 	background: ImageLabel,
 	embers: Frame,
 	title: TextLabel,
@@ -38,6 +38,12 @@ local COLORS = Look.colors
 local BAR_TOP = 30 -- arriba de la barra nada el pez
 local BAR_HEIGHT = 40
 local FISH_CELL = 4
+local PANEL_WIDTH = 640
+local SKIP_SIZE = Vector2.new(160, 50)
+-- El panel y SALTAR miden en píxeles pensados para esta altura de pantalla y se escalan:
+-- en la tele (1080) crecen, en el teléfono se achican sin bajar de MIN_SCALE.
+local REFERENCE_HEIGHT = 600
+local MIN_SCALE, MAX_SCALE = 0.7, 1.8
 
 local label = LoadingParts.label
 local frame = LoadingParts.frame
@@ -63,7 +69,7 @@ local function titles(root: GuiObject): (TextLabel, UIGradient)
 	title.Position = UDim2.fromScale(0.5, 0.05)
 	title.Size = UDim2.fromScale(0.9, 0.13)
 	title.Text = Look.title
-	LoadingParts.maxTextSize(title, 96)
+	LoadingParts.maxTextSize(title, 120)
 	local gradient = LoadingParts.gold(title, 4)
 	local subtitle = label("Subtitulo", title, 5)
 	subtitle.AnchorPoint = Vector2.new(0.5, 0)
@@ -71,8 +77,22 @@ local function titles(root: GuiObject): (TextLabel, UIGradient)
 	subtitle.Size = UDim2.fromScale(0.6, 0.38)
 	subtitle.Text = Look.subtitle
 	subtitle.TextColor3 = COLORS.TextMuted
-	LoadingParts.maxTextSize(subtitle, 32)
+	LoadingParts.maxTextSize(subtitle, 44)
 	return title, gradient
+end
+
+-- Escala el panel y SALTAR con la pantalla (y que el panel no pase del 92 % de ancho).
+local function fitToScreen(root: Frame, panel: Frame, skip: TextButton)
+	local scale = Instance.new("UIScale")
+	scale.Parent = panel
+	local function fit()
+		local screen = root.AbsoluteSize
+		local byHeight = math.clamp(screen.Y / REFERENCE_HEIGHT, MIN_SCALE, MAX_SCALE)
+		scale.Scale = math.min(byHeight, screen.X * 0.92 / PANEL_WIDTH)
+		skip.Size = UDim2.fromOffset(SKIP_SIZE.X * byHeight, SKIP_SIZE.Y * byHeight)
+	end
+	root:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit)
+	fit()
 end
 
 local LoadingView = {}
@@ -84,8 +104,11 @@ function LoadingView.build(playerGui: PlayerGui): View
 	gui.ResetOnSpawn = false
 	gui.DisplayOrder = 1000 -- encima de todo el HUD del juego
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	-- Toda la pantalla, también bajo el notch y los bordes del teléfono: si no, el mundo se
+	-- asoma a los costados. Los textos quedan lejos del borde por sus posiciones.
+	gui.ScreenInsets = Enum.ScreenInsets.None
 
-	local root = Instance.new("CanvasGroup")
+	local root = Instance.new("Frame")
 	root.Name = "Raiz"
 	root.Size = UDim2.fromScale(1, 1)
 	root.BackgroundColor3 = COLORS.Backdrop
@@ -109,12 +132,8 @@ function LoadingView.build(playerGui: PlayerGui): View
 	local panel = frame("Panel", root, 6, Color3.new())
 	panel.BackgroundTransparency = 1
 	panel.AnchorPoint = Vector2.new(0.5, 1)
-	panel.Position = UDim2.new(0.5, 0, 1, -36)
-	panel.Size = UDim2.new(0.56, 0, 0, BAR_TOP + BAR_HEIGHT + 62)
-	local width = Instance.new("UISizeConstraint")
-	width.MinSize = Vector2.new(300, 0)
-	width.MaxSize = Vector2.new(780, math.huge)
-	width.Parent = panel
+	panel.Position = UDim2.fromScale(0.5, 0.94) -- lejos del borde de la tele
+	panel.Size = UDim2.fromOffset(PANEL_WIDTH, BAR_TOP + BAR_HEIGHT + 62)
 
 	local bar = LoadingParts.bar(panel, BAR_TOP, BAR_HEIGHT)
 	local fish = BlockFish.build(bar.track, FISH_CELL, COLORS)
@@ -130,6 +149,7 @@ function LoadingView.build(playerGui: PlayerGui): View
 	tip.FontFace = LoadingParts.BODY_FONT
 
 	local skip = LoadingParts.skipButton(root)
+	fitToScreen(root, panel, skip)
 
 	gui.Parent = playerGui
 	return {

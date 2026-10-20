@@ -8,8 +8,8 @@
 	como UIConfig.Loading).
 
 	Tiempos en segundos. La barra no avanza sola: sigue la carga real (llegada del
-	juego, personaje y guardado, el mapa alrededor del personaje, imágenes y sonidos) y se
-	suaviza con fillSpeed.
+	juego, personaje y guardado, la isla que arma el servidor, el mapa alrededor del
+	personaje, imágenes y sonidos) y se suaviza con fillSpeed.
 ]]
 
 export type LoadingLook = {
@@ -17,19 +17,27 @@ export type LoadingLook = {
 	maxSeconds: number, -- se cierra sola pase lo que pase
 	skipAfter: number, -- aparece el botón SALTAR
 	fillSpeed: number, -- fracción de barra por segundo que alcanza como mucho
-	joinGuessSeconds: number, -- cuánto se espera que tarde en llegar el mundo
+	guessSeconds: number, -- cuánto se espera que tarden las fases que no se miden por partes
+	waitLimit: number, -- lo máximo que se espera cada señal (guardado, mundo, cliente)
 	tipSeconds: number, -- cada cuánto cambia el consejo
 	fadeSeconds: number, -- fundido de salida
 	emberEvery: number, -- una chispa de lava cada tanto
 	emberMax: number, -- chispas a la vez como máximo
 	-- Hasta dónde llega la barra al terminar cada fase (0..1).
-	phaseEnds: { join: number, player: number, world: number, assets: number },
+	phaseEnds: { join: number, player: number, island: number, world: number, assets: number },
 	colors: { [string]: Color3 },
 	gold: ColorSequence, -- el dorado de los títulos (igual que Interface/Kit.GOLD)
 	lava: ColorSequence, -- relleno de la barra
 	title: string,
 	subtitle: string,
-	status: { join: string, player: string, world: string, assets: string, done: string },
+	status: {
+		join: string,
+		player: string,
+		island: string,
+		world: string,
+		assets: string,
+		done: string,
+	},
 	tips: { string },
 }
 
@@ -37,16 +45,17 @@ local rgb = Color3.fromRGB
 
 local Loading: LoadingLook = {
 	minSeconds = 6,
-	maxSeconds = 45,
-	skipAfter = 8,
+	maxSeconds = 90,
+	skipAfter = 15,
 	fillSpeed = 0.45,
-	joinGuessSeconds = 5,
+	guessSeconds = 6,
+	waitLimit = 60,
 	tipSeconds = 4.5,
 	fadeSeconds = 0.8,
 	emberEvery = 0.12,
 	emberMax = 40,
 
-	phaseEnds = { join = 0.15, player = 0.3, world = 0.85, assets = 1 },
+	phaseEnds = { join = 0.1, player = 0.2, island = 0.45, world = 0.9, assets = 1 },
 
 	colors = {
 		Backdrop = rgb(26, 16, 22), -- mientras llega la imagen del fondo
@@ -82,7 +91,8 @@ local Loading: LoadingLook = {
 	status = {
 		join = "Llegando a la isla...",
 		player = "Preparando tu caña...",
-		world = "Cargando la isla y el volcán...",
+		island = "Construyendo la isla y el volcán...",
+		world = "Cargando el mapa...",
 		assets = "Despertando a los gigantes...",
 		done = "¡Listo!",
 	},

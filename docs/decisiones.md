@@ -884,3 +884,17 @@ distinto; los sonidos de `Assets` se precargan como `Sound` sin padre. **Lo no o
 fallaban con cientos de "Asset type does not match requested type" en la consola. Y el fondo no
 se mostraba porque esperaba el cambio de `IsLoaded`, que no siempre avisa: ahora se precarga
 primero y aparece al terminar.
+
+## 2026-10-20 — La pantalla de carga espera a que el servidor arme la isla
+
+**Contexto:** el usuario vio que el mapa seguía sin cargar al cerrarse la pantalla, y que en
+teléfono y Xbox se veía mal. **Decisión:** el servidor pone `Workspace.MundoListo` al terminar
+`TerrainBuilder`, `PropDresser` y `HabitatService`, y `Main.client` pone `ClienteListo` en su
+`LocalPlayer` al terminar de arrancar; la pantalla espera las dos (como mucho
+`Look.waitLimit`) antes de pedir y precargar el mapa. **Lo no obvio:** el terreno de la isla lo
+genera el servidor después de que entran los jugadores (en Studio tarda ~19 s) y no hay nada en
+el cliente que diga cuándo terminó: la pantalla se cerraba a los ~9 s sobre una isla sin
+terreno. En teléfono, `ScreenInsets` por defecto deja afuera el notch y los bordes (se asomaba
+el mundo): la pantalla usa `None`. El panel mide en píxeles para 600 de alto y se escala con
+la pantalla (en la tele quedaba diminuto), y no se usa `CanvasGroup` para el fundido porque en
+teléfonos y consolas lo dibuja a menos resolución.

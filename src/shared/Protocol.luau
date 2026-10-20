@@ -143,6 +143,13 @@ local Protocol = {
 		Turn = "GiroY", -- en ServerStorage: grados para girar el frente (Meshy a veces lo da al revés)
 	},
 
+	-- En Workspace: el servidor terminó de armar el mundo (terreno, decorados y hábitats).
+	-- La pantalla de carga lo espera: el terreno se arma después de que entran los jugadores.
+	WorldReadyAttribute = "MundoListo",
+	-- En el LocalPlayer, solo en ese cliente (no se replica): Main.client terminó de arrancar
+	-- todo lo que arma el cliente. También lo espera la pantalla de carga.
+	ClientReadyAttribute = "ClienteListo",
+
 	PlayerAttributes = {
 		CarriedFish = "CarriedFish",
 		FishingState = "FishingState", -- FishingVisualState

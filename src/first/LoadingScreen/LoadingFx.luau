@@ -24,6 +24,7 @@ local TweenService = game:GetService("TweenService")
 
 local Look = require(ReplicatedStorage.Shared.UIConfig.Loading)
 local LoadingBackdrop = require(script.Parent.LoadingBackdrop)
+local LoadingParts = require(script.Parent.LoadingParts)
 local LoadingView = require(script.Parent.LoadingView)
 
 export type Fx = {
@@ -161,10 +162,9 @@ function LoadingFx.start(view: LoadingView.View): Fx
 			return shown >= 0.999
 		end,
 		fadeOut = function()
-			local info =
-				TweenInfo.new(Look.fadeSeconds, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 			backdrop.leave()
-			tween(view.root, info, { GroupTransparency = 1 }).Completed:Wait()
+			LoadingParts.fadeAll(view.root, Look.fadeSeconds)
+			task.wait(Look.fadeSeconds)
 		end,
 		stop = function()
 			for _, connection in connections do

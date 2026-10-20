@@ -10,12 +10,10 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
-local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local AbyssRescue = require(script.Parent.Ambient.AbyssRescue)
 local AfkNotice = require(script.Parent.Ambient.AfkNotice)
 local BridgeBoost = require(script.Parent.Ambient.BridgeBoost)
-local Flock = require(script.Parent.Ambient.Flock)
+local Flocks = require(script.Parent.Ambient.Flocks)
 local HabitatFx = require(script.Parent.Ambient.HabitatFx)
 local Lighthouse = require(script.Parent.Ambient.Lighthouse)
 local SeaLife = require(script.Parent.Ambient.SeaLife)
@@ -81,8 +79,6 @@ local Overhead = require(script.Parent.Interface.Overhead)
 local TrajesClient = require(script.Parent.Trajes)
 local CodesWindow = require(script.Parent.Menus.CodesWindow)
 local GroupWindow = require(script.Parent.Menus.GroupWindow)
-
-local EFFECTS = UIConfig.Effects
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -170,30 +166,7 @@ TrajesClient.start()
 TitleUnlock.start(toasts)
 FxQuality.start()
 
--- Gaviotas sobre la isla y murciélagos sobre el cráter.
-Flock.start({
-	name = "Gaviotas",
-	center = Vector3.new(0, EFFECTS.SeagullHeight, 0),
-	count = EFFECTS.SeagullCount,
-	radius = EFFECTS.SeagullRadius,
-	bodyColor = Color3.fromRGB(248, 250, 252),
-	wingColor = Color3.fromRGB(150, 158, 170),
-	beakColor = Color3.fromRGB(255, 196, 84),
-	size = 1,
-	flapSpeed = 9,
-	orbitSeconds = 26,
-	sound = "Seagull",
-})
-Flock.start({
-	name = "Murcielagos",
-	center = WorldZones.craterCenter + Vector3.new(0, WorldLayout.craterRimHeight + 30, 0),
-	count = EFFECTS.BatCount,
-	radius = WorldLayout.craterLakeRadius * 0.7,
-	bodyColor = Color3.fromRGB(28, 22, 30),
-	wingColor = Color3.fromRGB(40, 30, 44),
-	beakColor = Color3.fromRGB(255, 50, 40),
-	size = 0.9,
-	flapSpeed = 18,
-	orbitSeconds = 18,
-	sound = nil,
-})
+Flocks.start() -- gaviotas sobre la isla y murciélagos sobre el cráter
+
+-- La pantalla de carga (ReplicatedFirst) espera esto para cerrarse.
+player:SetAttribute(require(ReplicatedStorage.Shared.Protocol).ClientReadyAttribute, true)

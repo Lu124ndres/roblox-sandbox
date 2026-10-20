@@ -82,3 +82,4 @@ PlayerCollision.init()
 TerrainBuilder.build()
 PropDresser.dress()
 HabitatService.init() -- se apoya en el terreno: va después
+Workspace:SetAttribute(Protocol.WorldReadyAttribute, true) -- la pantalla de carga lo espera

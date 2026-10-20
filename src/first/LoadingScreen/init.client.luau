@@ -47,7 +47,7 @@ local started = os.clock()
 local skipShown = false
 while true do
 	local elapsed = os.clock() - started
-	fx.setTarget(progress.fraction(elapsed))
+	fx.setTarget(progress.fraction())
 	if not skipShown and elapsed >= Look.skipAfter then
 		skipShown = true
 		fx.showSkip()
