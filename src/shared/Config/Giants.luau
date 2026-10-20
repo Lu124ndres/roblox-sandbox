@@ -22,7 +22,8 @@
 
 	Crecen por etapas: cada etapa empieza en stageThresholds[i] de la barra y
 	mide stageHeightsInPlayers[i] veces el alto de un jugador. Con un jugador
-	de 5.5 studs: 16.5, 44, 82.5 y 165 studs.
+	de 5.5 studs: 16.5, 44, 53.6 y 107.3 studs (la 3 y la 4 bajaron un 35 %, pedido
+	del usuario del 2026-10-20).
 
 	Enojo: si nadie le da de comer en graceSeconds, se enoja poco a poco
 	(0 -> 1 en rampSeconds). Desde angryThreshold la barra baja sola (nunca por
@@ -121,7 +122,7 @@ local Giants: Types.GiantsConfig = {
 	},
 	stageThresholds = { 0, 0.25, 0.5, 0.75 },
 	playerHeightStuds = 5.5,
-	stageHeightsInPlayers = { 3, 8, 15, 30 },
+	stageHeightsInPlayers = { 3, 8, 9.75, 19.5 },
 	anger = {
 		graceSeconds = 45,
 		smallServerPlayers = 3,

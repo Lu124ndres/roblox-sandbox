@@ -3174,3 +3174,15 @@ arriba, abajo y a los dos lados.
 **Sigue:**
 - rig y FBX de la orca, y adaptar `OrcaSwim`;
 - decidir la pupila del Minotauro E1 (su ojo es todo negro) y la del Dragón E2 (ojo de 1×1).
+
+---
+
+## 2026-10-20 (15) — Gigantes más chicos en las etapas 3 y 4
+
+**Qué se hizo (pedido del usuario):** el alto de las etapas 3 y 4 baja un 35 %:
+`stageHeightsInPlayers` pasa a { 3, 8, 9.75, 19.5 } (53.6 y 107.3 studs; antes 82.5 y 165).
+El crecimiento final (`growth.finalHeightInPlayers`, 36 → 23.4, 128.7 studs) se cambió en el
+archivo pero queda sin commit junto con el resto del crecimiento por pez, que es de otra sesión.
+
+**Probado en Studio (Play):** `GiantStages` da 16.5, 44, 53.6, 107.2 y 128.7 al llenarse; el
+Minotauro en etapa 4 mide 107 de alto en el cráter, sin errores en la consola.
