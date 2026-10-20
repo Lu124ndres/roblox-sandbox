@@ -2854,3 +2854,34 @@ Orca fantasma (solo queda en el panel de admin); E1 y E2 con los meshes nuevos, 
 
 **Qué se rompió:** nada visto. El producto `ChooseOrcaFantasma` existe en el Creator Hub
 pero ya no se ofrece.
+
+---
+
+## 2026-10-20 — Guardado al salir, pases que se notan, aura de captura y RT en el mando
+
+**Qué se hizo (pedido del usuario):**
+- **Guardado:** no se guardaba lo de una sesión corta. Al salir el último jugador, Roblox
+  cierra el servidor mientras `PlayerRemoving` todavía guarda; `BindToClose` veía la lista
+  vacía y terminaba enseguida, así que el guardado final (y la liberación del bloqueo) nunca
+  llegaba. Ahora `BindToClose` espera también las salidas en curso (`SaveService`).
+- **Pases:** con mucho poder y la caña 20, la espera del pique llegaba al tope del corcho
+  (0.7 s) para todos y los peces salían en 1–2 toques, así que Rey del Mar y Dios del Volcán no
+  cambiaban nada. Opción "moderada" elegida por el usuario: el pique de los gratis nunca baja
+  de 1.6 s (`minBiteDelaySeconds`, solo los pases bajan de ahí: Rey 0.8 s, Dios 0.7 s), la caña
+  da como mucho x1.5 de fuerza (`strengthPerRodLevel` 0.025; un legendario pide ~9 toques, ~4
+  con Rey, 1 con Dios) y una canasta llena tarda 12 s en entregarse (6 s Rey, 3 s Dios).
+- **Aura:** el cilindro de neón de los peces raros o mejores se cambió por un aura de
+  partículas (`Effects/LightAura`: brillo en el suelo, anillos que suben, chispas y brasas, luz
+  a la altura del pecho). El destino del tutorial usa la misma aura en amarillo; se quitaron
+  el pilar y el cartel con la distancia (`GuideMarker` borrado).
+- **Mando:** pescar y alimentar muestran RT (R2 en PlayStation) en la insignia del botón y en
+  los avisos; siguen funcionando con X y con RT (`InputHints.holdAction`).
+
+**Probado en Studio (Play):** con el código viejo, después de salir el registro seguía con el
+bloqueo de la sesión puesto (el guardado final no llegó); con el nuevo, Kills 2 → 3, salir, y el DataStore (sin caché)
+tenía Kills 3 y el bloqueo suelto; al volver a entrar cargó 3 (después se dejó en 2). Aura
+vista con un legendario y un épico, con efectos completos y reducidos; aura del tutorial
+vista en el suelo. `GetImageForKeyCode(ButtonR2)` da el dibujo del gatillo.
+
+**Qué se rompió:** nada visto. Los gratis pescan algo más lento que antes desde el principio
+(el pique de un jugador nuevo pasa de 0.8–1.8 s a 1.6–1.8 s).

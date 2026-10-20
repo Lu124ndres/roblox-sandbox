@@ -103,7 +103,7 @@ barra de hambre sube. La Orca crece mientras come.
 ## H1.8 — Peces, animaciones, efectos y sonidos (pedido del 2026-10-13)
 
 - [x] 12 peces en 6 rarezas (común a mítico) con modelo propio por especie.
-- [x] Captura por rareza: cartel, trofeo con haz de luz, onda y temblor; sonido por rareza.
+- [x] Captura por rareza: cartel, trofeo con aura de luz, onda y temblor; sonido por rareza.
 - [x] Canasta en la espalda que se llena (todos la ven) y brilla llena.
 - [x] Tarjeta de captura con el pez en 3D; monedas que vuelan al contador.
 - [x] Peces lanzados al gigante con giro, whoosh y destellos.
@@ -278,3 +278,12 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Témpanos menos regulares y párpados de la cría y el joven (ola 4).
 - [ ] Fuegos fatuos (oleadas de esferas).
 - [ ] Ambiente nocturno y anuncio previo.
+
+## Arreglos del 2026-10-20 (pedido del usuario)
+
+- [x] El guardado al salir no llegaba cuando el servidor se cerraba (`BindToClose`).
+- [x] Pesca y alimentación más lentas para los gratis, para que los pases se noten (piso del pique
+      1.6 s, caña hasta x1.5, canasta en 12 s).
+- [x] Aura de partículas en vez del cilindro de neón al pescar raros o mejores y en el destino del
+      tutorial; sin pilar ni cartel en el destino.
+- [x] RT (R2) en los botones y avisos de pescar y alimentar con mando.

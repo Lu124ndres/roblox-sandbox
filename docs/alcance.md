@@ -47,7 +47,7 @@ pesca de todos.
 **12 peces en 6 rarezas** (`Config/Fish.luau`). Cada especie tiene su modelo propio
 (rayas, púas, espada, farolito, brillo...). Cuanto más raro, más grande el momento:
 desde poco común sale un cartel con la rareza sobre la cabeza; desde raro el pez gira en
-el aire y el jugador lo muestra en alto dentro de un haz de luz de su color; legendario y
+el aire y el jugador lo muestra en alto dentro de un aura de luz de su color; legendario y
 mítico suman onda y temblor de cámara. Cada rareza tiene su sonido. El jugador ve además
 una tarjeta abajo con el pez en 3D girando.
 

@@ -832,3 +832,23 @@ vacías hasta `Analytics.init`) y no requiere a Analytics. **Lo no obvio:**
 **Decisión:** `GiantPool.listed(def)` (`released` y `inRoulette`) filtra la ruleta, "Elegir el
 siguiente monstruo" de la tienda de Robux y los chips del descanso. La orden de admin `giant`
 busca el monstruo directo en la config y no pasa por el filtro, así se prueba antes de lanzar.
+
+## 2026-10-20 — Los pases bajan del piso del pique; el poder y las cañas no
+
+**Contexto:** con mucho poder y la caña 20, la espera llegaba a 0.7 s (lo que tarda el corcho)
+para todos y el pase no cambiaba nada. **Decisión:** `minBiteDelaySeconds` (1.6 s) es el piso
+del poder y las cañas; el `biteDelay` del pase multiplica después de ese piso. **Lo no obvio:**
+- El tope de 0.7 s del corcho (`castSeconds + 0.1`) sigue mandando: con Dios del Volcán
+  (x0.2) el pique queda en 0.7 s, no en 0.32. Lo que lo separa de Rey del Mar (0.8 s) es
+  sacar el pez de un toque.
+- Los eventos con `biteDelay` (x0.5) también multiplican el piso: durante un evento un jugador
+  gratis pica como uno con Rey del Mar sin evento.
+
+## 2026-10-20 — BindToClose espera las salidas en curso, no solo a los que siguen dentro
+
+**Contexto:** el guardado de una sesión corta se perdía. **Decisión:** `BindToClose` espera
+hasta que la tabla `leaving` quede vacía. **Lo no obvio:** cuando sale el último jugador, el
+servidor se cierra mientras su `PlayerRemoving` todavía guarda; `GetPlayers()` ya viene vacío
+y Roblox no espera a ese hilo, así que el último guardado (y la liberación del bloqueo) se
+perdía. Además, el bloqueo quedaba puesto 180 s y, si volvía antes, la carga reintentaba hasta
+expulsarlo.
