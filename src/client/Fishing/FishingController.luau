@@ -155,8 +155,7 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 
 	fishingUpdate.OnClientEvent:Connect(function(state: unknown, detail: unknown)
 		if state == "waiting" and typeof(detail) == "Vector3" then
-			faceWater(player, detail)
-			toasts.show("Espera a que pique...", COLORS.TextMuted)
+			faceWater(player, detail) -- sin aviso de "espera a que pique": estorbaba (pedido del usuario)
 			return
 		elseif state == "bite" then
 			local info: { [string]: any } = if type(detail) == "table" then detail :: any else {}

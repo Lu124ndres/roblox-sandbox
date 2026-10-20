@@ -4,7 +4,7 @@
 
 	Avisos y ambiente del ciclo del gigante para el jugador local:
 		- carteles al llenarse, al empezar el descanso y al llegar el siguiente;
-		- "+1 Kill" cuando ayudó a llenar al monstruo;
+		- "+1 Kill" (o "+N Kills" con un pase) cuando ayudó a llenar al monstruo;
 		- en el descanso el volcán se vacía (CraterDrain) y la guarida queda en
 		  el fondo, con destellos: sobre ella se entrena solo (GiantCycle);
 		- avisos al entrar o salir de la guarida y 10 s antes de que vuelva
@@ -111,13 +111,19 @@ function CycleView.start(toasts: Toasts.Toasts)
 	stateFolder:GetAttributeChangedSignal(ATTR.Drained):Connect(onDrained)
 	onDrained()
 
-	-- +1 Kill: este jugador ayudó a llenar al monstruo.
+	-- +N Kills: este jugador ayudó a llenar al monstruo (N con los pases con traje). Solo con
+	-- los datos ya cargados: al entrar, Kills pasa de 0 a lo guardado y no es una kill nueva.
 	local kills = player:GetAttribute(Protocol.PlayerAttributes.Kills)
 	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.Kills):Connect(function()
 		local now = player:GetAttribute(Protocol.PlayerAttributes.Kills)
-		if type(now) == "number" and type(kills) == "number" and now > kills then
+		local loaded = player:GetAttribute(Protocol.PlayerAttributes.DataLoaded) == true
+		if loaded and type(now) == "number" and type(kills) == "number" and now > kills then
 			Sounds.play("LegendaryCatch")
-			toasts.banner(`+1 Kill · {GiantName.current(true)}`, COLORS.Furious)
+			local gained = now - kills
+			toasts.banner(
+				`+{gained} {if gained == 1 then "Kill" else "Kills"} · {GiantName.current(true)}`,
+				COLORS.Furious
+			)
 		end
 		kills = now
 	end)
