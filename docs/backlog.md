@@ -301,5 +301,7 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Los pases que el admin quita o pone se guardan (el creador siempre los tiene en Roblox).
 - [x] Estanques repartidos en un anillo parejo; vitrinas más cerca del centro.
 - [x] Pantalla de carga con los gigantes de bloques y barra que sigue la carga real del mapa.
+- [x] Luz y color del mapa como las fotos del juego (opción 1).
+- [ ] Decorados de bloques (palmeras, rocas, muelles) y suelo de cubos: opciones 2 y 3, a decidir.
 - [ ] Estanque sagrado: ponerlo a la venta a 1200 R$ en el Creator Hub (está fuera de oferta).
       Subir el pase Dios del Volcán a 858 R$ (Roblox dice 496).

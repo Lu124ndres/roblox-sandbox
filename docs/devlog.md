@@ -3130,3 +3130,16 @@ construye si la versión coincide. Pasos para regenerarlo en `docs/setup.md`.
 1-f5f9159a)" y el mundo queda listo sin esperar al terreno; la isla y el cráter se ven igual.
 **Falta (usuario):** guardar el lugar y publicarlo; hasta entonces el terreno solo está en el
 Studio abierto.
+
+---
+
+## 2026-10-20 (14) — Luz y color del mapa como las fotos
+
+**Qué se hizo (pedido del usuario, opción 1 de 3):** luz más saturada y cálida, menos bruma,
+sombras más marcadas, bloom y rayos de sol más fuertes; tarde dorada desde las 16:30; pasto,
+arena y roca más vivos y mar azul hondo con la orilla turquesa. Arreglo: `CraterWater` ya no
+pisa el color del mar con el viejo guardado en el lugar.
+
+**Probado en Studio (Play, hora fija 12 y 17.3, sin evento, con efectos completos):** antes y
+después desde la plaza y la costa. La franja del horizonte a la tarde es el borde del streaming
+(ya pasaba). Opciones 2 (decorados de bloques) y 3 (suelo de cubos) pendientes de decidir.

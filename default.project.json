@@ -53,9 +53,9 @@
 				"EnvironmentDiffuseScale": 1,
 				"EnvironmentSpecularScale": 1,
 				"GlobalShadows": true,
-				"ShadowSoftness": 0.3,
+				"ShadowSoftness": 0.15,
 				"Technology": "ShadowMap",
-				"ExposureCompensation": -0.15
+				"ExposureCompensation": 0
 			},
 			"Atmosphere": {
 				"$className": "Atmosphere",
@@ -72,15 +72,15 @@
 						0.56,
 						0.68
 					],
-					"Glare": 0.05,
-					"Haze": 0.55
+					"Glare": 0.25,
+					"Haze": 0.3
 				}
 			},
 			"ColorCorrection": {
 				"$className": "ColorCorrectionEffect",
 				"$properties": {
-					"Saturation": 0.12,
-					"Contrast": 0.1,
+					"Saturation": 0.28,
+					"Contrast": 0.16,
 					"TintColor": [
 						1,
 						0.985,
@@ -91,15 +91,15 @@
 			"Bloom": {
 				"$className": "BloomEffect",
 				"$properties": {
-					"Intensity": 0.25,
-					"Size": 20,
-					"Threshold": 2.2
+					"Intensity": 0.45,
+					"Size": 28,
+					"Threshold": 1.6
 				}
 			},
 			"SunRays": {
 				"$className": "SunRaysEffect",
 				"$properties": {
-					"Intensity": 0.08,
+					"Intensity": 0.14,
 					"Spread": 0.6
 				}
 			},

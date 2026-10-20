@@ -167,12 +167,19 @@ function CraterWater.start(getBlend: () -> number)
 	FxQuality.scaleAll(folder)
 
 	local terrain = Workspace.Terrain
+	-- El agua del mar se lee al entrar al cráter, no al arrancar: el servidor pone sus
+	-- colores al arrancar (TerrainBuilder) y el cliente puede llegar antes, con los viejos
+	-- guardados en el lugar. Fuera del cráter no se toca.
 	local seaColor, seaClear = terrain.WaterColor, terrain.WaterTransparency
 	local seaShine, seaWaves = terrain.WaterReflectance, terrain.WaterWaveSize
-	local shown, shownIce = -1, -1
+	local shown, shownIce = 0, 0
 	RunService.Heartbeat:Connect(function()
 		local blend, ice = getBlend(), CraterMode.iceBlend()
 		if math.abs(blend - shown) > 0.01 or math.abs(ice - shownIce) > 0.01 then
+			if shown <= 0.01 then
+				seaColor, seaClear = terrain.WaterColor, terrain.WaterTransparency
+				seaShine, seaWaves = terrain.WaterReflectance, terrain.WaterWaveSize
+			end
 			shown, shownIce = blend, ice
 			terrain.WaterColor = seaColor:Lerp(LAKE_COLOR:Lerp(LAKE_ICE, ice), blend)
 			terrain.WaterTransparency = seaClear + (LAKE_TRANSPARENCY - seaClear) * blend

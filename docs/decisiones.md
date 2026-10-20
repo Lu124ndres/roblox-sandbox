@@ -920,3 +920,17 @@ no hace nada si coincide. El código sigue siendo la fuente: si no coincide, el 
 construye como antes. **Lo no obvio:** el servidor no puede leer el código de los módulos, así
 que un cambio en la forma sin tocar `WorldLayoutData` no cambia la huella: hay que subir
 `SHAPE_VERSION` a mano (docs/setup.md).
+
+## 2026-10-20 — Luz y color como las fotos del juego
+
+**Contexto:** el usuario pidió acercar el mapa al estilo de las miniaturas (colores saturados,
+luz cálida). **Decisión:** más saturación y contraste, menos bruma, sombras más definidas y más
+bloom en `default.project.json`; mediodía más limpio y cálido y una tarde dorada desde las 16:30
+en `SkyMoods`; pasto, arena y roca más saturados y agua más honda en `TerrainBuilder.style`.
+**Lo no obvio:** la franja lisa del horizonte es el borde del streaming (más allá no llegan el
+océano ni las montañas): se ve del color de la bruma, así que la de la tarde va casi blanca o
+parece una pared. `CraterWater` guardaba el color del mar al arrancar el cliente y lo volvía a
+escribir: si el cliente llegaba antes que los colores del servidor, el mar quedaba con los
+viejos guardados en el lugar; ahora lo lee al entrar al cráter. Los colores del terreno no
+cambian su versión (`TerrainVersion`): `style()` corre en cada arranque. Con efectos reducidos
+no hay bloom, rayos de sol, sombras ni reflejos en el agua.

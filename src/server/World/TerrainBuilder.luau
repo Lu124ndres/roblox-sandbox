@@ -44,21 +44,24 @@ local FRAME_BUDGET = 0.02 -- segundos de trabajo por cuadro antes de ceder
 local TerrainBuilder = {}
 
 local function style(terrain: Terrain)
-	terrain.WaterColor = Color3.fromRGB(28, 168, 184)
-	terrain.WaterTransparency = 0.65
-	terrain.WaterReflectance = 0.55
+	-- Colores saturados y cálidos, como las fotos del juego (2026-10-20). El agua es azul
+	-- más hondo y menos transparente: el mar abierto se ve azul y la orilla, donde hay poca
+	-- agua sobre la arena, turquesa.
+	terrain.WaterColor = Color3.fromRGB(12, 104, 150)
+	terrain.WaterTransparency = 0.45
+	terrain.WaterReflectance = 0.5
 	terrain.WaterWaveSize = 0.22
 	terrain.WaterWaveSpeed = 14
-	terrain:SetMaterialColor(MATERIAL.Grass, Color3.fromRGB(108, 176, 74))
-	terrain:SetMaterialColor(MATERIAL.Sand, Color3.fromRGB(222, 198, 148))
+	terrain:SetMaterialColor(MATERIAL.Grass, Color3.fromRGB(94, 182, 60))
+	terrain:SetMaterialColor(MATERIAL.Sand, Color3.fromRGB(238, 206, 140))
 	terrain:SetMaterialColor(MATERIAL.Cobblestone, Color3.fromRGB(126, 118, 108))
-	terrain:SetMaterialColor(MATERIAL.Rock, Color3.fromRGB(122, 126, 134))
+	terrain:SetMaterialColor(MATERIAL.Rock, Color3.fromRGB(128, 120, 112))
 	terrain:SetMaterialColor(MATERIAL.Basalt, Color3.fromRGB(42, 38, 46))
 	terrain:SetMaterialColor(MATERIAL.CrackedLava, Color3.fromRGB(255, 96, 40))
 	terrain:SetMaterialColor(MATERIAL.Slate, Color3.fromRGB(150, 150, 156))
 	terrain:SetMaterialColor(MATERIAL.Mud, Color3.fromRGB(96, 78, 54)) -- orillas de los estanques
 	-- Pasto corto del jardín de entrenamiento (sin el pasto alto de Grass, que tapaba el agua).
-	terrain:SetMaterialColor(MATERIAL.LeafyGrass, Color3.fromRGB(104, 172, 70))
+	terrain:SetMaterialColor(MATERIAL.LeafyGrass, Color3.fromRGB(90, 176, 56))
 	-- Fondo claro del lago del cráter: bajo el agua se ve turquesa (y el gigante resalta).
 	terrain:SetMaterialColor(MATERIAL.Limestone, Color3.fromRGB(52, 92, 92))
 	terrain:SetMaterialColor(MATERIAL.Asphalt, Color3.fromRGB(58, 46, 48)) -- cumbres del volcán

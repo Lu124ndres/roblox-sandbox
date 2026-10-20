@@ -44,14 +44,16 @@ end
 local rgb = Color3.fromRGB
 local NIGHT =
 	mood(0, 1.2, rgb(70, 82, 130), rgb(24, 30, 60), 0.34, rgb(200, 214, 255), rgb(80, 90, 130))
+-- Mediodía como las fotos del juego (pedido del usuario, 2026-10-20): aire limpio (poca
+-- niebla: los colores no se lavan), luz un poco cálida y sombras tibias.
 local NOON = mood(
 	9,
-	2.2,
-	rgb(200, 222, 238),
+	2.5,
+	rgb(206, 224, 238),
 	rgb(108, 143, 174),
-	0.28,
-	rgb(255, 251, 245),
-	rgb(116, 118, 130)
+	0.22,
+	rgb(255, 244, 228),
+	rgb(138, 126, 118)
 )
 
 local SkyMoods = {}
@@ -77,7 +79,17 @@ SkyMoods.day = {
 		rgb(150, 130, 130)
 	),
 	NOON,
-	mood(16.5, NOON.brightness, NOON.atmosphere, NOON.decay, NOON.density, NOON.tint, NOON.ambient),
+	-- Tarde dorada: el tono de atardecer de las fotos empieza antes de que baje el sol.
+	mood(14.5, NOON.brightness, NOON.atmosphere, NOON.decay, NOON.density, NOON.tint, NOON.ambient),
+	mood(
+		16.5,
+		2.4,
+		rgb(255, 224, 196),
+		rgb(250, 204, 184),
+		0.25,
+		rgb(255, 232, 200),
+		rgb(170, 136, 120)
+	),
 	mood(
 		18.4,
 		1.8,
