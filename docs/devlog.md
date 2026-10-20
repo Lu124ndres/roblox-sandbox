@@ -2991,3 +2991,18 @@ una kill de admin, "+1 Kill · La Orca".
 
 **Probado en Studio (Play):** carteles x1 "¡Abierto!", x2 "1" ... x100 "100", sagrado x250; sin
 estanques ni hoyas donde estaban el 9 y el 10; vitrinas en (±28, 52) con el precio 858.
+
+---
+
+## 2026-10-20 (6) — El traje elegido se guarda; sagrado a 1300 R$
+
+**Qué se hizo (pedido del usuario):**
+- "Me quito el Dios del Volcán, regreso y lo tengo puesto": el traje elegido solo vivía en el
+  atributo `TrajeElegido`, y al entrar `Outfits` ponía el del pase más caro. Ahora va en el
+  guardado (`save.outfit`, esquema v12, `SaveExtra`): `OutfitChoice` lo guarda al elegir y
+  `ProfilePublish.all` lo publica al cargar. Solo se aceptan "Marinero" o el traje de un pase.
+- `SaveExtra.flags` (antes en `SaveSchema`) para que `SaveSchema` quede bajo 200 líneas.
+- Estanque sagrado: 1300 R$ (`pondRobux[11]`).
+
+**Probado en Studio (Play):** con el Dios del Volcán puesto, E → Marinero; al salir el DataStore
+tiene `outfit = "Marinero"`, versión 12 y el bloqueo suelto; al volver a entrar lleva Marinero.

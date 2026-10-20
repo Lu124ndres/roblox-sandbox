@@ -297,5 +297,6 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Sin "Espera a que pique" ni el "+1 Kill" falso al entrar.
 - [x] Estanques: tabla nueva (x2 a x100, sagrado x250), sin el Dorado ni el Celestial; carteles
       con solo el requisito; vitrinas junto a los estanques para principiantes.
-- [ ] Estanque sagrado: ponerlo a la venta en el Creator Hub (está fuera de oferta; el juego lo
-      vende a 799 R$). Subir el pase Dios del Volcán a 858 R$ (Roblox dice 496).
+- [x] El traje elegido se guarda (se quitaba y al volver lo tenía puesto).
+- [ ] Estanque sagrado: ponerlo a la venta a 1300 R$ en el Creator Hub (está fuera de oferta).
+      Subir el pase Dios del Volcán a 858 R$ (Roblox dice 496).
