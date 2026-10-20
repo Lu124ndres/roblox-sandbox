@@ -2,8 +2,9 @@
 --[[
 	Showcase
 
-	Vitrinas de los trajes de pase en la zona de entrenamiento, a los lados
-	de la aparición (que está dentro del jardín): el escenario en el color del
+	Vitrinas de los trajes de pase en la zona de entrenamiento, del lado de
+	los estanques para principiantes (WorldLayout.showcaseAngle), mirando al
+	centro del jardín: el escenario en el color del
 	traje (Social/ShowcaseStage: pedestal hexagonal con aros de luz, haz,
 	rayos, aura y cartel con precio, nombre y ventajas), el traje de malla en
 	grande flotando en su pose (lo animan los clientes: client/Trajes/Vitrinas)
@@ -19,7 +20,6 @@ local Workspace = game:GetService("Workspace")
 local Config = require(ReplicatedStorage.Shared.Config)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
-local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Proximity = require(script.Parent.Parent.Proximity)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local OutfitChoice = require(script.Parent.OutfitChoice)
@@ -32,7 +32,6 @@ local PASSES = Config.Monetization.passes
 local DISPLAY_HEIGHT = 12 -- alto del traje en la vitrina (studs)
 local HOVER = 1.2 -- el traje flota sobre el pedestal (studs)
 local PROMPT_DISTANCE = 16
-local SPAWN_LOOK_AHEAD = 20 -- studs hacia el volcán (+Z) desde la aparición
 
 local Showcase = {}
 
@@ -77,7 +76,7 @@ end
 
 local function build(folder: Folder, passKey: string, side: number)
 	local outfit = PASSES[passKey].outfit :: string
-	local angle = math.rad(L.spawnAngle)
+	local angle = math.rad(L.showcaseAngle)
 	local out = Vector3.new(math.cos(angle), 0, math.sin(angle))
 	local tangent = Vector3.new(-out.Z, 0, out.X)
 	local ground = out * L.showcaseRadius
@@ -89,9 +88,8 @@ local function build(folder: Folder, passKey: string, side: number)
 	model:SetAttribute("Outfit", outfit)
 	local look = ShowcaseStage.LOOKS[outfit]
 	local top, button, base = ShowcaseStage.pedestal(model, ground, look)
-	-- Mira un poco delante de la aparición: quien aparece la ve de frente al dar unos pasos.
-	local facing = WorldZones.spawnPoint() + Vector3.new(0, 0, SPAWN_LOOK_AHEAD)
-	local toward = Vector3.new(facing.X - ground.X, 0, facing.Z - ground.Z).Unit
+	-- Mira al centro del jardín: quien cruza hacia los estanques para principiantes la ve de frente.
+	local toward = Vector3.new(-ground.X, 0, -ground.Z).Unit
 	local feet = top + Vector3.new(0, HOVER, 0)
 	local shown = display(outfit, feet, toward)
 	if shown then

@@ -55,8 +55,11 @@ export type WorldLayout = {
 	pierLength: number,
 	spawnAngle: number, -- dónde está el arco de la entrada (con los tableros del ranking)
 	spawnPosition: { number }, -- { x, z }: se aparece dentro del jardín, mirando al volcán
-	showcaseRadius: number, -- vitrinas de los trajes de pase: en la zona de entrenamiento,
-	showcaseSide: number, -- a esta distancia del centro y a este costado de la aparición
+	-- Vitrinas de los trajes de pase: en la zona de entrenamiento, del lado de los estanques
+	-- para principiantes (1 y 2), a showcaseRadius del centro y showcaseSide a cada costado.
+	showcaseAngle: number,
+	showcaseRadius: number,
+	showcaseSide: number,
 	shopAngle: number,
 	shopRadius: number,
 	campAngle: number,

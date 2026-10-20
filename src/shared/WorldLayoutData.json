@@ -45,6 +45,7 @@
 	"pierStartRadius": 158,
 	"pierLength": 56,
 	"spawnAngle": 270,
+	"showcaseAngle": 90,
 	"showcaseRadius": 52,
 	"showcaseSide": 28,
 	"shopAngle": 0,
