@@ -852,3 +852,11 @@ servidor se cierra mientras su `PlayerRemoving` todavía guarda; `GetPlayers()` 
 y Roblox no espera a ese hilo, así que el último guardado (y la liberación del bloqueo) se
 perdía. Además, el bloqueo quedaba puesto 180 s y, si volvía antes, la carga reintentaba hasta
 expulsarlo.
+
+## 2026-10-20 — Los estanques quitados conservan su número
+
+**Contexto:** el usuario dejó 8 estanques más el sagrado. **Decisión:** el 9 y el 10 siguen en
+`Config.Progression.ponds` y en `pondPositions`, pero `WorldLayout.removedPonds` los saca del
+mapa y `WorldZones.pondExists` hace que nada los muestre ni los abra. **Lo no obvio:**
+renumerar movía el sagrado del 11 al 9: el producto `Pond9` (649 R$) daría el sagrado, `Pond11`
+no daría nada y lo guardado en `ponds` apuntaría a otro estanque.

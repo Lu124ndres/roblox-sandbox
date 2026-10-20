@@ -2970,3 +2970,24 @@ al entrar. Los atributos llegan en el mismo cuadro y sus avisos se disparan en c
 así que cuando avisa Kills, DataLoaded ya está puesto. Ahora `CycleView` ignora las subidas de
 Kills durante 5 s después de cargar (`LOAD_QUIET`). Probado en Play: al entrar ningún aviso; con
 una kill de admin, "+1 Kill · La Orca".
+
+---
+
+## 2026-10-20 (5) — Estanques nuevos, sagrado x250, vitrinas junto a los principiantes
+
+**Qué se hizo (pedido del usuario):**
+- **Estanques** (`Config/Progression`): x1 (libre), x2 (1 monstruo), x5 (3), x10 (8), x25 (15),
+  x50 (25), x75 (50), x100 (100) y el sagrado x250 (solo Robux). El Dorado y el Celestial (9 y
+  10) se quitaron del mapa (`WorldLayout.removedPonds`): terreno, piezas regeneradas con
+  `tools/generar_isla.py`, carteles, siguiente meta y telemetría los saltan, y nunca se abren.
+- **Carteles:** solo el número de monstruos que pide ("50"), no "2/50".
+- **Vitrinas:** del lado de los estanques 1 y 2 (`WorldLayout.showcaseAngle` = 90), mirando al
+  centro del jardín.
+- **Compra de pases:** no era un error. El creador del juego tiene todos sus pases
+  (`UserOwnsGamePassAsync` da true para lu124ndres), así que E en la vitrina se lo pone. Para ver
+  la compra hay que probar con otra cuenta o con el servidor local de Studio (Player1).
+- Roblox dice que el pase Dios del Volcán cuesta 496 R$: el usuario lo sube a 858 en el
+  Creator Hub (el juego ya dice 858).
+
+**Probado en Studio (Play):** carteles x1 "¡Abierto!", x2 "1" ... x100 "100", sagrado x250; sin
+estanques ni hoyas donde estaban el 9 y el 10; vitrinas en (±28, 52) con el precio 858.
