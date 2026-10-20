@@ -10,15 +10,19 @@
 	cada uno. Las funciones Fill redondean a la cuadrícula de 4 studs y dejaban
 	el suelo hasta 4 studs más alto que las piezas de madera.
 
-	El terreno no se puede guardar en un archivo de Rojo, así que se genera al
-	arrancar el servidor (y la pantalla de carga lo espera: Workspace.MundoListo).
-	Para que tarde poco, los bloques de mar abierto (IslandShape.touches) no se
+	El terreno no se puede guardar en un archivo de Rojo: se genera con este código y
+	queda guardado en el lugar (PescaYAlimentaGigantes.rbxl) con su versión
+	(TerrainVersion) en el atributo TerrenoVersion. Al arrancar, el servidor solo lo
+	vuelve a construir si esa versión no es la de ahora (cambió WorldLayoutData o
+	SHAPE_VERSION), y la pantalla de carga lo espera (Workspace.MundoListo).
+	Para que construirlo tarde poco, los bloques de mar abierto (IslandShape.touches) no se
 	muestrean: son todos iguales y sus vóxeles se calculan una vez. Además se escriben
 	varios bloques por cuadro hasta FRAME_BUDGET (un bloque por cuadro tardaba 10 s solo
 	en esperar cuadros: son 576 bloques).
 
-	Para verlo en modo Edit, en la barra de comandos:
-		require(game.ServerScriptService.Server.World.TerrainBuilder).build()
+	Para regenerarlo y guardarlo en el lugar (docs/setup.md), en Edit, en la barra de
+	comandos, y después guardar y publicar:
+		require(game.ServerScriptService.Server.World.TerrainBuilder).build(true)
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -26,6 +30,7 @@ local Workspace = game:GetService("Workspace")
 
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local IslandShape = require(script.Parent.IslandShape)
+local TerrainVersion = require(script.Parent.TerrainVersion)
 
 local L = WorldLayout
 local MATERIAL = Enum.Material
@@ -144,10 +149,19 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 	terrain:WriteVoxels(region, VOXEL, chunk.materials, chunk.occupancies)
 end
 
-function TerrainBuilder.build()
+local VERSION_ATTRIBUTE = "TerrenoVersion"
+
+-- force: construirlo aunque el guardado en el lugar ya tenga la versión de ahora.
+function TerrainBuilder.build(force: boolean?)
 	local terrain = Workspace.Terrain
-	terrain:Clear()
+	local version = TerrainVersion.get()
 	style(terrain)
+	if not force and terrain:GetAttribute(VERSION_ATTRIBUTE) == version then
+		print(`TerrainBuilder: terreno guardado en el lugar (versión {version})`)
+		return
+	end
+	terrain:Clear()
+	terrain:SetAttribute(VERSION_ATTRIBUTE, nil)
 	local half = math.ceil(L.oceanHalfSize / (VOXEL * CHUNK_VOXELS)) * VOXEL * CHUNK_VOXELS
 	local step = VOXEL * CHUNK_VOXELS
 	local started = os.clock()
@@ -162,7 +176,11 @@ function TerrainBuilder.build()
 			end
 		end
 	end
-	print(`TerrainBuilder: terreno en {string.format("%.1f", os.clock() - started)} s`)
+	terrain:SetAttribute(VERSION_ATTRIBUTE, version)
+	print(
+		`TerrainBuilder: terreno construido en {string.format("%.1f", os.clock() - started)} s`
+			.. ` (versión {version})`
+	)
 end
 
 return TerrainBuilder

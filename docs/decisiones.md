@@ -909,3 +909,14 @@ Se comprobó en Studio que en los bloques saltados `IslandShape.sample` da exact
 columna por columna. **Lo no obvio:** el cálculo nunca fue lo caro: con un `task.wait()` por
 bloque, 576 bloques eran 576 cuadros (10 s) aunque cada uno usara medio cuadro. Lo que queda
 (~3 s en caliente) es sobre todo el motor llenando 4.7 millones de vóxeles de océano.
+
+## 2026-10-20 — El terreno queda guardado en el lugar con su versión
+
+**Contexto:** aun acelerado, el servidor tardaba 3–7 s en construir el terreno al arrancar y la
+pantalla de carga lo esperaba. **Decisión:** el terreno se genera una vez en Edit y se guarda
+en el `.rbxl`; `TerrainVersion` (SHAPE_VERSION más una huella de `WorldLayout` con las claves
+ordenadas) va en el atributo `TerrenoVersion` de `Workspace.Terrain`, y `TerrainBuilder.build`
+no hace nada si coincide. El código sigue siendo la fuente: si no coincide, el servidor lo
+construye como antes. **Lo no obvio:** el servidor no puede leer el código de los módulos, así
+que un cambio en la forma sin tocar `WorldLayoutData` no cambia la huella: hay que subir
+`SHAPE_VERSION` a mano (docs/setup.md).

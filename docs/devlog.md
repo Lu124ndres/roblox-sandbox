@@ -3117,3 +3117,16 @@ se escriben varios bloques por cuadro hasta 20 ms. `TerrainBuilder` imprime cuá
 **Probado en Studio (Play):** en caliente pasó de 10.3 s (575 cuadros) a 3.1 s (52 cuadros); al
 arrancar Play, 6.8 s. Los 526 bloques saltados dan lo mismo que antes columna por columna y la
 isla se ve igual.
+
+---
+
+## 2026-10-20 (13) — Terreno guardado en el lugar
+
+**Qué se hizo (pedido del usuario):** el terreno se generó en Edit y queda guardado en el lugar
+con su versión (`TerrainVersion`, atributo `TerrenoVersion`); al arrancar, el servidor no lo
+construye si la versión coincide. Pasos para regenerarlo en `docs/setup.md`.
+
+**Probado en Studio (Play):** el servidor imprime "terreno guardado en el lugar (versión
+1-f5f9159a)" y el mundo queda listo sin esperar al terreno; la isla y el cráter se ven igual.
+**Falta (usuario):** guardar el lugar y publicarlo; hasta entonces el terreno solo está en el
+Studio abierto.

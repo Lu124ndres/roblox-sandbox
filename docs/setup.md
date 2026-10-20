@@ -97,3 +97,20 @@ Repositorio: <https://github.com/ahujasid/blender-mcp>
   git branch -M main
   git push -u origin main
   ```
+
+## Terreno guardado en el lugar
+
+El terreno de la isla se genera con `src/server/World/` y queda guardado en
+`PescaYAlimentaGigantes.rbxl` con su versión (atributo `TerrenoVersion` de
+`Workspace.Terrain`). Si la versión guardada es la de ahora, el servidor no lo construye al
+arrancar; si no, lo construye (~3–7 s) y la pantalla de carga espera.
+
+Cada vez que cambie `WorldLayoutData.json` o la forma (`IslandShape`, `CraterShape`,
+`GardenShape`, `TerrainBuilder`; en ese caso, subir antes `SHAPE_VERSION` en
+`TerrainVersion.luau`):
+
+- [ ] **[Studio, Edit]** En la barra de comandos:
+  `require(game.ServerScriptService.Server.World.TerrainBuilder).build(true)`
+  (si Studio guardó una copia vieja del módulo, reabrir el lugar antes).
+- [ ] **[Studio]** Guardar el lugar y publicarlo.
+
