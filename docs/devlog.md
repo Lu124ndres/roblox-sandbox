@@ -3006,3 +3006,21 @@ estanques ni hoyas donde estaban el 9 y el 10; vitrinas en (±28, 52) con el pre
 
 **Probado en Studio (Play):** con el Dios del Volcán puesto, E → Marinero; al salir el DataStore
 tiene `outfit = "Marinero"`, versión 12 y el bloqueo suelto; al volver a entrar lleva Marinero.
+
+---
+
+## 2026-10-20 (7) — Pases de prueba que se guardan y estanques repartidos
+
+**Qué se hizo (pedido del usuario):**
+- "Me meto con el VIP, lo quito y vuelvo, y aún lo tengo": el botón "Pases (on/off)" del admin
+  solo cambiaba el atributo, y al entrar `Passes` volvía a preguntar a Roblox, que da al creador
+  todos sus pases. Ahora lo que pone o quita el admin queda en `save.passTests` (esquema v13):
+  `ProfilePublish.all` lo aplica al cargar y `Passes.grant` no marca un pase quitado. Comprarlo
+  o recibirlo de regalo (`Passes.acquire`) borra la prueba.
+- Estanques: los 8 en un anillo de radio 82 alrededor del sagrado, dos por cuarto entre los
+  caminos (22.5° del camino más cercano). x1 y x2 al norte junto a las vitrinas, subiendo por los
+  costados hasta x75 y x100 cerca de la aparición. Vitrinas a 40 del centro (antes 52) para no
+  tocar el x2. Distancias mínimas: 62 entre estanques, 36 a las vitrinas, 39 a la aparición.
+
+**Probado en Studio (Play):** VIP quitado desde el admin → salir y entrar → sigue sin VIP (el Rey
+y el Dios siguen); se le devolvió el VIP al final. Vista desde arriba con el reparto nuevo.
