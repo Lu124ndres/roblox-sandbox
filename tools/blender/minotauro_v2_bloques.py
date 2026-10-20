@@ -26,6 +26,8 @@ además puede traer
                     toma la caja entera y studs_por_bu sale de esa dimensión (el dragón)
     VISTAS_EXTRA    más vistas (nombre, ángulo, alto); con alto negativo, desde abajo y sin piso
     PISO_BAJO       cuánto más abajo va el piso (en las medidas de la E1), para que no parezca posado
+    ENCUADRE_CAJA   True: la cámara toma la caja entera, pero se sigue midiendo por el alto (la
+                    orca, que es el doble de larga que de alta)
 
 Uso (desde la raíz del repo; sin --etapa, la 1):
     blender -b --factory-startup --python tools/blender/minotauro_v2_bloques.py -- --etapa 2
@@ -283,7 +285,7 @@ def estudio(alto=3.1):
 def encuadre():
     """Centro de la cámara y k, las medidas de la E1 del minotauro (3.1 BU de alto) en proporción:
     al alto, parado en z = 0; con LARGO_JUEGO, a la caja entera (el dragón vuela)."""
-    if "LARGO_JUEGO" not in globals():
+    if "LARGO_JUEGO" not in globals() and not globals().get("ENCUADRE_CAJA"):
         alto = alto_bu()
         return V((0, 0, 1.55 * alto / 3.1)), alto / 3.1
     pts = np.array([tuple(o.matrix_world @ v.co) for o in bpy.data.objects

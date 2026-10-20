@@ -1,0 +1,96 @@
+{
+  "bloques": 112,
+  "bloques_por_parte": {
+    "Cabeza": 30,
+    "Mandibula": 14,
+    "Pecho": 24,
+    "Cola1": 10,
+    "Cola2": 8,
+    "Cola3": 6,
+    "Cola4": 4,
+    "Cola5": 4,
+    "Dorsal": 4,
+    "AletaIzq": 1,
+    "AletaDer": 1,
+    "AletaIzq2": 2,
+    "AletaDer2": 2,
+    "AletaColaIzq": 1,
+    "AletaColaDer": 1
+  },
+  "triangulos": 4468,
+  "triangulos_ocultos_quitados": {
+    "Cabeza": 96,
+    "Mandibula": 46,
+    "Pecho": 54,
+    "Cola1": 24,
+    "Cola2": 20,
+    "Cola3": 16,
+    "Cola4": 10,
+    "Cola5": 10,
+    "Dorsal": 12,
+    "AletaIzq2": 2,
+    "AletaDer2": 2
+  },
+  "triangulos_por_parte": {
+    "Cabeza": 1152,
+    "Mandibula": 486,
+    "Pecho": 966,
+    "Cola1": 392,
+    "Cola2": 320,
+    "Cola3": 236,
+    "Cola4": 154,
+    "Cola5": 154,
+    "Dorsal": 188,
+    "AletaIzq": 44,
+    "AletaDer": 44,
+    "AletaIzq2": 98,
+    "AletaDer2": 98,
+    "AletaColaIzq": 68,
+    "AletaColaDer": 68
+  },
+  "partes": 15,
+  "alto_bu": 15.5,
+  "studs_por_bu": 5.3226,
+  "caras_coplanares": [],
+  "normales_hacia_adentro": 0,
+  "bisel": {
+    "min": 0.06,
+    "max": 0.06,
+    "segmentos_distintos_de_1": []
+  },
+  "pendientes": {
+    "cunas_fuera_de_regla": [],
+    "vertices_fuera_de_cuadricula": []
+  },
+  "huesos": {
+    "pieza_a_hueso": {
+      "Cabeza": "Cabeza",
+      "Mandibula": "Mandibula",
+      "Pecho": "Pecho",
+      "Cola1": "Cola1",
+      "Cola2": "Cola2",
+      "Cola3": "Cola3",
+      "Cola4": "Cola4",
+      "Cola5": "Cola5",
+      "Dorsal": "Dorsal",
+      "AletaIzq": "AletaIzq",
+      "AletaDer": "AletaDer",
+      "AletaIzq2": "AletaIzq2",
+      "AletaDer2": "AletaDer2",
+      "AletaColaIzq": "AletaColaIzq",
+      "AletaColaDer": "AletaColaDer"
+    },
+    "piezas_sin_hueso_del_contrato": [],
+    "huesos_sin_pieza": [
+      "Boca",
+      "Espiraculo",
+      "Raiz"
+    ],
+    "huesos_con_varias_piezas": {},
+    "huesos_sin_pesos_por_contrato": [
+      "Boca",
+      "Espiraculo",
+      "Raiz"
+    ]
+  }
+}
