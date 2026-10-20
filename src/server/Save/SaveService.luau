@@ -13,7 +13,8 @@
 		  cerrar el servidor corren a la vez PlayerRemoving y BindToClose).
 		  Si sale mientras carga, la carga suelta el bloqueo y no lo adjunta.
 		- Al cerrar el servidor (BindToClose): guarda a todos a la vez con
-		  menos reintentos (SaveStore.shuttingDown) y espera a que terminen.
+		  menos reintentos (SaveStore.shuttingDown) y espera a que terminen,
+		  también las salidas que ya habían empezado (el último en salir).
 		Nunca se guarda un perfil que no terminó de cargar (PlayerData.snapshot
 		da nil) ni datos corruptos o de una versión más nueva (SaveStore).
 	El estado vive en PlayerData; el DataStore, en SaveStore.
@@ -127,18 +128,16 @@ function SaveService.init()
 		end
 	end)
 
+	-- Cuando sale el último jugador, el servidor se cierra mientras su PlayerRemoving
+	-- todavía guarda: GetPlayers() ya viene vacío y Roblox no espera a ese hilo. Por eso
+	-- se espera a todas las salidas en curso (leaving), no solo a los que siguen dentro.
 	game:BindToClose(function()
 		SaveStore.shuttingDown()
-		local pending = 0
 		for _, player in Players:GetPlayers() do
-			pending += 1
-			task.spawn(function()
-				onRemoving(player)
-				pending -= 1
-			end)
+			task.spawn(onRemoving, player)
 		end
 		local deadline = os.clock() + 25 -- Roblox da 30 s para cerrar
-		while pending > 0 and os.clock() < deadline do
+		while next(leaving) ~= nil and os.clock() < deadline do
 			task.wait(0.2)
 		end
 	end)
