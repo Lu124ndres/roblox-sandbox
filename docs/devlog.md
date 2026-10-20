@@ -2964,3 +2964,9 @@ dorado; el mensaje de chat sale como `[VIP] [APRENDIZ] lu124ndres:` con sus colo
 
 **Pendiente:** "Estanque sagrado" sigue fuera de oferta en el Creator Hub (x250) y el juego lo
 vende a 799 R$ como x50.
+
+**Corrección (mismo día):** mirar `DataLoaded` no alcanzaba: el usuario siguió viendo "+2 Kills"
+al entrar. Los atributos llegan en el mismo cuadro y sus avisos se disparan en cualquier orden,
+así que cuando avisa Kills, DataLoaded ya está puesto. Ahora `CycleView` ignora las subidas de
+Kills durante 5 s después de cargar (`LOAD_QUIET`). Probado en Play: al entrar ningún aviso; con
+una kill de admin, "+1 Kill · La Orca".

@@ -33,6 +33,8 @@ local CYCLE = Config.Giants.cycle
 local ATTR = Protocol.GiantAttributes
 local CHECK_SECONDS = 0.5
 local WARNING_SECONDS = 10
+local PLAYER = Protocol.PlayerAttributes
+local LOAD_QUIET = 5 -- segundos tras cargar los datos en que una subida de Kills no es una kill nueva
 local CENTER = WorldZones.craterCenter
 
 local CycleView = {}
@@ -111,13 +113,21 @@ function CycleView.start(toasts: Toasts.Toasts)
 	stateFolder:GetAttributeChangedSignal(ATTR.Drained):Connect(onDrained)
 	onDrained()
 
-	-- +N Kills: este jugador ayudó a llenar al monstruo (N con los pases con traje). Solo con
-	-- los datos ya cargados: al entrar, Kills pasa de 0 a lo guardado y no es una kill nueva.
-	local kills = player:GetAttribute(Protocol.PlayerAttributes.Kills)
-	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.Kills):Connect(function()
-		local now = player:GetAttribute(Protocol.PlayerAttributes.Kills)
-		local loaded = player:GetAttribute(Protocol.PlayerAttributes.DataLoaded) == true
-		if loaded and type(now) == "number" and type(kills) == "number" and now > kills then
+	-- +N Kills: este jugador ayudó a llenar al monstruo (N con los pases con traje). Al entrar,
+	-- Kills pasa de 0 a lo guardado y no es una kill nueva. Los atributos llegan juntos (Kills y
+	-- DataLoaded en el mismo cuadro) y sus avisos en cualquier orden, así que no alcanza con
+	-- mirar DataLoaded: se ignora lo que suba hasta LOAD_QUIET segundos después de cargar.
+	local loadedAt: number? = if player:GetAttribute(PLAYER.DataLoaded) == true
+		then os.clock() - LOAD_QUIET
+		else nil
+	player:GetAttributeChangedSignal(PLAYER.DataLoaded):Connect(function()
+		loadedAt = if player:GetAttribute(PLAYER.DataLoaded) == true then os.clock() else nil
+	end)
+	local kills = player:GetAttribute(PLAYER.Kills)
+	player:GetAttributeChangedSignal(PLAYER.Kills):Connect(function()
+		local now = player:GetAttribute(PLAYER.Kills)
+		local settled = loadedAt ~= nil and os.clock() - loadedAt >= LOAD_QUIET
+		if settled and type(now) == "number" and type(kills) == "number" and now > kills then
 			Sounds.play("LegendaryCatch")
 			local gained = now - kills
 			toasts.banner(
