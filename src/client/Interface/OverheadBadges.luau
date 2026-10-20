@@ -3,11 +3,12 @@
 	OverheadBadges
 
 	Insignias del cartel sobre la cabeza (Overhead), todas dentro de un solo
-	marco: una placa con marco de lava (Interface/Kit, como TIENDA). Adentro,
-	separados por líneas finas:
+	marco: una placa con marco de lava (Interface/Kit, como TIENDA); con el pase
+	VIP la placa es de oro y lleva una cinta de lava "VIP" inclinada en la
+	esquina de arriba (pedido del usuario el 2026-10-20). Adentro, separados
+	por líneas finas:
 		Monstruos  el monstruo alimentado (Icons "fed", el de "monstruos llenados"
 		           del HUD) y cuántos llenó
-		VIP        "VIP" en oro con degradado (solo si tiene el pase)
 		Premium    el ícono de Roblox Premium (solo si es Premium)
 	La placa se ajusta al ancho de lo que se muestra y queda centrada; los
 	íconos sobresalen un poco del marco.
@@ -19,6 +20,7 @@ local Assets = require(ReplicatedStorage.Shared.Assets)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Icons = require(script.Parent.Icons)
 local Kit = require(script.Parent.Kit)
+local OverheadVip = require(script.Parent.OverheadVip)
 local Style = require(script.Parent.Style)
 
 export type Badges = {
@@ -27,21 +29,13 @@ export type Badges = {
 }
 
 local rgb = Color3.fromRGB
-local WHITE = Color3.new(1, 1, 1)
 local GOLD = rgb(255, 214, 80)
 -- Ancho de cada parte (fracción del ancho del cartel) y el margen de la placa.
-local WIDTH = { kills = 0.27, vip = 0.17, premium = 0.11, line = 0.012 }
+local WIDTH = { kills = 0.27, premium = 0.11, line = 0.012 }
 local SIDES = 0.07 -- un poco más: el marco de lava es más grueso que el de oro
 local PLATE_SLICE = 0.3
 
 local OverheadBadges = {}
-
-local function gradient(parent: Instance, top: Color3, bottom: Color3)
-	local fill = Instance.new("UIGradient")
-	fill.Rotation = 90
-	fill.Color = ColorSequence.new(top, bottom)
-	fill.Parent = parent
-end
 
 local function plate(row: Frame): (Frame, Frame)
 	local back = Instance.new("Frame")
@@ -108,20 +102,10 @@ end
 
 function OverheadBadges.build(row: Frame, player: Player): Badges
 	local back, inside = plate(row)
+	local tag = OverheadVip.ribbon(back)
 	local kills = part(inside, "Monstruos", 1)
 	icon(kills, "fed", 1.45, 0.2)
 	local count = label(kills, "0", rgb(255, 244, 214), 0.44)
-	local lineVip = divider(inside, 2)
-	local vip = part(inside, "VIP", 3)
-	local vipText = label(vip, "VIP", WHITE, 0.08)
-	vipText.Size = UDim2.fromScale(0.84, 0.86)
-	vipText.Position = UDim2.fromScale(0.08, 0.07)
-	gradient(vipText, rgb(255, 250, 190), rgb(255, 150, 0)) -- oro: claro arriba, naranja abajo
-	local outline = vipText:FindFirstChildOfClass("UIStroke")
-	if outline then
-		outline.Color = rgb(90, 40, 0)
-		outline.Thickness = 3
-	end
 	local linePremium = divider(inside, 4)
 	local premium = part(inside, "Premium", 5)
 	local glyph = Instance.new("ImageLabel")
@@ -143,8 +127,6 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 		type Entry = { frame: Frame, width: number, on: boolean }
 		local shown: { Entry } = {
 			{ frame = kills, width = WIDTH.kills, on = true },
-			{ frame = lineVip, width = WIDTH.line, on = hasVip },
-			{ frame = vip, width = WIDTH.vip, on = hasVip },
 			{ frame = linePremium, width = WIDTH.line, on = isPremium },
 			{ frame = premium, width = WIDTH.premium, on = isPremium },
 		}
@@ -169,7 +151,13 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 		setVip = function(on: boolean)
 			if on ~= hasVip then
 				hasVip = on
-				layout()
+				OverheadVip.paint(back, on, PLATE_SLICE)
+				tag.Visible = on
+				for _, line in back:GetDescendants() do
+					if line:IsA("Frame") and line.Parent and line.Parent.Name == "Linea" then
+						line.BackgroundColor3 = if on then OverheadVip.LINE else GOLD
+					end
+				end
 			end
 		end,
 	}

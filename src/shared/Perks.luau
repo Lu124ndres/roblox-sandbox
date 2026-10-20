@@ -2,7 +2,8 @@
 --[[
 	Perks: lo que cambian las compras con Robux y los renacimientos, leído de
 	atributos que solo pone el servidor (servidor y cliente calculan igual):
-		Pase_<clave> / Nivel<Power|Coins> / Estanque_<i>   pases, x2^nivel, estanques
+		Pase_<clave> / Nivel<Power|Coins> / Estanque_<i>   pases (VIP: x1.5 monedas y
+		                                                   entrenamiento), x2^nivel, estanques
 		MembershipType (Premium) / Renacimientos           x1.2 / x1.25^n poder y monedas
 		ReplicatedStorage.Impulsos                         entrenamiento del servidor (x2^nivel)
 		racha del diario / x2 monedas de la ruleta         RetentionBonus
@@ -96,6 +97,7 @@ function Perks.powerMultiplier(player: Player): number
 		* Perks.friendMultiplier(player)
 		* RebirthMath.bonusMultiplier(RebirthMath.count(player))
 		* RetentionBonus.powerMultiplier(player)
+		* passProduct(player, "trainingMultiplier")
 		* ServerEvents.value("power", 1)
 end
 
@@ -105,6 +107,7 @@ function Perks.coinMultiplier(player: Player): number
 		* Perks.friendMultiplier(player)
 		* RebirthMath.bonusMultiplier(RebirthMath.count(player))
 		* RetentionBonus.coinMultiplier(player)
+		* passProduct(player, "coinMultiplier")
 		* ServerEvents.value("coins", 1)
 end
 

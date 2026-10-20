@@ -11,7 +11,8 @@
 	x2 del servidor (ServerBoost<n>): dura `minutes`. Si alguien compra
 	mientras está activo, el tiempo vuelve a `minutes` y sube a x2^n. Al
 	vencer vuelve a x1 y la próxima compra es el nivel 1 otra vez.
-	Pase VIP: etiqueta, suerte extra y premio diario x2.
+	Pase VIP: placa dorada con cinta VIP sobre la cabeza, +50% monedas, +50%
+	de entrenamiento (poder que gana), +20% suerte y premio diario x2.
 	Pases con traje (como el Faraón de «Construye la Pirámide»): se ven en el
 	personaje (`outfit`, ver server/Social/Outfits) y pescan más rápido:
 		ReyDelMar      pesca x2 más rápido (y x2 de fuerza), alimenta x2, x2 kills
@@ -37,6 +38,8 @@ export type PassDef = {
 	robux: number,
 	luck: number?, -- se suma a la suerte de la caña
 	dailyMultiplier: number?,
+	coinMultiplier: number?, -- multiplica todas las monedas que gana
+	trainingMultiplier: number?, -- multiplica el poder que gana entrenando (y descansando)
 	biteDelay: number?, -- multiplica la espera hasta que pica (0.5 = el doble de rápido)
 	reelStrength: number?, -- multiplica la fuerza de cada toque al recoger
 	instantReel: boolean?, -- un toque basta para sacar cualquier pez
@@ -85,22 +88,25 @@ local Monetization: MonetizationConfig = {
 		Power = {
 			name = "Poder",
 			description = "Todo el poder que ganas, para siempre.",
-			robux = { 3, 7, 15, 32, 76, 128, 229, 599, 999, 999 }, -- Poder 10 pendiente de confirmar
+			robux = { 3, 7, 15, 32, 76, 128, 229, 599, 999, 1300 },
 		},
 		Coins = {
 			name = "Monedas",
 			description = "Todas las monedas que ganas, para siempre.",
-			robux = { 3, 7, 15, 32, 76, 128, 229, 599, 999, 999 }, -- Poder 10 pendiente de confirmar
+			robux = { 3, 7, 15, 32, 76, 128, 229, 599, 999, 1300 },
 		},
 	},
 	levelOrder = { "Power", "Coins" },
 	passes = {
 		VIP = {
 			name = "VIP",
-			description = "Etiqueta dorada, +20% suerte y premio diario x2.",
+			-- Corta: la tarjeta de la tienda muestra dos líneas (el resto: placa dorada, suerte, diario x2).
+			description = "+50% monedas y +50% entrenamiento",
 			robux = 299,
 			luck = 0.2,
 			dailyMultiplier = 2,
+			coinMultiplier = 1.5,
+			trainingMultiplier = 1.5,
 		},
 		ReyDelMar = {
 			name = "Rey del Mar",
