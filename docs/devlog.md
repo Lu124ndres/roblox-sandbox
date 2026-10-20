@@ -3042,3 +3042,24 @@ y el Dios siguen); se le devolvió el VIP al final. Vista desde arriba con el re
 **Probado en Studio (Play):** historial del DataStore revisado (la versión de las 10:47 tenía
 `{VIP = true}`; la actual, los tres en `false`); al entrar de nuevo, ningún `Pase_` y traje
 Marinero. El reinicio en sí no se ejecutó para no borrar el progreso real de la cuenta.
+
+---
+
+## 2026-10-20 (9) — Pases: reintento si Roblox no contesta y pruebas solo para admins
+
+**Qué se hizo (pedido del usuario):**
+- Si `UserOwnsGamePassAsync` fallaba los 3 intentos al entrar, el jugador pasaba toda la partida
+  sin el pase que pagó. Ahora `Passes.check` guarda los que no se contestaron y vuelve a
+  preguntar cada 60 s (`RETRY_SECONDS`) mientras siga en el servidor, con un solo aviso en el
+  Output por jugador.
+- Las pruebas de pases (`save.passTests`) solo cuentan para admins: un jugador al que un admin le
+  quitó un pase y después lo compra fuera del juego lo recibía bloqueado. El botón del panel
+  sobre otro jugador ahora dura solo esa partida ("(esta partida)" en el aviso), y `Passes.grant`
+  y `ProfilePublish.all` ignoran las pruebas guardadas de quien no es admin.
+- La lista de admins sale de `AdminService` a `Admin/Admins.luau` (sin dependencias), para que
+  `Passes` y `ProfilePublish` la consulten sin ciclos.
+
+**Probado en Studio (Play):** al entrar el admin conserva los tres pases quitados y el panel;
+VIP puesto y quitado desde el panel ("VIP: puesto" / "VIP: quitado", sin "esta partida"); al
+salir el DataStore sigue con los tres en `false` y el bloqueo suelto. No se pudo probar con un
+segundo jugador ni forzar un fallo de Roblox desde el MCP.

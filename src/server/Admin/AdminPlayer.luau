@@ -26,6 +26,7 @@ local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local AdminReset = require(script.Parent.AdminReset)
+local Admins = require(script.Parent.Admins)
 
 export type Handler = (target: Player, value: unknown, admin: Player) -> string
 
@@ -146,11 +147,16 @@ AdminPlayer.HANDLERS = {
 		local attribute = `{ATTR.PassPrefix}{value}`
 		local now = target:GetAttribute(attribute) ~= true
 		target:SetAttribute(attribute, if now then true else nil)
-		-- Queda guardado: al volver a entrar sigue así aunque Roblox diga que lo tiene (Passes).
-		PlayerData.edit(target, function(save)
-			save.passTests[value] = now
-		end)
-		return `{Config.Monetization.passes[value].name}: {if now then "puesto" else "quitado"}`
+		-- En un admin queda guardado: al volver a entrar sigue así aunque Roblox diga que lo
+		-- tiene (Passes). En otro jugador dura solo esta partida: nunca le quita uno que pague.
+		local saved = Admins.is(target)
+			and PlayerData.edit(target, function(save)
+				save.passTests[value] = now
+			end)
+		local state = if now then "puesto" else "quitado"
+		return `{Config.Monetization.passes[value].name}: {state}{if saved
+			then ""
+			else " (esta partida)"}`
 	end,
 	playtime = function(target, value)
 		local since = target:GetAttribute(ATTR.PlaytimeSince)

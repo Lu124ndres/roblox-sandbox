@@ -2,7 +2,7 @@
 --[[
 	AdminService
 
-	Panel de pruebas solo para los administradores (ADMINS, por UserId; vive
+	Panel de pruebas solo para los administradores (Admins, por UserId; vive
 	en el servidor, nadie más lo ve). A ellos se les marca el atributo
 	EsAdmin y el cliente muestra el panel. Cada orden llega por AdminCommand
 	(nombre, valor, UserId del jugador elegido) y se vuelve a comprobar aquí
@@ -16,17 +16,11 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
 local AdminCommands = require(script.Parent.AdminCommands)
-
--- UserId de los administradores (lu124ndres).
-local ADMINS: { [number]: boolean } = {
-	[147364237] = true,
-}
+local Admins = require(script.Parent.Admins)
 
 local AdminService = {}
 
-local function isAdmin(player: Player): boolean
-	return ADMINS[player.UserId] == true
-end
+local isAdmin = Admins.is
 
 -- targetId: UserId del jugador elegido en el panel (nil = el mismo admin).
 local function onCommand(player: Player, name: unknown, value: unknown, targetId: unknown)

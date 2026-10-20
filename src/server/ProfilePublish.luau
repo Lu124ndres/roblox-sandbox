@@ -19,6 +19,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local Admins = require(script.Parent.Admin.Admins)
 local Basket = require(script.Parent.Feeding.Basket)
 local SaveSchema = require(script.Parent.Save.SaveSchema)
 local Titles = require(ReplicatedStorage.Shared.Titles)
@@ -147,8 +148,10 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 	for key in save.gifts do
 		player:SetAttribute(`{ATTR.PassPrefix}{key}`, true) -- pase regalado
 	end
-	for key, on in save.passTests do -- puesto o quitado por un admin: manda sobre lo demás
-		player:SetAttribute(`{ATTR.PassPrefix}{key}`, if on then true else nil)
+	if Admins.is(player) then -- pases que se puso o quitó para probar: mandan sobre lo demás
+		for key, on in save.passTests do
+			player:SetAttribute(`{ATTR.PassPrefix}{key}`, if on then true else nil)
+		end
 	end
 	for index in Config.Progression.ponds do
 		if save.ponds[tostring(index)] then
