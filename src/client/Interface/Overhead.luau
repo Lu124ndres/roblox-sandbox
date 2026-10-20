@@ -6,7 +6,8 @@
 		insignias con marco y fondo (OverheadBadges): monstruos llenados, VIP y Premium
 		su título (atributo Titulo, por su poder máximo), con un degradado por
 		rango; desde Dios del Mar el brillo recorre el texto
-		su nombre
+		su nombre (en oro y con brillo si tiene el VIP, ver OverheadVip)
+	En el chat, lo mismo delante del nombre ([VIP] [TÍTULO], ChatTags).
 	Reemplaza el nombre de Roblox (se oculta en este cliente). Lee atributos
 	que pone el servidor (Titulo, Kills, Pase_VIP). Con efectos reducidos se
 	quitan los contornos UIStroke y se ve de más cerca.
@@ -22,8 +23,10 @@ local Titles = require(ReplicatedStorage.Shared.Titles)
 local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
+local ChatTags = require(script.Parent.ChatTags)
 local OverheadBadges = require(script.Parent.OverheadBadges)
 local OverheadLook = require(script.Parent.OverheadLook)
+local OverheadVip = require(script.Parent.OverheadVip)
 local Style = require(script.Parent.Style)
 
 local ATTR = Protocol.PlayerAttributes
@@ -73,7 +76,7 @@ local function build(player: Player, head: BasePart): () -> ()
 	lift()
 	guis[player] = gui
 
-	local shownIndex, shownKills = 0, -1
+	local shownIndex, shownKills, shownVip = 0, -1, false
 	return function()
 		local value = player:GetAttribute(ATTR.Title)
 		local index = if type(value) == "number" then value else 1
@@ -94,7 +97,15 @@ local function build(player: Player, head: BasePart): () -> ()
 			shownKills = killCount
 			badges.setKills(killCount)
 		end
-		badges.setVip(Perks.hasPass(player, "VIP"))
+		local vip = Perks.hasPass(player, "VIP")
+		badges.setVip(vip)
+		if vip ~= shownVip then
+			shownVip = vip
+			local gold = OverheadVip.name(name, vip)
+			if gold then
+				shimmering[gold] = true
+			end
+		end
 	end
 end
 
@@ -135,6 +146,7 @@ local function watch(player: Player)
 end
 
 function Overhead.start()
+	ChatTags.start()
 	Players.PlayerAdded:Connect(watch)
 	Players.PlayerRemoving:Connect(function(player: Player)
 		local list = connections[player]
