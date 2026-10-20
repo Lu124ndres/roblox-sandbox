@@ -4,7 +4,8 @@
 
 	Las vitrinas de los trajes de pase (server/Social/Showcase): avisa para
 	animar el traje en exhibición (su pose de vitrina la pone su estilo), lo
-	hace flotar y mecerse apenas, gira los rayos de detrás, hace latir los aros
+	hace flotar y mecerse apenas, gira los rayos de detrás y los mantiene justo
+	detrás del traje desde donde mire la cámara, hace latir los aros
 	de luz y el botón del pedestal, cambia el texto de la E según el jugador
 	(Comprar, Ponerte o Quitarte) y, si no tiene el pase, abre la compra.
 ]]
@@ -28,11 +29,14 @@ local TEXT_SECONDS = 0.5
 
 -- Gira sobre sus pies: el marco del traje (Trajes.measure), no el pivote del Model.
 type Spin = { model: Model, frame: CFrame, offset: CFrame }
+-- Rayos detrás del traje: `depth` studs más allá de `center`, por la línea cámara -> traje.
+type Backdrop = { billboard: BillboardGui, center: BasePart, depth: number }
 
 local Vitrinas = {}
 
 local spins: { Spin } = {}
 local rays: { ImageLabel } = {}
+local backdrops: { Backdrop } = {}
 local lights: { BasePart } = {} -- aros y botón que laten
 
 local function decorate(vitrina: Instance)
@@ -41,6 +45,17 @@ local function decorate(vitrina: Instance)
 	local image = billboard and billboard:FindFirstChild("Rayos")
 	if image and image:IsA("ImageLabel") then
 		table.insert(rays, image)
+	end
+	local depth = billboard and billboard:GetAttribute("Fondo")
+	if
+		billboard
+		and billboard:IsA("BillboardGui")
+		and aura
+		and aura:IsA("BasePart")
+		and type(depth) == "number"
+	then
+		billboard.StudsOffset = Vector3.zero
+		table.insert(backdrops, { billboard = billboard, center = aura, depth = depth })
 	end
 	local rings = vitrina:FindFirstChild("Aros")
 	for _, ring in if rings then rings:GetChildren() else {} do
@@ -131,6 +146,12 @@ function Vitrinas.start(onDisplay: (holder: Instance, key: string) -> ())
 		end
 		for _, image in rays do
 			image.Rotation = (image.Rotation + RAYS_SPEED * dt) % 360
+		end
+		for _, backdrop in backdrops do
+			local away = backdrop.center.Position - camera.CFrame.Position
+			if away.Magnitude > 0.01 then
+				backdrop.billboard.StudsOffsetWorldSpace = away.Unit * backdrop.depth
+			end
 		end
 		local glow = 0.2 + 0.2 * math.sin(now * 2.4)
 		for _, part in lights do

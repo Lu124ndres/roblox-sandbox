@@ -3,8 +3,8 @@
 	ShowcaseAura
 
 	El aura del traje en su vitrina (Social/Showcase), en su color: rayos y un
-	brillo redondo detrás (un BillboardGui corrido hacia atrás desde la cámara,
-	así siempre quedan detrás del traje; los clientes giran los rayos), una nube
+	brillo redondo detrás (un BillboardGui que los clientes corren hacia atrás
+	desde la cámara y giran, así siempre quedan detrás del traje), una nube
 	de luz y partículas que suben por todo el cuerpo. (Una luz pegada al cuerpo
 	lo lavaba: la luz sale del botón del pedestal, en ShowcaseStage.)
 ]]
@@ -34,7 +34,10 @@ function ShowcaseAura.build(model: Model, top: Vector3, height: number, look: Lo
 	local rays = Instance.new("BillboardGui")
 	rays.Name = "Rayos"
 	rays.Size = UDim2.fromScale(height * 1.9, height * 1.9)
-	rays.StudsOffset = Vector3.new(0, 0, -height * 0.45) -- detrás, mirado desde la cámara
+	-- Detrás del traje mirado desde la cámara: cada cliente lo corre por la línea
+	-- cámara -> traje (Trajes/Vitrinas); StudsOffset se corre según hacia dónde
+	-- mira la cámara y, con el pedestal a un lado de la pantalla, se salía de él.
+	rays:SetAttribute("Fondo", height * 0.45)
 	rays.LightInfluence = 0
 	rays.MaxDistance = 140
 	for i, cell in { 13, 12 } do -- brillo redondo y rayos encima
