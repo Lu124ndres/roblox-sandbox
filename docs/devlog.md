@@ -3063,3 +3063,26 @@ Marinero. El reinicio en sí no se ejecutó para no borrar el progreso real de l
 VIP puesto y quitado desde el panel ("VIP: puesto" / "VIP: quitado", sin "esta partida"); al
 salir el DataStore sigue con los tres en `false` y el bloqueo suelto. No se pudo probar con un
 segundo jugador ni forzar un fallo de Roblox desde el MCP.
+
+---
+
+## 2026-10-20 (10) — Pantalla de carga con los gigantes de bloques
+
+**Qué se hizo (pedido del usuario):**
+- Pantalla de carga en `ReplicatedFirst` (`src/first/LoadingScreen/`): fondo de Canva con la isla
+  al atardecer y el minotauro, el dragón y el zorro de bloques (renders de los v2 como
+  referencia), título dorado, barra de lava partida en bloques con porcentaje, un pez de bloques
+  que nada sobre la punta, chispas cuadradas que suben, consejos que cambian y botón SALTAR a
+  los 8 s.
+- La barra sigue la carga real: llegada del juego, personaje y guardado, el mapa alrededor del
+  personaje (streaming y precarga de mallas, texturas, partículas y sonidos) y las imágenes y
+  sonidos de la interfaz. Dura al menos 6 s y se cierra sola a los 45 s.
+- Arreglos tras la primera prueba del usuario: el fondo no aparecía (esperaba `IsLoaded`), la
+  pantalla se iba antes de cargar el mapa y el recorte centrado se comía el cielo en pantallas
+  anchas (ahora `LoadingBackdrop` encuadra con foco arriba).
+- 20 miniaturas del juego en Canva (carpeta "Feed the Giants - Miniaturas"), sin texto.
+
+**Probado en Studio (Play):** se ve el fondo con los tres gigantes, la barra pasa por
+"Cargando la isla y el volcán..." y la pantalla se va a los ~9 s con el mapa cargado; la
+consola pasó de cientos de "Asset type does not match" a uno que no viene del juego. No se probó
+en teléfono ni con el juego publicado (en Studio todo está en caché y carga rápido).

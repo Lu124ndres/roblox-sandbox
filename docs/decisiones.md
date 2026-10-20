@@ -860,3 +860,27 @@ expulsarlo.
 mapa y `WorldZones.pondExists` hace que nada los muestre ni los abra. **Lo no obvio:**
 renumerar movía el sagrado del 11 al 9: el producto `Pond9` (649 R$) daría el sagrado, `Pond11`
 no daría nada y lo guardado en `ponds` apuntaría a otro estanque.
+
+## 2026-10-20 — La pantalla de carga solo pide módulos sin require
+
+**Contexto:** la pantalla de carga tiene que verse al entrar, así que corre en `ReplicatedFirst`
+(`src/first/LoadingScreen`), antes de que llegue el resto de `ReplicatedStorage`. **Decisión:**
+su ID va en `Assets/Loading.luau` y sus tiempos, colores y textos en `UIConfig/Loading.luau`,
+dos módulos sin `require` que la pantalla espera con `WaitForChild`; `Assets` entero y
+`Protocol` los pide `LoadingProgress` recién después de `game.Loaded`. **Lo no obvio:**
+`WaitForChild("Shared")` vuelve apenas llega la carpeta, no sus hijos: hacer `require` de
+`Assets/init` en ese momento puede fallar porque sus `require(script.Products)`,
+`script.Sounds`… todavía no llegaron. Por la misma razón el pez, la barra y las chispas se
+dibujan con Frames (sin imágenes del kit de `Interface/Kit`, que vive en el cliente) y las
+fuentes y el dorado se repiten en `UIConfig/Loading` en lugar de pedirse a `UIConfig`.
+
+## 2026-10-20 — La pantalla de carga precarga instancias, no IDs
+
+**Contexto:** la pantalla tiene que cubrir la carga del mapa (el lugar usa `StreamingEnabled`).
+**Decisión:** `WorldPreload` pide el mapa alrededor del personaje con
+`RequestStreamAroundAsync` y precarga una instancia por cada malla, textura, partícula o sonido
+distinto; los sonidos de `Assets` se precargan como `Sound` sin padre. **Lo no obvio:**
+`ContentProvider:PreloadAsync` con un ID suelto lo pide como imagen: las mallas y los sonidos
+fallaban con cientos de "Asset type does not match requested type" en la consola. Y el fondo no
+se mostraba porque esperaba el cambio de `IsLoaded`, que no siempre avisa: ahora se precarga
+primero y aparece al terminar.

@@ -23,6 +23,7 @@ humana o asistida, que escriba código o documentación aquí.
 |---|---|---|
 | `src/server/` | `ServerScriptService.Server` | Lógica autoritativa: estado de jugadores, economía, validación de remotes, guardado. |
 | `src/client/` | `StarterPlayer.StarterPlayerScripts.Client` | Input, UI, efectos visuales locales. Solo presenta y pide. |
+| `src/first/` | `ReplicatedFirst` | Lo que corre antes de que cargue el juego: la pantalla de carga (`LoadingScreen/`). Solo puede pedir módulos de `Shared` sin require (ver `docs/decisiones.md`). |
 | `src/shared/` | `ReplicatedStorage.Shared` | Módulos que usan ambos lados: `Config/`, `Assets`, `UIConfig/`, `WorldLayout`, tipos, utilidades puras. `Config` y `UIConfig` son carpetas con `init.luau` y secciones. |
 | `assets/blender/` | — | Archivos `.blend` y exportaciones `.fbx`/`.glb`. |
 | `assets/textures/` | — | PNG fuente de texturas y UI antes de subirlos a Roblox. |
@@ -58,7 +59,7 @@ Documentos en `docs/`:
    terreno en `src/server/World/` y las medidas de ambos en `WorldLayoutData.json`.
 5. **Un módulo, una responsabilidad.** Si un archivo pasa de 200 líneas, se divide.
 6. **Todo `rbxassetid` vive en `src/shared/Assets/`** (`init.luau`, `Textures.luau`, `Products.luau`,
-   `Sounds.luau`), nunca inline.
+   `Sounds.luau`, `Loading.luau`), nunca inline.
 7. **Todos los números de balance viven en `src/shared/Config/`**, nunca mágicos.
 8. **`--!strict` en todos los archivos Luau.**
 

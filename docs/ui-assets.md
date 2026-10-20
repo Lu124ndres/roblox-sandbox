@@ -212,6 +212,20 @@ filas. Los usa `Interface/GearIcons` (MEJORAS, pestañas, pack de inicio).
 El ícono de Roblox Premium del cartel de la cabeza es el que trae Roblox
 (`rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png`, `Assets.UI.PremiumIcon`).
 
+## Pantalla de carga (Canva)
+
+Pedido del usuario (2026-10-20): pantalla de carga con la temática del juego y "los monstruos,
+que son cubos". Los gigantes v2 de bloques (minotauro, dragón y zorro de agua, etapa 4) se
+renderizaron con Blender en modo consola desde `assets/blender/*_v2/e4_rig.blend` y se subieron a
+Canva como referencia; la IA de Canva pintó la isla al atardecer con los tres gigantes de bloques,
+sin texto (el usuario la eligió entre cuatro opciones). Se exportó a 1920×1080 desde la página
+"Carga isla" del lienzo auxiliar de la interfaz, se achicó a 1024×576 y se subió por el MCP de
+Studio. El título, la barra, el pez y las chispas no son imágenes: los dibuja el código.
+
+| Nombre | Archivo | Uso | `Assets.Loading` |
+|---|---|---|---|
+| Background | `assets/ui/carga/fondo.png` (fuente: `fondo_crudo.png`) | Fondo de la pantalla de carga | 107415033029925 |
+
 ## Sonidos
 
 Audio público de la Tienda de creadores (se buscó en Studio y se copió el ID) o sonidos

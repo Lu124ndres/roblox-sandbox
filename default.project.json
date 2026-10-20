@@ -7,6 +7,11 @@
 				"$path": "src/server"
 			}
 		},
+		"ReplicatedFirst": {
+			"LoadingScreen": {
+				"$path": "src/first/LoadingScreen"
+			}
+		},
 		"ReplicatedStorage": {
 			"Shared": {
 				"$path": "src/shared"

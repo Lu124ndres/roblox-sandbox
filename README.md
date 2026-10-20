@@ -52,6 +52,8 @@ docs/
 
 - **`src/server/`**: lógica autoritativa. Estado de jugadores, economía, guardado y
   validación de toda petición que llega del cliente.
+- **`src/first/`**: lo que corre en `ReplicatedFirst` antes de que cargue el juego: la
+  pantalla de carga, con una barra que sigue la carga real.
 - **`src/client/`**: input, interfaz y efectos locales. No decide estado; envía
   peticiones al servidor y presenta el resultado.
 - **`src/shared/`**: módulos que usan ambos lados.
