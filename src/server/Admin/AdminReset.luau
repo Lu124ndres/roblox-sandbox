@@ -7,7 +7,9 @@
 		          mejoras x2, pack de inicio, pases regalados) y sus ajustes
 		all       como una cuenta nueva: solo quedan los recibos de compras
 		          (para que ninguna compra se cobre ni se entregue dos veces)
-	Los pases comprados de verdad no se tocan (son de Roblox). También limpia lo
+	Los pases comprados de verdad no se tocan (son de Roblox), y los que un admin puso o
+	quitó para probar (passTests) se conservan en los dos modos: si se borraran, el
+	creador volvería a tener todos sus pases al entrar. También limpia lo
 	que vive fuera del guardado (paso del tutorial, misiones publicadas, regalos
 	por tiempo, reloj del grupo), lo hace reaparecer y guarda al momento.
 ]]
@@ -27,8 +29,8 @@ export type Mode = "progress" | "all"
 
 local ATTR = Protocol.PlayerAttributes
 local KEEP: { [Mode]: { string } } = {
-	progress = { "receipts", "ponds", "levels", "starterPack", "gifts", "settings" },
-	all = { "receipts" },
+	progress = { "receipts", "ponds", "levels", "starterPack", "gifts", "settings", "passTests" },
+	all = { "receipts", "passTests" },
 }
 
 local AdminReset = {}
@@ -50,7 +52,7 @@ function AdminReset.run(player: Player, mode: Mode): string
 	local save = PlayerData.read(player) :: SaveSchema.SaveData
 	-- Lo que el guardado nuevo ya no tiene (publicar solo pone lo que hay).
 	for key in oldGifts do
-		if not save.gifts[key] then
+		if not save.gifts[key] and save.passTests[key] ~= true then
 			player:SetAttribute(`{ATTR.PassPrefix}{key}`, nil)
 		end
 	end

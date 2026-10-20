@@ -3024,3 +3024,21 @@ tiene `outfit = "Marinero"`, versión 12 y el bloqueo suelto; al volver a entrar
 
 **Probado en Studio (Play):** VIP quitado desde el admin → salir y entrar → sigue sin VIP (el Rey
 y el Dios siguen); se le devolvió el VIP al final. Vista desde arriba con el reparto nuevo.
+
+---
+
+## 2026-10-20 (8) — El reinicio del admin ya no borra los pases de prueba
+
+**Qué se hizo (pedido del usuario):**
+- "Siempre que me meto tengo los pases activos": `AdminReset` armaba un guardado nuevo con
+  `SaveSchema.default()` y solo conservaba lo de su lista `KEEP`, que no incluía `passTests`.
+  Reiniciar (progreso o cuenta nueva) borraba los pases quitados y al volver a entrar Roblox le
+  daba al creador los tres. Ahora `passTests` se conserva en los dos modos, y un regalo que se
+  pierde con "cuenta nueva" no apaga un pase que el admin dejó puesto.
+- Además, la prueba de la sesión (7) dejó el VIP puesto (`passTests.VIP = true`) y el Rey y el
+  Dios nunca se habían quitado con el código nuevo: por eso seguían activos al entrar. El
+  usuario los quitó los tres en esta sesión y quedaron guardados en `false`.
+
+**Probado en Studio (Play):** historial del DataStore revisado (la versión de las 10:47 tenía
+`{VIP = true}`; la actual, los tres en `false`); al entrar de nuevo, ningún `Pase_` y traje
+Marinero. El reinicio en sí no se ejecutó para no borrar el progreso real de la cuenta.
