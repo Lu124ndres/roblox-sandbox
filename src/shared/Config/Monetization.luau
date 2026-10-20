@@ -22,7 +22,7 @@
 	Choose<idGigante>: elige el monstruo que sale después del descanso.
 	RestTime: +1 minuto de descanso en el volcán para todo el servidor.
 	Pond2..Pond10: desbloquea ese estanque para siempre. Pond11: el estanque
-	sagrado del centro (x50), que solo se abre así.
+	sagrado del centro (x250), que solo se abre así.
 	Rod<n>, Basket<n>, Boots<n>: el nivel n de MEJORAS sin juntar monedas
 	(upgradeRobux[categoría][n]; el 1 es el gratis).
 	Spin1/Spin5: +1 / +5 giros guardados de la ruleta (no se regalan).
@@ -160,7 +160,7 @@ local Monetization: MonetizationConfig = {
 		[8] = 449,
 		[9] = 649,
 		[10] = 999,
-		[11] = 799, -- estanque sagrado x50 (solo Robux)
+		[11] = 799, -- estanque sagrado x250 (solo Robux)
 	},
 	upgradeRobux = {
 		Rod = { 0, 5, 15, 29, 59, 99, 199, 349, 599, 999 },

@@ -31,6 +31,10 @@ export type WorldLayout = {
 	-- cerca del puente al volcán (+Z), y el sagrado en el centro.
 	trainingPondCount: number,
 	pondPositions: { { number } }, -- { x, z } de los estanques 1..trainingPondCount
+	-- Estanques que ya no están en el mapa (2026-10-20: el Dorado y el Celestial). Siguen
+	-- contando para los números: el sagrado es trainingPondCount + 1 y los productos PondN
+	-- y lo guardado van por número.
+	removedPonds: { number },
 	trainingPondRadius: number,
 	trainingPondFloor: number,
 	trainingPondWaterTop: number,

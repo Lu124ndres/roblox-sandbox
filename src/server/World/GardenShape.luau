@@ -30,8 +30,10 @@ local GardenShape = {}
 
 local PONDS: { Vector2 } = {}
 for index = 1, WorldZones.SACRED_POND do
-	local center = WorldZones.pondCenter(index)
-	PONDS[index] = Vector2.new(center.X, center.Z)
+	if WorldZones.pondExists(index) then -- los quitados quedan como pasto
+		local center = WorldZones.pondCenter(index)
+		PONDS[index] = Vector2.new(center.X, center.Z)
+	end
 end
 
 local SPOKES: { { Vector2 } } = {}

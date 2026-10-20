@@ -23,6 +23,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(ReplicatedStorage.Shared.RebirthMath)
 local Titles = require(ReplicatedStorage.Shared.Titles)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
+local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
@@ -52,7 +53,11 @@ local function goals(player: Player): { Goal }
 	local power = number(player, ATTR.Power)
 	-- Siguiente estanque: solo se abre llenando monstruos.
 	for index, pond in PONDS do
-		if not pond.robuxOnly and not Perks.pondOpen(player, index) then
+		if
+			not pond.robuxOnly
+			and WorldZones.pondExists(index)
+			and not Perks.pondOpen(player, index)
+		then
 			local missing = pond.requiredKills - kills
 			table.insert(list, {
 				icon = "pond",

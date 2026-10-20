@@ -9,6 +9,7 @@ import generar_isla as gi
 
 L = gi.L
 SAGRADO = L["trainingPondCount"] + 1  # mismo índice que WorldZones.SACRED_POND
+QUITADOS = set(L.get("removedPonds", []))  # ya no están en el mapa (WorldZones.pondExists)
 AGUA = L["trainingPondWaterTop"]
 SUELO = L["plateauHeight"]
 

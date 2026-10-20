@@ -12,6 +12,10 @@
 	"deckHeight": 6.6,
 	"plazaRadius": 122,
 	"trainingPondCount": 10,
+	"removedPonds": [
+		9,
+		10
+	],
 	"trainingPondRadius": 14,
 	"trainingPondFloor": -1.5,
 	"trainingPondWaterTop": 6,

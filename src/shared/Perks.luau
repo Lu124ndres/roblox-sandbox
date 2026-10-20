@@ -17,6 +17,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(script.Parent.RebirthMath)
 local RetentionBonus = require(script.Parent.RetentionBonus)
 local ServerEvents = require(script.Parent.ServerEvents)
+local WorldZones = require(script.Parent.WorldZones)
 
 local MONETIZATION = Config.Monetization
 local SOCIAL = Config.Social
@@ -169,8 +170,8 @@ end
 -- Puede entrenar ahí: llenó los monstruos pedidos o lo compró (el poder no abre estanques).
 function Perks.pondOpen(player: Player, index: number): boolean
 	local pond = PONDS[index]
-	if not pond then
-		return false
+	if not pond or not WorldZones.pondExists(index) then
+		return false -- también los quitados del mapa
 	end
 	if pond.robuxOnly then
 		return Perks.ownsPond(player, index)

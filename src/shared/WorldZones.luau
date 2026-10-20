@@ -54,6 +54,21 @@ end
 -- Estanques: 1..trainingPondCount en círculo y, después, el sagrado en el centro.
 WorldZones.SACRED_POND = L.trainingPondCount + 1
 
+-- ¿Está este estanque en el mapa? (WorldLayout.removedPonds se quitaron.)
+function WorldZones.pondExists(index: number): boolean
+	return index >= 1 and index <= WorldZones.SACRED_POND and not table.find(L.removedPonds, index)
+end
+
+-- El estanque de entrenamiento más alto que está en el mapa (sin contar el sagrado).
+function WorldZones.topPond(): number
+	for index = WorldZones.SACRED_POND - 1, 1, -1 do
+		if WorldZones.pondExists(index) then
+			return index
+		end
+	end
+	return 1
+end
+
 -- Centro del estanque número index, a la altura del agua (WorldLayout.pondPositions: los
 -- más bajos cerca del puente al volcán, así el viaje a alimentar es corto).
 function WorldZones.pondCenter(index: number): Vector3

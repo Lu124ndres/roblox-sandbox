@@ -7,8 +7,7 @@
 	SOLO con monstruos llenados (requiredKills, para siempre: las kills no se
 	pierden al renacer); el poder no abre estanques (pedido del usuario,
 	2026-10-18). Un jugador que aporta a casi todos los monstruos suma ~3-4 kills en 45 min
-	(un monstruo cada ~10-12 min con el descanso), así la tabla de abajo
-	reparte los 10 estanques en ~4 semanas.
+	(un monstruo cada ~10-12 min con el descanso). El último estanque pide 100.
 
 	El poder es la FUERZA (como en «Construye la Pirámide»): cuántos peces
 	cargas (fórmulas en Shared/FishingPower):
@@ -25,22 +24,22 @@
 local Types = require(script.Parent.Types)
 
 local Progression: Types.ProgressionConfig = {
-	-- Curva para ~45 min al día con el diario (simulación de docs/balance.md):
-	-- estanque 2 ~8 min, 3 ~30 min, 4 día 2, 5 día 3, 6 día 5, 7 día 7,
-	-- 8 ~día 12, 9 ~día 19, 10 ~día 29. Las kills son el único camino (no se
-	-- pierden al renacer), además de comprar el estanque con Robux.
+	-- Tabla del usuario (2026-10-20): 8 estanques en el mapa más el sagrado. El 9 y el 10 (el
+	-- Dorado y el Celestial) se quitaron del mapa (WorldLayout.removedPonds) pero conservan su
+	-- número: el sagrado sigue siendo el 11 y los productos PondN y lo guardado van por número.
+	-- Nunca se abren (Perks.pondOpen mira WorldZones.pondExists).
 	ponds = {
 		{ multiplier = 1, requiredKills = 0 },
-		{ multiplier = 1.5, requiredKills = 1 },
-		{ multiplier = 2, requiredKills = 3 },
-		{ multiplier = 3, requiredKills = 6 },
-		{ multiplier = 4, requiredKills = 9 },
-		{ multiplier = 6, requiredKills = 15 },
-		{ multiplier = 8, requiredKills = 22 },
-		{ multiplier = 12, requiredKills = 40 },
-		{ multiplier = 16, requiredKills = 62 },
-		{ multiplier = 25, requiredKills = 95 },
-		{ multiplier = 50, requiredKills = 0, robuxOnly = true }, -- sagrado: x2 del 10
+		{ multiplier = 2, requiredKills = 1 },
+		{ multiplier = 5, requiredKills = 3 },
+		{ multiplier = 10, requiredKills = 8 },
+		{ multiplier = 25, requiredKills = 15 },
+		{ multiplier = 50, requiredKills = 25 },
+		{ multiplier = 75, requiredKills = 50 },
+		{ multiplier = 100, requiredKills = 100 },
+		{ multiplier = 100, requiredKills = 100 }, -- quitado del mapa (era el Dorado x16)
+		{ multiplier = 100, requiredKills = 100 }, -- quitado del mapa (era el Celestial x25)
+		{ multiplier = 250, requiredKills = 0, robuxOnly = true }, -- sagrado (solo Robux)
 	},
 	biteSpeedDivisor = 40,
 	capacityPerRoot = 2,

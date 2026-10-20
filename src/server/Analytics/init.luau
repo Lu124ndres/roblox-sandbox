@@ -27,6 +27,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local PlayerData = require(script.Parent.PlayerData)
 local SaveSchema = require(script.Parent.Save.SaveSchema)
 local Bus = require(script.Bus)
@@ -82,7 +83,8 @@ end
 local function pondsOpened(player: Player, before: number, after: number)
 	for index, pond in PONDS do
 		local need = pond.requiredKills
-		if not pond.robuxOnly and need > 0 and need > before and need <= after then
+		local real = WorldZones.pondExists(index)
+		if real and not pond.robuxOnly and need > 0 and need > before and need <= after then
 			Envio.custom(player, "EstanqueAbierto", index, { "kills" })
 		end
 	end

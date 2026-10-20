@@ -4,8 +4,9 @@
 
 	Un cartel flotante sobre cada estanque de entrenamiento (lo dibuja
 	PondSignView): su nombre, el multiplicador de poder y una cápsula con lo
-	que pide para abrirse (cuántos monstruos llenó de los que pide: solo se abre
-	así; el sagrado, con su pase de Robux) o «¡Abierto! Entrenar». Se actualiza cuando
+	que pide para abrirse (los monstruos que pide, solo el número: pedido del
+	usuario; el sagrado, con su pase de Robux) o «¡Abierto! Entrenar». Los
+	estanques quitados del mapa no tienen cartel. Se actualiza cuando
 	cambian las kills del jugador (o compra un estanque). Mientras entrena en un estanque,
 	el cartel de ese se esconde: de cerca tapaba su nombre y su título. Solo
 	muestra: el servidor decide quién entrena dónde (TrainingService).
@@ -45,11 +46,9 @@ function PondSigns.start()
 	local player = Players.LocalPlayer
 	local signs: { PondSignView.View } = {}
 	for index = 1, #PONDS do
-		signs[index] = build(index)
-	end
-	local function kills(): number
-		local value = player:GetAttribute(Protocol.PlayerAttributes.Kills)
-		return if type(value) == "number" then value else 0
+		if WorldZones.pondExists(index) then
+			signs[index] = build(index)
+		end
 	end
 	local function refresh()
 		for index, sign in signs do
@@ -58,8 +57,7 @@ function PondSigns.start()
 				then "open"
 				elseif def.robuxOnly then "robux"
 				else "locked"
-			local have = math.min(kills(), def.requiredKills)
-			sign.set(state, `{have}/{def.requiredKills}`)
+			sign.set(state, tostring(def.requiredKills))
 		end
 	end
 	local function hideCurrent()

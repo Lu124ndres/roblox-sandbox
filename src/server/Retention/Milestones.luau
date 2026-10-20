@@ -73,7 +73,7 @@ end
 
 function Milestones.trained(player: Player, pondIndex: number)
 	Tutorial.progress(player, "entrenar", 1)
-	if pondIndex >= WorldZones.SACRED_POND - 1 then -- el más alto (o el sagrado)
+	if pondIndex >= WorldZones.topPond() then -- el más alto del mapa (o el sagrado)
 		Badges.award(player, "EstanqueMaximo")
 	end
 end

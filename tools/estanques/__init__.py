@@ -13,7 +13,7 @@ import random
 
 import generar_isla as gi
 from estanques import base, jardin, temas
-from estanques.forma import SAGRADO
+from estanques.forma import QUITADOS, SAGRADO
 
 
 def estanque(i):
@@ -25,5 +25,5 @@ def estanque(i):
 
 
 def zona_entrenamiento():
-    estanques = gi.grupo("Estanques", [estanque(i) for i in range(1, SAGRADO + 1)], "Folder")
+    estanques = gi.grupo("Estanques", [estanque(i) for i in range(1, SAGRADO + 1) if i not in QUITADOS], "Folder")
     return gi.grupo("ZonaEntrenamiento", [estanques, jardin.borde()])
