@@ -182,9 +182,9 @@ local Assets: Assets = {
 	-- Pases de Robux (Config.Monetization.passes): se crean en el Creator Hub con
 	-- el juego publicado y su ID va aquí. En 0 la tienda lo muestra sin vender.
 	GamePasses = {
-		VIP = 0, -- R$ 299
-		ReyDelMar = 0, -- R$ 149
-		DiosDelVolcan = 0, -- R$ 399
+		VIP = 2036600514, -- R$ 299
+		ReyDelMar = 2037994956, -- R$ 149
+		DiosDelVolcan = 2036326912, -- R$ 399
 	},
 	Products = Products, -- productos de Robux: ver Products.luau
 }
