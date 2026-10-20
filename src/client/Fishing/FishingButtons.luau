@@ -71,9 +71,9 @@ local function addPlacer(placer: () -> ())
 	end
 end
 
--- Insignia con la tecla (E en PC, X/Cuadrado en el mando; nada en táctil).
+-- Insignia con la tecla (E en PC, RT/R2 en el mando; nada en táctil).
 local function keyBadge(button: TextButton)
-	InputHints.badge(button, InputHints.ACTION_KEY, InputHints.ACTION_PAD)
+	InputHints.badge(button, InputHints.ACTION_KEY, InputHints.HOLD_PAD)
 end
 
 -- Pescar y Alimentar: tamaño fijo en píxeles, en el lugar del pulgar.

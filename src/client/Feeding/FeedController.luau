@@ -101,7 +101,7 @@ function FeedController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			end
 			if there and not wasThere then
 				toasts.show(
-					`Mantén {InputHints.action()} para alimentar a {GiantName.current()}`,
+					`Mantén {InputHints.holdAction()} para alimentar a {GiantName.current()}`,
 					UIConfig.Colors.Feeding
 				)
 			end

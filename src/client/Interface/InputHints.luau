@@ -8,10 +8,14 @@
 		onChange  avisa cuando cambia (enchufa un mando, toca la pantalla...)
 		action    texto del botón de acción para los avisos: "E", "X" (Xbox),
 		          "Cuadrado" (PlayStation) o "el botón" en táctil
+		holdAction  igual, para pescar y alimentar: en el mando dice el gatillo
+		          (RT en Xbox, R2 en PlayStation)
 		badge     insignia sobre un botón: la tecla en PC, el dibujo del botón
 		          del mando en consola (el de Xbox o el de PlayStation, lo da
 		          Roblox) y nada en táctil
 	El botón de acción del mando es X (Cuadrado en PlayStation), igual que E.
+	Pescar y alimentar aceptan X y el gatillo derecho, pero sus botones y
+	avisos muestran el gatillo (HOLD_PAD, pedido del usuario: «que diga RT»).
 ]]
 
 local GuiService = game:GetService("GuiService")
@@ -29,17 +33,20 @@ local PLAYSTATION_NAMES: { [Enum.KeyCode]: string } = {
 	[Enum.KeyCode.ButtonY] = "Triángulo",
 	[Enum.KeyCode.ButtonA] = "Equis",
 	[Enum.KeyCode.ButtonB] = "Círculo",
+	[Enum.KeyCode.ButtonR2] = "R2",
 }
 local XBOX_NAMES: { [Enum.KeyCode]: string } = {
 	[Enum.KeyCode.ButtonX] = "X",
 	[Enum.KeyCode.ButtonY] = "Y",
 	[Enum.KeyCode.ButtonA] = "A",
 	[Enum.KeyCode.ButtonB] = "B",
+	[Enum.KeyCode.ButtonR2] = "RT",
 }
 
 local InputHints = {}
 
 InputHints.ACTION_PAD = Enum.KeyCode.ButtonX
+InputHints.HOLD_PAD = Enum.KeyCode.ButtonR2 -- el que se muestra para pescar y alimentar
 InputHints.ACTION_KEY = "E"
 
 local function initial(): Mode
@@ -110,6 +117,14 @@ function InputHints.action(): string
 		return "el botón"
 	end
 	return InputHints.ACTION_KEY
+end
+
+-- Como action, para pescar y alimentar: en el mando, el gatillo derecho.
+function InputHints.holdAction(): string
+	if current == "gamepad" then
+		return InputHints.padName(InputHints.HOLD_PAD)
+	end
+	return InputHints.action()
 end
 
 -- Insignia arriba a la derecha de `button`: tecla (PC) o botón del mando (consola).
