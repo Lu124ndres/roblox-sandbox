@@ -898,3 +898,14 @@ terreno. En teléfono, `ScreenInsets` por defecto deja afuera el notch y los bor
 el mundo): la pantalla usa `None`. El panel mide en píxeles para 600 de alto y se escala con
 la pantalla (en la tele quedaba diminuto), y no se usa `CanvasGroup` para el fundido porque en
 teléfonos y consolas lo dibuja a menos resolución.
+
+## 2026-10-20 — El terreno no muestrea el mar abierto y escribe varios bloques por cuadro
+
+**Contexto:** el usuario pidió que el mapa se construya más rápido (la pantalla de carga lo
+espera). **Decisión:** `IslandShape.touches` dice si un bloque de 128×128 toca la isla (repisa,
+lomas, rocas, faro) o el cráter; los demás (526 de 576) usan vóxeles de mar abierto calculados
+una sola vez, y `TerrainBuilder` escribe bloques hasta gastar 20 ms por cuadro antes de ceder.
+Se comprobó en Studio que en los bloques saltados `IslandShape.sample` da exactamente lo mismo
+columna por columna. **Lo no obvio:** el cálculo nunca fue lo caro: con un `task.wait()` por
+bloque, 576 bloques eran 576 cuadros (10 s) aunque cada uno usara medio cuadro. Lo que queda
+(~3 s en caliente) es sobre todo el motor llenando 4.7 millones de vóxeles de océano.

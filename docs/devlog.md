@@ -3105,3 +3105,15 @@ en teléfono ni con el juego publicado (en Studio todo está en caché y carga r
 isla a los 19 s de partida y la pantalla se cerró a los 22.4 s con el terreno, los estanques y
 las vitrinas a la vista; en los dos dispositivos cubre la pantalla, la barra y los textos se
 leen y SALTAR no tapa nada. No se probó en un teléfono ni una Xbox reales.
+
+---
+
+## 2026-10-20 (12) — Terreno más rápido
+
+**Qué se hizo (pedido del usuario):** el terreno se armaba con un bloque por cuadro (576
+cuadros). Ahora los bloques de mar abierto no se muestrean (sus vóxeles se calculan una vez) y
+se escriben varios bloques por cuadro hasta 20 ms. `TerrainBuilder` imprime cuánto tardó.
+
+**Probado en Studio (Play):** en caliente pasó de 10.3 s (575 cuadros) a 3.1 s (52 cuadros); al
+arrancar Play, 6.8 s. Los 526 bloques saltados dan lo mismo que antes columna por columna y la
+isla se ve igual.

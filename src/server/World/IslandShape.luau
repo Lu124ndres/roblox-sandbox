@@ -11,6 +11,9 @@
 	estanques naturales (GardenShape), caminos, lomas, rocas y el promontorio del faro.
 	Cráter del Abismo: su forma está en CraterShape (lago, acantilado, paseo,
 	montañas con vetas de lava y ladera hacia el mar).
+
+	Lejos de los dos todo es mar abierto (openSea): touches dice si un cuadrado toca
+	la isla o el cráter, y así TerrainBuilder no muestrea los bloques de mar.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -116,6 +119,40 @@ local function mainIsland(point: Vector2): (number, Enum.Material, number)
 		end
 	end
 	return height, material, waterTop
+end
+
+-- Círculos fuera de los cuales sample() da siempre mar abierto: la isla (repisa, lomas,
+-- rocas y faro) y el cráter (CraterShape.height es nil desde craterBaseRadius).
+type Reach = { center: Vector2, radius: number }
+local REACH: { Reach } = {
+	{ center = Vector2.zero, radius = L.shelfRadius },
+	{ center = LIGHTHOUSE, radius = L.lighthouseMoundRadius },
+	{ center = CRATER, radius = L.craterBaseRadius },
+}
+for _, hill in L.hills do
+	table.insert(REACH, { center = Vector2.new(hill[1], hill[2]), radius = hill[3] * 1.6 })
+end
+for _, rock in L.shoreRocks do
+	table.insert(REACH, { center = Vector2.new(rock[1], rock[2]), radius = rock[3] })
+end
+
+-- Lo que da sample() en mar abierto: fondo de arena y agua hasta el nivel del mar.
+function IslandShape.openSea(_x: number, _z: number): (number, Enum.Material, number)
+	return L.seaFloorHeight, MATERIAL.Sand, L.waterLevel
+end
+
+-- true si el cuadrado de lado size desde (x0, z0) toca la isla o el cráter.
+function IslandShape.touches(x0: number, z0: number, size: number): boolean
+	for _, reach in REACH do
+		local nearest = Vector2.new(
+			math.clamp(reach.center.X, x0, x0 + size),
+			math.clamp(reach.center.Y, z0, z0 + size)
+		)
+		if (nearest - reach.center).Magnitude <= reach.radius then
+			return true
+		end
+	end
+	return false
 end
 
 function IslandShape.sample(x: number, z: number): (number, Enum.Material, number)

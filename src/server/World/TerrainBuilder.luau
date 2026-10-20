@@ -11,7 +11,13 @@
 	el suelo hasta 4 studs más alto que las piezas de madera.
 
 	El terreno no se puede guardar en un archivo de Rojo, así que se genera al
-	arrancar el servidor. Para verlo en modo Edit, en la barra de comandos:
+	arrancar el servidor (y la pantalla de carga lo espera: Workspace.MundoListo).
+	Para que tarde poco, los bloques de mar abierto (IslandShape.touches) no se
+	muestrean: son todos iguales y sus vóxeles se calculan una vez. Además se escriben
+	varios bloques por cuadro hasta FRAME_BUDGET (un bloque por cuadro tardaba 10 s solo
+	en esperar cuadros: son 576 bloques).
+
+	Para verlo en modo Edit, en la barra de comandos:
 		require(game.ServerScriptService.Server.World.TerrainBuilder).build()
 ]]
 
@@ -28,6 +34,7 @@ local HALF = VOXEL / 2
 local Y_MIN = -40 -- más abajo solo donde el suelo baja (el lago hondo del cráter)
 local Y_MAX = 40 -- más arriba solo donde hay montañas (el anillo del cráter)
 local CHUNK_VOXELS = 32 -- columnas por lado en cada bloque escrito
+local FRAME_BUDGET = 0.02 -- segundos de trabajo por cuadro antes de ceder
 
 local TerrainBuilder = {}
 
@@ -62,7 +69,11 @@ end
 
 type Sample = { height: number, material: Enum.Material, water: number }
 
-local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: number)
+type Sampler = (x: number, z: number) -> (number, Enum.Material, number)
+type Voxels = { yMin: number, yMax: number, materials: { any }, occupancies: { any } }
+
+-- Los vóxeles de un bloque según la forma shapeAt.
+local function voxels(x0: number, z0: number, columns: number, shapeAt: Sampler): Voxels
 	-- Primero las alturas: el piso de este bloque baja hasta su punto más hondo.
 	local samples: { { Sample } } = {}
 	local yMin, yMax = Y_MIN, Y_MAX
@@ -71,7 +82,7 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 		samples[ix] = {}
 		for iz = 1, columns do
 			local height, material, waterTop =
-				IslandShape.sample(x0 + (ix - 0.5) * VOXEL, z0 + (iz - 0.5) * VOXEL)
+				shapeAt(x0 + (ix - 0.5) * VOXEL, z0 + (iz - 0.5) * VOXEL)
 			samples[ix][iz] = { height = height, material = material, water = waterTop }
 			yMin = math.min(yMin, math.floor(height / VOXEL) * VOXEL - VOXEL)
 			yMax = math.max(yMax, math.ceil(height / VOXEL) * VOXEL + VOXEL)
@@ -113,9 +124,24 @@ local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: num
 			end
 		end
 	end
+	return { yMin = yMin, yMax = yMax, materials = materials, occupancies = occupancies }
+end
+
+-- Todos los bloques de mar abierto son iguales: se calculan una vez y se reusan.
+local openSeaVoxels: Voxels? = nil
+
+local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: number)
 	local size = columns * VOXEL
-	local region = Region3.new(Vector3.new(x0, yMin, z0), Vector3.new(x0 + size, yMax, z0 + size))
-	terrain:WriteVoxels(region, VOXEL, materials, occupancies)
+	local chunk: Voxels
+	if IslandShape.touches(x0, z0, size) then
+		chunk = voxels(x0, z0, columns, IslandShape.sample)
+	else
+		chunk = openSeaVoxels or voxels(0, 0, columns, IslandShape.openSea)
+		openSeaVoxels = chunk
+	end
+	local region =
+		Region3.new(Vector3.new(x0, chunk.yMin, z0), Vector3.new(x0 + size, chunk.yMax, z0 + size))
+	terrain:WriteVoxels(region, VOXEL, chunk.materials, chunk.occupancies)
 end
 
 function TerrainBuilder.build()
@@ -124,12 +150,19 @@ function TerrainBuilder.build()
 	style(terrain)
 	local half = math.ceil(L.oceanHalfSize / (VOXEL * CHUNK_VOXELS)) * VOXEL * CHUNK_VOXELS
 	local step = VOXEL * CHUNK_VOXELS
+	local started = os.clock()
+	local frameStarted = started
 	for x0 = -half, half - step, step do
 		for z0 = -half, half - step, step do
 			writeChunk(terrain, x0, z0, CHUNK_VOXELS)
-			task.wait() -- reparte el trabajo para no congelar el servidor
+			-- Reparte el trabajo para no congelar el servidor, pero sin regalar cuadros.
+			if os.clock() - frameStarted >= FRAME_BUDGET then
+				task.wait()
+				frameStarted = os.clock()
+			end
 		end
 	end
+	print(`TerrainBuilder: terreno en {string.format("%.1f", os.clock() - started)} s`)
 end
 
 return TerrainBuilder
