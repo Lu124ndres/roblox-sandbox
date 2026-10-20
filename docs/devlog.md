@@ -2994,7 +2994,7 @@ estanques ni hoyas donde estaban el 9 y el 10; vitrinas en (±28, 52) con el pre
 
 ---
 
-## 2026-10-20 (6) — El traje elegido se guarda; sagrado a 1300 R$
+## 2026-10-20 (6) — El traje elegido se guarda; sagrado a 1200 R$
 
 **Qué se hizo (pedido del usuario):**
 - "Me quito el Dios del Volcán, regreso y lo tengo puesto": el traje elegido solo vivía en el
@@ -3002,7 +3002,7 @@ estanques ni hoyas donde estaban el 9 y el 10; vitrinas en (±28, 52) con el pre
   guardado (`save.outfit`, esquema v12, `SaveExtra`): `OutfitChoice` lo guarda al elegir y
   `ProfilePublish.all` lo publica al cargar. Solo se aceptan "Marinero" o el traje de un pase.
 - `SaveExtra.flags` (antes en `SaveSchema`) para que `SaveSchema` quede bajo 200 líneas.
-- Estanque sagrado: 1300 R$ (`pondRobux[11]`).
+- Estanque sagrado: 1200 R$ (`pondRobux[11]`; el usuario dijo 1300 y lo corrigió).
 
 **Probado en Studio (Play):** con el Dios del Volcán puesto, E → Marinero; al salir el DataStore
 tiene `outfit = "Marinero"`, versión 12 y el bloqueo suelto; al volver a entrar lleva Marinero.
