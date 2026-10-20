@@ -8,7 +8,7 @@
 		  jugador, da unos coletazos y se mete en la canasta de la espalda;
 		- poco común o mejor: cartel flotante con la rareza, el nombre y "xN";
 		- raro o mejor: el pez gira en el aire y el jugador lo muestra en alto
-		  (trofeo) dentro de un haz de luz del color de la rareza;
+		  (trofeo) dentro de un aura de luz del color de la rareza (LightAura);
 		- legendario o mítico: además onda dorada y la cámara tiembla un poco
 		  si el que pescó es el jugador local.
 	Cada rareza tiene su propio sonido.
@@ -31,6 +31,7 @@ local Distance = require(script.Parent.Parent.Effects.Distance)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
 local Fx = require(script.Parent.Parent.Effects.Fx)
+local LightAura = require(script.Parent.Parent.Effects.LightAura)
 local CatchLabels = require(script.Parent.CatchLabels)
 
 local EFFECTS = UIConfig.Effects
@@ -133,7 +134,7 @@ function CatchShow.play(
 				)
 			end
 			if level >= TROPHY_FROM then
-				CatchLabels.beam(character:GetPivot().Position, color, holdSeconds, level)
+				LightAura.burst(character:GetPivot().Position, color, holdSeconds, level)
 				Fx.sparkle(head.Position + Vector3.new(0, 2.4, 0), color, 20 + level * 8)
 			end
 			if level >= EPIC_FROM then

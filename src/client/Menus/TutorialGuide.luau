@@ -6,7 +6,8 @@
 	(pedido del usuario): arriba, la instrucción grande de la misión y su
 	avance (TutorialBanner); en el mundo, una fila de flechas amarillas que
 	sale del jugador y llega hasta el destino (GuidePath) y, en el destino,
-	un pilar de luz con un cartel y la distancia (GuideMarker).
+	un aura de luz amarilla en el suelo (LightAura; sin pilar ni cartel,
+	pedido del usuario).
 
 	Cada misión (Config.Retention.tutorial) tiene sus tramos: al volcán, primero
 	«¡CRUZA EL PUENTE!» hasta la entrada del puente y, ya en él, «¡ALIMENTA A
@@ -25,8 +26,8 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local GiantName = require(script.Parent.Parent.GiantName)
+local LightAura = require(script.Parent.Parent.Effects.LightAura)
 local InputHints = require(script.Parent.Parent.Interface.InputHints)
-local GuideMarker = require(script.Parent.GuideMarker)
 local GuidePath = require(script.Parent.GuidePath)
 local TutorialBanner = require(script.Parent.TutorialBanner)
 
@@ -34,8 +35,9 @@ local ATTR = Protocol.PlayerAttributes
 local STEPS = Config.Retention.tutorial
 local ARRIVE = 12 -- studs del destino a los que las flechas se van
 local DONE_SECONDS = 1.4 -- lo que se ve «¡LISTO!» antes del paso siguiente
+local GUIDE_COLOR = Color3.fromRGB(255, 214, 30) -- el amarillo de las flechas (GuideArrow)
 
-type Leg = { target: Vector3, label: string, title: string, hint: string }
+type Leg = { target: Vector3, title: string, hint: string }
 
 local TutorialGuide = {}
 
@@ -45,23 +47,22 @@ local function polar(angle: number, radius: number, y: number): Vector3
 end
 
 -- Cómo se hace la acción según con qué juega: «Mantén E» o «Toca PESCAR».
-local function how(verb: string, button: string): string
+-- hold: pescar y alimentar, que en el mando muestran el gatillo (RT).
+local function how(verb: string, button: string, hold: boolean?): string
 	if InputHints.mode() == "touch" then
 		return `Toca {button}`
 	end
-	return `{verb} {InputHints.action()}`
+	return `{verb} {if hold then InputHints.holdAction() else InputHints.action()}`
 end
 
--- El tramo actual de la misión `id`: adónde ir, qué dice el cartel del destino y qué
--- dice el aviso grande.
+-- El tramo actual de la misión `id`: adónde ir y qué dice el aviso grande.
 local function legFor(id: string, position: Vector3, count: number, goal: number): Leg
 	if id == "pescar" then
 		local angle = math.deg(math.atan2(position.Z, position.X))
 		return {
 			target = polar(angle, WorldLayout.shoreRadius - 5, WorldLayout.waterLevel + 1),
-			label = "PLAYA",
 			title = `¡PESCA {goal} PECES!`,
-			hint = `{how("Mantén", "PESCAR")} en la playa · llevas {count}`,
+			hint = `{how("Mantén", "PESCAR", true)} en la playa · llevas {count}`,
 		}
 	elseif id == "alimentar" then
 		local start, finish = WorldZones.bridgeEnds()
@@ -70,28 +71,24 @@ local function legFor(id: string, position: Vector3, count: number, goal: number
 		if onTheWay then
 			return {
 				target = finish,
-				label = "PUERTA DEL VOLCÁN",
 				title = `¡ALIMENTA A {string.upper(GiantName.current())}!`,
-				hint = `{how("Mantén", "ALIMENTAR")} en la puerta del volcán`,
+				hint = `{how("Mantén", "ALIMENTAR", true)} en la puerta del volcán`,
 			}
 		end
 		return {
 			target = start,
-			label = "PUENTE",
 			title = "¡CRUZA EL PUENTE!",
 			hint = "Sigue las flechas hasta el volcán",
 		}
 	elseif id == "entrenar" then
 		return {
 			target = WorldZones.pondCenter(1),
-			label = "ESTANQUE",
 			title = "¡ENTRENA EN EL ESTANQUE!",
 			hint = `{how("Aprieta", "ENTRENAR")} junto al agua`,
 		}
 	end
 	return {
 		target = polar(WorldLayout.shopAngle, WorldLayout.shopRadius, WorldLayout.plateauHeight),
-		label = "TIENDA",
 		title = "¡COMPRA UNA MEJORA!",
 		hint = `{how("Aprieta", "MEJORAS")} en la tienda`,
 	}
@@ -101,7 +98,7 @@ function TutorialGuide.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local banner = TutorialBanner.new(screen)
 	local route = GuidePath.new()
-	local marker = GuideMarker.new()
+	local marker = LightAura.marker(GUIDE_COLOR)
 	local shownStep, shownTitle = -1, ""
 	local celebrating = false
 
@@ -180,7 +177,7 @@ function TutorialGuide.start(screen: ScreenGui)
 			refresh()
 		end
 		local distance = (leg.target - at).Magnitude
-		marker.place(leg.target, leg.label, distance)
+		marker.place(leg.target)
 		marker.show(true)
 		if distance < ARRIVE then
 			route.hide()

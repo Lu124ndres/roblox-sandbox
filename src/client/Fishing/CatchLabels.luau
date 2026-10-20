@@ -3,14 +3,13 @@
 	CatchLabels
 
 	Adornos de una captura que ven todos: el cartel flotante sobre la cabeza
-	("¡ÉPICO!" + nombre del pez y "xN") que sube y se desvanece, y el haz de
-	luz del color de la rareza que sale del piso cuando se saca un trofeo.
+	("¡ÉPICO!" + nombre del pez y "xN") que sube y se desvanece. El aura de
+	los trofeos está en Effects/LightAura.
 ]]
 
 local Debris = game:GetService("Debris")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local Workspace = game:GetService("Workspace")
 
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
@@ -84,45 +83,6 @@ function CatchLabels.billboard(
 		end
 		Debris:AddItem(billboard, 0.6)
 	end)
-end
-
--- Columna de luz desde los pies del jugador; más ancha y alta cuanto más raro.
-function CatchLabels.beam(feet: Vector3, color: Color3, seconds: number, level: number)
-	local height = 18 + level * 8
-	local beam = Instance.new("Part")
-	beam.Name = "HazCaptura"
-	beam.Shape = Enum.PartType.Cylinder
-	beam.Size = Vector3.new(height, 0.6, 0.6)
-	beam.CFrame = CFrame.new(feet + Vector3.new(0, height / 2 - 3, 0))
-		* CFrame.Angles(0, 0, math.rad(90))
-	beam.Color = color
-	beam.Material = Enum.Material.Neon
-	beam.Transparency = 0.35
-	beam.Anchored = true
-	beam.CanCollide = false
-	beam.CanQuery = false
-	beam.CanTouch = false
-	beam.CastShadow = false
-	beam.Parent = Workspace
-	local width = 1.6 + level * 0.5
-	TweenService:Create(
-		beam,
-		TweenInfo.new(0.25, Enum.EasingStyle.Back),
-		{ Size = Vector3.new(height, width, width) }
-	):Play()
-	local light = Instance.new("PointLight")
-	light.Color = color
-	light.Range = 18
-	light.Brightness = 2
-	light.Parent = beam
-	task.delay(seconds, function()
-		TweenService:Create(
-			beam,
-			TweenInfo.new(0.5),
-			{ Transparency = 1, Size = Vector3.new(height, 0.2, 0.2) }
-		):Play()
-	end)
-	Debris:AddItem(beam, seconds + 0.6)
 end
 
 return CatchLabels
