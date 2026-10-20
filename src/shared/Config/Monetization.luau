@@ -160,7 +160,7 @@ local Monetization: MonetizationConfig = {
 		[8] = 449,
 		[9] = 649,
 		[10] = 999,
-		[11] = 799, -- estanque sagrado x250 (solo Robux)
+		[11] = 1300, -- estanque sagrado x250 (solo Robux)
 	},
 	upgradeRobux = {
 		Rod = { 0, 5, 15, 29, 59, 99, 199, 349, 599, 999 },
