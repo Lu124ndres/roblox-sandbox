@@ -123,7 +123,7 @@ local Monetization: MonetizationConfig = {
 			name = "Dios del Volcán",
 			description = "Traje de fuego. Pesca ultrarrápida de un toque, alimentas x4 más rápido y x4 kills.",
 			perks = "Pesca de un toque · Alimenta x4 · x4 kills",
-			robux = 399,
+			robux = 858,
 			biteDelay = 0.2,
 			instantReel = true,
 			feedSpeed = 4,
@@ -167,7 +167,7 @@ local Monetization: MonetizationConfig = {
 		Basket = { 0, 9, 25, 49, 129, 299 },
 		Boots = { 0, 5, 19, 39, 79, 199 },
 	},
-	passGifts = { VIP = 299, ReyDelMar = 149, DiosDelVolcan = 399 },
+	passGifts = { VIP = 299, ReyDelMar = 149, DiosDelVolcan = 858 }, -- lo mismo que el pase
 	spinProducts = { Spin1 = { robux = 24, spins = 1 }, Spin5 = { robux = 80, spins = 5 } },
 	-- 19 R$: el producto PackInicio tiene que tener ese precio en el panel de Roblox.
 	starterPack = { robux = 19, coins = 15000, boostMinutes = 60, rod = 4, basket = 3, boots = 4 },

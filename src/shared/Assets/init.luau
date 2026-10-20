@@ -184,7 +184,7 @@ local Assets: Assets = {
 	GamePasses = {
 		VIP = 2036600514, -- R$ 299
 		ReyDelMar = 2037994956, -- R$ 149
-		DiosDelVolcan = 2036326912, -- R$ 399
+		DiosDelVolcan = 2036326912, -- R$ 858
 	},
 	Products = Products, -- productos de Robux: ver Products.luau
 }

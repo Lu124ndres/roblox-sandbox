@@ -68,7 +68,7 @@ local Products: { [string]: number } = {
 	-- Regalar un pase a otro jugador
 	GiftVIP = 3720103057, -- R$ 299
 	GiftReyDelMar = 3720103257, -- R$ 149
-	GiftDiosDelVolcan = 3720103306, -- R$ 399
+	GiftDiosDelVolcan = 3720103306, -- R$ 858
 	-- MEJORAS en Robux (el nivel 1 es gratis): cañas
 	Rod2 = 3720103346, -- R$ 5
 	Rod3 = 3720103386, -- R$ 15

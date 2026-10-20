@@ -18,7 +18,7 @@ Se regeneran con `tools/productos/build.py` (fuentes en `assets/ui/iconos/`, fue
 ## Crea primero estos 18 (lo que más se ve y más vende)
 
 1. `PackInicio` (19) — oferta de bienvenida, se abre sola a los 2.5 min.
-2. Pases `VIP` (299), `ReyDelMar` (149), `DiosDelVolcan` (399) — sección Pases abajo.
+2. Pases `VIP` (299), `ReyDelMar` (149), `DiosDelVolcan` (858) — sección Pases abajo.
 3. `Fill25` (49), `Fill50` (89), `Fill75` (129) — botones bajo la barra del monstruo.
 4. `ChooseOrca` (25), `ChooseMinotauro` (99), `ChooseDragonMarino` (265), `ChooseZorroDeAgua` (408) — botones del descanso. Para Halloween: `ChooseOrcaFantasma` (149).
 5. `ServerBoost1` (60), `ServerBoost2` (129), `ServerBoost3` (239) — banner de la tienda.
@@ -41,7 +41,7 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `Power7` | Poder 7 (x128) | 229 | Poder x2^n (para siempre) | 3718590185 |
 | `Power8` | Poder 8 (x256) | 599 | Poder x2^n (para siempre) | 3718640196 |
 | `Power9` | Poder 9 (x512) | 999 | Poder x2^n (para siempre) | 3718640353 |
-| `Power10` | Poder 10 (x1024) | 999 | Poder x2^n (para siempre) | 3720099091 |
+| `Power10` | Poder 10 (x1024) | 1300 | Poder x2^n (para siempre) | 3720099091 |
 | `Coins1` | Monedas 1 (x2) | 3 | Monedas x2^n (para siempre) | 3718640414 |
 | `Coins2` | Monedas 2 (x4) | 7 | Monedas x2^n (para siempre) | 3718640488 |
 | `Coins3` | Monedas 3 (x8) | 15 | Monedas x2^n (para siempre) | 3718640898 |
@@ -51,7 +51,7 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `Coins7` | Monedas 7 (x128) | 229 | Monedas x2^n (para siempre) | 3718641221 |
 | `Coins8` | Monedas 8 (x256) | 599 | Monedas x2^n (para siempre) | 3718641364 |
 | `Coins9` | Monedas 9 (x512) | 999 | Monedas x2^n (para siempre) | 3718641436 |
-| `Coins10` | Monedas 10 (x1024) | 999 | Monedas x2^n (para siempre) | 3720099352 |
+| `Coins10` | Monedas 10 (x1024) | 1300 | Monedas x2^n (para siempre) | 3720099352 |
 | `ServerBoost1` | Entrenamiento del servidor 1 (x2) | 60 | Entrenamiento para todo el servidor, 15 min | 3718641640 |
 | `ServerBoost2` | Entrenamiento del servidor 2 (x4) | 129 | Entrenamiento para todo el servidor, 15 min | 3718641697 |
 | `ServerBoost3` | Entrenamiento del servidor 3 (x8) | 239 | Entrenamiento para todo el servidor, 15 min | 3718641786 |
@@ -79,7 +79,7 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `Spin5` | 5 giros de ruleta | 80 | Giros de la ruleta (se guardan; no se regalan) | 3720103018 |
 | `GiftVIP` | Regalar VIP | 299 | Regalar el pase VIP a otro jugador | 3720103057 |
 | `GiftReyDelMar` | Regalar Rey del Mar | 149 | Regalar el traje Rey del Mar a otro jugador | 3720103257 |
-| `GiftDiosDelVolcan` | Regalar Dios del Volcán | 399 | Regalar el traje Dios del Volcán a otro jugador | 3720103306 |
+| `GiftDiosDelVolcan` | Regalar Dios del Volcán | 858 | Regalar el traje Dios del Volcán a otro jugador | 3720103306 |
 | `Rod2` | Caña nivel 2 | 5 | MEJORAS en Robux (el nivel 1 es gratis): cañas | 3720103346 |
 | `Rod3` | Caña nivel 3 | 15 | MEJORAS en Robux (el nivel 1 es gratis): cañas | 3720103386 |
 | `Rod4` | Caña nivel 4 | 29 | MEJORAS en Robux (el nivel 1 es gratis): cañas | 3720103425 |
@@ -105,7 +105,7 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | Clave | Nombre | Precio R$ | ID |
 |---|---|---|---|
 | `VIP` | VIP | 299 | 2036600514 |
-| `DiosDelVolcan` | Dios del Volcán | 399 | 2036326912 |
+| `DiosDelVolcan` | Dios del Volcán | 858 | 2036326912 |
 | `ReyDelMar` | Rey del Mar | 149 | 2037994956 |
 
 Descripciones para el Creator Hub:
