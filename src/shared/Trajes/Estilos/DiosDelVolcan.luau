@@ -7,9 +7,8 @@
 	lados. En la vitrina posa con los brazos abiertos y los puños arriba, y
 	ruge cada tanto.
 	Efectos: la lava del cuerpo respira (el brillo propio del traje sube y
-	baja con el corazón), sello de magma a sus pies (charco, aro de runas,
-	onda de choque y brasas), pisadas de lava que se enfrían (Trajes/Huellas),
-	brasas y llamitas en las puntas de los cuernos y las hombreras, gotas de
+	baja con el corazón), brasas que suben de sus pies (Trajes/Sello),
+	pisadas de lava que se enfrían (Trajes/Huellas), brasas y llamitas en las puntas de los cuernos y las hombreras, gotas de
 	lava que caen de las hombreras y los puños, humo de la corona, una luz
 	suave en el corazón que late con él, halo y contorno de lava.
 	Puntos en altos del traje, medidos en el modelo (tools/blender/traje_v2_dios_del_volcan*.py).
@@ -101,7 +100,7 @@ local style: Tipos.Style = {
 	end,
 	effects = function(fx: Tipos.Fx): Tipos.Tick?
 		local h = fx.height
-		Sello.build(fx) -- charco, runas, onda de choque, brasas, halo y contorno
+		Sello.build(fx) -- brasas del piso, halo y contorno
 		local crown = fx.socket("Cabeza", CROWN)
 		Aura.add(fx, crown, {
 			texture = T.Smoke,

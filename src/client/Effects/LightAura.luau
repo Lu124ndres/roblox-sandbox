@@ -2,14 +2,15 @@
 --[[
 	LightAura
 
-	Aura de luz a los pies de alguien (reemplaza al cilindro de neón, pedido
+	Aura de luz alrededor de alguien (reemplaza al cilindro de neón, pedido
 	del usuario: «es solo un tubo de color»). Todo con partículas propias
-	(Assets.Particles), nada sólido:
-		- un brillo suave en el suelo (Halo) que respira;
-		- anillos planos que nacen en el suelo y suben despacio abriéndose (Anillo);
+	(Assets.Particles), nada sólido y sin círculos en el suelo (tampoco
+	gustaron: «eso no es un aura, solo un círculo»):
+		- lenguas de energía del color de la rareza que suben pegadas al
+		  cuerpo (FuegoFlip teñido), solo en burst: hay alguien dentro;
 		- chispas y brasas que flotan hacia arriba alrededor del cuerpo
 		  (Chispa, Brasa), más cuanto mayor es `level`;
-		- una luz del mismo color.
+		- una luz del mismo color a la altura del pecho.
 	burst la enciende `seconds` y la apaga sola (peces raros o mejores);
 	marker la deja puesta y la mueve (destino del tutorial). Con efectos
 	reducidos salen menos partículas (FxQuality). Solo en este cliente.
@@ -44,67 +45,55 @@ local function emitter(parent: Instance, texture: string, color: Color3): Partic
 	return particles
 end
 
--- Base del aura: un disco invisible en el suelo (las chispas salen de toda su
--- superficie; un Attachment solo emite desde un punto) y su centro.
-local function base(name: string): (Part, Attachment)
-	local disc = Instance.new("Part")
-	disc.Name = name
-	disc.Transparency = 1
-	disc.Anchored = true
-	disc.CanCollide, disc.CanQuery, disc.CanTouch = false, false, false
-	disc.CastShadow = false
-	disc.Size = Vector3.new(4, 0.1, 4)
-	local center = Instance.new("Attachment")
-	center.Parent = disc
-	return disc, center
+-- Pieza invisible de la que salen partículas (un Attachment solo emite desde un punto).
+local function invisible(name: string, size: Vector3): Part
+	local part = Instance.new("Part")
+	part.Name = name
+	part.Transparency = 1
+	part.Anchored = true
+	part.CanCollide, part.CanQuery, part.CanTouch = false, false, false
+	part.CastShadow = false
+	part.Size = size
+	return part
 end
 
--- Arma el aura sobre `disc` (en el suelo). level 1..6: más alta y más llena.
-local function build(
-	disc: Part,
-	center: Attachment,
-	color: Color3,
-	level: number
-): { ParticleEmitter }
+-- Lenguas de energía por la superficie de `body` (un cilindro del tamaño del cuerpo).
+local function tongues(body: Part, color: Color3, level: number): ParticleEmitter
+	local particles = emitter(body, Assets.Particles.FuegoFlip, color)
+	particles.FlipbookLayout = Enum.ParticleFlipbookLayout.Grid4x4
+	particles.FlipbookMode = Enum.ParticleFlipbookMode.OneShot
+	particles.Shape = Enum.ParticleEmitterShape.Cylinder
+	particles.ShapeStyle = Enum.ParticleEmitterShapeStyle.Surface
+	particles.ShapeInOut = Enum.ParticleEmitterShapeInOut.Outward
+	particles.EmissionDirection = Enum.NormalId.Top
+	particles.Speed = NumberRange.new(0.5, 1.5)
+	particles.Acceleration = Vector3.new(0, 7, 0)
+	particles.Lifetime = NumberRange.new(0.7, 1)
+	particles.Rotation = NumberRange.new(-12, 12)
+	particles.LightEmission = 0.45 -- con 1 se pierden de día (ver las chispas)
+	particles.Brightness = 2
+	particles.Rate = 14 + level * 4
+	particles.Size = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.6),
+		NumberSequenceKeypoint.new(0.35, 1.7),
+		NumberSequenceKeypoint.new(1, 0.7),
+	})
+	particles.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 1),
+		NumberSequenceKeypoint.new(0.2, 0.25),
+		NumberSequenceKeypoint.new(0.7, 0.4),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	return particles
+end
+
+-- Chispas y brasas que salen de `disc` (en el suelo) y suben flotando, y la luz.
+-- level 1..6: más altas y más llenas.
+local function build(disc: Part, color: Color3, level: number): { ParticleEmitter }
 	local reach = 1 + level * 0.18 -- radio y alto crecen con la rareza
 	disc.Size = Vector3.new(3.2 * reach, 0.1, 3.2 * reach)
 
-	local glow = emitter(center, Assets.Particles.Halo, color)
-	glow.Orientation = Enum.ParticleOrientation.VelocityPerpendicular
-	glow.EmissionDirection = Enum.NormalId.Top
-	glow.Speed = NumberRange.new(0.01)
-	glow.Lifetime = NumberRange.new(1.2)
-	glow.Rate = 2.5
-	glow.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 2.6 * reach),
-		NumberSequenceKeypoint.new(0.5, 3.4 * reach),
-		NumberSequenceKeypoint.new(1, 2.6 * reach),
-	})
-	glow.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 1),
-		NumberSequenceKeypoint.new(0.4, 0.72),
-		NumberSequenceKeypoint.new(1, 1),
-	})
-
-	local rings = emitter(center, Assets.Particles.Anillo, color)
-	rings.Orientation = Enum.ParticleOrientation.VelocityPerpendicular
-	rings.EmissionDirection = Enum.NormalId.Top
-	rings.SpreadAngle = Vector2.zero
-	rings.Speed = NumberRange.new(2.2 * reach)
-	rings.Lifetime = NumberRange.new(1.4)
-	rings.Rate = 1.6
-	rings.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 2.5 * reach),
-		NumberSequenceKeypoint.new(1, 5.5 * reach),
-	})
-	rings.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 1),
-		NumberSequenceKeypoint.new(0.15, 0.05),
-		NumberSequenceKeypoint.new(1, 1),
-	})
-
-	-- Chispas y brasas: salen del disco alrededor de los pies y suben flotando.
-	local motes = {}
+	local all = {}
 	for index, texture in { Assets.Particles.Chispa, Assets.Particles.Brasa } do
 		local particles = emitter(disc, texture, color)
 		particles.Shape = Enum.ParticleEmitterShape.Disc
@@ -126,7 +115,7 @@ local function build(
 			NumberSequenceKeypoint.new(0.2, size * reach),
 			NumberSequenceKeypoint.new(1, 0),
 		})
-		table.insert(motes, particles)
+		table.insert(all, particles)
 	end
 	-- A la altura del pecho y corta: tiñe al jugador sin lavar el suelo.
 	local chest = Instance.new("Attachment")
@@ -140,7 +129,6 @@ local function build(
 	light.Shadows = false
 	light.Parent = chest
 
-	local all = { glow, rings, motes[1], motes[2] }
 	for _, particles in all do
 		FxQuality.scaleEmitter(particles)
 	end
@@ -153,14 +141,19 @@ local function setEnabled(list: { ParticleEmitter }, on: boolean)
 	end
 end
 
--- Aura de `seconds` a los pies (`feet` = centro del personaje: baja hasta el suelo).
+-- Aura de `seconds` alrededor de quien está en `feet` (centro del personaje).
 function LightAura.burst(feet: Vector3, color: Color3, seconds: number, level: number)
-	local disc, center = base("AuraCaptura")
-	local list = build(disc, center, color, level)
+	local disc = invisible("AuraCaptura", Vector3.one)
+	local list = build(disc, color, level)
 	disc.CFrame = CFrame.new(feet - Vector3.new(0, 2.8, 0))
+	local body = invisible("Cuerpo", Vector3.new(2.6, 5, 2.6))
+	body.CFrame = disc.CFrame * CFrame.new(0, 2.6, 0)
+	body.Parent = disc
+	local flames = tongues(body, color, level)
+	FxQuality.scaleEmitter(flames)
+	table.insert(list, flames)
 	disc.Parent = Workspace
 	setEnabled(list, true)
-	list[2]:Emit(1) -- el primer anillo sale ya, con el pez en alto
 	task.delay(seconds, function()
 		if disc.Parent then
 			setEnabled(list, false)
@@ -175,8 +168,8 @@ end
 
 -- Aura fija que se mueve (destino del tutorial): place la pone en el suelo y show la prende.
 function LightAura.marker(color: Color3): Marker
-	local disc, center = base("AuraGuia")
-	local list = build(disc, center, color, 3)
+	local disc = invisible("AuraGuia", Vector3.one)
+	local list = build(disc, color, 3)
 	disc.Parent = Workspace
 	local light = disc:FindFirstChildWhichIsA("PointLight", true) :: PointLight
 	light.Enabled = false
