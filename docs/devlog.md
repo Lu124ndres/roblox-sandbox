@@ -3270,3 +3270,29 @@ centros); el usuario importó los dos y quedaron en `ServerStorage.IslaBloques` 
 setos), del pasto al camino y la rampa se sube caminando, se entra a los estanques por las
 aberturas, la aparición y el faro apoyados, el agua viva/pálida según el estanque, el terreno
 guardado se usa sin reconstruir y sin errores. **Falta (usuario):** guardar (Ctrl+S) y publicar.
+
+---
+
+## 2026-10-20 (19) — HUD limpio en móvil
+
+**Qué se hizo:** las columnas del HUD se acomodan en la franja libre de la pantalla en vez de
+centrarse en toda la altura (`Interface/Columns`): la izquierda entre la etiqueta de amigos y
+el joystick, la derecha entre los botones de arriba y el de saltar (`Interface/TouchControls`
+lee dónde los dibuja Roblox); si no caben, se achican las dos por igual.
+Los botones de arriba pasan a `Interface/TopBar`. En táctil la tarjeta de captura sale abajo al centro, encima de «Siguiente
+meta» (a la izquierda caía sobre el joystick). El aviso de los ProximityPrompt va al 70 % en
+teléfono (la tecla tallada pasa a `Interface/PromptKey`). Se quita el aviso «Entrenando…
+vuelve a apretar E…» (pedido del usuario: estorbaba; salía doble y decía E en táctil).
+
+**Qué se rompió:** antes, en teléfonos acostados el regalo por jugar tapaba el joystick y
+Misiones/Renacer tapaban Saltar (Galaxy A06, iPhone 7).
+
+**Probado en Studio (simulador + Play):** Galaxy A06 (705×338), iPhone 7, iPhone 16 Pro Max,
+Galaxy Tab A8 y PC 720p: las columnas terminan encima del joystick y de Saltar, sin
+encimarse con la barra de arriba ni con el panel de hambre; la tarjeta de captura de prueba
+queda entre el joystick y Pescar; PC igual que antes; sin errores en el Output.
+
+**Qué sigue:** el aviso de entrenar se ancla al centro del estanque y, según la cámara, puede
+caer debajo de la columna derecha (propuesta pendiente para el usuario). Cambiar de
+dispositivo en el simulador con Play corriendo deja la barra de arriba con la forma de PC: hay
+que reiniciar Play (en un teléfono real el táctil está desde el arranque).

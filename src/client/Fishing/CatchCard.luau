@@ -2,7 +2,8 @@
 --[[
 	CatchCard
 
-	Tarjeta de la captura del jugador local, a la izquierda bajo el menú: el pez en 3D
+	Tarjeta de la captura del jugador local (a la izquierda bajo el menú; en
+	táctil, abajo al centro): el pez en 3D
 	girando (ViewportFrame), su rareza con su color, el nombre con "xN" y la
 	comida que aporta. Entra con un rebote, queda CatchCardSeconds y se va.
 	Una captura nueva reemplaza a la anterior.
@@ -16,6 +17,7 @@ local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
 local Ui = require(script.Parent.Parent.Ui)
+local Device = require(script.Parent.Parent.Interface.Device)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 
 local COLORS = UIConfig.Colors
@@ -26,11 +28,24 @@ export type Card = { show: (fishId: string, count: number) -> () }
 
 function CatchCard.mount(screen: ScreenGui): Card
 	local card = Ui.panel("Captura", screen)
-	-- A la izquierda, debajo de la columna de estadísticas: no tapa ¡TIRA! ni Pescar.
-	-- La altura se calcula al mostrarla (la columna cambia con la misión y la pantalla).
+	-- PC: a la izquierda, debajo de la columna de estadísticas (no tapa ¡TIRA! ni Pescar).
+	-- Táctil: abajo al centro, encima de «Siguiente meta» (a la izquierda está el joystick).
+	-- Se calcula al mostrarla (la columna cambia con la misión y la pantalla).
 	local function places(): (UDim2, UDim2)
-		local top = Layout.leftBottom() + UIConfig.Spacing.Margin
-		return UDim2.fromOffset(UIConfig.Spacing.Margin, top), UDim2.fromOffset(-340, top)
+		local margin = UIConfig.Spacing.Margin
+		if Device.touch() then
+			card.AnchorPoint = Vector2.new(0.5, 1)
+			local bottom = screen.AbsoluteSize.Y
+			local goal = screen:FindFirstChild("SiguienteMeta")
+			if goal and goal:IsA("GuiObject") and goal.Visible then
+				bottom = goal.AbsolutePosition.Y - screen.AbsolutePosition.Y
+			end
+			local up = screen.AbsoluteSize.Y - bottom + margin
+			return UDim2.new(0.5, 0, 1, -up), UDim2.new(0.5, 0, 1, 200)
+		end
+		card.AnchorPoint = Vector2.zero
+		local top = Layout.leftBottom() + margin
+		return UDim2.fromOffset(margin, top), UDim2.fromOffset(-340, top)
 	end
 	local shown, hidden = places()
 	card.Position = hidden

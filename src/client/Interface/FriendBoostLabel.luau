@@ -52,6 +52,7 @@ function FriendBoostLabel.start(screen: ScreenGui)
 	place()
 	Device.onResize(place)
 	frame.Parent = screen
+	Layout.avoid(frame) -- la columna de estadísticas no se le mete encima ni debajo
 	local icon = Icons.view(frame, "friends")
 	icon.Position = UDim2.fromOffset(4, -6)
 	icon.Size = UDim2.fromOffset(HEIGHT + 6, HEIGHT + 6)

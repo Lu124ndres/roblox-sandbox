@@ -47,8 +47,9 @@ function TrainingController.start(toasts: Toasts.Toasts)
 	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.TrainingPond):Connect(function()
 		local pond = player:GetAttribute(Protocol.PlayerAttributes.TrainingPond)
 		if type(pond) == "number" and pond > 0 then
+			-- Sin aviso de texto (estorbaba, pedido del usuario 2026-10-20): ya lo dicen
+			-- el "+N", el destello del Poder y el cartel del estanque.
 			facePond(player, pond)
-			toasts.show("Entrenando... vuelve a apretar E o aléjate para parar", COLORS.TextMuted)
 		end
 	end)
 

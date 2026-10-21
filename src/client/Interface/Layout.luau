@@ -2,40 +2,33 @@
 --[[
 	Layout
 
-	Dónde va cada parte del HUD, para que nada se encime en PC ni en móvil
-	(las dos columnas van centradas a media altura de la pantalla):
+	Dónde va cada parte del HUD, para que nada se encime en PC ni en móvil:
 		izquierda   columna con las estadísticas y la misión del tutorial
 		derecha     columna con el aviso del entrenamiento del servidor, Tienda y
 		            Robux, y los atajos de Poder y Monedas
-		barra       botones redondos chicos en la esquina derecha de la barra de
-		            Roblox (premio, colección, códigos, grupo, ajustes): en móvil
-		            van en dos filas de 4, así dejan libre el centro de la barra
-		            para el panel de hambre y no tapan los botones de Roblox
-	Las columnas se achican en pantallas bajas (UIScale según el alto), así en
-	un teléfono acostado no llegan a los botones de Pescar y Saltar.
+		barra       botones chicos en la esquina derecha de la barra de Roblox
+		            (Interface/TopBar)
+	Las columnas van en la franja libre entre la barra y los controles táctiles
+	de Roblox, y se achican si no caben (Interface/Columns).
+	Todo el HUD se achica en pantallas bajas (UIScale según el alto).
 	La columna derecha mide lo mismo que sus filas (dos botones de 88 con 10
 	entre ellos) y las centra, así Tienda, Mejoras y los atajos quedan alineados.
 ]]
 
-local GuiService = game:GetService("GuiService")
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
+local Columns = require(script.Parent.Columns)
 local Device = require(script.Parent.Device)
+local TopBar = require(script.Parent.TopBar)
 
 -- Escala 1 a partir de 760 px de alto (un monitor 1080p) y nunca más grande:
 -- el HUD es chico y deja ver el juego.
 local REFERENCE_HEIGHT = 760
 local MIN_SCALE, MAX_SCALE = 0.5, 1
 local PHONE_REFERENCE_HEIGHT, PHONE_MIN_SCALE = 760, 0.45
-local MARGIN = 12
 local STAT_WIDTH = 250 -- ancho de las filas de estadísticas en PC
 local STAT_WIDTH_TOUCH = 210 -- más angostas en táctil: dejan sitio a la barra de hambre
-local TOP_BUTTON_MIN, TOP_BUTTON_MAX = 26, 36 -- botones redondos de la barra de arriba
-local TOP_BUTTON_TOUCH = 30 -- más chicos en táctil
-local TOP_COLUMNS_TOUCH = 4 -- en táctil, los botones de arriba van en dos filas de 4:
--- así dejan libre el centro de la barra de Roblox para el panel de hambre
-local TOP_GAP = 6
 
 local Layout = {}
 
@@ -62,28 +55,6 @@ function Layout.statWidth(): number
 	return if Device.touch() then STAT_WIDTH_TOUCH else STAT_WIDTH
 end
 
-local function column(screen: ScreenGui, name: string, anchorRight: boolean): Frame
-	local frame = Instance.new("Frame")
-	frame.Name = name
-	frame.BackgroundTransparency = 1
-	frame.AnchorPoint = Vector2.new(if anchorRight then 1 else 0, 0.5)
-	frame.Position =
-		UDim2.new(if anchorRight then 1 else 0, if anchorRight then -MARGIN else MARGIN, 0.5, 0)
-	frame.Size =
-		UDim2.fromOffset(if anchorRight then Layout.RIGHT_WIDTH else Layout.statWidth(), 600)
-	frame.Parent = screen
-	local list = Instance.new("UIListLayout")
-	list.SortOrder = Enum.SortOrder.LayoutOrder
-	list.Padding = UDim.new(0, 4)
-	list.VerticalAlignment = Enum.VerticalAlignment.Center
-	list.HorizontalAlignment = if anchorRight
-		then Enum.HorizontalAlignment.Center
-		else Enum.HorizontalAlignment.Left
-	list.Parent = frame
-	Layout.scaleWith(frame)
-	return frame
-end
-
 -- El objeto se achica o agranda con la pantalla (como todo el HUD).
 function Layout.scaleWith(object: GuiObject)
 	local scale = Instance.new("UIScale")
@@ -101,6 +72,9 @@ function Layout.onScaleChanged(callback: () -> ())
 	table.insert(scaleCallbacks, callback)
 end
 
+-- Las columnas no se meten debajo ni encima de `object` (está pegado a un borde).
+Layout.avoid = Columns.avoid
+
 local function refreshScale()
 	local camera = Workspace.CurrentCamera
 	local height = if camera then camera.ViewportSize.Y else REFERENCE_HEIGHT
@@ -115,65 +89,14 @@ local function refreshScale()
 	for _, callback in scaleCallbacks do
 		task.spawn(callback)
 	end
-end
-
--- Botones en la esquina derecha de la barra de Roblox (GuiService.TopbarInset).
-local function placeTopBar()
-	local inset = GuiService.TopbarInset
-	local height = inset.Height
-	topBar.AnchorPoint = Vector2.new(1, 0)
-	if height <= 0 then
-		topBar.Position = UDim2.new(1, -MARGIN, 0, MARGIN)
-		topBar.Size = UDim2.fromOffset(400, TOP_BUTTON_MAX)
-		return
-	end
-	local largest = if Device.touch() then TOP_BUTTON_TOUCH else TOP_BUTTON_MAX
-	local size = math.clamp(height - 18, TOP_BUTTON_MIN, largest)
-	if Device.touch() then
-		-- Dos filas de 4 que empiezan en la barra de Roblox y bajan por debajo de ella.
-		local width = TOP_COLUMNS_TOUCH * size + (TOP_COLUMNS_TOUCH - 1) * TOP_GAP
-		topBar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
-		topBar.Size = UDim2.fromOffset(width, size * 2 + TOP_GAP)
-		return
-	end
-	topBar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
-	topBar.Size = UDim2.fromOffset(400, size)
+	Columns.setMaxScale(currentScale)
 end
 
 function Layout.mount(screen: ScreenGui, playerGui: Instance)
-	left = column(screen, "ColumnaIzquierda", false)
-	right = column(screen, "ColumnaDerecha", true)
-
-	local barScreen = Instance.new("ScreenGui")
-	barScreen.Name = "BarraSuperior"
-	barScreen.ResetOnSpawn = false
-	barScreen.IgnoreGuiInset = true
-	barScreen.DisplayOrder = screen.DisplayOrder
-	barScreen.Parent = playerGui
-	topBar = Instance.new("Frame")
-	topBar.Name = "Botones"
-	topBar.BackgroundTransparency = 1
-	topBar.Parent = barScreen
-	if Device.touch() then
-		-- Cuadrícula de 4 columnas: los botones llenan de derecha a izquierda, fila por fila.
-		local grid = Instance.new("UIGridLayout")
-		grid.FillDirection = Enum.FillDirection.Horizontal
-		grid.HorizontalAlignment = Enum.HorizontalAlignment.Right
-		grid.SortOrder = Enum.SortOrder.LayoutOrder
-		grid.FillDirectionMaxCells = TOP_COLUMNS_TOUCH
-		grid.CellPadding = UDim2.fromOffset(TOP_GAP, TOP_GAP)
-		grid.CellSize = UDim2.fromOffset(TOP_BUTTON_TOUCH, TOP_BUTTON_TOUCH)
-		grid.Parent = topBar
-	else
-		local list = Instance.new("UIListLayout")
-		list.FillDirection = Enum.FillDirection.Horizontal
-		list.HorizontalAlignment = Enum.HorizontalAlignment.Right
-		list.SortOrder = Enum.SortOrder.LayoutOrder
-		list.Padding = UDim.new(0, TOP_GAP)
-		list.Parent = topBar
-	end
-	placeTopBar()
-	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placeTopBar)
+	topBar = TopBar.mount(playerGui, screen.DisplayOrder)
+	left, right = Columns.mount(screen, playerGui, Layout.statWidth, function()
+		return Layout.RIGHT_WIDTH
+	end)
 
 	refreshScale()
 	local camera = Workspace.CurrentCamera

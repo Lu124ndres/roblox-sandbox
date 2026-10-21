@@ -8,7 +8,8 @@
 	(E dorada en PC, el botón del mando en consola, «TOCA» en celular), el
 	objeto arriba en chico («Requiere 3 monstruos») y la acción grande en
 	dorado («Entrenar x3»). Entra con un rebote, late suave y, al apretar, se
-	hunde. En celular la placa entera es el botón.
+	hunde. En celular la placa entera es el botón; en teléfono va al 70 %, así no
+	se mete debajo de las columnas del HUD. La tecla la talla PromptKey.
 
 	Funciona con los prompts de Style = Custom (los que arma server/Proximity y
 	Ambient/SpinStand); Roblox no dibuja nada para esos.
@@ -18,17 +19,18 @@ local Players = game:GetService("Players")
 local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Device = require(script.Parent.Device)
 local InputHints = require(script.Parent.InputHints)
 local Kit = require(script.Parent.Kit)
+local PromptKey = require(script.Parent.PromptKey)
 local Style = require(script.Parent.Style)
 
 local SIZE = Vector2.new(270, 74) -- píxeles
-local KEY = 56
+local PHONE_FIT = 0.7 -- en teléfono, más chico: no tapa medio juego y sigue siendo fácil de tocar
+local KEY = PromptKey.SIZE
 local SLICE = 0.28
-local KEY_SLICE = 0.2
 local POP = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
 local LEAVE = TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 local PRESS = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -45,54 +47,31 @@ local function adornee(prompt: ProximityPrompt): Instance?
 	return nil
 end
 
--- La tecla tallada: letra dorada, el botón del mando o «TOCA».
-local function key(parent: Instance, prompt: ProximityPrompt): Frame
-	local frame = Instance.new("Frame")
-	frame.Name = "Tecla"
-	frame.AnchorPoint = Vector2.new(0, 0.5)
-	frame.Position = UDim2.new(0, 9, 0.5, 0)
-	frame.Size = UDim2.fromOffset(KEY, KEY)
-	frame.ZIndex = 3
-	Kit.skin(frame, "boton", Kit.STONE).SliceScale = KEY_SLICE
-	frame.Parent = parent
-	local letter = Style.text(frame, "Letra", 34, nil, 3)
-	letter.Position = UDim2.fromScale(0.1, 0.1)
-	letter.Size = UDim2.fromScale(0.8, 0.8)
-	letter.ZIndex = 4
-	Kit.gold(letter)
-	local glyph = Instance.new("ImageLabel")
-	glyph.Name = "Boton"
-	glyph.BackgroundTransparency = 1
-	glyph.Position = UDim2.fromScale(0.12, 0.12)
-	glyph.Size = UDim2.fromScale(0.76, 0.76)
-	glyph.ScaleType = Enum.ScaleType.Fit
-	glyph.ZIndex = 4
-	glyph.Parent = frame
-	local mode = InputHints.mode()
-	glyph.Visible = mode == "gamepad"
-	letter.Visible = mode ~= "gamepad"
-	if mode == "gamepad" then
-		glyph.Image = UserInputService:GetImageForKeyCode(prompt.GamepadKeyCode)
-	elseif mode == "touch" then
-		letter.Text = "TOCA"
-	else
-		letter.Text = string.upper(UserInputService:GetStringForKeyCode(prompt.KeyboardKeyCode))
-	end
-	return frame
-end
-
 local function build(prompt: ProximityPrompt, holder: Instance): BillboardGui
 	local touch = InputHints.mode() == "touch"
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "AvisoAccion"
 	gui.Adornee = adornee(prompt)
 	gui.AlwaysOnTop = true
-	gui.Size = UDim2.fromOffset(SIZE.X, SIZE.Y)
+	local fit = if Device.phone() then PHONE_FIT else 1
+	gui.Size = UDim2.fromOffset(SIZE.X * fit, SIZE.Y * fit)
 	gui.StudsOffsetWorldSpace = Vector3.new(0, 3, 0)
 	gui.LightInfluence = 0
 	gui.ResetOnSpawn = false
 	gui.Active = touch
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+	-- La placa mide siempre SIZE; el marco la achica en teléfono.
+	local frame = Instance.new("Frame")
+	frame.Name = "Marco"
+	frame.BackgroundTransparency = 1
+	frame.AnchorPoint = Vector2.new(0.5, 0.5)
+	frame.Position = UDim2.fromScale(0.5, 0.5)
+	frame.Size = UDim2.fromOffset(SIZE.X, SIZE.Y)
+	frame.Parent = gui
+	local frameScale = Instance.new("UIScale")
+	frameScale.Scale = fit
+	frameScale.Parent = frame
 
 	local card = Instance.new(if touch then "TextButton" else "Frame") :: GuiObject
 	card.Name = "Placa"
@@ -105,12 +84,12 @@ local function build(prompt: ProximityPrompt, holder: Instance): BillboardGui
 	end
 	local skin = Kit.skin(card, "casilla")
 	skin.SliceScale = SLICE
-	card.Parent = gui
+	card.Parent = frame
 	local scale = Instance.new("UIScale")
 	scale.Scale = 0.3
 	scale.Parent = card
 
-	key(card, prompt)
+	PromptKey.make(card, prompt)
 	local left = KEY + 18
 	local object = Style.text(card, "Objeto", 17, UIConfig.Colors.TextMuted, 2)
 	object.TextXAlignment = Enum.TextXAlignment.Left
@@ -191,7 +170,7 @@ function PromptView.start()
 		if not gui then
 			return
 		end
-		local card = gui:FindFirstChild("Placa")
+		local card = gui:FindFirstChild("Placa", true)
 		local scale = card and card:FindFirstChildOfClass("UIScale")
 		if scale then
 			TweenService:Create(scale, LEAVE, { Scale = 0.3 }):Play()

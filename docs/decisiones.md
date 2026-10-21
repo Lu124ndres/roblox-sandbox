@@ -1014,3 +1014,16 @@ centro respecto de la convención del FBX (en los props no se notaba porque las 
 giran); se corrige al colocarlas. Los escalones de 2 studs se suben caminando porque la
 colisión por defecto de las mallas (`CollisionFidelity` Default) los aproxima con pendientes.
 Sin `ServerStorage.IslaBloques` el juego vuelve a la isla de terreno.
+
+## 2026-10-20 — Las columnas del HUD leen dónde están el joystick y Saltar
+
+**Contexto:** en teléfonos acostados (338 px de alto útil en un Galaxy A06) las columnas,
+centradas en toda la altura, tapaban el joystick y el botón de saltar. **Decisión:**
+`Interface/Columns` pone cada columna en su franja libre y la achica si no cabe (las dos con la
+misma escala, mínimo 0.3); el borde de abajo sale del `TouchGui` real
+(`Interface/TouchControls`: `ThumbstickStart` y `JumpButton`), no de medidas fijas, porque
+Roblox cambia su tamaño y lugar según la pantalla (70 px en teléfono, 120 en tablet).
+**Lo no obvio:** el `TouchGui` aparece después del personaje y sus piezas llegan de a poco,
+así que se siguen sus cambios (`AbsolutePosition`, `Visible`, `Enabled`) y se reacomoda en
+el siguiente cuadro. La escala de las columnas sale de los tamaños en offset de sus filas, no
+de `AbsoluteContentSize`, para no entrar en un bucle con la propia escala.

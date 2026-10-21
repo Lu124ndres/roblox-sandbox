@@ -219,7 +219,8 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [ ] 2+ jugadores (Test → Local Server): barra compartida, varios en un estanque,
       Salpicón a otro jugador, entregas a la vez, desconectarse pescando o entrenando.
 - [ ] Ping simulado (0.3 s): la ventana de TIRA y el aviso de los ataques son justos.
-- [ ] Emulador de móvil: botones, HUD, tarjeta de captura sin tapar Pescar.
+- [x] Emulador de móvil: botones, HUD, tarjeta de captura sin tapar Pescar (2026-10-20:
+      columnas sobre el joystick y Saltar, ver `docs/decisiones.md`).
 - [x] Medición en el emulador de gama baja (`docs/rendimiento.md`: 4,748 piezas, 2.3 M de
       celdas de terreno, 83 luces; propuestas sin implementar, las elige el usuario).
 - [ ] Teléfono real de gama baja: FPS y memoria (pasos en `docs/lanzamiento.md`).
