@@ -3386,3 +3386,22 @@ de +25/50/75 % 38×28 pt (chicos para el dedo); los íconos de potenciadores roz
 
 **Probado en Studio (Play):** `FeedResult` "ok" desde el servidor: 32 monedas volando y ningún
 aviso nuevo en la pila.
+
+## 2026-10-21 (8) — Caña solo de suerte y 20 niveles más de cada equipo
+
+**Qué se hizo (pedido del usuario):**
+- **Caña:** ya no da poder, solo suerte (`Config.Shop.Rod.value` = suerte; sin
+  `Upgrades.rodPower`). Entrenar, el descanso y el medidor del monstruo ya no multiplican por la
+  caña. MEJORAS muestra solo "Suerte". La caña suprema dice "x3 la suerte de tu caña".
+- **20 niveles nuevos** de caña (jade → eterna, hasta +1500 % de suerte y 1.5Qi monedas),
+  canasta (jade → bóveda eterna, hasta x35000) y botas (jade → eternas, velocidad hasta 100).
+  Ver `docs/decisiones.md`.
+- **Íconos:** `Interface/GearIcons` lee dos hojas por categoría (niveles 1-20 y 21-40);
+  `Assets.UI.EquipoRod1/2`, `EquipoBasket1/2`, `EquipoBoots1/2`. Hasta subir las hojas v4, la
+  hoja 1 es la vieja y los niveles nuevos salen sin ícono. `tools/ui/equipo_v4.json` tiene los
+  prompts de Canva y `tools/ui/armar_hojas_equipo.py` quita el fondo y arma las hojas.
+
+**Probado en Studio (Play):** MEJORAS con 40 cañas (Nv 1/40, "Suerte: +0% → +5%", precios hasta
+1.5Qi), 34 canastas y 34 botas; con botas 34 la velocidad es 100; caña 40 sin errores en el
+Output. El personaje no lleva botas.
+**Pendiente:** los íconos v4 (Canva limita la cuota: van de a pocos).

@@ -27,7 +27,6 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
-local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local PlayerData = require(script.Parent.PlayerData)
 local Quests = require(script.Parent.Retention.Quests)
@@ -113,11 +112,9 @@ local function tick()
 		then
 			TrainingService.stop(player)
 		else
-			local rod = Upgrades.rodPower(player)
 			local gained = math.round(
 				TRAINING.powerPerTick
 					* PONDS[session.pond].multiplier
-					* rod
 					* Perks.powerMultiplier(player)
 			)
 			PlayerData.addPower(player, gained)

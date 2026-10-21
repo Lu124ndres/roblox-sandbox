@@ -41,8 +41,8 @@ export type SpinConfig = {
 	coinBoostMultiplier: number, -- premio coinBoost: monedas x esto mientras dure
 	-- Por jugar: +1 giro guardado cada `everyMinutes` conectado, hasta `maxPerSession` por sesión
 	playSpins: { everyMinutes: number, maxPerSession: number },
-	-- Caña suprema (premio "rod"): multiplica el poder y la suerte de la mejor caña que tenga
-	-- (Upgrades.rodPower / rodLuck), así sigue valiendo lo mismo cuando compra otra.
+	-- Caña suprema (premio "rod"): multiplica la suerte de la mejor caña que tenga
+	-- (Upgrades.rodLuck), así sigue valiendo lo mismo cuando compra otra.
 	superRod: { name: string, multiplier: number },
 	prizes: { Prize }, -- en el orden de las casillas de la ventana
 }

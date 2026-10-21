@@ -5,8 +5,9 @@
 	Lectura de las mejoras de la tienda (Config.Shop) para servidor y
 	cliente: qué nivel tiene un jugador (atributo con el nombre de la
 	categoría), qué da ese nivel y cómo se describe en la tienda.
-	rodPower / rodLuck son lo que rinde su caña de verdad: con la caña
-	suprema de la ruleta (atributo CanaSuprema), x`superRod.multiplier`.
+	rodLuck es lo que rinde su caña de verdad: con la caña suprema de la
+	ruleta (atributo CanaSuprema), x`superRod.multiplier`. La caña solo da
+	suerte; ya no multiplica el poder (2026-10-21).
 ]]
 
 local Config = require(script.Parent.Config)
@@ -52,26 +53,23 @@ local function superRodMultiplier(player: Player): number
 		else 1
 end
 
--- Multiplicador de poder de su caña (con la caña suprema, x3 la mejor que tenga).
-function Upgrades.rodPower(player: Player): number
-	return Upgrades.current(player, "Rod").value * superRodMultiplier(player)
-end
-
--- Suerte de su caña (peso extra de los peces mejores), con la caña suprema incluida.
+-- Suerte de su caña (peso extra de los peces mejores); con la caña suprema, x3 la mejor que tenga.
 function Upgrades.rodLuck(player: Player): number
-	return (Upgrades.current(player, "Rod").luck or 0) * superRodMultiplier(player)
+	return Upgrades.current(player, "Rod").value * superRodMultiplier(player)
 end
 
 local function times(value: number): string
 	return if value % 1 == 0 then NumberFormat.short(value) else string.format("%.1f", value)
 end
 
--- Texto corto de lo que da un nivel ("x3 poder · +15 % suerte").
+local function percent(value: number): string
+	return `+{NumberFormat.short(math.round(value * 100))}%`
+end
+
+-- Texto corto de lo que da un nivel ("+15% suerte").
 function Upgrades.describe(category: Category, def: Config.UpgradeDef): string
 	if category == "Rod" then
-		local luck = def.luck or 0
-		local text = `x{times(def.value)} poder al entrenar`
-		return if luck > 0 then `{text} · +{math.round(luck * 100)} % suerte` else text
+		return if def.value > 0 then `{percent(def.value)} suerte` else "Sin suerte extra"
 	elseif category == "Basket" then
 		return `x{times(def.value)} capacidad de la canasta`
 	end
@@ -83,10 +81,7 @@ export type Stat = { label: string, value: string }
 -- Lo que da un nivel, dato por dato (para comparar "ahora → siguiente" en MEJORAS).
 function Upgrades.stats(category: Category, def: Config.UpgradeDef): { Stat }
 	if category == "Rod" then
-		return {
-			{ label = "Poder", value = `x{times(def.value)}` },
-			{ label = "Suerte", value = `+{math.round((def.luck or 0) * 100)}%` },
-		}
+		return { { label = "Suerte", value = percent(def.value) } }
 	elseif category == "Basket" then
 		return { { label = "Capacidad", value = `x{times(def.value)}` } }
 	end

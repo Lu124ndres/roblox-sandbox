@@ -88,8 +88,7 @@ export type ProgressionConfig = {
 export type UpgradeDef = {
 	name: string,
 	price: number, -- monedas
-	value: number, -- multiplicador de poder (Rod), de capacidad (Basket) o velocidad (Boots)
-	luck: number?, -- solo cañas: peso extra de los peces poco comunes o mejores
+	value: number, -- suerte (Rod), multiplicador de capacidad (Basket) o velocidad (Boots)
 }
 
 export type ShopConfig = {

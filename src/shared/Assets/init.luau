@@ -75,11 +75,15 @@ local Assets: Assets = {
 		-- Hoja 3 (v4/iconos_v4_hoja3.png): calendario del diario, caña suprema, Dios del Volcán,
 		-- Rey del Mar.
 		IconSheet3 = "rbxassetid://101327392927525",
-		-- Equipo de la tienda (Canva, recortado): un ícono por nivel, 5 columnas de 200 px,
-		-- celda = nivel - 1 por filas. Fuentes en assets/ui/iconos/equipo_*.png.
-		EquipoRod = "rbxassetid://79873240212746", -- 20 cañas
-		EquipoBasket = "rbxassetid://125162908853974", -- 14 canastas
-		EquipoBoots = "rbxassetid://122825125598846", -- 14 botas
+		-- Equipo de la tienda (v4, Canva): un ícono por nivel en hojas de 5x4 celdas de 200 px;
+		-- la hoja 1 tiene los niveles 1-20 y la 2 los 21-40 (Interface/GearIcons).
+		-- Fuentes en assets/ui/iconos/v4/equipo/ (tools/ui/armar_hojas_equipo.py).
+		EquipoRod1 = "rbxassetid://79873240212746", -- cañas 1-20 (hoja vieja hasta subir la v4)
+		EquipoRod2 = "rbxassetid://0", -- cañas 21-40
+		EquipoBasket1 = "rbxassetid://125162908853974", -- canastas 1-20 (hoja vieja: 1-14)
+		EquipoBasket2 = "rbxassetid://0", -- canastas 21-34
+		EquipoBoots1 = "rbxassetid://122825125598846", -- botas 1-20 (hoja vieja: 1-14)
+		EquipoBoots2 = "rbxassetid://0", -- botas 21-34
 		-- Kit de la interfaz: piedra volcánica con grietas de lava, hecho con la IA de Canva sobre
 		-- las referencias del usuario (tools/ui/recortar_kit_canva.py → assets/ui/kit_canva/).
 		-- 9-slice; los cortes están en Interface/Kit.

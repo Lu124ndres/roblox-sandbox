@@ -1053,3 +1053,18 @@ Así no rompe el orden de la tienda ni deja de valer al renacer. **Lo no obvio:*
 va x3 (la de Poseidón pasa de 3 a 9) y los lanzamientos para llenar la canasta y la fuerza en la
 pelea siguen por nivel, sin la caña suprema. Si ya la tiene, su casilla pesa 0 y se sortea entre
 las demás.
+
+## 2026-10-21 — La caña solo da suerte y el equipo llega a 40/34/34 niveles
+
+Pedido del usuario: la caña ya no multiplica el poder al entrenar, solo da suerte, y **sin
+compensar** (el poder sube solo con estanques, renacimientos, pases y potenciadores). En
+`Config.Shop.Rod` el `value` de cada caña es ahora la suerte (antes era el poder y la suerte iba en
+`luck`); se borró `Upgrades.rodPower` y la caña suprema multiplica solo la suerte. Los
+lanzamientos para llenar la canasta y la fuerza en la pelea siguen por nivel de caña.
+
+Se agregaron 20 niveles a cada mejora (cañas 40, canastas 34, botas 34) con la misma curva de
+precios (x2.5 cañas, x2.8 canastas y botas); la suerte llega a +1500 %, la canasta a x35000 y las
+botas a velocidad 100 (el puente sigue en 56, así que con botas rápidas ya no acelera). Los
+modelos 3D de la caña y la canasta repiten el último (se modelarán en Blender después); las botas
+nunca se dibujan en el personaje. Los íconos van en hojas de 5x4 celdas de 200 px por
+categoría (Roblox achica las imágenes de más de 1024 px), así que cada categoría tiene dos hojas.

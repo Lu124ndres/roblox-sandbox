@@ -15,7 +15,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
-local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local GiantService = require(script.Parent.GiantService)
 local PlayerData = require(script.Parent.PlayerData)
@@ -48,12 +47,10 @@ function GiantRewards.restTick()
 		local root = Proximity.getRoot(player)
 		if root and PlayerData.isLoaded(player) and WorldZones.isInRestArena(root.Position) then
 			local best = Perks.bestPondMultiplier(player)
-			local rod = Upgrades.rodPower(player)
 			local gained = math.round(
 				TRAINING.powerPerTick
 					* best
 					* GiantService.getCurrent().multiplier
-					* rod
 					* Perks.powerMultiplier(player)
 			)
 			PlayerData.addPower(player, gained)

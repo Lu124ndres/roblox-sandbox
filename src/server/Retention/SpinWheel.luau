@@ -68,7 +68,7 @@ local function giveSuperRod(player: Player): string
 			end
 		end
 	end)
-	return `¡{SPIN.superRod.name}! x{SPIN.superRod.multiplier} poder y suerte de tu caña`
+	return `¡{SPIN.superRod.name}! x{SPIN.superRod.multiplier} la suerte de tu caña`
 end
 
 -- Monedas de una casilla para este jugador (también las muestra la ventana).

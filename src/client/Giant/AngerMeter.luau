@@ -19,7 +19,6 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
-local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
@@ -102,7 +101,6 @@ function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
 			local perSecond = training.powerPerTick -- igual que GiantCycle.restTick, por segundo
 				* Perks.bestPondMultiplier(player)
 				* Perks.powerMultiplier(player)
-				* Upgrades.rodPower(player)
 				* rest
 				/ training.tickSeconds
 			local spinAt = stateFolder:GetAttribute(Protocol.GiantAttributes.RouletteAt)
