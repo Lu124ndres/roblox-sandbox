@@ -19,8 +19,9 @@ from estanques.forma import QUITADOS, SAGRADO
 def estanque(i):
     tono = gi.COLORES_ESTANQUE[(i - 1) % len(gi.COLORES_ESTANQUE)]
     rng = random.Random(1000 + i)
+    # Sin contorno de luz: la isla de bloques pone un aro de piedras y el agua de color, y es
+    # el agua la que muestra si el estanque está abierto (client/Training/PondFx).
     hijos = base.tapa_y_prompt(i, tono) + base.loto_centro(i, tono) + temas.tema(i, rng)
-    hijos.append(base.brillo_orilla(i, tono))
     return gi.grupo(f"Estanque{i}", hijos)
 
 

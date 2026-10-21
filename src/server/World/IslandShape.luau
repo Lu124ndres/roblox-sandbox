@@ -14,6 +14,8 @@
 
 	Lejos de los dos todo es mar abierto (openSea): touches dice si un cuadrado toca
 	la isla o el cráter, y así TerrainBuilder no muestrea los bloques de mar.
+	Con la isla de bloques (World/BlockIsland) el suelo de la isla es de mallas: el terreno
+	solo pone el cráter y el mar (craterOnly, touchesCrater).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -124,10 +126,11 @@ end
 -- Círculos fuera de los cuales sample() da siempre mar abierto: la isla (repisa, lomas,
 -- rocas y faro) y el cráter (CraterShape.height es nil desde craterBaseRadius).
 type Reach = { center: Vector2, radius: number }
+local CRATER_REACH: Reach = { center = CRATER, radius = L.craterBaseRadius }
 local REACH: { Reach } = {
 	{ center = Vector2.zero, radius = L.shelfRadius },
 	{ center = LIGHTHOUSE, radius = L.lighthouseMoundRadius },
-	{ center = CRATER, radius = L.craterBaseRadius },
+	CRATER_REACH,
 }
 for _, hill in L.hills do
 	table.insert(REACH, { center = Vector2.new(hill[1], hill[2]), radius = hill[3] * 1.6 })
@@ -141,18 +144,39 @@ function IslandShape.openSea(_x: number, _z: number): (number, Enum.Material, nu
 	return L.seaFloorHeight, MATERIAL.Sand, L.waterLevel
 end
 
+local function reaches(reach: Reach, x0: number, z0: number, size: number): boolean
+	local nearest = Vector2.new(
+		math.clamp(reach.center.X, x0, x0 + size),
+		math.clamp(reach.center.Y, z0, z0 + size)
+	)
+	return (nearest - reach.center).Magnitude <= reach.radius
+end
+
 -- true si el cuadrado de lado size desde (x0, z0) toca la isla o el cráter.
 function IslandShape.touches(x0: number, z0: number, size: number): boolean
 	for _, reach in REACH do
-		local nearest = Vector2.new(
-			math.clamp(reach.center.X, x0, x0 + size),
-			math.clamp(reach.center.Y, z0, z0 + size)
-		)
-		if (nearest - reach.center).Magnitude <= reach.radius then
+		if reaches(reach, x0, z0, size) then
 			return true
 		end
 	end
 	return false
+end
+
+-- Como touches, pero solo el cráter (la isla es de mallas).
+function IslandShape.touchesCrater(x0: number, z0: number, size: number): boolean
+	return reaches(CRATER_REACH, x0, z0, size)
+end
+
+-- El cráter sobre el mar abierto, sin la isla.
+function IslandShape.craterOnly(x: number, z: number): (number, Enum.Material, number)
+	local height, material, waterTop = IslandShape.openSea(x, z)
+	local offset = Vector2.new(x, z) - CRATER
+	local rho, angle = offset.Magnitude, math.atan2(offset.Y, offset.X)
+	local crater = CraterShape.height(rho, angle)
+	if crater and (crater > height or rho < L.craterCliffRadius) then
+		height, material = crater, CraterShape.material(rho, angle, crater)
+	end
+	return height, material, waterTop
 end
 
 function IslandShape.sample(x: number, z: number): (number, Enum.Material, number)

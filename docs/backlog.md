@@ -306,8 +306,7 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
       `docs/capturas/mapa_antes_despues/`).
 - [x] Incorporar la decoración de bloques (`PropsMapaBloques.fbx` en `ServerStorage.PropsMapa`;
       los de antes en `PropsMapaRespaldo`).
-- [ ] Incorporar la isla de bloques (mallas, sacar el terreno de la isla, agua de color de los
-      estanques, subir la aparición y 11 setos, bajar el faro 1 stud, colisiones).
+- [x] Incorporar la isla de bloques (`ServerStorage.IslaBloques`, `World/BlockIsland`).
 - [ ] Incorporar el volcán (craterCenter 520 → 722, montaña y cueva, luz de la cueva, corriente
       en el túnel, lago/desierto/guarida/hielo, colisiones, streaming).
 - [ ] Estanque sagrado: ponerlo a la venta a 1200 R$ en el Creator Hub (está fuera de oferta).

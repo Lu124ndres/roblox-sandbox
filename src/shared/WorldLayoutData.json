@@ -36,6 +36,7 @@
 		270
 	],
 	"gardenClearingRadius": 29,
+	"gardenPathRise": 2,
 	"pierAngles": [
 		45,
 		135,
@@ -54,7 +55,7 @@
 	"campRadius": 144,
 	"lighthouseAngle": 180,
 	"lighthouseRadius": 182,
-	"lighthouseBaseHeight": 15,
+	"lighthouseBaseHeight": 16,
 	"lighthouseMoundRadius": 30,
 	"fishingBandInner": 148,
 	"fishingBandOuter": 176,

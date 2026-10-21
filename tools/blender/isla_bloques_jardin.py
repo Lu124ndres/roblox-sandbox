@@ -21,6 +21,7 @@ Adentro del jardín de entrenamiento, en la isla de bloques (sin bpy):
 import math
 from collections import deque
 import isla_bloques_forma as F
+import isla_bloques_piezas as P
 import isla_bloques_monticulos as MO
 import isla_bloques_relieve as R
 
@@ -68,9 +69,10 @@ def _fuera_del_agua(x, z):
 
 
 def _plano(x, z):
-    """¿Esta columna del jardín queda plana? Senderos, claro, estanques con su aro y orilla."""
+    """¿Esta columna del jardín queda plana? Senderos, claro, estanques con su aro y orilla, y
+    lo que arma el juego al correr (vitrinas de los trajes)."""
     _, material, _ = F.muestra(x, z)
-    if material != "jardin":
+    if material != "jardin" or P.en_pieza_del_juego(x, z):
         return True
     for indice, centro, radio in F.ESTANQUES:
         dx, dz = x - centro[0], z - centro[1]

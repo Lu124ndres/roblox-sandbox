@@ -381,7 +381,8 @@ def aparicion():
         "properties": {
             "Anchored": True, "Neutral": True, "Duration": 0, "Size": [1, 14, 14], "Shape": "Cylinder",
             # Cilindro de pie; su LookVector (-Z local) apunta al volcán (+Z del mundo).
-            "CFrame": cf((x, L["plateauHeight"] - 0.4, z), mat(base_con_z((0, 0, -1)), rz(90))),
+            # Sobre el sendero elevado de la isla de bloques (gardenPathRise sobre la meseta).
+            "CFrame": cf((x, L["plateauHeight"] + L["gardenPathRise"] - 0.4, z), mat(base_con_z((0, 0, -1)), rz(90))),
             "Color": color(ROCA_VOLCANICA), "Material": "Basalt", "TopSurface": "Smooth", "BottomSurface": "Smooth",
             "Transparency": 1, "CanCollide": True, "CanTouch": True, "CanQuery": False, "CastShadow": False,
         },

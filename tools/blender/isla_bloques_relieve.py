@@ -15,6 +15,7 @@ Lo de adentro del jardín (senderos elevados, estanques y ondulaciones) es isla_
 import json, math
 from collections import deque
 import isla_bloques_forma as F
+import isla_bloques_piezas as P
 
 SEMILLA = 7
 ONDA = (80.0, 0.6), (40.0, 0.4)  # (studs entre lomas, peso) de cada octava
@@ -87,7 +88,7 @@ def _plano(x, z, celda):
     """¿El centro de la columna cae en una zona de juego?"""
     r = math.hypot(x, z)
     L = F.L
-    if r <= L["plazaRadius"] + celda:
+    if r <= L["plazaRadius"] + celda or P.en_pieza_del_juego(x, z):
         return True
     if any(F.distancia_segmento((x, z), a, b) <= F.ANCHO_CAMINO + 2 * celda for a, b in F.CAMINOS):
         return True

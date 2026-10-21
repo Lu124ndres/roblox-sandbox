@@ -50,6 +50,7 @@ export type WorldLayout = {
 	gardenPathHalfWidth: number,
 	gardenSpokeAngles: { number },
 	gardenClearingRadius: number,
+	gardenPathRise: number, -- los senderos del jardín (isla de bloques) van así de alto sobre la meseta
 	pierAngles: { number },
 	pierStartRadius: number,
 	pierLength: number,

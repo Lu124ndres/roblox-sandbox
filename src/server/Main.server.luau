@@ -42,6 +42,7 @@ local ShopService = require(script.Parent.ShopService)
 local HabitatService = require(script.Parent.World.HabitatService)
 local PropDresser = require(script.Parent.World.PropDresser)
 local TerrainBuilder = require(script.Parent.World.TerrainBuilder)
+local BlockIsland = require(script.Parent.World.BlockIsland)
 local TrainingService = require(script.Parent.TrainingService)
 local Analytics = require(script.Parent.Analytics)
 
@@ -80,6 +81,7 @@ PlayerCollision.init()
 -- El terreno al final: tarda unos segundos y nada de lo anterior lo necesita (se aparece
 -- en la pieza de aparición). Así EstadoGigante y los remotes existen desde el principio.
 TerrainBuilder.build()
+BlockIsland.place() -- el suelo de la isla en mallas, si está en ServerStorage
 PropDresser.dress()
 HabitatService.init() -- se apoya en el terreno: va después
 Workspace:SetAttribute(Protocol.WorldReadyAttribute, true) -- la pantalla de carga lo espera

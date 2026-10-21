@@ -16,6 +16,7 @@ cuadrícula: así la apertura morfológica del relieve no lo aplana, y los suelt
 """
 import json, math
 import isla_bloques_forma as F
+import isla_bloques_piezas as P
 import isla_bloques_relieve as R
 
 ARO = 5.0  # studs que ocupa el aro por fuera del agua (escala con el estanque)
@@ -103,6 +104,8 @@ def preparar(ruta_mundo, celda, n):
     for i in range(-n, n):
         for j in range(-n, n):
             x, z = (i + 0.5) * celda, (j + 0.5) * celda
+            if P.en_pieza_del_juego(x, z):  # vitrinas: planas con una celda de margen
+                bloqueo.update((i + a, j + b) for a in (-1, 0, 1) for b in (-1, 0, 1))
             if math.hypot(x, z) <= F.L["plazaRadius"] and (F.tipo_sendero((x, z)) or F.en_rayo((x, z))):
                 bloqueo.update((i + a, j + b) for a in (-1, 0, 1) for b in (-1, 0, 1) if abs(a) + abs(b) <= 1)
     MONTICULO.clear()

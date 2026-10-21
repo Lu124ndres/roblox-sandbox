@@ -114,3 +114,17 @@ Cada vez que cambie `WorldLayoutData.json` o la forma (`IslandShape`, `CraterSha
   (si Studio guardó una copia vieja del módulo, reabrir el lugar antes).
 - [ ] **[Studio]** Guardar el lugar y publicarlo.
 
+## Isla y volcán de bloques (mallas en el lugar)
+
+El suelo de la isla y el volcán son mallas de Blender guardadas en el `.rbxl`, en
+`ServerStorage.IslaBloques` y `ServerStorage.VolcanBloques` (fuera de Rojo). Para cambiarlos:
+
+- [ ] **[terminal]** Regenerar con `tools/blender/isla_bloques.py` o `volcan_bloques.py` y
+  exportar con `isla_bloques_exportar.py` / `volcan_bloques_exportar.py` (escriben el FBX y
+  el JSON con el centro de cada malla).
+- [ ] **[Studio]** Importar 3D el FBX con las opciones por defecto.
+- [ ] **[MCP]** Poner cada MeshPart en su centro del JSON girada 180° en Y (el importador las
+  deja giradas) y moverlas a la carpeta de `ServerStorage` en lugar de las viejas.
+- [ ] Si cambió el terreno (`WorldLayoutData`, forma), regenerarlo (sección anterior).
+- [ ] **[Studio]** Guardar y publicar.
+

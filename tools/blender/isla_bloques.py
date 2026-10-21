@@ -6,6 +6,7 @@ módulo (columnas de 4 x 4 studs, escalones de 2) y el mismo acabado.
     isla_bloques_relieve.py  lomas suaves y acantilados bajos, con las zonas de juego planas
     isla_bloques_jardin.py   senderos elevados, pozo de cada estanque y ondulaciones del pasto
     isla_bloques_monticulos.py  montículos de pasto alrededor de cada estanque
+    isla_bloques_piezas.py   lo que arma el juego al correr (vitrinas, ruleta): queda plano
     isla_bloques_malla.py    columnas, bisel, caras de arriba en rectángulos y lados en tiras
     isla_bloques_aros.py     aro de piedras de cada estanque y su lámina
     isla_bloques_rampas.py   rampas de entrada a los senderos elevados

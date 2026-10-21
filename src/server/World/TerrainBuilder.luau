@@ -29,6 +29,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
+local BlockIsland = require(script.Parent.BlockIsland)
 local IslandShape = require(script.Parent.IslandShape)
 local TerrainVersion = require(script.Parent.TerrainVersion)
 
@@ -138,10 +139,19 @@ end
 -- Todos los bloques de mar abierto son iguales: se calculan una vez y se reusan.
 local openSeaVoxels: Voxels? = nil
 
-local function writeChunk(terrain: Terrain, x0: number, z0: number, columns: number)
+-- blocks: la isla es de mallas (BlockIsland); el terreno solo pone el cráter y el mar.
+local function writeChunk(
+	terrain: Terrain,
+	x0: number,
+	z0: number,
+	columns: number,
+	blocks: boolean
+)
 	local size = columns * VOXEL
 	local chunk: Voxels
-	if IslandShape.touches(x0, z0, size) then
+	if blocks and IslandShape.touchesCrater(x0, z0, size) then
+		chunk = voxels(x0, z0, columns, IslandShape.craterOnly)
+	elseif not blocks and IslandShape.touches(x0, z0, size) then
 		chunk = voxels(x0, z0, columns, IslandShape.sample)
 	else
 		chunk = openSeaVoxels or voxels(0, 0, columns, IslandShape.openSea)
@@ -157,7 +167,8 @@ local VERSION_ATTRIBUTE = "TerrenoVersion"
 -- force: construirlo aunque el guardado en el lugar ya tenga la versión de ahora.
 function TerrainBuilder.build(force: boolean?)
 	local terrain = Workspace.Terrain
-	local version = TerrainVersion.get()
+	local blocks = BlockIsland.present()
+	local version = TerrainVersion.get(blocks)
 	style(terrain)
 	if not force and terrain:GetAttribute(VERSION_ATTRIBUTE) == version then
 		print(`TerrainBuilder: terreno guardado en el lugar (versión {version})`)
@@ -171,7 +182,7 @@ function TerrainBuilder.build(force: boolean?)
 	local frameStarted = started
 	for x0 = -half, half - step, step do
 		for z0 = -half, half - step, step do
-			writeChunk(terrain, x0, z0, CHUNK_VOXELS)
+			writeChunk(terrain, x0, z0, CHUNK_VOXELS, blocks)
 			-- Reparte el trabajo para no congelar el servidor, pero sin regalar cuadros.
 			if os.clock() - frameStarted >= FRAME_BUDGET then
 				task.wait()

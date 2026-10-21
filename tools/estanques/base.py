@@ -41,24 +41,3 @@ def nenufares(i, rng, flor, n=8, neon=False, cada=3):
         p = en_agua(i, g, rng.uniform(0.42, 0.82))
         hijos.append(agua.nenufar(f"Nenufar{k}", p, rng.uniform(1.8, 3.1), rng, flor if k % cada == 0 else None, neon))
     return hijos
-
-
-def brillo_orilla(i, tono, n=44, afuera=1.2):
-    """Contorno de luz del color del estanque, sobre el barro de la orilla (`afuera` studs
-    por fuera del agua). El agua del terreno va en bloques de 4 studs y no sigue la curva al
-    detalle: el cliente (Training/PondFx) asienta cada tramo en el suelo con un rayo y lo
-    prende o apaga según si el estanque está abierto."""
-    c = centro(i)
-    hijos = []
-    for k in range(n):
-        a0, a1 = 2 * math.pi * k / n, 2 * math.pi * (k + 1) / n
-        r0, r1 = borde(i, a0) + afuera, borde(i, a1) + afuera
-        p0 = (c[0] + math.cos(a0) * r0, SUELO + 0.1, c[2] + math.sin(a0) * r0)
-        p1 = (c[0] + math.cos(a1) * r1, SUELO + 0.1, c[2] + math.sin(a1) * r1)
-        largo = math.dist(p0, p1) + 0.15
-        medio = tuple((p0[q] + p1[q]) / 2 for q in range(3))
-        u = gi.norm((p1[0] - p0[0], 0, p1[2] - p0[2]))
-        hijos.append(gi.pieza(f"Brillo{k}", (0.8, 0.2, largo), medio, tono, "Neon", gi.base_con_z(u), **gi.FANTASMA))
-    grupo = gi.grupo("BrilloOrilla", hijos)
-    grupo["attributes"] = {"Indice": i}
-    return grupo

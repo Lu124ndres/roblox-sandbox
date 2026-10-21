@@ -3,10 +3,10 @@
 	TerrainVersion
 
 	La versión del terreno: SHAPE_VERSION más una huella de WorldLayout (todas sus
-	claves, ordenadas). TerrainBuilder la anota en Workspace.Terrain (atributo
+	claves, ordenadas) y "-b" si el suelo de la isla es de mallas (BlockIsland). TerrainBuilder la anota en Workspace.Terrain (atributo
 	TerrenoVersion) y, si el terreno guardado en el lugar ya tiene la de ahora, no lo
 	vuelve a construir al arrancar el servidor.
-		get() -> string
+		get(blocks) -> string
 
 	SHAPE_VERSION se sube a mano al cambiar cómo se arma el terreno sin tocar
 	WorldLayoutData (IslandShape, CraterShape, GardenShape, TerrainBuilder): el servidor
@@ -51,8 +51,10 @@ end
 
 local TerrainVersion = {}
 
-function TerrainVersion.get(): string
-	return `{SHAPE_VERSION}-{string.format("%08x", hash(serialize(WorldLayout)))}`
+-- blocks: con la isla de bloques el terreno no lleva la isla (otra versión, "-b").
+function TerrainVersion.get(blocks: boolean): string
+	local suffix = if blocks then "-b" else ""
+	return `{SHAPE_VERSION}-{string.format("%08x", hash(serialize(WorldLayout)))}{suffix}`
 end
 
 return table.freeze(TerrainVersion)

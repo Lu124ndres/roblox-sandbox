@@ -3253,3 +3253,20 @@ Default (precisa) en rocas y crestas, que chocan.
 **Probado en Studio (Play):** PropDresser pone los 237 modelos (68 palmeras, 49 arbustos, 81
 rocas, 36 crestas), se ven en la plaza, la playa y el borde del cráter, sin errores.
 **Falta (usuario):** guardar el lugar (Ctrl+S) y publicarlo.
+
+---
+
+## 2026-10-20 (18) — Isla de bloques en el juego
+
+**Qué se hizo:** exportadores de la isla y del volcán (`*_bloques_exportar.py`: FBX y JSON de
+centros); el usuario importó los dos y quedaron en `ServerStorage.IslaBloques` y
+`VolcanBloques` (el volcán todavía no se usa). `World/BlockIsland` pone la isla al arrancar,
+`TerrainBuilder` deja de escribir el suelo de la isla (terreno guardado `1-5f1f5e56-b`) y
+`PondFx` muestra si el estanque está abierto con el agua. En `generar_isla.py`: sin
+`BrilloOrilla`, la aparición y 11 setos 2 studs más arriba (`gardenPathRise`) y el faro a 16
+(`lighthouseBaseHeight`); la isla deja planas las vitrinas y la ruleta.
+
+**Probado en Studio (Play):** la isla entera en su lugar (cenital, plaza, estanques, vitrinas,
+setos), del pasto al camino y la rampa se sube caminando, se entra a los estanques por las
+aberturas, la aparición y el faro apoyados, el agua viva/pálida según el estanque, el terreno
+guardado se usa sin reconstruir y sin errores. **Falta (usuario):** guardar (Ctrl+S) y publicar.

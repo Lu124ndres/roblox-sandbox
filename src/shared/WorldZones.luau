@@ -79,9 +79,9 @@ function WorldZones.pondCenter(index: number): Vector3
 	return Vector3.new(spot[1], L.trainingPondWaterTop, spot[2])
 end
 
--- Dónde se aparece (al nivel de la meseta).
+-- Dónde se aparece: sobre el sendero elevado del jardín (gardenPathRise sobre la meseta).
 function WorldZones.spawnPoint(): Vector3
-	return Vector3.new(L.spawnPosition[1], L.plateauHeight, L.spawnPosition[2])
+	return Vector3.new(L.spawnPosition[1], L.plateauHeight + L.gardenPathRise, L.spawnPosition[2])
 end
 
 function WorldZones.pondRadius(index: number): number

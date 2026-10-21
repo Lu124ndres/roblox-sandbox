@@ -1000,3 +1000,17 @@ combinaban (6 en el volcán); con 4 y caras juntadas la isla baja a ~54 mil y el
 mucho 129 studs (decisión del usuario). Al incorporarlo se mueve todo lo que usa `craterCenter`,
 la corriente del puente (`BridgeBoost`) se extiende al túnel, y el lago, el desierto, la guarida
 y el hielo del cráter (que escriben terreno) hay que adaptarlos a una cueva de mallas.
+
+## 2026-10-20 — El suelo de la isla son mallas en ServerStorage, no terreno
+
+**Contexto:** la isla de bloques aprobada se pasó al juego. **Decisión:** sus 47 mallas viven
+en `ServerStorage.IslaBloques` (en el `.rbxl`) y `World/BlockIsland` las copia a
+`Workspace.IslaBloques` al arrancar (Persistent: se ve entera con streaming); si están,
+`TerrainBuilder` no escribe el suelo de la isla (solo el mar y el cráter) y la versión del
+terreno lleva "-b". El agua de color de cada estanque es su malla `Lamina_<n>`, que `PondFx`
+pinta viva (abierto) o pálida (cerrado), en lugar del contorno de luz `BrilloOrilla` (pedido
+del usuario). **Lo no obvio:** el importador 3D de Roblox deja cada malla girada 180° sobre su
+centro respecto de la convención del FBX (en los props no se notaba porque las anclas las
+giran); se corrige al colocarlas. Los escalones de 2 studs se suben caminando porque la
+colisión por defecto de las mallas (`CollisionFidelity` Default) los aproxima con pendientes.
+Sin `ServerStorage.IslaBloques` el juego vuelve a la isla de terreno.
