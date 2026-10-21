@@ -3444,3 +3444,22 @@ reposo; al soltar vuelve a leerla.
 **Probado en Studio (simulador de teléfono, Play):** subir el aro 80 px a mano (como hace Roblox
 al tocar) achicaba el menú de 0.66 a 0.43: esa era la causa. Con el arreglo el HUD arranca igual
 y sin errores. El toque real no se puede simular por MCP: falta confirmarlo en un teléfono.
+
+## 2026-10-21 (11) — La placa de entrenar flota en el centro de cada estanque
+
+**Qué se hizo (pedido del usuario: "que salga la placa de entrenar de buen tamaño y solo una por
+estanque en el centro, no abajo"):**
+- **Un prompt por estanque** (`server/TrainingPonds`, nuevo): en un Attachment `CentroEntrenar`
+  en el centro de las piezas del estanque, con alcance hasta la más lejana + 22 studs. El
+  sagrado tenía cuatro (una por esquina) y el aviso saltaba entre ellas. El servidor valida la
+  distancia a ese centro (`TrainingService`).
+- **Placa flotante** (`Interface/PromptFloat`, nuevo): los prompts con el atributo `Flotante`
+  (`ProtocolMap.PromptFloatAttribute`) no van abajo junto a Saltar en táctil: flotan 1.5 studs
+  sobre el agua, debajo del cartel del estanque, sin AlwaysOnTop. Mide lo mismo a cualquier
+  distancia y se achica con el HUD (en táctil, al menos x0.6: 162×44 en un iPhone 7). En PC los
+  demás prompts siguen igual.
+
+**Probado en Studio (simulador iPhone 7, Play):** 9 prompts (uno por estanque, el sagrado con
+alcance 34); la placa sale en el centro del Estanque de Jade y del sagrado; tocarla empieza a
+entrenar (TrainingPond 1) y otra vez lo para; sin errores. Con AlwaysOnTop las placas no salían en
+las capturas de Studio.

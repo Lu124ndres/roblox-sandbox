@@ -12,6 +12,7 @@ return table.freeze({
 	LighthouseBeam = "Haz",
 	TrainingPond = "Estanque", -- pieza del estanque; atributo "Indice" = 1..N
 	PondIndexAttribute = "Indice",
+	PromptFloatAttribute = "Flotante", -- prompt cuyo aviso flota sobre el objeto también en táctil (los estanques)
 	GiantAnchor = "GuaridaGigante",
 	RestArena = "GuaridaDescanso", -- modelo en ServerStorage: la plataforma del descanso
 	Buoys = "Boyas",

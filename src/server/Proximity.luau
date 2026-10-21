@@ -36,7 +36,7 @@ function Proximity.isNearPoint(player: Player, point: Vector3, maxDistance: numb
 end
 
 function Proximity.makePrompt(
-	parent: BasePart,
+	parent: BasePart | Attachment,
 	actionText: string,
 	objectText: string,
 	distance: number

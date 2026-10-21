@@ -8,8 +8,9 @@
 	(E dorada en PC, el botón del mando en consola, «TOCA» en celular), el
 	objeto arriba en chico («Requiere 3 monstruos») y la acción grande en
 	dorado («Entrenar x3»). Entra con un rebote, late suave y, al apretar, se
-	hunde. En táctil no flota sobre el objeto: va fijo junto al botón de saltar
-	(PromptDock) y la placa entera es el botón. La tecla la talla PromptKey.
+	hunde. En PC flota sobre el objeto (PromptFloat). En táctil va fijo junto al
+	botón de saltar (PromptDock), salvo los estanques (atributo Flotante), que
+	flotan en su centro; la placa entera es el botón. La tecla la talla PromptKey.
 
 	Funciona con los prompts de Style = Custom (los que arma server/Proximity y
 	Ambient/SpinStand); Roblox no dibuja nada para esos.
@@ -20,15 +21,18 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Device = require(script.Parent.Device)
 local InputHints = require(script.Parent.InputHints)
 local Kit = require(script.Parent.Kit)
 local PromptDock = require(script.Parent.PromptDock)
+local PromptFloat = require(script.Parent.PromptFloat)
 local PromptKey = require(script.Parent.PromptKey)
 local Style = require(script.Parent.Style)
 
-local SIZE = Vector2.new(270, 74) -- píxeles
+local SIZE = Vector2.new(270, 74) -- píxeles, antes de la escala del HUD
+local FLOAT = Protocol.Map.PromptFloatAttribute
 local KEY = PromptKey.SIZE
 local SLICE = 0.28
 local POP = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
@@ -38,43 +42,17 @@ local BEAT = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOu
 
 local PromptView = {}
 
--- Dónde se ancla el cartel: la pieza o el Attachment que tiene el prompt.
-local function adornee(prompt: ProximityPrompt): Instance?
-	local parent = prompt.Parent
-	if parent and (parent:IsA("BasePart") or parent:IsA("Attachment") or parent:IsA("Model")) then
-		return parent
-	end
-	return nil
-end
-
--- PC y mando: el cartel flota sobre el objeto (BillboardGui).
-local function billboard(prompt: ProximityPrompt): (BillboardGui, Frame)
-	local gui = Instance.new("BillboardGui")
-	gui.Name = "AvisoAccion"
-	gui.Adornee = adornee(prompt)
-	gui.AlwaysOnTop = true
-	gui.Size = UDim2.fromOffset(SIZE.X, SIZE.Y)
-	gui.StudsOffsetWorldSpace = Vector3.new(0, 3, 0)
-	gui.LightInfluence = 0
-	gui.ResetOnSpawn = false
-	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	local frame = Instance.new("Frame")
-	frame.Name = "Marco"
-	frame.BackgroundTransparency = 1
-	frame.Size = UDim2.fromScale(1, 1)
-	frame.Parent = gui
-	return gui, frame
-end
-
 local function build(prompt: ProximityPrompt, holder: Instance): LayerCollector
-	-- Táctil: fijo junto a Saltar (PromptDock); la placa entera es el botón.
-	local docked = Device.touch()
+	-- Táctil: fijo junto a Saltar (PromptDock), salvo los que flotan (los estanques);
+	-- la placa entera es el botón.
+	local onWater = prompt:GetAttribute(FLOAT) == true
+	local docked = Device.touch() and not onWater
 	local touch = docked or InputHints.mode() == "touch"
 	local gui: LayerCollector, frame: Frame
 	if docked then
 		gui, frame = PromptDock.make(holder, SIZE)
 	else
-		gui, frame = billboard(prompt)
+		gui, frame = PromptFloat.make(prompt, SIZE, onWater)
 	end
 	if gui:IsA("BillboardGui") then
 		gui.Active = touch

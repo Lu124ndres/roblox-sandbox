@@ -14,9 +14,10 @@
 	cada uno lanza su corcho hacia el agua frente a él, no al mismo punto.
 	El poder hace pescar más peces y más rápido (Shared/FishingPower).
 
+	Cada estanque tiene un solo prompt, en su centro (TrainingPonds).
 	El servidor no confía en el ProximityPrompt: al empezar y en cada tick
-	el jugador tiene que estar a promptDistanceStuds + PROMPT_SLACK_STUDS
-	del estanque. Se puede empezar justo después de pescar (estados "caught"
+	el jugador tiene que estar dentro de ese alcance + PROMPT_SLACK_STUDS
+	del centro. Se puede empezar justo después de pescar (estados "caught"
 	y "escaped": el pez de la mano aún se está mostrando).
 ]]
 
@@ -24,7 +25,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Perks = require(ReplicatedStorage.Shared.Perks)
@@ -33,8 +33,9 @@ local Quests = require(script.Parent.Retention.Quests)
 local Milestones = require(script.Parent.Retention.Milestones)
 local Proximity = require(script.Parent.Proximity)
 local Remotes = require(script.Parent.Remotes)
+local TrainingPonds = require(script.Parent.TrainingPonds)
 
-type Session = { pond: number, origin: Vector3, part: BasePart }
+type Session = { pond: number, origin: Vector3 }
 
 local TRAINING = Config.Gameplay.training
 local PONDS = Config.Progression.ponds
@@ -46,6 +47,7 @@ local FREE_STATES: { [string]: boolean } = { idle = true, caught = true, escaped
 local TrainingService = {}
 
 local sessions: { [Player]: Session } = {}
+local pondSpots: { [number]: TrainingPonds.Pond } = {}
 
 function TrainingService.isTraining(player: Player): boolean
 	return sessions[player] ~= nil
@@ -71,13 +73,15 @@ local function targetFor(position: Vector3, pond: number): Vector3
 	return center + offset.Unit * WorldZones.pondRadius(pond) * 0.45
 end
 
-local function nearPond(player: Player, part: BasePart): boolean
-	return Proximity.isNear(player, part, TRAINING.promptDistanceStuds + PROMPT_SLACK_STUDS)
+local function nearPond(player: Player, pond: number): boolean
+	local spot = pondSpots[pond]
+	return spot ~= nil
+		and Proximity.isNearPoint(player, spot.center, spot.reach + PROMPT_SLACK_STUDS)
 end
 
-local function start(player: Player, pond: number, part: BasePart)
+local function start(player: Player, pond: number)
 	local root = Proximity.getRoot(player)
-	if not root or not PlayerData.isLoaded(player) or not nearPond(player, part) then
+	if not root or not PlayerData.isLoaded(player) or not nearPond(player, pond) then
 		return
 	end
 	local def = PONDS[pond]
@@ -90,17 +94,17 @@ local function start(player: Player, pond: number, part: BasePart)
 		Remotes.TrainingDenied:FireClient(player, "busy")
 		return
 	end
-	sessions[player] = { pond = pond, origin = root.Position, part = part }
+	sessions[player] = { pond = pond, origin = root.Position }
 	player:SetAttribute(ATTR.TrainingPond, pond)
 	player:SetAttribute(ATTR.FishingTarget, targetFor(root.Position, pond))
 	player:SetAttribute(ATTR.FishingState, "training")
 end
 
-local function onPrompt(player: Player, pond: number, part: BasePart)
+local function onPrompt(player: Player, pond: number)
 	local current = sessions[player]
 	TrainingService.stop(player)
 	if not current or current.pond ~= pond then
-		start(player, pond, part)
+		start(player, pond)
 	end
 end
 
@@ -108,7 +112,7 @@ local function tick()
 	for player, session in sessions do
 		if
 			not Proximity.isNearPoint(player, session.origin, TRAINING.maxDriftStuds)
-			or not nearPond(player, session.part)
+			or not nearPond(player, session.pond)
 		then
 			TrainingService.stop(player)
 		else
@@ -126,36 +130,8 @@ local function tick()
 end
 
 function TrainingService.init(map: Instance)
-	local count = 0
-	for _, descendant in map:GetDescendants() do
-		local index = descendant:GetAttribute(Protocol.Map.PondIndexAttribute)
-		if
-			descendant.Name == Protocol.Map.TrainingPond
-			and descendant:IsA("BasePart")
-			and type(index) == "number"
-		then
-			local def = PONDS[index]
-			if def then
-				local requirement = if def.robuxOnly
-					then "Estanque sagrado · solo con Robux"
-					elseif def.requiredKills > 0 then `Requiere {FishingPower.pondRequirement(
-						def
-					)}`
-					else "Poder de pesca"
-				local prompt = Proximity.makePrompt(
-					descendant,
-					`Entrenar x{def.multiplier}`,
-					requirement,
-					TRAINING.promptDistanceStuds
-				)
-				prompt.Triggered:Connect(function(player: Player)
-					onPrompt(player, index, descendant)
-				end)
-				count += 1
-			end
-		end
-	end
-	assert(count > 0, "TrainingService: no hay estanques en el mapa")
+	pondSpots = TrainingPonds.build(map, onPrompt)
+	assert(next(pondSpots) ~= nil, "TrainingService: no hay estanques en el mapa")
 
 	task.spawn(function()
 		while true do
