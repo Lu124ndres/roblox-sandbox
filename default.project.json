@@ -41,9 +41,9 @@
 				"GeographicLatitude": 23,
 				"Brightness": 2.2,
 				"Ambient": [
-					0.27,
-					0.28,
-					0.32
+					0.19,
+					0.21,
+					0.26
 				],
 				"OutdoorAmbient": [
 					0.47,
@@ -72,15 +72,15 @@
 						0.56,
 						0.68
 					],
-					"Glare": 0.25,
-					"Haze": 0.3
+					"Glare": 0.4,
+					"Haze": 0.6
 				}
 			},
 			"ColorCorrection": {
 				"$className": "ColorCorrectionEffect",
 				"$properties": {
-					"Saturation": 0.28,
-					"Contrast": 0.16,
+					"Saturation": 0.12,
+					"Contrast": 0.22,
 					"TintColor": [
 						1,
 						0.985,
@@ -91,15 +91,15 @@
 			"Bloom": {
 				"$className": "BloomEffect",
 				"$properties": {
-					"Intensity": 0.45,
-					"Size": 28,
-					"Threshold": 1.6
+					"Intensity": 0.5,
+					"Size": 24,
+					"Threshold": 1.4
 				}
 			},
 			"SunRays": {
 				"$className": "SunRaysEffect",
 				"$properties": {
-					"Intensity": 0.14,
+					"Intensity": 0.18,
 					"Spread": 0.6
 				}
 			},

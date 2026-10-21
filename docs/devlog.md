@@ -3405,3 +3405,28 @@ aviso nuevo en la pila.
 1.5Qi), 34 canastas y 34 botas; con botas 34 la velocidad es 100; caña 40 sin errores en el
 Output. El personaje no lleva botas.
 **Pendiente:** los íconos v4 (Canva limita la cuota: van de a pocos).
+
+## 2026-10-21 (9) — Luz más realista, agua del mar y estanques, espuma rota
+
+**Qué se hizo (pedido del usuario: "la iluminación se ve muy plasticosa", agua mejor y que no
+se bugee con el mapa):**
+- **Luz:** `SkyMoods` sube el sol x1.25 y oscurece la luz de relleno (OutdoorAmbient) un 28 % en
+  todos los ambientes, así las sombras tienen volumen. En `default.project.json`: saturación
+  0.28 → 0.12, contraste 0.16 → 0.22, Ambient más oscuro, bruma 0.3 → 0.6, destello del sol
+  0.25 → 0.4, bloom un poco más suave y rayos de sol 0.14 → 0.18. Exposición -0.2 desde
+  `SkyCycle` (Rojo no sincroniza `ExposureCompensation`).
+- **Agua del mar** (`World/TerrainStyle`, archivo nuevo de otra sesión, sin commit): azul verdoso
+  (0, 112, 140), transparencia 0.4, reflejo 0.5 → 0.45 y olas más chicas y lentas.
+- **Estanques:** la lámina de agua (`Lamina_<n>`, `World/BlockIsland`) pasa de plástico liso a
+  vidrio con reflejo 0.3; sigue viva o pálida según si está abierto (`Training/PondFx`).
+- **Bug de la orilla:** las franjas celestes sobre la arena eran la espuma (`Isla.Espuma`), un
+  anillo de la isla redonda de antes; con la isla de bloques las 192 piezas caen en tierra.
+  `Ambient/FoamShore` borra al cargar las que tocan la isla (hoy, todas).
+
+**Probado en Studio (Play):** capturas antes y después de la orilla y de los estanques a varias
+horas; la espuma ya no aparece, los estanques son de vidrio, exposición -0.2, sin errores en el
+Output.
+**Pendiente (decisión del usuario):** el pasto sigue muy saturado porque el color viene de la
+textura de las mallas de la isla; la orilla poco honda se ve beige porque la plataforma de arena
+bajo el agua es casi plana (se arregla en Blender); `Technology` sigue en ShadowMap (Future se
+ve más real pero pesa más en teléfonos); espuma nueva siguiendo la orilla de bloques.

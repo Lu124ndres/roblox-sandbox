@@ -122,6 +122,8 @@ function SkyCycle.start()
 	local lastHour, lastZone, lastDawn, lastHot, lastLair, lastIce, sinceWrite =
 		-1, -1, -1, -1, -1, -1, math.huge
 	local lastEvent = -1
+	-- Va aquí y no en default.project.json: Rojo no sincroniza ExposureCompensation.
+	Lighting.ExposureCompensation = SkyMoods.exposure
 	EventSky.start()
 	RunService.RenderStepped:Connect(function(dt: number)
 		sinceWrite += dt

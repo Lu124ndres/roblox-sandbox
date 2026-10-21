@@ -11,6 +11,12 @@
 	sol: luz clara y cálida).
 ]]
 
+-- Luz más realista (pedido del usuario, 2026-10-21: "se ve muy plasticosa"): más sol y
+-- menos luz de relleno (OutdoorAmbient) en todos los ambientes, así las sombras tienen
+-- volumen en vez de verse todo igual de iluminado. Los valores de abajo son los de antes.
+local SUN_BOOST = 1.25
+local SHADE_DARKEN = 0.28
+
 export type Mood = {
 	hour: number,
 	brightness: number,
@@ -32,12 +38,12 @@ local function mood(
 ): Mood
 	return {
 		hour = hour,
-		brightness = brightness,
+		brightness = brightness * SUN_BOOST,
 		atmosphere = atmosphere,
 		decay = decay,
 		density = density,
 		tint = tint,
-		ambient = ambient,
+		ambient = ambient:Lerp(Color3.new(), SHADE_DARKEN),
 	}
 end
 
@@ -57,6 +63,9 @@ local NOON = mood(
 )
 
 local SkyMoods = {}
+
+-- Un poco menos de exposición: con el sol más fuerte la arena salía casi blanca.
+SkyMoods.exposure = -0.2
 
 SkyMoods.day = {
 	NIGHT,

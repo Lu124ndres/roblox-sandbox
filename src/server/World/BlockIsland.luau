@@ -27,6 +27,7 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local SOURCE = Protocol.Map.BlockIsland -- en ServerStorage, y la copia en Workspace
 local SOLID = { "IslaSector_", "RampaSendero_", "AroEstanque_" }
 local WATER_PREFIX = Protocol.Map.PondWaterPrefix
+local POND_REFLECTANCE = 0.3
 
 local BlockIsland = {}
 
@@ -44,10 +45,12 @@ local function startsWithAny(name: string, prefixes: { string }): boolean
 end
 
 -- El agua de un estanque: color plano del estanque (sin la textura), el cliente la anima.
+-- Vidrio con reflejo: en plástico liso se veía como una lámina de plástico, no como agua.
 local function water(part: MeshPart, index: number)
 	part.TextureID = ""
 	part.Color = UIConfig.PondColors[index] or part.Color
-	part.Material = Enum.Material.SmoothPlastic
+	part.Material = Enum.Material.Glass
+	part.Reflectance = POND_REFLECTANCE
 	part.CastShadow = false
 	part:SetAttribute(Protocol.Map.PondIndexAttribute, index)
 end

@@ -1068,3 +1068,13 @@ botas a velocidad 100 (el puente sigue en 56, así que con botas rápidas ya no 
 modelos 3D de la caña y la canasta repiten el último (se modelarán en Blender después); las botas
 nunca se dibujan en el personaje. Los íconos van en hojas de 5x4 celdas de 200 px por
 categoría (Roblox achica las imágenes de más de 1024 px), así que cada categoría tiene dos hojas.
+
+## 2026-10-21 — La espuma redonda de la orilla se borra en el cliente
+
+La espuma de la orilla (`Isla.Espuma`) la genera `tools/generar_isla.py` como un anillo en
+`shoreRadius`, pensado para la isla de terreno redonda. Con la isla de bloques las 192 piezas
+quedan sobre la arena y se veían como franjas de agua flotando. En vez de regenerar
+`world/Isla.model.json` (el generador tiene cambios sin commit de otra sesión), el cliente
+(`Ambient/FoamShore`, desde `SeaLife`) borra al cargar las piezas que tocan la isla con un rayo
+hacia abajo en las esquinas y donde llega la ola. Si algún día se hace una espuma que siga la
+orilla de bloques, este filtro la deja pasar mientras quede sobre el agua.

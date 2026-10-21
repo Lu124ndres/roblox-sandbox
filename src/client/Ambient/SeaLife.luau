@@ -28,6 +28,7 @@ local FishModel = require(script.Parent.Parent.Effects.FishModel)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local CraterMode = require(script.Parent.CraterMode)
+local FoamShore = require(script.Parent.FoamShore)
 
 local EFFECTS = UIConfig.Effects
 local FOAM_TRAVEL_STUDS = 1.2 -- cuánto sube y baja la espuma sobre la arena
@@ -50,10 +51,12 @@ local function collectBuoys(folder: Instance): { Floating }
 	return buoys
 end
 
-local function collectFoam(folder: Instance): { Foam }
+local function collectFoam(folder: Instance, island: Instance): { Foam }
 	local foam = {}
 	for index, child in folder:GetChildren() do
-		if child:IsA("BasePart") then
+		if child:IsA("BasePart") and FoamShore.overLand(child, island, FOAM_TRAVEL_STUDS) then
+			child:Destroy() -- quedaba sobre la arena de la isla de bloques
+		elseif child:IsA("BasePart") then
 			table.insert(foam, {
 				part = child,
 				base = child.CFrame,
@@ -178,7 +181,8 @@ function SeaLife.start()
 	task.spawn(function()
 		local map = Workspace:WaitForChild(Protocol.Map.Root, math.huge)
 		local buoys = collectBuoys(map:WaitForChild(Protocol.Map.Buoys, math.huge))
-		local foam = collectFoam(map:WaitForChild(Protocol.Map.Foam, math.huge))
+		local island = Workspace:WaitForChild(Protocol.Map.BlockIsland, math.huge)
+		local foam = collectFoam(map:WaitForChild(Protocol.Map.Foam, math.huge), island)
 		animate(buoys, foam, glints)
 	end)
 end
