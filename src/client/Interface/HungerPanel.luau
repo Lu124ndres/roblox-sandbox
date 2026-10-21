@@ -69,7 +69,7 @@ end
 local function place(panel: Frame)
 	local inset = GuiService.TopbarInset
 	local bar = Layout.topBar()
-	-- En PC los botones van en una lista; en táctil, en una cuadrícula de dos filas.
+	-- Los botones van en una lista que crece hacia la izquierda.
 	local list = bar:FindFirstChildWhichIsA("UIGridStyleLayout")
 	local barLeft = bar.AbsolutePosition.X
 		+ bar.AbsoluteSize.X

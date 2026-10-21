@@ -7,7 +7,7 @@
 	giran del color del evento, su ícono, el nombre enorme («¡PESCA DORADA!»)
 	en su color con contorno negro grueso y abajo qué da y cuánto dura. Entra
 	de golpe con rebote, se queda unos segundos y sube desvaneciéndose. Lo
-	arranca EventTimer; el evento lo decide el servidor (EventScheduler).
+	arranca Main.client; el evento lo decide el servidor (EventScheduler).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

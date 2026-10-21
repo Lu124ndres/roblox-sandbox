@@ -7,35 +7,34 @@
 	tarjetas de MEJORAS de la referencia del usuario.
 		HudButtons.side   grandes, en la columna derecha (Tienda, Mejoras), centrados;
 		                  casilla, salvo los de LAVA (la TIENDA, con marco de lava)
+		HudButtons.wide   placa ancha arriba de la columna derecha (Índice de peces)
 		HudButtons.top    casillas chicas en la esquina derecha de la barra de
-		                  Roblox (Premio, Peces, Códigos, Grupo, Ajustes)
+		                  Roblox (Ruleta, Premio, Códigos, Grupo, Ajustes)
 	Cada módulo agrega el suyo y decide qué hace al tocarlo. Un punto rojo
 	avisa que hay algo nuevo (por ejemplo, el premio diario).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TweenService = game:GetService("TweenService")
 
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local HudButtonParts = require(script.Parent.HudButtonParts)
 
-local COLORS = UIConfig.Colors
 local SIDE_SIZE = Layout.BUTTON_SIZE
 -- Grosor del canto: el de la casilla mide 34 px en la imagen; a 0.32 queda en unos 10 px
 -- sobre un botón de 88 (como las tarjetas de la referencia), y más fino en los de arriba.
 local SIDE_SLICE = 0.32
 local TOP_SLICE = 0.16
 local INSET = 10 -- lo que ocupa el canto en los grandes: el ícono queda dentro
+local WIDE_HEIGHT = 54 -- alto de la placa ancha (HudButtons.wide)
 -- Los laterales que llevan el marco de lava (lo más importante).
 local LAVA: { [string]: boolean } = { Tienda = true }
 -- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
 local TOP_ORDER: { [string]: number } =
-	{ Ruleta = 1, Premio = 2, Peces = 3, ["Códigos"] = 4, Grupo = 5, Ajustes = 6, Admin = 7 }
+	{ Ruleta = 1, Premio = 2, ["Códigos"] = 3, Grupo = 4, Ajustes = 5, Admin = 6 }
 
 export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
 
@@ -46,37 +45,10 @@ local registered: { TextButton } = {} -- todos, en orden: los recorre el mando (
 local sideRow: Frame? = nil
 local sideCount = 0 -- botones grandes ya puestos (van de dos en dos por fila)
 
-local function alertDot(parent: GuiObject): Frame
-	local dot = Instance.new("Frame")
-	dot.Name = "Aviso"
-	dot.AnchorPoint = Vector2.new(0.5, 0.5)
-	dot.Position = UDim2.new(1, -8, 0, 8)
-	dot.Size = UDim2.fromOffset(14, 14)
-	dot.BackgroundColor3 = COLORS.Bite
-	dot.Visible = false
-	dot.ZIndex = 6
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(1, 0)
-	corner.Parent = dot
-	Style.border(dot, 2)
-	dot.Parent = parent
-	return dot
-end
+local alertDot = HudButtonParts.alertDot
+local press = HudButtonParts.press
 
--- Rebote al tocarlo, y sonido.
-local function press(button: TextButton, onClick: () -> ())
-	local scale = Instance.new("UIScale")
-	scale.Parent = button
-	button.Activated:Connect(function()
-		Sounds.play("Click")
-		scale.Scale = 0.88
-		TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = 1 }):Play()
-		onClick()
-	end)
-end
-
--- Casilla con ícono y nombre dorado abajo; lo usan también los atajos de
--- Robux. `lava`: con el marco de lava (si no, la casilla oscura). Todo el cuadro (ícono y
+-- Casilla con ícono y nombre dorado abajo. `lava`: con el marco de lava (si no, la casilla oscura). Todo el cuadro (ícono y
 -- nombre) es el botón: el ícono y el nombre no reciben toques, así el toque
 -- siempre llega al botón aunque caiga sobre el dibujo.
 function HudButtons.iconButton(
@@ -135,6 +107,44 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE, LAVA[text])
 	button.LayoutOrder = order
 	table.insert(registered, button)
+	press(button, onClick)
+	local dot = alertDot(button)
+	return {
+		button = button,
+		setAlert = function(on: boolean)
+			dot.Visible = on
+		end,
+	}
+end
+
+-- Placa ancha arriba de la columna derecha (el Índice de peces): ícono a la
+-- izquierda y el nombre dorado, del ancho de una fila de dos botones.
+function HudButtons.wide(text: string, icon: string, onClick: () -> ()): HudButton
+	order += 1
+	local button = Instance.new("TextButton")
+	button.Name = `Boton{text}`
+	button.Text = ""
+	button.LayoutOrder = 2 -- debajo del entrenamiento del servidor, encima de Mejoras y Tienda
+	button.AutoButtonColor = false
+	button.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, WIDE_HEIGHT)
+	local skin = Kit.skin(button, "casilla")
+	skin.SliceScale = SIDE_SLICE
+	Kit.press(button, skin)
+	button.Parent = Layout.right()
+	table.insert(registered, button)
+	local view = Icons.view(button, icon)
+	view.AnchorPoint = Vector2.new(0, 0.5)
+	view.Position = UDim2.new(0, 8, 0.5, 0)
+	view.Size = UDim2.fromOffset(WIDE_HEIGHT - 12, WIDE_HEIGHT - 12)
+	view.Active = false
+	view.Interactable = false
+	local label = Style.text(button, "Nombre", 24, nil, 2)
+	label.Position = UDim2.fromOffset(WIDE_HEIGHT, 10)
+	label.Size = UDim2.new(1, -WIDE_HEIGHT - 10, 1, -20)
+	label.Active = false
+	label.Interactable = false
+	label.Text = TextCase.upper(text)
+	Kit.gold(label)
 	press(button, onClick)
 	local dot = alertDot(button)
 	return {

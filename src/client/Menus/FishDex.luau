@@ -77,7 +77,7 @@ function FishDex.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local size = WindowLayout.size(Vector2.new(660, 500), Vector2.new(1040, 440))
 	local window = Window.create(screen, "Coleccion", "Colección de peces", size)
-	local hud = HudButtons.top("Peces", "fish", window.toggle)
+	local hud = HudButtons.wide("Índice", "fish", window.toggle)
 	-- Arriba: barra de especies descubiertas y el premio por completarla.
 	local bar = CardParts.bar(window.content, Style.PALETTE.Cards.Green, 22)
 	bar.track.Position = UDim2.fromOffset(4, 6)

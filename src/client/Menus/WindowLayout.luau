@@ -38,8 +38,14 @@ function WindowLayout.share(): Vector2
 end
 
 -- `frameMax`: el tope del marco entero (panel + lo que sobresale el título).
-function WindowLayout.resize(frame: Frame, screen: ScreenGui, frameMax: Vector2): number
-	local share = WindowLayout.share()
+-- `shrink`: achica la parte de la pantalla que puede ocupar (1 = la de siempre).
+function WindowLayout.resize(
+	frame: Frame,
+	screen: ScreenGui,
+	frameMax: Vector2,
+	shrink: number?
+): number
+	local share = WindowLayout.share() * (shrink or 1)
 	local area = screen.AbsoluteSize
 	if area.X < 1 or area.Y < 1 then
 		area = Device.viewport()

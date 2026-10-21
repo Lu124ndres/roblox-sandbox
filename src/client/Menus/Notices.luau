@@ -120,7 +120,7 @@ function Notices.start(toasts: Toasts.Toasts)
 			Sounds.play(if a == "ok" then "LegendaryCatch" else "Click")
 			toasts.banner(texts[a] or "", if a == "ok" then COLORS.Coins else COLORS.Warning)
 		elseif kind == "event" then
-			return -- lo anuncia en grande EventIntro (lo arranca EventTimer)
+			return -- lo anuncia en grande EventIntro
 		elseif kind == "quest" and type(a) == "string" and type(b) == "string" then
 			Sounds.play("LegendaryCatch")
 			toasts.banner(`¡Misión cumplida! {a}: {b}`, COLORS.Success)

@@ -11,8 +11,8 @@
 		biteDelay  multiplica la espera hasta que pica (0.5 = el doble de rápido)
 		coins      multiplica las monedas
 		power      multiplica el poder
-	Cada uno tiene su color y su ícono (Interface/Icons) para el anuncio y la
-	placa del HUD; su cielo y sus efectos en el mundo están en client/Ambient
+	Cada uno tiene su color y su ícono (Interface/Icons) para el anuncio y el
+	potenciador del HUD (BoostBadges); su cielo y sus efectos en el mundo están en client/Ambient
 	(EventSky, EventFx).
 ]]
 

@@ -10,9 +10,10 @@
 		Amigos   +10 % por amigo de Roblox en el servidor (hasta 5); tocarlo abre
 		         la invitación de Roblox (SocialService), y si un amigo nuevo
 		         entra por ella los dos ganan premio (server/Social/Referrals)
-	PC: abajo a la izquierda. Táctil: abajo a la derecha, encima de Saltar
-	(abajo a la izquierda está el joystick). Los números los calcula el
-	servidor (atributo AmigosEnServidor, carpeta de impulsos); aquí se muestran.
+	Siempre abajo a la izquierda. En táctil quedan detrás del joystick y son
+	solo para ver: no reciben toques, así no le quitan ninguno al joystick.
+	Los números los calcula el servidor (atributo AmigosEnServidor, carpeta de
+	impulsos); aquí se muestran.
 ]]
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -29,7 +30,6 @@ local Device = require(script.Parent.Device)
 local Icons = require(script.Parent.Icons)
 local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
-local TouchControls = require(script.Parent.TouchControls)
 
 local SIZE = 56 -- ancho y alto de cada insignia (el ícono; el número va encima de su borde de abajo)
 local GAP = 6
@@ -67,6 +67,7 @@ local function badge(row: Frame, name: string, order: number, icon: GuiObject?):
 	button.AutoButtonColor = false
 	button.BackgroundTransparency = 1
 	button.Size = UDim2.fromOffset(SIZE, SIZE)
+	button.Interactable = not Device.touch()
 	button.Parent = row
 	local image = icon or Icons.view(button, IDLE_EVENT_ICON)
 	image.Parent = button
@@ -107,23 +108,8 @@ function BoostBadges.start(screen: ScreenGui)
 	local event = badge(row, "Evento", 2, nil)
 	local friends = badge(row, "Amigos", 3, Icons.view(row, "friends"))
 
-	local function place()
-		if Device.touch() then
-			-- Encima de Saltar, pegado al borde derecho.
-			local jump = TouchControls.jumpTop()
-			local bottom = if jump then jump - screen.AbsolutePosition.Y - MARGIN else -MARGIN
-			row.AnchorPoint = Vector2.new(1, 1)
-			list.HorizontalAlignment = Enum.HorizontalAlignment.Right
-			row.Position = UDim2.new(1, -MARGIN, if jump then 0 else 1, bottom)
-		else
-			row.AnchorPoint = Vector2.new(0, 1)
-			list.HorizontalAlignment = Enum.HorizontalAlignment.Left
-			row.Position = UDim2.new(0, MARGIN, 1, -MARGIN)
-		end
-	end
-	place()
-	Device.onResize(place)
-	TouchControls.onChange(place)
+	row.AnchorPoint = Vector2.new(0, 1)
+	row.Position = UDim2.new(0, MARGIN, 1, -MARGIN)
 	row.Parent = screen
 	Layout.avoid(row) -- las columnas no se le meten encima ni debajo
 

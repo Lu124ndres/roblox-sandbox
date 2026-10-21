@@ -37,7 +37,7 @@ function HudFocus.start(screen: ScreenGui)
 	veil.Parent = screen
 
 	local hud: { GuiObject } = { Layout.left(), Layout.right(), Layout.topBar() }
-	for _, name in { "Hambre", "Impulsos" } do
+	for _, name in { "Hambre", "Impulsos", "AtajosRobux" } do
 		local object = screen:FindFirstChild(name)
 		if object and object:IsA("GuiObject") then
 			table.insert(hud, object)

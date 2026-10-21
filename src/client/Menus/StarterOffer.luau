@@ -2,8 +2,10 @@
 --[[
 	StarterOffer
 
-	Oferta de bienvenida: a los `DELAY_SECONDS` de cada partida, si todavía
-	no compró el pack de inicio (atributo PackInicio), se abre esta ventana.
+	Oferta de bienvenida: `DELAY_SECONDS` después de terminar el tutorial (o de
+	entrar, si ya lo había terminado), si todavía no compró el pack de inicio
+	(atributo PackInicio), se abre esta ventana, más chica que las demás para
+	no tapar toda la pantalla (pedido del usuario el 2026-10-21).
 	Arriba el regalo sobre rayos, el título y la etiqueta de descuento; en el
 	medio cinco tarjetas con lo que trae (monedas, caña, canasta, botas con
 	sus íconos de MEJORAS y x2 poder); abajo lo que costaría por separado
@@ -27,7 +29,10 @@ local ShopStone = require(script.Parent.ShopStone)
 local StarterParts = require(script.Parent.StarterParts)
 local Window = require(script.Parent.Window)
 
-local DELAY_SECONDS = 150
+local DELAY_SECONDS = 60
+local SHRINK = 0.7 -- parte de la pantalla que ocupa, comparada con las demás ventanas
+local ATTR = Protocol.PlayerAttributes
+local TUTORIAL_STEPS = #Config.Retention.tutorial
 local PACK = Config.Monetization.starterPack
 local ROBUX = Config.Monetization.upgradeRobux
 local CARDS = Style.PALETTE.Cards
@@ -66,6 +71,7 @@ end
 function StarterOffer.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
 	local window = Window.create(screen, "PackInicio", "¡Oferta!", Vector2.new(820, 500))
+	window.setShrink(SHRINK)
 	local content = window.content
 	local separate = separateRobux()
 	StarterParts.header(
@@ -129,19 +135,35 @@ function StarterOffer.start(screen: ScreenGui)
 			price.Text = tostring(Purchases.price("PackInicio", false, PACK.robux))
 		end)
 	end)
-	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.StarterPack):Connect(function()
-		if
-			player:GetAttribute(Protocol.PlayerAttributes.StarterPack) == true and window.isOpen()
-		then
+	player:GetAttributeChangedSignal(ATTR.StarterPack):Connect(function()
+		if player:GetAttribute(ATTR.StarterPack) == true and window.isOpen() then
 			window.close()
 		end
 	end)
 
-	task.delay(DELAY_SECONDS, function()
-		if player:GetAttribute(Protocol.PlayerAttributes.StarterPack) ~= true then
-			window.open()
+	-- Una vez por partida: el minuto empieza al terminar el tutorial (el servidor
+	-- cuenta los pasos hechos en el atributo Tutorial).
+	local scheduled = false
+	local function tutorialDone(): boolean
+		local steps = player:GetAttribute(ATTR.Tutorial)
+		return player:GetAttribute(ATTR.DataLoaded) == true
+			and type(steps) == "number"
+			and steps >= TUTORIAL_STEPS
+	end
+	local function schedule()
+		if scheduled or not tutorialDone() then
+			return
 		end
-	end)
+		scheduled = true
+		task.delay(DELAY_SECONDS, function()
+			if player:GetAttribute(ATTR.StarterPack) ~= true then
+				window.open()
+			end
+		end)
+	end
+	player:GetAttributeChangedSignal(ATTR.Tutorial):Connect(schedule)
+	player:GetAttributeChangedSignal(ATTR.DataLoaded):Connect(schedule)
+	schedule()
 end
 
 return StarterOffer

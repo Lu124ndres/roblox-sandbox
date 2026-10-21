@@ -35,6 +35,7 @@ export type Window = {
 	isOpen: () -> boolean,
 	onOpen: (callback: () -> ()) -> (),
 	onClose: (callback: () -> ()) -> (),
+	setShrink: (factor: number) -> (), -- ocupa menos pantalla (1 = lo normal)
 }
 
 local Window = {}
@@ -96,6 +97,7 @@ function Window.create(
 	local pop = TweenService:Create(scale, UIConfig.Tweens.Pop, {})
 	local openCallbacks: { () -> () } = {}
 	local closeCallbacks: { () -> () } = {}
+	local shrink = 1
 	local window: Window
 	window = {
 		frame = frame,
@@ -111,7 +113,7 @@ function Window.create(
 				callback()
 			end
 			Sounds.play("Click")
-			local fit = WindowLayout.resize(frame, screen, limit.MaxSize)
+			local fit = WindowLayout.resize(frame, screen, limit.MaxSize, shrink)
 			frame.Visible = true
 			scale.Scale = fit * 0.85
 			pop = TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = fit })
@@ -151,6 +153,9 @@ function Window.create(
 		onClose = function(callback: () -> ())
 			table.insert(closeCallbacks, callback)
 		end,
+		setShrink = function(factor: number)
+			shrink = factor
+		end,
 	}
 	closeButton.Activated:Connect(window.close)
 	local opener = Instance.new("BindableEvent")
@@ -162,7 +167,7 @@ function Window.create(
 	Device.onResize(function()
 		if frame.Visible then
 			pop:Cancel()
-			scale.Scale = WindowLayout.resize(frame, screen, limit.MaxSize)
+			scale.Scale = WindowLayout.resize(frame, screen, limit.MaxSize, shrink)
 		end
 	end)
 	return window
