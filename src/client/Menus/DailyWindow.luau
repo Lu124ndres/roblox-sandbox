@@ -60,14 +60,14 @@ local function dayReward(player: Player, day: number): string
 	return if spins > 0 then `{coins} y +{spins} giro{if spins == 1 then "" else "s"}` else coins
 end
 
--- Ícono grande de regalo que asoma sobre la esquina del título (el título se corre a la
+-- Calendario grande que asoma sobre la esquina del título (el título se corre a la
 -- derecha para dejarle lugar), como el calendario de los simuladores.
 local function titleBadge(frame: Frame)
 	local heading = frame:FindFirstChild("Encabezado")
 	if heading and heading:IsA("GuiObject") then
 		heading.Position += UDim2.fromOffset(BADGE_ROOM, 0)
 	end
-	local badge = Icons.view(frame, "gift")
+	local badge = Icons.view(frame, "calendar")
 	badge.Name = "IconoTitulo"
 	badge.AnchorPoint = Vector2.new(0.5, 0.5)
 	badge.Position = UDim2.fromOffset(34, 30)
@@ -91,7 +91,7 @@ function DailyWindow.start(screen: ScreenGui)
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local claimRemote = remotes:WaitForChild(Protocol.Remotes.ClaimDaily) :: RemoteEvent
 	local window = Window.create(screen, "Diario", "Premio diario", Vector2.new(880, 520))
-	local hud = HudButtons.top("Premio", "gift", window.toggle)
+	local hud = HudButtons.top("Premio", "calendar", window.toggle)
 	titleBadge(window.frame)
 
 	-- Días 1 a 6 en una grilla de 3 x 2; el último, alto a la derecha.

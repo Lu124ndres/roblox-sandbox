@@ -72,8 +72,9 @@ local Assets: Assets = {
 		-- Hoja 2, por filas: caña, botas, corona, estanque / rayo, orca, minotauro, dragón /
 		-- zorro, regalo rosa, flecha, carne / rayos de fondo (sunburst), brillo redondo.
 		IconSheet2 = "rbxassetid://89496859008486",
-		-- Hoja 3 (assets/ui/iconos/iconos_hoja3.png): monstruo panzón (monstruos llenados).
-		IconSheet3 = "rbxassetid://99850577116916",
+		-- Hoja 3 (v4/iconos_v4_hoja3.png): calendario del diario, caña suprema, Dios del Volcán,
+		-- Rey del Mar.
+		IconSheet3 = "rbxassetid://101327392927525",
 		-- Equipo de la tienda (Canva, recortado): un ícono por nivel, 5 columnas de 200 px,
 		-- celda = nivel - 1 por filas. Fuentes en assets/ui/iconos/equipo_*.png.
 		EquipoRod = "rbxassetid://79873240212746", -- 20 cañas

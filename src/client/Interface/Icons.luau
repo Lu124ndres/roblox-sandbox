@@ -12,7 +12,8 @@
 	        alimentado.
 	Hoja 2: rod, boots, crown, pond, bolt, orca, minotaur, dragon, fox,
 	        giftPink, arrow, meat, sunburst (rayos blancos para teñir), glow.
-	Hoja 3: la anterior del monstruo panzón (ya no se usa: fed va en la hoja 1).
+	Hoja 3: calendar (premio diario), superRod (caña suprema de la ruleta),
+	        volcanoGod y seaKing (caras de los trajes de los pases).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -58,6 +59,10 @@ local CELLS: { [string]: Cell } = {
 	fed = { sheet = 1, index = 3, fallback = "skull" },
 	spin = { sheet = 1, index = 14, fallback = "gift" },
 	pack = { sheet = 1, index = 15, fallback = "chest" },
+	calendar = { sheet = 3, index = 0, fallback = "gift" },
+	superRod = { sheet = 3, index = 1, fallback = "crystal" },
+	volcanoGod = { sheet = 3, index = 2, fallback = "skull" },
+	seaKing = { sheet = 3, index = 3, fallback = "skull" },
 }
 
 local Icons = {}
