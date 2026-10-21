@@ -75,7 +75,7 @@ local CoreGuiSetup = require(script.Parent.Interface.CoreGuiSetup)
 local FillChips = require(script.Parent.Interface.FillChips)
 local Layout = require(script.Parent.Interface.Layout)
 local QuickBuys = require(script.Parent.Interface.QuickBuys)
-local FriendBoostLabel = require(script.Parent.Interface.FriendBoostLabel)
+local BoostBadges = require(script.Parent.Interface.BoostBadges)
 local Overhead = require(script.Parent.Interface.Overhead)
 local StartZoom = require(script.Parent.Interface.StartZoom)
 local TrajesClient = require(script.Parent.Trajes)
@@ -91,11 +91,7 @@ CoreGuiSetup.start()
 
 local screen = Ui.screen("Juego", playerGui, 1)
 Layout.mount(screen, playerGui)
-local toasts = Toasts.mount(screen)
-if player.MembershipType == Enum.MembershipType.Premium then
-	local bonus = require(ReplicatedStorage.Shared.Config).Social.premiumMultiplier
-	task.delay(8, toasts.show, `Premium: x{bonus} poder y monedas`, UIConfig.Colors.Coins)
-end
+local toasts = Toasts.mount(screen) -- el bono de Premium se ve en Interface/BoostBadges
 
 local hungerPanel = HungerBar.mount(screen, function(stage: number)
 	local color = UIConfig.HungerStageColors[stage]
@@ -135,7 +131,7 @@ RebirthWindow.start(screen)
 StarterOffer.start(screen)
 CodesWindow.start(screen)
 GroupWindow.start(screen)
-FriendBoostLabel.start(screen)
+BoostBadges.start(screen)
 HudFocus.start(screen) -- después del HUD: en táctil lo oculta con una ventana abierta
 BoostTimer.start(screen)
 EventTimer.start()
