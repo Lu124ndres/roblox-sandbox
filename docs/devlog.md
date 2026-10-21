@@ -3377,3 +3377,12 @@ ventana Mejoras y ruleta centrados y sin encimarse; avisos de misión, kill y av
 compactos sin tapar al personaje; la ruleta oscurece toda la pantalla en el iPhone 16 Pro Max.
 **Pendiente (decisión del usuario):** los botones de la barra miden 28 pt en el teléfono y los
 de +25/50/75 % 38×28 pt (chicos para el dedo); los íconos de potenciadores rozan el joystick.
+
+## 2026-10-21 (7) — Sin aviso de monedas al alimentar
+
+- Al alimentar ya no sale el aviso "+N monedas · N peces para …" (pedido del usuario: tapaba
+  la vista en cada mordida). Quedan las monedas que vuelan al contador (`CoinBurst`) y los
+  avisos de carga vacía, evolución, descanso y gigante lleno (`FeedFeedback`).
+
+**Probado en Studio (Play):** `FeedResult` "ok" desde el servidor: 32 monedas volando y ningún
+aviso nuevo en la pila.

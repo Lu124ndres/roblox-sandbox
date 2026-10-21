@@ -2,8 +2,8 @@
 --[[
 	FeedFeedback
 
-	Avisos al alimentar al gigante: monedas ganadas (con monedas que vuelan
-	al contador), carga vacía o gigante
+	Lo que se ve al alimentar al gigante: monedas que vuelan al contador (sin
+	aviso de texto) y avisos de carga vacía, evolución, descanso o gigante
 	satisfecho. Los números vienen del servidor; aquí solo se muestran.
 ]]
 
@@ -27,12 +27,9 @@ function FeedFeedback.start(toasts: Toasts.Toasts, screen: ScreenGui, coinLabel:
 	feedResult.OnClientEvent:Connect(function(status: unknown, fishCount: unknown, coins: unknown)
 		if status == "ok" and type(fishCount) == "number" and type(coins) == "number" then
 			Sounds.play("Coins")
+			-- Solo las monedas que vuelan al contador: el aviso con el total tapaba la
+			-- vista en cada mordida (pedido del usuario el 2026-10-21).
 			CoinBurst.burst(screen, coinLabel, coins, function() end)
-			local noun = if fishCount == 1 then "pez" else "peces"
-			toasts.show(
-				`+{coins} monedas · {fishCount} {noun} para {GiantName.current()}`,
-				COLORS.Coins
-			)
 		elseif status == "empty" then
 			toasts.show("No llevas peces: pesca en la orilla de la isla", COLORS.Fishing)
 		elseif status == "evolving" then
