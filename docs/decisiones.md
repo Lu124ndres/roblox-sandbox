@@ -1027,3 +1027,18 @@ Roblox cambia su tamaño y lugar según la pantalla (70 px en teléfono, 120 en 
 así que se siguen sus cambios (`AbsolutePosition`, `Visible`, `Enabled`) y se reacomoda en
 el siguiente cuadro. La escala de las columnas sale de los tamaños en offset de sus filas, no
 de `AbsoluteContentSize`, para no entrar en un bucle con la propia escala.
+
+## 2026-10-20 — En táctil, el botón de acción y el aviso de los prompts van junto a Saltar
+
+**Contexto:** en teléfonos el aviso de los ProximityPrompt (un BillboardGui sobre el objeto)
+caía debajo de las columnas o fuera de la pantalla según la cámara, y Pescar medía 110 pt en
+todo teléfono (un tercio del alto en uno de 338). **Decisión:** `Interface/ActionSpot` define
+un único lugar para la acción principal: en táctil, a la izquierda de Saltar, con su base y 1.2
+veces su tamaño, leído del `TouchGui` (70 en teléfono, 120 en tablet); en PC, la esquina de
+siempre. Pescar/Alimentar/¡TIRA! y, en táctil, el aviso de los prompts (`PromptDock`, opción 1
+elegida por el usuario) salen de ahí. Con una ventana abierta en táctil se oculta el HUD y un
+velo tapa el resto (`Menus/HudFocus`). **Lo no obvio:** el aviso fijo va en un ScreenGui con
+DisplayOrder 0 (debajo del HUD) para quedar bajo el velo y no tocarse con un menú abierto; el
+velo tapa sin cambiarles `Visible` a piezas que otros módulos muestran u ocultan (Pescar,
+«Siguiente meta»). En Roblox no hay forma de saber los DPI, así que los tamaños táctiles van en
+proporción al alto de la pantalla y se comprobaron en mm con los datos del simulador.

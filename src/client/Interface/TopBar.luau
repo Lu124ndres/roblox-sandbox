@@ -6,7 +6,8 @@
 	colección, códigos, grupo, ajustes; GuiService.TopbarInset). En PC van en
 	una fila; en táctil, en dos filas de 4 que empiezan en la barra y bajan
 	por debajo de ella: así dejan libre el centro de la barra para el panel de
-	hambre y no tapan los botones de Roblox.
+	hambre y no tapan los botones de Roblox. En táctil su tamaño sigue al alto
+	de la pantalla (TOUCH_SHARE).
 	La parte de Layout: la columna derecha empieza debajo de `bottom()`.
 ]]
 
@@ -16,7 +17,10 @@ local Device = require(script.Parent.Device)
 
 local MARGIN = 12
 local BUTTON_MIN, BUTTON_MAX = 26, 36
-local BUTTON_TOUCH = 30 -- más chicos en táctil
+-- En táctil, una parte del alto de la pantalla: se ven igual en un teléfono y en
+-- una tablet, sin bajar del mínimo cómodo para el dedo ni salirse de la barra de Roblox.
+local TOUCH_SHARE = 0.1
+local TOUCH_MIN, TOUCH_MAX = 38, 50 -- 50: deja aire en la barra de Roblox (58) para el punto de aviso
 local COLUMNS_TOUCH = 4
 local GAP = 6
 
@@ -33,15 +37,21 @@ local function place()
 		bar.Size = UDim2.fromOffset(400, BUTTON_MAX)
 		return
 	end
-	local largest = if Device.touch() then BUTTON_TOUCH else BUTTON_MAX
-	local size = math.clamp(height - 18, BUTTON_MIN, largest)
-	bar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
 	if Device.touch() then
 		-- Dos filas de 4 que empiezan en la barra de Roblox y bajan por debajo de ella.
+		local size = math.clamp(math.round(Device.viewport().Y * TOUCH_SHARE), TOUCH_MIN, TOUCH_MAX)
+		local grid = bar:FindFirstChildOfClass("UIGridLayout")
+		if grid then
+			grid.CellSize = UDim2.fromOffset(size, size)
+		end
+		bar.Position =
+			UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + math.max((height - size) / 2, 0))
 		local width = COLUMNS_TOUCH * size + (COLUMNS_TOUCH - 1) * GAP
 		bar.Size = UDim2.fromOffset(width, size * 2 + GAP)
 		return
 	end
+	local size = math.clamp(height - 18, BUTTON_MIN, BUTTON_MAX)
+	bar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
 	bar.Size = UDim2.fromOffset(400, size)
 end
 
@@ -64,7 +74,6 @@ function TopBar.mount(playerGui: Instance, displayOrder: number): Frame
 		grid.SortOrder = Enum.SortOrder.LayoutOrder
 		grid.FillDirectionMaxCells = COLUMNS_TOUCH
 		grid.CellPadding = UDim2.fromOffset(GAP, GAP)
-		grid.CellSize = UDim2.fromOffset(BUTTON_TOUCH, BUTTON_TOUCH)
 		grid.Parent = bar
 	else
 		local list = Instance.new("UIListLayout")
@@ -76,6 +85,7 @@ function TopBar.mount(playerGui: Instance, displayOrder: number): Frame
 	end
 	place()
 	GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(place)
+	Device.onResize(place)
 	return bar
 end
 

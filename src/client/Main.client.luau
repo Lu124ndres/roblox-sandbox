@@ -80,6 +80,7 @@ local Overhead = require(script.Parent.Interface.Overhead)
 local TrajesClient = require(script.Parent.Trajes)
 local CodesWindow = require(script.Parent.Menus.CodesWindow)
 local GroupWindow = require(script.Parent.Menus.GroupWindow)
+local HudFocus = require(script.Parent.Menus.HudFocus)
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -134,6 +135,7 @@ StarterOffer.start(screen)
 CodesWindow.start(screen)
 GroupWindow.start(screen)
 FriendBoostLabel.start(screen)
+HudFocus.start(screen) -- después del HUD: en táctil lo oculta con una ventana abierta
 BoostTimer.start(screen)
 EventTimer.start()
 TutorialGuide.start(screen)

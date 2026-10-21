@@ -7,63 +7,35 @@
 		Alimentar  coral, en el mismo lugar; sale en la orilla del volcán con peces.
 		¡TIRA!     rojo, en el mismo lugar y un poco más grande (el pulgar no se
 		           mueve): se toca rápido para recoger (la barra es ReelBar).
-	Dónde van (abajo a la derecha, sin tapar la columna derecha del HUD):
-		teléfono  justo a la izquierda del botón de saltar de Roblox
-		tablet    igual, más grande (el botón de saltar también lo es)
-		PC        en la esquina; todo se hace con E (los botones muestran la tecla)
-		mando     igual que PC; X (Cuadrado en PlayStation) o R2, y lo muestran
-	Se reacomodan si cambia la pantalla (girar el teléfono, ventana en PC).
+	Dónde van: en Interface/ActionSpot (en táctil, a la izquierda del botón de
+	saltar de Roblox y de su tamaño; en PC, en la esquina). En PC todo se hace
+	con E y en el mando con X (Cuadrado en PlayStation) o R2: los botones
+	muestran la tecla. Se reacomodan si cambia la pantalla o los controles.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Device = require(script.Parent.Parent.Interface.Device)
+local ActionSpot = require(script.Parent.Parent.Interface.ActionSpot)
 local InputHints = require(script.Parent.Parent.Interface.InputHints)
 local ActionButton = require(script.Parent.ActionButton)
 
 local COLORS = UIConfig.Colors
 
--- Medidas en píxeles de pantalla (estos botones no usan la escala del HUD).
-local PHONE_SIZE = 110
-local PHONE_POSITION = UDim2.new(1, -110, 1, -24) -- a la izquierda del salto (70 px)
-local TABLET_SIZE = 140
-local TABLET_POSITION = UDim2.new(1, -190, 1, -90) -- a la izquierda del salto (120 px)
-local PC_MARGIN = 32
-local PC_HEIGHT_FRACTION = 0.16
-local PC_MIN_SIZE = 96
 local BITE_GROWTH = 1.25 -- ¡TIRA! es un poco más grande que Pescar
 local BITE_HEIGHT = 0.36 -- ...pero nunca más de esta fracción del alto
-
-type Spot = { position: UDim2, size: number }
 
 local FishingButtons = {}
 
 local placers: { () -> () } = {}
 local listening = false
 
--- El lugar del botón principal según la pantalla.
-local function spot(): Spot
-	if Device.phone() then
-		return { position = PHONE_POSITION, size = PHONE_SIZE }
-	elseif Device.touch() then
-		return { position = TABLET_POSITION, size = TABLET_SIZE }
-	end
-	local height = Device.viewport().Y
-	local size = math.clamp(
-		math.floor(height * PC_HEIGHT_FRACTION),
-		PC_MIN_SIZE,
-		UIConfig.Spacing.CastButtonSize
-	)
-	return { position = UDim2.new(1, -PC_MARGIN, 1, -PC_MARGIN), size = size }
-end
-
 local function addPlacer(placer: () -> ())
 	table.insert(placers, placer)
 	placer()
 	if not listening then
 		listening = true
-		Device.onResize(function()
+		ActionSpot.onChange(function()
 			for _, each in placers do
 				each()
 			end
@@ -86,9 +58,9 @@ local function mainButton(
 ): TextButton
 	local button = ActionButton.new(screen, name, text, color, icon)
 	addPlacer(function()
-		local where = spot()
-		button.Position = where.position
-		button.Size = UDim2.fromOffset(where.size, where.size)
+		local spot = ActionSpot.get()
+		button.Position = UDim2.fromOffset(spot.right, spot.bottom)
+		button.Size = UDim2.fromOffset(spot.size, spot.size)
 	end)
 	return button
 end
@@ -115,9 +87,9 @@ function FishingButtons.bite(screen: ScreenGui): TextButton
 	local limit = Instance.new("UISizeConstraint")
 	limit.Parent = button
 	addPlacer(function()
-		local where = spot()
-		button.Position = where.position
-		limit.MaxSize = Vector2.one * math.floor(where.size * BITE_GROWTH)
+		local spot = ActionSpot.get()
+		button.Position = UDim2.fromOffset(spot.right, spot.bottom)
+		limit.MaxSize = Vector2.one * math.floor(spot.size * BITE_GROWTH)
 	end)
 	ActionButton.rings(button, COLORS.Bite, 0.55)
 	keyBadge(button)

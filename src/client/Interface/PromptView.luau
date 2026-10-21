@@ -8,8 +8,8 @@
 	(E dorada en PC, el botón del mando en consola, «TOCA» en celular), el
 	objeto arriba en chico («Requiere 3 monstruos») y la acción grande en
 	dorado («Entrenar x3»). Entra con un rebote, late suave y, al apretar, se
-	hunde. En celular la placa entera es el botón; en teléfono va al 70 %, así no
-	se mete debajo de las columnas del HUD. La tecla la talla PromptKey.
+	hunde. En táctil no flota sobre el objeto: va fijo junto al botón de saltar
+	(PromptDock) y la placa entera es el botón. La tecla la talla PromptKey.
 
 	Funciona con los prompts de Style = Custom (los que arma server/Proximity y
 	Ambient/SpinStand); Roblox no dibuja nada para esos.
@@ -24,11 +24,11 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Device = require(script.Parent.Device)
 local InputHints = require(script.Parent.InputHints)
 local Kit = require(script.Parent.Kit)
+local PromptDock = require(script.Parent.PromptDock)
 local PromptKey = require(script.Parent.PromptKey)
 local Style = require(script.Parent.Style)
 
 local SIZE = Vector2.new(270, 74) -- píxeles
-local PHONE_FIT = 0.7 -- en teléfono, más chico: no tapa medio juego y sigue siendo fácil de tocar
 local KEY = PromptKey.SIZE
 local SLICE = 0.28
 local POP = TweenInfo.new(0.25, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
@@ -47,31 +47,38 @@ local function adornee(prompt: ProximityPrompt): Instance?
 	return nil
 end
 
-local function build(prompt: ProximityPrompt, holder: Instance): BillboardGui
-	local touch = InputHints.mode() == "touch"
+-- PC y mando: el cartel flota sobre el objeto (BillboardGui).
+local function billboard(prompt: ProximityPrompt): (BillboardGui, Frame)
 	local gui = Instance.new("BillboardGui")
 	gui.Name = "AvisoAccion"
 	gui.Adornee = adornee(prompt)
 	gui.AlwaysOnTop = true
-	local fit = if Device.phone() then PHONE_FIT else 1
-	gui.Size = UDim2.fromOffset(SIZE.X * fit, SIZE.Y * fit)
+	gui.Size = UDim2.fromOffset(SIZE.X, SIZE.Y)
 	gui.StudsOffsetWorldSpace = Vector3.new(0, 3, 0)
 	gui.LightInfluence = 0
 	gui.ResetOnSpawn = false
-	gui.Active = touch
 	gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-	-- La placa mide siempre SIZE; el marco la achica en teléfono.
 	local frame = Instance.new("Frame")
 	frame.Name = "Marco"
 	frame.BackgroundTransparency = 1
-	frame.AnchorPoint = Vector2.new(0.5, 0.5)
-	frame.Position = UDim2.fromScale(0.5, 0.5)
-	frame.Size = UDim2.fromOffset(SIZE.X, SIZE.Y)
+	frame.Size = UDim2.fromScale(1, 1)
 	frame.Parent = gui
-	local frameScale = Instance.new("UIScale")
-	frameScale.Scale = fit
-	frameScale.Parent = frame
+	return gui, frame
+end
+
+local function build(prompt: ProximityPrompt, holder: Instance): LayerCollector
+	-- Táctil: fijo junto a Saltar (PromptDock); la placa entera es el botón.
+	local docked = Device.touch()
+	local touch = docked or InputHints.mode() == "touch"
+	local gui: LayerCollector, frame: Frame
+	if docked then
+		gui, frame = PromptDock.make(holder, SIZE)
+	else
+		gui, frame = billboard(prompt)
+	end
+	if gui:IsA("BillboardGui") then
+		gui.Active = touch
+	end
 
 	local card = Instance.new(if touch then "TextButton" else "Frame") :: GuiObject
 	card.Name = "Placa"
@@ -157,7 +164,7 @@ end
 
 function PromptView.start()
 	local holder = Players.LocalPlayer:WaitForChild("PlayerGui")
-	local shown: { [ProximityPrompt]: BillboardGui } = {}
+	local shown: { [ProximityPrompt]: LayerCollector } = {}
 	ProximityPromptService.PromptShown:Connect(function(prompt: ProximityPrompt)
 		if prompt.Style ~= Enum.ProximityPromptStyle.Custom or shown[prompt] then
 			return

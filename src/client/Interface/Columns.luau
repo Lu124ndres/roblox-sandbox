@@ -2,11 +2,13 @@
 --[[
 	Columns
 
-	Las dos columnas del HUD (Layout): cada una va centrada en su franja libre,
-	entre lo de arriba (la barra de botones, o lo que se aparte con `avoid`) y
-	lo de abajo (el joystick y el botón de saltar de Roblox, TouchControls).
-	Si no cabe, la columna se achica (las dos por igual, así las filas se ven
-	parejas), y así en un teléfono acostado nunca tapa el joystick ni Saltar.
+	Las dos columnas del HUD (Layout): cada una va centrada en la pantalla, pero
+	sin salir de su franja libre, entre lo de arriba (la barra de botones, o lo
+	que se aparte con `avoid`) y lo de abajo (el joystick y el botón de saltar
+	de Roblox, TouchControls).
+	Si no cabe, la columna se achica (cada una lo justo: la derecha tiene menos
+	alto por los botones de arriba), y así en un teléfono acostado nunca tapa el
+	joystick ni Saltar.
 	Se reacomodan cuando cambia una fila, la pantalla o los controles táctiles.
 ]]
 
@@ -52,10 +54,14 @@ local function band(column: Column): (number, number)
 	if control then
 		bottom = math.min(bottom, control - GAP)
 	end
-	-- Lo apartado (la etiqueta de amigos): si está en la mitad de arriba, la columna
-	-- empieza debajo; si está en la de abajo, termina encima.
+	-- Lo apartado (la etiqueta de amigos, la zona del botón de acción) que cae en el
+	-- ancho de la columna: si está en la mitad de arriba, la columna empieza debajo;
+	-- si está en la de abajo, termina encima.
+	local width = column.width() * maxScale
+	local columnLeft = if column.left then MARGIN else screen.AbsoluteSize.X - MARGIN - width
 	for _, object in avoided do
-		local overColumn = (object.AbsolutePosition.X < screen.AbsoluteSize.X / 2) == column.left
+		local x = object.AbsolutePosition.X - screen.AbsolutePosition.X
+		local overColumn = x < columnLeft + width and x + object.AbsoluteSize.X > columnLeft
 		if object.Visible and object.Parent and overColumn then
 			local objectTop = object.AbsolutePosition.Y
 			local objectBottom = objectTop + object.AbsoluteSize.Y
@@ -70,26 +76,25 @@ local function band(column: Column): (number, number)
 end
 
 local function place()
-	local fit = maxScale
-	local bands: { [Column]: Vector2 } = {}
 	for _, column in { left, right } do
 		local top, bottom = band(column)
-		bands[column] = Vector2.new(top, bottom)
 		local content = contentHeight(column.frame)
-		if content > 0 then
-			fit = math.min(fit, (bottom - top) / content)
-		end
-	end
-	fit = math.max(fit, MIN_SCALE)
-	for column, range in bands do
+		local fit = if content > 0 then math.min(maxScale, (bottom - top) / content) else maxScale
+		fit = math.max(fit, MIN_SCALE)
 		column.scale.Scale = fit
+		-- Centrada en la pantalla si cabe ahí; si no, corrida lo justo dentro de su franja.
+		local height = content * fit
+		local center = (top + bottom) / 2
+		if height < bottom - top then
+			center = math.clamp(screen.AbsoluteSize.Y / 2, top + height / 2, bottom - height / 2)
+		end
 		column.frame.Position = UDim2.new(
 			if column.left then 0 else 1,
 			if column.left then MARGIN else -MARGIN,
 			0,
-			range.X
+			center - height / 2
 		)
-		column.frame.Size = UDim2.fromOffset(column.width(), (range.Y - range.X) / fit)
+		column.frame.Size = UDim2.fromOffset(column.width(), content)
 	end
 end
 

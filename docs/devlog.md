@@ -3296,3 +3296,34 @@ queda entre el joystick y Pescar; PC igual que antes; sin errores en el Output.
 caer debajo de la columna derecha (propuesta pendiente para el usuario). Cambiar de
 dispositivo en el simulador con Play corriendo deja la barra de arriba con la forma de PC: hay
 que reiniciar Play (en un teléfono real el táctil está desde el arranque).
+
+---
+
+## 2026-10-20 (20) — La UI se ve igual en cualquier teléfono o tablet
+
+**Qué se hizo:** medidor por MCP que, en cada equipo del simulador, toma las cajas de todo el
+HUD, busca encimados y calcula el tamaño real en mm con la densidad de cada pantalla. Con eso:
+- **Lugar de acción único** (`Interface/ActionSpot`): en táctil, Pescar, Alimentar y ¡TIRA! van
+  pegados a la izquierda de Saltar, con su base y 1.2 veces su tamaño (84 en teléfono, 144 en
+  tablet; antes 110 fijos, un tercio del alto en teléfonos bajos y encima de Misiones/Renacer
+  en los altos). La columna derecha no baja hasta esa zona.
+- **El aviso de los prompts en táctil va fijo ahí** (`Interface/PromptDock`, opción 1 del
+  usuario): ya no flota sobre el estanque ni se mete debajo de la columna según la cámara; si
+  Pescar está a la vista, va encima. En PC sigue flotando.
+- **Botones de arriba proporcionales** en táctil: 10 % del alto, entre 38 y 50 (antes 30 fijos:
+  4.7 mm en un iPhone 7, 4.3 mm en una Tab A9; ahora 6–12 mm).
+- **Con una ventana abierta en táctil** (`Menus/HudFocus`) se ocultan columnas, panel de
+  hambre, etiqueta de amigos y botones de arriba, con un velo oscuro detrás: antes asomaban por
+  los costados y la X caía sobre la barra de arriba.
+- Cada columna con su propia escala, centrada en la pantalla y corrida solo si algo la limita
+  (en PC quedan donde estaban).
+
+**Probado en Studio (simulador + Play):** 11 teléfonos (Galaxy A06/A16/S22 Ultra, iPhone 6 Plus,
+7, XR, 13, 13 Pro Max, 16, 16 Pro Max, 17 Pro) y 9 tablets (iPad 6, 10, Pro 11 y 13, Redmi Pad
+SE, Fire HD 10, Tab A8, A9, S11): sin encimados ni piezas fuera de pantalla; aviso de entrenar
+fijo junto a Saltar; abrir, cambiar y cerrar ventanas (X con Enter) oculta y devuelve el HUD;
+PC 720p igual que antes (sin velo, aviso flotante, columnas en su lugar); sin errores.
+
+**Qué sigue:** ¡TIRA! no se vio en pantalla (sale al picar un pez): su tamaño sale del mismo
+lugar (1.25 × Pescar, tope 36 % del alto). En teléfonos bajos la columna derecha queda chica
+(botones de 36 pt, 7 mm): si se quiere más grande, habría que sacar algo de ella.

@@ -9,7 +9,8 @@
 		barra       botones chicos en la esquina derecha de la barra de Roblox
 		            (Interface/TopBar)
 	Las columnas van en la franja libre entre la barra y los controles táctiles
-	de Roblox, y se achican si no caben (Interface/Columns).
+	de Roblox (y el lugar del botón de acción, Interface/ActionSpot), y se
+	achican si no caben (Interface/Columns).
 	Todo el HUD se achica en pantallas bajas (UIScale según el alto).
 	La columna derecha mide lo mismo que sus filas (dos botones de 88 con 10
 	entre ellos) y las centra, así Tienda, Mejoras y los atajos quedan alineados.
@@ -18,6 +19,7 @@
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
+local ActionSpot = require(script.Parent.ActionSpot)
 local Columns = require(script.Parent.Columns)
 local Device = require(script.Parent.Device)
 local TopBar = require(script.Parent.TopBar)
@@ -97,6 +99,7 @@ function Layout.mount(screen: ScreenGui, playerGui: Instance)
 	left, right = Columns.mount(screen, playerGui, Layout.statWidth, function()
 		return Layout.RIGHT_WIDTH
 	end)
+	Columns.avoid(ActionSpot.mount(screen)) -- la columna derecha no baja hasta Pescar
 
 	refreshScale()
 	local camera = Workspace.CurrentCamera
