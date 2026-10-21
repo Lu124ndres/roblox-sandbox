@@ -984,3 +984,19 @@ el alto. La alineación gira las criaturas largas para mostrarlas de perfil.
 - **El recorrido es un plan fijo por épocas de 300 s:** sale de la hora del servidor, así que
   el enojo ya no lo apura (solo sube el tope de Steer). Si lo apurara, cada cliente vería un
   recorrido distinto.
+
+## 2026-10-20 — Mapa de bloques: celda de 4 studs y volcán separado de la isla
+
+**Contexto:** el usuario pidió el mapa en el estilo de bloques de las miniaturas (isla, volcán
+y decoración). Se modeló en Blender por script, sin incorporarlo todavía. **Decisión:** isla y
+volcán en mallas de columnas de 4×4 studs con escalones de 2 (las alturas clave del juego son
+pares y quedan exactas), bisel de 0.4 y caras de arriba juntadas en rectángulos; el volcán es
+una montaña cerrada con la cueva del gigante adentro y el arco como única entrada, y para que
+el cono quede entero se separa de la isla: el centro del cráter pasa de z = 520 a z = 722 y el
+arco queda donde está, al pie de la montaña, con un túnel de 225 studs hasta la cueva.
+**Lo no obvio:** con celda de 2 la isla pesaba 138 mil triángulos y los dos modelos no
+combinaban (6 en el volcán); con 4 y caras juntadas la isla baja a ~54 mil y el volcán queda en
+~182 mil. El techo de la cueva se deja a 240 sobre el lago aunque los gigantes ahora midan como
+mucho 129 studs (decisión del usuario). Al incorporarlo se mueve todo lo que usa `craterCenter`,
+la corriente del puente (`BridgeBoost`) se extiende al túnel, y el lago, el desierto, la guarida
+y el hielo del cráter (que escriben terreno) hay que adaptarlos a una cueva de mallas.

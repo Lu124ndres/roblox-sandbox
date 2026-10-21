@@ -302,7 +302,13 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Estanques repartidos en un anillo parejo; vitrinas más cerca del centro.
 - [x] Pantalla de carga con los gigantes de bloques y barra que sigue la carga real del mapa.
 - [x] Luz y color del mapa como las fotos del juego (opción 1).
-- [ ] Decorados de bloques (palmeras, rocas, muelles) y suelo de cubos: opciones 2 y 3, a decidir.
+- [x] Modelos de bloques aprobados: decoración, isla y volcán (`tools/blender/`, fotos en
+      `docs/capturas/mapa_antes_despues/`).
+- [ ] Incorporar la decoración de bloques (exportar `PropsMapa` nuevo, importarlo en Studio).
+- [ ] Incorporar la isla de bloques (mallas, sacar el terreno de la isla, agua de color de los
+      estanques, subir la aparición y 11 setos, bajar el faro 1 stud, colisiones).
+- [ ] Incorporar el volcán (craterCenter 520 → 722, montaña y cueva, luz de la cueva, corriente
+      en el túnel, lago/desierto/guarida/hielo, colisiones, streaming).
 - [ ] Estanque sagrado: ponerlo a la venta a 1200 R$ en el Creator Hub (está fuera de oferta).
       Subir el pase Dios del Volcán a 858 R$ (Roblox dice 496).
 

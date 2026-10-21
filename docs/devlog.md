@@ -3217,3 +3217,24 @@ queda limpia.
 
 **Sigue:** mirar los trucos en Play y ajustar sus números; las pupilas del Minotauro E1 y del
 Dragón E2.
+
+---
+
+## 2026-10-20 (16) — Mapa de bloques: decoración, isla y volcán (modelos)
+
+**Qué se hizo (pedido del usuario, sin incorporar al juego todavía):**
+- Decoración de bloques (`tools/blender/props_bloques*.py`): 3 palmeras de diez hojas, 2
+  arbustos, 3 rocas y 2 crestas del volcán, con los nombres de `PropsMapa`.
+- Isla (`tools/blender/isla_bloques*.py`, dos agentes en paralelo): celda de 4, relieve natural
+  hasta 10 studs, ondulación de 1–2 en el jardín, la cruz y el anillo de caminos elevados con
+  rampas y la cruz llegando al estanque sagrado, estanques con aro de piedras bajas (como la
+  referencia del usuario) y agua del color de cada uno, montículos de pasto con dos entradas.
+- Volcán (`tools/blender/volcan_*.py`): montaña cerrada de 368 studs con copa de lava, cueva con
+  el lago y el paseo exactos, arco al pie con una entrada asimétrica y túnel hasta la cueva;
+  separado de la isla (cráter en z = 722).
+- Gigantes: etapas 3 y 4 un 35 % más chicas (commit aparte).
+- Fotos antes y después desde 16 ángulos en `docs/capturas/mapa_antes_despues/`
+  (`tools/blender/mapa_bloques_render.py` y `mapa_bloques_vistas.py`).
+
+**Probado:** solo renders en Blender (el usuario los revisó en cada versión). Pendiente la
+incorporación por partes: decoración, isla y volcán.
