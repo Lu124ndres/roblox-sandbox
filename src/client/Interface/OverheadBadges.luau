@@ -34,6 +34,8 @@ local GOLD = rgb(255, 214, 80)
 local WIDTH = { kills = 0.27, premium = 0.11, line = 0.012 }
 local SIDES = 0.07 -- un poco más: el marco de lava es más grueso que el de oro
 local PLATE_SLICE = 0.3
+-- La placa, más ancha en la misma proporción en que Overhead subió el alto de su fila.
+local GROW = 1.25
 
 local OverheadBadges = {}
 
@@ -136,7 +138,7 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 				total += entry.width
 			end
 		end
-		back.Size = UDim2.fromScale(total, 0.84)
+		back.Size = UDim2.fromScale(total * GROW, 0.84)
 		for _, entry in shown do
 			entry.frame.Visible = entry.on
 			entry.frame.Size = UDim2.fromScale(entry.width / total, 1)

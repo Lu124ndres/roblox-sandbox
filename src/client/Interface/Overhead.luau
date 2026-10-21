@@ -42,26 +42,28 @@ local function build(player: Player, head: BasePart): () -> ()
 	local gui = Instance.new("BillboardGui")
 	gui.Name = TAG_NAME
 	-- Medido en studs: se ve del tamaño del mundo, como un cartel sobre la cabeza.
-	gui.Size = UDim2.fromScale(7, 2.7)
+	-- De arriba abajo: insignias 1.28 (la placa, ×1.25 desde el 2026-10-21),
+	-- título 0.86 y nombre 0.68, con huecos chicos entre medio.
+	gui.Size = UDim2.fromScale(7, 2.96)
 	gui.LightInfluence = 0
 	gui.ResetOnSpawn = false
 
 	local top = Instance.new("Frame")
 	top.BackgroundTransparency = 1
-	top.Size = UDim2.fromScale(1, 0.38)
+	top.Size = UDim2.fromScale(1, 0.432)
 	top.Name = "Insignias"
 	top.Parent = gui
 	local badges = OverheadBadges.build(top, player)
 
 	local title = Style.text(gui, "Titulo", 90, nil, 3)
-	title.Position = UDim2.fromScale(0, 0.4)
-	title.Size = UDim2.fromScale(1, 0.32)
+	title.Position = UDim2.fromScale(0, 0.451)
+	title.Size = UDim2.fromScale(1, 0.292)
 	local gradient = Instance.new("UIGradient")
 	gradient.Rotation = 90
 	gradient.Parent = title
 	local name = Style.text(gui, "Nombre", 70, nil, 2.5)
-	name.Position = UDim2.fromScale(0, 0.73)
-	name.Size = UDim2.fromScale(1, 0.25)
+	name.Position = UDim2.fromScale(0, 0.752)
+	name.Size = UDim2.fromScale(1, 0.228)
 	name.Text = player.DisplayName
 
 	gui.Adornee = head
@@ -70,7 +72,7 @@ local function build(player: Player, head: BasePart): () -> ()
 	local character = head.Parent :: Instance -- los trajes altos (Shared.Trajes) suben el cartel
 	local function lift()
 		local extra = character:GetAttribute(Trajes.EXTRA_HEIGHT)
-		gui.StudsOffset = Vector3.new(0, 3.7 + (tonumber(extra) or 0), 0)
+		gui.StudsOffset = Vector3.new(0, 3.83 + (tonumber(extra) or 0), 0)
 	end
 	character:GetAttributeChangedSignal(Trajes.EXTRA_HEIGHT):Connect(lift)
 	lift()
