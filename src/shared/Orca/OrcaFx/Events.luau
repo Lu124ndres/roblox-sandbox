@@ -52,6 +52,7 @@ function Events.play(event: OrcaMotion.Event, motion: OrcaMotion.Motion, hooks: 
 	local scale = math.sqrt(height / BASE_HEIGHT)
 	local deep = math.clamp(1.25 / scale, 0.55, 1.3) -- las grandes suenan más grave
 	local kind = event.kind
+	local size = event.size or 1 -- fuerza que pide el truco (la ola de la anciana, el soplo hondo)
 	if kind == "call" then
 		hooks.play("OrcaCall", motion.top(), state.voice)
 	elseif kind == "roar" then
@@ -62,28 +63,30 @@ function Events.play(event: OrcaMotion.Event, motion: OrcaMotion.Motion, hooks: 
 		hooks.sparkle(mouth, COLORS.Gold, 16)
 		hooks.shake(state.center, 0.35 + 0.25 * scale, 1.6)
 	elseif kind == "slap" then
-		local hit = if event.where == "fin" then upperFin(motion) else motion.point("Cola4")
+		local hit = if event.where == "fin"
+			then upperFin(motion)
+			else motion.point("Cola5") or motion.point("Cola4")
 		local spot = under(hit or state.center)
 		hooks.play("BigSplash", spot, 1.3 * deep)
-		hooks.splash(spot, 2.4 * scale)
+		hooks.splash(spot, 2.4 * scale * size)
 		hooks.ring(spot, height * 0.6, 1.3)
 		hooks.sparkle(spot + Vector3.new(0, height * 0.15, 0), COLORS.Crystal, 10)
 		hooks.shake(spot, 0.15 * scale, 0.5)
 	elseif kind == "spout" then
 		local blowhole = motion.top()
-		hooks.spout(blowhole, math.max(1, height / 15) * 1.3)
+		hooks.spout(blowhole, math.max(1, height / 15) * 1.3 * size)
 		hooks.play("Spout", blowhole, deep)
 	elseif kind == "splash" then
 		local spot = motion.water()
 		hooks.play("Plop", spot, 1.2 * deep)
-		hooks.splash(spot, 1.6 * scale)
+		hooks.splash(spot, 1.6 * scale * size)
 	elseif kind == "cascade" then
 		hooks.play("BigSplash", motion.water(), 0.7 * deep)
 		for k = 1, 6 do
 			local angle = k / 6 * math.pi * 2
 			local spot = motion.water()
 				+ Vector3.new(math.cos(angle), 0, math.sin(angle)) * height * 0.5
-			hooks.splash(spot, 1.8 * scale)
+			hooks.splash(spot, 1.8 * scale * size)
 		end
 		hooks.sparkle(state.center + Vector3.new(0, height * 0.4, 0), COLORS.Crystal, 30)
 	end

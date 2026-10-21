@@ -12,7 +12,10 @@ por el lomo, por la cuña y la placa. Por ahí asoma el núcleo, una celda adent
 Juntas: como en la E3, cada anillo nace una celda dentro del anterior y es más chico en todos los
 lados. El núcleo termina una celda antes del final del anillo: ese hueco lo llena justo el anillo
 siguiente, así el costado de su placa no queda en el plano del núcleo de este (la Cola5, que es la
-última, lo tapa con una placa).
+última, lo tapa con una placa). En medio de ese hueco va un tapón, dos celdas más chico que el
+núcleo por lado y metido una celda en el del anillo siguiente: no se ve, pero al girar ese anillo
+se mete en macizo, como los anillos llenos de la E3 (sin él, el borde del núcleo se metía en el
+núcleo de este desde el reposo y la revisión de poses cortaba la columna a un tercio de los topes).
 """
 
 
@@ -40,6 +43,9 @@ def anillo(parte, y, ancho, z, surcos, cortes, colores, placa, sigue=True, frent
         bloque(parte, t, "cuerpo", (1 - w, w - 1), (y0, y0 + 1), (z0 + 1, z1 - 1))
     if not sigue:  # la Cola5: tapa de atrás, entre los lóbulos de la cola
         bloque(parte, t, "cuerpo", (1 - w, w - 1), (y1 - 1, y1), (z0 + 1, z1 - 1))
+    else:  # tapón: llena por dentro la celda de atrás, una celda dentro del núcleo del anillo
+        # siguiente (que lo tapa); así ese anillo, al girar, se mete en macizo como en la E3.
+        bloque(parte, t, "brillo", (3 - w, w - 3), (y1 - 1, y1), (z0 + 3, z1 - 3))
     # La primera celda va dentro del anillo anterior: ahí las cuñas de arriba y de abajo son
     # cajas, que llenan su hueco hasta las esquinas (si no, por el chaflán asoma su núcleo).
     entra = 0 if frente else 1
@@ -88,29 +94,36 @@ def dorsal():
     # Alta, echada hacia atrás y desgarrada: el borde de ataque sube 2:1 con una mordida a media
     # altura, el de salida es cóncavo (1:2, 1:1 y 2:1) con otra mordida, y la punta queda en cara
     # plana (z 31). Contorno en yz partido en piezas convexas; del mismo grueso de arriba abajo.
-    contorno = [(-10, 16), (8, 16), (8, 18), (4, 20), (3, 21), (1, 21), (0, 22), (1, 23), (0, 24),
-                (-2, 28), (-2, 31), (-3, 31), (-6, 25), (-4, 24), (-4, 23), (-6, 21),
-                (-8, 21), (-10, 17)]
+    # La dorsal es de la Cola1: lo metido en el lomo termina en y 3, dos celdas antes de la Cola2
+    # (y 5; antes llegaba a y 8 y la Cola2 la atravesaba al ondular), y el talón de atrás (y 3..5)
+    # se apoya sobre la placa de la Cola1 (z 19), como en la E3.
+    # Adelante, metida en el Pecho, la base sube 1:1 (desde y -6) hasta el borde de ataque: al
+    # arquear la Cola1 hacia arriba, la punta de adelante se hundía en el Pecho.
+    contorno = [(-6, 16), (3, 16), (3, 19), (5, 19), (5, 20), (3, 21), (1, 21), (0, 22), (1, 23),
+                (0, 24), (-2, 28), (-2, 31), (-3, 31), (-6, 25), (-4, 24), (-4, 23), (-6, 21),
+                (-8, 21), (-9, 19)]
     for pieza in trocear(contorno):
         prisma("Dorsal", "Aletas", "aleta", pieza, (-1, 1), eje="x")
 
 
 def pectorales():
     # Bajan hacia afuera 2:1 desde el costado del Pecho; el segundo tramo, más fino y corrido
-    # hacia atrás, nace dentro del primero y llega a z 0 con la punta en cara plana. En la punta,
-    # tres garras echadas hacia atrás.
+    # hacia atrás, nace dentro del primero (dos celdas antes de su punta, con la esquina de abajo
+    # en cuña: más adentro, al girar el codo se metía en el Pecho) y llega a z 0 con la punta en
+    # cara plana. En la punta, tres garras echadas hacia atrás.
     a = "Aletas"
     par_prisma("Aleta{lado}", a, "pectoral", [(6, 10), (6, 5), (12, 2), (12, 7)], (-14, -7), eje="y")
-    par_prisma("Aleta{lado}2", a, "pectoral", [(9, 7), (9, 3), (15, 0), (19, 0), (19, 2)], (-13, -5),
-               eje="y")
+    par_prisma("Aleta{lado}2", a, "pectoral",
+               [(10, 6), (10, 4), (13, 1), (15, 0), (19, 0), (19, 2), (11, 6)], (-13, -5), eje="y")
     for y0 in (-13, -10, -7):
         par_prisma("Aleta{lado}2", a, "pua", [(19, y0), (19, y0 + 2), (21, y0 + 4)], (0, 2))
 
 
 def cola():
     # Cola en V, horizontal: cada lóbulo nace dentro de la Cola5 y se abre 1:1 hacia atrás, con
-    # una mordida en el borde de salida y dos púas en el de ataque.
-    lobulo = [(1, 24), (4, 24), (13, 33), (11, 33), (9, 32), (8, 30), (5, 30), (3, 29), (1, 28)]
+    # una mordida en el borde de salida y dos púas en el de ataque. Nace dos celdas detrás de la
+    # Cola4 (y 26; antes en y 24, al ras de ella, y al girar la Cola5 se le metía).
+    lobulo = [(1, 26), (6, 26), (13, 33), (11, 33), (9, 32), (8, 30), (5, 30), (3, 29), (1, 28)]
     par_lamina("AletaCola{lado}", "Aletas", "aleta", lobulo, (10, 12))
     for pua in ([(6, 26), (8, 28), (10, 26)], [(9, 29), (11, 31), (13, 29)]):
         par_prisma("AletaCola{lado}", "Aletas", "pua", pua, (10, 12))

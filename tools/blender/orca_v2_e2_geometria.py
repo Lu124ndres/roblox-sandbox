@@ -12,8 +12,8 @@ Proporciones (28 módulos de alto: de la punta de las pectorales a la de la dors
     cabeza      y -27..-12      mandíbula z 3..7, boca abierta z 6..11, cráneo z 11..18
     cuerpo      y -12..22       Pecho y Cola1..Cola5, de 14 a 4 de ancho
     dorsal      z 14..28        cola en V hasta y 27 (54 de largo)
-Solo el modelo para revisar la forma: todavía sin articulaciones ni rig. La cabeza está en
-orca_v2_e2_cabeza.py, el cuerpo y las aletas en orca_v2_e2_cuerpo.py y las formas que no son
+Las articulaciones del rig (ARTICULACIONES, COLAS y PUNTOS) van al final; las usan orca_v2_poses.py y
+rig_orca_v2.py. La cabeza está en orca_v2_e2_cabeza.py, el cuerpo y las aletas en orca_v2_e2_cuerpo.py y las formas que no son
 bloques (prisma, par_prisma, espinas) en dragon_v2_formas.py.
 Ejes: x = izquierda de la orca, -y = frente, z arriba; la punta de las pectorales en z = 0.
 """
@@ -70,3 +70,45 @@ COLORES = {n: _lineal(h) for n, h in {
 
 def construir():
     cabeza(); cuerpo(); dorsal(); pectorales(); cola(); adornos()
+
+
+# --- Rig (orca_ref/CONTRATO_RIG_NADO.md, 1) ------------------------------------------------
+# Hueso -> (padre, articulación en celdas). {l}: Izq en +x y Der espejado; el padre antes que el
+# hijo; sin padre, cuelga de Raiz. La cola cuelga del Pecho, en cadena. Las reglas son las de la E3.
+ARTICULACIONES = [
+    ("Pecho", None, (0, -7.5, 10.5)),  # centro del anillo de adelante
+    ("Cabeza", "Pecho", (0, -12, 14)),  # la nuca: en la cara de unión, 4 celdas bajo el lomo
+    ("Mandibula", "Cabeza", (0, -16, 5)),  # bisagra: en medio de la cuña de atrás, bajo la mejilla
+    ("Aleta{l}", "Pecho", (5, -8, 8)),  # hombro: en la cara de adentro, a 3/4 de su alto
+    ("Aleta{l}2", "Aleta{l}", (10, -7.5, 4)),  # codo: una celda dentro de la punta del primer tramo
+    # Columna: en el centro de la celda de solape con el anillo anterior y a media altura del
+    # anillo más chico (el de atrás).
+    ("Cola1", "Pecho", (0, -3.5, 10.5)),
+    ("Cola2", "Cola1", (0, 3.5, 10.5)),
+    ("Cola3", "Cola2", (0, 9.5, 10.5)),
+    ("Cola4", "Cola3", (0, 14.5, 10.5)),
+    ("Cola5", "Cola4", (0, 18.5, 10.5)),
+    ("Dorsal", "Cola1", (0, -2, 16)),  # base metida en el lomo, una celda bajo el de la Cola1
+    ("AletaCola{l}", "Cola5", (2, 21.5, 10)),  # raíz del lóbulo, en el costado de la Cola5
+]
+# Cola de cada hueso (celdas, lado izquierdo): hacia el hijo, o hacia donde apunta la pieza.
+COLAS = {
+    "Pecho": (0, -3.5, 10.5), "Cabeza": (0, -27, 12), "Mandibula": (0, -26, 4),
+    "Aleta{l}": (10, -7.5, 4), "Aleta{l}2": (18, -6, 0.5),
+    "Cola1": (0, 3.5, 10.5), "Cola2": (0, 9.5, 10.5), "Cola3": (0, 14.5, 10.5),
+    "Cola4": (0, 18.5, 10.5), "Cola5": (0, 22, 10.5), "Dorsal": (0, -3.5, 28),
+    "AletaCola{l}": (10, 26, 10),
+}
+# Huesos sin pesos: (padre, cabeza, cola). Raiz en el centro del largo a media altura del cuerpo;
+# Boca entre los dientes de adelante; Espiraculo sobre la frente, detrás de la púa. Ojo{l}Mira en
+# el centro de la cara de la cuenca (UIConfig/GiantEyesData, OrcaE2: (±2.0964, -7.2036, 4.05) BU),
+# con la cola a lo largo de su normal (±0.7071, -0.7071, 0).
+_OJO, _NORMAL = (2.0964 / CELDA, -7.2036 / CELDA, 4.05 / CELDA), (0.7071, -0.7071, 0)
+PUNTOS = {
+    "Raiz": (None, (0, 0, 10.5), (0, -3, 10.5)),
+    "Boca": ("Cabeza", (0, -26, 8.5), (0, -28, 8.5)),
+    "Espiraculo": ("Cabeza", (0, -16, 18), (0, -16, 20)),
+}
+for _s, _l in ((1, "Izq"), (-1, "Der")):
+    _c = (_s * _OJO[0], _OJO[1], _OJO[2])
+    PUNTOS[f"Ojo{_l}Mira"] = ("Cabeza", _c, (_c[0] + _s * _NORMAL[0] * 2, _c[1] + _NORMAL[1] * 2, _c[2]))

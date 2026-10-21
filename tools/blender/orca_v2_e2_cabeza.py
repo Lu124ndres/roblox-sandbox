@@ -63,13 +63,17 @@ def dientes_arriba(c):
 
 def mandibula():
     m = "Mandibula"
-    # Quijada blanca con el borde de abajo achaflanado; termina en la garganta (y -14).
-    bloque(m, m, "blanco", (-6, 6), (-26, -14), (4, 5))
-    bloque(m, m, "blanco", (-6, 6), (-26, -14), (3, 4), fin="-", recorte={"x-": 1, "x+": 1})
+    # Quijada blanca con el borde de abajo achaflanado. Termina una celda antes de la garganta
+    # (y -15; la garganta es del Pecho y empieza en y -14) y atrás sube en cuña 1:2 por abajo: al
+    # abrir la boca, la esquina de atrás y abajo gira hacia la garganta (guía, 4, "Mandíbula").
+    # La cuña lleva todo el alto de la quijada (z 4..6) en sus dos últimas celdas.
+    bloque(m, m, "blanco", (-6, 6), (-26, -17), (4, 5))
+    bloque(m, m, "blanco", (-6, 6), (-26, -17), (3, 4), fin="-", recorte={"x-": 1, "x+": 1})
+    bloque(m, m, "blanco", (-6, 6), (-17, -15), (4, 6), eje="y", recorte={"z-": 1})
     # Borde blanco (los costados y adelante) y el piso rojo con la lengua.
-    par(m, m, "blanco", (5, 6), (-26, -14), (5, 6))
+    par(m, m, "blanco", (5, 6), (-26, -17), (5, 6))
     bloque(m, m, "blanco", (-5, 5), (-26, -24), (5, 6))
-    bloque(m, m, "boca", (-5, 5), (-24, -14), (5, 6))
+    bloque(m, m, "boca", (-5, 5), (-24, -17), (5, 6))
     bloque(m, m, "lengua", (-3, 3), (-22, -16), (6, 7))
     # Dientes de abajo, entre los de arriba: uno al medio y dos a cada costado.
     prisma(m, m, "diente", _diente(False, -1), (-25, -24), eje="y")

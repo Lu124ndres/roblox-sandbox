@@ -53,32 +53,44 @@ def cuerpo():
 
 def dorsal():
     # Echada hacia atrás como la de la adulta, pero más baja: 10 sobre el lomo (la E3, 13). El
-    # borde de ataque sube 1:2 de punta a punta y el de salida es cóncavo (baja recto, después 2:1,
-    # 1:1 y recto); en piezas convexas cortadas en z 20 y 24, y la punta en cara plana (en cuña, el
-    # bisel la bajaría y la orca no mediría 28).
+    # borde de ataque sube 1:2 de punta a punta y el de salida es cóncavo (baja recto, después 1:1,
+    # 2:1 en el talón y recto); en piezas convexas cortadas en z 24, y la punta en cara plana (en
+    # cuña, el bisel la bajaría y la orca no mediría 28). La dorsal es de la Cola1:
+    #   - atrás, lo metido en el lomo termina en y 1, dos celdas antes de la Cola2 (y 3), para que
+    #     la Cola2 no la atraviese al ondular (antes bajaba recto hasta y 5, dentro de ella); el
+    #     talón (y 1..3) se apoya en la placa de la Cola1 (z 18) y sigue el borde de salida 2:1;
+    #   - adelante, lo metido en el Pecho deja el borde de ataque en z 16 y vuelve 1:2 hasta y -9
+    #     (antes llegaba a y -11, a una celda del frente del Pecho, y al curvarse la Cola1 se
+    #     hundía en él). La pieza de abajo llega hasta z 24 sin corte en z 20: así ninguna esquina
+    #     queda justo bajo el lomo del Pecho, donde se hunde al mecerse la dorsal.
     d, a = "Dorsal", "Aletas"
-    prisma(d, a, "aleta", [(-11, 14), (5, 14), (5, 18), (1, 20), (-8, 20)], (-1, 1), eje="x")
-    prisma(d, a, "aleta", [(-8, 20), (1, 20), (-3, 24), (-6, 24)], (-1, 1), eje="x")
+    prisma(d, a, "aleta", [(-9, 14), (1, 14), (1, 20), (-3, 24), (-6, 24), (-10, 16)], (-1, 1), eje="x")
+    prisma(d, a, "aleta", [(1, 18), (3, 18), (3, 19), (1, 20)], (-1, 1), eje="x")
     prisma(d, a, "aleta", [(-6, 24), (-3, 24), (-3, 28), (-4, 28)], (-1, 1), eje="x")
 
 
 def pectorales():
     # Largas y finas (la joven está desgarbada): bajan hacia afuera 2:1 desde el costado del
     # Pecho y cuelgan 3 celdas por debajo de la panza. El segundo tramo, de 2 de grueso y corrido
-    # hacia atrás, nace dentro del primero y llega a z 0 con la punta en cara plana.
+    # hacia atrás, nace dentro del primero y llega a z 0 con la punta en cara plana. El primer
+    # tramo deja dos celdas hasta la nuca (y -12), como en la adulta (con una, la cabeza lo tocaba
+    # al girar), y lo que queda dentro del Pecho (x 5..7) termina una celda antes (y -7), para que
+    # la Cola1 no lo toque al curvarse; lo que se ve llega hasta y -6.
     a = "Aletas"
-    par_prisma("Aleta{lado}", a, "pectoral", [(5, 9), (5, 5), (11, 2), (11, 6)], (-11, -6), eje="y")
+    par_prisma("Aleta{lado}", a, "pectoral", [(5, 9), (5, 5), (11, 2), (11, 6)], (-10, -7), eje="y")
+    par_prisma("Aleta{lado}", a, "pectoral", [(7, 8), (7, 4), (11, 2), (11, 6)], (-7, -6), eje="y")
     par_prisma("Aleta{lado}2", a, "pectoral", [(9, 4), (17, 0), (18, 0), (18, 1), (17, 2), (9, 6)],
-               (-10, -4), eje="y")
+               (-9, -3), eje="y")
     # Placa clara sobre el segundo tramo, apoyada en su cara de arriba.
-    par_prisma("Aleta{lado}2", a, "pua", [(11, 5), (15, 3), (15, 4), (11, 6)], (-9, -5), eje="y")
+    par_prisma("Aleta{lado}2", a, "pua", [(11, 5), (15, 3), (15, 4), (11, 6)], (-8, -4), eje="y")
 
 
 def cola():
     # Cola en V, horizontal: cada lóbulo nace dentro de la Cola5 y se abre 1:1 hacia atrás; entre
-    # los dos queda la muesca del medio.
+    # los dos queda la muesca del medio. El borde de adelante va una celda detrás de la Cola4 (y
+    # 19): pegado a ella, la tocaba en cuanto la Cola5 ondulaba.
     par_prisma("AletaCola{lado}", "Aletas", "aleta",
-               [(1, 19), (4, 19), (10, 25), (10, 27), (2, 23), (1, 22)], (9, 11))
+               [(1, 20), (5, 20), (10, 25), (10, 27), (2, 23), (1, 22)], (9, 11))
 
 
 def adornos():

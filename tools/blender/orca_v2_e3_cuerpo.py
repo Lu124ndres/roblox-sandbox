@@ -53,10 +53,14 @@ def cuerpo():
 
 def dorsal():
     # Alta y echada hacia atrás: el borde de ataque sube 1:2 y el de salida es cóncavo (baja
-    # recto, después 1:2, 1:1 y 2:1); en piezas convexas cortadas en z 19, 23 y 27. Del mismo grueso
-    # de arriba abajo: con la base más gruesa, su escalón quedaba en el plano de la placa del Pecho.
+    # recto, después 1:2, 1:1 y recto hasta el lomo); en piezas convexas cortadas en z 19, 23 y 27.
+    # Del mismo grueso de arriba abajo: con la base más gruesa, su escalón quedaba en el plano de la
+    # placa del Pecho. La dorsal es de la Cola1: metida en la Cola2 (antes bajaba 2:1 hasta y 7), la
+    # Cola2 la atravesaba al ondular. Ahora lo metido en el lomo termina en y 1, dos celdas antes de
+    # la Cola2 (y 3), y el talón de atrás (y 1..3) se apoya sobre la placa de la Cola1 (z 18).
     d, a = "Dorsal", "Aletas"
-    prisma(d, a, "aleta", [(-12, 14), (7, 14), (7, 17), (3, 19), (-10, 19), (-12, 15)], (-1, 1), eje="x")
+    prisma(d, a, "aleta", [(-12, 14), (1, 14), (1, 19), (-10, 19), (-12, 15)], (-1, 1), eje="x")
+    prisma(d, a, "aleta", [(1, 18), (3, 18), (3, 19), (1, 19)], (-1, 1), eje="x")
     prisma(d, a, "aleta", [(-10, 19), (3, 19), (-1, 23), (-8, 23)], (-1, 1), eje="x")
     prisma(d, a, "aleta", [(-8, 23), (-1, 23), (-3, 27), (-6, 27)], (-1, 1), eje="x")
     prisma(d, a, "aleta", [(-6, 27), (-3, 27), (-3, 31), (-4, 31)], (-1, 1), eje="x")

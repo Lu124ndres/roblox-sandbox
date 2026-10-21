@@ -4,9 +4,9 @@
 
 	Los gestos chicos de la orca al comer. Se SUMAN a su pose de comer (no la
 	reemplazan) y pasan por resortes (Comer), así se encadenan y se mezclan
-	sin saltos aunque lleguen peces cada 0.2 s:
-		bocado    con cada pez: estira la cabeza hacia arriba fuera del agua,
-		          cierra la boca de golpe y traga (la cabeza baja un poco)
+	sin saltos. El mordisco de cada pez no es un gesto: lo hace Boca.
+		sorpresa  pez raro: echa la cabeza atrás y abre boca y aletas
+		aletazo   se ladea y golpea el agua con la pectoral de arriba
 		panza     se gira de costado mostrando la panza y la aleta de arriba
 		          saluda; al volver da un coletazo chico
 		saludo    se ladea y saluda con la aleta pectoral (tres veces)
@@ -15,8 +15,7 @@
 		coletazo  baja la cabeza, levanta la cola despacio y la azota
 		tragar    traga despacio: la cabeza cabecea con la boca cerrada
 	`side` (+1 o -1) es hacia qué lado se gira: con +1 sube la aleta derecha.
-	Ángulos en radianes, alturas en altos del modelo. Duraciones de la adulta
-	(cada etapa las estira o acorta con su tempo).
+	Ángulos en radianes, alturas en altos. Duraciones de la adulta (tempo).
 ]]
 
 local Tricks = require(script.Parent.Parent.Tricks)
@@ -82,24 +81,6 @@ end
 
 local LIST: { Gesture } = {
 	{
-		name = "bocado",
-		seconds = 0.6,
-		events = {},
-		pose = function(u: number, side: number, _roll: number): Add
-			local strike = hold(u, 0, 0.16, 0.3, 0.75)
-			local swallow = bell(span(u, 0.45, 1))
-			local add = Gestos.zero()
-			add.pitch = 0.2 * strike - 0.05 * swallow
-			add.head = 0.2 * strike - 0.09 * swallow
-			add.depth = 0.045 * strike
-			add.jaw = -0.25 * swallow
-			add.yaw = side * 0.07 * strike
-			add.fins = -0.12 * strike
-			add.tail = 0.12 * bell(span(u, 0.2, 0.8)) -- la cola sigue tarde
-			return add
-		end,
-	},
-	{
 		name = "panza",
 		seconds = 2,
 		events = { { at = 0.32, kind = "belly" }, { at = 0.88, kind = "splash" } },
@@ -159,6 +140,39 @@ local LIST: { Gesture } = {
 			add.head = -0.05 * bend
 			add.fins = -0.2 * bend
 			add.tail = 0.95 * lash(span(u, 0.1, 0.95)) * bend
+			return add
+		end,
+	},
+	{
+		name = "sorpresa",
+		seconds = 0.6,
+		events = { { at = 0.08, kind = "clicks" } },
+		pose = function(u: number, _side: number, _roll: number): Add
+			local jolt = hold(u, 0, 0.12, 0.5, 1)
+			local add = Gestos.zero()
+			add.head = 0.16 * jolt
+			add.pitch = 0.08 * jolt -- se echa atrás
+			add.depth = 0.02 * jolt
+			add.jaw = 0.4 * jolt
+			add.fins = -0.35 * jolt
+			return add
+		end,
+	},
+	{
+		name = "aletazo",
+		seconds = 1.5,
+		events = { { at = 0.12, kind = "clicks" }, { at = 0.62, kind = "slap", where = "fin" } },
+		pose = function(u: number, side: number, roll: number): Add
+			local tilt = hold(u, 0, 0.3, 0.75, 1)
+			local add = Gestos.zero()
+			add.roll = side * 0.6 * roll * tilt
+			add.head = 0.06 * tilt
+			-- Sube la aleta despacio y la baja de golpe contra el agua.
+			wave(
+				add,
+				side,
+				(-0.75 * smooth(span(u, 0.15, 0.55)) + 1.05 * smooth(span(u, 0.55, 0.64))) * tilt
+			)
 			return add
 		end,
 	},

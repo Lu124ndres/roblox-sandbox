@@ -23,6 +23,7 @@ local Protocol = require(script.Parent.Parent.Protocol)
 local WorldLayout = require(script.Parent.Parent.WorldLayout)
 local Etapas = require(script.Parent.Etapas)
 local Perfil = require(script.Parent.Etapas.Perfil)
+local Apunte = require(script.Apunte)
 local Body = require(script.Body)
 local Comer = require(script.Comer)
 local Feeders = require(script.Feeders)
@@ -30,6 +31,7 @@ local Path = require(script.Path)
 local Rig = require(script.Rig)
 local Schedule = require(script.Schedule)
 local Steer = require(script.Steer)
+local Tipos = require(script.Tipos)
 local Tricks = require(script.Tricks)
 
 local L = WorldLayout
@@ -38,22 +40,8 @@ local LAKE = L.craterLakeRadius + 4 -- hasta el pie del acantilado
 local BITE_SECONDS = 0.16
 
 export type Event = Schedule.Event
-export type State = {
-	center: Vector3, -- centro del cuerpo en el mundo
-	vy: number, -- studs/s hacia arriba
-	speed: number,
-	yaw: number,
-	height: number,
-	feeding: number, -- 0..1
-	breath: number, -- ciclo de respirar (0 = en la superficie)
-	trick: string?, -- nombre del truco que está haciendo
-	hidden: boolean, -- escondida bajo el lago (descanso)
-	ghost: boolean, -- es la Orca fantasma (OrcaFx le pone su toque espectral)
-	voice: number, -- tono de sus llamados (etapa)
-	events: { Event }, -- lo que pasó este cuadro (OrcaFx los consume)
-	rig: Rig.Rig?,
-}
-export type Info = { height: number, lift: number, spin: number, anger: number, inner: Model? }
+export type State = Tipos.State
+export type Info = Tipos.Info
 export type Motion = {
 	state: State,
 	step: (dt: number, info: Info) -> CFrame,
@@ -71,7 +59,7 @@ local OrcaMotion = {}
 function OrcaMotion.new(lakeCenter: Vector3): Motion
 	local origin = Vector3.new(lakeCenter.X, 0, lakeCenter.Z)
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
-	local feeders = Feeders.watch(origin)
+	local feeders = Feeders.watch(origin, true) -- por turnos: de a uno, y se queda al terminar
 	local state: State = {
 		center = origin + Vector3.new(0, WATER, 0),
 		vy = 0,
@@ -93,7 +81,8 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 	local rigFor: Model? = nil
 	local biteUntil = 0
 	local schedule = Schedule.new()
-	local comer = Comer.new()
+	local comer = Comer.new(feeders)
+	local apunte = Apunte.new()
 
 	local function step(dt: number, info: Info): CFrame
 		dt = math.clamp(dt, 1 / 240, 0.1)
@@ -117,7 +106,9 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 
 		-- Truco del tramo (sincronizado en todos los clientes) y sus eventos.
 		local allowed = active and state.feeding < 0.05 and not state.hidden
-		local doing = Schedule.step(schedule, dt, now, profile, sample.depth, allowed, state.events)
+		local aim = Apunte.step(apunte, radius, height, profile, swim) -- los de lucirse, de costado a la rampa
+		local doing =
+			Schedule.step(schedule, dt, now, profile, sample.depth, allowed, state.events, aim)
 		local weight = doing.weight
 		local trickPose: Tricks.Pose = doing.pose or {}
 		local boost = 1 + ((trickPose.speed or 1) - 1) * weight
@@ -131,7 +122,7 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 		local close = Steer.follow(steer, dt, sample, direction, radius, height, cruise, boost, now)
 		local speed = steer.velocity.Magnitude
 		local turn = steer.turn + schedule.yawRate
-		local meal = Comer.step(comer, dt, profile, state, state.events)
+		local meal = Comer.step(comer, dt, profile, state, state.events, close)
 		Body.step(shape, dt, {
 			profile = profile,
 			height = height,
@@ -149,11 +140,12 @@ function OrcaMotion.new(lakeCenter: Vector3): Motion
 			anger = info.anger,
 			meal = meal,
 			rig = state.rig, -- y anima los huesos
+			breath = sample.breath, -- v2: sopla al llegar arriba y rueda hacia abajo
 		})
 
 		state.height, state.speed, state.yaw, state.vy = height, speed, steer.yaw, shape.vy
 		state.breath, state.voice = sample.breath, profile.voice
-		state.trick = doing.name
+		state.trick, state.splash = doing.name, if doing.pose then doing.pose.splash else nil
 		state.hidden = info.lift < -height * 1.5
 		local add = meal.add -- los gestos al comer, sobre el cuerpo
 		local depth = shape.depth + add.depth * height + info.lift

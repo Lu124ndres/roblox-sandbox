@@ -53,6 +53,9 @@ local Giants: Types.GiantsConfig = {
 			food = 400, -- mínimo
 			targetMinutes = 6,
 			modelBase = "Orca",
+			-- Modelo de bloques v2 (docs/plan_orca_v2.md): OrcaE1_v2..E4_v2. Sin esta línea vuelve
+			-- todo al actual.
+			modelSuffix = "_v2",
 			rouletteWeight = 50,
 			released = true,
 			inRoulette = true,

@@ -311,7 +311,9 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Geometría de las 4 etapas (cría, joven, adulta y anciana), aprobada (`docs/plan_orca_v2.md`).
 - [x] Pupilas por código que siguen al jugador (`Giant/GiantEyes`): Minotauro, Dragón y Zorro
       encima de su ojo; la orca con cuenca en el modelo.
-- [ ] Rig, poses y FBX de las 4 etapas (huesos `Ojo{l}Mira` en la cuenca).
-- [ ] Importar en Studio, IDs en `Assets` y `modelSuffix = "_v2"`.
-- [ ] Adaptar `Shared/Orca` y `OrcaSwim` a los huesos nuevos y probar las pupilas en Play.
+- [x] Rig, poses y FBX de las 4 etapas (huesos `Ojo{l}Mira` en la cuenca).
+- [x] Importar en Studio, IDs en `Assets` y `modelSuffix = "_v2"`.
+- [x] Nado natural: recorrido aleatorio, onda de cetáceo, saltos que se hunden y comer asomada
+      con la boca abierta; probado en Play con las pupilas.
+- [ ] Ver los trucos en Play y ajustar sus números (`Etapas/*`, `Comer/Estilo`).
 - [ ] Pupila del Minotauro E1 (ojo todo negro) y del Dragón E2 (ojo de 1×1): a decidir.

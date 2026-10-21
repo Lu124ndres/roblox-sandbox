@@ -23,7 +23,7 @@ function Remolinos.attach(rig: Rig.Rig, color: Color3): Remolinos?
 	local trails, tips = {}, {}
 	for _, s in { "Izq", "Der" } do
 		local root = rig.bones[`AletaCola{s}`]
-		local base = rig.bones.Cola4
+		local base = rig.bones.Cola5 or rig.bones.Cola4
 		if root and base then
 			-- La punta: siguiendo la aleta desde la base de la cola hacia afuera.
 			local reach = root.WorldPosition - base.WorldPosition
@@ -57,7 +57,7 @@ function Remolinos.update(
 	fxScale: number,
 	visible: boolean
 )
-	local tail = Rig.point(r.rig, "Cola4")
+	local tail = (Rig.point(r.rig, "Cola5") or Rig.point(r.rig, "Cola4"))
 	local under = tail ~= nil and tail.Y < WATER - height * 0.05
 	local on = visible and under and fxScale > 0 and speed > SLOW * height
 	for _, t in r.trails do

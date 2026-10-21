@@ -49,9 +49,12 @@ export type Profile = {
 	swim: Swim,
 	breath: Breath,
 	feed: Feed,
+	talla: Tricks.Talla, -- su tamaño: la gravedad y el ritmo de sus trucos
 	trickEvery: number, -- tramo en segundos en que puede hacer un truco
 	trickChance: number, -- probabilidad de truco en cada tramo
-	tricks: { Entry },
+	rest: number, -- segundos de pausa, como mínimo, antes y después de cada truco
+	tricks: { Entry }, -- nunca hace dos veces seguidas el mismo (por nombre)
+	sounding: Tricks.Trick?, -- zambullida con la cola afuera para la inmersión larga del recorrido
 	meal: Meal,
 }
 

@@ -130,7 +130,7 @@ function Comida.play(
 		hooks.play("Plop", motion.water(), deep)
 		hooks.splash(motion.water(), 1.4 * scale)
 	elseif kind == "flick" then
-		local tail = surface(motion.point("Cola4") or state.center)
+		local tail = surface(motion.point("Cola5") or motion.point("Cola4") or state.center)
 		hooks.play("OrcaTailSlap", tail, 1.2 * deep, 0.7)
 		hooks.splash(tail, 1.8 * scale)
 		hooks.ring(tail, height * 0.5, 1)

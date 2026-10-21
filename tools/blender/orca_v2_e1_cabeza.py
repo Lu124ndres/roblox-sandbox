@@ -31,6 +31,10 @@ def cabeza():
     bloque(c, c, "placa", (-7, 7), (-19, -9), (23, 24), recorte={"y-": 1})
     # Mejillas: cierran la boca atrás, bajo los ojos.
     bloque(c, c, "cuerpo", (-11, 11), (-16, -8), (6, 10))
+    # Espiga de la nuca, metida dos celdas en el Pecho y angosta (en cuña 1:2): al cabecear, la
+    # cara de atrás de la cabeza se hunde en el Pecho sin abrir la junta, y al levantar la nariz
+    # tapa la V que se abre abajo (guía, 4, "Cola o cuello en segmentos").
+    bloque(c, c, "cuerpo", (-3, 3), (-8, -6), (9, 17), eje="y", recorte={"x-": 1, "x+": 1, "z-": 1, "z+": 1})
     # Por dentro, roja: la pared del fondo y el paladar.
     bloque(c, c, "boca", (-9, 9), (-17, -16), (6, 10))
     bloque(c, c, "boca", (-9, 9), (-23, -17), (9, 10))
@@ -65,13 +69,18 @@ def dientes_arriba(c):
 
 def mandibula():
     m = "Mandibula"
-    # Quijada blanca con el borde de abajo y la barbilla achaflanados; termina en la garganta.
-    bloque(m, m, "blanco", (-10, 10), (-24, -10), (2, 5))
-    bloque(m, m, "blanco", (-10, 10), (-24, -10), (1, 2), fin="-", recorte={"x-": 1, "x+": 1, "y-": 1})
+    # Quijada blanca con el borde de abajo y la barbilla achaflanados. Termina dos celdas antes de
+    # la garganta (y -12; la garganta es del Pecho y empieza en y -10) y atrás sube en cuña 1:2 por
+    # abajo: al abrir la boca, la esquina de atrás y abajo gira hacia la garganta (guía, 4,
+    # "Mandíbula"; como en la E3). Dos celdas y no una porque la cabeza de cría es alta: al bajarla,
+    # la quijada (13 celdas bajo la nuca) se corre hacia atrás más que en la E3.
+    bloque(m, m, "blanco", (-10, 10), (-24, -14), (2, 5))
+    bloque(m, m, "blanco", (-10, 10), (-24, -14), (1, 2), fin="-", recorte={"x-": 1, "x+": 1, "y-": 1})
+    bloque(m, m, "blanco", (-10, 10), (-14, -12), (2, 5), eje="y", recorte={"z-": 1})
     # Borde blanco (los costados y adelante) y el piso rojo con la lengua.
-    par(m, m, "blanco", (9, 10), (-24, -10), (5, 6))
+    par(m, m, "blanco", (9, 10), (-24, -12), (5, 6))
     bloque(m, m, "blanco", (-9, 9), (-24, -22), (5, 6))
-    bloque(m, m, "boca", (-9, 9), (-22, -10), (5, 6))
+    bloque(m, m, "boca", (-9, 9), (-22, -12), (5, 6))
     bloque(m, m, "lengua", (-4, 4), (-21, -14), (6, 7))
     # Dientes de abajo, entre los de arriba.
     prisma(m, m, "diente", _diente(False, -1), (-23, -22), eje="y")

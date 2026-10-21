@@ -965,3 +965,22 @@ no hay bloom, rayos de sol, sombras ni reflejos en el agua.
 **Lo no obvio:** el armador común encuadraba por el alto y cortaba la orca. Con
 `ENCUADRE_CAJA = True` en la geometría, la cámara toma la caja entera y la medida sigue siendo
 el alto. La alineación gira las criaturas largas para mostrarlas de perfil.
+
+## 2026-10-20 — Orca v2: la columna en cadena desde el Pecho y topes medidos
+
+**Decisión:**
+- **El árbol:** la cola cuelga del Pecho en 5 tramos encadenados (Raiz > Pecho > Cola1..Cola5).
+  En el rig viejo colgaba de la Raiz en 4. `Rig.bind` distingue los dos por los huesos (v2 si
+  hay Cola5 o si la Cola1 cuelga del Pecho), así que la Orca fantasma sigue con la cuenta de
+  antes (`Rig/Fantasma`).
+- **Los topes:** todo ángulo que se escribe se limita contra `OrcaMotion/Limites`, que son los
+  de la E3 con ~10 % de margen.
+
+**Lo no obvio:**
+- **La E4 mide de más:** sus anillos encajan en un hueco, así que la revisión mide topes
+  inflados. Para las 4 etapas valen los de la E3, que es la más justa.
+- **El arco se reparte hacia la punta** (`SHARE` 0.10 a 0.31): las juntas de atrás aguantan
+  más y el arco llega a 1.45 rad limpio. Repartido parejo, se atraviesa a 0.9.
+- **El recorrido es un plan fijo por épocas de 300 s:** sale de la hora del servidor, así que
+  el enojo ya no lo apura (solo sube el tope de Steer). Si lo apurara, cada cliente vería un
+  recorrido distinto.

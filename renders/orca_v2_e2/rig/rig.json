@@ -1,0 +1,132 @@
+{
+  "triangulos": 4128,
+  "huesos": 20,
+  "huesos_que_deforman": 15,
+  "arbol": {
+    "Raiz": null,
+    "Pecho": "Raiz",
+    "Cabeza": "Pecho",
+    "Mandibula": "Cabeza",
+    "Boca": "Cabeza",
+    "Espiraculo": "Cabeza",
+    "OjoIzqMira": "Cabeza",
+    "OjoDerMira": "Cabeza",
+    "AletaIzq": "Pecho",
+    "AletaIzq2": "AletaIzq",
+    "AletaDer": "Pecho",
+    "AletaDer2": "AletaDer",
+    "Cola1": "Pecho",
+    "Cola2": "Cola1",
+    "Cola3": "Cola2",
+    "Cola4": "Cola3",
+    "Cola5": "Cola4",
+    "AletaColaIzq": "Cola5",
+    "AletaColaDer": "Cola5",
+    "Dorsal": "Cola1"
+  },
+  "huesos_del_contrato_que_faltan": [],
+  "huesos_fuera_del_contrato": [],
+  "sin_pesos": {
+    "Raiz": {
+      "deforma": false,
+      "vertices": 0
+    },
+    "Boca": {
+      "deforma": false,
+      "vertices": 0
+    },
+    "Espiraculo": {
+      "deforma": false,
+      "vertices": 0
+    },
+    "OjoIzqMira": {
+      "deforma": false,
+      "vertices": 0
+    },
+    "OjoDerMira": {
+      "deforma": false,
+      "vertices": 0
+    }
+  },
+  "colores_en_la_paleta": 18,
+  "pesos": {
+    "vertices_con_mas_de_un_hueso": 0,
+    "grupos_en_huesos_sin_pesos": []
+  },
+  "error_maximo_celdas_por_pose": {
+    "nado_cola_arriba": 5e-06,
+    "nado_cola_abajo": 6e-06,
+    "giro_cerrado_izq": 5e-06,
+    "giro_cerrado_der": 4e-06,
+    "giro_con_nado": 1e-05,
+    "arco_zambullida": 6e-06,
+    "arco_salto": 5e-06,
+    "zambullida_cola_afuera": 7e-06,
+    "boca_max": 3.3e-05,
+    "comer": 5.5e-05,
+    "pectorales_abiertas": 7e-06,
+    "pectorales_pegadas": 4e-06,
+    "saludo": 5e-06,
+    "cabeza_arriba": 4.6e-05,
+    "cabeza_abajo": 2.5e-05,
+    "cabeza_izq": 4e-06,
+    "cabeza_der": 4e-06,
+    "aletas_cola_arriba": 4e-06,
+    "aletas_cola_abajo": 4e-06,
+    "dorsal_izq": 7e-06,
+    "dorsal_der": 7e-06,
+    "pedunculo_arriba": 7e-06,
+    "pedunculo_abajo": 7e-06,
+    "aletazo": 3e-06,
+    "tope_Cola1.pitch+": 6e-06,
+    "tope_Cola1.pitch-": 4e-06,
+    "tope_Cola1.yaw+": 3e-06,
+    "tope_Cola1.yaw-": 3e-06,
+    "tope_Cola2.pitch+": 3e-06,
+    "tope_Cola2.pitch-": 5e-06,
+    "tope_Cola2.yaw+": 4e-06,
+    "tope_Cola2.yaw-": 4e-06,
+    "tope_Cola3.pitch+": 4e-06,
+    "tope_Cola3.pitch-": 4e-06,
+    "tope_Cola3.yaw+": 8e-06,
+    "tope_Cola3.yaw-": 8e-06,
+    "tope_Cola4.pitch+": 3e-06,
+    "tope_Cola4.pitch-": 4e-06,
+    "tope_Cola4.yaw+": 3e-06,
+    "tope_Cola4.yaw-": 3e-06,
+    "tope_Cola5.pitch+": 3e-06,
+    "tope_Cola5.pitch-": 3e-06,
+    "tope_Cola5.yaw+": 4e-06,
+    "tope_Cola5.yaw-": 4e-06,
+    "tope_AletaCola.pitch+": 3e-06,
+    "tope_AletaCola.pitch-": 3e-06,
+    "tope_Cabeza.pitch+": 4.8e-05,
+    "tope_Cabeza.pitch-": 1.7e-05,
+    "tope_Cabeza.yaw+": 5e-06,
+    "tope_Cabeza.yaw-": 5e-06,
+    "tope_Mandibula.pitch-": 1.9e-05,
+    "tope_Mandibula.pitch+": 3e-05,
+    "tope_Aleta.abajo": 4e-06,
+    "tope_Aleta.arriba": 8e-06,
+    "tope_Aleta2.abajo": 4e-06,
+    "tope_Aleta2.arriba": 3e-06,
+    "tope_Dorsal.roll+": 4e-06,
+    "tope_Dorsal.roll-": 3e-06
+  },
+  "error_maximo_celdas": 5.5e-05,
+  "escala_studs_por_bu": 5.2381,
+  "medidas_studs": {
+    "ancho_x": 56.571,
+    "largo_y": 84.773,
+    "alto_z": 44.0
+  },
+  "fbx_releido": {
+    "huesos": 20,
+    "mallas": 1,
+    "medidas_studs": {
+      "ancho_x": 56.571,
+      "largo_y": 84.773,
+      "alto_z": 44.0
+    }
+  }
+}

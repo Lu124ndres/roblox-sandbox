@@ -10,11 +10,16 @@
 	suman a la cabeza, la boca, las aletas y la cola). Usa resortes amortiguados:
 	el cuerpo llega un poco pasado y se acomoda, como algo pesado en el agua
 	(en el aire sigue la parábola exacta del truco).
+	En la orca v2 además sopla al respirar (sube un poco) y rueda hacia abajo
+	arqueando el lomo; al comer o asomarse casi vertical se sostiene con
+	aletazos cortos (tread); el ritmo de aletazos y planeo sale de Rig/Ritmo.
 ]]
 
 local Perfil = require(script.Parent.Parent.Etapas.Perfil)
 local Comer = require(script.Parent.Comer)
 local Rig = require(script.Parent.Rig)
+local Mezcla = require(script.Parent.Rig.Mezcla)
+local Ritmo = require(script.Parent.Rig.Ritmo)
 local Tricks = require(script.Parent.Tricks)
 
 export type Body = {
@@ -27,6 +32,8 @@ export type Body = {
 	jaw: number,
 	vy: number, -- studs/s
 	phase: number, -- fase del aleteo
+	pose: Rig.Pose, -- la pose de los huesos (se reusa cada cuadro)
+	beat: Ritmo.Beat,
 }
 export type Input = {
 	profile: Perfil.Profile,
@@ -45,7 +52,11 @@ export type Input = {
 	anger: number,
 	meal: Comer.Out?, -- su animación al comer
 	rig: Rig.Rig?, -- si está, se animan sus huesos
+	breath: number?, -- 0..1 del ciclo de respirar de Path (0 = arriba): sopla y rueda (v2)
 }
+
+local BLOW_RISE = 0.02 -- altos del modelo: sube al soplar
+local UPRIGHT_FROM, UPRIGHT_SPAN = 0.6, 0.5 -- rad de cabeceo desde donde se sostiene vertical
 
 local Body = {}
 
@@ -60,6 +71,8 @@ function Body.new(depth: number): Body
 		jaw = 0,
 		vy = 0,
 		phase = 0,
+		pose = Mezcla.newPose(),
+		beat = { hz = 0, effort = 0, glide = 0, kick = 0 },
 	}
 end
 
@@ -90,13 +103,26 @@ function Body.step(body: Body, dt: number, input: Input)
 	local bw = if meal then meal.weight else 0
 	local add = if meal then meal.add else Comer.zero
 	local rise = input.feeding * input.close
+	local rig = input.rig
+	local v2 = rig ~= nil and rig.v2
+	-- Base (v2): sopla al llegar arriba y rueda hacia abajo; casi vertical se sostiene.
+	local blow, rollArch, tread = 0, 0, 0
+	if v2 then
+		local calm = (1 - w) * (1 - bw) * (1 - input.feeding)
+		blow, rollArch = Ritmo.breath(input.breath, p.breath.seconds, calm)
+		local tilt = (math.abs(body.pitch) - UPRIGHT_FROM) / UPRIGHT_SPAN
+		local upright = if trick.air or big.air then 0 else math.clamp(tilt, 0, 1) -- en el aire no rema
+		tread = math.max(rise, upright)
+	end
+	blow = math.max(blow, if trick.blow then w else 0, if big.blow then bw else 0)
 	-- Crucero (y comer): respira, levanta la cabeza para comer, se inclina en las curvas.
 	local cruiseDepth = input.cruiseDepth
 		+ (p.feed.rise - input.cruiseDepth) * rise
 		+ math.sin(input.now * 2) * 0.025 * rise
+		+ BLOW_RISE * blow
 	local cruisePitch = math.atan2(body.vy, math.max(input.speed, 2)) * 0.7 * (1 - rise)
 		+ p.feed.pitch * rise
-	local cruiseRoll = math.clamp(input.turn * p.swim.bank, -0.45, 0.45)
+	local cruiseRoll = math.clamp(input.turn * p.swim.bank, -0.45, 0.45) * (1 - tread)
 		+ math.sin(input.now * p.swim.beat * 1.4) * p.swim.wiggle * (1 - rise)
 		+ math.sin(input.now * 6) * p.feed.wiggle * rise
 		+ math.sin(input.now * 23) * input.anger * 0.05
@@ -143,29 +169,31 @@ function Body.step(body: Body, dt: number, input: Input)
 	end
 	body.jaw += (wantJaw - body.jaw) * (1 - math.exp(-dt * (if input.biting then 30 else 10)))
 
-	-- Huesos: onda de nado (más lenta y ancha al planear), cola, cabeza, boca, aletas.
-	local rig = input.rig
+	-- Huesos: ritmo (aletazos y planeo), y la pose del truco y de comer encima.
 	if rig then
-		local glide = 1 - p.swim.glide * (0.5 + 0.5 * math.sin(input.now * math.pi * 2 / 7))
-		local pace = input.speed / input.cruise
-		local effort = (0.45 + pace * 0.75 + input.anger * 0.4) * glide * p.swim.amplitude
-		effort = mix(effort, if trick.effort then trick.effort * p.swim.amplitude else nil, w)
-		effort = mix(effort, if big.effort then big.effort * p.swim.amplitude else nil, bw)
-		body.phase += dt * math.pi * 2 * p.swim.beat * (0.45 + pace * 0.55 + input.anger * 0.5)
-		Rig.apply(rig, {
-			phase = body.phase,
-			effort = effort * (1 - 0.5 * input.close),
-			turn = input.turn,
-			jaw = body.jaw,
-			fins = -0.25 * input.feeding + (trick.fins or 0) * w + (big.fins or 0) * bw + add.fins,
-			flap = p.swim.flap,
-			head = 0.12 * input.close + (trick.head or 0) * w + (big.head or 0) * bw + add.head,
-			tail = (trick.tail or 0) * w + (big.tail or 0) * bw + add.tail,
-			pitchSpeed = body.pitchSpeed,
-			rollSpeed = body.rollSpeed,
-			waveIzq = add.waveIzq,
-			waveDer = add.waveDer,
-		}, dt)
+		local pace, beat = input.speed / input.cruise, body.beat
+		if v2 then
+			local busy = math.max(w, bw, input.feeding, math.abs(input.turn) / 0.5)
+			Ritmo.step(beat, p.swim, input.now, pace, input.anger, busy, tread, body.phase)
+		else
+			Ritmo.viejo(beat, p.swim, input.now, pace, input.anger)
+		end
+		local amp = p.swim.amplitude
+		local effort = mix(beat.effort, if trick.effort then trick.effort * amp else nil, w)
+		effort = mix(effort, if big.effort then big.effort * amp else nil, bw)
+		body.phase += dt * math.pi * 2 * mix(beat.hz, big.beat, bw) -- comer: los aletazos que la sostienen
+		local pose = body.pose
+		pose.phase = body.phase
+		pose.effort = if v2 then effort else effort * (1 - 0.5 * input.close)
+		pose.turn = input.turn
+		pose.jaw = body.jaw
+		pose.flap = p.swim.flap
+		pose.pitchSpeed, pose.rollSpeed = body.pitchSpeed, body.rollSpeed
+		-- Base (comer, soplar, rodar) y encima la acción (truco, comer).
+		pose.fins, pose.head, pose.arch = -0.25 * input.feeding, 0.12 * input.close, rollArch
+		pose.blow, pose.glide, pose.tread = blow, beat.glide, tread
+		Mezcla.action(pose, trick, w, big, bw, add)
+		Rig.apply(rig, pose, dt)
 	end
 end
 

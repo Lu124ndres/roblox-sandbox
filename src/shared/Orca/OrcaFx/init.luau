@@ -59,13 +59,17 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 	local function crossings(rel: number, height: number, scale: number)
 		local state = motion.state
 		local water = motion.water()
+		local size = state.splash or 1 -- lo pide el truco: los saltitos entran limpios, la anciana levanta una ola
 		if lastRel < 0 and rel >= 0 and state.vy > height * 0.5 then
-			hooks.play("BigSplash", water, 1.25)
-			hooks.splash(water, 2.2 * scale)
+			hooks.play(if size < 0.5 then "Plop" else "BigSplash", water, 1.25)
+			hooks.splash(water, 2.2 * scale * math.max(size, 0.3))
 			hooks.sparkle(water + Vector3.new(0, height * 0.2, 0), COLORS.Crystal, 16)
+		elseif lastRel > 0 and rel <= 0 and state.vy < -height * 0.5 and size < 0.5 then
+			hooks.play("Plop", water, 1)
+			hooks.splash(water, 1.6 * scale * math.max(size, 0.3))
 		elseif lastRel > 0 and rel <= 0 and state.vy < -height * 0.5 then
 			hooks.play("BigSplash", water, 0.85)
-			hooks.splash(water, 4 * scale)
+			hooks.splash(water, 4 * scale * size)
 			for k = 1, 3 do
 				hooks.ring(water, height * (0.5 + k * 0.4), 1 + k * 0.3)
 			end

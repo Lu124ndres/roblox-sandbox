@@ -86,13 +86,16 @@ def colmillos_arriba(c):
 
 def mandibula():
     m = "Mandibula"
-    # Quijada blanca con el borde de abajo achaflanado; termina en la garganta (y -18).
-    bloque(m, m, "blanco", (-6, 6), (-30, -18), (3, 5))
-    bloque(m, m, "blanco", (-6, 6), (-30, -18), (2, 3), fin="-", recorte={"x-": 1, "x+": 1})
+    # Quijada blanca con el borde de abajo achaflanado. Termina una celda antes de la garganta
+    # (y -19; la garganta es del Pecho y empieza en y -18) y atrás sube en cuña 1:2 por abajo: al
+    # abrir la boca, la esquina de atrás y abajo gira hacia la garganta (guía, 4, "Mandíbula").
+    bloque(m, m, "blanco", (-6, 6), (-30, -21), (3, 5))
+    bloque(m, m, "blanco", (-6, 6), (-30, -21), (2, 3), fin="-", recorte={"x-": 1, "x+": 1})
+    bloque(m, m, "blanco", (-6, 6), (-21, -19), (3, 5), eje="y", recorte={"z-": 1})
     # Borde blanco (los costados y adelante) y el piso rojo con la lengua.
-    par(m, m, "blanco", (5, 6), (-30, -18), (5, 6))
+    par(m, m, "blanco", (5, 6), (-30, -19), (5, 6))
     bloque(m, m, "blanco", (-5, 5), (-30, -28), (5, 6))
-    bloque(m, m, "boca", (-5, 5), (-28, -18), (5, 6))
+    bloque(m, m, "boca", (-5, 5), (-28, -19), (5, 6))
     bloque(m, m, "lengua", (-3, 3), (-26, -20), (6, 7))
     # Colmillos de abajo, entre los de arriba: el del medio y un par, largos; a los costados,
     # corridos media cuña respecto de los de arriba.

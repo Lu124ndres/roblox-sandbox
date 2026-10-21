@@ -3186,3 +3186,34 @@ archivo pero queda sin commit junto con el resto del crecimiento por pez, que es
 
 **Probado en Studio (Play):** `GiantStages` da 16.5, 44, 53.6, 107.2 y 128.7 al llenarse; el
 Minotauro en etapa 4 mide 107 de alto en el cráter, sin errores en la consola.
+
+---
+
+## 2026-10-20 (16) — Orca v2: rig de las 4 etapas y nado natural
+
+**Qué se hizo (pedido del usuario: "movimiento natural de orcas o ballenas, saltos naturales que
+se sumerja, nado natural, no solo un círculo sino aleatorio"; y "al alimentar que salga y abra
+la boca"):**
+- **Rig:** 20 huesos por etapa (columna de 6 tramos en cadena, `Ojo{l}Mira` en la cuenca),
+  poses extremas con la cuenta del juego (22 de 24 limpias en las cuatro) y FBX. El usuario los
+  importó; están en `ServerStorage.OrcaE<n>_v2`, con los IDs en `Assets` y
+  `modelSuffix = "_v2"`.
+- **Nado nuevo** en `Shared/Orca/OrcaMotion`, en cuatro partes:
+  - **recorrido aleatorio** (`Path/`): cruces, patrullas, descansos y respiraciones en serie,
+    de costado a la rampa;
+  - **onda de cetáceo** (`Rig/`, `Body`), con topes medidos (`Limites`);
+  - **trucos naturales** (`Tricks/`): salto con parábola que cae y se hunde, zambullida con la
+    cola afuera, asomarse, flotar;
+  - **comer** (`Comer/`): sale casi vertical y abre la boca antes de cada pez.
+
+**Probado en Studio (Play):** las 4 etapas cargan con sus 20 huesos y 2 pupilas, y la consola
+queda limpia.
+- **La adulta:** nada con la cola ondulando y, al darle de comer, se para a 63° con la boca muy
+  abierta frente a la orilla.
+- **La Orca vieja:** también nada con el motor nuevo.
+- **Las alturas** ya son las nuevas (53.6 y 107.2 studs).
+- **Sin verificar:** no se vio un truco completo en Play, porque salen por la hora del
+  servidor. Se comprobaron en simulación (PNG en el scratchpad de la sesión).
+
+**Sigue:** mirar los trucos en Play y ajustar sus números; las pupilas del Minotauro E1 y del
+Dragón E2.

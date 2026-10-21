@@ -1,7 +1,8 @@
 # Plan: Orca v2 (orca monstruo de bloques)
 
-Estado: **geometría de las 4 etapas aprobada (2026-10-20)**. Falta el rig, el FBX, la
-importación y adaptar su movimiento (`Shared/Orca`, `OrcaSwim`).
+Estado (2026-10-20): **en el juego.** Las 4 etapas tienen rig, FBX importado
+(`ServerStorage.OrcaE<n>_v2`, `modelSuffix = "_v2"`) y nado nuevo. Se probó en Play: nada,
+come asomada con la boca abierta y lleva pupilas que siguen al jugador.
 
 Es la v2 de la Orca de siempre (`OrcaE1..E4_v2`), en el mismo estilo de bloques que el
 Minotauro, el Dragón y el Zorro. Sale de una referencia del usuario (fuera del repo): se toma la
@@ -82,10 +83,57 @@ Mientras el modelo no tenga ese hueso, `GiantEyes` no le pone pupilas (`requires
 `UIConfig/GiantEyesData`). Con el rig hecho, hay que volver a correr `tools/blender/ojos_medir.py`
 para que mida la malla exportada.
 
+## Rig (rig_orca_v2.py y orca_v2_poses.py)
+
+| | E1 | E2 | E3 | E4 |
+|---|---|---|---|---|
+| Huesos (con pesos) | 20 (15) | 20 (15) | 20 (15) | 20 (15) |
+| Poses limpias | 22 de 24 | 22 de 24 | 22 de 24 | 22 de 24 |
+| Triángulos | 4,340 | 4,128 | 4,742 | 11,230 |
+| FBX (alto en studs) | 16.5 | 44 | 82.5 | 165 |
+
+Árbol: Raiz > Pecho > Cabeza > Mandibula; Pecho > Aleta{l} > Aleta{l}2; Pecho > Cola1..Cola5
+en cadena; Cola1 > Dorsal; Cola5 > AletaCola{l}. Sin pesos: Raiz, Boca, Espiraculo y
+`Ojo{l}Mira`. En todas fallan las mismas dos poses (el arco máximo del salto y la cabeza muy
+abajo), que el juego ya limita.
+
+Topes limpios: los de la E3, la etapa más justa, con ~10 % de margen, en
+`OrcaMotion/Limites.luau`. El arco y la curva se reparten en la columna creciendo hacia la
+cola (`Rig/Columna`, SHARE).
+
+Retoques de juntas para que el rig no se atraviese:
+- la quijada termina antes de la garganta, con una cuña atrás (en la cría, 2 celdas);
+- lo metido de la dorsal termina antes de la Cola2;
+- los lóbulos de la cola nacen una celda más atrás;
+- espigas y tapones ocultos (cría y anciana) y el codo de la pectoral afinado (cría).
+
+## Movimiento (`src/shared/Orca/OrcaMotion/`)
+
+- **`Path/`, el recorrido:** no gira en círculos.
+  - Épocas de 300 s con cruces, patrullas, paseos y descansos flotando.
+  - Respira en series de 3 a 5 soplidos y después hace una inmersión larga.
+  - Se deja ver de costado o de frente a la rampa: en las simulaciones nunca estuvo más de
+    ~3 s de espaldas.
+- **`Rig/` y `Body`, el cuerpo:**
+  - una onda dorsoventral que crece hacia la cola, con las aletas de la cola como paleta y la
+    cabeza firme;
+  - ráfagas de aletazos y planeo (por hash);
+  - en los giros la columna se curva, el cuerpo se inclina y las pectorales timonean;
+  - el modo sostén para comer asomada;
+  - `Rig/Fantasma` mantiene igual el modelo viejo (la Orca fantasma).
+- **`Tricks/`, `Schedule` y `Etapas/`, los trucos:**
+  - salto con parábola real que cae de costado y se hunde, saltitos, zambullida con la cola
+    afuera, asomarse, coletazo, aletazo y flotar;
+  - la agenda nunca repite el mismo truco seguido y los de lucirse van de costado a la rampa
+    (`Apunte`).
+- **`Comer/` y `Feeders`, comer:**
+  - atiende por turnos y nada a la orilla;
+  - sale casi vertical, abre la boca antes de cada pez, muerde, traga, festeja, espera y se
+    hunde.
+- Simulaciones fuera del juego: `tools/orca_recorrido_sim.py`.
+
 ## Pasos que quedan
 
-1. Rig, poses extremas (meta ≥ 19 de 24 limpias) y FBX de las 4 etapas.
-2. El usuario importa los FBX (con "Mantener huesos de influencia cero"); se revisan, se pasan a
-   `ServerStorage.OrcaE<n>_v2`, se cargan los IDs y se pone `modelSuffix = "_v2"`.
-3. Adaptar `Shared/Orca` y `OrcaSwim` a los huesos nuevos (Cola1..Cola5, Aleta{l}2).
-4. Volver a medir los ojos y probar las pupilas en Play.
+1. Pupila para el Minotauro E1 (su ojo es todo negro) y el Dragón E2 (ojo de 1×1).
+2. Ajustar a la vista en Play los números de los trucos y de la comida
+   (`Etapas/*`, `Comer/Estilo`).

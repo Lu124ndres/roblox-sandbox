@@ -125,6 +125,13 @@ local Assets: Assets = {
 		ZorroDeAguaE2_v2 = "rbxassetid://121650889617604", -- joven, 3 colas (4,604, 46)
 		ZorroDeAguaE3_v2 = "rbxassetid://84846756727124", -- adulto, 6 colas (7,604, 61)
 		ZorroDeAguaE4_v2 = "rbxassetid://101856396424858", -- forma final, 9 colas (10,332, 76)
+		-- Orca v2 de bloques (rig_orca_v2.py; docs/plan_orca_v2.md). Models en
+		-- ServerStorage.OrcaE<n>_v2; se usan en lugar de OrcaE<n>. 20 huesos (OjoIzqMira y
+		-- OjoDerMira: las pupilas de GiantEyes).
+		OrcaE1_v2 = "rbxassetid://72414859955031", -- cría (4,340 triángulos)
+		OrcaE2_v2 = "rbxassetid://132231555278043", -- joven (4,128)
+		OrcaE3_v2 = "rbxassetid://82287267274223", -- adulta (4,742)
+		OrcaE4_v2 = "rbxassetid://103685738191709", -- anciana (11,230)
 		-- Trajes del personaje (rig_traje.py + suavizar_traje.py: piel continua, no se abren) y dragón (rig_dragon.py, en pose
 		-- de vuelo): texturas horneadas con hornear.py. Fuente: assets/blender/*.fbx. Los Model
 		-- están en ServerStorage (Traje<clave>, DragonMarinoE1..E4) y viven en el .rbxl.

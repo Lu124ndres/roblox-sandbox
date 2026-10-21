@@ -275,87 +275,87 @@ local data: { [string]: ModelEyes } = {
 			},
 		},
 	},
-	-- assets/blender/orca_v2/e1_bloques.blend
+	-- assets/blender/orca_v2/e1_rig.blend
 	OrcaE1 = {
 		bone = "Cabeza",
-		boundsMin = Vector3.new(-1.7, -2.5, 0),
-		boundsMax = Vector3.new(1.7, 2.4946, 3.1),
+		boundsMin = Vector3.new(-9.0484, -13.3065, 0),
+		boundsMax = Vector3.new(9.0484, 13.2779, 16.5),
 		requiresBone = "OjoIzqMira",
 		eyes = {
 			{
-				center = Vector3.new(0.9226, -1.8774, 1.7938),
+				center = Vector3.new(4.9104, -9.9929, 9.5474),
 				normal = Vector3.new(0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(0.4625, 0.3875),
+				size = Vector2.new(2.4617, 2.0625),
 			},
 			{
-				center = Vector3.new(-0.9226, -1.8774, 1.7938),
+				center = Vector3.new(-4.9104, -9.9929, 9.5474),
 				normal = Vector3.new(-0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(0.4625, 0.3875),
+				size = Vector2.new(2.4617, 2.0625),
 			},
 		},
 	},
-	-- assets/blender/orca_v2/e2_bloques.blend
+	-- assets/blender/orca_v2/e2_rig.blend
 	OrcaE2 = {
 		bone = "Cabeza",
-		boundsMin = Vector3.new(-5.4, -8.1, 0),
-		boundsMax = Vector3.new(5.4, 8.0839, 8.4),
+		boundsMin = Vector3.new(-28.2857, -42.4286, 0),
+		boundsMax = Vector3.new(28.2857, 42.3442, 44),
 		requiresBone = "OjoIzqMira",
 		eyes = {
 			{
-				center = Vector3.new(2.0964, -7.2036, 4.05),
+				center = Vector3.new(10.9813, -37.733, 21.2143),
 				normal = Vector3.new(0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(0.7875, 0.825),
+				size = Vector2.new(4.125, 4.3214),
 			},
 			{
-				center = Vector3.new(-2.0964, -7.2036, 4.05),
+				center = Vector3.new(-10.9813, -37.733, 21.2143),
 				normal = Vector3.new(-0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(0.7875, 0.825),
+				size = Vector2.new(4.125, 4.3214),
 			},
 		},
 	},
-	-- assets/blender/orca_v2/e3_bloques.blend
+	-- assets/blender/orca_v2/e3_rig.blend
 	OrcaE3 = {
 		bone = "Cabeza",
-		boundsMin = Vector3.new(-8.5, -15.5, 0),
-		boundsMax = Vector3.new(8.5, 16.4732, 15.5),
+		boundsMin = Vector3.new(-45.2419, -82.5, 0),
+		boundsMax = Vector3.new(45.2419, 87.6798, 82.5),
 		requiresBone = "OjoIzqMira",
 		eyes = {
 			{
-				center = Vector3.new(3.494, -14.006, 6.5),
+				center = Vector3.new(18.5973, -74.5479, 34.5968),
 				normal = Vector3.new(0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(1.1875, 1),
+				size = Vector2.new(6.3206, 5.3226),
 			},
 			{
-				center = Vector3.new(-3.494, -14.006, 6.5),
+				center = Vector3.new(-18.5973, -74.5479, 34.5968),
 				normal = Vector3.new(-0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(1.1875, 1),
+				size = Vector2.new(6.3206, 5.3226),
 			},
 		},
 	},
-	-- assets/blender/orca_v2/e4_bloques.blend
+	-- assets/blender/orca_v2/e4_rig.blend
 	OrcaE4 = {
 		bone = "Cabeza",
-		boundsMin = Vector3.new(-20.9463, -30, 0),
-		boundsMax = Vector3.new(20.9463, 33, 31),
+		boundsMin = Vector3.new(-111.4886, -159.6774, 0),
+		boundsMax = Vector3.new(111.4886, 175.6452, 165),
 		requiresBone = "OjoIzqMira",
 		eyes = {
 			{
-				center = Vector3.new(7.3858, -26.6142, 15.6787),
+				center = Vector3.new(39.3116, -141.6561, 83.451),
 				normal = Vector3.new(0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(1.5, 1.5),
+				size = Vector2.new(7.9839, 7.9839),
 			},
 			{
-				center = Vector3.new(-7.3858, -26.6142, 15.6787),
+				center = Vector3.new(-39.3116, -141.6561, 83.451),
 				normal = Vector3.new(-0.7071, -0.7071, 0),
 				up = Vector3.new(0, 0, 1),
-				size = Vector2.new(1.5, 1.5),
+				size = Vector2.new(7.9839, 7.9839),
 			},
 		},
 	},

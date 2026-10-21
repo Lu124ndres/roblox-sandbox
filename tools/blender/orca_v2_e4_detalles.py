@@ -106,7 +106,7 @@ def algas():
             ("Cabeza", "Cabeza", (7, 8), (-19, 11, 6, 2)),
             ("Cabeza", "Cabeza", (-8, -7), (-20, 10, 5, 3)),
             ("Pecho", "Torso", (8, 9), (-5, 8, 4, 1)),
-            ("Pecho", "Torso", (-9, -8), (-6, 9, 3, 1)),
+            ("Pecho", "Torso", (-9, -8), (-5, 9, 3, 1)),  # detrás de la pectoral: en y -6 la tocaba
             ("Cola2", "Torso", (6, 7), (10, 8, 3, 1)),
             ("Cola4", "Torso", (-5, -4), (21, 9, 5, 2)),
             ("Dorsal", "Aletas", (1, 2), (-3, 29, 24, 20))):
