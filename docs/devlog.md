@@ -3430,3 +3430,17 @@ Output.
 textura de las mallas de la isla; la orilla poco honda se ve beige porque la plataforma de arena
 bajo el agua es casi plana (se arregla en Blender); `Technology` sigue en ShadowMap (Future se
 ve más real pero pesa más en teléfonos); espuma nueva siguiendo la orilla de bloques.
+
+## 2026-10-21 (10) — El menú ya no se achica al tocar el joystick
+
+**Qué pasaba (reporte del usuario):** al tocar el joystick, la columna del menú (izquierda) se
+achicaba. El joystick dinámico de Roblox mueve su aro (`ThumbstickStart`) a donde se apoya el
+dedo, y `Interface/Columns` usa el borde de arriba del aro para que el menú no lo tape: si el
+dedo estaba más arriba que el aro en reposo, el menú creía tener menos lugar.
+**Arreglo:** `Interface/TouchControls` cuenta los dedos en la pantalla (`TouchStarted` /
+`TouchEnded`) y, mientras haya alguno, `thumbstickTop()` devuelve la última posición del aro en
+reposo; al soltar vuelve a leerla.
+
+**Probado en Studio (simulador de teléfono, Play):** subir el aro 80 px a mano (como hace Roblox
+al tocar) achicaba el menú de 0.66 a 0.43: esa era la causa. Con el arreglo el HUD arranca igual
+y sin errores. El toque real no se puede simular por MCP: falta confirmarlo en un teléfono.

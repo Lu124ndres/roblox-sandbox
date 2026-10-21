@@ -10,15 +10,21 @@
 	se ve (PC, mando, o todavía no apareció). Se leen del TouchGui real y no de
 	medidas fijas: Roblox los cambia de tamaño según la pantalla.
 	`onChange` avisa cuando aparecen, se mueven o se ocultan.
+	El joystick dinámico mueve su aro a donde se apoya el dedo: mientras haya un
+	dedo en la pantalla se usa la última posición del aro en reposo (si no, el
+	menú de la izquierda se achicaba al tocar el joystick más arriba).
 ]]
 
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 
 local TouchControls = {}
 
 local listeners: { () -> () } = {}
 local watched: { RBXScriptConnection } = {}
 local pending = false
+local touches: { [InputObject]: boolean } = {}
+local restThumbstickTop: number? = nil
 
 local function shown(object: GuiObject?): boolean
 	if not object then
@@ -56,7 +62,11 @@ end
 
 function TouchControls.thumbstickTop(): number?
 	-- Joystick dinámico (el de siempre): su aro de reposo. Clásico: el marco es el aro.
-	return top(find("ThumbstickStart") or find("ThumbstickFrame"))
+	if next(touches) ~= nil and restThumbstickTop then
+		return restThumbstickTop
+	end
+	restThumbstickTop = top(find("ThumbstickStart") or find("ThumbstickFrame"))
+	return restThumbstickTop
 end
 
 local function notify()
@@ -103,6 +113,13 @@ function TouchControls.onChange(listener: () -> ())
 end
 
 function TouchControls.start(playerGui: Instance)
+	UserInputService.TouchStarted:Connect(function(input: InputObject)
+		touches[input] = true
+	end)
+	UserInputService.TouchEnded:Connect(function(input: InputObject)
+		touches[input] = nil
+		notify() -- el aro ya volvió a su lugar: se vuelve a leer
+	end)
 	local touchGui = playerGui:FindFirstChild("TouchGui")
 	if touchGui then
 		follow(touchGui)
