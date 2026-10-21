@@ -98,6 +98,15 @@ function Window.create(
 	local openCallbacks: { () -> () } = {}
 	local closeCallbacks: { () -> () } = {}
 	local shrink = 1
+	-- Acomoda la ventana. Las achicadas (setShrink) tienen aire: suben medio título para
+	-- que el panel, no el marco, quede en el centro de la pantalla.
+	local function resize(): number
+		local fit = WindowLayout.resize(frame, screen, limit.MaxSize, shrink)
+		if shrink < 1 then
+			frame.Position += UDim2.fromOffset(0, -TITLE_HEIGHT * fit / 2)
+		end
+		return fit
+	end
 	local window: Window
 	window = {
 		frame = frame,
@@ -113,7 +122,7 @@ function Window.create(
 				callback()
 			end
 			Sounds.play("Click")
-			local fit = WindowLayout.resize(frame, screen, limit.MaxSize, shrink)
+			local fit = resize()
 			frame.Visible = true
 			scale.Scale = fit * 0.85
 			pop = TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = fit })
@@ -167,7 +176,7 @@ function Window.create(
 	Device.onResize(function()
 		if frame.Visible then
 			pop:Cancel()
-			scale.Scale = WindowLayout.resize(frame, screen, limit.MaxSize, shrink)
+			scale.Scale = resize()
 		end
 	end)
 	return window

@@ -2,7 +2,7 @@
 --[[
 	RebirthWindow
 
-	Renacer (botón RENACER de la columna derecha) con el estilo de la TIENDA:
+	Renacer (botón RENACER de la columna del menú) con el estilo de la TIENDA:
 	dos tarjetas con rayos, AHORA (azul) → AL RENACER (dorada, con "+N%"),
 	con los peces por segundo al alimentar y el bono para siempre de monedas
 	y poder (x1.25 por renacimiento, RebirthMath.bonusMultiplier); las

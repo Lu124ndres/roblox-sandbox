@@ -125,12 +125,12 @@ end
 
 function NextGoal.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	-- Como el tutorial: en PC en la columna izquierda; en pantallas táctiles abajo
+	-- Como el tutorial: en PC en la columna de estadísticas; en pantallas táctiles abajo
 	-- al centro (a la izquierda estorbaría al joystick).
 	local touchOnly = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 	local card = Instance.new("Frame")
 	card.Name = "SiguienteMeta"
-	card.Parent = if touchOnly then screen else Layout.left()
+	card.Parent = if touchOnly then screen else Layout.stats()
 	local skin = Kit.skin(card, "panel")
 	skin.SliceScale = PLATE_SLICE
 	card.LayoutOrder = 21

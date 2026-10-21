@@ -2,7 +2,7 @@
 --[[
 	BoostTimer
 
-	Cartel arriba de la columna derecha mientras dura el entrenamiento que alguien
+	Cartel arriba de la columna del menú mientras dura el entrenamiento que alguien
 	compró para todo el servidor: cuánto multiplica, quién fue y cuánto queda.
 	Es una placa de piedra verde (Interface/Kit) con texto blanco con contorno.
 ]]
@@ -21,14 +21,14 @@ local REFRESH_SECONDS = 0.5
 local BoostTimer = {}
 
 function BoostTimer.start(_screen: ScreenGui)
-	-- Arriba de la columna derecha (encima de Tienda y Robux).
+	-- Arriba de la columna del menú (encima de Tienda y Robux).
 	local pill = Instance.new("Frame")
 	pill.Name = "ImpulsoServidor"
 	pill.LayoutOrder = 1
-	pill.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, 54) -- el ancho de la columna
+	pill.Size = UDim2.fromOffset(Layout.MENU_WIDTH, 54) -- el ancho de la columna
 	pill.Visible = false
 	Kit.skin(pill, "boton", UIConfig.Colors.Robux)
-	pill.Parent = Layout.right()
+	pill.Parent = Layout.menu()
 	local title = Style.text(pill, "Texto", UIConfig.TextSizes.Body, nil, 2)
 	title.Position = UDim2.fromOffset(10, 5)
 	title.Size = UDim2.new(1, -20, 0, 24)

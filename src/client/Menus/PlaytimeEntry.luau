@@ -2,7 +2,7 @@
 --[[
 	PlaytimeEntry
 
-	Botón grande de los regalos por jugar en la columna izquierda: casilla
+	Botón grande de los regalos por jugar en la columna de estadísticas: casilla
 	volcánica (como los botones del HUD) con el regalo que sobresale, "REGALO
 	GRATIS" y la cuenta regresiva grande. Cuando hay uno listo se enciende el
 	marco de lava, dice ¡RECLAMAR!, late y el regalo se sacude para llamar la
@@ -34,7 +34,7 @@ function PlaytimeEntry.build(order: number, onClick: () -> ()): Entry
 	holder.BackgroundTransparency = 1
 	holder.LayoutOrder = order
 	holder.Size = UDim2.fromOffset(Layout.statWidth(), HEIGHT + 8)
-	holder.Parent = Layout.left()
+	holder.Parent = Layout.stats()
 	local button = Instance.new("TextButton")
 	button.Name = "Boton"
 	button.Text = ""

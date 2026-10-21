@@ -3,16 +3,17 @@
 	Layout
 
 	Dónde va cada parte del HUD, para que nada se encime en PC ni en móvil:
-		izquierda   columna con las estadísticas y la misión del tutorial
-		derecha     columna con el aviso del entrenamiento del servidor, Tienda y
-		            Robux, y los atajos de Poder y Monedas
-		barra       botones chicos en la esquina derecha de la barra de Roblox
-		            (Interface/TopBar)
+		menú           a la izquierda: el aviso del entrenamiento del servidor, el
+		               Índice, Mejoras, Tienda, Misiones y Renacer
+		estadísticas   a la derecha: monedas, poder, canasta, monstruos y el regalo
+		               por jugar (se cambiaron de lado el 2026-10-21, pedido del usuario)
+		barra          botones chicos en la esquina derecha de la barra de Roblox
+		               (Interface/TopBar), con los atajos de Robux debajo (QuickBuys)
 	Las columnas van en la franja libre entre la barra y los controles táctiles
 	de Roblox (y el lugar del botón de acción, Interface/ActionSpot), y se
 	achican si no caben (Interface/Columns).
 	Todo el HUD se achica en pantallas bajas (UIScale según el alto).
-	La columna derecha mide lo mismo que sus filas (dos botones de 88 con 10
+	La columna del menú mide lo mismo que sus filas (dos botones de 88 con 10
 	entre ellos) y las centra, así Tienda, Mejoras y los atajos quedan alineados.
 ]]
 
@@ -34,25 +35,25 @@ local STAT_WIDTH_TOUCH = 210 -- más angostas en táctil: dejan sitio a la barra
 
 local Layout = {}
 
--- Medidas de la columna derecha (antes de escalar), las comparten todas sus filas.
+-- Medidas de la columna del menú (antes de escalar), las comparten todas sus filas.
 Layout.BUTTON_SIZE = 88
 Layout.BUTTON_GAP = 10
-Layout.RIGHT_WIDTH = Layout.BUTTON_SIZE * 2 + Layout.BUTTON_GAP
--- Filas de la columna izquierda: el ícono ocupa los primeros STAT_ICON píxeles,
+Layout.MENU_WIDTH = Layout.BUTTON_SIZE * 2 + Layout.BUTTON_GAP
+-- Filas de la columna de estadísticas: el ícono ocupa los primeros STAT_ICON píxeles,
 -- la placa empieza en su mitad y el texto justo después del ícono. Las comparten
 -- las estadísticas (Hud) y el regalo por jugar (PlaytimeEntry) para quedar alineados.
 Layout.STAT_ICON = 60
 Layout.STAT_PLATE_LEFT = Layout.STAT_ICON / 2
 Layout.STAT_TEXT_LEFT = Layout.STAT_ICON + 4
 
-local left: Frame
-local right: Frame
+local stats: Frame
+local menu: Frame
 local topBar: Frame
 local scales: { UIScale } = {}
 local scaleCallbacks: { () -> () } = {}
 local currentScale = 1
 
--- Ancho de las filas de la columna izquierda (estadísticas, impulso de amigos).
+-- Ancho de las filas de la columna de estadísticas.
 function Layout.statWidth(): number
 	return if Device.touch() then STAT_WIDTH_TOUCH else STAT_WIDTH
 end
@@ -96,10 +97,10 @@ end
 
 function Layout.mount(screen: ScreenGui, playerGui: Instance)
 	topBar = TopBar.mount(playerGui, screen.DisplayOrder)
-	left, right = Columns.mount(screen, playerGui, Layout.statWidth, function()
-		return Layout.RIGHT_WIDTH
+	stats, menu = Columns.mount(screen, playerGui, Layout.statWidth, function()
+		return Layout.MENU_WIDTH
 	end)
-	Columns.avoid(ActionSpot.mount(screen)) -- la columna derecha no baja hasta Pescar
+	Columns.avoid(ActionSpot.mount(screen)) -- las estadísticas no bajan hasta Pescar
 
 	refreshScale()
 	local camera = Workspace.CurrentCamera
@@ -108,22 +109,22 @@ function Layout.mount(screen: ScreenGui, playerGui: Instance)
 	end
 end
 
-function Layout.left(): Frame
-	return left
+function Layout.stats(): Frame
+	return stats
 end
 
-function Layout.right(): Frame
-	return right
+function Layout.menu(): Frame
+	return menu
 end
 
 function Layout.topBar(): Frame
 	return topBar
 end
 
--- Borde de abajo de la columna izquierda en píxeles (para la tarjeta de captura).
-function Layout.leftBottom(): number
-	local bottom = left.AbsolutePosition.Y
-	for _, child in left:GetChildren() do
+-- Borde de abajo de la columna del menú en píxeles (la tarjeta de captura va debajo).
+function Layout.menuBottom(): number
+	local bottom = menu.AbsolutePosition.Y
+	for _, child in menu:GetChildren() do
 		if child:IsA("GuiObject") and child.Visible then
 			bottom = math.max(bottom, child.AbsolutePosition.Y + child.AbsoluteSize.Y)
 		end

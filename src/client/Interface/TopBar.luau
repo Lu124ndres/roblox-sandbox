@@ -6,7 +6,7 @@
 	ruleta, códigos, grupo, ajustes; GuiService.TopbarInset), en una sola fila
 	centrada en la barra. En táctil van más chicos (pedido del usuario el
 	2026-10-21) y su tamaño sigue al alto de la pantalla (TOUCH_SHARE).
-	La parte de Layout: la columna derecha empieza debajo de `bottom()`.
+	La parte de Layout: la columna del menú empieza debajo de `bottom()`.
 ]]
 
 local GuiService = game:GetService("GuiService")

@@ -56,7 +56,7 @@ local function row(order: number, icon: string, color: Color3): Row
 	frame.LayoutOrder = order
 	frame.BackgroundTransparency = 1
 	frame.Size = UDim2.fromOffset(Layout.statWidth(), ROW_HEIGHT)
-	frame.Parent = Layout.left()
+	frame.Parent = Layout.stats()
 	-- La placa empieza a media altura del ícono: el ícono asoma por la izquierda.
 	local plate = Instance.new("Frame")
 	plate.Name = "Placa"

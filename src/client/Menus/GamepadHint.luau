@@ -2,7 +2,7 @@
 --[[
 	GamepadHint
 
-	Ayuda de mando arriba de la columna derecha (solo con mando y sin nada
+	Ayuda de mando arriba de la columna del menú (solo con mando y sin nada
 	marcado), en una placa de piedra (Interface/Kit): "Y  Menú" y "Select  Ratón". Select saca el cursor virtual de
 	Roblox (un ratón que se mueve con el stick y aprieta con A), porque
 	StarterGui.VirtualCursorMode = Enabled (default.project.json).
@@ -29,7 +29,7 @@ function GamepadHint.start(isGamepad: () -> boolean)
 	local hint = Instance.new("Frame")
 	hint.Name = "AyudaMando"
 	hint.LayoutOrder = 0
-	hint.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, ROW_HEIGHT * #ROWS + 8)
+	hint.Size = UDim2.fromOffset(Layout.MENU_WIDTH, ROW_HEIGHT * #ROWS + 8)
 	Kit.skin(hint, "panel").SliceScale = PLATE_SLICE
 	local glyphs: { [Enum.KeyCode]: ImageLabel } = {}
 	for index, row in ROWS do
@@ -45,7 +45,7 @@ function GamepadHint.start(isGamepad: () -> boolean)
 		label.Position = UDim2.fromOffset(48, y + 2)
 		label.Size = UDim2.new(1, -56, 0, ROW_HEIGHT - 4)
 	end
-	hint.Parent = Layout.right()
+	hint.Parent = Layout.menu()
 	local function paint()
 		hint.Visible = isGamepad() and GuiService.SelectedObject == nil
 		for key, glyph in glyphs do

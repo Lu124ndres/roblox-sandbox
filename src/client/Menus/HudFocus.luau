@@ -36,7 +36,7 @@ function HudFocus.start(screen: ScreenGui)
 	veil.Visible = false
 	veil.Parent = screen
 
-	local hud: { GuiObject } = { Layout.left(), Layout.right(), Layout.topBar() }
+	local hud: { GuiObject } = { Layout.stats(), Layout.menu(), Layout.topBar() }
 	for _, name in { "Hambre", "Impulsos", "AtajosRobux" } do
 		local object = screen:FindFirstChild(name)
 		if object and object:IsA("GuiObject") then

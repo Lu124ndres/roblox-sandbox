@@ -91,6 +91,7 @@ local Protocol = {
 		ClaimGroup = "ClaimGroup", -- cliente -> servidor: reclamar el regalo del grupo
 		ClaimSpin = "ClaimSpin", -- cliente -> servidor: girar (el gratis si toca, si no uno guardado)
 		ChooseOutfit = "ElegirTraje", -- cliente -> servidor: (passKey) ponerse/quitarse ese traje
+		StarterSeen = "PackVisto", -- cliente -> servidor: se le abrió solo el pack de inicio
 		-- cliente -> servidor: (productKey: string, targetUserId: number). La próxima
 		-- compra de ese producto (en 2 min) es un regalo para ese jugador.
 		SetGift = "SetGift",
@@ -177,6 +178,7 @@ local Protocol = {
 		Title = "Titulo", -- índice del título (Config.Social.titles) por su poder máximo
 		Share = "Aporte", -- fracción de la barra del monstruo actual que aportó (0..1)
 		StarterPack = "PackInicio", -- ya compró el pack de inicio
+		StarterSeenAt = "PackVistoEn", -- unix en que se le abrió solo el pack (0 = nunca)
 		Quests = "Misiones", -- JSON con las misiones del día y su avance
 		Settings = "Settings", -- ajustes del jugador (JSON)
 		PassPrefix = "Pase_", -- Pase_<clave>: true si tiene ese pase de Robux

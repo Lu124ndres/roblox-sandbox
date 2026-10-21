@@ -78,6 +78,7 @@ export type MonetizationConfig = {
 		rod: number,
 		basket: number,
 		boots: number,
+		timerHours: number, -- cuenta del atajo del pack: vuelve a empezar al llegar a cero
 	},
 	sellPonds: boolean, -- vender estanques con Robux (false: se abren solo con kills)
 	receiptHistory: number, -- cuántas compras recientes se recuerdan por jugador
@@ -170,7 +171,15 @@ local Monetization: MonetizationConfig = {
 	passGifts = { VIP = 299, ReyDelMar = 149, DiosDelVolcan = 858 }, -- lo mismo que el pase
 	spinProducts = { Spin1 = { robux = 24, spins = 1 }, Spin5 = { robux = 80, spins = 5 } },
 	-- 19 R$: el producto PackInicio tiene que tener ese precio en el panel de Roblox.
-	starterPack = { robux = 19, coins = 15000, boostMinutes = 60, rod = 4, basket = 3, boots = 4 },
+	starterPack = {
+		robux = 19,
+		coins = 15000,
+		boostMinutes = 60,
+		rod = 4,
+		basket = 3,
+		boots = 4,
+		timerHours = 24,
+	},
 	sellPonds = false,
 	receiptHistory = 50,
 }

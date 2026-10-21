@@ -99,7 +99,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 	local window = Window.create(screen, "Regalos", "Regalos por jugar", Vector2.new(760, 500))
 	headerGift(window)
 
-	-- Botón grande en la columna izquierda (abre la ventana).
+	-- Botón grande en la columna de estadísticas (abre la ventana).
 	local entry = PlaytimeEntry.build(16, window.toggle)
 
 	local function elapsed(): number

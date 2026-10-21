@@ -2,7 +2,8 @@
 --[[
 	Columns
 
-	Las dos columnas del HUD (Layout): cada una va centrada en la pantalla, pero
+	Las dos columnas del HUD (Layout), el menú a la izquierda y las estadísticas a
+	la derecha: cada una va centrada en la pantalla, pero
 	sin salir de su franja libre, entre lo de arriba (la barra de botones, o lo
 	que se aparte con `avoid`) y lo de abajo (el joystick y el botón de saltar
 	de Roblox, TouchControls).
@@ -19,6 +20,7 @@ local MARGIN = 12
 local GAP = 8 -- aire entre una columna y lo que la limita arriba o abajo
 local LIST_PADDING = 4
 local MIN_SCALE = 0.3 -- pueden achicarse más que el resto del HUD para no tapar los controles
+local MENU_LIFT = 0.06 -- el menú (izquierda) va un poco más arriba del centro: parte del alto
 
 type Column = { frame: Frame, scale: UIScale, left: boolean, width: () -> number }
 
@@ -82,11 +84,13 @@ local function place()
 		local fit = if content > 0 then math.min(maxScale, (bottom - top) / content) else maxScale
 		fit = math.max(fit, MIN_SCALE)
 		column.scale.Scale = fit
-		-- Centrada en la pantalla si cabe ahí; si no, corrida lo justo dentro de su franja.
+		-- Centrada en la pantalla si cabe ahí (el menú, un poco más arriba); si no,
+		-- corrida lo justo dentro de su franja.
 		local height = content * fit
 		local center = (top + bottom) / 2
 		if height < bottom - top then
-			center = math.clamp(screen.AbsoluteSize.Y / 2, top + height / 2, bottom - height / 2)
+			local wanted = screen.AbsoluteSize.Y * (0.5 - if column.left then MENU_LIFT else 0)
+			center = math.clamp(wanted, top + height / 2, bottom - height / 2)
 		end
 		column.frame.Position = UDim2.new(
 			if column.left then 0 else 1,
@@ -131,16 +135,17 @@ local function column(name: string, isLeft: boolean, width: () -> number): Colum
 	return { frame = frame, scale = scale, left = isLeft, width = width }
 end
 
--- `leftWidth` y `rightWidth`: ancho de cada columna antes de escalar.
+-- `statsWidth` y `menuWidth`: ancho de cada columna antes de escalar. Devuelve
+-- la de estadísticas (a la derecha) y la del menú (a la izquierda).
 function Columns.mount(
 	gui: ScreenGui,
 	playerGui: Instance,
-	leftWidth: () -> number,
-	rightWidth: () -> number
+	statsWidth: () -> number,
+	menuWidth: () -> number
 ): (Frame, Frame)
 	screen = gui
-	left = column("ColumnaIzquierda", true, leftWidth)
-	right = column("ColumnaDerecha", false, rightWidth)
+	left = column("ColumnaMenu", true, menuWidth)
+	right = column("ColumnaEstadisticas", false, statsWidth)
 	local bar = TopBar.frame()
 	bar:GetPropertyChangedSignal("AbsolutePosition"):Connect(requestPlace)
 	bar:GetPropertyChangedSignal("AbsoluteSize"):Connect(requestPlace)
@@ -148,7 +153,7 @@ function Columns.mount(
 	TouchControls.start(playerGui)
 	screen:GetPropertyChangedSignal("AbsoluteSize"):Connect(requestPlace)
 	requestPlace()
-	return left.frame, right.frame
+	return right.frame, left.frame
 end
 
 -- Las columnas nunca van más grandes que esto (la escala del resto del HUD).

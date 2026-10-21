@@ -28,7 +28,7 @@ export type Card = { show: (fishId: string, count: number) -> () }
 
 function CatchCard.mount(screen: ScreenGui): Card
 	local card = Ui.panel("Captura", screen)
-	-- PC: a la izquierda, debajo de la columna de estadísticas (no tapa ¡TIRA! ni Pescar).
+	-- PC: a la izquierda, debajo de la columna del menú (no tapa ¡TIRA! ni Pescar).
 	-- Táctil: abajo al centro, encima de «Siguiente meta» (a la izquierda está el joystick).
 	-- Se calcula al mostrarla (la columna cambia con la misión y la pantalla).
 	local function places(): (UDim2, UDim2)
@@ -44,7 +44,7 @@ function CatchCard.mount(screen: ScreenGui): Card
 			return UDim2.new(0.5, 0, 1, -up), UDim2.new(0.5, 0, 1, 200)
 		end
 		card.AnchorPoint = Vector2.zero
-		local top = Layout.leftBottom() + margin
+		local top = Layout.menuBottom() + margin
 		return UDim2.fromOffset(margin, top), UDim2.fromOffset(-340, top)
 	end
 	local shown, hidden = places()

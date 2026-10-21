@@ -5,13 +5,15 @@
 	Oferta de bienvenida: `DELAY_SECONDS` después de terminar el tutorial (o de
 	entrar, si ya lo había terminado), si todavía no compró el pack de inicio
 	(atributo PackInicio), se abre esta ventana, más chica que las demás para
-	no tapar toda la pantalla (pedido del usuario el 2026-10-21).
+	no tapar toda la pantalla (pedido del usuario el 2026-10-21). Se abre sola
+	una sola vez en la vida del jugador: el servidor anota cuándo (StarterSeen,
+	atributo PackVistoEn) y desde ahí queda su atajo con cuenta regresiva
+	arriba del menú (StarterShortcut).
 	Arriba el regalo sobre rayos, el título y la etiqueta de descuento; en el
 	medio cinco tarjetas con lo que trae (monedas, caña, canasta, botas con
 	sus íconos de MEJORAS y x2 poder); abajo lo que costaría por separado
 	(precios en Robux de MEJORAS) tachado y el botón de lava que late, con
-	una gema a cada lado. Una vez por partida; también está siempre en la
-	TIENDA hasta comprarlo. Las piezas de piedra salen de StarterParts.
+	una gema a cada lado. También está siempre en la TIENDA hasta comprarlo. Las piezas de piedra salen de StarterParts.
 ]]
 
 local Players = game:GetService("Players")
@@ -27,6 +29,7 @@ local Style = require(script.Parent.Parent.Interface.Style)
 local Purchases = require(script.Parent.Purchases)
 local ShopStone = require(script.Parent.ShopStone)
 local StarterParts = require(script.Parent.StarterParts)
+local StarterShortcut = require(script.Parent.StarterShortcut)
 local Window = require(script.Parent.Window)
 
 local DELAY_SECONDS = 60
@@ -141,23 +144,31 @@ function StarterOffer.start(screen: ScreenGui)
 		end
 	end)
 
-	-- Una vez por partida: el minuto empieza al terminar el tutorial (el servidor
-	-- cuenta los pasos hechos en el atributo Tutorial).
+	StarterShortcut.mount(window.open)
+
+	-- El minuto empieza al terminar el tutorial (el servidor cuenta los pasos hechos
+	-- en el atributo Tutorial). Si ya se le abrió solo alguna vez, no se abre más.
+	local seenRemote = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
+		:WaitForChild(Protocol.Remotes.StarterSeen) :: RemoteEvent
 	local scheduled = false
-	local function tutorialDone(): boolean
+	local function due(): boolean
 		local steps = player:GetAttribute(ATTR.Tutorial)
+		local seenAt = player:GetAttribute(ATTR.StarterSeenAt)
 		return player:GetAttribute(ATTR.DataLoaded) == true
 			and type(steps) == "number"
 			and steps >= TUTORIAL_STEPS
+			and (seenAt == nil or seenAt == 0)
+			and player:GetAttribute(ATTR.StarterPack) ~= true
 	end
 	local function schedule()
-		if scheduled or not tutorialDone() then
+		if scheduled or not due() then
 			return
 		end
 		scheduled = true
 		task.delay(DELAY_SECONDS, function()
-			if player:GetAttribute(ATTR.StarterPack) ~= true then
+			if due() then
 				window.open()
+				seenRemote:FireServer()
 			end
 		end)
 	end

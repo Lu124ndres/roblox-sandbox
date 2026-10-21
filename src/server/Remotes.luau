@@ -45,6 +45,7 @@ local Remotes = {
 	ClaimSpin = makeEvent(Protocol.Remotes.ClaimSpin),
 	SetGift = makeEvent(Protocol.Remotes.SetGift),
 	ChooseOutfit = makeEvent(Protocol.Remotes.ChooseOutfit),
+	StarterSeen = makeEvent(Protocol.Remotes.StarterSeen),
 	GiantAttack = makeEvent(Protocol.Remotes.GiantAttack),
 	GiantHit = makeEvent(Protocol.Remotes.GiantHit),
 }

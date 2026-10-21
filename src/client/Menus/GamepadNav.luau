@@ -8,7 +8,7 @@
 		B (Círculo)    cierra la ventana abierta o sale del menú
 	Al abrirse una ventana, la marca entra a su primer botón y no se sale de
 	ella (SelectionGroup); al cerrarla vuelve al botón del HUD. La marca es un
-	marco dorado; con mando, arriba de la columna derecha dice "Y Menú" y
+	marco dorado; con mando, arriba de la columna del menú dice "Y Menú" y
 	"Select Ratón" (GamepadHint): Select saca el cursor virtual de Roblox.
 	Pescar, alimentar y entrenar no pasan por aquí: X (Cuadrado) o R2.
 ]]

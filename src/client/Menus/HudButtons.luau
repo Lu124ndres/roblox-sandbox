@@ -5,9 +5,9 @@
 	Botones del menú con ícono (Icons) y nombre dorado, en la "casilla
 	volcánica" (Interface/Kit): piedra oscura con grietas de lava, como las
 	tarjetas de MEJORAS de la referencia del usuario.
-		HudButtons.side   grandes, en la columna derecha (Tienda, Mejoras), centrados;
+		HudButtons.side   grandes, en la columna del menú (Tienda, Mejoras), centrados;
 		                  casilla, salvo los de LAVA (la TIENDA, con marco de lava)
-		HudButtons.wide   placa ancha arriba de la columna derecha (Índice de peces)
+		HudButtons.wide   placa ancha arriba de la columna del menú (Índice de peces)
 		HudButtons.top    casillas chicas en la esquina derecha de la barra de
 		                  Roblox (Ruleta, Premio, Códigos, Grupo, Ajustes)
 	Cada módulo agrega el suyo y decide qué hace al tocarlo. Un punto rojo
@@ -92,8 +92,8 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 		row.Name = "Menu"
 		row.LayoutOrder = 10 + sideCount // 2 * 30 -- Mejoras y Tienda arriba; Misiones y Renacer abajo de los atajos
 		row.BackgroundTransparency = 1
-		row.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, SIDE_SIZE + 4)
-		row.Parent = Layout.right()
+		row.Size = UDim2.fromOffset(Layout.MENU_WIDTH, SIDE_SIZE + 4)
+		row.Parent = Layout.menu()
 		local list = Instance.new("UIListLayout")
 		list.FillDirection = Enum.FillDirection.Horizontal
 		list.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -117,7 +117,7 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 	}
 end
 
--- Placa ancha arriba de la columna derecha (el Índice de peces): ícono a la
+-- Placa ancha arriba de la columna del menú (el Índice de peces): ícono a la
 -- izquierda y el nombre dorado, del ancho de una fila de dos botones.
 function HudButtons.wide(text: string, icon: string, onClick: () -> ()): HudButton
 	order += 1
@@ -126,11 +126,11 @@ function HudButtons.wide(text: string, icon: string, onClick: () -> ()): HudButt
 	button.Text = ""
 	button.LayoutOrder = 2 -- debajo del entrenamiento del servidor, encima de Mejoras y Tienda
 	button.AutoButtonColor = false
-	button.Size = UDim2.fromOffset(Layout.RIGHT_WIDTH, WIDE_HEIGHT)
+	button.Size = UDim2.fromOffset(Layout.MENU_WIDTH, WIDE_HEIGHT)
 	local skin = Kit.skin(button, "casilla")
 	skin.SliceScale = SIDE_SLICE
 	Kit.press(button, skin)
-	button.Parent = Layout.right()
+	button.Parent = Layout.menu()
 	table.insert(registered, button)
 	local view = Icons.view(button, icon)
 	view.AnchorPoint = Vector2.new(0, 0.5)
@@ -187,7 +187,7 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	}
 end
 
--- Los botones del HUD (primero los de la columna derecha), para el mando.
+-- Los botones del HUD (primero los de la columna del menú), para el mando.
 function HudButtons.all(): { TextButton }
 	return registered
 end

@@ -120,7 +120,7 @@ function PowerGainFx.mount(screen: ScreenGui)
 		vignette = PowerGainParts.vignette(playerGui)
 	end
 	task.spawn(function()
-		local row = Layout.left():WaitForChild("Stat2", 30)
+		local row = Layout.stats():WaitForChild("Stat2", 30)
 		local value = row and row:WaitForChild("Valor", 10)
 		if not (row and value and value:IsA("GuiObject")) then
 			return
