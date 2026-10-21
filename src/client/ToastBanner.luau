@@ -19,7 +19,8 @@ local Style = require(script.Parent.Interface.Style)
 local ToastFx = require(script.Parent.ToastFx)
 
 local TWEENS = UIConfig.Tweens
-local HEIGHT = 64
+local HEIGHT = 52
+local MAX_WIDTH = 480
 local WHITE = Color3.new(1, 1, 1)
 local SLICE = 0.4 -- borde de la pizarra (la tarjeta es más baja que una ventana)
 local TINT = 0.55 -- cuánto se acerca el color del aviso al blanco para teñir la piedra
@@ -63,7 +64,7 @@ function ToastBanner.show(
 	holder.LayoutOrder = order
 	holder.Size = UDim2.new(1, 0, 0, HEIGHT)
 	local limit = Instance.new("UISizeConstraint")
-	limit.MaxSize = Vector2.new(560, HEIGHT)
+	limit.MaxSize = Vector2.new(MAX_WIDTH, HEIGHT)
 	limit.Parent = holder
 	holder.Parent = stack
 	local group = body(holder, color)
@@ -73,14 +74,14 @@ function ToastBanner.show(
 	end
 	local top = 0.12
 	if caption then
-		local small = Style.text(group, "Detalle", 20, color:Lerp(WHITE, 0.6), 2)
+		local small = Style.text(group, "Detalle", 16, color:Lerp(WHITE, 0.6), 2)
 		small.Text = caption
 		small.Position = UDim2.new(0, left, 0.1, 0)
 		small.Size = UDim2.new(1, -left - 14, 0.32, 0)
 		small.ZIndex = 4
 		top = 0.38
 	end
-	local title = Style.text(group, "Texto", 34, WHITE, 3)
+	local title = Style.text(group, "Texto", 26, WHITE, 2.5)
 	title.Text = text
 	title.Position = UDim2.new(0, left, top, 0)
 	title.Size = UDim2.new(1, -left - 14, if caption then 0.54 else 0.76, 0)

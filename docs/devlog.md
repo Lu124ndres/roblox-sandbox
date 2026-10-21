@@ -3359,3 +3359,21 @@ el calendario en la barra y en el diario; sin errores en el Output. El sorteo re
 se probó (no hay comando de admin para forzarlo). `ClaimSpin` no cambió de argumentos (ninguno).
 **Pendiente:** íconos en 200 px (el conector de Canva no da más); la caña en la mano se ve igual
 que la normal.
+
+## 2026-10-21 (6) — Avisos más chicos en el teléfono y fondo completo de la ruleta
+
+- **Avisos (`Toasts`):** eran lo único del HUD que no se achicaba con la pantalla; en el teléfono
+  salían a tamaño de PC y tapaban al jugador (pedido del usuario: "extremo grandes y
+  estorbosos"). La pila ahora usa `Layout.scaleWith` con un ancho fijo de 480 antes de la escala.
+  Tarjeta grande de 64 a 52 de alto (título 34 → 26, detalle 20 → 16, ancho máximo 560 → 480);
+  aviso chico de 40 a 34 (ancho 460 → 400); chispas más chicas.
+- **Ruleta de monstruos:** el fondo oscuro quedaba cortado arriba (la pantalla `Juego` empieza
+  debajo de la barra de Roblox) y junto al notch. Ahora el fondo y el panel van en su propia
+  ScreenGui `RuletaMonstruos` (DisplayOrder de Juego + 1, sin zonas seguras), encima del HUD y
+  de los botones de la barra.
+
+**Probado en Studio (simulador):** Galaxy A06, iPhone 7, iPhone 16 Pro Max y iPad 10: HUD,
+ventana Mejoras y ruleta centrados y sin encimarse; avisos de misión, kill y aviso chico
+compactos sin tapar al personaje; la ruleta oscurece toda la pantalla en el iPhone 16 Pro Max.
+**Pendiente (decisión del usuario):** los botones de la barra miden 28 pt en el teléfono y los
+de +25/50/75 % 38×28 pt (chicos para el dedo); los íconos de potenciadores rozan el joystick.

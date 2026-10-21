@@ -76,21 +76,32 @@ function RouletteParts.card(parent: Instance, index: number, def: Config.GiantDe
 	tag.Size = UDim2.fromOffset(46, 26)
 end
 
+-- Pantalla propia encima del HUD y de la barra de botones, sin zonas seguras:
+-- dentro de Juego el fondo oscuro quedaba cortado arriba y junto al notch.
+local function fullScreen(screen: ScreenGui): ScreenGui
+	local gui = Ui.screen("RuletaMonstruos", screen.Parent :: Instance, screen.DisplayOrder + 1)
+	gui.IgnoreGuiInset = true
+	gui.ScreenInsets = Enum.ScreenInsets.None
+	gui.ClipToDeviceSafeArea = false
+	return gui
+end
+
 function RouletteParts.build(screen: ScreenGui): Parts
+	local gui = fullScreen(screen)
 	local shade = Instance.new("Frame")
 	shade.Name = "FondoRuleta"
 	shade.BackgroundColor3 = Color3.new(0, 0, 0)
 	shade.BackgroundTransparency = 0.45
+	shade.BorderSizePixel = 0
 	shade.Size = UDim2.fromScale(1, 1)
 	shade.Visible = false
-	shade.ZIndex = 30
-	shade.Parent = screen
-	local panel = Ui.panel("Ruleta", screen)
+	shade.Parent = gui
+	local panel = Ui.panel("Ruleta", gui)
 	panel.AnchorPoint = Vector2.new(0.5, 0.5)
 	panel.Position = UDim2.fromScale(0.5, 0.5)
 	panel.Size = UDim2.fromOffset(STRIP_WIDTH + 40, 330)
 	panel.Visible = false
-	panel.ZIndex = 31
+	panel.ZIndex = 2
 	Ui.corner(panel, 22)
 	Style.gradient(panel, Color3.fromRGB(40, 30, 70))
 	Style.border(panel, 6)

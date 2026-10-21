@@ -19,6 +19,7 @@ local Style = require(script.Parent.Interface.Style)
 local TWEENS = UIConfig.Tweens
 local WHITE = Color3.new(1, 1, 1)
 local SMALL_SLICE = 0.3 -- borde de la placa de los avisos chicos (son bajitos)
+local SMALL_WIDTH, SMALL_HEIGHT = 400, 34
 
 local ToastFx = {}
 
@@ -100,7 +101,7 @@ function ToastFx.sparkles(holder: Frame, color: Color3)
 		star.Size = UDim2.fromOffset(4, 4)
 		star.ZIndex = 6
 		task.delay(0.1 + index * 0.08, function()
-			local size = 30 + (index % 2) * 12
+			local size = 22 + (index % 2) * 8
 			tween(
 				star,
 				TweenInfo.new(0.3, Enum.EasingStyle.Back),
@@ -141,11 +142,11 @@ function ToastFx.small(stack: Frame, order: number, text: string, color: Color3,
 	local toast = Instance.new("Frame")
 	toast.Name = "Aviso"
 	toast.LayoutOrder = order
-	toast.Size = UDim2.new(1, 0, 0, 40)
+	toast.Size = UDim2.new(1, 0, 0, SMALL_HEIGHT)
 	Kit.skin(toast, "panel").SliceScale = SMALL_SLICE
 	toast.Parent = stack
 	local limit = Instance.new("UISizeConstraint")
-	limit.MaxSize = Vector2.new(460, 40)
+	limit.MaxSize = Vector2.new(SMALL_WIDTH, SMALL_HEIGHT)
 	limit.Parent = toast
 	local label = Style.text(toast, "Texto", UIConfig.TextSizes.Body, nil, 2)
 	label.FontFace = UIConfig.Fonts.Body

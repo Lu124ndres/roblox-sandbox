@@ -14,6 +14,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Layout = require(script.Parent.Interface.Layout)
 local ToastBanner = require(script.Parent.ToastBanner)
 local ToastFx = require(script.Parent.ToastFx)
 
@@ -26,6 +27,7 @@ local COLORS = UIConfig.Colors
 local EFFECTS = UIConfig.Effects
 
 local GAP_BELOW = 8 -- aire entre el panel de hambre y el primer aviso
+local STACK_WIDTH, STACK_HEIGHT = 480, 260 -- antes de la escala del HUD
 local MAX_SHOWN = 2 -- más avisos que esto empujan fuera al más viejo (no bajan hasta el jugador)
 local QUICK_SECONDS = 1.6 -- tarjetas en fila: cada una dura menos para no atrasarse
 
@@ -71,9 +73,11 @@ function Toasts.mount(screen: ScreenGui): Toasts
 	frame.BackgroundTransparency = 1
 	frame.AnchorPoint = Vector2.new(0.5, 0)
 	frame.Position = UDim2.new(0.5, 0, 0.26, 10) -- hasta que placeBelow la acomode
-	frame.Size = UDim2.fromScale(0.46, 0.4)
+	frame.Size = UDim2.fromOffset(STACK_WIDTH, STACK_HEIGHT)
 	frame.ZIndex = 40 -- encima de las ventanas (TIENDA, MEJORAS...)
 	frame.Parent = screen
+	-- Se achica con el HUD: en un teléfono a tamaño de PC tapaban al jugador.
+	Layout.scaleWith(frame)
 	local layout = Instance.new("UIListLayout")
 	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	layout.Padding = UDim.new(0, 6)
