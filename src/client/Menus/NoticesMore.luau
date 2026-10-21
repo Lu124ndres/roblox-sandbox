@@ -5,8 +5,9 @@
 	Más carteles del remote Notice (Notices le pasa los que no conoce): hito
 	de la colección (cada 6 especies), el monstruo que se cansó de esperar y
 	se fue (con la kill igual para quien le dio algo) y el premio de la
-	ruleta (después de que la ventana termina de girar) y los giros guardados
-	que gana por jugar o con el diario. Solo muestra.
+	ruleta (después de que la ventana termina de girar, con el ícono de la
+	casilla), los giros guardados que gana por jugar o con el diario y otro
+	jugador que sacó la caña suprema. Solo muestra.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -47,10 +48,26 @@ function NoticesMore.handle(toasts: Toasts.Toasts, kind: unknown, a: unknown, b:
 		)
 		return true
 	elseif kind == "spin" and type(b) == "string" then
+		local prize = if type(a) == "number" then SPIN.prizes[a] else nil
+		local supreme = prize ~= nil and prize.kind == "rod"
 		task.delay(SPIN.spinSeconds, function()
 			Sounds.play("LegendaryCatch")
-			toasts.banner(b, COLORS.Coins, "chest", "¡RULETA!")
+			toasts.banner(
+				b,
+				if supreme then COLORS.Robux else COLORS.Coins,
+				if prize then prize.icon else "chest",
+				if supreme then "¡¡CAÑA SUPREMA!!" else "¡RULETA!"
+			)
 		end)
+		return true
+	elseif kind == "superRod" and type(a) == "string" then
+		Sounds.play("LegendaryCatch")
+		toasts.banner(
+			`¡{a} sacó la {SPIN.superRod.name} en la ruleta! (0.01%)`,
+			COLORS.Robux,
+			"superRod",
+			"¡¡CAÑA SUPREMA!!"
+		)
 		return true
 	elseif kind == "spinsGained" and type(a) == "number" then
 		Sounds.play("Coins")

@@ -3,7 +3,8 @@
 	SpinWheelView
 
 	La rueda de la ruleta, como la de los simuladores: la imagen de la rueda
-	(Assets.UI.RuedaRuleta: piedra volcánica y lava, 8 casillas con la 1 arriba)
+	(Assets.UI.RuedaRuleta: piedra volcánica y lava, una casilla por premio de
+	Config/Spin con la 1 arriba; la de la caña suprema es violeta)
 	y, encima de cada casilla, su ícono, su premio cerca del borde y su % dorado
 	cerca del centro; la gema de lava de arriba marca la casilla que sale. Todo
 	va en `rotor`, que gira.
@@ -28,7 +29,17 @@ local COLORS: { [string]: Color3 } = {
 	fill = Color3.fromRGB(255, 120, 90),
 	spins = Color3.fromRGB(255, 210, 60),
 	coinBoost = Color3.fromRGB(255, 120, 210),
+	rod = Color3.fromRGB(230, 140, 255),
 }
+
+-- "30%", "2.5%" o "0.01%": con los decimales que hagan falta para no mostrar 0.
+local function percentText(value: number): string
+	if value >= 1 then
+		return `{math.round(value)}%`
+	end
+	local text = string.format(if value >= 0.1 then "%.1f" else "%.2f", value)
+	return `{text}%`
+end
 
 export type Wheel = {
 	root: Frame,
@@ -84,10 +95,10 @@ function SpinWheelView.build(parent: Instance, textScale: number?): Wheel
 		label.ZIndex = 3
 		labels[index] = label
 		local percent = Style.text(rotor, "Probabilidad", math.floor(28 * big), nil, 2.5)
-		place(percent, angle, RIM * 0.31, 0.1)
-		percent.Size = UDim2.fromScale(0.12, 0.06)
+		place(percent, angle, RIM * 0.35, 0.1)
+		percent.Size = UDim2.fromScale(0.09, 0.05) -- angosto: con 9 casillas no se pisan
 		local value = SpinOffers.percent(index)
-		percent.Text = if value < 1 then string.format("%.1f%%", value) else `{math.round(value)}%`
+		percent.Text = percentText(value)
 		percent.ZIndex = 3
 		Kit.gold(percent)
 	end

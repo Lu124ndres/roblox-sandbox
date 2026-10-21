@@ -5,8 +5,10 @@ remaches dorados y un centro dorado como el ícono pintado de la ruleta (iconos/
 
 La geometría es la de la rueda anterior (assets/ui/RuedaRuleta.png), porque SpinWheelView pone
 los íconos y textos de cada premio encima con esas medidas:
-    1024 x 1024, centro (512, 512), 8 casillas de 45°, la casilla 1 centrada arriba y las
-    siguientes en sentido horario; las casillas llegan a r = 446 y el aro a r = 508.
+    1024 x 1024, centro (512, 512), CASILLAS casillas iguales (9 desde el 2026-10-21: la 9 es la
+    caña suprema), la casilla 1 centrada arriba y las siguientes en sentido horario; las
+    casillas llegan a r = 446 y el aro a r = 508.
+Las casillas alternan piedra y lava; la de la caña suprema (MITICA) es violeta con vetas doradas.
 El puntero mide 256 x 256 con la punta abajo al centro (128, 238), como el anterior.
 
 Todo se dibuja al doble y se achica al final (bordes suaves). La textura es ruido de varias
@@ -26,11 +28,14 @@ SALIDA = os.path.join(RAIZ, "assets", "ui", "ruleta_v2")
 ICONOS = os.path.join(RAIZ, "assets", "ui", "iconos", "v4")
 
 LADO, K = 1024, 2  # tamaño final y sobremuestreo
-CASILLAS, R_CASILLAS, R_ARO, R_CENTRO = 8, 446, 508, 66
+CASILLAS, R_CASILLAS, R_ARO, R_CENTRO = 9, 446, 508, 66
+GRADOS = 360 / CASILLAS  # ancho de cada casilla
+MITICA = 8  # casilla de la caña suprema (0 = la de arriba)
 CONTORNO = (34, 20, 14)
 ORO_CLARO, ORO, ORO_OSCURO = (255, 236, 150), (228, 172, 52), (140, 82, 22)
 PIEDRA = np.array([60, 54, 56], float)
 LAVA_ROJA = np.array([138, 36, 22], float)
+VIOLETA = np.array([96, 34, 128], float)
 GRIETA, BRILLO = (255, 120, 30), (255, 214, 110)
 
 
@@ -100,15 +105,18 @@ def rueda():
     dx, dy = xx - c, yy - c
     r = np.hypot(dx, dy) / K
     ang = (np.degrees(np.arctan2(dx, -dy)) + 360) % 360  # 0 = arriba, horario
-    sector = np.floor(((ang + 22.5) % 360) / 45).astype(int)  # 0 = casilla 1
-    off = np.abs(((ang + 22.5) % 45) - 22.5)  # grados al centro de la casilla
-    al_borde = np.minimum((22.5 - off) * np.pi / 180 * r, R_CASILLAS - r)  # px al separador
+    mitad = GRADOS / 2
+    sector = np.floor(((ang + mitad) % 360) / GRADOS).astype(int)  # 0 = casilla 1
+    off = np.abs(((ang + mitad) % GRADOS) - mitad)  # grados al centro de la casilla
+    al_borde = np.minimum((mitad - off) * np.pi / 180 * r, R_CASILLAS - r)  # px al separador
 
     tex = textura(n, 7)[..., None]
     lava = (sector % 2 == 1)[..., None]
-    base = np.where(lava, LAVA_ROJA, PIEDRA)
+    mitica = (sector == MITICA)[..., None]
+    base = np.where(mitica, VIOLETA, np.where(lava, LAVA_ROJA, PIEDRA))
     calor = np.clip(1 - r / R_CASILLAS, 0, 1)[..., None]  # la lava se enciende al centro
     color = base * (0.7 + 0.6 * tex) + np.where(lava, calor * [70, 30, 0], 0)
+    color += np.where(mitica, calor * [80, 40, 90], 0)  # la mítica brilla al centro
     color *= np.clip(0.55 + al_borde[..., None] / 40, 0.55, 1)  # sombra junto a los bordes
 
     # Aro de piedra: 16 bloques con juntas, cada uno con su tono y bordes redondeados.
@@ -133,18 +141,26 @@ def rueda():
             tramos.append(camino(rnd, a, R_ARO - 6, R_CASILLAS + rnd.uniform(14, 40), 3, 2))
     img.alpha_composite(grietas(n, tramos, 5))
     finas = []  # grietas finas en las casillas de piedra, a un lado para no tapar el premio
-    for s in range(0, CASILLAS, 2):
+    for s in range(0, CASILLAS - 1, 2):
         for lado in (-1, 1):
-            a = s * 45 + lado * rnd.uniform(12, 16)
+            a = s * GRADOS + lado * GRADOS * rnd.uniform(0.27, 0.36)
             finas.append(camino(rnd, a, rnd.uniform(90, 160), rnd.uniform(330, 420), 6, 2.5))
     capa = grietas(n, finas, 9)
     capa.putalpha(capa.getchannel("A").point(lambda v: v * 0.6))
     img.alpha_composite(capa)
+    doradas = []  # vetas doradas en la casilla mítica, también a los lados
+    for lado in (-1, 1):
+        a = MITICA * GRADOS + lado * GRADOS * rnd.uniform(0.27, 0.36)
+        doradas.append(camino(rnd, a, rnd.uniform(90, 160), rnd.uniform(360, 430), 6, 2.5))
+    capa = grietas(n, doradas, 13)
+    oro_capa = Image.new("RGBA", (n, n), (*ORO_CLARO, 0))
+    oro_capa.putalpha(capa.getchannel("A"))
+    img.alpha_composite(oro_capa)
 
     d = ImageDraw.Draw(img)
     # Separadores dorados (con contorno) y bandas doradas entre las casillas y el aro.
     for s in range(CASILLAS):
-        a = math.radians(s * 45 + 22.5 - 90)
+        a = math.radians(s * GRADOS + GRADOS / 2 - 90)
         p = (c + math.cos(a) * R_CASILLAS * K, c + math.sin(a) * R_CASILLAS * K)
         d.line((c, c, *p), CONTORNO, 15 * K)
         d.line((c, c, *p), ORO_OSCURO, 10 * K)
@@ -207,13 +223,13 @@ def muestra(img_rueda, img_puntero):
     """Rueda con los íconos de los premios donde los pone SpinWheelView (solo para revisar)."""
     fondo = Image.new("RGBA", (LADO, LADO + 120), (40, 34, 36, 255))
     fondo.alpha_composite(img_rueda, (0, 90))
-    iconos = ("coin", "bolt", "ticket", "chest", "crown", "orca", "giftPink", "crystal")
+    iconos = ("coin", "bolt", "ticket", "chest", "crown", "orca", "giftPink", "crystal", "superRod")
     for i, nombre in enumerate(iconos):
         ruta = os.path.join(ICONOS, nombre + ".png")
         if not os.path.exists(ruta):
             continue
-        a, rr, t = math.radians(i * 45 - 90), 0.43 * 0.56 * LADO, int(0.15 * LADO)
-        ico = Image.open(ruta).convert("RGBA").resize((t, t)).rotate(-i * 45, expand=False)
+        a, rr, t = math.radians(i * GRADOS - 90), 0.43 * 0.56 * LADO, int(0.15 * LADO)
+        ico = Image.open(ruta).convert("RGBA").resize((t, t)).rotate(-i * GRADOS, expand=False)
         x, y = LADO / 2 + math.cos(a) * rr - t / 2, LADO / 2 + math.sin(a) * rr - t / 2 + 90
         fondo.alpha_composite(ico, (int(x), int(y)))
     t = int(0.13 * LADO)

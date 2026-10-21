@@ -59,7 +59,7 @@ local Assets: Assets = {
 		-- roja de lava, separadores dorados, aro de piedra con grietas de lava y remaches
 		-- dorados; la casilla 1 arriba) y la gema de lava que marca el premio. Las dibuja
 		-- tools/ui/generar_ruleta.py con la geometría de la rueda anterior (assets/ui/ruleta_v2/).
-		RuedaRuleta = "rbxassetid://86382670718617",
+		RuedaRuleta = "rbxassetid://103590278651247", -- 9 casillas: la 9 (violeta) es la caña suprema
 		PunteroRuleta = "rbxassetid://71593213487154",
 		-- Ícono de Roblox Premium que trae Roblox instalado.
 		PremiumIcon = "rbxasset://textures/ui/PlayerList/PremiumIcon@3x.png",

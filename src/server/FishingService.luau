@@ -102,8 +102,7 @@ local function onBite(player: Player, session: Session)
 		endSession(player, "cancelled")
 		return
 	end
-	local fish =
-		FishCatalog.roll(rng, (Upgrades.current(player, "Rod").luck or 0) + Perks.luckBonus(player))
+	local fish = FishCatalog.roll(rng, Upgrades.rodLuck(player) + Perks.luckBonus(player))
 	local rarity, rarityIndex = FishCatalog.rarity(fish.id)
 	local strength = ReelFight.strength(Upgrades.level(player, "Rod"), Perks.reelStrength(player))
 	local fight = ReelFight.new(rarityIndex, strength, Perks.instantReel(player), os.clock())

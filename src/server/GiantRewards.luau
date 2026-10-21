@@ -48,7 +48,7 @@ function GiantRewards.restTick()
 		local root = Proximity.getRoot(player)
 		if root and PlayerData.isLoaded(player) and WorldZones.isInRestArena(root.Position) then
 			local best = Perks.bestPondMultiplier(player)
-			local rod = Upgrades.current(player, "Rod").value
+			local rod = Upgrades.rodPower(player)
 			local gained = math.round(
 				TRAINING.powerPerTick
 					* best

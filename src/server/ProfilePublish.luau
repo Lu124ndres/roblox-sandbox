@@ -143,6 +143,7 @@ function ProfilePublish.all(player: Player, save: SaveSchema.SaveData)
 	player:SetAttribute(ATTR.SpinAt, save.spinAt)
 	player:SetAttribute(ATTR.Spins, save.spins)
 	player:SetAttribute(ATTR.CoinBoostUntil, save.coinBoostUntil)
+	player:SetAttribute(ATTR.SuperRod, save.superRod)
 	for key, level in save.levels do
 		player:SetAttribute(`{ATTR.LevelPrefix}{key}`, level)
 	end

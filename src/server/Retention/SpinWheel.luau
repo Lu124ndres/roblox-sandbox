@@ -11,8 +11,11 @@
 	y GiroPorTiempoEn (próximo giro por jugar, ver SpinTimer).
 	Los giros guardados llegan por jugar (SpinTimer), con el diario
 	(DailyReward), en la propia ruleta y con Robux (Monetization/Grants).
+	La caña suprema (premio "rod") se sortea solo si todavía no la tiene; al
+	salir se avisa a los demás con Notice "superRod" cuando la rueda frena.
 ]]
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
@@ -31,19 +34,41 @@ local SpinWheel = {}
 
 local rng = Random.new()
 
-local function roll(): number
+-- Peso de una casilla para este jugador: la caña suprema no sale si ya la tiene.
+local function weight(prize: SPIN.Prize, hasSuperRod: boolean): number
+	return if prize.kind == "rod" and hasSuperRod then 0 else prize.weight
+end
+
+local function roll(hasSuperRod: boolean): number
 	local total = 0
 	for _, prize in SPIN.prizes do
-		total += prize.weight
+		total += weight(prize, hasSuperRod)
 	end
 	local value = rng:NextNumber(0, total)
 	for index, prize in SPIN.prizes do
-		value -= prize.weight
-		if value <= 0 then
+		local w = weight(prize, hasSuperRod)
+		value -= w
+		if w > 0 and value <= 0 then
 			return index
 		end
 	end
 	return 1
+end
+
+-- La caña suprema: se guarda (edit publica el atributo) y los demás se enteran cuando la
+-- rueda frena.
+local function giveSuperRod(player: Player): string
+	PlayerData.edit(player, function(data)
+		data.superRod = true
+	end)
+	task.delay(SPIN.spinSeconds, function()
+		for _, other in Players:GetPlayers() do
+			if other ~= player then
+				Remotes.Notice:FireClient(other, "superRod", player.DisplayName)
+			end
+		end
+	end)
+	return `¡{SPIN.superRod.name}! x{SPIN.superRod.multiplier} poder y suerte de tu caña`
 end
 
 -- Monedas de una casilla para este jugador (también las muestra la ventana).
@@ -63,6 +88,8 @@ local function give(player: Player, prize: SPIN.Prize): string
 				+ math.floor(minutes * 60)
 		end)
 		return `{minutes} min de x{SPIN.coinBoostMultiplier} monedas`
+	elseif prize.kind == "rod" then
+		return giveSuperRod(player)
 	elseif prize.kind == "spins" then
 		local spins = prize.spins or 1
 		PlayerData.edit(player, function(save)
@@ -89,7 +116,7 @@ local function claim(player: Player)
 	if not free and save.spins <= 0 then
 		return -- no toca el gratis y no tiene giros guardados
 	end
-	local index = roll()
+	local index = roll(save.superRod)
 	PlayerData.edit(player, function(data)
 		if free then
 			data.spinAt = os.time() + math.floor(SPIN.cooldownHours * 3600)

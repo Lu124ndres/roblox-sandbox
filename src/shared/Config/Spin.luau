@@ -2,9 +2,9 @@
 --[[
 	Spin
 
-	Ruleta (server/Retention/SpinWheel), como la de los simuladores: 8
+	Ruleta (server/Retention/SpinWheel), como la de los simuladores: 9
 	casillas con su probabilidad a la vista (`weight` suma 100, así cada peso
-	es su %). Un giro GRATIS cada `cooldownHours` horas (save.spinAt) y giros
+	es su %; puede tener decimales: la caña suprema es 0.01). Un giro GRATIS cada `cooldownHours` horas (save.spinAt) y giros
 	guardados (save.spins) que se ganan jugando (`playSpins`), con el diario
 	(Config.Retention.dailySpins), en la propia ruleta o con Robux (Spin1/Spin5).
 	Premios por `kind`:
@@ -15,11 +15,13 @@
 		           si no está comiendo, paga `share` en monedas
 		spins      +`spins` giros guardados
 		coinBoost  `minutes` de x`coinBoostMultiplier` monedas (save.coinBoostUntil)
+		rod        la caña suprema (`superRod`, save.superRod): solo sale aquí, una
+		           vez; si ya la tiene, no puede salir (se sortea entre las demás)
 	`label` es el texto corto de la casilla e `icon` un nombre de
 	client/Interface/Icons. La ventana (client/Menus/SpinWindow) los muestra.
 ]]
 
-export type PrizeKind = "coins" | "boost" | "fill" | "spins" | "coinBoost"
+export type PrizeKind = "coins" | "boost" | "fill" | "spins" | "coinBoost" | "rod"
 
 export type Prize = {
 	kind: PrizeKind,
@@ -39,6 +41,9 @@ export type SpinConfig = {
 	coinBoostMultiplier: number, -- premio coinBoost: monedas x esto mientras dure
 	-- Por jugar: +1 giro guardado cada `everyMinutes` conectado, hasta `maxPerSession` por sesión
 	playSpins: { everyMinutes: number, maxPerSession: number },
+	-- Caña suprema (premio "rod"): multiplica el poder y la suerte de la mejor caña que tenga
+	-- (Upgrades.rodPower / rodLuck), así sigue valiendo lo mismo cuando compra otra.
+	superRod: { name: string, multiplier: number },
 	prizes: { Prize }, -- en el orden de las casillas de la ventana
 }
 
@@ -47,10 +52,11 @@ local Spin: SpinConfig = {
 	spinSeconds = 2.6,
 	coinBoostMultiplier = 2,
 	playSpins = { everyMinutes = 15, maxPerSession = 4 },
+	superRod = { name = "Caña suprema", multiplier = 3 },
 	prizes = {
 		{
 			kind = "coins",
-			weight = 30,
+			weight = 29.99, -- le cede 0.01 a la caña suprema
 			label = "Monedas",
 			icon = "coin",
 			coins = 300,
@@ -90,6 +96,8 @@ local Spin: SpinConfig = {
 			minutes = 15,
 		},
 		{ kind = "boost", weight = 10, label = "30 min x2 poder", icon = "crystal", minutes = 30 },
+		-- La casilla violeta de la rueda (tools/ui/generar_ruleta.py, MITICA).
+		{ kind = "rod", weight = 0.01, label = "¡CAÑA SUPREMA!", icon = "superRod" },
 	},
 }
 

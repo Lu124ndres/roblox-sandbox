@@ -102,7 +102,7 @@ function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
 			local perSecond = training.powerPerTick -- igual que GiantCycle.restTick, por segundo
 				* Perks.bestPondMultiplier(player)
 				* Perks.powerMultiplier(player)
-				* Upgrades.current(player, "Rod").value
+				* Upgrades.rodPower(player)
 				* rest
 				/ training.tickSeconds
 			local spinAt = stateFolder:GetAttribute(Protocol.GiantAttributes.RouletteAt)

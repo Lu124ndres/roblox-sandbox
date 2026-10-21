@@ -2,7 +2,7 @@
 --[[
 	SaveExtra
 
-	Campos del guardado que llegaron en las versiones 8 a 14 (SaveSchema los
+	Campos del guardado que llegaron en las versiones 8 a 15 (SaveSchema los
 	declara y llama a read; en un guardado viejo faltan y quedan en 0 o vacíos):
 		rebirths     veces que renació (Retention/Rebirth)
 		quests       misiones del día: día UTC, avance y cuáles se cumplieron
@@ -19,6 +19,7 @@
 		starterSeenAt  unix en que el pack de inicio se le abrió solo (v14,
 		             Monetization/StarterSeen): ya no se vuelve a abrir solo, y su
 		             atajo cuenta 24 horas desde ahí
+		superRod     sacó la caña suprema en la ruleta (v15, Retention/SpinWheel)
 	También flags, que copia los `clave = true` de un mapa guardado.
 ]]
 
@@ -80,7 +81,7 @@ local function outfit(value: unknown): string
 	return ""
 end
 
--- Lee lo de las versiones 8 a 14 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
+-- Lee lo de las versiones 8 a 15 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
 function SaveExtra.read(source: { [string]: any }, data: any)
 	data.rebirths = count(source.rebirths)
 	data.starterPack = source.starterPack == true
@@ -90,6 +91,7 @@ function SaveExtra.read(source: { [string]: any }, data: any)
 	data.playMinutes = count(source.playMinutes)
 	data.outfit = outfit(source.outfit)
 	data.starterSeenAt = count(source.starterSeenAt)
+	data.superRod = source.superRod == true
 	if type(source.passTests) == "table" then
 		for key, on in source.passTests do
 			if

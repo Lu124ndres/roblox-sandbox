@@ -5,10 +5,14 @@
 	Lectura de las mejoras de la tienda (Config.Shop) para servidor y
 	cliente: qué nivel tiene un jugador (atributo con el nombre de la
 	categoría), qué da ese nivel y cómo se describe en la tienda.
+	rodPower / rodLuck son lo que rinde su caña de verdad: con la caña
+	suprema de la ruleta (atributo CanaSuprema), x`superRod.multiplier`.
 ]]
 
 local Config = require(script.Parent.Config)
 local NumberFormat = require(script.Parent.NumberFormat)
+local Protocol = require(script.Parent.Protocol)
+local SPIN = require(script.Parent.Config.Spin)
 
 export type Category = "Rod" | "Basket" | "Boots"
 
@@ -40,6 +44,22 @@ end
 
 function Upgrades.current(player: Player, category: Category): Config.UpgradeDef
 	return Upgrades.list(category)[Upgrades.level(player, category)]
+end
+
+local function superRodMultiplier(player: Player): number
+	return if player:GetAttribute(Protocol.PlayerAttributes.SuperRod) == true
+		then SPIN.superRod.multiplier
+		else 1
+end
+
+-- Multiplicador de poder de su caña (con la caña suprema, x3 la mejor que tenga).
+function Upgrades.rodPower(player: Player): number
+	return Upgrades.current(player, "Rod").value * superRodMultiplier(player)
+end
+
+-- Suerte de su caña (peso extra de los peces mejores), con la caña suprema incluida.
+function Upgrades.rodLuck(player: Player): number
+	return (Upgrades.current(player, "Rod").luck or 0) * superRodMultiplier(player)
 end
 
 local function times(value: number): string

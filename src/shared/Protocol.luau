@@ -192,6 +192,7 @@ local Protocol = {
 		Spins = "GirosGuardados", -- giros de ruleta guardados (se gastan si no toca el gratis)
 		SpinTimeAt = "GiroPorTiempoEn", -- unix del próximo giro por jugar (0 = ya no hay más)
 		CoinBoostUntil = "MonedasX2Hasta", -- unix en que termina el x2 monedas de la ruleta
+		SuperRod = "CanaSuprema", -- true si sacó la caña suprema en la ruleta (x3 su mejor caña)
 	},
 
 	Leaderstats = { -- tabla de jugadores (Tab), en este orden

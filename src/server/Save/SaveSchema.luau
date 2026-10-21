@@ -52,6 +52,7 @@ export type SaveData = {
 	outfit: string, -- traje que eligió en la vitrina ("" = el del mejor pase; v12)
 	passTests: { [string]: boolean }, -- pases puestos (true) o quitados (false) por un admin (v13)
 	starterSeenAt: number, -- unix en que se le abrió solo el pack de inicio (0 = nunca; v14)
+	superRod: boolean, -- sacó la caña suprema en la ruleta (v15)
 }
 
 local SaveSchema = {}
@@ -60,9 +61,8 @@ local SaveSchema = {}
 -- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie;
 -- 8: renacer, misiones, pack de inicio; 9: ruleta gratis; 10: giros guardados y
 -- x2 monedas; 11: minutos jugados; 12: traje elegido; 13: pases de prueba del admin;
--- 14: cuándo vio el pack de inicio (8 a 14 en SaveExtra; lo que falta en un guardado
--- viejo queda en 0 o vacío)
-SaveSchema.VERSION = 14
+-- 14: cuándo vio el pack de inicio; 15: caña suprema (8 a 15 en SaveExtra; si falta, 0)
+SaveSchema.VERSION = 15
 
 function SaveSchema.default(): SaveData
 	return {
@@ -96,6 +96,7 @@ function SaveSchema.default(): SaveData
 		outfit = "",
 		passTests = {},
 		starterSeenAt = 0,
+		superRod = false,
 	}
 end
 

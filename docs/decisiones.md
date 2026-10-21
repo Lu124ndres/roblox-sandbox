@@ -1042,3 +1042,14 @@ DisplayOrder 0 (debajo del HUD) para quedar bajo el velo y no tocarse con un men
 velo tapa sin cambiarles `Visible` a piezas que otros módulos muestran u ocultan (Pescar,
 «Siguiente meta»). En Roblox no hay forma de saber los DPI, así que los tamaños táctiles van en
 proporción al alto de la pantalla y se comprobaron en mm con los datos del simulador.
+
+## 2026-10-21 — La caña suprema multiplica la caña que tengas
+
+**Contexto:** el usuario pidió una caña muy poderosa que solo salga en la ruleta (0.01 %). Las
+cañas son 20 niveles en fila y renacer los vuelve al 1. **Decisión (del usuario):** no es un
+nivel 21 sino un objeto aparte (`save.superRod`) que da el 300 % de la mejor caña que tenga:
+x3 su poder y su suerte (`Upgrades.rodPower` / `rodLuck`, `Config.Spin.superRod.multiplier`).
+Así no rompe el orden de la tienda ni deja de valer al renacer. **Lo no obvio:** la suerte también
+va x3 (la de Poseidón pasa de 3 a 9) y los lanzamientos para llenar la canasta y la fuerza en la
+pelea siguen por nivel, sin la caña suprema. Si ya la tiene, su casilla pesa 0 y se sortea entre
+las demás.

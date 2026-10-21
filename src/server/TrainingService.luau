@@ -113,7 +113,7 @@ local function tick()
 		then
 			TrainingService.stop(player)
 		else
-			local rod = Upgrades.current(player, "Rod").value
+			local rod = Upgrades.rodPower(player)
 			local gained = math.round(
 				TRAINING.powerPerTick
 					* PONDS[session.pond].multiplier

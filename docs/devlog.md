@@ -3327,3 +3327,35 @@ PC 720p igual que antes (sin velo, aviso flotante, columnas en su lugar); sin er
 **Qué sigue:** ¡TIRA! no se vio en pantalla (sale al picar un pez): su tamaño sale del mismo
 lugar (1.25 × Pescar, tope 36 % del alto). En teléfonos bajos la columna derecha queda chica
 (botones de 36 pt, 7 mm): si se quiere más grande, habría que sacar algo de ella.
+
+## 2026-10-21 (5) — Calendario del diario y caña suprema en la ruleta
+
+**Qué se hizo (pedido del usuario):**
+- **Calendario:** ícono v4 pintado a mano (Canva, con la moneda maestra de guía): calendario de
+  piedra volcánica con franja de lava, tilde dorada y un regalito. Va en el botón Premio de
+  arriba y asomando sobre el título de la ventana del diario.
+- **Caña suprema** (opciones del usuario: 300 % de tu mejor caña, rueda nueva de 9 casillas, si
+  ya la tiene se vuelve a sortear):
+  - Ícono de caña de obsidiana con vetas de lava, carrete dorado con rubí, cristales, llamas y
+    rayos.
+  - `Config.Spin`: premio `rod` con peso 0.01 (las monedas bajan de 30 a 29.99) y
+    `superRod = { multiplier = 3 }`.
+  - Guardado v15 `superRod`, atributo `CanaSuprema`. `Upgrades.rodPower` / `rodLuck`
+    multiplican la caña actual, así sigue valiendo x3 al comprar otra y al renacer; los usan
+    el entrenamiento, el descanso, la pesca (suerte) y el medidor del monstruo.
+  - `SpinWheel`: si ya la tiene, su peso es 0. Al salir, los demás reciben Notice `superRod`
+    cuando la rueda frena; el cartel de la ruleta usa el ícono de la casilla.
+  - Rueda: `tools/ui/generar_ruleta.py` acepta cualquier número de casillas; la 9 es violeta con
+    vetas doradas. Los % del centro se angostaron para que no se pisen, y los de menos de 0.1 se
+    muestran con dos decimales (0.01%).
+- **Hoja 3 de íconos v4:** calendario, caña suprema y las caras del Dios del Volcán y el Rey del
+  Mar (pendientes de hoja desde el 2026-10-20). Íconos `calendar`, `superRod`, `volcanoGod`,
+  `seaKing`.
+
+**Probado en Studio (simulador de teléfono + Play):** rueda de 9 casillas con 0.01% y los %
+separados; la rueda frena en la caña con el aviso `spin` 9; el cartel "¡¡CAÑA SUPREMA!!" con el
+ícono; con `CanaSuprema` la caña de madera pasa de x1.5 a x4.5 poder y de 5 % a 15 % de suerte;
+el calendario en la barra y en el diario; sin errores en el Output. El sorteo real con 0.01 % no
+se probó (no hay comando de admin para forzarlo). `ClaimSpin` no cambió de argumentos (ninguno).
+**Pendiente:** íconos en 200 px (el conector de Canva no da más); la caña en la mano se ve igual
+que la normal.

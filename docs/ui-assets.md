@@ -93,7 +93,7 @@ premios encima con esas medidas. Archivos en `assets/ui/ruleta_v2/` (`_muestra.p
 
 | Nombre | Archivo | Uso | `Assets.UI` |
 |---|---|---|---|
-| RuedaRuleta | rueda.png | Rueda de la ventana Ruleta y de la ruleta del mundo | 86382670718617 |
+| RuedaRuleta | rueda.png | Rueda de la ventana Ruleta y de la ruleta del mundo (9 casillas desde el 2026-10-21; la 9, violeta, es la caña suprema) | 103590278651247 (antes 86382670718617, de 8) |
 | PunteroRuleta | puntero.png | Gema de lava que marca el premio | 71593213487154 |
 
 ## Modelos y texturas de mesh
@@ -134,8 +134,14 @@ tablas de media de Canva de cada ícono quedan en el devlog del 2026-10-17 (17).
 | 1 (HUD) | `v4/iconos_v4_hud.png` | IconSheet = 135004623117532 | moneda, poder, canasta con peces, **monstruo alimentado** (reemplaza la calavera de "monstruos llenados"), canasta, cofre, regalo, engranaje, pez, boleto, amigos, grupo, colmillo, cuenco de peces (insignia `fed`) |
 | 2 | `v4/iconos_v4_hoja2.png` | IconSheet2 = 97933580602007 → 89496859008486 | caña, botas, corona, estanque, rayo, orca, minotauro, dragón (el nuevo), zorro, regalo rosa, flecha, carne, rayos y brillo (copiados de la hoja anterior) |
 
-**Caras de los trajes de pase** (2026-10-20, sueltos, todavía no están en ninguna hoja ni
-subidos): `v4/volcanoGod.png` (Dios del Volcán) y `v4/seaKing.png` (Rey del Mar), en celda de
+**Hoja 3** (2026-10-21): `v4/iconos_v4_hoja3.png`, `Assets.UI.IconSheet3 = 101327392927525`
+(reemplaza a la hoja 3 vieja del monstruo panzón). Celdas: 0 calendario (premio diario, media
+`MAHYrGtj_3Y`, sin fondo; con fondo `MAHYrCptBMc`), 1 caña suprema de la ruleta (`MAHYrJQ3VAE`;
+con fondo `MAHYrC4E5bU`), 2 Dios del Volcán, 3 Rey del Mar. El calendario y la caña se generaron
+con la moneda maestra como guía; están en 200 px (`v4/crudo2/`) porque el conector no da más:
+para mejorarlos, bajar la versión de 1024 desde Canva, volver a armar la hoja y subirla.
+
+**Caras de los trajes de pase** (2026-10-20; desde el 2026-10-21 en la hoja 3): `v4/volcanoGod.png` (Dios del Volcán) y `v4/seaKing.png` (Rey del Mar), en celda de
 256 como los demás. Se generaron en Canva con la moneda maestra y el minotauro v4 como guía de
 estilo y una captura de cada traje en Studio como guía de diseño; fondo quitado en Canva.
 Media de Canva: Dios `MAHYj4m_JoE`, Rey `MAHYj8u8m8w` (con fondo: `MAHYj5mH0GA`,

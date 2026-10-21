@@ -208,6 +208,11 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Ranking global de Poder y Kills en los tableros de la entrada (`Leaderboards`,
       `RankingBoards`); sin publicar muestra a los jugadores del servidor.
 - [x] Premio diario de 7 días con racha (`DailyReward`, `DailyWindow`).
+- [x] Ícono de calendario v4 para el premio diario (botón de arriba y título de la ventana).
+- [x] Caña suprema: premio de la ruleta (0.01 %, rueda de 9 casillas) que da x3 el poder y la
+      suerte de la mejor caña; solo sale una vez (guardado v15).
+- [ ] Caña suprema: cambiar los íconos de 200 px por la versión de 1024 de Canva y que la
+      caña se vea distinta en la mano.
 - [ ] Con el lugar publicado: comprobar insignias reales y el ranking global.
 - [x] Títulos y kills sobre la cabeza, impulso de amigos, códigos, regalo del grupo.
 - [ ] Crear el grupo de Roblox del juego y poner su número en `Config.Social.group.groupId`.
