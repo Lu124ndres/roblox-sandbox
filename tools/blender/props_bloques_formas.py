@@ -24,8 +24,9 @@ def hoja(bm, base, angulo, tramos, semilla):
         tramo = direccion * math.cos(math.radians(sube)) + V((0, 0, math.sin(math.radians(sube))))
         centro = punto + tramo * LARGO_TRAMO * CELDA / 2
         color = "hoja" if (j + semilla) % 2 == 0 else "hoja2"
+        # Sin bisel: las hojas son tablas finas (el bisel no se ve y triplicaba el peso).
         caja(bm, color, centro, (ancho, LARGO_TRAMO + 0.3, 0.45), giro=angulo - 90, inclina=sube,
-             centrado=True)
+             centrado=True, bisel=0)
         if 1 <= j <= len(tramos) - 2:  # hojuelas a los costados: el borde dentado
             for lado in (-1, 1):
                 al_lado = centro + costado * lado * (ancho / 2 + 0.35) * CELDA - V((0, 0, 0.15 * CELDA))

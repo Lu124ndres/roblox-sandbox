@@ -3238,3 +3238,18 @@ Dragón E2.
 
 **Probado:** solo renders en Blender (el usuario los revisó en cada versión). Pendiente la
 incorporación por partes: decoración, isla y volcán.
+
+---
+
+## 2026-10-20 (17) — Decoración de bloques en el juego
+
+**Qué se hizo:** `props_bloques.py -- --exportar` escribe `assets/blender/PropsMapaBloques.fbx`
+(misma configuración que `props_mapa.py`; las hojas de las palmeras sin bisel: 1,950 triángulos
+por palmera en vez de 3,400). El usuario lo importó y las 10 piezas reemplazaron a las de
+`ServerStorage.PropsMapa` (las viejas quedan en `PropsMapaRespaldo`), con el material y la
+colisión on/off de las viejas. `CollisionFidelity` no se puede copiar por script: quedó en
+Default (precisa) en rocas y crestas, que chocan.
+
+**Probado en Studio (Play):** PropDresser pone los 237 modelos (68 palmeras, 49 arbustos, 81
+rocas, 36 crestas), se ven en la plaza, la playa y el borde del cráter, sin errores.
+**Falta (usuario):** guardar el lugar (Ctrl+S) y publicarlo.

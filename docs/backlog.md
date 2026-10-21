@@ -304,7 +304,8 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Luz y color del mapa como las fotos del juego (opción 1).
 - [x] Modelos de bloques aprobados: decoración, isla y volcán (`tools/blender/`, fotos en
       `docs/capturas/mapa_antes_despues/`).
-- [ ] Incorporar la decoración de bloques (exportar `PropsMapa` nuevo, importarlo en Studio).
+- [x] Incorporar la decoración de bloques (`PropsMapaBloques.fbx` en `ServerStorage.PropsMapa`;
+      los de antes en `PropsMapaRespaldo`).
 - [ ] Incorporar la isla de bloques (mallas, sacar el terreno de la isla, agua de color de los
       estanques, subir la aparición y 11 setos, bajar el faro 1 stud, colisiones).
 - [ ] Incorporar el volcán (craterCenter 520 → 722, montaña y cueva, luz de la cueva, corriente

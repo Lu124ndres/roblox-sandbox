@@ -9,15 +9,17 @@ server/World/PropDresser los pone en el mapa igual que a los de ahora:
     Roca1..3      piedras de bloques apilados (la 3 con musgo, la 2 chata)
     Cresta1..2    picos de basalto escalonados del volcán con vetas de lava
 Las formas están en props_bloques_formas.py y el render de revisión en props_bloques_vista.py.
-Saca dos renders con la misma fila: los de ahora (PropsMapa.fbx) y los nuevos. Todavía no
-exporta: primero el usuario aprueba el estilo.
+Saca dos renders con la misma fila: los de ahora (PropsMapa.fbx) y los nuevos. Con
+--exportar además escribe assets/blender/PropsMapaBloques.fbx con la misma configuración que
+props_mapa.py (studs, -Z adelante, Y arriba, textura embebida): cada prop a su alto del juego,
+con la escala aplicada y el origen en el centro de su base.
 
 Uso (desde la raíz del repo):
-    blender -b --factory-startup --python tools/blender/props_bloques.py
+    blender -b --factory-startup --python tools/blender/props_bloques.py [-- --exportar]
 Salidas: assets/blender/props_v2/props_bloques.blend, assets/textures/PropsBloques_color.png,
 renders/props_v2/antes.png, despues.png y cerca.png (cuatro de cerca).
 """
-import bpy, bmesh, math, os
+import bpy, bmesh, math, os, sys
 from mathutils import Vector as V, Matrix
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -26,6 +28,8 @@ BLEND = os.path.join(RAIZ, "assets", "blender", "props_v2", "props_bloques.blend
 TEX = os.path.join(RAIZ, "assets", "textures", "PropsBloques_color.png")
 RENDERS = os.path.join(RAIZ, "renders", "props_v2")
 ACTUALES = os.path.join(RAIZ, "assets", "blender", "PropsMapa.fbx")
+FBX = os.path.join(RAIZ, "assets", "blender", "PropsMapaBloques.fbx")
+EXPORTAR = "--exportar" in (sys.argv[sys.argv.index("--") + 1 :] if "--" in sys.argv else [])
 
 CELDA = 0.5  # BU por celda: todo bloque mide celdas enteras
 BISEL = 0.12 * CELDA
@@ -169,6 +173,22 @@ def actuales():
     return [por_nombre[n] for n in PROPS if n in por_nombre]
 
 
+def exportar(objetos):
+    """Cada prop en el origen, con su escala aplicada a la malla, a PropsMapaBloques.fbx."""
+    for o in bpy.data.objects:
+        o.select_set(o in objetos)
+    for o in objetos:
+        o.data.transform(Matrix.Diagonal((*o.scale, 1.0)))
+        abajo = min(v.co.z for v in o.data.vertices)  # el pie toca z = 0
+        o.data.transform(Matrix.Translation((0, 0, -abajo)))
+        o.scale = (1, 1, 1)
+        o.location = (0, 0, 0)
+    bpy.ops.export_scene.fbx(filepath=FBX, use_selection=True, apply_scale_options="FBX_SCALE_UNITS",
+        path_mode="COPY", embed_textures=True, axis_forward="-Z", axis_up="Y",
+        bake_space_transform=True, mesh_smooth_type="FACE", object_types={"MESH"})
+    print("EXPORTADO", FBX, {o.name: tuple(round(d, 2) for d in o.dimensions) for o in objetos})
+
+
 def main():
     for o in list(bpy.data.objects):
         bpy.data.objects.remove(o)
@@ -193,6 +213,8 @@ def main():
     os.makedirs(os.path.dirname(BLEND), exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=BLEND)
     print("TRIS", {o.name: sum(len(p.vertices) - 2 for p in o.data.polygons) for o in nuevos})
+    if EXPORTAR:
+        exportar(nuevos)
 
 
 main()
