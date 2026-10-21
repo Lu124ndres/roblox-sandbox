@@ -31,7 +31,7 @@ local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
 local TouchControls = require(script.Parent.TouchControls)
 
-local SIZE = 80 -- ancho y alto de cada insignia (el ícono; el número va encima de su borde de abajo)
+local SIZE = 56 -- ancho y alto de cada insignia (el ícono; el número va encima de su borde de abajo)
 local GAP = 6
 local MARGIN = 12
 local IDLE_EVENT_ICON = "bolt"
@@ -73,10 +73,10 @@ local function badge(row: Frame, name: string, order: number, icon: GuiObject?):
 	image.AnchorPoint = Vector2.new(0.5, 0)
 	image.Position = UDim2.fromScale(0.5, 0)
 	image.Size = UDim2.fromScale(0.8, 0.8)
-	local value = Style.text(button, "Porcentaje", 28, OFF_COLOR, 2.5)
+	local value = Style.text(button, "Porcentaje", 20, OFF_COLOR, 2.5)
 	value.AnchorPoint = Vector2.new(0.5, 1)
 	value.Position = UDim2.fromScale(0.5, 1)
-	value.Size = UDim2.new(1, 8, 0, 30)
+	value.Size = UDim2.new(1, 8, 0, 22)
 	value.ZIndex = 2
 	return { button = button, icon = image, value = value }
 end
