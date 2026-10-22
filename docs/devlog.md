@@ -3487,3 +3487,23 @@ la canasta llega a x160000. La velocidad de las botas se repartió parejo de 52 
 
 **Probado en Studio (Play):** MEJORAS con canastas Nv 36/40 (siguiente: Bodega del leviatán) y la
 cuadrícula hasta la 40 con sus íconos; botas 40/40 con velocidad 100; sin errores.
+
+## 2026-10-21 (14) — Piloto 3D: caña del dragón y mochila del trueno
+
+**Qué se hizo (pedido del usuario: modelar en Blender las cañas y canastas como sus íconos v4,
+"más grandes y llamativas"; las botas no):** piloto con la caña 24 (del dragón: cabeza con
+cuernos de oro en la contera, vara con escamas, carrete de oro, anzuelo-garra con llamas; 5,924
+triángulos, 10.5 studs) y la canasta 24 como mochila (cofre del trueno: piedra, marco de oro,
+rayo brillante, nube de tormenta y correas; 2,446 triángulos, 2.4 de ancho).
+- `tools/blender/canas_v4.py` y `canastas_v4.py`, en consola (`blender -b -P ... -- 24`): renders
+  en `renders/canas_v4/` y `renders/canastas_v4/`, FBX en `assets/blender/canas_v4/` y
+  `canastas_v4/`, y `assets/blender/EquipoPrueba.fbx` con las dos.
+- Roblox junta cada malla en una MeshPart de un color: el FBX va partido por material (una pieza
+  por color + un cubito `_Origen` en el mango o el punto de la espalda) y en Studio cada pieza
+  toma su color y material (oro Metal, ojos/fuego/rayo Neon).
+- Importado por el usuario y guardado en `ServerStorage.EquipoPrueba` (Cana24, Canasta24).
+
+**Probado en Studio (Play, a mano):** caña soldada a la mano hacia adelante y 35° arriba, mochila
+en la espalda con el rayo hacia atrás. El pivote importado no tiene la orientación de Blender:
+se alinean con sus propias piezas (el hilo marca la punta, la nube marca arriba). Falta
+conectarlas al juego (RodRig / FishBasket) y hacer las otras 78.
