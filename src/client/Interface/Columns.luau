@@ -3,7 +3,7 @@
 	Columns
 
 	Las dos columnas del HUD (Layout), el menú a la izquierda y las estadísticas a
-	la derecha: cada una va centrada en la pantalla, pero
+	la derecha: las dos empiezan a la misma altura, centradas en la pantalla, pero
 	sin salir de su franja libre, entre lo de arriba (la barra de botones, o lo
 	que se aparte con `avoid`) y lo de abajo (el joystick y el botón de saltar
 	de Roblox, TouchControls).
@@ -20,7 +20,6 @@ local MARGIN = 12
 local GAP = 8 -- aire entre una columna y lo que la limita arriba o abajo
 local LIST_PADDING = 4
 local MIN_SCALE = 0.3 -- pueden achicarse más que el resto del HUD para no tapar los controles
-local MENU_LIFT = 0.06 -- el menú (izquierda) va un poco más arriba del centro: parte del alto
 
 type Column = { frame: Frame, scale: UIScale, left: boolean, width: () -> number }
 
@@ -78,27 +77,27 @@ local function band(column: Column): (number, number)
 end
 
 local function place()
+	local fits: { { column: Column, top: number, bottom: number, height: number } } = {}
+	local tallest = 0
 	for _, column in { left, right } do
 		local top, bottom = band(column)
 		local content = contentHeight(column.frame)
 		local fit = if content > 0 then math.min(maxScale, (bottom - top) / content) else maxScale
 		fit = math.max(fit, MIN_SCALE)
 		column.scale.Scale = fit
-		-- Centrada en la pantalla si cabe ahí (el menú, un poco más arriba); si no,
-		-- corrida lo justo dentro de su franja.
-		local height = content * fit
-		local center = (top + bottom) / 2
-		if height < bottom - top then
-			local wanted = screen.AbsoluteSize.Y * (0.5 - if column.left then MENU_LIFT else 0)
-			center = math.clamp(wanted, top + height / 2, bottom - height / 2)
-		end
-		column.frame.Position = UDim2.new(
-			if column.left then 0 else 1,
-			if column.left then MARGIN else -MARGIN,
-			0,
-			center - height / 2
-		)
 		column.frame.Size = UDim2.fromOffset(column.width(), content)
+		local height = content * fit
+		tallest = math.max(tallest, height)
+		table.insert(fits, { column = column, top = top, bottom = bottom, height = height })
+	end
+	-- Las dos empiezan a la misma altura, centradas en la pantalla según la más alta;
+	-- si una no cabe ahí, se corre lo justo dentro de su franja.
+	local wanted = (screen.AbsoluteSize.Y - tallest) / 2
+	for _, entry in fits do
+		local column = entry.column
+		local y = math.clamp(wanted, entry.top, math.max(entry.top, entry.bottom - entry.height))
+		column.frame.Position =
+			UDim2.new(if column.left then 0 else 1, if column.left then MARGIN else -MARGIN, 0, y)
 	end
 end
 

@@ -36,6 +36,8 @@ local WIDE_TEXT = if BIG then 26 else 24
 local NAME_TEXT = if BIG then 22 else 19 -- nombre bajo el ícono de los botones grandes
 -- Los laterales que llevan el marco de lava (lo más importante).
 local LAVA: { [string]: boolean } = { Tienda = true }
+-- Orden de los grandes dentro de su fila: la TIENDA a la izquierda (pedido del usuario el 2026-10-21).
+local SIDE_ORDER: { [string]: number } = { Tienda = 1, Mejoras = 2, Misiones = 3, Renacer = 4 }
 -- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
 local TOP_ORDER: { [string]: number } =
 	{ Ruleta = 1, Premio = 2, ["Códigos"] = 3, Grupo = 4, Ajustes = 5, Admin = 6 }
@@ -109,7 +111,7 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 	order += 1
 	sideCount += 1
 	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE, LAVA[text])
-	button.LayoutOrder = order
+	button.LayoutOrder = SIDE_ORDER[text] or 10 + order
 	table.insert(registered, button)
 	press(button, onClick)
 	local dot = alertDot(button)
