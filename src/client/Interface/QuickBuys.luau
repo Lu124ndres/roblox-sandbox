@@ -25,6 +25,7 @@ local Layout = require(script.Parent.Layout)
 local TopBar = require(script.Parent.TopBar)
 
 local SIZE = 100 -- cada atajo, antes de escalar (los botones de la columna miden 88)
+local SIZE_TV = 130 -- en consola, más grandes (pedido del usuario el 2026-10-21)
 local GAP = 16 -- entre los dos atajos (los nombres no se tocan)
 local BELOW_BAR = 18 -- aire bajo los botones de arriba
 local BELOW_BAR_TV = 90 -- en consola, más abajo (pedido del usuario el 2026-10-21)
@@ -34,11 +35,13 @@ local QuickBuys = {}
 
 function QuickBuys.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
+	local tv = GuiService:IsTenFootInterface()
+	local size = if tv then SIZE_TV else SIZE
 	local row = Instance.new("Frame")
 	row.Name = "AtajosRobux"
 	row.AnchorPoint = Vector2.new(1, 0)
 	row.BackgroundTransparency = 1
-	row.Size = UDim2.fromOffset(SIZE * 2 + GAP, SIZE)
+	row.Size = UDim2.fromOffset(size * 2 + GAP, size)
 	local list = Instance.new("UIListLayout")
 	list.FillDirection = Enum.FillDirection.Horizontal
 	list.HorizontalAlignment = Enum.HorizontalAlignment.Right
@@ -50,7 +53,7 @@ function QuickBuys.start(screen: ScreenGui)
 
 	-- Pegado al borde derecho de los botones de arriba, justo debajo de ellos.
 	local bar = TopBar.frame()
-	local below = if GuiService:IsTenFootInterface() then BELOW_BAR_TV else BELOW_BAR
+	local below = if tv then BELOW_BAR_TV else BELOW_BAR
 	local function place()
 		local origin = screen.AbsolutePosition
 		local right = bar.AbsolutePosition.X + bar.AbsoluteSize.X - origin.X
@@ -66,7 +69,7 @@ function QuickBuys.start(screen: ScreenGui)
 	for index, key in Config.Monetization.levelOrder do
 		local spec = RobuxOffers.level(player, key)
 		local shortcut =
-			FloatShortcut.new(row, `Atajo{key}`, ICONS[key] or "coin", SIZE, (index - 1) / 2)
+			FloatShortcut.new(row, `Atajo{key}`, ICONS[key] or "coin", size, (index - 1) / 2)
 		shortcut.button.LayoutOrder = index
 		local button, label, price = shortcut.button, shortcut.label, shortcut.price
 		HudButtonParts.press(button, function()
