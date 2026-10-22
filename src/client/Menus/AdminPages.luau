@@ -4,8 +4,8 @@
 
 	Lo que lleva cada pestaña del panel admin que cambia al jugador elegido
 	(AdminPanel las arma; las del mundo están en AdminPagesWorld):
-		player  números, canasta, mejoras de monedas, regalos por tiempo y
-		        reiniciar como recién llegado (pide confirmación)
+		player  números, canasta, mejoras de monedas, regalos por tiempo, el
+		        tutorial y reiniciar como recién llegado (pide confirmación)
 		shop    lo que se compra con Robux: todo de una vez, pases, Poder y
 		        Monedas, estanques, pack de inicio y giros
 	Cada botón es una orden de server/Admin (nombre y valor).
@@ -53,6 +53,10 @@ local function fillPlayer(page: Page)
 	page.row("Regalos tiempo", {
 		{ text = "+10 min", name = "playtime", value = 10 },
 		{ text = "+1 h", name = "playtime", value = 60 },
+	})
+	page.row("Tutorial", {
+		{ text = "Terminarlo", name = "tutorial", value = "done", color = CARDS.Green },
+		{ text = "Empezar de nuevo", name = "tutorial", value = "restart", color = CARDS.Orange },
 	})
 	page.section("Reiniciar", "como jugador nuevo; toca dos veces")
 	page.row("Reiniciar", {

@@ -12,6 +12,7 @@
 	creador volvería a tener todos sus pases al entrar. También limpia lo
 	que vive fuera del guardado (paso del tutorial, misiones publicadas, regalos
 	por tiempo, reloj del grupo), lo hace reaparecer y guarda al momento.
+	setTutorial: solo el tutorial, terminado o desde el principio.
 ]]
 
 local Players = game:GetService("Players")
@@ -77,6 +78,19 @@ function AdminReset.run(player: Player, mode: Mode): string
 	return if mode == "all"
 		then "Reiniciado como cuenta nueva"
 		else "Progreso reiniciado (conserva compras y ajustes)"
+end
+
+-- Termina el tutorial (done) sin pagar sus monedas ni el logro, o lo vuelve a empezar.
+function AdminReset.setTutorial(player: Player, done: boolean): string
+	assert(
+		PlayerData.edit(player, function(save)
+			save.tutorial = if done then #Config.Retention.tutorial else 0
+		end),
+		"todavía no cargó sus datos"
+	)
+	Tutorial.forget(player)
+	player:SetAttribute(ATTR.TutorialCount, 0)
+	return if done then "Tutorial terminado" else "Tutorial desde el principio"
 end
 
 return table.freeze(AdminReset)

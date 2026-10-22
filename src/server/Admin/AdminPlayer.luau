@@ -13,6 +13,7 @@
 		tp                              "orilla", "volcan", "plaza" o "tienda"
 		visit, bring                    el admin va con el jugador / lo trae a su lado
 		reset                           "progress" o "all": como recién llegado (AdminReset)
+		tutorial                        "done": lo termina sin premios; "restart": desde el principio
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -172,6 +173,10 @@ AdminPlayer.HANDLERS = {
 	end,
 	reset = function(target, value)
 		return AdminReset.run(target, if value == "all" then "all" else "progress")
+	end,
+	tutorial = function(target, value)
+		assert(value == "done" or value == "restart", "usa done o restart")
+		return AdminReset.setTutorial(target, value == "done")
 	end,
 } :: { [string]: Handler }
 
