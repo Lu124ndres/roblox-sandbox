@@ -3,7 +3,7 @@
 	QuickBuys
 
 	Atajos de Robux siempre a la vista, debajo de los botones de arriba
-	(TopBar): el siguiente nivel de Poder y de Monedas ("x4 Poder") con su
+	(TopBar; en consola, más separados de ellos): el siguiente nivel de Poder y de Monedas ("x4 Poder") con su
 	precio en una placa de piedra verde (Style.robuxBadge). Sin casilla: el
 	ícono suelto, más grande que los botones de la columna, flota arriba y
 	abajo con rayos que giran detrás para llamar la atención (FloatShortcut,
@@ -11,6 +11,7 @@
 	Lo que muestran sale de RobuxOffers (lo mismo que la tienda de Robux).
 ]]
 
+local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -26,6 +27,7 @@ local TopBar = require(script.Parent.TopBar)
 local SIZE = 100 -- cada atajo, antes de escalar (los botones de la columna miden 88)
 local GAP = 16 -- entre los dos atajos (los nombres no se tocan)
 local BELOW_BAR = 18 -- aire bajo los botones de arriba
+local BELOW_BAR_TV = 60 -- en consola, más abajo (pedido del usuario el 2026-10-21)
 local ICONS = { Power = "crystal", Coins = "coin" }
 
 local QuickBuys = {}
@@ -48,10 +50,11 @@ function QuickBuys.start(screen: ScreenGui)
 
 	-- Pegado al borde derecho de los botones de arriba, justo debajo de ellos.
 	local bar = TopBar.frame()
+	local below = if GuiService:IsTenFootInterface() then BELOW_BAR_TV else BELOW_BAR
 	local function place()
 		local origin = screen.AbsolutePosition
 		local right = bar.AbsolutePosition.X + bar.AbsoluteSize.X - origin.X
-		row.Position = UDim2.fromOffset(right, TopBar.bottom() - origin.Y + BELOW_BAR)
+		row.Position = UDim2.fromOffset(right, TopBar.bottom() - origin.Y + below)
 	end
 	bar:GetPropertyChangedSignal("AbsolutePosition"):Connect(place)
 	bar:GetPropertyChangedSignal("AbsoluteSize"):Connect(place)
