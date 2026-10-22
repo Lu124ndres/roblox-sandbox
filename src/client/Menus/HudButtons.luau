@@ -47,7 +47,7 @@ export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
 local HudButtons = {}
 
 local order = 0
-local registered: { TextButton } = {} -- todos, en orden: los recorre el mando (GamepadNav)
+local sidePresses: { [string]: () -> () } = {} -- el apretón de cada botón grande, por nombre
 local sideRow: Frame? = nil
 local sideCount = 0 -- botones grandes ya puestos (van de dos en dos por fila)
 
@@ -112,8 +112,7 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 	sideCount += 1
 	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE, LAVA[text])
 	button.LayoutOrder = SIDE_ORDER[text] or 10 + order
-	table.insert(registered, button)
-	press(button, onClick)
+	sidePresses[text] = press(button, onClick)
 	local dot = alertDot(button)
 	return {
 		button = button,
@@ -121,6 +120,11 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 			dot.Visible = on
 		end,
 	}
+end
+
+-- El apretón del botón grande `text` (para las flechas del mando, GamepadNav).
+function HudButtons.sidePress(text: string): (() -> ())?
+	return sidePresses[text]
 end
 
 -- Placa ancha arriba de la columna del menú (el Índice de peces): ícono a la
@@ -137,7 +141,6 @@ function HudButtons.wide(text: string, icon: string, onClick: () -> ()): HudButt
 	skin.SliceScale = SIDE_SLICE
 	Kit.press(button, skin)
 	button.Parent = Layout.menu()
-	table.insert(registered, button)
 	local view = Icons.view(button, icon)
 	view.AnchorPoint = Vector2.new(0, 0.5)
 	view.Position = UDim2.new(0, 8, 0.5, 0)
@@ -176,7 +179,6 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	skin.SliceScale = TOP_SLICE
 	Kit.press(button, skin)
 	button.Parent = bar
-	table.insert(registered, button)
 	local view = Icons.view(button, icon)
 	view.AnchorPoint = Vector2.new(0.5, 0.5)
 	view.Position = UDim2.fromScale(0.5, 0.5)
@@ -191,11 +193,6 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 			dot.Visible = on
 		end,
 	}
-end
-
--- Los botones del HUD (primero los de la columna del menú), para el mando.
-function HudButtons.all(): { TextButton }
-	return registered
 end
 
 return HudButtons

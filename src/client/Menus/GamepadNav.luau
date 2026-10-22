@@ -3,13 +3,15 @@
 	GamepadNav
 
 	Jugar con mando (Xbox o PlayStation) sin mouse:
-		Y (Triángulo)  entra al menú del HUD (Tienda, Mejoras...); otra vez Y sale
+		flechas        abren un menú directo, sin nada marcado ni ventana abierta
+		               (pedido del usuario el 2026-10-21): arriba Mejoras, abajo
+		               Tienda, izquierda Misiones, derecha Renacer
+		Y (Triángulo)  abre o cierra el regalo gratis (PlaytimeWindow, setGift)
 		A (Equis)      aprieta el botón marcado (lo hace Roblox)
-		B (Círculo)    cierra la ventana abierta o sale del menú
+		B (Círculo)    cierra la ventana abierta
 	Al abrirse una ventana, la marca entra a su primer botón y no se sale de
-	ella (SelectionGroup); al cerrarla vuelve al botón del HUD. La marca es un
-	marco dorado; con mando, arriba de la columna del menú dice "Y Menú" y
-	"Select Ratón" (GamepadHint): Select saca el cursor virtual de Roblox.
+	ella (SelectionGroup); al cerrarla se quita. La marca es un
+	marco dorado. Select saca el cursor virtual de Roblox.
 	Pescar, alimentar y entrenar no pasan por aquí: X (Cuadrado) o R2.
 ]]
 
@@ -20,15 +22,27 @@ local Players = game:GetService("Players")
 local InputHints = require(script.Parent.Parent.Interface.InputHints)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
-local GamepadHint = require(script.Parent.GamepadHint)
 
 local GOLD = Color3.fromRGB(255, 214, 60)
 local SELECT_DELAY = 0.15 -- espera a que la ventana termine de armarse
+-- Qué botón grande del menú abre cada flecha.
+local ARROWS: { [Enum.KeyCode]: string } = {
+	[Enum.KeyCode.DPadUp] = "Mejoras",
+	[Enum.KeyCode.DPadDown] = "Tienda",
+	[Enum.KeyCode.DPadLeft] = "Misiones",
+	[Enum.KeyCode.DPadRight] = "Renacer",
+}
 
 local GamepadNav = {}
 
 local openWindow: Window.Window? = nil
 local lastHud: GuiObject? = nil
+local toggleGift: (() -> ())? = nil
+
+-- Lo que hace Y: abrir o cerrar la ventana del regalo gratis.
+function GamepadNav.setGift(toggle: () -> ())
+	toggleGift = toggle
+end
 
 local function shown(object: GuiObject): boolean
 	local current: Instance? = object
@@ -60,20 +74,6 @@ local function firstButton(root: Instance): GuiButton?
 		end
 	end
 	return best
-end
-
-local function hudButton(): GuiObject?
-	for _, button in HudButtons.all() do
-		if button.Name == "BotonTienda" and shown(button) then
-			return button
-		end
-	end
-	for _, button in HudButtons.all() do
-		if shown(button) then
-			return button
-		end
-	end
-	return nil
 end
 
 local function gamepad(): boolean
@@ -131,18 +131,34 @@ end
 function GamepadNav.start()
 	Players.LocalPlayer.PlayerGui.SelectionImageObject = selectionImage()
 	Window.onAnyChange(onWindow)
-	GamepadHint.start(gamepad)
-	ContextActionService:BindAction("MenuMando", function(_, state: Enum.UserInputState)
-		if state ~= Enum.UserInputState.Begin then
+	-- Con algo marcado o una ventana abierta, las flechas mueven la marca (Roblox).
+	ContextActionService:BindAction(
+		"FlechasMando",
+		function(_, state: Enum.UserInputState, input: InputObject)
+			if state ~= Enum.UserInputState.Begin or openWindow or GuiService.SelectedObject then
+				return Enum.ContextActionResult.Pass
+			end
+			local text = ARROWS[input.KeyCode]
+			local pressed = text and HudButtons.sidePress(text)
+			local button = text
+				and Players.LocalPlayer.PlayerGui:FindFirstChild(`Boton{text}`, true)
+			if not pressed or not (button and button:IsA("GuiObject") and shown(button)) then
+				return Enum.ContextActionResult.Pass
+			end
+			pressed()
+			return Enum.ContextActionResult.Sink
+		end,
+		false,
+		Enum.KeyCode.DPadUp,
+		Enum.KeyCode.DPadDown,
+		Enum.KeyCode.DPadLeft,
+		Enum.KeyCode.DPadRight
+	)
+	ContextActionService:BindAction("RegaloMando", function(_, state: Enum.UserInputState)
+		if state ~= Enum.UserInputState.Begin or not toggleGift then
 			return Enum.ContextActionResult.Pass
 		end
-		if openWindow then
-			openWindow.close()
-		elseif GuiService.SelectedObject then
-			GuiService.SelectedObject = nil
-		else
-			GuiService.SelectedObject = hudButton()
-		end
+		toggleGift()
 		return Enum.ContextActionResult.Sink
 	end, false, Enum.KeyCode.ButtonY)
 	ContextActionService:BindActionAtPriority("AtrasMando", function(_, state: Enum.UserInputState)

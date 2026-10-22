@@ -163,7 +163,7 @@ HabitatFx.start()
 Music.start()
 Overhead.start()
 StartZoom.start() -- táctil: la cámara arranca más lejos para que el cartel no tape al personaje
-GamepadNav.start() -- mando: Y menú, B atrás, la marca entra a las ventanas
+GamepadNav.start() -- mando: flechas abren menús, Y el regalo, B atrás
 TrajesClient.start()
 TitleUnlock.start(toasts)
 FxQuality.start()

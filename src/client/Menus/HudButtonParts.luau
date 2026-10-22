@@ -5,7 +5,7 @@
 	Piezas que comparten los botones del HUD (HudButtons) y los atajos de Robux
 	(Interface/QuickBuys):
 		alertDot  punto rojo de "hay algo nuevo" en la esquina de arriba a la derecha
-		press     rebote y sonido al tocarlo, y luego la acción
+		press     rebote y sonido al tocarlo, y luego la acción (devuelve el apretón)
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -34,15 +34,18 @@ function HudButtonParts.alertDot(parent: GuiObject): Frame
 	return dot
 end
 
-function HudButtonParts.press(button: GuiButton, onClick: () -> ())
+-- Devuelve el apretón, para dispararlo también sin tocar el botón (las flechas del mando).
+function HudButtonParts.press(button: GuiButton, onClick: () -> ()): () -> ()
 	local scale = Instance.new("UIScale")
 	scale.Parent = button
-	button.Activated:Connect(function()
+	local function pressed()
 		Sounds.play("Click")
 		scale.Scale = 0.88
 		TweenService:Create(scale, UIConfig.Tweens.Pop, { Scale = 1 }):Play()
 		onClick()
-	end)
+	end
+	button.Activated:Connect(pressed)
+	return pressed
 end
 
 return table.freeze(HudButtonParts)

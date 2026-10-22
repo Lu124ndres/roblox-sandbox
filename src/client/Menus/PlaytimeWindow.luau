@@ -22,6 +22,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RewardScale = require(ReplicatedStorage.Shared.RewardScale)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Style = require(script.Parent.Parent.Interface.Style)
+local GamepadNav = require(script.Parent.GamepadNav)
 local PlaytimeCard = require(script.Parent.PlaytimeCard)
 local PlaytimeEntry = require(script.Parent.PlaytimeEntry)
 local Window = require(script.Parent.Window)
@@ -101,6 +102,7 @@ function PlaytimeWindow.start(screen: ScreenGui)
 
 	-- Botón grande en la columna de estadísticas (abre la ventana).
 	local entry = PlaytimeEntry.build(16, window.toggle)
+	GamepadNav.setGift(window.toggle) -- Y (Triángulo) del mando
 
 	local function elapsed(): number
 		local since = player:GetAttribute(ATTR.PlaytimeSince)
