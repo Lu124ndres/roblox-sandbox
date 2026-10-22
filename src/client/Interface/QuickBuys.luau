@@ -27,7 +27,7 @@ local TopBar = require(script.Parent.TopBar)
 local SIZE = 100 -- cada atajo, antes de escalar (los botones de la columna miden 88)
 local GAP = 16 -- entre los dos atajos (los nombres no se tocan)
 local BELOW_BAR = 18 -- aire bajo los botones de arriba
-local BELOW_BAR_TV = 60 -- en consola, más abajo (pedido del usuario el 2026-10-21)
+local BELOW_BAR_TV = 90 -- en consola, más abajo (pedido del usuario el 2026-10-21)
 local ICONS = { Power = "crystal", Coins = "coin" }
 
 local QuickBuys = {}
