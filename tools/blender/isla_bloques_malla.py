@@ -179,9 +179,16 @@ def _lado(agregar, sec, di, dj, linea, desde, hasta, h, abajo, m, piso):
 
 
 def orientar(quad, normal):
-    """Ordena los vértices para que la cara mire hacia `normal` (en ejes de Roblox)."""
-    p0, p1, p2 = quad[0], quad[1], quad[2]
-    u = [p1[k] - p0[k] for k in range(3)]
-    v = [p2[k] - p1[k] for k in range(3)]
-    n = (u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0])
+    """Ordena los vértices para que la cara mire hacia `normal` (en ejes de Roblox).
+
+    La normal sale de todo el polígono (Newell), no de sus tres primeros vértices: en un
+    polígono con entrantes (las láminas de agua, de orilla ondulada) esos tres pueden caer
+    en una curva hacia adentro y dar la cara al revés (le pasó al estanque 6, 2026-10-21).
+    """
+    n = [0.0, 0.0, 0.0]
+    for i, a in enumerate(quad):
+        b = quad[(i + 1) % len(quad)]
+        n[0] += (a[1] - b[1]) * (a[2] + b[2])
+        n[1] += (a[2] - b[2]) * (a[0] + b[0])
+        n[2] += (a[0] - b[0]) * (a[1] + b[1])
     return quad if sum(n[k] * normal[k] for k in range(3)) >= 0 else tuple(reversed(quad))
