@@ -3,7 +3,7 @@
 	QuickBuys
 
 	Atajos de Robux siempre a la vista, debajo de los botones de arriba
-	(TopBar; en consola, más separados de ellos): el siguiente nivel de Poder y de Monedas ("x4 Poder") con su
+	(TopBar; en PC y consola, más separados de ellos): el siguiente nivel de Poder y de Monedas ("x4 Poder") con su
 	precio en una placa de piedra verde (Style.robuxBadge). Sin casilla: el
 	ícono suelto, más grande que los botones de la columna, flota arriba y
 	abajo con rayos que giran detrás para llamar la atención (FloatShortcut,
@@ -11,7 +11,6 @@
 	Lo que muestran sale de RobuxOffers (lo mismo que la tienda de Robux).
 ]]
 
-local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
@@ -20,23 +19,25 @@ local TextCase = require(ReplicatedStorage.Shared.TextCase)
 local HudButtonParts = require(script.Parent.Parent.Menus.HudButtonParts)
 local Purchases = require(script.Parent.Parent.Menus.Purchases)
 local RobuxOffers = require(script.Parent.Parent.Menus.RobuxOffers)
+local Device = require(script.Parent.Device)
 local FloatShortcut = require(script.Parent.FloatShortcut)
 local Layout = require(script.Parent.Layout)
 local TopBar = require(script.Parent.TopBar)
 
-local SIZE = 100 -- cada atajo, antes de escalar (los botones de la columna miden 88)
-local SIZE_TV = 130 -- en consola, más grandes (pedido del usuario el 2026-10-21)
+-- En PC y consola más grandes y más abajo que en táctil (pedido del usuario el 2026-10-21).
+local SIZE = 130 -- cada atajo, antes de escalar (los botones de la columna miden 88)
+local SIZE_TOUCH = 100
 local GAP = 16 -- entre los dos atajos (los nombres no se tocan)
-local BELOW_BAR = 18 -- aire bajo los botones de arriba
-local BELOW_BAR_TV = 90 -- en consola, más abajo (pedido del usuario el 2026-10-21)
+local BELOW_BAR = 90 -- aire bajo los botones de arriba
+local BELOW_BAR_TOUCH = 18
 local ICONS = { Power = "crystal", Coins = "coin" }
 
 local QuickBuys = {}
 
 function QuickBuys.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local tv = GuiService:IsTenFootInterface()
-	local size = if tv then SIZE_TV else SIZE
+	local touch = Device.touch()
+	local size = if touch then SIZE_TOUCH else SIZE
 	local row = Instance.new("Frame")
 	row.Name = "AtajosRobux"
 	row.AnchorPoint = Vector2.new(1, 0)
@@ -53,7 +54,7 @@ function QuickBuys.start(screen: ScreenGui)
 
 	-- Pegado al borde derecho de los botones de arriba, justo debajo de ellos.
 	local bar = TopBar.frame()
-	local below = if tv then BELOW_BAR_TV else BELOW_BAR
+	local below = if touch then BELOW_BAR_TOUCH else BELOW_BAR
 	local function place()
 		local origin = screen.AbsolutePosition
 		local right = bar.AbsolutePosition.X + bar.AbsoluteSize.X - origin.X
