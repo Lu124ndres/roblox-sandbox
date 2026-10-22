@@ -194,9 +194,9 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 
 ## Etapa 5 — Primer minuto y retención
 
-- [x] Tutorial de 4 misiones (pescar 5, alimentar, entrenar, comprar) con panel y
-      flecha sobre el destino; monedas por misión y bono al final (`Tutorial`,
-      `TutorialGuide`).
+- [x] Tutorial de 4 misiones (pescar 3, alimentar, entrenar, comprar desde MEJORAS) con
+      anuncio grande, línea de objetivo, chevrones en el suelo y aro en el destino; monedas por
+      misión y bono al final (`Tutorial`, `TutorialGuide`). Rehecho el 2026-10-21.
 - [x] Menú de ajustes: música, sonidos, temblor de cámara, efectos reducidos; se guardan
       con la partida (`ClientSettings`, `SettingsWindow`, `FxQuality`).
 - [x] Música de fondo por zona: isla, cráter y descanso, con fundido (`Music`).
@@ -332,3 +332,12 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
       con la boca abierta; probado en Play con las pupilas.
 - [ ] Ver los trucos en Play y ajustar sus números (`Etapas/*`, `Comer/Estilo`).
 - [ ] Pupila del Minotauro E1 (ojo todo negro) y del Dragón E2 (ojo de 1×1): a decidir.
+
+## Tutorial de los primeros 30 segundos (2026-10-21, pedido del usuario)
+
+- [x] El novato aparece en la playa y pesca 3 peces. En los pasos de ir lejos camina más rápido.
+- [x] Anuncio grande por paso, línea de objetivo chica, chevrones verdes en el suelo y aro de neón.
+- [x] Ruta al volcán por puente, arco y puerta (dentro del túnel ya no apunta para atrás).
+- [x] Comprar desde el ícono MEJORAS con el velo con hueco y la mano.
+- [x] El diario y los carteles de pez nuevo y logro esperan a que termine el tutorial.
+- [ ] Probar el tutorial en el simulador de teléfono.

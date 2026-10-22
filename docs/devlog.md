@@ -3538,3 +3538,46 @@ sección completa; el ícono del pez de Canva en la etiqueta de la captura):**
 secciones con su avance, candados en las siluetas; barra de recoger con un pique épico; tarjeta
 de captura con el ícono del pez y la comida; el cartel de la cabeza se crea con placa, ícono y
 "x2" (las capturas de Studio no muestran billboards AlwaysOnTop). Sin errores en el Output.
+
+## 2026-10-21 (16) — Tutorial nuevo: enganchar en los primeros 30 segundos
+
+**Qué se hizo (pedido del usuario: rehacer el tutorial "como el video de referencia"
+(`referencias/Ejemplo.mp4`), que enganche en los primeros 30 s, que se entienda, que no se trabe y
+que no abrume):**
+- **El novato aparece en la playa** (`Retention/TutorialSpawn`), frente al mar y ya en la franja
+  de pesca. Antes aparecía en la plaza mirando al volcán, con la orilla 110 studs a sus espaldas.
+  Los que ya hicieron el tutorial siguen apareciendo en la plaza.
+- **Pasos más cortos:** pescar 3 (antes 5), alimentar, entrenar y comprar.
+  - En alimentar y entrenar camina al menos a 40 (`tutorialWalkSpeed`, en `ShopService`), así la
+    primera comida al gigante llega en ~45 s.
+  - Entrenar paga 100 (antes 50): antes de comprar ya juntó 175 y nunca se traba.
+- **Guía como en la referencia:**
+  - Anuncio grande de cómic, una sola vez por paso (`TutorialCallout`).
+  - Línea de objetivo chica abajo al centro, con el avance, «+1» al sumar y «¡LISTO! +N»
+    (`TutorialBanner`).
+  - Chevrones verdes pegados al suelo que avanzan por los puntos de paso (`GuidePath`,
+    `GuideArrow`) y un aro de neón que late en el destino (`GuideRing`).
+- **Se arregló la ruta al volcán** (`TutorialLegs`). Desde que el volcán tiene túnel, dentro de él
+  las flechas volvían al puente y el aviso decía «¡CRUZA EL PUENTE!». Ahora la ruta es entrada del
+  puente → arco → puerta del cráter, salteando lo ya pasado; para entrenar vuelve por el túnel.
+- **Comprar desde el ícono MEJORAS** (pedido del usuario) con `TutorialSpotlight`:
+  - Velo oscuro con un hueco sobre el botón, marco verde y una mano que rebota.
+  - Con la ventana abierta, el hueco pasa al botón de comprar con monedas, en la pestaña de la
+    mejora siguiente más barata (`ShopController.showCheapest`).
+- **Nada tapa la guía:** el premio diario se abre recién al terminar el tutorial. Los carteles de
+  pez nuevo y de logro se guardan y salen al final (`Notices`).
+
+**Probado en Studio (Play, PC):**
+- Aparece en (0, 7.5, -159) mirando al mar, y el diario no se abre.
+- Al pescar suma y pasa al paso 2 con el anuncio «¡DALE DE COMER AL GIGANTE!».
+- En el túnel las flechas van hacia adelante (z 335→449). En la orilla, el aviso cambia a
+  «Mantén E para darle de comer a LA ORCA».
+- Alimentar y entrenar avanzan los pasos.
+- En el paso 4 el velo deja el hueco exacto sobre MEJORAS y, ya abierta, sobre el precio (abrió en
+  Botas, 200, la más barata). La mano no tapa el botón de Robux.
+- Al comprar: tutorial en 4, +300 monedas, la línea se va y la velocidad vuelve a la de las botas.
+
+**Pendiente:**
+- No se probó en el simulador de teléfono.
+- Simular el clic en el botón de comprar con Enter no llegó; la compra se probó con el remote.
+

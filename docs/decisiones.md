@@ -1086,3 +1086,20 @@ campo nuevo en el guardado: la suerte sale de los atributos `Pez_<id>` que el se
 desde `save.species`, así que no hace falta migrar partidas (los que ya tenían una sección
 completa la reciben al entrar) y servidor y cliente calculan lo mismo. El cartel "sección
 completa" solo sale al descubrir la especie que la cierra (en `Milestones`), no al entrar.
+
+## 2026-10-21 — El tutorial mueve al novato a la playa y lo acelera
+
+Para que la primera comida al gigante llegue en ~45 s sin regenerar la isla:
+- **Aparición:** la pieza de aparición sigue en la plaza. Al novato (`save.tutorial == 0`) el
+  servidor lo pasa a la playa con `PivotTo` apenas cargan sus datos, y solo si sigue donde
+  apareció (`Retention/TutorialSpawn`).
+- **Velocidad:** en los pasos de ir lejos (`tutorialFastSteps`), `ShopService.applyWalkSpeed` pone
+  al menos `tutorialWalkSpeed`. Se reaplica cuando cambia el atributo `Tutorial`.
+
+En el paso de comprar, la ventana MEJORAS abre en la categoría cuya mejora siguiente es la más
+barata, no siempre en cañas: si el jugador ya compró la caña 2 antes, la caña 3 (750) no le
+alcanza y el tutorial se trabaría.
+
+El velo del paso de comprar (`TutorialSpotlight`) no atrapa toques: solo guía. Así siguen
+andando los controles de movimiento y la X de la ventana.
+

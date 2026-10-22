@@ -175,8 +175,9 @@ por si hace falta otra recompensa más adelante.
 
 ## Retención
 
-- **Tutorial:** 4 misiones (pescar 5 peces, alimentar, entrenar, comprar) con flecha
-  sobre el destino; 25–100 monedas cada una y 200 al terminar.
+- **Tutorial:** 4 misiones (pescar 3 peces, alimentar, entrenar, comprar desde MEJORAS).
+  El novato aparece en la playa; en cada paso hay un anuncio grande, una línea de objetivo y
+  flechas en el suelo hasta el destino. Paga 25–100 monedas por misión y 200 al terminar.
 - **Colección:** 12 especies; descubrir una da monedas según su rareza (25 a 25,000) y
   completarla da 100,000.
 - **Premio diario:** racha de 7 días (100, 200, 350, 500, 800, 1,200, 2,500); si se
