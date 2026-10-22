@@ -269,3 +269,24 @@ en `UIConfig.Sounds`. Todos verificados con `IsLoaded` en Studio el 2026-10-12.
 La música es de catálogo con licencia de Roblox (APMOfficial / DistrokidOfficial), así
 que funciona en cualquier juego. Verificada con `IsLoaded` el 2026-10-13. Se silencia con
 el ajuste Música (SoundGroup `Musica`); los demás sonidos van a `Efectos`.
+
+## Íconos v4 del equipo de la tienda (2026-10-21)
+
+Un ícono por nivel: 40 cañas, 34 canastas y 34 botas, pintados a mano en Canva con la moneda
+maestra (`MAHYVFfkyU0`) y la caña suprema (`MAHYrJQ3VAE`) como guía de estilo. Prompts en
+`tools/ui/equipo_v4.json`; `tools/ui/armar_hojas_equipo.py` quita el fondo, encaja cada ícono en
+200 px y arma hojas de 5x4 (niveles 1-20 y 21-40).
+
+| Hoja | Archivo | `Assets.UI` |
+|---|---|---|
+| Cañas 1-20 | `v4/equipo/equipo_rod_1.png` | EquipoRod1 = 81312902149564 |
+| Cañas 21-40 | `v4/equipo/equipo_rod_2.png` | EquipoRod2 = 139047610937566 |
+| Canastas 1-20 | `v4/equipo/equipo_basket_1.png` | EquipoBasket1 = 103473328998101 |
+| Canastas 21-34 | `v4/equipo/equipo_basket_2.png` | EquipoBasket2 = 88975165692196 |
+| Botas 1-20 | `v4/equipo/equipo_boots_1.png` | EquipoBoots1 = 132274235368393 |
+| Botas 21-34 | `v4/equipo/equipo_boots_2.png` | EquipoBoots2 = 73284489356357 |
+
+Las cañas 1-21 se generaron de a una (200 px, el máximo del conector). Las demás salieron de hojas
+de 3x3 exportadas a 1080 px desde el diseño de Canva `DAHYr01q5ww` (unos 360 px por ícono y 9 por
+generación: la cuota de Canva deja ~1 imagen cada 5 min). Media de cada hoja en `media.json`.
+Subidas con `upload_image` del MCP de Studio, sirviendo la carpeta con `py -m http.server`.

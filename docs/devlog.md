@@ -3463,3 +3463,16 @@ estanque en el centro, no abajo"):**
 alcance 34); la placa sale en el centro del Estanque de Jade y del sagrado; tocarla empieza a
 entrenar (TrainingPond 1) y otra vez lo para; sin errores. Con AlwaysOnTop las placas no salían en
 las capturas de Studio.
+
+## 2026-10-21 (12) — Íconos v4 del equipo de la tienda
+
+**Qué se hizo (pedido del usuario: íconos v4 de las 108 cañas, canastas y botas):** un ícono por
+nivel, pintado a mano en Canva y nombrado como su nivel en `tools/ui/equipo_v4.json`. Las cañas
+1-21 de a una; el resto en hojas de 3x3 exportadas a 1080 px (9 íconos por generación: de ~9 h a
+~1 h con la cuota de Canva). `tools/ui/armar_hojas_equipo.py` quita el fondo (también los huecos
+cerrados lisos, sin tocar el mármol ni el oro blanco) y las manchas sueltas que se cuelan de la
+celda vecina. La bota eterna (34) es la versión B de cuatro (elegida por el usuario). Las 6 hojas
+están subidas y en `Assets.UI.Equipo*` (ver `docs/ui-assets.md`).
+
+**Probado en Studio (Play):** MEJORAS con los íconos nuevos en Cañas (detalle de la caña 26 y la
+cuadrícula hasta la 40) y Botas (1-12); sin errores en el Output.

@@ -1,0 +1,40 @@
+{
+  "rod": {
+    "01": "MAHYrgyjvwo",
+    "02": "MAHYrr6GxqY",
+    "03": "MAHYrr8IFII",
+    "04": "MAHYrjgc9Lk",
+    "05": "MAHYrorlUF4",
+    "06": "MAHYrjGoyZY",
+    "07": "MAHYrvso92k",
+    "08": "MAHYrmgos-0",
+    "09": "MAHYrku-a60",
+    "10": "MAHYrhaDweA",
+    "11": "MAHYruOWcMY",
+    "12": "MAHYrl2IJWM",
+    "13": "MAHYrrrtgEs",
+    "14": "MAHYrwLDjW0",
+    "15": "MAHYr8CU9cM",
+    "16": "MAHYr9Qn93k",
+    "17": "MAHYr3dJmy4",
+    "18": "MAHYr37tNRE",
+    "19": "MAHYrwAG5sQ",
+    "20": "MAHYryKnYc8",
+    "21": "MAHYr3KvRPA"
+  },
+  "basket": {},
+  "boots": {},
+  "_hojas_3x3": {
+    "rod 22-30": "MAHYrwO_Rd4",
+    "rod 31-39": "MAHYsNYkVRE",
+    "rod 40 + basket 1-8": "MAHYsCXujeU",
+    "basket 9-17": "MAHYsPVhYgc",
+    "basket 18-26": "MAHYsG2gyl0",
+    "basket 27-34 + boots 1": "MAHYsNT7uRw",
+    "boots 2-10": "MAHYsOPkvC4",
+    "boots 11-19": "MAHYsJ_TwHw",
+    "boots 20-28": "MAHYsAiuhfU",
+    "boots 29-34 (34 = version B, celda 7)": "MAHYsMji4YQ"
+  },
+  "_nota": "Cañas 1-21: un ícono por generación (media de cada nivel arriba). El resto salió de hojas de 3x3 generadas en Canva y exportadas a 1080 px desde el diseño DAHYr01q5ww (crudo/hoja_*.png); el conector solo da 200 px por imagen."
+}

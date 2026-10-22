@@ -31,6 +31,12 @@ BORDE = 30  # más allá de TOLERANCIA, rango en que el alfa sube de 0 a 255
 MARGEN = 6  # aire alrededor del ícono dentro de la celda
 HUECO_TOLERANCIA = 14  # un hueco cerrado tiene que ser casi exactamente del color del fondo
 HUECO_MINIMO = 40  # y medir al menos esto (los brillos chicos de los íconos se quedan)
+HUECO_LISURA = 3  # y ser liso: distancia media al fondo, en niveles de color
+# Los huecos grandes (entre la caña y el hilo, bajo un aro) son fondo aunque traigan algo de
+# ruido; las partes blancas de los íconos (mármol, oro blanco) son manchas chicas con pinceladas.
+HUECO_GRANDE = 500
+HUECO_LISURA_GRANDE = 4.5
+SUELTO_MINIMO = 0.04  # manchas menores que esta parte del objeto principal se borran
 
 
 def distancia(a, b):
@@ -72,7 +78,10 @@ def quitar_fondo(imagen):
         for y in range(alto):
             if not visto[x][y] and distancia(px[x, y], fondo) <= HUECO_TOLERANCIA:
                 pixeles = inundar(px, visto, deque([(x, y)]), fondo, HUECO_TOLERANCIA)
-                if len(pixeles) >= HUECO_MINIMO:
+                # Fondo de verdad: liso, casi sin pinceladas (el mármol o el oro blanco las tienen).
+                lisura = sum(distancia(px[hx, hy], fondo) for hx, hy in pixeles) / max(len(pixeles), 1)
+                limite = HUECO_LISURA_GRANDE if len(pixeles) >= HUECO_GRANDE else HUECO_LISURA
+                if len(pixeles) >= HUECO_MINIMO and lisura <= limite:
                     for hx, hy in pixeles:
                         fuera[hx][hy] = True
     salida = Image.new("RGBA", (ancho, alto))
@@ -96,8 +105,43 @@ def quitar_fondo(imagen):
     return salida
 
 
+def quitar_sueltos(icono):
+    """Borra las manchas sueltas chicas (en las hojas de 3x3 se cuela el borde del vecino)."""
+    alfa = icono.getchannel("A")
+    ancho, alto = icono.size
+    a = alfa.load()
+    visto = [[False] * alto for _ in range(ancho)]
+    manchas = []
+    for x in range(ancho):
+        for y in range(alto):
+            if visto[x][y] or a[x, y] < 40:
+                continue
+            pila, mancha = [(x, y)], []
+            visto[x][y] = True
+            while pila:
+                px, py = pila.pop()
+                mancha.append((px, py))
+                for nx, ny in ((px + 1, py), (px - 1, py), (px, py + 1), (px, py - 1)):
+                    if 0 <= nx < ancho and 0 <= ny < alto and not visto[nx][ny] and a[nx, ny] >= 40:
+                        visto[nx][ny] = True
+                        pila.append((nx, ny))
+            manchas.append(mancha)
+    if not manchas:
+        return icono
+    mayor = max(len(m) for m in manchas)
+    salida = icono.copy()
+    s = salida.load()
+    for mancha in manchas:
+        if len(mancha) < mayor * SUELTO_MINIMO:
+            for px, py in mancha:
+                r, g, b, _ = s[px, py]
+                s[px, py] = (r, g, b, 0)
+    return salida
+
+
 def encajar(icono):
-    caja = icono.getbbox()
+    icono = quitar_sueltos(icono)
+    caja = icono.getbbox(alpha_only=True)
     if caja:
         icono = icono.crop(caja)
     lado = CELDA - MARGEN * 2

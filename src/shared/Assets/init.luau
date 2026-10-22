@@ -78,12 +78,12 @@ local Assets: Assets = {
 		-- Equipo de la tienda (v4, Canva): un ícono por nivel en hojas de 5x4 celdas de 200 px;
 		-- la hoja 1 tiene los niveles 1-20 y la 2 los 21-40 (Interface/GearIcons).
 		-- Fuentes en assets/ui/iconos/v4/equipo/ (tools/ui/armar_hojas_equipo.py).
-		EquipoRod1 = "rbxassetid://79873240212746", -- cañas 1-20 (hoja vieja hasta subir la v4)
-		EquipoRod2 = "rbxassetid://0", -- cañas 21-40
-		EquipoBasket1 = "rbxassetid://125162908853974", -- canastas 1-20 (hoja vieja: 1-14)
-		EquipoBasket2 = "rbxassetid://0", -- canastas 21-34
-		EquipoBoots1 = "rbxassetid://122825125598846", -- botas 1-20 (hoja vieja: 1-14)
-		EquipoBoots2 = "rbxassetid://0", -- botas 21-34
+		EquipoRod1 = "rbxassetid://81312902149564", -- cañas 1-20
+		EquipoRod2 = "rbxassetid://139047610937566", -- cañas 21-40
+		EquipoBasket1 = "rbxassetid://103473328998101", -- canastas 1-20
+		EquipoBasket2 = "rbxassetid://88975165692196", -- canastas 21-34
+		EquipoBoots1 = "rbxassetid://132274235368393", -- botas 1-20
+		EquipoBoots2 = "rbxassetid://73284489356357", -- botas 21-34
 		-- Kit de la interfaz: piedra volcánica con grietas de lava, hecho con la IA de Canva sobre
 		-- las referencias del usuario (tools/ui/recortar_kit_canva.py → assets/ui/kit_canva/).
 		-- 9-slice; los cortes están en Interface/Kit.
