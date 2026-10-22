@@ -14,11 +14,14 @@ local GuiService = game:GetService("GuiService")
 local Device = require(script.Parent.Device)
 
 local MARGIN = 12
-local BUTTON_MIN, BUTTON_MAX = 26, 36
+-- Más grandes desde que son menos (pedido del usuario el 2026-10-21; antes 36 y 40):
+-- llenan casi todo el alto de la barra de Roblox, centrados en ella.
+local BUTTON_MIN, BUTTON_MAX = 26, 48
+local BAR_PADDING = 10 -- lo que sobra de la barra (arriba más abajo)
 -- En táctil, una parte del alto de la pantalla: se ven igual en un teléfono y en
 -- una tablet, sin bajar del mínimo cómodo para el dedo ni salirse de la barra de Roblox.
 local TOUCH_SHARE = 0.075
-local TOUCH_MIN, TOUCH_MAX = 28, 40
+local TOUCH_MIN, TOUCH_MAX = 28, 46
 local GAP = 6
 
 local TopBar = {}
@@ -35,8 +38,12 @@ local function place()
 		return
 	end
 	local size = if Device.touch()
-		then math.clamp(math.round(Device.viewport().Y * TOUCH_SHARE), TOUCH_MIN, TOUCH_MAX)
-		else math.clamp(height - 18, BUTTON_MIN, BUTTON_MAX)
+		then math.clamp(
+			math.round(Device.viewport().Y * TOUCH_SHARE),
+			TOUCH_MIN,
+			math.max(TOUCH_MIN, math.min(TOUCH_MAX, height - BAR_PADDING))
+		)
+		else math.clamp(height - BAR_PADDING, BUTTON_MIN, BUTTON_MAX)
 	bar.Position = UDim2.fromOffset(inset.Max.X - MARGIN, inset.Min.Y + (height - size) / 2)
 	bar.Size = UDim2.fromOffset(400, size)
 end

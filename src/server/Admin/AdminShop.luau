@@ -6,6 +6,7 @@
 	jugador elegido (para probar sin pagar):
 		pass          clave: pone o quita ese pase (prueba trajes y ventajas)
 		level         "Power:n" / "Coins:n": esa mejora en x2^n (0 la quita)
+		levelUp       "Power" / "Coins": un nivel más, como ir comprando x2, x4, x8...
 		ponds         "all": abre todos los estanques; "none": los cierra
 		starterPack   entrega el pack de inicio (lo mismo que Grants, sin contarlo como compra)
 		spins         +n giros de ruleta guardados
@@ -20,6 +21,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local PlayerData = require(script.Parent.Parent.PlayerData)
@@ -105,6 +107,15 @@ local HANDLERS: { [string]: AdminPlayer.Handler } = {
 		local level = math.clamp(tonumber(levelText) or 0, 0, #MONETIZATION.levels[key].robux)
 		setLevel(target, key, level)
 		return `{MONETIZATION.levels[key].name} x{2 ^ level}`
+	end,
+	levelUp = function(target, value)
+		onlyAdmins(target)
+		assert(type(value) == "string" and MONETIZATION.levels[value], "esa mejora no existe")
+		local max = #MONETIZATION.levels[value].robux
+		local level = Perks.level(target, value) + 1
+		assert(level <= max, `{MONETIZATION.levels[value].name} ya está al máximo`)
+		setLevel(target, value, level)
+		return `{MONETIZATION.levels[value].name} x{2 ^ level}`
 	end,
 	ponds = function(target, value)
 		onlyAdmins(target)

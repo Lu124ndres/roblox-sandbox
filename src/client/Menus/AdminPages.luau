@@ -92,12 +92,12 @@ local function fillShop(page: Page)
 		table.insert(passes, { text = name, name = "pass", value = key, color = CARDS.Purple })
 	end
 	page.row("Pases", passes)
-	page.section("Mejoras de Robux", "x2 por nivel")
+	page.section("Mejoras de Robux", "Siguiente: como comprar x2, x4, x8...")
 	for _, key in MONETIZATION.levelOrder do
 		local max = #MONETIZATION.levels[key].robux
 		page.row(MONETIZATION.levels[key].name, {
 			{ text = "Quitar", name = "level", value = `{key}:0`, color = CARDS.Orange },
-			{ text = "x2", name = "level", value = `{key}:1` },
+			{ text = "Siguiente (x2 más)", name = "levelUp", value = key },
 			{ text = `x{2 ^ max}`, name = "level", value = `{key}:{max}`, color = CARDS.Green },
 		})
 	end
