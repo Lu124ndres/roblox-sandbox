@@ -12,7 +12,8 @@
 	del descanso (RestDawn: al llenar al monstruo sale el sol), y arriba de
 	todo, el cielo del evento del servidor (EventSky). Lighting se
 	escribe cada SkyUpdateSeconds (UIConfig.Performance) o si la hora o las
-	mezclas cambian de más. Workspace.HoraFija congela la hora.
+	mezclas cambian de más. Workspace.HoraFija congela la hora (pruebas) y,
+	si no, UIConfig.Effects.FixedHour (hoy, siempre mediodía; -1 = el ciclo).
 ]]
 
 local Lighting = game:GetService("Lighting")
@@ -52,6 +53,9 @@ function SkyCycle.currentHour(): number
 	local fixed = Workspace:GetAttribute("HoraFija")
 	if type(fixed) == "number" then
 		return fixed
+	end
+	if EFFECTS.FixedHour >= 0 then
+		return EFFECTS.FixedHour
 	end
 	local cycleSeconds = EFFECTS.DayCycleMinutes * 60
 	local fraction = (Workspace:GetServerTimeNow() % cycleSeconds) / cycleSeconds

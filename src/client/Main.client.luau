@@ -55,6 +55,7 @@ local Purchases = require(script.Parent.Menus.Purchases)
 local RankingBoards = require(script.Parent.Menus.RankingBoards)
 local RobuxShop = require(script.Parent.Menus.RobuxShop)
 local SettingsWindow = require(script.Parent.Menus.SettingsWindow)
+local TutorialCamera = require(script.Parent.Menus.TutorialCamera)
 local TutorialGuide = require(script.Parent.Menus.TutorialGuide)
 local HungerBar = require(script.Parent.HungerBar)
 local Toasts = require(script.Parent.Toasts)
@@ -137,6 +138,7 @@ HudFocus.start(screen) -- después del HUD: en táctil lo oculta con una ventana
 BoostTimer.start(screen)
 EventIntro.start(screen) -- el anuncio grande al empezar un evento
 TutorialGuide.start(screen)
+TutorialCamera.start() -- al pasarlo a la playa, la cámara queda detrás de él
 NextGoal.start(screen)
 Notices.start(toasts)
 RankingBoards.start()

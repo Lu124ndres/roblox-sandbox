@@ -10,7 +10,9 @@
 
 	La playa queda en el ángulo de la aparición (WorldLayout.spawnAngle), a
 	Config.Retention.tutorialShoreInset de la orilla hacia tierra; la altura
-	sale de un rayo al suelo.
+	sale de un rayo al suelo. Espera a que el mundo esté puesto (los bloques
+	de la isla se ponen al arrancar el servidor): si no, el rayo no encuentra
+	la arena y el personaje queda adentro del bloque de la playa.
 ]]
 
 local Players = game:GetService("Players")
@@ -18,10 +20,11 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 
-local LOAD_TIMEOUT = 15 -- segundos que espera los datos antes de dejarlo en la plaza
+local LOAD_TIMEOUT = 30 -- segundos que espera datos y mundo antes de dejarlo en la plaza
 local MAX_WANDER = 30 -- si ya se alejó tanto de donde apareció, no se lo mueve
 local RAY_TOP = 120 -- desde dónde baja el rayo al suelo
 
@@ -56,15 +59,26 @@ local function isNewcomer(player: Player): boolean
 	return save ~= nil and save.tutorial == 0
 end
 
--- Espera los datos (el primer personaje aparece antes de que carguen) y, si es
+-- ¿Ya cargaron sus datos y está puesto el mundo (los bloques de la isla)?
+local function ready(player: Player): boolean
+	return PlayerData.isLoaded(player)
+		and Workspace:GetAttribute(Protocol.WorldReadyAttribute) == true
+end
+
+-- Espera los datos y el mundo (el primer personaje aparece antes) y, si es
 -- novato y sigue donde apareció, lo pasa a la playa.
 local function place(player: Player, character: Model, root: BasePart)
 	local appearedAt = root.Position
 	local waited = 0
-	while not PlayerData.isLoaded(player) and waited < LOAD_TIMEOUT do
+	while not ready(player) and waited < LOAD_TIMEOUT do
 		waited += task.wait(0.2)
 	end
-	if character.Parent == nil or player.Character ~= character or not isNewcomer(player) then
+	if
+		not ready(player)
+		or character.Parent == nil
+		or player.Character ~= character
+		or not isNewcomer(player)
+	then
 		return
 	end
 	if (root.Position - appearedAt).Magnitude > MAX_WANDER then

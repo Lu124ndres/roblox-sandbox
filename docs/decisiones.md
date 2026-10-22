@@ -1114,3 +1114,10 @@ En el paso de comprar se ve únicamente MEJORAS, que vive dentro de la columna d
 No se ocultan sus hermanas una por una: algunas (cofre del regalo, atajo del pack) manejan su
 propio `Visible` y se volverían a mostrar. En cambio, `TutorialHud` saca el botón real a un marco
 propio en su mismo lugar y con su misma escala, y al terminar lo devuelve a su fila.
+
+## 2026-10-21 — El cielo queda fijo a mediodía
+
+Pedido del usuario: el juego queda siempre a mediodía. No se borró el ciclo de día y noche: queda
+detrás de `UIConfig.Effects.FixedHour` (-1 lo vuelve a prender), así como el atributo
+`Workspace.HoraFija` sigue sirviendo para pruebas. Lo que depende de la noche (faro, luz de los
+estanques, estrellas) queda sin usarse mientras la hora esté fija.

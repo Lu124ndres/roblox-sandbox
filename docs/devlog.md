@@ -3601,3 +3601,23 @@ normalidad»):**
 - Con el tutorial reiniciado no queda nada del HUD, solo el anuncio y la línea de objetivo.
 - En el paso de comprar se ve solo MEJORAS con la mano.
 - Al comprar vuelven todas las partes y MEJORAS queda en su fila al lado de TIENDA.
+
+## 2026-10-21 (18) — Siempre mediodía y la guía del tutorial arriba en grande
+
+**Qué se hizo (pedido del usuario: «que el juego se quede en mediodía» (siempre, confirmado) y
+«los carteles ahora sí arriba en grande, como eliminamos todo para el tutorial»):**
+- **Siempre mediodía:** `UIConfig.Effects.FixedHour = 12`. `SkyCycle.currentHour` lo usa en vez
+  del ciclo; con -1 vuelve el día y la noche. El faro y la luz de los estanques quedan apagados
+  porque nunca es de noche.
+- **Línea de objetivo arriba y en grande** (`TutorialBanner`, 760x112, título de 52): va en el
+  lugar del panel del gigante, que está oculto en el tutorial, y no tapa el cartel sobre la
+  cabeza.
+- **Arreglo de la aparición en la playa** (`TutorialSpawn`): en un servidor recién abierto, el
+  novato se ubicaba antes de que se pusieran los bloques de la isla y quedaba adentro del bloque
+  de la playa. Ahora espera a `MundoListo`.
+- **Cámara detrás del personaje** (`Menus/TutorialCamera`): al pasarlo a la playa, la cámara
+  quedaba de frente al personaje. Ahora se pone detrás, mirando al mar.
+
+**Probado en Studio (Play, servidor nuevo):** aparece en (0, 7.45, -159) sobre la arena,
+`ClockTime` 12, la cámara mira al mar detrás del personaje y la línea está arriba sin tapar el
+cartel de kills.

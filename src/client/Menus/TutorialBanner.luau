@@ -3,11 +3,13 @@
 	TutorialBanner
 
 	La línea de objetivo del tutorial (como la de referencias/Ejemplo.mp4):
-	una franja oscura y angosta abajo al centro (arriba tapaba el cartel sobre
-	la cabeza del personaje y los avisos; abajo, entre los controles, está libre),
+	una franja oscura arriba al centro y en grande, en el lugar del panel del
+	gigante (pedido del usuario: durante el tutorial el HUD se oculta,
+	TutorialHud, así que arriba ya no estorba; más abajo tapaba el cartel
+	sobre la cabeza),
 	con lo que hay que hacer y el avance en dorado («Pesca 3 peces  1/3») y,
-	debajo, cómo se hace («Mantén E mirando al mar»). Es chica y no se mueve
-	sola, para no molestar (pedido del usuario); el anuncio grande de cada
+	debajo, cómo se hace («Mantén E mirando al mar»). No se mueve sola, para
+	no molestar (pedido del usuario); el anuncio grande de cada
 	paso lo hace TutorialCallout. Se anima solo cuando pasa algo:
 		bump   el avance subió: un «+1» verde salta al lado y la franja late
 		done   «¡LISTO! +25» en verde un momento
@@ -20,9 +22,9 @@ local Device = require(script.Parent.Parent.Interface.Device)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Style = require(script.Parent.Parent.Interface.Style)
 
-local WIDTH, HEIGHT = 440, 64
-local SCALE_TOUCH = 0.75
-local BOTTOM = 24 -- píxeles desde abajo
+local WIDTH, HEIGHT = 760, 112
+local SCALE_TOUCH = 0.6
+local TOP = 10 -- píxeles desde arriba si no está el panel del gigante (HungerPanel)
 local WHITE = Color3.new(1, 1, 1)
 local SOFT = Color3.fromRGB(215, 222, 230)
 local DONE = Color3.fromRGB(120, 240, 130)
@@ -44,8 +46,17 @@ local TutorialBanner = {}
 function TutorialBanner.new(screen: ScreenGui): Banner
 	local root = Instance.new("Frame")
 	root.Name = "Tutorial"
-	root.AnchorPoint = Vector2.new(0.5, 1)
-	root.Position = UDim2.new(0.5, 0, 1, -BOTTOM)
+	root.AnchorPoint = Vector2.new(0.5, 0)
+	root.Position = UDim2.new(0.5, 0, 0, TOP)
+	-- A la altura del panel del gigante (sube a la barra de Roblox si cabe).
+	local hunger = screen:FindFirstChild("Hambre")
+	if hunger and hunger:IsA("GuiObject") then
+		local function follow()
+			root.Position = UDim2.new(0.5, 0, 0, hunger.Position.Y.Offset)
+		end
+		hunger:GetPropertyChangedSignal("Position"):Connect(follow)
+		follow()
+	end
 	root.Size = UDim2.fromOffset(WIDTH, HEIGHT)
 	root.BackgroundColor3 = STRIP
 	root.BackgroundTransparency = STRIP_SEE_THROUGH
@@ -53,7 +64,7 @@ function TutorialBanner.new(screen: ScreenGui): Banner
 	root.ZIndex = 41 -- por encima del velo del paso de comprar (TutorialSpotlight)
 	root.Parent = screen
 	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 12)
+	corner.CornerRadius = UDim.new(0, 16)
 	corner.Parent = root
 	Layout.scaleWith(root)
 	local device = Instance.new("UIScale")
@@ -63,13 +74,13 @@ function TutorialBanner.new(screen: ScreenGui): Banner
 	pop.Parent = root
 
 	-- Un solo texto con el avance en dorado (texto enriquecido).
-	local title = Style.text(root, "Titulo", 28, WHITE, 2)
+	local title = Style.text(root, "Titulo", 52, WHITE, 4)
 	title.RichText = true
-	title.Position = UDim2.fromOffset(12, 4)
-	title.Size = UDim2.new(1, -24, 0, 32)
-	local hint = Style.text(root, "Como", 19, SOFT, 1.5)
-	hint.Position = UDim2.fromOffset(12, 36)
-	hint.Size = UDim2.new(1, -24, 0, 22)
+	title.Position = UDim2.fromOffset(16, 6)
+	title.Size = UDim2.new(1, -32, 0, 60)
+	local hint = Style.text(root, "Como", 28, SOFT, 2.5)
+	hint.Position = UDim2.fromOffset(16, 68)
+	hint.Size = UDim2.new(1, -32, 0, 34)
 
 	local function beat(scale: number)
 		pop.Scale = scale
@@ -86,11 +97,11 @@ function TutorialBanner.new(screen: ScreenGui): Banner
 
 	-- «+N» verde que sube y se va, al lado derecho de la franja.
 	local function bump(amount: number)
-		local plus = Style.text(root, "Mas", 40, DONE, 3)
+		local plus = Style.text(root, "Mas", 64, DONE, 4)
 		plus.Text = `+{amount}`
 		plus.AnchorPoint = Vector2.new(0, 0.5)
 		plus.Position = UDim2.new(1, 8, 0.5, 0)
-		plus.Size = UDim2.fromOffset(90, 48)
+		plus.Size = UDim2.fromOffset(130, 70)
 		plus.TextXAlignment = Enum.TextXAlignment.Left
 		TweenService
 			:Create(plus, RISE, { Position = UDim2.new(1, 8, 0.5, -36), TextTransparency = 1 })

@@ -170,6 +170,7 @@ local UIConfig: UIConfig = {
 		SpoutMaxSeconds = 16,
 		-- Ambiente
 		DayCycleMinutes = 16, -- un día completo; 3/4 es de día
+		FixedHour = 12, -- el cielo queda siempre a esta hora (pedido del usuario: mediodía); -1 = ciclo de día y noche
 		LighthouseTurnSeconds = 9,
 		FoamPulseSeconds = 2.6,
 		BuoyBobAmplitude = 0.45,
