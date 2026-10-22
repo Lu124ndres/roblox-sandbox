@@ -85,8 +85,13 @@ local function row(order: number, icon: string, color: Color3): Row
 	return { value = value, badge = badge }
 end
 
+-- Un decimal como mucho (pedido del usuario el 2026-10-21): x1.32 → x1.3, x2.0 → x2.
 local function multiplier(value: number): string
-	return if value >= 1000 then `x{NumberFormat.short(value)}` else `x{value}`
+	if value >= 1000 then
+		return `x{NumberFormat.short(value)}`
+	end
+	local text = string.format("%.1f", value)
+	return `x{(string.gsub(text, "%.0$", ""))}`
 end
 
 -- Devuelve la etiqueta de monedas (destino de las monedas que vuelan).
