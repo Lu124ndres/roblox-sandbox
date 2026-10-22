@@ -81,9 +81,9 @@ local Assets: Assets = {
 		EquipoRod1 = "rbxassetid://81312902149564", -- cañas 1-20
 		EquipoRod2 = "rbxassetid://139047610937566", -- cañas 21-40
 		EquipoBasket1 = "rbxassetid://103473328998101", -- canastas 1-20
-		EquipoBasket2 = "rbxassetid://88975165692196", -- canastas 21-34
+		EquipoBasket2 = "rbxassetid://134760141920327", -- canastas 21-40
 		EquipoBoots1 = "rbxassetid://132274235368393", -- botas 1-20
-		EquipoBoots2 = "rbxassetid://73284489356357", -- botas 21-34
+		EquipoBoots2 = "rbxassetid://78348750552780", -- botas 21-40
 		-- Kit de la interfaz: piedra volcánica con grietas de lava, hecho con la IA de Canva sobre
 		-- las referencias del usuario (tools/ui/recortar_kit_canva.py → assets/ui/kit_canva/).
 		-- 9-slice; los cortes están en Interface/Kit.

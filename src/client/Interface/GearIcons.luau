@@ -20,8 +20,8 @@ local PER_SHEET = 20
 -- Claves en minúscula; se acepta también la categoría de Upgrades ("Rod").
 local SHEETS: { [string]: { ids: { string }, count: number } } = {
 	rod = { ids = { Assets.UI.EquipoRod1, Assets.UI.EquipoRod2 }, count = 40 },
-	basket = { ids = { Assets.UI.EquipoBasket1, Assets.UI.EquipoBasket2 }, count = 34 },
-	boots = { ids = { Assets.UI.EquipoBoots1, Assets.UI.EquipoBoots2 }, count = 34 },
+	basket = { ids = { Assets.UI.EquipoBasket1, Assets.UI.EquipoBasket2 }, count = 40 },
+	boots = { ids = { Assets.UI.EquipoBoots1, Assets.UI.EquipoBoots2 }, count = 40 },
 }
 
 local GearIcons = {}

@@ -14,8 +14,9 @@
 	Precios: un jugador nuevo gana ~200 monedas/min pescando con la Orca (más
 	con poder, canasta y monstruos mejores; ver docs/balance.md); la segunda
 	caña llega en el primer minuto y cada nivel cuesta 2.5-4 veces el anterior.
-	Los 20 niveles del final de cada lista (2026-10-21) siguen la curva: x2.5
-	por caña y x2.8 por canasta y botas.
+	Desde el 2026-10-21 cada mejora tiene 40 niveles; los nuevos siguen la curva: x2.5
+	por caña y x2.8 por canasta y botas. La velocidad de las botas sube parejo de
+	52 (nivel 14) a 100 (nivel 40).
 ]]
 
 local Types = require(script.Parent.Types)
@@ -97,7 +98,13 @@ local Shop: Types.ShopConfig = {
 		{ name = "Cesta estelar", price = 64e15, value = 16000 },
 		{ name = "Tesoro de los dioses", price = 180e15, value = 21000 },
 		{ name = "Saco del infinito", price = 500e15, value = 27000 },
-		{ name = "Bóveda eterna", price = 1.4e18, value = 35000 },
+		{ name = "Cofre del sol negro", price = 1.4e18, value = 35000 },
+		{ name = "Arcón del kraken rey", price = 3.9e18, value = 45000 },
+		{ name = "Cofre de la supernova", price = 11e18, value = 58000 },
+		{ name = "Bodega del leviatán", price = 31e18, value = 75000 },
+		{ name = "Cofre del firmamento", price = 86e18, value = 97000 },
+		{ name = "Cofre del origen", price = 240e18, value = 125000 },
+		{ name = "Bóveda eterna", price = 670e18, value = 160000 },
 	},
 	Boots = {
 		{ name = "Sandalias", price = 0, value = 22 },
@@ -115,25 +122,31 @@ local Shop: Types.ShopConfig = {
 		{ name = "Botas del abismo", price = 270e6, value = 50 },
 		{ name = "Botas de Hermes", price = 800e6, value = 52 },
 		{ name = "Botas de jade", price = 2.2e9, value = 54 },
-		{ name = "Botas de zafiro", price = 6.3e9, value = 57 },
-		{ name = "Botas de la aurora", price = 18e9, value = 59 },
-		{ name = "Botas del dragón", price = 49e9, value = 62 },
-		{ name = "Botas de amatista", price = 140e9, value = 64 },
-		{ name = "Botas del eclipse", price = 390e9, value = 66 },
-		{ name = "Botas de diamante", price = 1.1e12, value = 69 },
-		{ name = "Botas del fénix", price = 3e12, value = 71 },
-		{ name = "Botas lunares", price = 8.5e12, value = 74 },
-		{ name = "Botas del trueno", price = 24e12, value = 76 },
-		{ name = "Botas de plasma", price = 66e12, value = 78 },
-		{ name = "Botas de la nebulosa", price = 190e12, value = 81 },
-		{ name = "Botas del tritón", price = 520e12, value = 83 },
-		{ name = "Botas galácticas", price = 1.5e15, value = 86 },
-		{ name = "Botas de los titanes", price = 4.1e15, value = 88 },
-		{ name = "Botas del vacío", price = 11e15, value = 90 },
-		{ name = "Botas estelares", price = 32e15, value = 93 },
-		{ name = "Botas de los dioses", price = 90e15, value = 95 },
-		{ name = "Botas del infinito", price = 250e15, value = 98 },
-		{ name = "Botas eternas", price = 700e15, value = 100 },
+		{ name = "Botas de zafiro", price = 6.3e9, value = 56 },
+		{ name = "Botas de la aurora", price = 18e9, value = 58 },
+		{ name = "Botas del dragón", price = 49e9, value = 59 },
+		{ name = "Botas de amatista", price = 140e9, value = 61 },
+		{ name = "Botas del eclipse", price = 390e9, value = 63 },
+		{ name = "Botas de diamante", price = 1.1e12, value = 65 },
+		{ name = "Botas del fénix", price = 3e12, value = 67 },
+		{ name = "Botas lunares", price = 8.5e12, value = 69 },
+		{ name = "Botas del trueno", price = 24e12, value = 70 },
+		{ name = "Botas de plasma", price = 66e12, value = 72 },
+		{ name = "Botas de la nebulosa", price = 190e12, value = 74 },
+		{ name = "Botas del tritón", price = 520e12, value = 76 },
+		{ name = "Botas galácticas", price = 1.5e15, value = 78 },
+		{ name = "Botas de los titanes", price = 4.1e15, value = 80 },
+		{ name = "Botas del vacío", price = 11e15, value = 82 },
+		{ name = "Botas estelares", price = 32e15, value = 83 },
+		{ name = "Botas de los dioses", price = 90e15, value = 85 },
+		{ name = "Botas del infinito", price = 250e15, value = 87 },
+		{ name = "Botas del sol negro", price = 700e15, value = 89 },
+		{ name = "Botas del kraken rey", price = 2e18, value = 91 },
+		{ name = "Botas de la supernova", price = 5.5e18, value = 93 },
+		{ name = "Botas del leviatán", price = 15e18, value = 94 },
+		{ name = "Botas del firmamento", price = 43e18, value = 96 },
+		{ name = "Botas del origen", price = 120e18, value = 98 },
+		{ name = "Botas eternas", price = 340e18, value = 100 },
 	},
 }
 

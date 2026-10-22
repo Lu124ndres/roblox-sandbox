@@ -3476,3 +3476,14 @@ están subidas y en `Assets.UI.Equipo*` (ver `docs/ui-assets.md`).
 
 **Probado en Studio (Play):** MEJORAS con los íconos nuevos en Cañas (detalle de la caña 26 y la
 cuadrícula hasta la 40) y Botas (1-12); sin errores en el Output.
+
+## 2026-10-21 (13) — Canastas y botas también llegan a 40 niveles
+
+**Qué se hizo (pedido del usuario: "faltan 6 canastas y 6 botas"):** las cañas tenían 40 niveles
+y las canastas y botas 34. Se agregaron 6 de cada una antes de la eterna, que pasa al nivel 40:
+sol negro, kraken rey, supernova, leviatán, firmamento y origen. Precios con la misma curva (x2.8);
+la canasta llega a x160000. La velocidad de las botas se repartió parejo de 52 (nivel 14) a 100
+(nivel 40). Íconos v4 nuevos en dos hojas de 3x3 y hojas 2 de canastas y botas vueltas a subir.
+
+**Probado en Studio (Play):** MEJORAS con canastas Nv 36/40 (siguiente: Bodega del leviatán) y la
+cuadrícula hasta la 40 con sus íconos; botas 40/40 con velocidad 100; sin errores.
