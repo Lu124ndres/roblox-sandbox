@@ -29,7 +29,11 @@ local SIDE_SIZE = Layout.BUTTON_SIZE
 local SIDE_SLICE = 0.32
 local TOP_SLICE = 0.16
 local INSET = 10 -- lo que ocupa el canto en los grandes: el ícono queda dentro
-local WIDE_HEIGHT = 54 -- alto de la placa ancha (HudButtons.wide)
+-- Los botones grandes de PC (Layout.BUTTON_SIZE) llevan la placa ancha y los nombres más grandes.
+local BIG = Layout.BIG_MENU
+local WIDE_HEIGHT = if BIG then 60 else 54 -- alto de la placa ancha (HudButtons.wide)
+local WIDE_TEXT = if BIG then 26 else 24
+local NAME_TEXT = if BIG then 22 else 19 -- nombre bajo el ícono de los botones grandes
 -- Los laterales que llevan el marco de lava (lo más importante).
 local LAVA: { [string]: boolean } = { Tienda = true }
 -- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
@@ -75,10 +79,10 @@ function HudButtons.iconButton(
 	view.Size = UDim2.fromOffset(size - 2 * INSET - 2, size - 26)
 	view.Active = false
 	view.Interactable = false
-	local label = Style.text(button, "Nombre", 19, nil, 2)
+	local label = Style.text(button, "Nombre", NAME_TEXT, nil, 2)
 	label.AnchorPoint = Vector2.new(0.5, 1)
 	label.Position = UDim2.new(0.5, 0, 1, -7)
-	label.Size = UDim2.new(1, -12, 0, 20)
+	label.Size = UDim2.new(1, -12, 0, NAME_TEXT + 1)
 	label.Active = false
 	label.Interactable = false
 	label.Text = TextCase.upper(text)
@@ -138,7 +142,7 @@ function HudButtons.wide(text: string, icon: string, onClick: () -> ()): HudButt
 	view.Size = UDim2.fromOffset(WIDE_HEIGHT - 12, WIDE_HEIGHT - 12)
 	view.Active = false
 	view.Interactable = false
-	local label = Style.text(button, "Nombre", 24, nil, 2)
+	local label = Style.text(button, "Nombre", WIDE_TEXT, nil, 2)
 	label.Position = UDim2.fromOffset(WIDE_HEIGHT, 10)
 	label.Size = UDim2.new(1, -WIDE_HEIGHT - 10, 1, -20)
 	label.Active = false

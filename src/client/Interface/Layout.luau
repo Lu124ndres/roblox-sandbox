@@ -13,7 +13,7 @@
 	de Roblox (y el lugar del botón de acción, Interface/ActionSpot), y se
 	achican si no caben (Interface/Columns).
 	Todo el HUD se achica en pantallas bajas (UIScale según el alto).
-	La columna del menú mide lo mismo que sus filas (dos botones de 88 con 10
+	La columna del menú mide lo mismo que sus filas (dos botones con 10
 	entre ellos) y las centra, así Tienda, Mejoras y los atajos quedan alineados.
 ]]
 
@@ -36,7 +36,10 @@ local STAT_WIDTH_TOUCH = 210 -- más angostas en táctil: dejan sitio a la barra
 local Layout = {}
 
 -- Medidas de la columna del menú (antes de escalar), las comparten todas sus filas.
-Layout.BUTTON_SIZE = 88
+-- En PC y consola mide lo mismo que la de estadísticas (250; pedido del usuario el
+-- 2026-10-21); en táctil, más chica.
+Layout.BIG_MENU = not Device.touch()
+Layout.BUTTON_SIZE = if Layout.BIG_MENU then 120 else 88
 Layout.BUTTON_GAP = 10
 Layout.MENU_WIDTH = Layout.BUTTON_SIZE * 2 + Layout.BUTTON_GAP
 -- Filas de la columna de estadísticas: el ícono ocupa los primeros STAT_ICON píxeles,
