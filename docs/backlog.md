@@ -202,6 +202,9 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Música de fondo por zona: isla, cráter y descanso, con fundido (`Music`).
 - [x] Colección de peces: 12 tarjetas, silueta si falta, monedas por descubrir y 100K al
       completarla (`FishDex`, `Milestones`).
+- [x] Índice por secciones de rareza con medallones de Canva, suerte por cada sección completa
+      y pesca (barra, tarjeta y cartel de captura) en piedra volcánica (`FishDex*`,
+      `CollectionLuck`, `ReelBar`, `CatchCard`, `CatchLabels`).
 - [x] Insignias (primer pez, primer raro/legendario/mítico, primera kill, 10 kills,
       colección, tutorial, estanque máximo): aviso en partida ya; **falta crearlas en el
       Creator Hub y poner los IDs en `Assets.Badges`**.

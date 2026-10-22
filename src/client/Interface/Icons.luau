@@ -14,6 +14,8 @@
 	        giftPink, arrow, meat, sunburst (rayos blancos para teñir), glow.
 	Hoja 3: calendar (premio diario), superRod (caña suprema de la ruleta),
 	        volcanoGod y seaKing (caras de los trajes de los pases).
+	Hoja 4: el Índice de peces: dex (libro, "Todos"), un medallón por rareza
+	        (dexComun ... dexMitico), luck (trébol) y lock (candado).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -63,12 +65,26 @@ local CELLS: { [string]: Cell } = {
 	superRod = { sheet = 3, index = 1, fallback = "crystal" },
 	volcanoGod = { sheet = 3, index = 2, fallback = "skull" },
 	seaKing = { sheet = 3, index = 3, fallback = "skull" },
+	dex = { sheet = 4, index = 0, fallback = "fish:PezPayaso" },
+	dexComun = { sheet = 4, index = 1, fallback = "fish:Sardina" },
+	dexPocoComun = { sheet = 4, index = 2, fallback = "fish:Sardina" },
+	dexRaro = { sheet = 4, index = 3, fallback = "fish:Sardina" },
+	dexEpico = { sheet = 4, index = 4, fallback = "fish:Sardina" },
+	dexLegendario = { sheet = 4, index = 5, fallback = "fish:Sardina" },
+	dexMitico = { sheet = 4, index = 6, fallback = "fish:Sardina" },
+	luck = { sheet = 4, index = 7, fallback = "crystal" },
+	lock = { sheet = 4, index = 8, fallback = "chest" },
 }
 
 local Icons = {}
 
 local function sheetId(number: number): string?
-	local id = ({ Assets.UI.IconSheet, Assets.UI.IconSheet2, Assets.UI.IconSheet3 })[number]
+	local id = ({
+		Assets.UI.IconSheet,
+		Assets.UI.IconSheet2,
+		Assets.UI.IconSheet3,
+		Assets.UI.IconSheet4,
+	})[number]
 	return if id and id ~= Assets.MISSING then id else nil
 end
 

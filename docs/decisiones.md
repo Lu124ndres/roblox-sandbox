@@ -1078,3 +1078,11 @@ quedan sobre la arena y se veían como franjas de agua flotando. En vez de regen
 (`Ambient/FoamShore`, desde `SeaLife`) borra al cargar las piezas que tocan la isla con un rayo
 hacia abajo en las esquinas y donde llega la ola. Si algún día se hace una espuma que siga la
 orilla de bloques, este filtro la deja pasar mientras quede sobre el agua.
+
+## 2026-10-21 — La suerte del Índice se calcula de los atributos, no se guarda
+
+Completar una sección del Índice da suerte para siempre (`shared/CollectionLuck`). No hay un
+campo nuevo en el guardado: la suerte sale de los atributos `Pez_<id>` que el servidor publica
+desde `save.species`, así que no hace falta migrar partidas (los que ya tenían una sección
+completa la reciben al entrar) y servidor y cliente calculan lo mismo. El cartel "sección
+completa" solo sale al descubrir la especie que la cierra (en `Milestones`), no al entrar.

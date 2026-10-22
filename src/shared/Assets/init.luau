@@ -75,6 +75,10 @@ local Assets: Assets = {
 		-- Hoja 3 (v4/iconos_v4_hoja3.png): calendario del diario, caña suprema, Dios del Volcán,
 		-- Rey del Mar.
 		IconSheet3 = "rbxassetid://101327392927525",
+		-- Hoja 4 (v4/iconos_v4_indice.png), del Índice de peces, por filas: libro (Todos),
+		-- medallones Común, Poco común, Raro / Épico, Legendario, Mítico, trébol (suerte) /
+		-- candado.
+		IconSheet4 = "rbxassetid://119150930462543",
 		-- Equipo de la tienda (v4, Canva): un ícono por nivel en hojas de 5x4 celdas de 200 px;
 		-- la hoja 1 tiene los niveles 1-20 y la 2 los 21-40 (Interface/GearIcons).
 		-- Fuentes en assets/ui/iconos/v4/equipo/ (tools/ui/armar_hojas_equipo.py).

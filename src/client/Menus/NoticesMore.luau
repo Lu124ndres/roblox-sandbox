@@ -3,7 +3,8 @@
 	NoticesMore
 
 	Más carteles del remote Notice (Notices le pasa los que no conoce): hito
-	de la colección (cada 6 especies), el monstruo que se cansó de esperar y
+	de la colección (cada 6 especies), una sección del Índice completa (con
+	su suerte), el monstruo que se cansó de esperar y
 	se fue (con la kill igual para quien le dio algo) y el premio de la
 	ruleta (después de que la ventana termina de girar, con el ícono de la
 	casilla), los giros guardados que gana por jugar o con el diario y otro
@@ -13,6 +14,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Collection = require(ReplicatedStorage.Shared.Collection)
+local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local SPIN = require(ReplicatedStorage.Shared.Config.Spin)
 local TextCase = require(ReplicatedStorage.Shared.TextCase)
@@ -36,6 +38,16 @@ function NoticesMore.handle(toasts: Toasts.Toasts, kind: unknown, a: unknown, b:
 			if nextStep
 				then `¡{a} ESPECIES! PRÓXIMO PREMIO: {nextStep}`
 				else `¡{a} ESPECIES EN TU COLECCIÓN!`
+		)
+		return true
+	elseif kind == "sectionLuck" and type(a) == "string" and type(b) == "number" then
+		Sounds.play("LegendaryCatch")
+		local rarity = FishCatalog.rarityById(a)
+		toasts.banner(
+			`+{math.round(b * 100)}% de suerte para siempre`,
+			UIConfig.RarityColors[a] or COLORS.Success,
+			"luck",
+			`¡SECCIÓN {TextCase.upper(if rarity then rarity.displayName else a)} COMPLETA!`
 		)
 		return true
 	elseif kind == "giantLeft" and type(a) == "string" then

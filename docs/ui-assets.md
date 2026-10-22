@@ -141,6 +141,14 @@ con fondo `MAHYrC4E5bU`), 2 Dios del Volcán, 3 Rey del Mar. El calendario y la 
 con la moneda maestra como guía; están en 200 px (`v4/crudo2/`) porque el conector no da más:
 para mejorarlos, bajar la versión de 1024 desde Canva, volver a armar la hoja y subirla.
 
+**Hoja 4, Índice de peces** (2026-10-21): `v4/iconos_v4_indice.png`, `Assets.UI.IconSheet4 =
+119150930462543`. Una sola generación de 3x3 en Canva (media `MAHYsz8cTOc`, con la moneda maestra
+y la caña suprema como guía de estilo), exportada a 1080 px desde `DAHYr01q5ww`
+(`v4/indice/crudo/hoja_indice.png`) y cortada con `tools/ui/armar_hoja_indice.py`. Celdas: 0 libro
+(`dex`, sección Todos), 1-6 medallones de Común, Poco común, Raro, Épico, Legendario y Mítico
+(`dexComun` ... `dexMitico`), 7 trébol (`luck`, suerte de las secciones), 8 candado (`lock`, peces
+sin descubrir).
+
 **Caras de los trajes de pase** (2026-10-20; desde el 2026-10-21 en la hoja 3): `v4/volcanoGod.png` (Dios del Volcán) y `v4/seaKing.png` (Rey del Mar), en celda de
 256 como los demás. Se generaron en Canva con la moneda maestra y el minotauro v4 como guía de
 estilo y una captura de cada traje en Studio como guía de diseño; fondo quitado en Canva.

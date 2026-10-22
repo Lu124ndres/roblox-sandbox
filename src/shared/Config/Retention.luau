@@ -46,6 +46,16 @@ local Retention: Types.RetentionConfig = {
 	-- Cada 6 especies nuevas: lo mayor entre 1,500 x hito (1.5K, 3K, 4.5K...) y
 	-- 0.4 de la siguiente caña (shared/Collection). Al llegar a 36 paga collectionBonus.
 	collectionMilestone = { every = 6, coins = 1500, share = 0.4 },
+	-- Suerte para siempre por completar cada sección (rareza) de la colección
+	-- (shared/CollectionLuck). Todas juntas: +145 %.
+	collectionLuck = {
+		Comun = 0.05,
+		PocoComun = 0.1,
+		Raro = 0.15,
+		Epico = 0.25,
+		Legendario = 0.4,
+		Mitico = 0.5,
+	},
 	-- Monedas fijas al principio; cuando el juego avanza, una fracción del precio
 	-- de la siguiente caña (shared/RewardScale): siempre valen la pena.
 	daily = { 100, 200, 350, 500, 800, 1200, 2500 },

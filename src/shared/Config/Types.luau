@@ -114,6 +114,7 @@ export type RetentionConfig = {
 	collectionBonus: number, -- monedas al completar la colección
 	-- Premio cada `every` especies: lo mayor entre coins x hito y share x la siguiente caña
 	collectionMilestone: { every: number, coins: number, share: number },
+	collectionLuck: { [string]: number }, -- por rareza: suerte al completar esa sección
 	daily: { number }, -- monedas de cada día de la racha (1..7)
 	dailyShare: { number }, -- o esta fracción de la siguiente caña, lo que sea mayor
 	dailySpins: { number }, -- giros de ruleta guardados que da cada día (1..7)

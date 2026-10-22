@@ -12,6 +12,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Collection = require(ReplicatedStorage.Shared.Collection)
+local CollectionLuck = require(ReplicatedStorage.Shared.CollectionLuck)
 local Config = require(ReplicatedStorage.Shared.Config)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
@@ -43,6 +44,10 @@ function Milestones.caught(player: Player, fishId: string, added: number, firstT
 		math.floor((RETENTION.discoveryCoins[rarity.id] or 0) * Perks.coinMultiplier(player))
 	PlayerData.addCoins(player, coins, "coleccion")
 	Remotes.Notice:FireClient(player, "newFish", fishId, coins)
+	-- Completó la sección de esa rareza: la suerte la suma Perks.luckBonus desde ya.
+	if CollectionLuck.complete(player, rarity.id) and CollectionLuck.value(rarity.id) > 0 then
+		Remotes.Notice:FireClient(player, "sectionLuck", rarity.id, CollectionLuck.value(rarity.id))
+	end
 	local save = PlayerData.read(player)
 	if not save then
 		return

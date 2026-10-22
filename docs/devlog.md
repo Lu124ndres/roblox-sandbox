@@ -3507,3 +3507,34 @@ rayo brillante, nube de tormenta y correas; 2,446 triángulos, 2.4 de ancho).
 en la espalda con el rayo hacia atrás. El pivote importado no tiene la orientación de Blender:
 se alinean con sus propias piezas (el hilo marca la punta, la nube marca arriba). Falta
 conectarlas al juego (RodRig / FishBasket) y hacer las otras 78.
+
+## 2026-10-21 (15) — Pesca en piedra volcánica e Índice por secciones con suerte
+
+**Qué se hizo (pedido del usuario: "la barrita sigue sin temática y al atrapar pez también";
+íconos del índice en Canva con la técnica 3x3; navegar mejor el índice; más suerte por cada
+sección completa; el ícono del pez de Canva en la etiqueta de la captura):**
+- **Barra de recoger** (`ReelBar`): placa de piedra con gemas, la rareza en una placa de su
+  color, "¡Toca rápido!" dorado (rojo si se escapa) y la barra hundida en la piedra
+  (`HungerLook.hollow`) con filo dorado que late en rojo.
+- **Tarjeta de captura** (`CatchCard`): piedra con gemas, el pez girando en un hueco tallado,
+  placa de rareza, nombre dorado y una fila con el ícono del pez de Canva + "x3" y la carne +
+  "+9 comida". **Cartel sobre la cabeza** (`CatchLabels`): placa de piedra con la rareza, el
+  nombre dorado y el ícono del pez con "xN".
+- **Íconos del Índice**: una hoja 3x3 de Canva (media `MAHYsz8cTOc`, moneda maestra y caña
+  suprema como guía de estilo) exportada a 1080 px desde `DAHYr01q5ww`;
+  `tools/ui/armar_hoja_indice.py` la corta y arma la hoja 4 de `Icons` (libro, 6 medallones de
+  rareza, trébol, candado). El candado reemplaza al emoji 🔒 de las tarjetas sin descubrir.
+- **Índice** (`FishDex`, `FishDexTabs`, `FishDexHeader` nuevo): columna de secciones a la
+  izquierda (medallón, nombre del color de la rareza, "2/7" y trébol con la suerte; en verde si
+  está completa) y a la derecha la cabecera de la sección (medallón grande, barra de
+  descubiertos y el premio: monedas del siguiente hito en Todos, o la suerte al completar) y la
+  cuadrícula centrada.
+- **Suerte por sección** (`shared/CollectionLuck`, `Config.Retention.collectionLuck`): Común
+  +5 %, Poco común +10 %, Raro +15 %, Épico +25 %, Legendario +40 %, Mítico +50 % (todas:
+  +145 %). Se calcula de los atributos `Pez_<id>` (solo los pone el servidor) y se suma en
+  `Perks.luckBonus`; `Milestones` avisa con el cartel "¡SECCIÓN RARO COMPLETA!".
+
+**Probado en Studio (Play):** Índice con Común y Poco común completas (`luckBonus` = 0.15),
+secciones con su avance, candados en las siluetas; barra de recoger con un pique épico; tarjeta
+de captura con el ícono del pez y la comida; el cartel de la cabeza se crea con placa, ícono y
+"x2" (las capturas de Studio no muestran billboards AlwaysOnTop). Sin errores en el Output.

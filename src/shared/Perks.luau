@@ -6,6 +6,7 @@
 		                                                   entrenamiento), x2^nivel, estanques
 		MembershipType (Premium) / Renacimientos           x1.1 / x1.25^n poder y monedas
 		GrupoReclamado                                     +10 % de suerte (letrero del grupo)
+		Pez_<id>                                           suerte por sección completa (CollectionLuck)
 		ReplicatedStorage.Impulsos                         entrenamiento del servidor (x2^nivel)
 		racha del diario / x2 monedas de la ruleta         RetentionBonus
 ]]
@@ -13,6 +14,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
+local CollectionLuck = require(script.Parent.CollectionLuck)
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(script.Parent.RebirthMath)
@@ -160,7 +162,9 @@ function Perks.groupLuck(player: Player): number
 end
 
 function Perks.luckBonus(player: Player): number
-	local bonus = ServerEvents.value("luck", 0) + Perks.groupLuck(player)
+	local bonus = ServerEvents.value("luck", 0)
+		+ Perks.groupLuck(player)
+		+ CollectionLuck.bonus(player)
 	for key, pass in MONETIZATION.passes do
 		if pass.luck and Perks.hasPass(player, key) then
 			bonus += pass.luck

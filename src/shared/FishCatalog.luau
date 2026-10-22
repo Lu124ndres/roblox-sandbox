@@ -36,6 +36,12 @@ function FishCatalog.rarity(fishId: string): (Config.RarityDef, number)
 	return ECONOMY.rarities[index], index
 end
 
+-- Rareza por su id (nil si no existe).
+function FishCatalog.rarityById(rarityId: string): Config.RarityDef?
+	local index = rarityIndex[rarityId]
+	return if index then ECONOMY.rarities[index] else nil
+end
+
 -- Probabilidad (0..1) de que salga este pez en una tirada.
 function FishCatalog.chance(fishId: string): number
 	local fish = byId[fishId]

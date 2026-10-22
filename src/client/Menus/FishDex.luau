@@ -2,12 +2,14 @@
 --[[
 	FishDex
 
-	Colección de peces: todas las especies (36) en una cuadrícula ordenada por
-	rareza, con pestañas por categoría (FishDexTabs); en táctil, ancha. Las
+	Índice de peces: a la izquierda una columna de secciones (Todos y una por
+	rareza, FishDexTabs) con su medallón, su avance y la suerte que da
+	completarla; a la derecha la cabecera de la sección elegida (FishDexHeader:
+	avance y premio o suerte) y la cuadrícula de sus especies, por rareza. Las
 	descubiertas giran en 3D con su rareza y cuántas se han pescado; las que
-	faltan son una silueta con "???". Arriba, el avance (7/36) y el siguiente
-	premio (shared/Collection). El botón Peces del HUD se marca cuando hay un
-	pez nuevo sin mirar. Los datos vienen de los atributos Pez_<id>.
+	faltan son una silueta con candado y "???". El botón Índice del HUD se
+	marca cuando hay un pez nuevo sin mirar. Los datos vienen de los
+	atributos Pez_<id>.
 
 	Los peces solo giran con la ventana abierta (un único RenderStepped), y
 	una captura actualiza solo la tarjeta de ese pez (o la deja pendiente
@@ -18,15 +20,10 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local Collection = require(ReplicatedStorage.Shared.Collection)
 local Config = require(ReplicatedStorage.Shared.Config)
-local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
-local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
-local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
-local Style = require(script.Parent.Parent.Interface.Style)
 local FishDexCard = require(script.Parent.FishDexCard)
+local FishDexHeader = require(script.Parent.FishDexHeader)
 local FishDexTabs = require(script.Parent.FishDexTabs)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
@@ -75,20 +72,19 @@ end
 
 function FishDex.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local size = WindowLayout.size(Vector2.new(660, 500), Vector2.new(1040, 440))
-	local window = Window.create(screen, "Coleccion", "Colección de peces", size)
+	local size = WindowLayout.size(Vector2.new(780, 520), Vector2.new(1040, 440))
+	local window = Window.create(screen, "Coleccion", "Índice de peces", size)
 	local hud = HudButtons.wide("Índice", "fish", window.toggle)
-	-- Arriba: barra de especies descubiertas y el premio por completarla.
-	local bar = CardParts.bar(window.content, Style.PALETTE.Cards.Green, 22)
-	bar.track.Position = UDim2.fromOffset(4, 6)
-	bar.track.Size = UDim2.new(0.62, 0, 0, 36)
-	local prize, prizeText = CardParts.iconText(window.content, "chest", 26, UIConfig.Colors.Coins)
-	prize.AnchorPoint = Vector2.new(1, 0)
-	prize.Position = UDim2.new(1, -4, 0, 2)
-	prize.Size = UDim2.new(0.35, 0, 0, 44)
+	local side = if WindowLayout.wide() then 200 else 196
 	local filter = FishDexTabs.ALL
 	local grid = Instance.new("ScrollingFrame")
 	local cards: { [string]: Card } = {}
+	local found: { [string]: number } = {}
+	local totals: { [string]: number } = { [FishDexTabs.ALL] = #FISH }
+	for _, fish in FISH do
+		totals[fish.rarity] = (totals[fish.rarity] or 0) + 1
+	end
+	local header = FishDexHeader.mount(window.content, side + 6)
 	local function applyFilter()
 		for _, fish in FISH do
 			local card = cards[fish.id]
@@ -96,17 +92,18 @@ function FishDex.start(screen: ScreenGui)
 				card.box.Visible = filter == FishDexTabs.ALL or fish.rarity == filter
 			end
 		end
+		header.set(filter, found[filter] or 0, totals[filter] or 0)
 	end
-	local tabs = FishDexTabs.mount(window.content, 50, function(id: string)
+	local tabs = FishDexTabs.mount(window.content, side, function(id: string)
 		filter = id
 		applyFilter()
 		grid.CanvasPosition = Vector2.zero
 	end)
-	local gridTop = 52 + tabs.height
+	local gridTop = header.height + 8
 	grid.BackgroundTransparency = 1
 	grid.BorderSizePixel = 0
-	grid.Position = UDim2.fromOffset(0, gridTop)
-	grid.Size = UDim2.new(1, 0, 1, -gridTop)
+	grid.Position = UDim2.fromOffset(side + 6, gridTop)
+	grid.Size = UDim2.new(1, -side - 6, 1, -gridTop)
 	grid.ScrollBarThickness = 6
 	grid.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	grid.CanvasSize = UDim2.new()
@@ -118,6 +115,7 @@ function FishDex.start(screen: ScreenGui)
 	pad.PaddingTop, pad.PaddingLeft = UDim.new(0, 4), UDim.new(0, 4)
 	pad.Parent = grid
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	layout.Parent = grid
 
 	local pending: { [string]: boolean } = {} -- tarjetas por (re)hacer al abrir
@@ -125,14 +123,12 @@ function FishDex.start(screen: ScreenGui)
 		pending[fish.id] = true
 	end
 	local function render()
-		local found = 0
-		local byRarity: { [string]: number } = {}
-		local totals: { [string]: number } = { [FishDexTabs.ALL] = #FISH }
+		table.clear(found)
 		for _, fish in FISH do
 			local amount = caught(player, fish.id)
-			found += if amount > 0 then 1 else 0
-			totals[fish.rarity] = (totals[fish.rarity] or 0) + 1
-			byRarity[fish.rarity] = (byRarity[fish.rarity] or 0) + (if amount > 0 then 1 else 0)
+			local known = if amount > 0 then 1 else 0
+			found[FishDexTabs.ALL] = (found[FishDexTabs.ALL] or 0) + known
+			found[fish.rarity] = (found[fish.rarity] or 0) + known
 			local existing = cards[fish.id]
 			if pending[fish.id] and existing and existing.known and amount > 0 then
 				existing.info.Text = FishDexCard.infoText(fish.id, amount) -- solo cambió la cantidad
@@ -144,21 +140,8 @@ function FishDex.start(screen: ScreenGui)
 			end
 			pending[fish.id] = nil
 		end
-		byRarity[FishDexTabs.ALL] = found
-		tabs.counts(byRarity, totals)
+		tabs.counts(found, totals)
 		applyFilter()
-		local nextStep = Collection.nextMilestone(found)
-		bar.set(
-			found / #FISH,
-			if nextStep
-				then `Descubiertos {found} / {#FISH} · premio con {nextStep}`
-				else `¡Colección completa! {found} / {#FISH}`
-		)
-		prizeText.Text = if nextStep
-			then `+{NumberFormat.short(
-				Collection.reward(player, nextStep) * Perks.coinMultiplier(player)
-			)} monedas`
-			else "¡Cobrado!"
 	end
 	local spin: RBXScriptConnection? = nil
 	window.onOpen(function()

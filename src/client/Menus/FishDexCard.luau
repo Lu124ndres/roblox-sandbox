@@ -4,7 +4,7 @@
 
 	Una casilla de la colección (FishDex): piedra teñida del color de su
 	rareza (un hueco oscuro en la piedra si falta descubrirlo), el
-	pez en 3D dentro de un ViewportFrame (o su silueta con un candado), el
+	pez en 3D dentro de un ViewportFrame (o su silueta con el candado de Canva), el
 	nombre y la rareza con la cantidad pescada. El giro lo hace FishDex,
 	solo con la ventana abierta, con el model que devuelve build.
 ]]
@@ -14,6 +14,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local FishModel = require(script.Parent.Parent.Effects.FishModel)
+local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 
@@ -91,11 +92,13 @@ function FishDexCard.build(parent: Instance, fishId: string, amount: number, ord
 	camera.Parent = view
 	view.CurrentCamera = camera
 	if not known then
-		local lock = Style.text(box, "Candado", 34, nil, 0)
-		lock.Text = "🔒"
+		local lock = Icons.view(box, "lock")
+		lock.Name = "Candado"
 		lock.AnchorPoint = Vector2.new(0.5, 0.5)
 		lock.Position = UDim2.fromScale(0.5, 0.33)
-		lock.Size = UDim2.fromScale(0.4, 0.3)
+		lock.Size = UDim2.fromScale(0.36, 0.36)
+		local square = Instance.new("UIAspectRatioConstraint")
+		square.Parent = lock
 		lock.ZIndex = 3
 	end
 
