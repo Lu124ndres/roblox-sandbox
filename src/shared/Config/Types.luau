@@ -99,7 +99,8 @@ export type ShopConfig = {
 
 export type TutorialStep = {
 	id: string,
-	text: string, -- lo que ve el jugador en el panel de la misión
+	intro: string, -- el texto grande que entra una vez al empezar el paso
+	text: string, -- la línea de objetivo, chica, mientras dura el paso
 	goal: number, -- cuántas veces hay que hacerlo
 	coins: number, -- premio al completarla
 }
@@ -110,6 +111,10 @@ export type PlaytimeGift =
 export type RetentionConfig = {
 	tutorial: { TutorialStep },
 	tutorialBonus: number, -- monedas extra al terminar el tutorial
+	tutorialWalkSpeed: number, -- velocidad mínima al caminar en los pasos de ir lejos
+	tutorialFastSteps: { string }, -- los pasos con esa velocidad (ids)
+	tutorialIntroSeconds: number, -- lo que se ve el texto grande de cada paso
+	tutorialShoreInset: number, -- studs desde la orilla hacia tierra donde aparece el novato
 	discoveryCoins: { [string]: number }, -- por rareza: primera vez que se pesca una especie
 	collectionBonus: number, -- monedas al completar la colección
 	-- Premio cada `every` especies: lo mayor entre coins x hito y share x la siguiente caña

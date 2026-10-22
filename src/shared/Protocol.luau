@@ -23,7 +23,7 @@ export type NoticeKind =
 	| "giantLeft" -- (displayName, gotKill) el monstruo se cansó de esperar y se fue
 	| "spin" -- (prizeIndex, text) giró la ruleta (Config/Spin)
 	| "spinsGained" -- (spins, reason: "play" | "daily") ganó giros guardados de la ruleta
-	| "tutorial" -- (stepIndex, coins) completó un paso; stepIndex > total = terminó
+	| "tutorial" -- (stepIndex, coins) completó un paso; stepIndex >= total = terminó
 	| "badge" -- (badgeKey) logro nuevo
 	| "daily" -- (day, coins) cobró la recompensa diaria
 	| "playtime" -- (index, text) cobró un regalo por tiempo jugado

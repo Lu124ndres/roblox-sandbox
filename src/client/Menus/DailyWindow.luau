@@ -173,10 +173,16 @@ function DailyWindow.start(screen: ScreenGui)
 	end
 	render()
 
-	-- Al entrar, si hoy toca, se abre sola (cuando ya cargaron los datos).
+	-- Al entrar, si hoy toca, se abre sola (cuando ya cargaron los datos y
+	-- terminó el tutorial: al novato no se le tapa la guía del primer minuto).
+	local function ready(): boolean
+		local step = player:GetAttribute(ATTR.Tutorial)
+		return player:GetAttribute(ATTR.DataLoaded) == true
+			and (if type(step) == "number" then step else 0) >= #Config.Retention.tutorial
+	end
 	task.spawn(function()
-		while player:GetAttribute(ATTR.DataLoaded) ~= true do
-			player:GetAttributeChangedSignal(ATTR.DataLoaded):Wait()
+		while not ready() do
+			task.wait(0.5)
 		end
 		task.wait(3)
 		if available() then

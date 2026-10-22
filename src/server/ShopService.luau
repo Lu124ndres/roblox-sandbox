@@ -7,12 +7,15 @@
 	de Config.Shop, si alcanzan las monedas. Responde con ShopResult.
 
 	También abre MEJORAS con E en el mostrador de la cabaña (OpenShop) y
-	aplica la velocidad de las botas a cada personaje que aparece.
+	aplica la velocidad de las botas a cada personaje que aparece. En los
+	pasos del tutorial de ir lejos (al volcán, al estanque) camina al menos a
+	Config.Retention.tutorialWalkSpeed, así la primera comida llega pronto.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local PlayerData = require(script.Parent.PlayerData)
@@ -29,12 +32,22 @@ local ShopService = {}
 
 local lastRequestAt: { [Player]: number } = {}
 
+-- ¿Está en un paso del tutorial de ir lejos?
+local function inFastStep(player: Player): boolean
+	local save = PlayerData.read(player)
+	local step = save and Config.Retention.tutorial[save.tutorial + 1]
+	return step ~= nil and table.find(Config.Retention.tutorialFastSteps, step.id) ~= nil
+end
+
 -- Velocidad de las botas compradas (el puente la sube aparte, en el cliente).
 local function applyWalkSpeed(player: Player)
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	if humanoid then
-		humanoid.WalkSpeed = Upgrades.current(player, "Boots").value
+		local boots = Upgrades.current(player, "Boots").value
+		humanoid.WalkSpeed = if inFastStep(player)
+			then math.max(boots, Config.Retention.tutorialWalkSpeed)
+			else boots
 	end
 end
 
@@ -80,8 +93,10 @@ local function track(player: Player)
 		character:WaitForChild("Humanoid", 10)
 		applyWalkSpeed(player)
 	end)
-	-- Al cargar y cuando cambian las botas (también si se compraron con Robux).
-	for _, attribute in { Protocol.PlayerAttributes.DataLoaded, Protocol.PlayerAttributes.Boots } do
+	-- Al cargar, cuando cambian las botas (también si se compraron con Robux) y al
+	-- pasar de paso del tutorial (entra o sale de los pasos de ir lejos).
+	local ATTR = Protocol.PlayerAttributes
+	for _, attribute in { ATTR.DataLoaded, ATTR.Boots, ATTR.Tutorial } do
 		player:GetAttributeChangedSignal(attribute):Connect(function()
 			applyWalkSpeed(player)
 		end)

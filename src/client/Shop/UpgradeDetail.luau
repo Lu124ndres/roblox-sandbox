@@ -36,7 +36,10 @@ export type DetailSpec = {
 	robux: number?, -- precio en Robux ya calculado (nil = no se vende)
 }
 
-export type Detail = { update: (spec: DetailSpec) -> () }
+export type Detail = {
+	update: (spec: DetailSpec) -> (),
+	buyButton: GuiObject, -- comprar con monedas (lo señala el tutorial)
+}
 
 local UpgradeDetail = {}
 
@@ -194,7 +197,7 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 		end
 	end
 
-	return { update = update }
+	return { update = update, buyButton = coinsButton.button }
 end
 
 return UpgradeDetail

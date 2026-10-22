@@ -7,8 +7,12 @@
 	recompensa diaria, compras con Robux (las propias y las de otros para todos)
 	y los peces legendarios o mejores que saca alguien del servidor (más en
 	NoticesMore). Solo muestra; los premios ya los dio el servidor.
+	Durante el tutorial no se tapa la guía: los peces nuevos y los logros se
+	guardan y salen al terminarlo (uno cada HELD_GAP), y cada paso cumplido
+	lo muestra la línea de objetivo (TutorialBanner), no un cartel.
 ]]
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
@@ -24,6 +28,8 @@ local Toasts = require(script.Parent.Parent.Toasts)
 
 local COLORS = UIConfig.Colors
 local RETENTION = Config.Retention
+local ATTR = Protocol.PlayerAttributes
+local HELD_GAP = 1.6 -- segundos entre los carteles guardados durante el tutorial
 
 local Notices = {}
 
@@ -39,12 +45,42 @@ end
 function Notices.start(toasts: Toasts.Toasts)
 	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
 	local notice = remotes:WaitForChild(Protocol.Remotes.Notice) :: RemoteEvent
+	local player = Players.LocalPlayer
+	local held: { () -> () } = {}
+
+	local function inTutorial(): boolean
+		local step = player:GetAttribute(ATTR.Tutorial)
+		return player:GetAttribute(ATTR.DataLoaded) == true
+			and (if type(step) == "number" then step else 0) < #RETENTION.tutorial
+	end
+
+	-- Muestra ahora o, en pleno tutorial, al terminarlo.
+	local function whenFree(show: () -> ())
+		if inTutorial() then
+			table.insert(held, show)
+		else
+			show()
+		end
+	end
+
+	player:GetAttributeChangedSignal(ATTR.Tutorial):Connect(function()
+		if inTutorial() or #held == 0 then
+			return
+		end
+		local queue = table.clone(held)
+		table.clear(held)
+		for k, show in queue do
+			task.delay(HELD_GAP * k, show)
+		end
+	end)
+
 	notice.OnClientEvent:Connect(function(kind: unknown, a: unknown, b: unknown)
 		if kind == "newFish" and type(a) == "string" then
 			local fish = FishCatalog.get(a)
 			local rarity = FishCatalog.rarity(a)
 			if fish then
-				task.delay(1.2, function() -- después del salto del pez
+				local pause = if inTutorial() then 0 else 1.2 -- después del salto del pez
+				task.delay(pause, whenFree, function()
 					local caption = "¡NUEVO EN TU COLECCIÓN!"
 					if type(b) == "number" and b > 0 then
 						Sounds.play("Coins")
@@ -68,20 +104,17 @@ function Notices.start(toasts: Toasts.Toasts)
 			)
 		elseif kind == "tutorial" and type(a) == "number" then
 			Sounds.play("RareCatch")
-			local done = a >= #RETENTION.tutorial
-			local coins = (if type(b) == "number" then b else 0)
-				+ (if done then RETENTION.tutorialBonus else 0)
-			toasts.banner(
-				if done
-					then `¡Tutorial completo! +{coins} monedas`
-					else `¡Misión cumplida! +{coins} monedas`,
-				COLORS.Success
-			)
+			if a >= #RETENTION.tutorial then
+				local coins = (if type(b) == "number" then b else 0) + RETENTION.tutorialBonus
+				toasts.banner(`¡Tutorial completo! +{coins} monedas`, COLORS.Success)
+			end
 		elseif kind == "badge" and type(a) == "string" then
 			local badge = RETENTION.badges[a]
 			if badge then
-				Sounds.play("LegendaryCatch")
-				toasts.banner(badge.name, COLORS.Power, "crown", "¡LOGRO DESBLOQUEADO!")
+				whenFree(function()
+					Sounds.play("LegendaryCatch")
+					toasts.banner(badge.name, COLORS.Power, "crown", "¡LOGRO DESBLOQUEADO!")
+				end)
 			end
 		elseif kind == "daily" and type(a) == "number" and type(b) == "number" then
 			Sounds.play("Coins")

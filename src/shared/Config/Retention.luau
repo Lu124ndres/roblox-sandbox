@@ -3,7 +3,10 @@
 	Retención: tutorial, colección de peces, recompensa diaria e insignias.
 
 	Tutorial: 4 misiones en orden; cada una paga `coins` al completarla y al
-	final se paga `tutorialBonus` (alcanza para la segunda caña).
+	final se paga `tutorialBonus`. Antes de la última (comprar) ya pagó 175,
+	más de los 150 de la segunda caña, así nunca se traba. El novato aparece en
+	la playa (`tutorialShoreInset` de la orilla) y en los pasos de ir lejos
+	camina a `tutorialWalkSpeed`: la primera comida al gigante llega en ~45 s.
 
 	Colección: la primera vez que se pesca cada especie paga según su rareza;
 	cada `collectionMilestone.every` especies hay un premio extra y completar
@@ -23,17 +26,34 @@ local Types = require(script.Parent.Types)
 
 local Retention: Types.RetentionConfig = {
 	tutorial = {
-		{ id = "pescar", text = "Pesca 5 peces en la orilla", goal = 5, coins = 25 },
+		{ id = "pescar", intro = "¡PESCA!", text = "Pesca 3 peces", goal = 3, coins = 25 },
 		{
 			id = "alimentar",
-			text = "Cruza el puente y alimenta a la Orca",
+			intro = "¡DALE DE COMER AL GIGANTE!",
+			text = "Lleva los peces al volcán",
 			goal = 1,
 			coins = 50,
 		},
-		{ id = "entrenar", text = "Entrena en un estanque del jardín", goal = 1, coins = 50 },
-		{ id = "comprar", text = "Compra una mejora en la tienda", goal = 1, coins = 100 },
+		{
+			id = "entrenar",
+			intro = "¡ENTRENA!",
+			text = "Entrena en el estanque",
+			goal = 1,
+			coins = 100,
+		},
+		{
+			id = "comprar",
+			intro = "¡MEJORA TU EQUIPO!",
+			text = "Compra una mejora",
+			goal = 1,
+			coins = 100,
+		},
 	},
 	tutorialBonus = 200,
+	tutorialWalkSpeed = 40,
+	tutorialFastSteps = { "alimentar", "entrenar" },
+	tutorialIntroSeconds = 1.6,
+	tutorialShoreInset = 8,
 	discoveryCoins = {
 		Comun = 25,
 		PocoComun = 75,

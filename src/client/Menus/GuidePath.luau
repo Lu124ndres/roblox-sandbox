@@ -2,32 +2,34 @@
 --[[
 	GuidePath
 
-	La fila de flechas del tutorial: una línea recta de flechas amarillas
-	flotando a la altura del pecho (GuideArrow) que sale del jugador y llega
-	hasta el destino de la misión (pedido del usuario: «que lleguen hasta
-	donde tienes que ir»), en tramos rectos (al volcán, primero a la entrada
-	del puente y después por el puente hasta la puerta; lo decide
-	TutorialGuide). Una onda suave las recorre hacia adelante; las más lejanas
-	van un poco transparentes para no saturar. Al cambiar de tramo la línea
-	gira suave. Todo solo en este cliente: no hay nada puesto en el mapa.
+	El camino del tutorial, como en los simuladores (referencias/Ejemplo.mp4):
+	flechas planas pegadas al suelo (GuideArrow) que salen del jugador y
+	siguen los puntos de paso del tramo hasta el destino (al volcán: entrada
+	del puente, arco y puerta del cráter; lo decide TutorialLegs), así nunca
+	cruzan el agua ni apuntan para atrás. Cada flecha busca el suelo con un
+	rayo (arena, puente, túnel o agua). Avanzan despacio hacia el destino,
+	como una cinta; las más lejanas van un poco transparentes para no saturar.
+	Todo solo en este cliente: no hay nada puesto en el mapa.
 ]]
+
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
 
 local GuideArrow = require(script.Parent.GuideArrow)
 
-local COUNT = 32 -- flechas como mucho (a 6 studs, ~190 studs: la isla entera)
+local COUNT = 36 -- flechas como mucho (a 6 studs, ~215 studs por delante)
 local SPACING = 6 -- studs entre flecha y flecha
 local FIRST = 5 -- la primera, así de adelante del jugador
-local LAST = 6 -- la última, así de antes del destino
-local HEIGHT = 0.3 -- respecto del centro del cuerpo: a la altura del pecho
-local SCALE = 0.9
-local WAVE = 0.35 -- alto de la onda que las recorre
-local WAVE_SPEED = 5
-local TURN = 5 -- qué tan rápido gira la fila hacia la dirección nueva (por segundo)
-local NEAR = 8 -- las primeras flechas, opacas; de ahí se van aclarando
-local FAR_SEE_THROUGH = 0.45 -- transparencia de las más lejanas
+local LAST = 5 -- la última, así de antes del destino
+local LIFT = 0.25 -- sobre el suelo
+local RAY_UP, RAY_DOWN = 8, 30 -- de dónde a dónde busca el suelo cada flecha
+local SCALE = 1.5
+local FLOW = 4 -- studs por segundo que avanzan las flechas por el camino
+local NEAR = 10 -- las primeras flechas, opacas; de ahí se van aclarando
+local FAR_SEE_THROUGH = 0.5 -- transparencia de las más lejanas
 
 export type Path = {
-	update: (position: Vector3, target: Vector3, t: number, dt: number) -> (),
+	update: (position: Vector3, points: { Vector3 }, t: number) -> (),
 	hide: () -> (),
 }
 
@@ -38,7 +40,9 @@ function GuidePath.new(): Path
 	for k = 1, COUNT do
 		arrows[k] = GuideArrow.shape(GuideArrow.group(), `Camino{k}`, SCALE)
 	end
-	local heading: Vector3? = nil
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.IgnoreWater = false
 
 	local function hideArrow(arrow: GuideArrow.Shape)
 		for _, item in arrow do
@@ -50,36 +54,60 @@ function GuidePath.new(): Path
 		for _, arrow in arrows do
 			hideArrow(arrow)
 		end
-		heading = nil
 	end
 
-	local function update(position: Vector3, target: Vector3, t: number, dt: number)
-		local toTarget = Vector3.new(target.X - position.X, 0, target.Z - position.Z)
-		local distance = toTarget.Magnitude
-		if distance < 1e-3 then
-			hide()
-			return
+	-- El suelo bajo `spot` (o el mismo punto si no hay nada cerca).
+	local function ground(spot: Vector3): Vector3
+		local hit = Workspace:Raycast(
+			spot + Vector3.new(0, RAY_UP, 0),
+			Vector3.new(0, -RAY_DOWN, 0),
+			params
+		)
+		return if hit then hit.Position + Vector3.new(0, LIFT, 0) else spot
+	end
+
+	-- Punto a `along` studs del camino (jugador -> puntos) y la dirección de ese tramo.
+	local function sample(route: { Vector3 }, along: number): (Vector3?, Vector3?)
+		local left = along
+		for k = 1, #route - 1 do
+			local from, to = route[k], route[k + 1]
+			local flat = Vector3.new(to.X - from.X, 0, to.Z - from.Z)
+			local length = flat.Magnitude
+			if length > 1e-3 then
+				if left <= length then
+					local t = left / length
+					return from:Lerp(to, t), flat.Unit
+				end
+				left -= length
+			end
 		end
-		-- La fila gira suave hacia el destino (al pasar de un tramo al otro no salta).
-		local wanted = toTarget.Unit
-		local current = heading or wanted
-		local turned = current:Lerp(wanted, math.clamp(dt * TURN, 0, 1))
-		local forward = if turned.Magnitude > 1e-3 then turned.Unit else wanted
-		heading = forward
-		-- Sube o baja parejo con el terreno entre el jugador y el destino.
-		local climb = (target.Y - position.Y) / distance
+		return nil, nil
+	end
+
+	local function update(position: Vector3, points: { Vector3 }, t: number)
+		local route = { position }
+		for _, point in points do
+			table.insert(route, point)
+		end
+		local total = 0
+		for k = 1, #route - 1 do
+			local a, b = route[k], route[k + 1]
+			total += Vector3.new(b.X - a.X, 0, b.Z - a.Z).Magnitude
+		end
+		local character = Players.LocalPlayer.Character
+		params.FilterDescendantsInstances = if character
+			then { character, GuideArrow.group() }
+			else { GuideArrow.group() }
 		for k, arrow in arrows do
-			local along = FIRST + (k - 1) * SPACING
-			if along > distance - LAST then
+			local along = FIRST + (k - 1) * SPACING + (t * FLOW) % SPACING
+			local spot, forward = sample(route, along)
+			if along > total - LAST or not spot or not forward then
 				hideArrow(arrow)
 				continue
 			end
-			local wave = math.sin(t * WAVE_SPEED - k * 0.9) * WAVE
-			local spot = position
-				+ forward * along
-				+ Vector3.new(0, HEIGHT + wave + climb * along, 0)
+			local floor = ground(spot)
 			local fade = FAR_SEE_THROUGH * math.clamp((k - NEAR) / (COUNT - NEAR), 0, 1)
-			GuideArrow.pose(arrow, CFrame.lookAt(spot, spot + forward), fade)
+			GuideArrow.pose(arrow, CFrame.lookAt(floor, floor + forward), fade)
 		end
 	end
 

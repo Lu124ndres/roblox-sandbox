@@ -2,10 +2,11 @@
 --[[
 	GuideArrow
 
-	Las flechas de la guía del tutorial (como las de los simuladores): planas,
-	amarillas, con contorno negro (un solo Highlight para todas) para que se
-	vean sobre el pasto, la arena, el mar y la piedra del volcán.
-		shape   arma una flecha plana (cuerpo y punta) dentro de un modelo
+	Las flechas de la guía del tutorial (como las de los simuladores,
+	referencias/Ejemplo.mp4): chevrones planos verde neón pegados al suelo,
+	con contorno negro (un solo Highlight para todas) para que se vean sobre
+	el pasto, la arena, el mar y la piedra del volcán.
+		shape   arma un chevrón plano (dos barras en V) dentro de un modelo
 		pose    la pone en un CFrame (apunta hacia su LookVector) con una
 		        transparencia (para que aparezcan y se vayan suave)
 	Las mueve GuidePath por el camino.
@@ -14,12 +15,16 @@
 
 local Workspace = game:GetService("Workspace")
 
-local COLOR = Color3.fromRGB(255, 214, 30)
-local THICK = 0.35 -- plana, como las de los simuladores
+local COLOR = Color3.fromRGB(70, 235, 90)
+local THICK = 0.2 -- plana, pegada al suelo
+local BAR = 0.75 -- ancho de cada barra del chevrón
+local LENGTH = 2.6 -- largo de cada barra
 
 export type Shape = { { part: BasePart, offset: CFrame } }
 
 local GuideArrow = {}
+
+GuideArrow.COLOR = COLOR -- lo comparten el anillo del destino y la flecha del velo
 
 local group: Model? = nil
 
@@ -47,7 +52,7 @@ local function piece(name: string, size: Vector3, parent: Instance): Part
 	part.Name = name
 	part.Size = size
 	part.Color = COLOR
-	part.Material = Enum.Material.SmoothPlastic
+	part.Material = Enum.Material.Neon
 	part.Anchored = true
 	part.CanCollide, part.CanQuery, part.CanTouch = false, false, false
 	part.CastShadow = false
@@ -56,18 +61,18 @@ local function piece(name: string, size: Vector3, parent: Instance): Part
 	return part
 end
 
--- Una flecha de `scale` dentro de `parent`; apunta hacia -Z.
+-- Un chevrón de `scale` dentro de `parent`, con la punta en el origen hacia -Z.
 function GuideArrow.shape(parent: Instance, name: string, scale: number): Shape
-	return {
-		{
-			part = piece(`{name}Cuerpo`, Vector3.new(1.4 * scale, THICK, 2.8 * scale), parent),
-			offset = CFrame.new(0, 0, 1.4 * scale),
-		},
-		{
-			part = piece(`{name}Punta`, Vector3.new(2.5 * scale, THICK, 2.5 * scale), parent),
-			offset = CFrame.new(0, 0, -0.45 * scale) * CFrame.Angles(0, math.rad(45), 0),
-		},
-	}
+	local shape: Shape = {}
+	for side, sign in { Izq = -1, Der = 1 } do
+		local back = Vector3.new(sign, 0, 1).Unit -- de la punta hacia atrás y al costado
+		local center = back * LENGTH * scale / 2
+		table.insert(shape, {
+			part = piece(`{name}{side}`, Vector3.new(BAR * scale, THICK, LENGTH * scale), parent),
+			offset = CFrame.lookAt(center, center + back),
+		})
+	end
+	return shape
 end
 
 function GuideArrow.pose(shape: Shape, frame: CFrame, transparency: number)

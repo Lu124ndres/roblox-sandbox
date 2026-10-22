@@ -36,6 +36,7 @@ export type Shop = {
 	window: Window.Window,
 	refresh: () -> (),
 	setTab: (category: Upgrades.Category) -> (),
+	buyButton: GuiObject, -- comprar con monedas (lo señala el tutorial)
 }
 
 local ShopWindow = {}
@@ -169,7 +170,7 @@ function ShopWindow.mount(
 		setTab(current)
 	end)
 
-	return { window = window, refresh = refresh, setTab = setTab }
+	return { window = window, refresh = refresh, setTab = setTab, buyButton = detail.buyButton }
 end
 
 return ShopWindow
