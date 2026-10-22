@@ -4,7 +4,8 @@
 	atributos que solo pone el servidor (servidor y cliente calculan igual):
 		Pase_<clave> / Nivel<Power|Coins> / Estanque_<i>   pases (VIP: x1.5 monedas y
 		                                                   entrenamiento), x2^nivel, estanques
-		MembershipType (Premium) / Renacimientos           x1.2 / x1.25^n poder y monedas
+		MembershipType (Premium) / Renacimientos           x1.1 / x1.25^n poder y monedas
+		GrupoReclamado                                     +10 % de suerte (letrero del grupo)
 		ReplicatedStorage.Impulsos                         entrenamiento del servidor (x2^nivel)
 		racha del diario / x2 monedas de la ruleta         RetentionBonus
 ]]
@@ -153,8 +154,13 @@ function Perks.instantReel(player: Player): boolean
 	return false
 end
 
+-- La suerte que da haber reclamado el regalo del grupo (0 si no).
+function Perks.groupLuck(player: Player): number
+	return if player:GetAttribute(ATTR.GroupClaimed) == true then SOCIAL.group.luck else 0
+end
+
 function Perks.luckBonus(player: Player): number
-	local bonus = ServerEvents.value("luck", 0)
+	local bonus = ServerEvents.value("luck", 0) + Perks.groupLuck(player)
 	for key, pass in MONETIZATION.passes do
 		if pass.luck and Perks.hasPass(player, key) then
 			bonus += pass.luck

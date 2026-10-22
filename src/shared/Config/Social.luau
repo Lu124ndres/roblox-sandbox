@@ -10,8 +10,9 @@
 	servidor, hasta maxFriends; multiplica el poder y las monedas.
 	Impulso personal: x`personalBoostMultiplier` de poder mientras dure (lo
 	dan los códigos y el regalo del grupo; se suma el tiempo).
-	Grupo: quien está en el grupo y juega `minutes` seguidos puede reclamar
-	una vez `coins` y `boostMinutes` de impulso. Con groupId = 0 no se puede.
+	Grupo: quien está en el grupo y juega `minutes` seguidos puede reclamar,
+	en el letrero de la plaza, +`luck` de suerte para siempre (va con los
+	impulsos de abajo a la izquierda). Con groupId = 0 no se puede.
 	Invitar (referral): un jugador nuevo que entra por la invitación de otro
 	gana newCoins y newBoostMinutes; quien lo invitó, si está en el servidor,
 	inviterCoins e inviterBoostMinutes (server/Social/Referrals).
@@ -24,7 +25,7 @@ export type SocialConfig = {
 	friendBoost: { perFriend: number, maxFriends: number },
 	personalBoostMultiplier: number,
 	premiumMultiplier: number,
-	group: { groupId: number, minutes: number, coins: number, boostMinutes: number },
+	group: { groupId: number, minutes: number, luck: number },
 	referral: {
 		newCoins: number,
 		newBoostMinutes: number,
@@ -65,9 +66,10 @@ local Social: SocialConfig = {
 	friendBoost = { perFriend = 0.1, maxFriends = 5 },
 	personalBoostMultiplier = 2,
 	-- Roblox Premium: multiplica el poder y las monedas (y lleva el ícono de Premium encima).
-	premiumMultiplier = 1.2,
+	premiumMultiplier = 1.1,
 	-- groupId: el número del grupo de Roblox del juego (en su página: roblox.com/groups/<número>).
-	group = { groupId = 0, minutes = 15, coins = 1500, boostMinutes = 15 },
+	-- luck: se suma a la de la caña (0.1 = +10 %).
+	group = { groupId = 0, minutes = 15, luck = 0.1 },
 	-- Invitar: si un jugador NUEVO entra por la invitación de alguien, los dos ganan.
 	referral = {
 		newCoins = 1000,

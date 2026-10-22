@@ -40,7 +40,7 @@ local LAVA: { [string]: boolean } = { Tienda = true }
 local SIDE_ORDER: { [string]: number } = { Tienda = 1, Mejoras = 2, Misiones = 3, Renacer = 4 }
 -- Orden de los botones de arriba (de izquierda a derecha); los demás van al final.
 local TOP_ORDER: { [string]: number } =
-	{ Ruleta = 1, Premio = 2, ["Códigos"] = 3, Grupo = 4, Ajustes = 5, Admin = 6 }
+	{ Ruleta = 1, Premio = 2, ["Códigos"] = 3, Ajustes = 5, Admin = 6 }
 
 export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
 

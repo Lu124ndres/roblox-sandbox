@@ -10,6 +10,8 @@
 		Amigos   +10 % por amigo de Roblox en el servidor (hasta 5); tocarlo abre
 		         la invitación de Roblox (SocialService), y si un amigo nuevo
 		         entra por ella los dos ganan premio (server/Social/Referrals)
+		Grupo    +10 % de suerte si ya reclamó el regalo del letrero de la plaza
+		         (Menus/GroupSign)
 	Siempre abajo a la izquierda. En táctil quedan detrás del joystick y son
 	solo para ver: no reciben toques, así no le quitan ninguno al joystick.
 	Los números los calcula el servidor (atributo AmigosEnServidor, carpeta de
@@ -92,7 +94,7 @@ function BoostBadges.start(screen: ScreenGui)
 	local row = Instance.new("Frame")
 	row.Name = "Impulsos"
 	row.BackgroundTransparency = 1
-	row.Size = UDim2.fromOffset(SIZE * 3 + GAP * 2, SIZE)
+	row.Size = UDim2.fromOffset(SIZE * 4 + GAP * 3, SIZE)
 	local list = Instance.new("UIListLayout")
 	list.FillDirection = Enum.FillDirection.Horizontal
 	list.Padding = UDim.new(0, GAP)
@@ -107,6 +109,7 @@ function BoostBadges.start(screen: ScreenGui)
 	local premium = badge(row, "Premium", 1, glyph)
 	local event = badge(row, "Evento", 2, nil)
 	local friends = badge(row, "Amigos", 3, Icons.view(row, "friends"))
+	local group = badge(row, "Grupo", 4, Icons.view(row, "group"))
 
 	row.AnchorPoint = Vector2.new(0, 1)
 	row.Position = UDim2.new(0, MARGIN, 1, -MARGIN)
@@ -133,6 +136,12 @@ function BoostBadges.start(screen: ScreenGui)
 		:GetAttributeChangedSignal(Protocol.PlayerAttributes.FriendsInServer)
 		:Connect(refreshFriends)
 	refreshFriends()
+
+	local function refreshGroup()
+		show(group, math.round(Perks.groupLuck(player) * 100))
+	end
+	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.GroupClaimed):Connect(refreshGroup)
+	refreshGroup()
 
 	local eventIcon = IDLE_EVENT_ICON
 	task.spawn(function()

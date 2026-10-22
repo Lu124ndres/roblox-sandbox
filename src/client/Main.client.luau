@@ -80,7 +80,7 @@ local Overhead = require(script.Parent.Interface.Overhead)
 local StartZoom = require(script.Parent.Interface.StartZoom)
 local TrajesClient = require(script.Parent.Trajes)
 local CodesWindow = require(script.Parent.Menus.CodesWindow)
-local GroupWindow = require(script.Parent.Menus.GroupWindow)
+local GroupSign = require(script.Parent.Menus.GroupSign)
 local HudFocus = require(script.Parent.Menus.HudFocus)
 
 local player = Players.LocalPlayer
@@ -130,7 +130,7 @@ QuestsWindow.start(screen)
 RebirthWindow.start(screen)
 StarterOffer.start(screen)
 CodesWindow.start(screen)
-GroupWindow.start(screen)
+task.spawn(GroupSign.start) -- el letrero de la plaza espera el terreno
 BoostBadges.start(screen)
 HudFocus.start(screen) -- después del HUD: en táctil lo oculta con una ventana abierta
 BoostTimer.start(screen)

@@ -4,7 +4,8 @@
 
 	Regalo por unirse al grupo del juego (Config.Social.group): quien está en
 	el grupo y lleva `minutes` en esta partida lo reclama una vez (remote
-	ClaimGroup) y recibe monedas e impulso personal. El atributo EntroEn
+	ClaimGroup, desde el letrero de la plaza) y gana +luck de suerte para
+	siempre (atributo GrupoReclamado, Perks.groupLuck). El atributo EntroEn
 	(hora del servidor al entrar) deja que el cliente muestre la cuenta.
 	Con groupId = 0 el regalo está apagado.
 ]]
@@ -18,7 +19,6 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
-local Rewards = require(script.Parent.Rewards)
 
 local GROUP = Config.Social.group
 local ATTR = Protocol.PlayerAttributes
@@ -63,12 +63,12 @@ local function claim(player: Player)
 	elseif os.clock() - (joinedAt[player] or os.clock()) < GROUP.minutes * 60 then
 		return reply("wait")
 	end
+	-- El premio es el atributo mismo (lo publica PlayerData.edit): Perks.groupLuck suma la
+	-- suerte mientras esté reclamado.
 	PlayerData.edit(player, function(data)
 		data.groupClaimed = true
 	end)
-	local reward = { coins = GROUP.coins, boostMinutes = GROUP.boostMinutes }
-	Rewards.give(player, reward, "grupo")
-	reply("ok", Rewards.describe(reward, Config.Social.personalBoostMultiplier))
+	reply("ok", `+{math.round(GROUP.luck * 100)}% de suerte para siempre`)
 end
 
 local function onJoin(player: Player)
