@@ -48,8 +48,9 @@ local function mood(
 end
 
 local rgb = Color3.fromRGB
+-- Luna más fuerte (pedido del usuario el 2026-10-21): antes brillo 1.2 y relleno (80, 90, 130).
 local NIGHT =
-	mood(0, 1.2, rgb(70, 82, 130), rgb(24, 30, 60), 0.34, rgb(200, 214, 255), rgb(80, 90, 130))
+	mood(0, 2.2, rgb(70, 82, 130), rgb(24, 30, 60), 0.34, rgb(200, 214, 255), rgb(92, 104, 150))
 -- Mediodía como las fotos del juego (pedido del usuario, 2026-10-20): aire limpio (poca
 -- niebla: los colores no se lavan), luz un poco cálida y sombras tibias.
 local NOON = mood(

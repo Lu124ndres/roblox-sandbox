@@ -2,9 +2,9 @@
 --[[
 	GroupSign
 
-	Letrero del regalo del grupo en la plaza, a la izquierda del camino al salir
-	del spawn y de cara a él (pedido del usuario el 2026-10-21; reemplaza el
-	escudo de la barra de arriba):
+	Letrero del regalo del grupo en la plaza, junto al Estanque de Jade y de cara
+	al spawn (pedido del usuario el 2026-10-21; reemplaza el escudo de la barra
+	de arriba):
 		1. Dale me gusta     (solo texto: Roblox no deja saber quién dio me gusta)
 		2. Únete al grupo
 		3. +10% de suerte para siempre
@@ -31,7 +31,9 @@ local Style = require(script.Parent.Parent.Interface.Style)
 local GROUP = Config.Social.group
 local ATTR = Protocol.PlayerAttributes
 local PALETTE = Style.PALETTE
-local SPOT = Vector2.new(-16, -36) -- { x, z } junto al camino, delante y a la izquierda del spawn
+-- { x, z } entre el Estanque de Jade y el camino del anillo, cerca de la fogata (pedido del
+-- usuario el 2026-10-21, con una foto); mira hacia el spawn, de donde llegan los jugadores.
+local SPOT = Vector2.new(-26, 102)
 local BOARD = Vector3.new(20, 11, 0.8) -- ancho, alto y grosor del tablero (studs)
 local LIFT = 3 -- el tablero empieza a esta altura sobre el suelo
 local POST = 1 -- grosor de los dos postes
