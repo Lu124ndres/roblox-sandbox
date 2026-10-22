@@ -5,15 +5,15 @@
 	Panel de pruebas para los administradores (atributo EsAdmin, lo pone el
 	servidor; nadie más ve el botón). Arriba se elige a qué jugador se le
 	aplican las órdenes (AdminTarget: tú u otro del servidor) y debajo hay
-	tres pestañas:
-		Jugador    números, canasta, mejoras, velocidad, pases, regalos,
-		           llevarlo a un lugar, ir con él / traerlo y reiniciarlo
-		           como recién llegado (pide confirmación)
+	cinco pestañas (reordenadas el 2026-10-21, pedido del usuario):
+		Jugador    números, canasta, mejoras, regalos y reiniciar (AdminPages)
+		Compras    todo lo que se compra con Robux, de una vez o por partes
+		Moverse    volar y sin colisión (solo tú), velocidad, llevar, ir y traer
+		Mundo      la hora del cielo, eventos y entrenamiento del servidor
 		Monstruos  cada monstruo por etapa, la barra y el descanso
-		Eventos    lanzar ya un evento del servidor
 	Cada botón manda AdminCommand(nombre, valor, UserId del elegido); el
 	servidor vuelve a comprobar que seas admin y responde con un aviso.
-	Las órdenes están en server/Admin.
+	Las órdenes están en server/Admin; volar y sin colisión, en AdminMoves.
 ]]
 
 local Players = game:GetService("Players")
@@ -21,7 +21,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Style = require(script.Parent.Parent.Interface.Style)
+local AdminMoves = require(script.Parent.AdminMoves)
 local AdminPages = require(script.Parent.AdminPages)
+local AdminPagesWorld = require(script.Parent.AdminPagesWorld)
 local AdminRows = require(script.Parent.AdminRows)
 local AdminTarget = require(script.Parent.AdminTarget)
 local HudButtons = require(script.Parent.HudButtons)
@@ -29,13 +31,15 @@ local Window = require(script.Parent.Window)
 
 local CARDS = Style.PALETTE.Cards
 local TAB_HEIGHT = 40
-local TAB_WIDTH = 170
+local TAB_WIDTH = 150
 
 type Tab = { title: string, fill: (page: AdminRows.Page) -> () }
 local TABS: { Tab } = {
 	{ title = "Jugador", fill = AdminPages.player },
-	{ title = "Monstruos", fill = AdminPages.giants },
-	{ title = "Eventos", fill = AdminPages.events },
+	{ title = "Compras", fill = AdminPages.shop },
+	{ title = "Moverse", fill = AdminPagesWorld.moves },
+	{ title = "Mundo", fill = AdminPagesWorld.world },
+	{ title = "Monstruos", fill = AdminPagesWorld.giants },
 }
 
 local AdminPanel = {}
@@ -49,6 +53,7 @@ function AdminPanel.start(screen: ScreenGui)
 	local command = remotes:WaitForChild(Protocol.Remotes.AdminCommand) :: RemoteEvent
 	local window = Window.create(screen, "Admin", "Panel admin", Vector2.new(900, 640))
 	HudButtons.top("Admin", "crown", window.toggle)
+	AdminMoves.start()
 
 	local target = AdminTarget.mount(window.content)
 	local function send(name: string, value: any)

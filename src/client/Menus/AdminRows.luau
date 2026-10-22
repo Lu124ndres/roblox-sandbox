@@ -7,6 +7,8 @@
 	sola, así nada se sale del panel y todos quedan del mismo tamaño. Una fila
 	puede tener una casilla para escribir un número (la usan los botones sin
 	valor propio). Los botones `confirm` piden un segundo toque ("¿Seguro?").
+	Los botones con `run` no mandan nada al servidor: hacen algo en este
+	cliente (volar, sin colisión) y su texto lo da `label` (se relee solo).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -20,6 +22,7 @@ local NAME_WIDTH = 170
 local COLUMNS = 4
 local GAP = 8
 local CONFIRM_SECONDS = 3
+local LABEL_SECONDS = 0.5
 
 export type Button = {
 	text: string,
@@ -27,6 +30,8 @@ export type Button = {
 	value: any?, -- sin valor: el número de la casilla de la fila
 	color: Color3?,
 	confirm: boolean?,
+	run: (() -> ())?, -- en vez de mandar la orden, esto en el cliente
+	label: (() -> string)?, -- texto que cambia (con `run`)
 }
 export type Page = {
 	frame: ScrollingFrame,
@@ -124,6 +129,24 @@ function AdminRows.page(parent: Instance, send: (name: string, value: any) -> ()
 			local button = Style.button(cells, spec.name, color, spec.text)
 			button.LayoutOrder = index
 			local label = button:FindFirstChild("Texto") :: TextLabel
+			local run, read = spec.run, spec.label
+			if run then
+				button.Activated:Connect(function()
+					run()
+					label.Text = if read then read() else spec.text
+				end)
+				if read then
+					task.spawn(function() -- al reaparecer se apagan solos (AdminMoves)
+						while button.Parent do
+							if frame.Visible then
+								label.Text = read()
+							end
+							task.wait(LABEL_SECONDS)
+						end
+					end)
+				end
+				continue
+			end
 			local armedUntil = 0
 			button.Activated:Connect(function()
 				if spec.confirm and os.clock() > armedUntil then

@@ -4,12 +4,11 @@
 
 	Órdenes del panel que cambian a un jugador: el elegido arriba del panel
 	(uno mismo u otro del servidor). Cada una recibe (objetivo, valor, admin)
-	y devuelve el texto del aviso.
+	y devuelve el texto del aviso. Lo que se compra con Robux está en AdminShop.
 		power, coins, kills, rebirths   número: pone ese valor
 		fish, emptyBasket               agrega peces al azar (hasta llenar) / vacía la canasta
 		speed                           velocidad al caminar (hasta reaparecer)
 		Rod, Basket, Boots              nivel de esa mejora; maxUpgrades: las tres al máximo
-		pass                            clave: pone o quita ese pase (prueba trajes y ventajas)
 		playtime                        minutos: adelanta los regalos por tiempo
 		tp                              "orilla", "volcan", "plaza" o "tienda"
 		visit, bring                    el admin va con el jugador / lo trae a su lado
@@ -18,7 +17,6 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Config = require(ReplicatedStorage.Shared.Config)
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
@@ -26,7 +24,6 @@ local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local AdminReset = require(script.Parent.AdminReset)
-local Admins = require(script.Parent.Admins)
 
 export type Handler = (target: Player, value: unknown, admin: Player) -> string
 
@@ -141,22 +138,6 @@ AdminPlayer.HANDLERS = {
 			humanoid.WalkSpeed = speed
 		end
 		return `Velocidad {speed}`
-	end,
-	pass = function(target, value)
-		assert(type(value) == "string" and Config.Monetization.passes[value], "ese pase no existe")
-		local attribute = `{ATTR.PassPrefix}{value}`
-		local now = target:GetAttribute(attribute) ~= true
-		target:SetAttribute(attribute, if now then true else nil)
-		-- En un admin queda guardado: al volver a entrar sigue así aunque Roblox diga que lo
-		-- tiene (Passes). En otro jugador dura solo esta partida: nunca le quita uno que pague.
-		local saved = Admins.is(target)
-			and PlayerData.edit(target, function(save)
-				save.passTests[value] = now
-			end)
-		local state = if now then "puesto" else "quitado"
-		return `{Config.Monetization.passes[value].name}: {state}{if saved
-			then ""
-			else " (esta partida)"}`
 	end,
 	playtime = function(target, value)
 		local since = target:GetAttribute(ATTR.PlaytimeSince)
