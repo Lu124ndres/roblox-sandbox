@@ -112,6 +112,11 @@ function ShopController.tutorialTarget(): (GuiObject?, "left" | "right")
 	return hudButton, "right"
 end
 
+-- El botón MEJORAS del HUD (en el paso de comprar es lo único que se ve: TutorialHud).
+function ShopController.hudButton(): GuiObject?
+	return hudButton
+end
+
 function ShopController.isOpen(): boolean
 	return shop ~= nil and shop.window.isOpen()
 end

@@ -340,4 +340,5 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Ruta al volcán por puente, arco y puerta (dentro del túnel ya no apunta para atrás).
 - [x] Comprar desde el ícono MEJORAS con el velo con hueco y la mano.
 - [x] El diario y los carteles de pez nuevo y logro esperan a que termine el tutorial.
+- [x] Durante el tutorial solo se ve el tutorial; en el paso de comprar, solo MEJORAS.
 - [ ] Probar el tutorial en el simulador de teléfono.

@@ -1103,3 +1103,14 @@ alcanza y el tutorial se trabaría.
 El velo del paso de comprar (`TutorialSpotlight`) no atrapa toques: solo guía. Así siguen
 andando los controles de movimiento y la X de la ventana.
 
+## 2026-10-21 — El HUD se oculta por motivos (HudVisibility)
+
+Durante el tutorial el HUD se oculta y, en táctil, `HudFocus` también lo oculta con una ventana
+abierta. Si cada uno pusiera `Visible` directo, al cerrar la ventana `HudFocus` mostraría el HUD
+en pleno tutorial. Por eso `Interface/HudVisibility` guarda los motivos de cada parte y la deja
+visible solo si no queda ninguno.
+
+En el paso de comprar se ve únicamente MEJORAS, que vive dentro de la columna del menú (oculta).
+No se ocultan sus hermanas una por una: algunas (cofre del regalo, atajo del pack) manejan su
+propio `Visible` y se volverían a mostrar. En cambio, `TutorialHud` saca el botón real a un marco
+propio en su mismo lugar y con su misma escala, y al terminar lo devuelve a su fila.

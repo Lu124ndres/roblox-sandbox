@@ -8,12 +8,17 @@
 	en su color con contorno negro grueso y abajo qué da y cuánto dura. Entra
 	de golpe con rebote, se queda unos segundos y sube desvaneciéndose. Lo
 	arranca Main.client; el evento lo decide el servidor (EventScheduler).
+	Durante el tutorial no sale (solo se ve el tutorial): si el evento sigue
+	al terminarlo, se anuncia entonces.
 ]]
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
+local Config = require(ReplicatedStorage.Shared.Config)
 local Events = require(ReplicatedStorage.Shared.Config.Events)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local ServerEvents = require(ReplicatedStorage.Shared.ServerEvents)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Icons = require(script.Parent.Parent.Interface.Icons)
@@ -86,16 +91,26 @@ local function show(screen: ScreenGui, kind: Events.EventDef)
 	end)
 end
 
+-- ¿Está en pleno tutorial (o todavía no se sabe)?
+local function inTutorial(player: Player): boolean
+	local step = player:GetAttribute(Protocol.PlayerAttributes.Tutorial)
+	return player:GetAttribute(Protocol.PlayerAttributes.DataLoaded) ~= true
+		or (if type(step) == "number" then step else 0) < #Config.Retention.tutorial
+end
+
 function EventIntro.start(screen: ScreenGui)
+	local player = Players.LocalPlayer
 	local seen: string? = nil
 	task.spawn(function()
 		while true do
-			local kind = ServerEvents.active()
-			local id = kind and kind.id
-			if kind and id ~= seen then
-				show(screen, kind)
+			if not inTutorial(player) then
+				local kind = ServerEvents.active()
+				local id = kind and kind.id
+				if kind and id ~= seen then
+					show(screen, kind)
+				end
+				seen = id
 			end
-			seen = id
 			task.wait(0.5)
 		end
 	end)

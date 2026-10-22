@@ -31,6 +31,7 @@ local GuidePath = require(script.Parent.GuidePath)
 local GuideRing = require(script.Parent.GuideRing)
 local TutorialBanner = require(script.Parent.TutorialBanner)
 local TutorialCallout = require(script.Parent.TutorialCallout)
+local TutorialHud = require(script.Parent.TutorialHud)
 local TutorialLegs = require(script.Parent.TutorialLegs)
 local TutorialSpotlight = require(script.Parent.TutorialSpotlight)
 local Window = require(script.Parent.Window)
@@ -47,6 +48,7 @@ function TutorialGuide.start(screen: ScreenGui)
 	local banner = TutorialBanner.new(screen)
 	local callout = TutorialCallout.new(screen)
 	local spotlight = TutorialSpotlight.new(screen)
+	local hud = TutorialHud.new(screen)
 	local route = GuidePath.new()
 	local ring = GuideRing.new()
 	local shownStep = -1 -- el paso que muestra la línea (-1: ninguno)
@@ -91,6 +93,17 @@ function TutorialGuide.start(screen: ScreenGui)
 	local function refresh()
 		local index = step()
 		local loaded = player:GetAttribute(ATTR.DataLoaded) == true
+		-- Solo el tutorial a la vista (hasta saber si lo tiene, detrás de la pantalla de
+		-- carga); en el de comprar, solo MEJORAS.
+		local current = STEPS[index]
+		hud.set(
+			not loaded or current ~= nil,
+			if loaded
+					and current
+					and current.id == "comprar"
+				then ShopController.hudButton()
+				else nil
+		)
 		if not loaded or not STEPS[index] then
 			if shownStep ~= -1 and loaded then -- terminó el último: «¡LISTO!» y se va
 				banner.done(STEPS[shownStep].coins + Config.Retention.tutorialBonus)

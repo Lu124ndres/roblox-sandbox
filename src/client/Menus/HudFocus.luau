@@ -14,6 +14,7 @@
 ]]
 
 local Device = require(script.Parent.Parent.Interface.Device)
+local HudVisibility = require(script.Parent.Parent.Interface.HudVisibility)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 local Window = require(script.Parent.Window)
 
@@ -56,7 +57,7 @@ function HudFocus.start(screen: ScreenGui)
 		local focus = Device.touch() and next(open) ~= nil
 		veil.Visible = focus
 		for _, object in hud do
-			object.Visible = not focus
+			HudVisibility.set(object, "ventana", focus)
 		end
 	end)
 end

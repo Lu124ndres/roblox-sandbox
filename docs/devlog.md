@@ -3581,3 +3581,23 @@ que no abrume):**
 - No se probó en el simulador de teléfono.
 - Simular el clic en el botón de comprar con Enter no llegó; la compra se probó con el remote.
 
+## 2026-10-21 (17) — Durante el tutorial solo se ve el tutorial
+
+**Qué se hizo (pedido del usuario: «cuando un jugador nuevo tenga el tutorial quita todo lo demás,
+solo deja el tutorial, y cuando tenga que mejorar sale solo mejorar; después vuelve todo a la
+normalidad»):**
+- **`Menus/TutorialHud`:** mientras dura el tutorial oculta las columnas del menú y de
+  estadísticas, los botones de arriba, el panel del gigante, los potenciadores y los atajos de
+  Robux.
+  - Siguen los botones de acción, los avisos de E, la barra de recoger y la tarjeta de captura.
+  - En el paso de comprar, el botón MEJORAS real sale de su columna oculta a un marco propio en
+    el mismo lugar. Al terminar vuelve a su fila.
+- **`Interface/HudVisibility`:** cada parte del HUD se ve solo si nadie la oculta.
+  `HudFocus` (táctil con ventana abierta) y el tutorial dicen su motivo, así no se pisan.
+- **`EventIntro`:** el anuncio de evento no sale durante el tutorial; si el evento sigue al
+  terminar, se anuncia entonces.
+
+**Probado en Studio (Play, PC):**
+- Con el tutorial reiniciado no queda nada del HUD, solo el anuncio y la línea de objetivo.
+- En el paso de comprar se ve solo MEJORAS con la mano.
+- Al comprar vuelven todas las partes y MEJORAS queda en su fila al lado de TIENDA.
