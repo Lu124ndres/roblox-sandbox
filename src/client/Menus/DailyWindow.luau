@@ -8,7 +8,8 @@
 	cobradas dicen ¡RECLAMADO!, la de hoy tiene marco de lava y el botón
 	¡RECLAMAR!, las que faltan su día. Debajo, la racha (+10% de monedas y poder
 	por día, shared/RetentionBonus) y lo que trae el próximo cobro. Se
-	abre sola al entrar si hoy todavía no se cobró, y el botón Premio del
+	abre sola AUTO_OPEN_SECONDS después de entrar si hoy todavía no se cobró
+	(primero se deja jugar un rato), y el botón Premio del
 	HUD lleva un punto rojo mientras tanto. El servidor decide (ClaimDaily).
 ]]
 
@@ -31,6 +32,7 @@ local Window = require(script.Parent.Window)
 
 local ATTR = Protocol.PlayerAttributes
 local DAILY = Config.Retention.daily
+local AUTO_OPEN_SECONDS = 25 -- pedido del usuario (2026-10-22): no abrirla apenas entra
 local STREAK = Config.Retention.streakBonus
 local BADGE_SIZE = 112 -- el regalo que asoma sobre la esquina del título
 local BADGE_ROOM = 76 -- cuánto se corre el título para dejarle lugar
@@ -173,8 +175,9 @@ function DailyWindow.start(screen: ScreenGui)
 	end
 	render()
 
-	-- Al entrar, si hoy toca, se abre sola (cuando ya cargaron los datos y
-	-- terminó el tutorial: al novato no se le tapa la guía del primer minuto).
+	-- Al entrar, si hoy toca, se abre sola AUTO_OPEN_SECONDS después de que
+	-- cargaron los datos y terminó el tutorial (al novato no se le tapa la guía
+	-- del primer minuto). Si ya la cobró desde el botón, no se abre.
 	local function ready(): boolean
 		local step = player:GetAttribute(ATTR.Tutorial)
 		return player:GetAttribute(ATTR.DataLoaded) == true
@@ -184,7 +187,7 @@ function DailyWindow.start(screen: ScreenGui)
 		while not ready() do
 			task.wait(0.5)
 		end
-		task.wait(3)
+		task.wait(AUTO_OPEN_SECONDS)
 		if available() then
 			window.open()
 		end

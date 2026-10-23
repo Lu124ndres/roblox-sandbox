@@ -3735,3 +3735,11 @@ aventura que crece) y "Hard Victory" (`1837864891`).
 escaparse y 11 ticks de entrenamiento. Todos suenan en orden y las notas suben exactas (0.85 →
 2.86) con el premio en el décimo. Faltó probar los toques del carrete con la barra real (salen
 con el pique del servidor).
+
+## 2026-10-22 — El premio diario espera 25 s antes de abrirse
+
+**Qué se hizo (pedido del usuario):** al entrar, la ventana del premio diario ya no se abre a
+los 3 s sino `AUTO_OPEN_SECONDS` (25 s) después de que cargan los datos y terminó el
+tutorial, para dejar jugar un rato primero. Si mientras tanto la cobró desde el botón, no se
+abre. **Probado en Studio:** con el día sin cobrar, se abrió a los ~33 s de juego (los datos
+cargan a los ~8 s).
