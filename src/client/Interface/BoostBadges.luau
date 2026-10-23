@@ -12,6 +12,8 @@
 		         entra por ella los dos ganan premio (server/Social/Referrals)
 		Grupo    +10 % de suerte si ya reclamó el regalo del letrero de la plaza
 		         (Menus/GroupSign)
+	Después, mientras duran, los x2 personales de poder y monedas con su
+	tiempo (Interface/TimedBadges).
 	Siempre abajo a la izquierda. En táctil quedan detrás del joystick y son
 	solo para ver: no reciben toques, así no le quitan ninguno al joystick.
 	Los números los calcula el servidor (atributo AmigosEnServidor, carpeta de
@@ -32,6 +34,7 @@ local Device = require(script.Parent.Device)
 local Icons = require(script.Parent.Icons)
 local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
+local TimedBadges = require(script.Parent.TimedBadges)
 
 local SIZE = 56 -- ancho y alto de cada insignia (el ícono; el número va encima de su borde de abajo)
 local GAP = 6
@@ -95,6 +98,7 @@ function BoostBadges.start(screen: ScreenGui)
 	row.Name = "Impulsos"
 	row.BackgroundTransparency = 1
 	row.Size = UDim2.fromOffset(SIZE * 4 + GAP * 3, SIZE)
+	row.AutomaticSize = Enum.AutomaticSize.X -- crece con los impulsos con tiempo
 	local list = Instance.new("UIListLayout")
 	list.FillDirection = Enum.FillDirection.Horizontal
 	list.Padding = UDim.new(0, GAP)
@@ -110,6 +114,9 @@ function BoostBadges.start(screen: ScreenGui)
 	local event = badge(row, "Evento", 2, nil)
 	local friends = badge(row, "Amigos", 3, Icons.view(row, "friends"))
 	local group = badge(row, "Grupo", 4, Icons.view(row, "group"))
+	TimedBadges.mount(row, 5, function(name: string, order: number, icon: GuiObject): Badge
+		return badge(row, name, order, icon)
+	end)
 
 	row.AnchorPoint = Vector2.new(0, 1)
 	row.Position = UDim2.new(0, MARGIN, 1, -MARGIN)

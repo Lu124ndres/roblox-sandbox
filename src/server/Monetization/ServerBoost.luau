@@ -9,8 +9,9 @@
 	vuelve a x1. Se publica en ReplicatedStorage.Impulsos (Perks lo lee) y
 	se avisa a todos quién lo subió.
 
-	Cada compra sube un nivel desde el activo, aunque dos personas compren el
-	mismo nivel a la vez (la segunda queda un nivel más arriba).
+	Cada compra entrega el nivel pagado (la tienda ofrece el siguiente al
+	activo) y nunca baja el activo: si dos personas compran el mismo nivel a
+	la vez, la segunda solo reinicia el tiempo.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")

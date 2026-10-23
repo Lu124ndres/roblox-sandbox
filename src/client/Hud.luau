@@ -116,11 +116,15 @@ function Hud.mount(_screen: ScreenGui, player: Player): TextLabel
 		end
 	end
 
+	local function refreshBadges()
+		coins.badge.Text = multiplier(Perks.coinMultiplier(player))
+		power.badge.Text = multiplier(Perks.powerMultiplier(player))
+	end
+
 	local function refresh()
 		set(coins.value, NumberFormat.big(number(player, ATTR.Coins)))
-		coins.badge.Text = multiplier(Perks.coinMultiplier(player))
 		set(power.value, NumberFormat.big(number(player, ATTR.Power)))
-		power.badge.Text = multiplier(Perks.powerMultiplier(player))
+		refreshBadges()
 		local capacity = FishingPower.playerCapacity(player)
 		local carried = number(player, ATTR.CarriedFish)
 		local full = carried >= capacity
@@ -132,11 +136,12 @@ function Hud.mount(_screen: ScreenGui, player: Player): TextLabel
 		set(kills.value, NumberFormat.big(number(player, ATTR.Kills)))
 	end
 	player.AttributeChanged:Connect(refresh)
-	-- El entrenamiento del servidor vence solo: revisar su multiplicador de vez en cuando.
+	-- Los impulsos con tiempo (servidor, x2 personal, x2 monedas de la ruleta, eventos,
+	-- racha del diario) vencen solos sin cambiar atributos: revisar cada segundo.
 	task.spawn(function()
 		while true do
 			task.wait(1)
-			power.badge.Text = multiplier(Perks.powerMultiplier(player))
+			refreshBadges()
 		end
 	end)
 	refresh()
