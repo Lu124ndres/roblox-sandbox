@@ -9,6 +9,9 @@
 		  del inicio que marcó el servidor, igual para todos;
 		- sin evolución (el admin lo puso en otra etapa, o el aviso llegó
 		  tarde): estalla ya, con el destello tapando el cambio.
+	Si la barra se llenó de golpe (Robux, ruleta) no evoluciona: toma la etapa
+	sin animación y se va; sus saltos pisaban los de la despedida y quedaba a
+	la vista durante el descanso.
 	Quien entra a mitad o cambia de gigante no pasa por aquí: GiantView
 	crea el cuerpo directo en su etapa (setStage instantáneo).
 	En el estallido salta y gira como siempre, salvo los gigantes con pose
@@ -71,7 +74,16 @@ local function startTime(): number
 	return now - EvolveLook.burstSeconds()
 end
 
-function GiantEvolution.begin(body: GiantBody.Body, def: Config.GiantDef, stage: number): Handle
+function GiantEvolution.begin(
+	body: GiantBody.Body,
+	def: Config.GiantDef,
+	stage: number,
+	progress: number
+): Handle?
+	if progress >= 1 then
+		body.setStage(stage, true)
+		return nil
+	end
 	return EvolveFx.play(body, def, stage, startTime(), function()
 		if not body.model.Parent then
 			return

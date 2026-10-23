@@ -3781,3 +3781,22 @@ contador (captura a mitad del chorro).
 ícono v4 de la moneda (`Icons.paint(…, "coin")`, 40 px) en vez del círculo dorado, que queda
 solo de reserva si la hoja no tiene ID. **Probado en Studio:** 37 monedas, todas `ImageLabel`
 con la hoja 1 de íconos, volando del volcán al contador.
+
+## 2026-10-23 — Sin fanfarria al vencer al monstruo, y se va aunque se llene de golpe
+
+**Qué se hizo (pedido del usuario: «el sonido de victoria cuando se vence un monstruo está
+horrible, quítalo; también el monstruo no se va, se queda ahí»):**
+
+- Se quitan la fanfarria `StageUp` del cartel «¡se llenó!», de la despedida, del inicio del
+  descanso y del aviso «se cansó de esperar», y `LegendaryCatch` del «+1 Kill». Al irse solo
+  suena la voz del monstruo (`GiantMoments`).
+- El monstruo que se quedaba: si la barra se llenaba saltando etapas (botones de Robux,
+  ruleta), arrancaban a la vez la evolución y la despedida; los saltos de la evolución
+  pisaban los de la despedida y quedaba a la vista (y=-47) todo el descanso. Ahora
+  `GiantEvolution.begin` no evoluciona con la barra llena (toma la etapa sin animación) y
+  `HungerBar` no anuncia «¡evolucionó!». Además, `GiantCycleFx` revisa cada 0.5 s del
+  descanso que siga hundido (cuerpo creado tarde, un salto de mordida).
+
+**Probado en Studio:** llenando de etapa 1 a 100 % por admin, antes la orca quedaba en y=-47
+y sonaba `StageUp` dos veces; ahora salta, se zambulle y a los 3 s está en y≈-430, y solo
+suenan `OrcaCall`, `OrcaCallDeep` y `OrcaBlow`.

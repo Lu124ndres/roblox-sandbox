@@ -50,8 +50,7 @@ function NoticesMore.handle(toasts: Toasts.Toasts, kind: unknown, a: unknown, b:
 			`¡SECCIÓN {TextCase.upper(if rarity then rarity.displayName else a)} COMPLETA!`
 		)
 		return true
-	elseif kind == "giantLeft" and type(a) == "string" then
-		Sounds.play("StageUp")
+	elseif kind == "giantLeft" and type(a) == "string" then -- sin fanfarria (pedido del usuario el 2026-10-23)
 		toasts.banner(
 			if b == true then "¡Te llevas la kill igual!" else "Dale de comer al siguiente",
 			if b == true then COLORS.Success else COLORS.Warning,

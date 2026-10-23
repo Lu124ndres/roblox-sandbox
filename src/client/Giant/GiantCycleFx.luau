@@ -5,7 +5,9 @@
 	Animaciones del ciclo del gigante, según EstadoGigante.Phase:
 		farewell  se llenó: ruge, salta girando y se zambulle en el lago con
 		          una ola enorme; después desaparece.
-		rest      no está (el que entra a mitad del descanso tampoco lo ve).
+		rest      no está (el que entra a mitad del descanso tampoco lo ve). Cada
+		          GUARD_SECONDS se revisa que siga hundido: un cuerpo creado tarde
+		          o un salto de mordida o de evolución lo devolvían a su lugar.
 		arriving  sale del fondo del lago con su tamaño de etapa 1, ruge y
 		          levanta olas.
 		feeding   está en su lugar.
@@ -19,7 +21,6 @@ local TweenService = game:GetService("TweenService")
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local GiantMoments = require(script.Parent.Parent.Audio.GiantMoments)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local GroundFx = require(script.Parent.Parent.Effects.GroundFx)
@@ -27,6 +28,7 @@ local CraterMode = require(script.Parent.Parent.Ambient.CraterMode)
 local GiantBody = require(script.Parent.GiantBody)
 
 local HIDDEN_DEPTH = 3 -- alturas del gigante bajo el agua mientras no está
+local GUARD_SECONDS = 0.5
 
 local GiantCycleFx = {}
 
@@ -62,8 +64,8 @@ end
 
 local function farewell(body: GiantBody.Body)
 	local height = body.height()
+	-- Solo su voz: la fanfarria de victoria se quitó (pedido del usuario el 2026-10-23).
 	GiantMoments.playCurrent("farewell", body.top(), body.water())
-	Sounds.play("StageUp")
 	Fx.sparkle(body.top(), UIConfig.Colors.Coins, 60)
 	tween(body.spin, body.spin.Value + 720, 1.8, Enum.EasingStyle.Quad)
 	local up = tween(body.lift, height * 0.5, 1, Enum.EasingStyle.Quad)
@@ -119,6 +121,16 @@ function GiantCycleFx.watch(getBody: () -> GiantBody.Body?)
 		end
 	end)
 	task.defer(apply, false) -- quien entra a mitad del ciclo ve el estado sin animación
+	task.spawn(function()
+		while true do
+			task.wait(GUARD_SECONDS)
+			local body = getBody()
+			local phase = stateFolder:GetAttribute(Protocol.GiantAttributes.Phase)
+			if body and phase == "rest" and body.lift.Value > -body.height() * 2 then
+				hide(body)
+			end
+		end
+	end)
 end
 
 return GiantCycleFx

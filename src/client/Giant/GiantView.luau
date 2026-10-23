@@ -166,7 +166,7 @@ function GiantView.start()
 			if evolution then
 				evolution.finish() -- otra antes de terminar (admin): la anterior se aplica ya
 			end
-			evolution = GiantEvolution.begin(body, defsById[id], stage)
+			evolution = GiantEvolution.begin(body, defsById[id], stage, progress)
 		end
 		lastStage = stage
 	end

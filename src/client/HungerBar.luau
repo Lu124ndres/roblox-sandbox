@@ -144,7 +144,7 @@ function HungerBar.mount(
 			currentId = id
 			lastStage, wasFull = stage, full -- al entrar o cambiar de gigante no se anuncia nada
 		else
-			if stage > lastStage then
+			if stage > lastStage and not full then -- lleno de golpe (Robux): se va, no evoluciona
 				onStageReached(stage)
 			end
 			if full and not wasFull then

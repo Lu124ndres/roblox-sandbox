@@ -23,7 +23,6 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
@@ -86,8 +85,7 @@ function CycleView.start(toasts: Toasts.Toasts)
 		if not announce then
 			return
 		end
-		if phase == "rest" then
-			Sounds.play("StageUp")
+		if phase == "rest" then -- sin fanfarria: sonaba fea al vencerlo (pedido del usuario el 2026-10-23)
 			toasts.banner(
 				`¡Descanso! Toca IR A LA GUARIDA: entrenamiento x{GiantPool.restMultiplier()} por {restLength(
 					stateFolder
@@ -128,7 +126,7 @@ function CycleView.start(toasts: Toasts.Toasts)
 		local now = player:GetAttribute(PLAYER.Kills)
 		local settled = loadedAt ~= nil and os.clock() - loadedAt >= LOAD_QUIET
 		if settled and type(now) == "number" and type(kills) == "number" and now > kills then
-			Sounds.play("LegendaryCatch")
+			-- Sin sonido: el de victoria se quitó (pedido del usuario el 2026-10-23).
 			local gained = now - kills
 			toasts.banner(
 				`+{gained} {if gained == 1 then "Kill" else "Kills"} · {GiantName.current(true)}`,
