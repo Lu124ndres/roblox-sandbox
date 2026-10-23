@@ -37,6 +37,8 @@ local OPTIONS: { { key: ClientSettings.Key, text: string, icon: string, hint: st
 		icon = "⚡",
 		hint = "Menos efectos, más fluido",
 	},
+	-- "English" no se traduce: así lo encuentra quien no lee español
+	{ key = "english", text = "English", icon = "🌐", hint = "Jugar en inglés" },
 }
 
 type Switch = { button: TextButton, knob: Frame, skin: ImageLabel, label: TextLabel }
@@ -98,7 +100,7 @@ local function row(
 end
 
 function SettingsWindow.start(screen: ScreenGui)
-	local window = Window.create(screen, "Ajustes", "Ajustes", Vector2.new(520, 400))
+	local window = Window.create(screen, "Ajustes", "Ajustes", Vector2.new(520, 480))
 	HudButtons.top("Ajustes", "gear", window.toggle)
 
 	local layout = Instance.new("UIListLayout")

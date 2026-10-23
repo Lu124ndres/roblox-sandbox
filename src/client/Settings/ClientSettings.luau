@@ -8,58 +8,49 @@
 	se mandan a guardar (SaveSettings) un segundo después, juntando los
 	cambios seguidos en un solo envío.
 
-	La música y los sonidos se silencian con dos SoundGroup locales:
-	Sounds pone cada efecto en Efectos y Music cada pista en Musica.
-	Encendidos suenan a MUSIC_VOLUME y SFX_VOLUME (un tercio menos que antes,
-	pedido del usuario el 2026-10-23).
+	La música y los sonidos se silencian con los SoundGroup de SoundGroups.
 
 	Valores automáticos (setAutomatic): valen solo esta sesión y no se
 	guardan. Así se encienden los efectos reducidos en un teléfono sin
 	teclado si el jugador nunca eligió, o cuando FpsWatchdog ve el juego
 	lento. Que el jugador "eligió" se marca con lowFxChosen al guardar.
+
+	english: jugar en inglés. Mientras el jugador no lo toque (langChosen),
+	vale lo que diga el idioma de su cuenta y no se guarda; al elegir, se
+	guarda y queda en el atributo Idioma que lee Lang/AutoTranslate.
 ]]
 
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local SoundService = game:GetService("SoundService")
 local UserInputService = game:GetService("UserInputService")
 
+local Lang = require(ReplicatedStorage.Shared.Lang)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local SoundGroups = require(script.Parent.SoundGroups)
 
 local SAVE_DELAY_SECONDS = 1
 local LOW_FX_SCALE = 0 -- modo rápido: sin partículas (mejor rendimiento)
-local MUSIC_VOLUME = 2 / 3
-local SFX_VOLUME = 2 / 3
 
-export type Key = "music" | "sfx" | "shake" | "lowFx"
+export type Key = "music" | "sfx" | "shake" | "lowFx" | "english"
+
+local LANG_ATTR = "Idioma" -- lo lee Lang/AutoTranslate
 
 local ClientSettings = {}
 
-local values: { [string]: boolean } = { music = true, sfx = true, shake = true, lowFx = false }
+local values: { [string]: boolean } =
+	{ music = true, sfx = true, shake = true, lowFx = false, english = false }
 local listeners: { (key: string, value: boolean) -> () } = {}
 local automatic: { [string]: boolean } = {} -- claves con valor de esta sesión, sin guardar
 local saveScheduled = false
 local lowFxChosen = false -- el jugador ya eligió los efectos reducidos alguna vez
-
-local function group(name: string): SoundGroup
-	local existing = SoundService:FindFirstChild(name)
-	if existing and existing:IsA("SoundGroup") then
-		return existing
-	end
-	local created = Instance.new("SoundGroup")
-	created.Name = name
-	created.Volume = 1
-	created.Parent = SoundService
-	return created
-end
-
-local musicGroup = group("Musica")
-local sfxGroup = group("Efectos")
+local langChosen = false -- el jugador ya eligió el idioma en Ajustes
 
 local function apply()
-	musicGroup.Volume = if values.music then MUSIC_VOLUME else 0
-	sfxGroup.Volume = if values.sfx then SFX_VOLUME else 0
+	SoundGroups.setVolumes(values.music, values.sfx)
+	if langChosen then
+		Players.LocalPlayer:SetAttribute(LANG_ATTR, if values.english then "en" else "es")
+	end
 end
 
 function ClientSettings.get(key: Key): boolean
@@ -67,11 +58,11 @@ function ClientSettings.get(key: Key): boolean
 end
 
 function ClientSettings.musicGroup(): SoundGroup
-	return musicGroup
+	return SoundGroups.music
 end
 
 function ClientSettings.sfxGroup(): SoundGroup
-	return sfxGroup
+	return SoundGroups.sfx
 end
 
 -- 1 normal; menos con efectos reducidos (para las ráfagas de partículas).
@@ -108,6 +99,7 @@ local function payload(): { [string]: boolean }
 		end
 	end
 	out.lowFxChosen = lowFxChosen
+	out.langChosen = langChosen
 	return out
 end
 
@@ -127,6 +119,8 @@ function ClientSettings.set(key: Key, value: boolean)
 	automatic[key] = nil
 	if key == "lowFx" then
 		lowFxChosen = true
+	elseif key == "english" then
+		langChosen = true
 	end
 	change(key, value)
 	if saveScheduled then
@@ -150,6 +144,10 @@ local function applyDeviceDefault()
 		automatic.lowFx = true
 		values.lowFx = true
 	end
+	if not langChosen then
+		automatic.english = true
+		values.english = not Lang.isSpanish(Players.LocalPlayer.LocaleId)
+	end
 end
 
 local function load(player: Player)
@@ -163,6 +161,10 @@ local function load(player: Player)
 	end
 	local saved = decoded :: { [string]: unknown }
 	lowFxChosen = lowFxChosen or saved.lowFxChosen == true or saved.lowFx == true
+	langChosen = langChosen or saved.langChosen == true
+	if langChosen then
+		automatic.english = nil
+	end
 	for key in values do
 		local value = saved[key]
 		if type(value) == "boolean" and not automatic[key] then

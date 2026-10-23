@@ -24,6 +24,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Lang = require(ReplicatedStorage.Shared.Lang)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local SaveStore = require(script.Parent.SaveStore)
 
@@ -40,6 +41,11 @@ local saving: { [Player]: boolean } = {} -- evita dos guardados del mismo jugado
 local gone: { [Player]: boolean } = setmetatable({}, { __mode = "k" }) :: any
 local leaving: { [Player]: boolean } = {} -- salida en curso (guardado final)
 
+-- El aviso de expulsión lo dibuja Roblox: se traduce aquí, según el idioma del jugador
+local function kick(player: Player, message: string)
+	player:Kick(if Lang.isSpanish(player.LocaleId) then message else Lang.toEnglish(message))
+end
+
 local function load(player: Player)
 	PlayerData.prepare(player)
 	for _ = 1, SAVING.lockedRetries do
@@ -54,12 +60,12 @@ local function load(player: Player)
 			PlayerData.attach(player, data)
 			return
 		elseif status == "error" or status == "newer" then
-			player:Kick(if status == "newer" then NEWER_MESSAGE else ERROR_MESSAGE)
+			kick(player, if status == "newer" then NEWER_MESSAGE else ERROR_MESSAGE)
 			return
 		end
 		task.wait(SAVING.lockedRetrySeconds)
 	end
-	player:Kick(LOCKED_MESSAGE)
+	kick(player, LOCKED_MESSAGE)
 end
 
 local function save(player: Player, release: boolean): boolean

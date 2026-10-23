@@ -33,7 +33,7 @@ export type SaveData = {
 	upgrades: { [string]: number }, -- nivel de cada mejora de la tienda (Rod, Basket, Boots)
 	tutorial: number, -- pasos del tutorial ya hechos (0 = recién llega)
 	daily: { lastDay: number, streak: number }, -- recompensa diaria: último día cobrado (UTC) y racha
-	settings: { music: boolean, sfx: boolean, shake: boolean, lowFx: boolean, lowFxChosen: boolean },
+	settings: SaveExtra.Settings, -- ajustes del cliente (ver SaveExtra.settings)
 	badges: { [string]: boolean }, -- insignias ya entregadas (para no pedirlas otra vez)
 	ponds: { [string]: boolean }, -- estanques comprados con Robux ("2".."10")
 	receipts: { string }, -- PurchaseId de las últimas compras (no cobrar dos veces)
@@ -78,7 +78,7 @@ function SaveSchema.default(): SaveData
 		upgrades = { Rod = 1, Basket = 1, Boots = 1 },
 		tutorial = 0,
 		daily = { lastDay = 0, streak = 0 },
-		settings = { music = true, sfx = true, shake = true, lowFx = false, lowFxChosen = false },
+		settings = SaveExtra.settings(),
 		badges = {},
 		ponds = {},
 		receipts = {},

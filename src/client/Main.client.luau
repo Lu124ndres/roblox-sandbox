@@ -84,10 +84,12 @@ local TrajesClient = require(script.Parent.Trajes)
 local CodesWindow = require(script.Parent.Menus.CodesWindow)
 local GroupSign = require(script.Parent.Menus.GroupSign)
 local HudFocus = require(script.Parent.Menus.HudFocus)
+local AutoTranslate = require(script.Parent.Lang.AutoTranslate)
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+AutoTranslate.start() -- antes de montar la interfaz: cada texto nace ya traducido
 ClientSettings.start()
 CoreGuiSetup.start()
 

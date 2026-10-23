@@ -38,7 +38,31 @@ export type QuestsSave = {
 	bonus: boolean, -- ya cobró el cofre por cumplir las tres
 }
 
+-- Ajustes del cliente (Retention/SettingsService acepta solo estas claves, booleanas).
+-- english solo cuenta si langChosen: mientras el jugador no elija, manda el idioma de su cuenta.
+export type Settings = {
+	music: boolean,
+	sfx: boolean,
+	shake: boolean,
+	lowFx: boolean,
+	lowFxChosen: boolean,
+	english: boolean,
+	langChosen: boolean,
+}
+
 local SaveExtra = {}
+
+function SaveExtra.settings(): Settings
+	return {
+		music = true,
+		sfx = true,
+		shake = true,
+		lowFx = false,
+		lowFxChosen = false,
+		english = false,
+		langChosen = false,
+	}
+end
 
 function SaveExtra.quests(): QuestsSave
 	return { day = 0, progress = {}, done = {}, claimed = {}, bonus = false }
