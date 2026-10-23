@@ -77,10 +77,10 @@ function StarterOffer.start(screen: ScreenGui)
 	window.setShrink(SHRINK)
 	local content = window.content
 	local separate = separateRobux()
-	StarterParts.header(
-		content,
-		if separate > PACK.robux then math.floor((1 - PACK.robux / separate) * 100) else 0
-	)
+	local function discountFor(robuxPrice: number): number
+		return if separate > robuxPrice then math.floor((1 - robuxPrice / separate) * 100) else 0
+	end
+	local setDiscount = StarterParts.header(content, discountFor(PACK.robux))
 	local items: { Item } = {
 		{
 			color = CARDS.Yellow,
@@ -110,6 +110,7 @@ function StarterOffer.start(screen: ScreenGui)
 	local function showValue(robuxPrice: number)
 		value.Text = `Solo el equipo, por separado: <s>{separate} R$</s>   ¡Hoy {robuxPrice} R$!`
 		value.Visible = separate > robuxPrice
+		setDiscount(discountFor(robuxPrice))
 	end
 	showValue(PACK.robux)
 

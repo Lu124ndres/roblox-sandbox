@@ -30,7 +30,10 @@ local UpgradeDetail = require(script.Parent.UpgradeDetail)
 
 local PALETTE = Style.PALETTE
 local TOP = 58 -- alto de la fila de pestañas
-local CELL = Vector2.new(124, 150)
+-- 5 columnas de 120 + huecos + relleno + barra entran en la grilla (unos 665 de ancho
+-- antes de escalar la ventana); con 124 la última quedaba recortada bajo la barra
+local CELL = Vector2.new(120, 150)
+local COLUMNS = 5
 local GAP = 10
 
 export type Shop = {
@@ -99,6 +102,7 @@ function ShopWindow.mount(
 	layout.CellSize = UDim2.fromOffset(CELL.X, CELL.Y)
 	layout.CellPadding = UDim2.fromOffset(GAP, GAP)
 	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	layout.FillDirectionMaxCells = COLUMNS
 	layout.Parent = grid
 	local padding = grid:FindFirstChildOfClass("UIPadding") or Instance.new("UIPadding")
 	padding.PaddingTop, padding.PaddingLeft = UDim.new(0, 8), UDim.new(0, 8)
@@ -160,12 +164,11 @@ function ShopWindow.mount(
 		showDetail()
 	end
 
-	-- Deja a la vista la fila del siguiente nivel. Recién creadas las tarjetas, la grilla
-	-- todavía no sabe cuántas columnas tiene (AbsoluteCellCount = 0) y bajaba de más:
-	-- se espera un cuadro a que se acomode.
+	-- Deja a la vista la fila del siguiente nivel. Recién creadas las tarjetas, el lienzo
+	-- todavía no tiene su alto y la posición se recortaba: se espera un cuadro.
 	local function scrollToSelected()
 		RunService.RenderStepped:Wait()
-		local row = (selected - 1) // math.max(layout.AbsoluteCellCount.X, 1)
+		local row = (selected - 1) // COLUMNS
 		grid.CanvasPosition = Vector2.new(0, math.max(row - 1, 0) * (CELL.Y + GAP))
 	end
 

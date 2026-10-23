@@ -32,7 +32,8 @@ export type Item = {
 
 local StarterParts = {}
 
-function StarterParts.header(content: Frame, discount: number)
+-- Devuelve con qué cambiar el % del sello cuando llega el precio real de Roblox.
+function StarterParts.header(content: Frame, discount: number): (number) -> ()
 	local art = ShopStone.chip(content, CARDS.Pink)
 	art.Name = "Regalo"
 	art.Position = UDim2.fromOffset(4, 0)
@@ -56,14 +57,18 @@ function StarterParts.header(content: Frame, discount: number)
 	tag.AnchorPoint = Vector2.new(1, 0)
 	tag.Position = UDim2.new(1, -110, 0, 30)
 	tag.Size = UDim2.fromOffset(170, 34)
-	if discount > 0 then
-		local seal = ShopStone.seal(content, `-{discount}%`)
-		seal.AnchorPoint = Vector2.new(1, 0)
-		seal.Position = UDim2.new(1, -4, 0, 4)
-		seal.Size = UDim2.fromOffset(100, 80)
-		seal.Rotation = 12
-		TweenService:Create(seal, PULSE, { Rotation = -6 }):Play()
+	local seal, label = ShopStone.seal(content, "")
+	seal.AnchorPoint = Vector2.new(1, 0)
+	seal.Position = UDim2.new(1, -4, 0, 4)
+	seal.Size = UDim2.fromOffset(100, 80)
+	seal.Rotation = 12
+	TweenService:Create(seal, PULSE, { Rotation = -6 }):Play()
+	local function setDiscount(percent: number)
+		label.Text = `-{percent}%`
+		seal.Visible = percent > 0
 	end
+	setDiscount(discount)
+	return setDiscount
 end
 
 function StarterParts.card(content: Frame, index: number, item: Item)

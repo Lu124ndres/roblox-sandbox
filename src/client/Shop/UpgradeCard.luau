@@ -120,7 +120,9 @@ function UpgradeCard.new(parent: Instance, spec: CardSpec): Card
 		Kit.gold(ribbon)
 		ribbon.Rotation = 12
 		ribbon.AnchorPoint = Vector2.new(1, 0)
-		ribbon.Position = UDim2.new(1, 4, 0, 2)
+		-- Girada, la cinta se asoma por la derecha: hacia adentro, que la grilla recorta
+		-- lo que sale de la última columna
+		ribbon.Position = UDim2.new(1, -8, 0, 6)
 		ribbon.Size = UDim2.fromScale(0.62, 0.15)
 		ribbon.ZIndex = 3
 		stroke.Color = PALETTE.Coins
