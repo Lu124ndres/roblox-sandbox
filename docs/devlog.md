@@ -3753,3 +3753,12 @@ crecer. Ahora mide 7 studs de ancho (`PromptFloat`, solo los prompts Flotante) y
 el estanque; la placa se reescala sola con el tamaño del cartel. Los demás avisos no cambian.
 **Probado en Studio (simulador de teléfono):** al alejar la cámara pasó de 94 a 41 px de
 ancho, siguiendo al estanque.
+
+## 2026-10-22 — Atajo del pack de inicio más grande y llamativo
+
+**Qué se hizo (pedido del usuario: «el ícono del pack de inicio está muy pequeño»):** pasa de
+100 a 170, con un segundo halo de rayos naranja que gira al revés, un latido suave y una cinta
+roja de ¡OFERTA!. Su fila conserva el alto de antes y el ícono sobresale hacia arriba: si la
+fila creciera, la columna del menú (que se ajusta a la pantalla) achicaría todos sus botones.
+Los atajos de Poder y Monedas no cambian. **Probado en Studio (simulador de teléfono):**
+capturas antes y después; los botones de la columna quedan del mismo tamaño.
