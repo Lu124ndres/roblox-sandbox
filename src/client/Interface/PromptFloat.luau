@@ -13,6 +13,9 @@
 	Los de los estanques (`onWater`) van bajitos, sobre el agua y debajo del
 	cartel del estanque (Training/PondSigns), y sin AlwaysOnTop: con él, a 3 studs,
 	quedaban encima de ese cartel y en Studio ni se veían en las capturas.
+	Además miden lo mismo en el mundo (WATER_WIDTH_STUDS), no en la pantalla:
+	con medida en píxeles, al alejar la cámara el estanque se achicaba y el
+	botón no, y parecía crecer (pedido del usuario, 2026-10-22, en celular).
 ]]
 
 local Device = require(script.Parent.Device)
@@ -21,6 +24,7 @@ local Layout = require(script.Parent.Layout)
 local TOUCH_MIN_SCALE = 0.6
 local LIFT_STUDS = 3 -- cuánto sobre el objeto
 local WATER_LIFT_STUDS = 1.5 -- los de los estanques: apenas sobre el agua
+local WATER_WIDTH_STUDS = 7 -- ancho de la placa de los estanques (el estanque mide 12.5)
 
 local PromptFloat = {}
 
@@ -47,7 +51,9 @@ function PromptFloat.make(
 	gui.Name = "AvisoAccion"
 	gui.Adornee = adornee(prompt)
 	gui.AlwaysOnTop = not onWater
-	gui.Size = UDim2.fromOffset(size.X * scale, size.Y * scale)
+	gui.Size = if onWater
+		then UDim2.fromScale(WATER_WIDTH_STUDS, WATER_WIDTH_STUDS * size.Y / size.X)
+		else UDim2.fromOffset(size.X * scale, size.Y * scale)
 	gui.StudsOffsetWorldSpace = Vector3.new(0, if onWater then WATER_LIFT_STUDS else LIFT_STUDS, 0)
 	gui.LightInfluence = 0
 	gui.ResetOnSpawn = false
@@ -62,6 +68,14 @@ function PromptFloat.make(
 	local fit = Instance.new("UIScale")
 	fit.Scale = scale
 	fit.Parent = frame
+	if onWater then
+		-- El cartel cambia de tamaño en pantalla con la distancia: la placa lo sigue.
+		local function refit()
+			fit.Scale = math.max(gui.AbsoluteSize.X / size.X, 0.01)
+		end
+		gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(refit)
+		refit()
+	end
 	return gui, frame
 end
 

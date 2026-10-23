@@ -3743,3 +3743,13 @@ los 3 s sino `AUTO_OPEN_SECONDS` (25 s) después de que cargan los datos y termi
 tutorial, para dejar jugar un rato primero. Si mientras tanto la cobró desde el botón, no se
 abre. **Probado en Studio:** con el día sin cobrar, se abrió a los ~33 s de juego (los datos
 cargan a los ~8 s).
+
+## 2026-10-22 — El botón de entrenar del estanque mide lo mismo en el mundo
+
+**Qué se hizo (pedido del usuario: «en móviles el botón de entrenar no tiene tamaño fijo, si
+alejo la cámara se hace grande»):** la placa de los estanques medía lo mismo en píxeles a
+cualquier distancia. Al alejar la cámara, el estanque se achicaba y el botón no, y parecía
+crecer. Ahora mide 7 studs de ancho (`PromptFloat`, solo los prompts Flotante) y se achica con
+el estanque; la placa se reescala sola con el tamaño del cartel. Los demás avisos no cambian.
+**Probado en Studio (simulador de teléfono):** al alejar la cámara pasó de 94 a 41 px de
+ancho, siguiendo al estanque.
