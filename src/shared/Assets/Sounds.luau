@@ -45,6 +45,8 @@ local Sounds: { [string]: string } = {
 	Spout = "rbxasset://sounds/action_swim.mp3",
 	BigSplash = "rbxasset://sounds/impact_water.mp3",
 	StageUp = "rbxassetid://3454671965", -- fanfarria (badge fanfare)
+	GiantDefeat = "rbxassetid://1836954054", -- APM "Ray Of Sunshine" (5.3 s): se llenó y se va
+	EvolveShine = "rbxassetid://9116394545", -- "Magic Glows Soft Clusters Of Chiming Hits 1" (1.4 s)
 	Roar = "rbxassetid://9113985604", -- "Creature Roar Mix Of Animals Gate Creaks 1" (PSE, 3.3 s)
 	-- Minotauro (biblioteca con licencia de Roblox: ProSoundEffects). Etapas y capas en
 	-- client/Audio/MinoVoces; el tono baja con la etapa.

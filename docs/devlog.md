@@ -3818,3 +3818,17 @@ kill»):** el cartel «¡evolucionó!» ya no toca `StageUp` (quedan la carga y 
 siguen contando y se ven en el HUD. **Probado en Studio:** evolución a etapa 2 y llenado por
 admin: suenan `EvolveCharge`, `EvolveBurst`, `OrcaCalfSqueak` y `OrcaBlow`, ningún
 `StageUp`; Kills pasó de 13 a 14 sin cartel.
+
+## 2026-10-23 — Sonidos nuevos al vencer al monstruo y al evolucionar
+
+**Qué se hizo (pedido del usuario: «hazle nuevos pero que no sean horribles»):** se buscaron
+candidatos suaves en la Creator Store (ProSoundEffects y APM, con licencia de Roblox) y el
+usuario eligió por su link:
+
+- `GiantDefeat`: APM «Ray Of Sunshine» (5.3 s) al empezar la despedida (`GiantCycleFx`), sin
+  variación de tono porque es música.
+- `EvolveShine`: «Magic Glows Soft Clusters Of Chiming Hits 1» (1.4 s, el mismo de
+  `PowerReward`) con el cartel «¡evolucionó!», después del estallido.
+
+**Probado en Studio:** evolución a etapa 2 y llenado por admin: `EvolveShine` suena a 1.7 s
+(tras `EvolveBurst`) y `GiantDefeat` al llenarse; sin errores de carga en el Output.
