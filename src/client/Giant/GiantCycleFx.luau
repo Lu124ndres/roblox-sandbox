@@ -3,7 +3,7 @@
 	GiantCycleFx
 
 	Animaciones del ciclo del gigante, según EstadoGigante.Phase:
-		farewell  se llenó: ruge, salta girando y se zambulle en el lago con
+		farewell  se llenó: salta girando y se zambulle en el lago con
 		          una ola enorme; después desaparece.
 		rest      no está (el que entra a mitad del descanso tampoco lo ve). Cada
 		          GUARD_SECONDS se revisa que siga hundido: un cuerpo creado tarde
@@ -12,7 +12,7 @@
 		          levanta olas.
 		feeding   está en su lugar.
 	Todo con las palancas de GiantBody (lift y spin) y efectos locales. La voz
-	de cada gigante al llegar (de cría) y al irse: Audio/GiantMoments.
+	de cada gigante al llegar (de cría): Audio/GiantMoments.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -64,8 +64,7 @@ end
 
 local function farewell(body: GiantBody.Body)
 	local height = body.height()
-	-- Solo su voz: la fanfarria de victoria se quitó (pedido del usuario el 2026-10-23).
-	GiantMoments.playCurrent("farewell", body.top(), body.water())
+	-- En silencio: la fanfarria y su voz al irse se quitaron (pedido del usuario el 2026-10-23).
 	Fx.sparkle(body.top(), UIConfig.Colors.Coins, 60)
 	tween(body.spin, body.spin.Value + 720, 1.8, Enum.EasingStyle.Quad)
 	local up = tween(body.lift, height * 0.5, 1, Enum.EasingStyle.Quad)

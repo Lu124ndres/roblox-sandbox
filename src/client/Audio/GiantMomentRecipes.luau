@@ -13,7 +13,8 @@
 	todos sin posición. Exagerado a propósito: voz + cuerpo + agua o golpe.
 
 	Los gigantes sin receta (Orca Fantasma, por ahora) usan "default": el
-	rugido y el llamado de siempre.
+	rugido y el llamado de siempre. Al irse (despedida) no suena nada: se
+	quitó por pedido del usuario el 2026-10-23.
 ]]
 
 export type Age = "young" | "adult" | "final"
@@ -46,12 +47,6 @@ local RECIPES: { [string]: { [string]: { Layer } } } = {
 			L("OrcaBlow", nil, { delay = 0.5 }),
 			L("BigSplash", nil, { pitch = 0.8, delay = 0.6, at = "water" }),
 		},
-		farewell = {
-			L("OrcaCalfSqueak", "young"),
-			L("OrcaCall", "adult", { pitch = 0.9 }),
-			L("OrcaCallDeep", "final", { pitch = 0.75, volume = 0.8 }),
-			L("OrcaBlow", nil, { pitch = 0.8, delay = 0.4 }),
-		},
 		hungry = {
 			L("OrcaCalfSqueak", "young", { pitch = 0.85 }),
 			L("OrcaHungry", "adult", { pitch = 0.7 }),
@@ -81,12 +76,6 @@ local RECIPES: { [string]: { [string]: { Layer } } } = {
 			L("MinoSnort", nil, { pitch = 1.3, delay = 0.5 }),
 			L("MinoSandHit", nil, { delay = 0.6, at = "water" }),
 		},
-		farewell = {
-			L("MinoBellowDeep", "adult"),
-			L("MinoRumble", "final", { pitch = 0.85 }),
-			L("MinoCalf", "young", { pitch = 1.3 }),
-			L("MinoBoom", nil, { delay = 0.6, at = "water" }),
-		},
 		hungry = {
 			L("MinoCalf", "young", { pitch = 1.35 }),
 			L("MinoHungry", "adult"),
@@ -111,12 +100,6 @@ local RECIPES: { [string]: { [string]: { Layer } } } = {
 			L("DragonBabyRoar", "young", { pitch = 1.5, delay = 0.4 }),
 			L("DragonFlapSmall", nil, { delay = 0.2 }),
 		},
-		farewell = {
-			L("DragonHatchling", "young"),
-			L("DragonRoar", "adult"),
-			L("DragonRumble", "final", { pitch = 0.85 }),
-			L("DragonFlapBurst", nil, { delay = 0.3 }),
-		},
 		hungry = {
 			L("DragonHatchling", "young", { pitch = 0.75 }),
 			L("DragonHungry", "adult"),
@@ -140,12 +123,6 @@ local RECIPES: { [string]: { [string]: { Layer } } } = {
 			L("ZorroWhimper", "young", { pitch = 1.2, volume = 0.6, delay = 0.4 }),
 			L("ZorroSplash", nil, { delay = 0.5, at = "water" }),
 		},
-		farewell = {
-			L("ZorroHowlYoung", "young"),
-			L("ZorroHowlDeep", "adult"),
-			L("ZorroHowlBig", "final", { pitch = 0.9, delay = 0.4 }),
-			L("ZorroRumble", "final", { pitch = 0.8, volume = 0.7 }),
-		},
 		hungry = {
 			L("ZorroWhimper", "young"),
 			L("ZorroHungry", "adult", { pitch = 0.9 }),
@@ -165,7 +142,6 @@ local RECIPES: { [string]: { [string]: { Layer } } } = {
 	},
 	default = {
 		arrive = { L("OrcaCall", nil, { pitch = 0.8 }), L("Roar", nil, { delay = 0.6 }) },
-		farewell = { L("Roar") },
 		hungry = { L("Roar", nil, { pitch = 1.15 }) },
 		furious = { L("Roar") },
 		evolve = { L("Roar") },

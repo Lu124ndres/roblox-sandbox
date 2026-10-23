@@ -3800,3 +3800,12 @@ horrible, quítalo; también el monstruo no se va, se queda ahí»):**
 **Probado en Studio:** llenando de etapa 1 a 100 % por admin, antes la orca quedaba en y=-47
 y sonaba `StageUp` dos veces; ahora salta, se zambulle y a los 3 s está en y≈-430, y solo
 suenan `OrcaCall`, `OrcaCallDeep` y `OrcaBlow`.
+
+## 2026-10-23 — El monstruo se va en silencio
+
+**Qué se hizo (pedido del usuario: «me refiero al único sonido que hay cuando lo derrotas»):**
+se quita también la voz del monstruo al irse (en la orca, `OrcaCall`/`OrcaCallDeep` y el
+resoplido `OrcaBlow`): `GiantCycleFx` ya no llama a `GiantMoments` en la despedida y las
+recetas `farewell` salen de `GiantMomentRecipes` (orca, minotauro, dragón, zorro y default).
+La llegada conserva su voz. **Probado en Studio:** llenando la barra por admin no se crea
+ningún sonido en la despedida (solo la gaviota del ambiente) y la orca se esconde a los 3 s.
