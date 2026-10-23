@@ -145,4 +145,6 @@ return {
 	["{} y +{} giros y +{}% más"] = "{} and +{} spins and +{}% more",
 	["{} (racha al máximo: ¡no la cortes!)"] = "{} (max streak: don't break it!)",
 	["Jugar en inglés"] = "Play in English",
+	-- Índice: «+8.7K con 18 · suerte +0%» (premio de la próxima meta de especies)
+	["{} con {} · suerte +{}"] = "{} at {} · luck +{}",
 }

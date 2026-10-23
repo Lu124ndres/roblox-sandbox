@@ -107,8 +107,9 @@ return {
 	["Calmado"] = "Calm",
 	["Molesta"] = "Annoyed",
 	["Molesto"] = "Annoyed",
-	["{} monstruo"] = "{} monster",
-	["{} monstruos"] = "{} monsters",
+	["Requiere {} monstruo"] = "Requires {} monster",
+	["Requiere {} monstruos"] = "Requires {} monsters",
+	["Personajes"] = "Characters",
 	-- Carteles del mapa (world/Isla.model.json)
 	["AL CRÁTER DEL ABISMO"] = "TO THE ABYSS CRATER",
 	["CRÁTER DEL ABISMO"] = "ABYSS CRATER",
@@ -118,4 +119,6 @@ return {
 	["TOP RENACIMIENTOS"] = "TOP REBIRTHS",
 	["Canjear"] = "Redeem",
 	["Todos"] = "All",
+	["Estanques"] = "Ponds",
+	["Pases"] = "Passes",
 }

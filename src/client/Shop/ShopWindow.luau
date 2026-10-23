@@ -12,6 +12,7 @@
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
@@ -159,11 +160,19 @@ function ShopWindow.mount(
 		showDetail()
 	end
 
+	-- Deja a la vista la fila del siguiente nivel. Recién creadas las tarjetas, la grilla
+	-- todavía no sabe cuántas columnas tiene (AbsoluteCellCount = 0) y bajaba de más:
+	-- se espera un cuadro a que se acomode.
+	local function scrollToSelected()
+		RunService.RenderStepped:Wait()
+		local row = (selected - 1) // math.max(layout.AbsoluteCellCount.X, 1)
+		grid.CanvasPosition = Vector2.new(0, math.max(row - 1, 0) * (CELL.Y + GAP))
+	end
+
 	local function setTab(category: Upgrades.Category)
 		current, lastOwned = category, 0
 		refresh()
-		local row = (selected - 1) // math.max(layout.AbsoluteCellCount.X, 1)
-		grid.CanvasPosition = Vector2.new(0, math.max(row - 1, 0) * (CELL.Y + GAP))
+		task.spawn(scrollToSelected)
 	end
 	tabs.onPick(setTab)
 	window.onOpen(function()

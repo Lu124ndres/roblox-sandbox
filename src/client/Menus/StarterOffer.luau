@@ -104,10 +104,14 @@ function StarterOffer.start(screen: ScreenGui)
 
 	local value = Style.text(content, "Valor", 24, Color3.fromRGB(255, 214, 200), 2)
 	value.RichText = true
-	value.Text = `Solo el equipo, por separado: <s>{separate} R$</s>   ¡Hoy {PACK.robux} R$!`
 	value.Position = UDim2.fromOffset(0, 310)
 	value.Size = UDim2.new(1, 0, 0, 28)
-	value.Visible = separate > PACK.robux
+	-- Con el precio que cobra Roblox (el del botón), no el de Config: si no, no coinciden
+	local function showValue(robuxPrice: number)
+		value.Text = `Solo el equipo, por separado: <s>{separate} R$</s>   ¡Hoy {robuxPrice} R$!`
+		value.Visible = separate > robuxPrice
+	end
+	showValue(PACK.robux)
 
 	local buy = Style.lavaButton(content, "Comprar", "¡LO QUIERO!")
 	buy.AnchorPoint = Vector2.new(0.5, 1)
@@ -135,7 +139,9 @@ function StarterOffer.start(screen: ScreenGui)
 	end)
 	window.onOpen(function()
 		task.spawn(function()
-			price.Text = tostring(Purchases.price("PackInicio", false, PACK.robux))
+			local robuxPrice = Purchases.price("PackInicio", false, PACK.robux)
+			price.Text = tostring(robuxPrice)
+			showValue(robuxPrice)
 		end)
 	end)
 	player:GetAttributeChangedSignal(ATTR.StarterPack):Connect(function()

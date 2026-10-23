@@ -107,17 +107,31 @@ local function lookup(core: string): string?
 	if found then
 		return matchCase(core, found)
 	end
+	-- Si varias plantillas encajan, gana la que deja menos pedazos con letras sin traducir
+	-- («EXTRA · {}» sobre «{} monstruo» en «EXTRA · Ayuda a llenar 1 monstruo»); a igual
+	-- cuenta, la de más texto fijo (el orden de rules). Los nombres de jugador no se
+	-- traducen nunca, así que cuentan igual para todas.
+	local best: string?, bestMissing = nil, math.huge
 	for _, rule in rules do
 		local marks = { string.match(key, rule.pattern) } :: { number }
 		if #marks > 0 then
-			local captures = {}
+			local captures, missing = {}, 0
 			for i = 1, #marks, 2 do
-				table.insert(captures, string.sub(core, marks[i], marks[i + 1] - 1))
+				local piece = string.sub(core, marks[i], marks[i + 1] - 1)
+				table.insert(captures, piece)
+				if string.find(piece, "%a") and not translate(piece) then
+					missing += 1
+				end
 			end
-			return matchCase(core, fill(rule.out, captures))
+			if missing < bestMissing then
+				best, bestMissing = fill(rule.out, captures), missing
+				if missing == 0 then
+					break
+				end
+			end
 		end
 	end
-	return nil
+	return if best then matchCase(core, best) else nil
 end
 
 translate = function(text: string): string?
