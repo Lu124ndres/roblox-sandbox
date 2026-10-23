@@ -154,6 +154,9 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] El botón Alimentar se esconde fuera de la fase de comer; los peces se conservan.
 - [x] La recompensa solo abajo: guarida del descanso que emerge en el centro del lago,
       rampas desde los muelles, aviso a los 10 s y subida a un muelle al terminar.
+- [x] Guarida del descanso como santuario flotante de Blender, a -20 (antes -60).
+- [ ] Lago de la orca plano a -250 (el terreno del lago cambia según el gigante).
+- [ ] Hábitat completo de la orca en Blender, sobre ese fondo (reemplaza los props sueltos).
 - [x] Kills: +1 a quien le dio de comer al monstruo; estadísticas Poder y Kills (las
       monedas pasan al HUD); kills guardadas (`SaveSchema` v2).
 - [ ] Ruleta con animación (Orca, Minotauro, Dragón, Zorro) cuando existan sus modelos

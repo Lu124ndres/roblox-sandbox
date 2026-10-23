@@ -2,8 +2,9 @@
 --[[
 	RestArena
 
-	El descanso es en el fondo del volcán. La guarida (world/GuaridaDescanso.model.json,
-	en ServerStorage) llena el fondo de pared a pared y queda ENTERRADA
+	El descanso es en el volcán vacío. La guarida (world/GuaridaDescanso.model.json,
+	en ServerStorage, vestida con el santuario flotante de Blender si está en
+	ServerStorage.PropsMapa: tools/blender/guarida_santuario.py) flota en el medio y queda ENTERRADA
 	(restArenaSink studs más abajo) mientras se alimenta al gigante. Al empezar el
 	descanso sube a su lugar y se publica VolcanVacio = true: cada cliente vacía el
 	lago (Ambient/CraterDrain, en Config.Giants.cycle.drainSeconds) y la ve subir
@@ -24,6 +25,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local GiantPublish = require(script.Parent.Feeding.GiantPublish)
+local PropDresser = require(script.Parent.World.PropDresser)
 local Proximity = require(script.Parent.Proximity)
 
 local RestArena = {}
@@ -54,6 +56,12 @@ function RestArena.init(_map: Instance)
 	local found = ServerStorage:WaitForChild(Protocol.Map.RestArena, 10)
 	assert(found and found:IsA("Model"), "RestArena: falta ServerStorage.GuaridaDescanso")
 	local model = found:Clone()
+	PropDresser.dress(model) -- el santuario flotante de Blender, si está en PropsMapa
+	for _, part in model:GetDescendants() do
+		if part:IsA("MeshPart") then -- se camina sobre el Piso y el Borde invisible
+			part.CanCollide, part.CanQuery, part.CanTouch = false, false, false
+		end
+	end
 	model.ModelStreamingMode = Enum.ModelStreamingMode.Persistent
 	model:PivotTo(model:GetPivot() + SINK) -- enterrada hasta el descanso
 	model.Parent = Workspace

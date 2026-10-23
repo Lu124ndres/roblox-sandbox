@@ -1,0 +1,12 @@
+{
+ "ancho": 268.423,
+ "alto": 154.972,
+ "centroY": -36.514,
+ "mallas": [
+  "GuaridaPiso",
+  "GuaridaRoca",
+  "GuaridaBorde",
+  "GuaridaLava"
+ ],
+ "lava": "GuaridaLava"
+}

@@ -1145,3 +1145,14 @@ despedirse, hambre, furia, calma, evolución de la orca) salen de una tabla por 
 agrega su bloque; si no lo tiene, usa `default`, que es el sonido de antes. Todo el audio es
 de ProSoundEffects (regla 3 de la guía del monstruo). Cuando no hay el animal real se usa el
 más parecido, con el tono ajustado, y queda anotado como sustituto en `docs/ui-assets.md`.
+
+## 2026-10-23 — La guarida del descanso es de Blender (excepción a la fase 1)
+
+**Contexto:** el usuario pidió una plataforma de descanso más épica y más alta. **Decisión:**
+otra excepción a la fase 1, como el arco: el santuario flotante sale de
+`tools/blender/guarida_santuario.py` y entra por `PropDresser` con anclas de ajuste `"caja"`
+(las cuatro mallas comparten la caja, que el script deja en `assets/blender/GuaridaSantuario.json`
+para el generador). Las mallas no chocan: se camina sobre el `Piso` de primitivas, que la malla
+tapa por 0.15 studs, y el `Borde` invisible de siempre; así `GuaridaSube` sigue midiendo con el
+`Piso`. Al flotar ya no llena el pozo de pared a pared: el radio baja a 100 y todo lo que cuelga
+queda dentro de la pared del lago a esa altura.

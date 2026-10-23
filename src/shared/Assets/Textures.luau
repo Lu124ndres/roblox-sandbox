@@ -81,6 +81,12 @@ local Textures: { [string]: { string } } = {
 	ArcoVolcan = {
 		"rbxassetid://85903901993794",
 	},
+	-- Santuario flotante de la guarida (tools/blender/guarida_santuario.py):
+	-- ServerStorage.PropsMapa.GuaridaPiso, GuaridaRoca y GuaridaBorde. La lava
+	-- (GuaridaLava) no lleva textura: PropDresser la pone en Neon.
+	GuaridaSantuario = {
+		"rbxassetid://76682386384168",
+	},
 	DragonMarinoE1 = {
 		"rbxassetid://84201486554941",
 		"rbxassetid://121296317760278",

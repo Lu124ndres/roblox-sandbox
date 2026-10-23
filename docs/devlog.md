@@ -3903,3 +3903,19 @@ regalo). `InputHints.badge` acepta no tener tecla: así solo se ve con mando.
 **Probado en Studio (simulador Xbox One):** captura con las cuatro cruces (abajo TIENDA,
 arriba MEJORAS, izquierda MISIONES, derecha RENACER) y la Y del regalo; sin simulador,
 en PC, las cinco insignias quedan ocultas.
+
+## 2026-10-23 — La guarida del descanso es un santuario flotante de Blender
+
+**Qué se hizo (pedido del usuario: «una plataforma de descanso más épica, más alta, que no
+esté tan profunda»; eligió «santuario flotante» y -20):** `tools/blender/guarida_santuario.py`
+arma por bloques un piso de losas con anillos y glifos de runas de lava, un estrado con
+cristales de magma y dos anillos cruzados alrededor del cristal de poder, 8 pilares con
+magma en la punta, un cono de roca colgante con vetas de lava, 8 cadenas de basalto con
+lastre y 16 piedras rúnicas flotando. Son cuatro mallas (≤ 9.564 triángulos) con la misma
+caja; `generar_isla.py` deja sus anclas en `GuaridaDescanso` y `RestArena` la viste con
+`PropDresser` al clonarla (sin las mallas quedan las primitivas). La guarida sube a
+`restArenaTop` -20 (antes -60), mide `restArenaRadius` 100 (flota, ya no toca las paredes)
+y se esconde 280 studs más abajo, por debajo también del futuro lago de -250 de la orca.
+
+**Probado en Studio:** `fill 1` → el volcán se vacía y el santuario sube de -300 a -20 con
+sus cuatro mallas (la lava en Neon); captura desde el borde del cráter.
