@@ -4,10 +4,12 @@
 
 	Una tarjeta de la ventana MISIONES (QuestsWindow): rayos azules o verdes,
 	ícono del tipo de misión en un hueco de piedra, texto, barra, premio en monedas, etiqueta de
-	impulso y ✓ al cumplirla.
+	impulso, el botón ¡RECLAMAR! de lava (late, como el del premio diario) al cumplirla y ✓
+	cuando ya la cobró.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local CardParts = require(script.Parent.Parent.Interface.CardParts)
@@ -17,6 +19,7 @@ local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local ROW_HEIGHT = 84
+local BEAT = TweenInfo.new(0.55, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 
 local QuestRow = {}
 
@@ -38,6 +41,7 @@ export type Quest = {
 	progress: number,
 	goal: number,
 	done: boolean,
+	claimed: boolean?, -- ya la cobró (done sin claimed: se puede reclamar)
 	coins: number,
 	boost: number,
 	extra: boolean?, -- misión extra: paga, pero el cofre no la pide
@@ -48,6 +52,8 @@ export type Row = {
 	title: TextLabel,
 	bar: CardParts.Bar,
 	reward: TextLabel,
+	prize: Frame,
+	claim: TextButton,
 	boost: TextLabel,
 	check: TextLabel,
 	color: Color3?,
@@ -92,7 +98,36 @@ function QuestRow.make(parent: Instance, order: number, wide: boolean?): Row
 	check.Position = UDim2.new(0, ROW_HEIGHT / 2, 0.5, 0)
 	check.Size = UDim2.fromOffset(ROW_HEIGHT, ROW_HEIGHT)
 	check.ZIndex = 4
-	return { box = box, title = title, bar = bar, reward = reward, boost = boost, check = check }
+	-- ¡RECLAMAR! ocupa el lugar del premio cuando está cumplida y sin cobrar.
+	local claim = Style.lavaButton(box, "Reclamar", "¡RECLAMAR!")
+	claim.AnchorPoint = Vector2.new(1, 0.5)
+	claim.Position = UDim2.new(1, -10, 0.5, 0)
+	claim.Size = UDim2.new(if wide then 0.26 else 0.3, -10, 0, 56)
+	claim.ZIndex = 4
+	claim.Visible = false
+	local beat = Instance.new("UIScale")
+	beat.Parent = claim
+	TweenService:Create(beat, BEAT, { Scale = 1.06 }):Play()
+	return {
+		box = box,
+		title = title,
+		bar = bar,
+		reward = reward,
+		prize = prize,
+		claim = claim,
+		boost = boost,
+		check = check,
+	}
+end
+
+-- Pendiente, lista para reclamar (botón) o cobrada (✓).
+function QuestRow.setState(row: Row, ready: boolean, claimed: boolean)
+	row.claim.Visible = ready and not claimed
+	row.prize.Visible = not row.claim.Visible
+	row.check.Visible = claimed
+	if row.icon then
+		row.icon.Visible = not claimed
+	end
 end
 
 function QuestRow.setIcon(row: Row, kind: string)

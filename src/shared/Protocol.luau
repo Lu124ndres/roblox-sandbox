@@ -29,7 +29,8 @@ export type NoticeKind =
 	| "playtime" -- (index, text) cobró un regalo por tiempo jugado
 	| "admin" -- (text) resultado de una orden del panel de administrador
 	| "event" -- (eventId) empezó un evento del servidor (Config/Events)
-	| "quest" -- (text, rewardText) cumplió una misión diaria (o el cofre)
+	| "quest" -- (text, hint) cumplió una misión diaria (o el cofre): se reclama en MISIONES
+	| "questClaimed" -- (text, rewardText) reclamó una misión diaria (o el cofre)
 	| "rebirth" -- (count) renació
 	| "boost" -- (buyerName, multiplier) alguien subió el entrenamiento de todo el servidor
 	| "choose" -- (buyerName, giantId) alguien eligió el siguiente monstruo
@@ -81,6 +82,8 @@ local Protocol = {
 		ClaimDaily = "ClaimDaily",
 		-- cliente -> servidor: (index: number). Cobrar el regalo por tiempo número index.
 		ClaimPlaytime = "ClaimPlaytime",
+		-- cliente -> servidor: (index: number). Reclamar la misión index del día (0 = el cofre).
+		QuestClaim = "QuestClaim",
 		-- cliente -> servidor: (name, value, UserId del jugador elegido). Orden del panel admin.
 		AdminCommand = "AdminCommand",
 		RestEnter = "RestEnter", -- cliente -> servidor: ir a la guarida durante el descanso

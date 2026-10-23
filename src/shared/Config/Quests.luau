@@ -4,8 +4,8 @@
 
 	Misiones diarias: cada día (UTC) salen `perDay` misiones de la lista,
 	las mismas para todos (así se comentan entre jugadores). Se cumplen solas
-	al llegar a la meta y pagan al momento; cumplir las tres da además el
-	cofre (`bonus`). Además sale una misión EXTRA de `extra` (llenar
+	al llegar a la meta y se reclaman en la ventana MISIONES; cumplir las tres
+	da además el cofre (`bonus`), que también se reclama ahí. Además sale una misión EXTRA de `extra` (llenar
 	monstruos): paga igual, pero el cofre no la pide (se puede jugar solo).
 	Las monedas crecen con el avance (shared/RewardScale), así valen la pena
 	todo el juego; el multiplicador de monedas (Robux) no las toca.

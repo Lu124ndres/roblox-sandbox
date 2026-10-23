@@ -5,9 +5,13 @@
 	Misiones diarias (botón MISIONES) con el estilo de la TIENDA: tarjetas
 	con rayos (azul pendiente, verde cumplida; la EXTRA morada), ícono, barra
 	y premio (QuestRow); abajo el cofre por cumplir las tres (la extra de
-	llenar monstruos paga, pero no hace falta para el cofre). El servidor paga y avisa; aquí solo se
-	muestra el atributo Misiones (JSON de server/Retention/Quests). En táctil
-	la ventana es ancha y las tarjetas van de dos en dos.
+	llenar monstruos paga, pero no hace falta para el cofre). Cumplida, la
+	tarjeta muestra ¡RECLAMAR! y se cobra aquí con QuestClaim(index; 0 = el
+	cofre): no hay autorreclamo (pedido del usuario el 2026-10-23). El servidor
+	valida y paga; aquí solo se muestra el atributo Misiones (JSON de
+	server/Retention/Quests). El botón MISIONES avisa mientras quede algo por
+	hacer o por reclamar. En táctil la ventana es ancha y las tarjetas van de
+	dos en dos.
 ]]
 
 local HttpService = game:GetService("HttpService")
@@ -26,11 +30,14 @@ local Window = require(script.Parent.Window)
 local WindowLayout = require(script.Parent.WindowLayout)
 
 local CARDS = Style.PALETTE.Cards
+local CHEST = 0 -- índice de QuestClaim para el cofre
 
 local QuestsWindow = {}
 
 function QuestsWindow.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
+	local remotes = ReplicatedStorage:WaitForChild(Protocol.RemotesFolder)
+	local claimRemote = remotes:WaitForChild(Protocol.Remotes.QuestClaim) :: RemoteEvent
 	local wide = WindowLayout.wide()
 	local size = WindowLayout.size(Vector2.new(740, 590), Vector2.new(1120, 400))
 	local window = Window.create(screen, "Misiones", "Misiones del día", size)
@@ -55,10 +62,18 @@ function QuestsWindow.start(screen: ScreenGui)
 	local rows: { QuestRow.Row } = {}
 	local count = QUESTS.perDay + (if #QUESTS.extra > 0 then 1 else 0)
 	for index = 1, count do
-		rows[index] =
-			QuestRow.make(window.content, if index > QUESTS.perDay then 98 else index, wide)
+		local row = QuestRow.make(window.content, if index > QUESTS.perDay then 98 else index, wide)
+		row.claim.Activated:Connect(function()
+			row.claim.Visible = false -- hasta que el servidor confirme (o lo vuelva a mostrar)
+			claimRemote:FireServer(index)
+		end)
+		rows[index] = row
 	end
 	local chest = QuestRow.make(window.content, QUESTS.perDay + 1, wide)
+	chest.claim.Activated:Connect(function()
+		chest.claim.Visible = false
+		claimRemote:FireServer(CHEST)
+	end)
 	QuestRow.setIcon(chest, "chest")
 	chest.title.Text = "Cofre: cumple las tres"
 	chest.reward.Text = NumberFormat.short(QUESTS.bonus.coins)
@@ -77,7 +92,7 @@ function QuestsWindow.start(screen: ScreenGui)
 		if not ok or type(data) ~= "table" or type(data.list) ~= "table" then
 			return
 		end
-		local pending, doneCount = false, 0
+		local pending, ready, doneCount = false, false, 0
 		for index, row in rows do
 			local quest = data.list[index] :: QuestRow.Quest?
 			row.box.Visible = quest ~= nil
@@ -94,10 +109,9 @@ function QuestsWindow.start(screen: ScreenGui)
 				)
 				row.reward.Text = NumberFormat.short(quest.coins)
 				QuestRow.setBoost(row, quest.boost)
-				row.check.Visible = quest.done
-				if row.icon then
-					row.icon.Visible = not quest.done
-				end
+				local claimed = quest.claimed == true
+				QuestRow.setState(row, quest.done, claimed)
+				ready = ready or (quest.done and not claimed)
 				local idle = if quest.extra then CARDS.Purple else CARDS.Blue
 				QuestRow.paint(row, if quest.done then CARDS.Green else idle)
 				if not quest.extra then
@@ -114,9 +128,11 @@ function QuestsWindow.start(screen: ScreenGui)
 			if data.bonus then "¡Cobrado!" else `{doneCount} / {QUESTS.perDay}`,
 			CARDS.Yellow
 		)
-		chest.check.Visible = data.bonus == true
+		local chestReady = doneCount >= QUESTS.perDay
+		QuestRow.setState(chest, chestReady, data.bonus == true)
+		ready = ready or (chestReady and data.bonus ~= true)
 		QuestRow.paint(chest, if data.bonus then CARDS.Green else CARDS.Orange)
-		hud.setAlert(pending)
+		hud.setAlert(pending or ready)
 	end
 
 	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.Quests):Connect(render)

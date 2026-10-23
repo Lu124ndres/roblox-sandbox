@@ -3863,3 +3863,29 @@ sonidos»):** los SoundGroup `Musica` y `Efectos` de `ClientSettings` suenan a 2
 (`MUSIC_VOLUME`, `SFX_VOLUME`) en vez de 1; apagarlos en Ajustes sigue dejándolos en 0.
 **Probado en Studio:** los dos grupos a 0.67 y todo lo que sonaba (música de la isla, del
 cráter y del descanso, olas, ambiente) estaba en uno de ellos.
+
+## 2026-10-23 — Las misiones se reclaman en la ventana MISIONES
+
+**Qué se hizo (pedido del usuario: «que las misiones se reclamen en el apartado de misiones,
+no autorreclamo»):**
+
+- Al llegar a la meta la misión queda cumplida y avisa «¡Misión cumplida! …: reclámala en
+  MISIONES», pero no paga. En la ventana su tarjeta muestra ¡RECLAMAR! de lava (late, como
+  el del premio diario) en lugar del premio; cobrada, ✓. El cofre igual, con las tres.
+- Remote nuevo `QuestClaim(index)` (1..n la misión de la lista del día, 0 el cofre), con
+  `RateLimit` (3/s): valida número entero, que exista, que esté cumplida y sin cobrar (o las
+  tres para el cofre). Marca antes de pagar: dos pedidos seguidos pagan una vez. Al cobrar,
+  cartel `questClaimed` con el premio.
+- Guardado v16: `quests.claimed`. Un guardado sin él copia `done` (antes se pagaban solas).
+  `QuestDay` se separa de `Quests` (la lista del día, el cambio de día y «las tres
+  cumplidas»). El botón MISIONES avisa también si hay algo por reclamar.
+- `remote-auditor`: sin agujeros; se aplicaron sus dos detalles (subir a v16 para que un
+  servidor viejo no abra el guardado y borre `claimed`; `Quests.add` ignora NaN e infinito).
+
+**Qué se rompió:** nada. Lo cumplido sin reclamar se pierde a las 00:00 UTC al cambiar el
+día (a decidir si se paga solo antes).
+
+**Probado en Studio:** llenar el monstruo cumplió la EXTRA sin pagar (+0) y avisó; ocho
+índices inválidos y el cofre sin las tres no pagaron; dos `QuestClaim(4)` seguidos pagaron
+2500 una vez; captura de la ventana con ¡RECLAMAR!, ✓ y pendientes; con v16 el guardado
+carga y conserva lo reclamado.

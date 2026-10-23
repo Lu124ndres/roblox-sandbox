@@ -2,10 +2,12 @@
 --[[
 	SaveExtra
 
-	Campos del guardado que llegaron en las versiones 8 a 15 (SaveSchema los
+	Campos del guardado que llegaron en las versiones 8 a 16 (SaveSchema los
 	declara y llama a read; en un guardado viejo faltan y quedan en 0 o vacíos):
 		rebirths     veces que renació (Retention/Rebirth)
-		quests       misiones del día: día UTC, avance y cuáles se cumplieron
+		quests       misiones del día: día UTC, avance, cuáles se cumplieron y cuáles
+		             se reclamaron (claimed, v16, 2026-10-23: antes se pagaban solas, así
+		             que en un guardado sin claimed lo cumplido cuenta como cobrado)
 		starterPack  ya compró el pack de inicio (se ofrece una sola vez)
 		spinAt       unix en que vuelve a tocar la ruleta gratis (v9, Retention/SpinWheel)
 		spins        giros de ruleta guardados (v10)
@@ -32,13 +34,14 @@ export type QuestsSave = {
 	day: number,
 	progress: { [string]: number },
 	done: { [string]: boolean },
+	claimed: { [string]: boolean }, -- ya la cobró en la ventana MISIONES
 	bonus: boolean, -- ya cobró el cofre por cumplir las tres
 }
 
 local SaveExtra = {}
 
 function SaveExtra.quests(): QuestsSave
-	return { day = 0, progress = {}, done = {}, bonus = false }
+	return { day = 0, progress = {}, done = {}, claimed = {}, bonus = false }
 end
 
 -- Entero >= 0 de lo guardado (0 si falta o no es un número válido).
@@ -81,7 +84,7 @@ local function outfit(value: unknown): string
 	return ""
 end
 
--- Lee lo de las versiones 8 a 15 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
+-- Lee lo de las versiones 8 a 16 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
 function SaveExtra.read(source: { [string]: any }, data: any)
 	data.rebirths = count(source.rebirths)
 	data.starterPack = source.starterPack == true
@@ -118,6 +121,15 @@ function SaveExtra.read(source: { [string]: any }, data: any)
 			for id, value in saved.done do
 				if type(id) == "string" and value == true then
 					data.quests.done[id] = true
+				end
+			end
+		end
+		-- Sin claimed (antes de 2026-10-23) lo cumplido ya se había pagado solo.
+		local claimed = if type(saved.claimed) == "table" then saved.claimed else saved.done
+		if type(claimed) == "table" then
+			for id, value in claimed do
+				if type(id) == "string" and value == true then
+					data.quests.claimed[id] = true
 				end
 			end
 		end

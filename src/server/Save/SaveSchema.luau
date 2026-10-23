@@ -61,8 +61,9 @@ local SaveSchema = {}
 -- 5: compras, códigos, grupo; 6: pases regalados; 7: canasta como conteo por especie;
 -- 8: renacer, misiones, pack de inicio; 9: ruleta gratis; 10: giros guardados y
 -- x2 monedas; 11: minutos jugados; 12: traje elegido; 13: pases de prueba del admin;
--- 14: cuándo vio el pack de inicio; 15: caña suprema (8 a 15 en SaveExtra; si falta, 0)
-SaveSchema.VERSION = 15
+-- 14: cuándo vio el pack de inicio; 15: caña suprema; 16: misiones reclamadas (quests.claimed;
+-- así un servidor viejo no abre el guardado y la borra) (8 a 16 en SaveExtra; si falta, 0)
+SaveSchema.VERSION = 16
 
 function SaveSchema.default(): SaveData
 	return {

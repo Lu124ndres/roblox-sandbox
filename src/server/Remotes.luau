@@ -36,6 +36,7 @@ local Remotes = {
 	Notice = makeEvent(Protocol.Remotes.Notice),
 	ClaimDaily = makeEvent(Protocol.Remotes.ClaimDaily),
 	ClaimPlaytime = makeEvent(Protocol.Remotes.ClaimPlaytime),
+	QuestClaim = makeEvent(Protocol.Remotes.QuestClaim),
 	AdminCommand = makeEvent(Protocol.Remotes.AdminCommand),
 	RestEnter = makeEvent(Protocol.Remotes.RestEnter),
 	Rebirth = makeEvent(Protocol.Remotes.Rebirth),

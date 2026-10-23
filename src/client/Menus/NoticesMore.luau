@@ -7,8 +7,9 @@
 	su suerte), el monstruo que se cansó de esperar y
 	se fue (con la kill igual para quien le dio algo) y el premio de la
 	ruleta (después de que la ventana termina de girar, con el ícono de la
-	casilla), los giros guardados que gana por jugar o con el diario y otro
-	jugador que sacó la caña suprema. Solo muestra.
+	casilla), los giros guardados que gana por jugar o con el diario, otro
+	jugador que sacó la caña suprema y el premio de una misión reclamada.
+	Solo muestra.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -91,6 +92,10 @@ function NoticesMore.handle(toasts: Toasts.Toasts, kind: unknown, a: unknown, b:
 			"ticket",
 			"¡GIRO GRATIS!"
 		)
+		return true
+	elseif kind == "questClaimed" and type(a) == "string" and type(b) == "string" then
+		Sounds.play("Coins")
+		toasts.banner(b, COLORS.Coins, "coin", `¡RECLAMADA! {TextCase.upper(a)}`)
 		return true
 	end
 	return false
