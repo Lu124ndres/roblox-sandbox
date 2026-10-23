@@ -22,6 +22,7 @@ local RunService = game:GetService("RunService")
 local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Distance = require(script.Parent.Parent.Effects.Distance)
+local BodyPose = require(script.Parent.Parent.Body.BodyPose)
 local ArmPose = require(script.Parent.ArmPose)
 local Rod = require(script.Parent.Rod)
 local RigParts = require(script.Parent.RigParts)
@@ -48,10 +49,14 @@ local loop: RBXScriptConnection? = nil
 
 local function step(dt: number)
 	for _, entry in entries do
-		local rod, pose = entry.rig.rod, entry.rig.pose
+		local rod, pose, body = entry.rig.rod, entry.rig.pose, entry.rig.body
 		if rod then
 			entry.since += dt
 			local target = if pose then pose.angle() else HOLD_DEGREES
+			-- El tronco echado atrás sube el brazo; girado, lo lleva de costado.
+			local lean = if body and entry.full then body.value("waistX") else 0
+			local twist = if body and entry.full then body.value("waistY") else 0
+			target += lean
 			if entry.full then
 				-- Resorte: la caña persigue al brazo (pasos chicos para que sea estable).
 				local angle = entry.angle or target
@@ -59,7 +64,7 @@ local function step(dt: number)
 				entry.speed += (SPRING * (target - angle) - DAMPING * entry.speed) * h
 				angle += entry.speed * h
 				entry.angle = angle
-				rod.follow(angle)
+				rod.follow(angle, twist)
 			elseif entry.since >= Performance.RodMidUpdateSeconds then
 				entry.since = 0
 				entry.angle, entry.speed = nil, 0
@@ -107,6 +112,9 @@ function RodRig.show(player: Player, rig: Rig, character: Model): (boolean, bool
 	local built = false
 	if not rig.pose then
 		rig.pose = ArmPose.new(character)
+	end
+	if not rig.body then
+		rig.body = BodyPose.get(character)
 	end
 	if not rig.rod then
 		local look = Upgrades.level(player, "Rod")

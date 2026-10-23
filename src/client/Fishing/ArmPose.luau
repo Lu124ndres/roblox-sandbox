@@ -23,6 +23,7 @@ export type ArmPose = {
 	set: (degrees: number, seconds: number, style: Enum.EasingStyle?) -> (),
 	angle: () -> number, -- ángulo actual en grados, con el temblor incluido
 	shake: (degrees: number) -> (),
+	freeze: (seconds: number) -> (), -- hitstop: congela y después alcanza (mismo final)
 	setActive: (active: boolean) -> (), -- mover el hombro o no
 	destroy: () -> (),
 }
@@ -31,6 +32,7 @@ export type ArmPose = {
 type Joint = (rotation: CFrame) -> ()
 
 local SHAKE_SPEED = 38 -- radianes por segundo del temblor cuando pica
+local CATCH_UP_SECONDS = 0.08 -- después de un hitstop, en cuánto vuelve a seguir al tween
 
 local ArmPose = {}
 
@@ -69,13 +71,24 @@ function ArmPose.new(character: Model, active: boolean?): ArmPose?
 	local shakeDegrees = 0
 	local elapsed = 0
 	local current = 0
+	local frozen, catchUp, held = 0, 0, 0
 	local connection: RBXScriptConnection? = nil
 
 	-- El Animator escribe Transform antes de la simulación; se suma la pose
 	-- justo después, así que la animación de caminar no la borra.
 	local function step(dt: number)
 		elapsed += dt
-		current = angle.Value + math.sin(elapsed * SHAKE_SPEED) * shakeDegrees
+		local live = angle.Value + math.sin(elapsed * SHAKE_SPEED) * shakeDegrees
+		if frozen > 0 then
+			-- Hitstop: el brazo queda quieto aunque el tween siga corriendo debajo.
+			frozen -= dt
+			live = held
+		elseif catchUp > 0 then
+			-- Alcanza al tween en el mismo tiempo que estuvo congelado.
+			catchUp = math.max(catchUp - dt, 0)
+			live = held + (live - held) * (1 - catchUp / CATCH_UP_SECONDS)
+		end
+		current = live
 		local radians = math.rad(current)
 		local rotation = if isR6 then CFrame.Angles(0, 0, radians) else CFrame.Angles(radians, 0, 0)
 		joint(rotation)
@@ -102,6 +115,11 @@ function ArmPose.new(character: Model, active: boolean?): ArmPose?
 		end,
 		shake = function(degrees: number)
 			shakeDegrees = degrees
+		end,
+		freeze = function(seconds: number)
+			held = current
+			frozen = seconds
+			catchUp = CATCH_UP_SECONDS
 		end,
 		setActive = setActive,
 		destroy = function()

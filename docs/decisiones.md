@@ -1121,3 +1121,15 @@ Pedido del usuario: el juego queda siempre a mediodía. No se borró el ciclo de
 detrás de `UIConfig.Effects.FixedHour` (-1 lo vuelve a prender), así como el atributo
 `Workspace.HoraFija` sigue sirviendo para pruebas. Lo que depende de la noche (faro, luz de los
 estanques, estrellas) queda sin usarse mientras la hora esté fija.
+
+## 2026-10-22 — Cuerpo entero animado por código, sumado al Animator
+
+Las animaciones de pescar, entrenar y alimentar mueven el cuerpo entero sin animaciones subidas
+(regla de CLAUDE.md: todo por código). `Body/BodyPose` multiplica el `Transform` de cada
+articulación R15 en `PreSimulation`, después del Animator, igual que ya hacía `ArmPose` con el
+hombro. Así caminar sigue funcionando debajo y los trajes de malla copian la pose sola
+(`Trajes/Rig` lee las partes en `PostSimulation`). Cada canal es un resorte, no un tween: las
+poses se encadenan sin cortes, y un hitstop congela y después alcanza al doble de velocidad, así
+ningún tiempo de juego cambia. Agacharse baja la `Root` lo que piden las piernas dobladas
+(largo de pierna × (1 − cos α)) y el tobillo deja el pie plano, sin IK. R6 no se anima: sus
+articulaciones vienen giradas y solo `ArmPose` mueve el brazo de la caña.

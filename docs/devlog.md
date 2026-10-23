@@ -3621,3 +3621,41 @@ normalidad»):**
 **Probado en Studio (Play, servidor nuevo):** aparece en (0, 7.45, -159) sobre la arena,
 `ClockTime` 12, la cámara mira al mar detrás del personaje y la línea está arriba sin tapar el
 cartel de kills.
+
+## 2026-10-22 — Animaciones de pescar, entrenar y alimentar con el cuerpo entero
+
+**Qué se hizo (pedido del usuario: «animaciones profesionales para pescar, alimentar y entrenar,
+como serían reales y exageradas»; eligió cuerpo completo, rutina del estanque, lanzamiento de
+cuidador, estirar y aplastar y hitstop, «sin cambiar el tiempo de pescar ni las mecánicas»):**
+- **`client/Body/`** (nuevo): `BodyPose` mueve tronco, cabeza, brazos y piernas por código con
+  resortes, sumado a lo que deja el Animator (como `ArmPose`). Cada grupo llega a su tiempo
+  (piernas → tronco → brazos → cabeza) para que se vea la cadena del movimiento. Las poses
+  están en `BodyPoses` y los ejes de R15 en `BodyRig`. Una pose por personaje y un solo bucle;
+  solo se mueven los jugadores en nivel "near".
+- **Pescar** (referencia: lanzado de mosca y cómo se clava un anzuelo): al cargar, el tronco gira
+  atrás y el brazo libre apunta; en el latigazo el cuerpo va adelante. Al picar se agacha listo.
+  Para clavar el anzuelo (`CatchPose`) se echa atrás con la caña al cielo (140°, antes 118°) y
+  se congela 0.07 s en el tope. Cuando el pez llega: hitstop corto, saltito, y festeja (puño
+  arriba o, desde raro, pose de trofeo). Si el pez se escapa, queda encorvado.
+- **Entrenar** (`PumpRhythm`): bombear y recoger como con un pez grande. En cada tick sube la
+  caña con la espalda atrás, se congela un instante y baja girando el carrete. Cada 10 golpes da
+  un tirón grande con saltito. Al jugador local se lo marca el `TrainingTick`; a los demás, su
+  propio reloj de `tickSeconds`.
+- **Alimentar** (`Giant/FeedPose`): lanzamiento por encima del hombro con los brazos turnándose
+  (uno lanza mientras el otro carga) y el pie contrario adelante. El pez sale de la mano.
+- **Estirar y aplastar** (`Effects/Squash`): el pez que salta del agua y los que vuelan al gigante
+  se estiran al salir y al llegar y se redondean arriba. El de la captura llega aplastado y
+  rebota. Solo toca la `Scale` de las mallas y la posición de las piezas.
+- La caña sigue el giro y la inclinación del tronco (`Rod.follow` con giro, `RodRig`).
+  `ArmPose.freeze` hace el hitstop del brazo sin mover el final del tween.
+
+**Tiempos:** todas las fases duran lo mismo que antes (lanzado 0.32 + 0.06 + 0.14 s, tirón
+0.16 s, festejo lo que el pez está en alto). El hitstop congela y después alcanza al doble de
+velocidad. No se tocó el servidor ni los remotes.
+
+**Probado en Studio (Play, R15):** pose de espera, tirón con la espalda atrás, trofeo con el
+PezDorado, ritmo de bombeo cada ~0.9 s sin ticks (el reloj de los demás jugadores), lanzamiento
+con brazos alternados y peces estirados en vuelo. Sin errores en el Output.
+
+**Qué sigue:** ver en un servidor con varios jugadores que el costo del bucle de cuerpos no se
+note. Con avatar R6 no se anima el cuerpo, solo el brazo de la caña, como antes.

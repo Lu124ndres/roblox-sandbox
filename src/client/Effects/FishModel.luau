@@ -19,10 +19,12 @@ local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local FishFeatures = require(script.Parent.FishFeatures)
 local FishGlow = require(script.Parent.FishGlow)
 local FishShapes = require(script.Parent.FishShapes)
+local Squash = require(script.Parent.Squash)
 
 local AURA_FROM_RARITY = 4 -- épico en adelante
 local BLACK = Color3.fromRGB(16, 16, 24)
 local WHITE = Color3.fromRGB(250, 250, 250)
+local ARC_STRETCH, LAND_SQUASH = 0.4, 0.4 -- estirar al volar y aplastar al llegar (Squash)
 
 local FishModel = {}
 
@@ -148,7 +150,8 @@ function FishModel.arcPose(
 	return CFrame.new(position) * heading.Rotation * CFrame.Angles(pitch, wiggle, roll)
 end
 
--- Salto en arco de "from" a "to" girando; llama onDone al terminar.
+-- Salto en arco de "from" a "to" girando, estirado según la velocidad; llama
+-- onDone al terminar.
 -- spins = vueltas completas en el aire (0 = solo cabecea).
 function FishModel.arc(
 	model: Model,
@@ -164,7 +167,8 @@ function FishModel.arc(
 	connection = RunService.RenderStepped:Connect(function(dt: number)
 		elapsed += dt
 		local t = math.min(elapsed / seconds, 1)
-		model:PivotTo(FishModel.arcPose(from, to, height, t, elapsed, spins or 0))
+		local pose = FishModel.arcPose(from, to, height, t, elapsed, spins or 0)
+		Squash.pivot(model, pose, Squash.arc(t, ARC_STRETCH))
 		if t >= 1 then
 			connection:Disconnect()
 			if onDone then
@@ -174,14 +178,15 @@ function FishModel.arc(
 	end)
 end
 
--- Coletazos en el lugar (en la mano del jugador o sobre la cabeza) por "seconds".
+-- Coletazos en el lugar (mano o sobre la cabeza) por "seconds"; llega aplastado y rebota.
 function FishModel.flop(model: Model, anchor: () -> CFrame, seconds: number, onDone: (() -> ())?)
 	local elapsed = 0
 	local connection: RBXScriptConnection
 	connection = RunService.RenderStepped:Connect(function(dt: number)
 		elapsed += dt
 		local wag = math.sin(elapsed * 22) * 0.5 * math.max(0, 1 - elapsed / seconds * 0.5)
-		model:PivotTo(anchor() * CFrame.Angles(math.rad(-75), wag, 0))
+		local pose = anchor() * CFrame.Angles(math.rad(-75), wag, 0)
+		Squash.pivot(model, pose, Squash.impact(elapsed, LAND_SQUASH))
 		if elapsed >= seconds then
 			connection:Disconnect()
 			if onDone then

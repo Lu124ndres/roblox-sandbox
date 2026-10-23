@@ -79,7 +79,8 @@ function CatchShow.play(
 	character: Model,
 	from: Vector3,
 	fishId: string,
-	count: number
+	count: number,
+	onLanded: ((level: number, holdSeconds: number) -> ())?
 )
 	local rarity, level = FishCatalog.rarity(fishId)
 	local color = UIConfig.RarityColors[rarity.id] or UIConfig.Colors.Text
@@ -142,6 +143,9 @@ function CatchShow.play(
 				if player == Players.LocalPlayer then
 					CameraShake.shake(0.35, 0.5)
 				end
+			end
+			if onLanded then
+				onLanded(level, holdSeconds)
 			end
 			Sounds.play("FishFlop", head.Position)
 			FishModel.flop(fish, above, holdSeconds, function()

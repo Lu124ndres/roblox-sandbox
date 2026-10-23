@@ -35,7 +35,8 @@ export type Rod = {
 	tip: Attachment,
 	trail: Trail, -- estela de la punta; se enciende durante el latigazo
 	look: number, -- nivel de caña con que se armó (para saber si se puede reutilizar)
-	follow: (armDegrees: number) -> (), -- coloca la caña según el ángulo del brazo
+	-- Coloca la caña según el ángulo del brazo y el giro del tronco (BodyPose).
+	follow: (armDegrees: number, twistDegrees: number?) -> (),
 	setDetail: (full: boolean) -> (), -- apaga partículas y luces de los adornos
 }
 
@@ -94,14 +95,16 @@ function Rod.attach(character: Model, tier: number): Rod?
 		return (hand :: BasePart).Position - (hand :: BasePart).CFrame.UpVector * dropR6
 	end
 
-	local function follow(armDegrees: number)
+	local function follow(armDegrees: number, twistDegrees: number?)
 		if not hand.Parent then
 			return
 		end
 		local elevation = math.rad(armDegrees + ARM_TO_ROD_DEGREES)
 		local origin = root.CFrame:PointToObjectSpace(handPoint())
-		-- En el espacio del personaje: adelante es -Z y arriba es +Y.
-		local direction = Vector3.new(0, math.sin(elevation), -math.cos(elevation))
+		-- En el espacio del personaje: adelante es -Z y arriba es +Y. Si el tronco
+		-- gira, la caña gira con él (si no, se despega de la mano al cargar el lanzado).
+		local direction = CFrame.Angles(0, math.rad(twistDegrees or 0), 0)
+			* Vector3.new(0, math.sin(elevation), -math.cos(elevation))
 		hold.C0 = CFrame.lookAt(origin, origin + direction)
 	end
 

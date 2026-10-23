@@ -32,6 +32,7 @@ local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local FeedFlights = require(script.Parent.FeedFlights)
 local FeedPool = require(script.Parent.FeedPool)
+local FeedPose = require(script.Parent.FeedPose)
 local FeedPop = require(script.Parent.FeedPop)
 
 local EFFECTS = UIConfig.Effects
@@ -52,8 +53,8 @@ type Feeder =
 local rng = Random.new()
 local lastWhoosh = 0
 
--- Un pez (de la especie entregada) vuela girando desde la mano hasta la boca
--- (target se pide cada cuadro: la boca del gigante se mueve).
+-- Un pez (de la especie entregada) vuela girando desde la mano (from) hasta la
+-- boca (target se pide cada cuadro: la boca del gigante se mueve).
 function FeedThrow.throw(
 	from: Vector3,
 	target: () -> Vector3,
@@ -69,7 +70,7 @@ function FeedThrow.throw(
 		lastWhoosh = now
 		Sounds.play("Whoosh", from, rng:NextNumber(0.9, 1.15))
 	end
-	local start = from + Vector3.new(0, 2, 0)
+	local start = from
 	local model = FeedPool.take(fishId, CFrame.new(start))
 	local spread = Vector3.new(rng:NextNumber(-2, 2), 0, rng:NextNumber(-2, 2))
 	local function aim(): Vector3
@@ -117,7 +118,8 @@ function FeedThrow.listen(
 			return last
 		end
 		local fishId = feeder.fishId
-		FeedThrow.throw(character:GetPivot().Position, target, fishId, function()
+		local gap = math.clamp(SPREAD_SECONDS / math.max(feeder.pending, 1), MIN_GAP, MAX_GAP)
+		FeedThrow.throw(FeedPose.throw(character, gap), target, fishId, function()
 			if os.clock() - lastBite >= BITE_SECONDS then
 				lastBite = os.clock()
 				onArrive(character, fishId)

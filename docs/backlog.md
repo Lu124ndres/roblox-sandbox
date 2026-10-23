@@ -107,6 +107,9 @@ barra de hambre sube. La Orca crece mientras come.
 - [x] Canasta en la espalda que se llena (todos la ven) y brilla llena.
 - [x] Tarjeta de captura con el pez en 3D; monedas que vuelan al contador.
 - [x] Peces lanzados al gigante con giro, whoosh y destellos.
+- [x] Animaciones de cuerpo entero por código (2026-10-22): lanzado, picada, clavar el anzuelo
+      con hitstop, festejo y trofeo; entrenar bombeando la caña; alimentar lanzando como un
+      cuidador de orcas; peces que se estiran y aplastan (`client/Body/`, `Effects/Squash`).
 - [ ] Colección de peces (qué especies ya pescó cada jugador), con H4 (guardado).
 - [ ] Probar los sonidos nuevos en un servidor publicado (permisos de audio).
 - [ ] Alimentar desde un muelle del cráter con 2 jugadores y revisar el ritmo.

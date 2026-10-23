@@ -5,7 +5,8 @@
 	Lado cliente del entrenamiento del jugador local: lo gira hacia el
 	estanque al empezar, muestra "+N" grande sobre su cabeza en cada tick
 	(GainPopup; en la pantalla, Effects/PowerGainFx) y avisa si el estanque
-	está bloqueado. El poder lo suma el servidor.
+	está bloqueado. Cada tick también marca el golpe de bombear la caña
+	(Fishing/PumpRhythm). El poder lo suma el servidor.
 ]]
 
 local Players = game:GetService("Players")
@@ -20,6 +21,7 @@ local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local Toasts = require(script.Parent.Parent.Toasts)
 local Purchases = require(script.Parent.Parent.Menus.Purchases)
 local PowerGainFx = require(script.Parent.Parent.Effects.PowerGainFx)
+local PumpRhythm = require(script.Parent.Parent.Fishing.PumpRhythm)
 local GainPopup = require(script.Parent.GainPopup)
 
 local COLORS = UIConfig.Colors
@@ -59,6 +61,7 @@ function TrainingController.start(toasts: Toasts.Toasts)
 			GainPopup.show(character, gained)
 			Sounds.play("PowerTick")
 			PowerGainFx.gain(gained)
+			PumpRhythm.beat(player)
 		end
 	end)
 

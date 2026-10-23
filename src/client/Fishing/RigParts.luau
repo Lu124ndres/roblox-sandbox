@@ -11,6 +11,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local BodyPose = require(script.Parent.Parent.Body.BodyPose)
 local ArmPose = require(script.Parent.ArmPose)
 local Bobber = require(script.Parent.Bobber)
 local CatchShow = require(script.Parent.CatchShow)
@@ -20,6 +21,7 @@ local ATTR = Protocol.PlayerAttributes
 
 export type Rig = {
 	pose: ArmPose.ArmPose?,
+	body: BodyPose.BodyPose?, -- el resto del cuerpo (compartido con la alimentación)
 	rod: Rod.Rod?,
 	bobber: Bobber.Bobber?,
 	line: Beam?,
@@ -43,6 +45,10 @@ function RigParts.dropRod(rig: Rig)
 	if rig.pose then
 		rig.pose.destroy()
 		rig.pose = nil
+	end
+	if rig.body then
+		rig.body.play("rest", 0.35)
+		rig.body = nil
 	end
 end
 
@@ -116,7 +122,14 @@ function RigParts.showAlert(rig: Rig, character: Model)
 	rig.alert = billboard
 end
 
-function RigParts.catchFish(rig: Rig, player: Player, character: Model, target: Vector3)
+-- onLanded(rareza, segundos en alto): el pez llegó sobre la cabeza (CatchPose festeja).
+function RigParts.catchFish(
+	rig: Rig,
+	player: Player,
+	character: Model,
+	target: Vector3,
+	onLanded: ((level: number, holdSeconds: number) -> ())?
+)
 	local fishId = player:GetAttribute(ATTR.FishingCatch)
 	local count = player:GetAttribute(ATTR.FishingCatchCount)
 	RigParts.clearBobber(rig)
@@ -125,7 +138,8 @@ function RigParts.catchFish(rig: Rig, player: Player, character: Model, target: 
 		character,
 		target,
 		if type(fishId) == "string" then fishId else "Sardina",
-		if type(count) == "number" then count else 1
+		if type(count) == "number" then count else 1,
+		onLanded
 	)
 end
 
