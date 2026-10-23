@@ -10,6 +10,8 @@
 
 	La música y los sonidos se silencian con dos SoundGroup locales:
 	Sounds pone cada efecto en Efectos y Music cada pista en Musica.
+	Encendidos suenan a MUSIC_VOLUME y SFX_VOLUME (un tercio menos que antes,
+	pedido del usuario el 2026-10-23).
 
 	Valores automáticos (setAutomatic): valen solo esta sesión y no se
 	guardan. Así se encienden los efectos reducidos en un teléfono sin
@@ -27,6 +29,8 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 
 local SAVE_DELAY_SECONDS = 1
 local LOW_FX_SCALE = 0 -- modo rápido: sin partículas (mejor rendimiento)
+local MUSIC_VOLUME = 2 / 3
+local SFX_VOLUME = 2 / 3
 
 export type Key = "music" | "sfx" | "shake" | "lowFx"
 
@@ -54,8 +58,8 @@ local musicGroup = group("Musica")
 local sfxGroup = group("Efectos")
 
 local function apply()
-	musicGroup.Volume = if values.music then 1 else 0
-	sfxGroup.Volume = if values.sfx then 1 else 0
+	musicGroup.Volume = if values.music then MUSIC_VOLUME else 0
+	sfxGroup.Volume = if values.sfx then SFX_VOLUME else 0
 end
 
 function ClientSettings.get(key: Key): boolean

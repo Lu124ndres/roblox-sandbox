@@ -3855,3 +3855,11 @@ dorada fea, quítala»):** `OverheadBadges` ya no pone la línea entre los monst
 el ícono de Premium; se van con ella su ancho, el repintado al pasar a VIP y
 `OverheadVip.LINE`. **Probado en Studio:** captura de cerca de la placa con Premium: «19» y
 el ícono, sin línea.
+
+## 2026-10-23 — Música y sonidos un tercio más bajos
+
+**Qué se hizo (pedido del usuario: «bájale el volumen 1/3 a la música de fondo y a los
+sonidos»):** los SoundGroup `Musica` y `Efectos` de `ClientSettings` suenan a 2/3
+(`MUSIC_VOLUME`, `SFX_VOLUME`) en vez de 1; apagarlos en Ajustes sigue dejándolos en 0.
+**Probado en Studio:** los dos grupos a 0.67 y todo lo que sonaba (música de la isla, del
+cráter y del descanso, olas, ambiente) estaba en uno de ellos.
