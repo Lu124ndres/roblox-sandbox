@@ -3774,3 +3774,10 @@ cada 0.06 s. `FeedThrow.onLocalArrive` avisa de cada pez del jugador local y
 ningún pez. El servidor no cambia: ya cobraba lote a lote. **Probado en Studio:** 24 peces
 simulados con `GiantFed` → 23 monedas repartidas en ~2.6 s, saliendo del volcán hacia el
 contador (captura a mitad del chorro).
+
+## 2026-10-23 — Las monedas que vuelan son el ícono v4
+
+**Qué se hizo (pedido del usuario):** las monedas de `CoinBurst` (por pez y la ráfaga) usan el
+ícono v4 de la moneda (`Icons.paint(…, "coin")`, 40 px) en vez del círculo dorado, que queda
+solo de reserva si la hoja no tiene ID. **Probado en Studio:** 37 monedas, todas `ImageLabel`
+con la hoja 1 de íconos, volando del volcán al contador.

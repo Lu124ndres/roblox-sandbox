@@ -5,7 +5,8 @@
 	Monedas que vuelan al contador de monedas del HUD al cobrar por alimentar.
 	drip: una moneda por pez que llega a la boca (sale de ahí); seguidas, el
 	"tin" sube de tono. burst: una ráfaga desde el centro de la pantalla,
-	cuantas más monedas más moneditas (hasta MAX_COINS).
+	cuantas más monedas más moneditas (hasta MAX_COINS). Cada moneda es el
+	ícono v4 de la moneda (Interface/Icons); sin la hoja, un círculo dorado.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -13,11 +14,13 @@ local TweenService = game:GetService("TweenService")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local Icons = require(script.Parent.Parent.Interface.Icons)
 
 local MIN_COINS, MAX_COINS = 4, 16
 local DRIP_GAP = 0.06 -- a lo sumo una moneda suelta cada tanto (chorro de peces rápido)
 local STREAK_RESET = 0.8 -- sin monedas este rato, el tono vuelve a empezar
 local COIN_SIZE = 30
+local ICON_SIZE = 40 -- el ícono pintado trae margen transparente
 local GOLD = UIConfig.Colors.Coins
 local GOLD_DARK = Color3.fromRGB(200, 140, 30)
 
@@ -27,7 +30,19 @@ local rng = Random.new()
 local lastDrip = 0
 local streak = 0
 
-local function coin(screen: ScreenGui): Frame
+local function coin(screen: ScreenGui): GuiObject
+	local icon = Instance.new("ImageLabel")
+	if Icons.paint(icon, "coin") then
+		icon.Name = "Moneda"
+		icon.AnchorPoint = Vector2.new(0.5, 0.5)
+		icon.Size = UDim2.fromOffset(ICON_SIZE, ICON_SIZE)
+		icon.BackgroundTransparency = 1
+		icon.ScaleType = Enum.ScaleType.Fit
+		icon.ZIndex = 20
+		icon.Parent = screen
+		return icon
+	end
+	icon:Destroy()
 	local frame = Instance.new("Frame")
 	frame.Name = "Moneda"
 	frame.AnchorPoint = Vector2.new(0.5, 0.5)
