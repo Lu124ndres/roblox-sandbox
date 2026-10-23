@@ -3659,3 +3659,43 @@ con brazos alternados y peces estirados en vuelo. Sin errores en el Output.
 
 **Qué sigue:** ver en un servidor con varios jugadores que el costo del bucle de cuerpos no se
 note. Con avatar R6 no se anima el cuerpo, solo el brazo de la caña, como antes.
+
+## 2026-10-22 — Voces de cría y de adulto, y momentos del ciclo con la voz de cada gigante
+
+**Qué se hizo (pedido del usuario: «sonidos reales y exagerados para cada monstruo, por etapas y
+momentos»; eligió voces distintas por edad, todos menos la Orca Fantasma, y los momentos de
+hambre y lleno, evolución propia, trucos mudos y llegada y despedida):**
+- **Voz por edad:** las crías (etapas 1 y 2) ya no son la voz adulta con el tono alto.
+  - La orca cría chilla como delfín (`OrcaFx/Voz`). La adulta hace el llamado de ballena y la
+    anciana suma un canto hondo en los momentos grandes. El resoplido del espiráculo es un
+    chorro de aire y agua.
+  - El becerro bala. La cría del dragón trina y tiene su propio rugido finito.
+  - El zorro adulto suma chillido y cacareo de zorro.
+- **Momentos del ciclo** (`Audio/GiantMoments` + `GiantMomentRecipes`): llegada (de cría),
+  despedida, hambre, furia, calma y evolución de la orca suenan con la voz de cada gigante y su
+  edad, en vez del rugido genérico. La etapa final suma capas graves.
+- **Trucos que no sonaban:**
+  - Minotauro: baile (`happy`), rascarse (frote, gruñido de alivio y golpeteo del pie) y una
+    evolución con balido o bramido y retumbo.
+  - Dragón: grito antes del fuego, festejo al comer, planeo, voltereta y una evolución con
+    rugido.
+  - Orca: el saludo con la aleta.
+  - Zorro: atrapar el pez y las gotas.
+- **Licencias:** el `Roar` genérico y `OrcaCall` venían de subidas de usuarios; ahora son de
+  ProSoundEffects, como pide la guía. Las claves nuevas están en `docs/ui-assets.md`.
+
+**Probado en Studio (Play):** se registró cada sonido creado.
+- Orca cría: hambre, furia y calma con chillidos, y llegada con chillido y resoplido.
+- Orca al evolucionar a la etapa final: llamado, canto hondo, rugido y resoplido.
+- Minotauro etapa 4: hambre, furia con bramido y retumbo, y calma.
+- Dragón cría: trinos, rugido finito y festejo.
+- Zorro etapa 4: chillido, cacareo y jadeo.
+
+**Qué se rompió:** nada. La despedida no se oye desde la plaza: el cráter queda a ~800 studs y
+`Sounds` no crea sonidos fuera de su alcance (igual que antes).
+
+**Qué sigue:**
+- Que el usuario los escuche en Studio y ajuste tonos y volúmenes en las recetas.
+- Pro Sound Effects no tiene zorro, ternero, espiráculo ni cría de reptil. Hay sustitutos
+  anotados: si aparecen audios con licencia mejores, se cambian solo en `Assets/Sounds`.
+- La Orca Fantasma comparte los efectos de la orca, así que también chilla de cría.

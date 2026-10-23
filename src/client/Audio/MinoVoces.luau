@@ -8,8 +8,8 @@
 	solo sobre agua, en la cabeza o en el suelo, y con un retraso.
 
 	Por etapa:
-		voz     el becerro bala agudo (Bull Bellows con el tono alto); el joven
-		        igual pero más grave; el adulto suma un gruñido de león y la
+		voz     el becerro bala (MinoCalf, un bramido corto y agudo); el joven
+		        brama con el tono alto; el adulto suma un gruñido de león y la
 		        forma final un rugido grave y largo debajo del bramido.
 		golpes  pisadas, pisotón, caída y sentarse bajan de tono y suben de
 		        volumen al crecer (WEIGHT y LOUD); desde el joven las pisadas
@@ -62,11 +62,16 @@ Sounds.define({
 	MinoSandHit = { volume = 1, rollOff = 380 },
 	MinoBoom = { volume = 1, rollOff = 600 },
 	MinoSit = { volume = 1, rollOff = 300 },
+	MinoCalf = { volume = 0.9, rollOff = 400 },
+	MinoHungry = { volume = 0.9, rollOff = 600 },
+	MinoHappy = { volume = 0.8, rollOff = 320 },
+	MinoScratch = { volume = 0.6, rollOff = 200 },
 })
 
 local RECIPES: { [string]: { Layer } } = {
 	roar = {
-		{ key = "MinoBellow", at = "head", tone = "voice", stages = SMALL },
+		{ key = "MinoCalf", at = "head", tone = "voice", stages = { 1 } },
+		{ key = "MinoBellow", at = "head", tone = "voice", stages = { 2 } },
 		{ key = "MinoBellowDeep", at = "head", tone = "voice", pitch = 1.1, stages = BIG },
 		{ key = "MinoGrowl", at = "head", tone = "voice", volume = 0.7, stages = { 3 } },
 		{ key = "MinoRumble", at = "head", pitch = 0.9, volume = 0.8, stages = { 4 } },
@@ -84,6 +89,7 @@ local RECIPES: { [string]: { Layer } } = {
 	},
 	grunt = { -- en reposo, cada tanto (MinoStand)
 		{ key = "MinoBreath", at = "head", tone = "voice", volume = 0.5, stages = SMALL },
+		{ key = "MinoCalf", at = "head", tone = "voice", volume = 0.4, stages = { 1 } },
 		{ key = "MinoGrunt", at = "head", tone = "voice", volume = 0.6, stages = BIG },
 	},
 	yawn = { { key = "MinoYawn", at = "head", tone = "voice", pitch = 1.15, volume = 0.8 } },

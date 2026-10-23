@@ -63,6 +63,8 @@ function ZorroComerFx.play(motion: Zorro.Motion, event: Zorro.Event)
 	local below = Vector3.new(state.center.X, motion.water().Y, state.center.Z)
 	if kind == "catch" then
 		ZorroGotas.drops(motion.mouth(), h, power)
+		ZorroVoces.play("ZorroBite", motion.mouth(), stage, "voice", 1.1)
+		ZorroVoces.play("ZorroDrip", motion.mouth(), stage, "weight", 0.6)
 	elseif kind == "gulp" then
 		ZorroVoces.play("ZorroGulp", motion.mouth(), stage, "voice")
 	elseif kind == "slap" then
@@ -71,6 +73,7 @@ function ZorroComerFx.play(motion: Zorro.Motion, event: Zorro.Event)
 		ZorroVoces.play("ZorroPaw", at, stage, "weight", 1.2)
 	elseif kind == "drops" then
 		ZorroGotas.drops(motion.mouth(), h, 1)
+		ZorroVoces.play("ZorroDrip", motion.mouth(), stage, "weight", 0.6)
 	elseif kind == "hop" then
 		Fx.ring(below, h * 0.35, 0.8)
 		ZorroVoces.play("ZorroPaw", below, stage, "weight")

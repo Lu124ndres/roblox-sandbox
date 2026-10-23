@@ -24,6 +24,7 @@ local Workspace = game:GetService("Workspace")
 local Config = require(ReplicatedStorage.Shared.Config)
 local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local GiantMoments = require(script.Parent.Parent.Audio.GiantMoments)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local EvolveFx = require(script.Parent.EvolveFx)
 local EvolveLook = require(script.Parent.EvolveLook)
@@ -78,7 +79,7 @@ function GiantEvolution.begin(body: GiantBody.Body, def: Config.GiantDef, stage:
 		body.setStage(stage) -- el modelo nuevo, escondido por el destello, y empieza a crecer
 		if not OWN_POSE[def.id] then
 			leap(body, GiantStages.heightFor(stage))
-			Sounds.play("Roar", body.top())
+			GiantMoments.play("evolve", def.id, stage, body.top(), body.water())
 		end
 		if not (def.sand or def.lava or body.flies) then
 			Sounds.play("BigSplash", body.water())

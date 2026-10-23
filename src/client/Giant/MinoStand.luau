@@ -31,6 +31,7 @@ local Minotauro = require(ReplicatedStorage.Shared.Minotauro)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local MinoVoces = require(script.Parent.Parent.Audio.MinoVoces)
 local MinoVocesComer = require(script.Parent.Parent.Audio.MinoVocesComer)
+local MinoVocesTrucos = require(script.Parent.Parent.Audio.MinoVocesTrucos)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local SandFx = require(script.Parent.Parent.Effects.SandFx)
@@ -44,6 +45,7 @@ local GRUNT_EVERY = NumberRange.new(9, 16) -- segundos de calma entre gruñidos 
 local MinoStand = {}
 
 MinoVoces.add(MinoVocesComer)
+MinoVoces.add(MinoVocesTrucos)
 
 local rng = Random.new()
 

@@ -27,11 +27,11 @@ local Sounds: { [string]: string } = {
 	Whoosh = "rbxassetid://123796710194563", -- "Whoosh" (peces lanzados al gigante)
 	-- Gigante
 	Chomp = "rbxassetid://99444504938110", -- mordida (eating sound)
-	OrcaCall = "rbxassetid://5696958591", -- "Orca sounds"
+	OrcaCall = "rbxassetid://9126210261", -- "Whale Vocal Underwater Talk With Sea Creature 1" (PSE): adulta
 	Spout = "rbxasset://sounds/action_swim.mp3",
 	BigSplash = "rbxasset://sounds/impact_water.mp3",
 	StageUp = "rbxassetid://3454671965", -- fanfarria (badge fanfare)
-	Roar = "rbxassetid://133651202885353", -- "Monster Roar"
+	Roar = "rbxassetid://9113985604", -- "Creature Roar Mix Of Animals Gate Creaks 1" (PSE, 3.3 s)
 	-- Minotauro (biblioteca con licencia de Roblox: ProSoundEffects). Etapas y capas en
 	-- client/Audio/MinoVoces; el tono baja con la etapa.
 	MinoBellow = "rbxassetid://9113626273", -- "Bull Bellows 3" (2.7 s): becerro y joven
@@ -48,6 +48,10 @@ local Sounds: { [string]: string } = {
 	MinoSandHit = "rbxassetid://9118767938", -- "Sand Impacts 1" (3.0 s): pisotón y caída
 	MinoBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
 	MinoSit = "rbxassetid://9113524166", -- "Body Impact 1" (1.1 s): se sienta
+	MinoCalf = "rbxassetid://9113628549", -- "Bull Bellows 22" (1.9 s), agudo: balido del becerro
+	MinoHungry = "rbxassetid://9125470318", -- "Creature Growls Lion Deep Guttural Rumbling 8" (2.7 s)
+	MinoHappy = "rbxassetid://9113636328", -- "Bull Grunts Snorts Constant 6" (1.8 s): festejo
+	MinoScratch = "rbxassetid://9125408272", -- "Brush Scrub Rubbing On Leather Seat Cushion 1" (2.3 s)
 	-- Comer: Minotauro (sus reacciones a cada pez, ProSoundEffects). Capas en
 	-- client/Audio/MinoVocesComer.
 	MinoGulp = "rbxassetid://9114171955", -- "Drinking Cu Gulping 3" (1.0 s): traga
@@ -83,6 +87,10 @@ local Sounds: { [string]: string } = {
 	DragonDebris = "rbxassetid://9114034406", -- "Debris Rain 1" (4.0 s): grava y ceniza
 	DragonBoom = "rbxassetid://9125484367", -- "Deep Hits Big Reverberant Booms" (5.1 s)
 	DragonRocks = "rbxassetid://9118690959", -- "Rocks Movement 1" (3.3 s): se acomoda
+	DragonHatchling = "rbxassetid://9117236949", -- "Parakeet Chirps 7" (2.9 s), grave: trinos de cría
+	DragonBabyRoar = "rbxassetid://9114166971", -- "Dragon Wailing 1" (3.4 s), agudo: rugido de cría
+	DragonHungry = "rbxassetid://9116309717", -- "Lions Beastly 2" (6.0 s): gime y jadea de hambre
+	DragonJoy = "rbxassetid://9117236763", -- "Parakeet Chirps 3" (3.5 s): trino de gusto
 	-- Comer: Dragón (ProSoundEffects). Su animación especial al comer (Dragon/Comer):
 	-- capas por etapa en client/Audio/DragonRecetasComer.
 	DragonSnap = "rbxassetid://9119055432", -- "Shark Bite Smaller Teeth Snaps 6" (0.6 s): muerde
@@ -102,6 +110,11 @@ local Sounds: { [string]: string } = {
 	OrcaTailSlap = "rbxassetid://9119187654", -- "Slap And Grab 14" (2.7 s): coletazo mojado
 	OrcaPartySplash = "rbxassetid://9119476512", -- "Splash Deep Thunking Impact 2" (3.6 s)
 	OrcaShine = "rbxassetid://9125635285", -- la de EvolveCharge (3.4 s), aguda: pez raro
+	OrcaCalfSqueak = "rbxassetid://9114124037", -- "Dolphins Water Movement 7" (2.4 s): chillidos de cría
+	OrcaCallDeep = "rbxassetid://9126210358", -- "Whale Vocal Underwater Talk With Sea Creature 3" (16 s): anciana
+	OrcaBlow = "rbxassetid://9120560453", -- "Water Hose Gun 3" (3.9 s): resoplido del espiráculo
+	OrcaHungry = "rbxassetid://9113173813", -- "Asian Elephant Squeaks Grunts Blows 1" (4.6 s), grave
+	OrcaFull = "rbxassetid://9114123688", -- "Dolphins Water Movement 2" (4.8 s): chillidos alegres
 	OrcaGhostWhoosh = "rbxassetid://9125989548", -- "Spirit Whooshes Low End Airy Growls Fast Bys 2" (2.1 s)
 	-- Evolución (EvolveFx; de ProSoundEffects, la cuenta de Pro Sound Effects en Roblox)
 	EvolveCharge = "rbxassetid://9125635285", -- "Magical Exit Sparkling Pass Bys Clinking Chimes 3" (3.4 s)
@@ -144,6 +157,11 @@ local Sounds: { [string]: string } = {
 	ZorroIceCrack = "rbxassetid://9125610927", -- "Ice Cubes Drop Falling To Floor Few At A Time 1" (1.2 s)
 	ZorroIceCrackBig = "rbxassetid://9114858588", -- "Ice Crackle Large Block Cracks 3" (3.7 s): témpano grande
 	ZorroIceTink = "rbxassetid://9114861568", -- "Ice Cube Drops 1" (0.9 s): tintineo de cristales
+	-- PSE no tiene zorros: chillido y cacareo ("gekkering") de coyote y ratón con el tono ajustado.
+	ZorroScream = "rbxassetid://9113951583", -- "Coyote Cu Whimpering Yelping Crying 3" (2.0 s)
+	ZorroGekker = "rbxassetid://9117009021", -- "Mouse Vocal 30" (2.0 s), grave: cacareo rápido
+	ZorroHungry = "rbxassetid://9113951479", -- "Coyote Cu Whimpering Yelping Crying 1" (4.1 s)
+	ZorroFull = "rbxassetid://9120038042", -- "Tiger Breathing 9" (2.8 s): jadeo contento
 	-- Música (con licencia de Roblox: APM y DistroKid, se pueden usar en cualquier juego)
 	MusicIsland = "rbxassetid://128770946473000", -- "The Fisherman's Small Boat" (2:39)
 	MusicCrater = "rbxassetid://1843867314", -- "Tension Repeat Drones 29" (2:04)

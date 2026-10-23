@@ -10,7 +10,7 @@ local C = require(script.Parent.Parent.Parent.Minotauro.Trucos.Curvas)
 return table.freeze({
 	name = "planeo",
 	seconds = 6,
-	events = {},
+	events = { { at = 0.15, kind = "glide" } },
 	pose = function(u: number, _L: number): { [string]: number }
 		local glide = C.hold(u, 0, 0.15, 0.85, 1)
 		local scan = math.sin(C.span(u, 0.15, 0.85) * math.pi * 2) * glide

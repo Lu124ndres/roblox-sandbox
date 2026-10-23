@@ -85,6 +85,10 @@ Sounds.define({
 	ZorroIceCrack = { volume = 0.6, rollOff = 260 },
 	ZorroIceCrackBig = { volume = 0.8, rollOff = 450 },
 	ZorroIceTink = { volume = 0.45, rollOff = 220 },
+	ZorroScream = { volume = 0.9, rollOff = 500 },
+	ZorroGekker = { volume = 0.7, rollOff = 300 },
+	ZorroHungry = { volume = 0.8, rollOff = 500 },
+	ZorroFull = { volume = 0.6, rollOff = 260 },
 })
 
 local lastPlayed: { [string]: number } = {}

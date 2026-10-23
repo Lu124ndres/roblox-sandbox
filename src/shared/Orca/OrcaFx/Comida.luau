@@ -26,6 +26,7 @@ local OrcaMotion = require(script.Parent.Parent.OrcaMotion)
 local Events = require(script.Parent.Events)
 local Fantasma = require(script.Parent.Fantasma)
 local Trails = require(script.Parent.Trails)
+local Voz = require(script.Parent.Voz)
 
 local WATER = WorldLayout.waterLevel
 local BASE_HEIGHT = 16.5 -- etapa 1: tamaño 1 de los efectos
@@ -143,6 +144,7 @@ function Comida.play(
 			then right
 			else left or right or motion.top()
 		hooks.sparkle(upper, if ghost then GHOST.Violet else COLORS.Gold, 10)
+		hooks.play("OrcaFull", upper, voice, 0.6) -- saluda chillando contenta
 		if ghost then
 			Fantasma.sweep(ghost, 0.8)
 		end
@@ -151,7 +153,7 @@ function Comida.play(
 	elseif kind == "song" then
 		local top = motion.top()
 		hooks.play("OrcaSong", top, voice)
-		hooks.play("OrcaCall", top, voice * 1.05)
+		Voz.call(hooks.play, top, height, voice * 1.05, 1, true)
 		burst(top + Vector3.new(0, height * 0.3, 0), 10, ghost, hooks)
 		if ghost then
 			hooks.play("OrcaGhostWhoosh", top, voice * 0.8)

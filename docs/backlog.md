@@ -110,6 +110,8 @@ barra de hambre sube. La Orca crece mientras come.
 - [x] Animaciones de cuerpo entero por código (2026-10-22): lanzado, picada, clavar el anzuelo
       con hitstop, festejo y trofeo; entrenar bombeando la caña; alimentar lanzando como un
       cuidador de orcas; peces que se estiran y aplastan (`client/Body/`, `Effects/Squash`).
+- [x] Voces de cría y de adulto por gigante, y momentos del ciclo con su voz (2026-10-22):
+      llegada, despedida, hambre, furia, calma, evolución y trucos mudos (`Audio/GiantMoments`).
 - [ ] Colección de peces (qué especies ya pescó cada jugador), con H4 (guardado).
 - [ ] Probar los sonidos nuevos en un servidor publicado (permisos de audio).
 - [ ] Alimentar desde un muelle del cráter con 2 jugadores y revisar el ritmo.

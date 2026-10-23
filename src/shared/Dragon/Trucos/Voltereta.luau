@@ -10,7 +10,7 @@ local C = require(script.Parent.Parent.Parent.Minotauro.Trucos.Curvas)
 return table.freeze({
 	name = "voltereta",
 	seconds = 1.9,
-	events = { { at = 0.15, kind = "whoosh" } },
+	events = { { at = 0.15, kind = "whoosh" }, { at = 0.5, kind = "flip" } },
 	pose = function(u: number, _L: number): { [string]: number }
 		local counter = C.bell(C.span(u, 0, 0.18))
 		local spin = C.smooth(C.span(u, 0.14, 0.78))

@@ -12,7 +12,11 @@ local C = require(script.Parent.Curvas)
 return {
 	name = "rascarse",
 	seconds = 3,
-	events = {},
+	events = {
+		{ at = 0.12, kind = "scratch" },
+		{ at = 0.45, kind = "tap" },
+		{ at = 0.6, kind = "tap" },
+	},
 	pose = function(u: number): Pose.Pose
 		local f = C.hold(u, 0.05, 0.25, 0.8, 0.97)
 		local reach = C.overshoot(C.span(u, 0.05, 0.25)) * (1 - C.smooth(C.span(u, 0.8, 0.97)))

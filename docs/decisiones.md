@@ -1133,3 +1133,15 @@ poses se encadenan sin cortes, y un hitstop congela y después alcanza al doble 
 ningún tiempo de juego cambia. Agacharse baja la `Root` lo que piden las piernas dobladas
 (largo de pierna × (1 − cos α)) y el tobillo deja el pie plano, sin IK. R6 no se anima: sus
 articulaciones vienen giradas y solo `ArmPose` mueve el brazo de la caña.
+
+## 2026-10-22 — Voces de cría propias y momentos del ciclo por gigante
+
+Antes la cría era la voz adulta con el tono más alto, y eso no suena a cría: un ternero
+bala, una cría de orca chilla, una de reptil trina. Ahora cada receta tiene capas por edad:
+cría en las etapas 1 y 2, adulto en la 3 y 4, y capas graves extra en la final. Dentro de
+cada edad el tono sigue bajando un poco por etapa. Los momentos del ciclo (llegar,
+despedirse, hambre, furia, calma, evolución de la orca) salen de una tabla por gigante
+(`Audio/GiantMomentRecipes`) en vez de estar escritos en cada efecto. Un gigante nuevo solo
+agrega su bloque; si no lo tiene, usa `default`, que es el sonido de antes. Todo el audio es
+de ProSoundEffects (regla 3 de la guía del monstruo). Cuando no hay el animal real se usa el
+más parecido, con el tono ajustado, y queda anotado como sustituto en `docs/ui-assets.md`.

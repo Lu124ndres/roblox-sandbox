@@ -103,6 +103,8 @@ local RECIPES: { [string]: { Layer } } = {
 	happy = {
 		voice("ZorroYelp", "head", { stages = BABY }),
 		voice("ZorroYipDouble", "head", { stages = GROWN }),
+		voice("ZorroGekker", "head", { pitch = 1.2, volume = 0.5, stages = BABY, delay = 0.3 }),
+		voice("ZorroGekker", "head", { pitch = 0.85, volume = 0.6, stages = BIG, delay = 0.4 }),
 		voice("ZorroWhimper", "head", { pitch = 1.2, volume = 0.4, stages = BABY, delay = 0.5 }),
 	},
 	step = {
@@ -114,6 +116,7 @@ local RECIPES: { [string]: { Layer } } = {
 		voice("ZorroYelp", "head", { stages = BABY }),
 		voice("ZorroYip", "head", { stages = GROWN }),
 		voice("ZorroBark", "head", { volume = 0.5, stages = BIG, delay = 0.1 }),
+		voice("ZorroGekker", "head", { pitch = 0.8, volume = 0.5, stages = BIG, delay = 0.3 }),
 	},
 	whine = { -- gañido de la cría (prueba el hielo, persigue su cola y no la alcanza)
 		voice("ZorroWhimper", "head", { stages = SMALL }),
@@ -124,6 +127,7 @@ local RECIPES: { [string]: { Layer } } = {
 		weight("ZorroWhoosh", "body", { volume = 0.7, stages = BIG }),
 		voice("ZorroYelp", "head", { volume = 0.7, stages = SMALL, delay = 0.1 }),
 		voice("ZorroBark", "head", { volume = 0.6, stages = BIG, delay = 0.1 }),
+		voice("ZorroScream", "head", { pitch = 0.9, volume = 0.6, stages = { 4 }, delay = 0.15 }),
 	},
 	yawn = {
 		voice("ZorroYawn", "head", { pitch = 1.25 }),

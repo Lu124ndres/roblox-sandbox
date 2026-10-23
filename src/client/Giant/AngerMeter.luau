@@ -21,7 +21,7 @@ local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local GiantMoments = require(script.Parent.Parent.Audio.GiantMoments)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
 local Ui = require(script.Parent.Parent.Ui)
@@ -127,7 +127,7 @@ function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
 		local name = GiantName.current(true)
 		if nextLevel ~= level then
 			if nextLevel == "furious" then
-				Sounds.play("Roar")
+				GiantMoments.playCurrent("furious")
 				toasts.banner(
 					`¡{name} está furios{if female() then "a" else "o"}! ¡Aliméntal{if female()
 						then "a"
@@ -135,9 +135,10 @@ function AngerMeter.mount(panel: Frame, toasts: Toasts.Toasts)
 					COLORS.Furious
 				)
 			elseif nextLevel == "angry" and level == "calm" then
-				Sounds.play("Roar", nil, 1.15)
+				GiantMoments.playCurrent("hungry")
 				toasts.banner(`{name} tiene hambre y se está enojando`, COLORS.Annoyed)
 			elseif nextLevel == "calm" then
+				GiantMoments.playCurrent("calm")
 				toasts.show(`{name} se calmó`, COLORS.Calm)
 			end
 			level = nextLevel

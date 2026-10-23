@@ -9,8 +9,8 @@
 	un retraso.
 
 	Por etapa:
-		voz    la cría chilla agudo y juguetón (pterodáctilo con el tono alto) y
-		       pía cuando se posa o se acicala; el joven chilla más grave con un
+		voz    la cría trina como un pichón (DragonHatchling) y ruge finito
+		       (DragonBabyRoar); el joven chilla (pterodáctilo) con un
 		       gruñido debajo; el adulto ruge (monstruo) con un gruñido de león y
 		       el anciano suma un trueno grave debajo del rugido.
 		peso   aletazos, despegue, golpe en la roca y fuego bajan de tono y suben
@@ -65,6 +65,10 @@ Sounds.define({
 	DragonDebris = { volume = 0.7, rollOff = 350 },
 	DragonBoom = { volume = 1, rollOff = 700 },
 	DragonRocks = { volume = 0.6, rollOff = 260 },
+	DragonHatchling = { volume = 0.7, rollOff = 300 },
+	DragonBabyRoar = { volume = 0.9, rollOff = 500 },
+	DragonHungry = { volume = 0.9, rollOff = 600 },
+	DragonJoy = { volume = 0.7, rollOff = 300 },
 	-- Al comer (DragonRecetasComer)
 	DragonSnap = { volume = 0.7, rollOff = 260 },
 	DragonGulp = { volume = 0.6, rollOff = 220 },

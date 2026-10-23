@@ -20,6 +20,12 @@ Sounds.define({
 	OrcaPartySplash = { volume = 1, rollOff = 450 },
 	OrcaShine = { volume = 0.7, pitch = 1.25, rollOff = 320 },
 	OrcaGhostWhoosh = { volume = 0.8, rollOff = 340 },
+	-- Voz por edad (OrcaFx/Voz) y momentos del ciclo (GiantMoments).
+	OrcaCalfSqueak = { volume = 0.8, rollOff = 320 },
+	OrcaCallDeep = { volume = 0.9, rollOff = 700 },
+	OrcaBlow = { volume = 0.7, rollOff = 300 },
+	OrcaHungry = { volume = 0.9, rollOff = 600 },
+	OrcaFull = { volume = 0.7, rollOff = 320 },
 })
 
 return {}

@@ -26,6 +26,7 @@ local Comida = require(script.Comida)
 local Events = require(script.Events)
 local Fantasma = require(script.Fantasma)
 local Trails = require(script.Trails)
+local Voz = require(script.Voz)
 
 local WATER = WorldLayout.waterLevel
 local BASE_HEIGHT = 16.5 -- etapa 1: tamaño 1 de los efectos
@@ -117,12 +118,12 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 		if state.breath < lastBreath and not state.trick and state.feeding < 0.3 then
 			local blowhole = motion.top()
 			hooks.spout(blowhole, math.max(1, height / 15))
-			hooks.play("Spout", blowhole, math.clamp(1.2 / scale, 0.6, 1.2))
+			Voz.blow(hooks.play, blowhole, math.clamp(1.2 / scale, 0.6, 1.2))
 		end
 
 		local feeding = state.feeding > 0.5
 		if feeding and not wasFeeding then
-			hooks.play("OrcaCall", motion.mouth(), state.voice)
+			Voz.call(hooks.play, motion.mouth(), height, state.voice)
 			hooks.splash(motion.water(), 1.6 * scale)
 		end
 		if feeding then
@@ -135,7 +136,8 @@ function OrcaFx.new(motion: OrcaMotion.Motion, hooks: Hooks): Fx
 			callIn -= dt
 			if callIn <= 0 then
 				callIn = math.random(CALL_MIN, CALL_MAX)
-				hooks.play("OrcaCall", motion.top(), state.voice * (0.9 + math.random() * 0.25))
+				local voice = state.voice * (0.9 + math.random() * 0.25)
+				Voz.call(hooks.play, motion.top(), height, voice)
 			end
 		end
 		lastRel, lastBreath, wasFeeding = rel, state.breath, feeding

@@ -254,11 +254,11 @@ en `UIConfig.Sounds`. Todos verificados con `IsLoaded` en Studio el 2026-10-12.
 | Bite | Pica el pez | `137273815815490` | bubble pop |
 | Reel | Recoger el sedal | `79404754846319` | fishing reel |
 | Chomp | La Orca come | `99444504938110` | eating chomp |
-| OrcaCall | Llamado de la Orca | `5696958591` | orca |
+| OrcaCall | Llamado de la Orca adulta | `9126210261` "Whale Vocal Underwater Talk With Sea Creature 1" (ProSoundEffects, 2026-10-22) | whale vocal |
 | StageUp | La barra cambia de estado | `3454671965` | victory fanfare |
 | Coins | Cobrar monedas | `135483737426662` | coin collect |
 | Click | Botones | `139719503904449` | ui click |
-| Roar | Rugido del gigante | `133651202885353` | monster roar |
+| Roar | Rugido genérico (furia de la orca adulta, gigantes sin receta) | `9113985604` "Creature Roar Mix Of Animals Gate Creaks 1" (ProSoundEffects, 2026-10-22) | creature roar |
 | HorrorAmbience | Ambiente del cráter | `138890398994853` | dark ambience |
 | Thunder | Relámpagos del cráter | `139319051979882` | thunder |
 | PowerTick | Tick de entrenamiento | `137273815815490` (Bite, más agudo) | bubble pop |
@@ -273,6 +273,32 @@ en `UIConfig.Sounds`. Todos verificados con `IsLoaded` en Studio el 2026-10-12.
 | MusicIsland | Música de la isla | `128770946473000` "The Fisherman's Small Boat" (DistroKid) | tropical island |
 | MusicCrater | Música del cráter | `1843867314` "Tension Repeat Drones 29" (APM) | epic boss battle |
 | MusicRest | Música del descanso | `9046678292` "Work Like A Champion" (APM) | epic boss battle |
+
+### Voces de cría y momentos de los gigantes (2026-10-22)
+
+Todas de ProSoundEffects (la librería con licencia de Roblox), verificadas con
+`PreloadAsync` en Studio. Donde PSE no tiene el animal real se usa el más parecido, con el
+tono ajustado (anotado como "sustituto").
+
+| Clave | Uso | ID | Nombre en PSE |
+|---|---|---|---|
+| OrcaCalfSqueak | Llamado de la orca cría | `9114124037` | Dolphins Water Movement 7 |
+| OrcaCallDeep | Canto hondo de la anciana | `9126210358` | Whale Vocal Underwater Talk With Sea Creature 3 |
+| OrcaBlow | Resoplido del espiráculo (sustituto) | `9120560453` | Water Hose Gun 3 |
+| OrcaHungry | Hambre de la orca adulta (sustituto: elefante grave) | `9113173813` | Asian Elephant Squeaks Grunts Blows 1 |
+| OrcaFull | Se calma, saluda con la aleta | `9114123688` | Dolphins Water Movement 2 |
+| MinoCalf | Balido del becerro (sustituto: bramido agudo; no hay terneros) | `9113628549` | Bull Bellows 22 |
+| MinoHungry | Hambre del minotauro adulto | `9125470318` | Creature Growls Lion Deep Guttural Rumbling 8 |
+| MinoHappy | Festejo del baile, se calma | `9113636328` | Bull Grunts Snorts Constant 6 |
+| MinoScratch | Se rasca la cabeza (sustituto) | `9125408272` | Brush Scrub Rubbing On Leather Seat Cushion 1 |
+| DragonHatchling | Trinos de la cría (sustituto: periquito grave) | `9117236949` | Parakeet Chirps 7 |
+| DragonBabyRoar | Rugido de cría | `9114166971` | Dragon Wailing 1 |
+| DragonHungry | Hambre del dragón adulto | `9116309717` | Lions Beastly 2 |
+| DragonJoy | Festejo al comer, se calma | `9117236763` | Parakeet Chirps 3 |
+| ZorroScream | Chillido del zorro adulto (sustituto: coyote) | `9113951583` | Coyote Cu Whimpering Yelping Crying 3 |
+| ZorroGekker | Cacareo de zorro (sustituto: ratón grave) | `9117009021` | Mouse Vocal 30 |
+| ZorroHungry | Hambre del zorro adulto | `9113951479` | Coyote Cu Whimpering Yelping Crying 1 |
+| ZorroFull | Se calma: jadeo contento (sustituto: tigre) | `9120038042` | Tiger Breathing 9 |
 
 La música es de catálogo con licencia de Roblox (APMOfficial / DistrokidOfficial), así
 que funciona en cualquier juego. Verificada con `IsLoaded` el 2026-10-13. Se silencia con

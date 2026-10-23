@@ -48,7 +48,8 @@ end
 
 local RECIPES: { [string]: { Layer } } = {
 	roar = {
-		voice("DragonScreech", "head", { stages = SMALL }),
+		voice("DragonBabyRoar", "head", { pitch = 1.5, stages = BABY }),
+		voice("DragonScreech", "head", { stages = YOUNG }),
 		voice("DragonRoarGrowl", "head", { volume = 0.5, stages = YOUNG }),
 		voice("DragonRoar", "head", { pitch = 1.15, stages = BIG }),
 		voice("DragonGrowl", "head", { pitch = 0.8, stages = { 3 }, delay = 0.3 }),
@@ -57,7 +58,7 @@ local RECIPES: { [string]: { Layer } } = {
 	fireStart = {
 		weight("DragonFireLick", "mouth", { stages = SMALL }),
 		weight("DragonFireStart", "mouth", { stages = BIG }),
-		voice("DragonChirp", "head", { volume = 0.6, stages = BABY }),
+		voice("DragonHatchling", "head", { volume = 0.6, stages = BABY }),
 		voice("DragonGrowl", "head", { volume = 0.6, stages = GROWN }),
 	},
 	fireEnd = {
@@ -83,7 +84,7 @@ local RECIPES: { [string]: { Layer } } = {
 	takeoff = {
 		weight("DragonFlapBurst", "body"),
 		weight("DragonGust", "ground", { volume = 0.8, delay = 0.15 }),
-		voice("DragonChirp", "head", { volume = 0.6, stages = BABY }),
+		voice("DragonHatchling", "head", { volume = 0.6, stages = BABY }),
 		voice("DragonGrowl", "head", { volume = 0.5, stages = BIG }),
 	},
 	land = {
@@ -91,7 +92,7 @@ local RECIPES: { [string]: { Layer } } = {
 		weight("DragonLand", "ground", { delay = 0.1 }),
 		weight("DragonDebris", "ground", { volume = 0.7, stages = GROWN, delay = 0.25 }),
 		weight("DragonBoom", "ground", { volume = 0.8, stages = ELDER, delay = 0.1 }),
-		voice("DragonChirp", "head", { volume = 0.6, stages = BABY, delay = 0.5 }),
+		voice("DragonHatchling", "head", { volume = 0.6, stages = BABY, delay = 0.5 }),
 	},
 	fold = {
 		weight("DragonFold", "body", { volume = 0.6 }),
@@ -105,7 +106,7 @@ local RECIPES: { [string]: { Layer } } = {
 	preen = {
 		voice("DragonHiss", "head", { pitch = 1.2, volume = 0.4 }),
 		weight("DragonFold", "body", { volume = 0.4, delay = 0.2 }),
-		voice("DragonChirp", "head", { volume = 0.6, stages = BABY, delay = 0.5 }),
+		voice("DragonHatchling", "head", { volume = 0.6, stages = BABY, delay = 0.5 }),
 	},
 	sleep = {
 		voice("DragonYawn", "head", { volume = 0.8 }),
@@ -116,17 +117,39 @@ local RECIPES: { [string]: { Layer } } = {
 		voice("DragonChirp", "head", { stages = SMALL, delay = 0.3 }),
 		voice("DragonHiss", "head", { volume = 0.5, stages = BIG, delay = 0.3 }),
 	},
-	evolve = { -- la evolución la dibuja EvolveFx: aquí solo un sonido corto
-		voice("DragonChirp", "head", { stages = BABY }),
-		voice("DragonGrowl", "head", { volume = 0.7, stages = GROWN }),
+	evolve = { -- al abrir las alas: trino y rugido de cría, rugido del adulto, trueno del anciano
+		voice("DragonHatchling", "head", { stages = BABY }),
+		voice("DragonBabyRoar", "head", { pitch = 1.35, stages = SMALL, delay = 0.2 }),
+		voice("DragonRoar", "head", { pitch = 1.1, stages = BIG }),
+		layer("DragonRumble", "head", nil, { pitch = 0.85, volume = 0.8, stages = ELDER }),
+		weight("DragonFlapBurst", "body", { volume = 0.8, delay = 0.1 }),
+	},
+	fire = { -- truco del fuego: el grito antes de la llamarada (el fuego suena aparte)
+		voice("DragonBabyRoar", "head", { pitch = 1.5, volume = 0.7, stages = SMALL }),
+		voice("DragonRoarGrowl", "head", { volume = 0.8, stages = BIG }),
+	},
+	joy = { -- festejo al comer: trino de gusto; el grande ronronea debajo
+		voice("DragonJoy", "head", { stages = SMALL }),
+		voice("DragonJoy", "head", { pitch = 0.75, volume = 0.6, stages = BIG }),
+		voice("DragonPurrDeep", "head", { volume = 0.7, stages = BIG, delay = 0.2 }),
+	},
+	glide = { -- deja de aletear y planea: ráfaga larga y un gruñido tranquilo
+		weight("DragonGust", "body", { volume = 0.7 }),
+		voice("DragonHatchling", "head", { volume = 0.5, stages = BABY, delay = 0.6 }),
+		voice("DragonGrowl", "head", { pitch = 0.9, volume = 0.5, stages = GROWN, delay = 0.6 }),
+	},
+	flip = { -- voltereta: chillido de gusto arriba del todo
+		voice("DragonHatchling", "head", { pitch = 1.2, stages = BABY }),
+		voice("DragonScreech", "head", { pitch = 1.1, volume = 0.6, stages = YOUNG }),
+		voice("DragonRoarGrowl", "head", { volume = 0.6, stages = BIG }),
 	},
 	idle = { -- posado, cada tanto: resopla humo y gruñe bajito
 		voice("DragonSnort", "head", { volume = 0.5 }),
-		voice("DragonChirp", "head", { volume = 0.4, stages = BABY, delay = 0.4 }),
+		voice("DragonHatchling", "head", { volume = 0.4, stages = BABY, delay = 0.4 }),
 		voice("DragonGrowl", "head", { volume = 0.5, stages = BIG, delay = 0.3 }),
 	},
 	growl = { -- volando tranquilo, cada tanto
-		voice("DragonChirp", "head", { volume = 0.6, stages = BABY }),
+		voice("DragonHatchling", "head", { volume = 0.6, stages = BABY }),
 		voice("DragonScreech", "head", { volume = 0.4, stages = YOUNG }),
 		voice("DragonGrowl", "head", { volume = 0.7, stages = BIG }),
 	},

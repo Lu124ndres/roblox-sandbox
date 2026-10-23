@@ -9,7 +9,8 @@
 		arriving  sale del fondo del lago con su tamaño de etapa 1, ruge y
 		          levanta olas.
 		feeding   está en su lugar.
-	Todo con las palancas de GiantBody (lift y spin) y efectos locales.
+	Todo con las palancas de GiantBody (lift y spin) y efectos locales. La voz
+	de cada gigante al llegar (de cría) y al irse: Audio/GiantMoments.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -17,6 +18,7 @@ local TweenService = game:GetService("TweenService")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local GiantMoments = require(script.Parent.Parent.Audio.GiantMoments)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
@@ -60,7 +62,7 @@ end
 
 local function farewell(body: GiantBody.Body)
 	local height = body.height()
-	Sounds.play("Roar", body.top())
+	GiantMoments.playCurrent("farewell", body.top(), body.water())
 	Sounds.play("StageUp")
 	Fx.sparkle(body.top(), UIConfig.Colors.Coins, 60)
 	tween(body.spin, body.spin.Value + 720, 1.8, Enum.EasingStyle.Quad)
@@ -80,10 +82,10 @@ local function arrive(body: GiantBody.Body)
 	local height = body.height()
 	body.lift.Value = -height * 1.4
 	local water = body.water()
-	Sounds.play("OrcaCall", water, 0.8)
+	local id = GiantMoments.current()
 	task.delay(0.6, function()
 		wave(water, height, 2)
-		Sounds.play("Roar", water)
+		GiantMoments.play("arrive", id, 1, water + Vector3.new(0, height, 0), water)
 		tween(body.lift, 0, 1.6, Enum.EasingStyle.Back)
 		tween(body.spin, body.spin.Value + 360, 1.6, Enum.EasingStyle.Quad)
 	end)
