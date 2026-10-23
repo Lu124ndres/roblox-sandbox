@@ -5,8 +5,8 @@
 	Insignias del cartel sobre la cabeza (Overhead), todas dentro de un solo
 	marco: una placa con marco de lava (Interface/Kit, como TIENDA); con el pase
 	VIP la placa es de oro y lleva una cinta de lava "VIP" inclinada en la
-	esquina de arriba (pedido del usuario el 2026-10-20). Adentro, separados
-	por líneas finas:
+	esquina de arriba (pedido del usuario el 2026-10-20). Adentro, sin líneas
+	entre las partes (la dorada se quitó por pedido del usuario el 2026-10-23):
 		Monstruos  el monstruo alimentado (Icons "fed", el de "monstruos llenados"
 		           del HUD) y cuántos llenó
 		Premium    el ícono de Roblox Premium (solo si es Premium)
@@ -29,9 +29,8 @@ export type Badges = {
 }
 
 local rgb = Color3.fromRGB
-local GOLD = rgb(255, 214, 80)
 -- Ancho de cada parte (fracción del ancho del cartel) y el margen de la placa.
-local WIDTH = { kills = 0.27, premium = 0.11, line = 0.012 }
+local WIDTH = { kills = 0.27, premium = 0.11 }
 local SIDES = 0.07 -- un poco más: el marco de lava es más grueso que el de oro
 local PLATE_SLICE = 0.3
 -- La placa, más ancha en la misma proporción en que Overhead subió el alto de su fila.
@@ -71,19 +70,6 @@ local function part(parent: Instance, name: string, order: number): Frame
 	return frame
 end
 
-local function divider(parent: Instance, order: number): Frame
-	local holder = part(parent, "Linea", order)
-	local line = Instance.new("Frame")
-	line.AnchorPoint = Vector2.new(0.5, 0.5)
-	line.Position = UDim2.fromScale(0.5, 0.5)
-	line.Size = UDim2.new(0, 2, 0.6, 0)
-	line.BackgroundColor3 = GOLD
-	line.BackgroundTransparency = 0.25
-	line.BorderSizePixel = 0
-	line.Parent = holder
-	return holder
-end
-
 local function icon(parent: Instance, kind: string, size: number, x: number)
 	local image = Icons.view(parent, kind)
 	image.SizeConstraint = Enum.SizeConstraint.RelativeYY
@@ -108,7 +94,6 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 	local kills = part(inside, "Monstruos", 1)
 	icon(kills, "fed", 1.45, 0.2)
 	local count = label(kills, "0", rgb(255, 244, 214), 0.44)
-	local linePremium = divider(inside, 4)
 	local premium = part(inside, "Premium", 5)
 	local glyph = Instance.new("ImageLabel")
 	glyph.Name = "Icono"
@@ -129,7 +114,6 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 		type Entry = { frame: Frame, width: number, on: boolean }
 		local shown: { Entry } = {
 			{ frame = kills, width = WIDTH.kills, on = true },
-			{ frame = linePremium, width = WIDTH.line, on = isPremium },
 			{ frame = premium, width = WIDTH.premium, on = isPremium },
 		}
 		local total = SIDES
@@ -155,11 +139,6 @@ function OverheadBadges.build(row: Frame, player: Player): Badges
 				hasVip = on
 				OverheadVip.paint(back, on, PLATE_SLICE)
 				tag.Visible = on
-				for _, line in back:GetDescendants() do
-					if line:IsA("Frame") and line.Parent and line.Parent.Name == "Linea" then
-						line.BackgroundColor3 = if on then OverheadVip.LINE else GOLD
-					end
-				end
 			end
 		end,
 	}

@@ -28,8 +28,6 @@ local PULSE = TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.EasingDirection.InO
 
 local OverheadVip = {}
 
-OverheadVip.LINE = rgb(110, 60, 10) -- las líneas doradas no se ven sobre el oro
-
 -- Destello: una franja blanca inclinada que cruza la placa de izquierda a derecha.
 local function shine(back: Frame)
 	local band = Instance.new("Frame")

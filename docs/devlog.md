@@ -3847,3 +3847,11 @@ el audio carga (3.5 s) en el lugar; no se reinició Play porque el usuario lo es
 despedida toca `EvolveShine` («Magic Glows Soft Clusters Of Chiming Hits 1») y se borra
 `GiantDefeat` de `Assets.Sounds` y `UIConfig.Sounds`. **Probado en Studio:** al llenar la
 barra por admin suena `EvolveShine` al empezar la despedida.
+
+## 2026-10-23 — Sin línea dorada en la placa sobre la cabeza
+
+**Qué se hizo (pedido del usuario: «la placa del nombre con los monstruos tiene una línea
+dorada fea, quítala»):** `OverheadBadges` ya no pone la línea entre los monstruos llenados y
+el ícono de Premium; se van con ella su ancho, el repintado al pasar a VIP y
+`OverheadVip.LINE`. **Probado en Studio:** captura de cerca de la placa con Premium: «19» y
+el ícono, sin línea.
