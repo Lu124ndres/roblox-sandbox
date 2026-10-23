@@ -12,7 +12,7 @@
 		          (RT en Xbox, R2 en PlayStation)
 		badge     insignia sobre un botón: la tecla en PC, el dibujo del botón
 		          del mando en consola (el de Xbox o el de PlayStation, lo da
-		          Roblox) y nada en táctil
+		          Roblox) y nada en táctil; sin tecla, solo con mando
 	El botón de acción del mando es X (Cuadrado en PlayStation), igual que E.
 	Pescar y alimentar aceptan X y el gatillo derecho, pero sus botones y
 	avisos muestran el gatillo (HOLD_PAD, pedido del usuario: «que diga RT»).
@@ -127,8 +127,9 @@ function InputHints.holdAction(): string
 	return InputHints.action()
 end
 
--- Insignia arriba a la derecha de `button`: tecla (PC) o botón del mando (consola).
-function InputHints.badge(button: GuiObject, key: string, pad: Enum.KeyCode): Frame
+-- Insignia arriba a la derecha de `button`: tecla (PC) o botón del mando (consola). Sin
+-- `key` (atajos que solo existen en el mando) no se ve en PC.
+function InputHints.badge(button: GuiObject, key: string?, pad: Enum.KeyCode): Frame
 	local badge = Instance.new("Frame")
 	badge.Name = "Tecla"
 	badge.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -141,7 +142,7 @@ function InputHints.badge(button: GuiObject, key: string, pad: Enum.KeyCode): Fr
 	text.BackgroundTransparency = 1
 	text.Position = UDim2.fromScale(0.1, 0.14)
 	text.Size = UDim2.fromScale(0.8, 0.72)
-	text.Text = key
+	text.Text = key or ""
 	text.TextScaled = true
 	text.FontFace = UIConfig.Fonts.Title
 	text.ZIndex = badge.ZIndex + 1
@@ -155,7 +156,7 @@ function InputHints.badge(button: GuiObject, key: string, pad: Enum.KeyCode): Fr
 	glyph.ZIndex = badge.ZIndex + 1
 	glyph.Parent = badge
 	local function paint(mode: Mode)
-		badge.Visible = mode ~= "touch"
+		badge.Visible = mode == "gamepad" or (mode == "keyboard" and key ~= nil)
 		text.Visible = mode == "keyboard"
 		glyph.Visible = mode == "gamepad"
 		if mode == "gamepad" then

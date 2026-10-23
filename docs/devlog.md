@@ -3889,3 +3889,17 @@ día (a decidir si se paga solo antes).
 índices inválidos y el cofre sin las tres no pagaron; dos `QuestClaim(4)` seguidos pagaron
 2500 una vez; captura de la ventana con ¡RECLAMAR!, ✓ y pendientes; con v16 el guardado
 carga y conserva lo reclamado.
+
+## 2026-10-23 — Con mando, cada botón muestra la flecha que lo abre
+
+**Qué se hizo (pedido del usuario: «en Xbox pon con qué flecha se abre cada botón, encima
+en la esquina del botón»):** `GamepadHints` (nuevo, lo llama `GamepadNav`) pone en la
+esquina de arriba a la izquierda de TIENDA, MEJORAS, MISIONES y RENACER una tecla de piedra
+con la cruz del D-pad y el brazo de su flecha en blanco (Roblox da la misma cruz para las
+cuatro flechas, sin dirección); a la derecha sigue el punto rojo. El regalo gratis lleva la
+Y de Roblox en la esquina derecha de su placa (a la izquierda la tapaba el dibujo del
+regalo). `InputHints.badge` acepta no tener tecla: así solo se ve con mando.
+
+**Probado en Studio (simulador Xbox One):** captura con las cuatro cruces (abajo TIENDA,
+arriba MEJORAS, izquierda MISIONES, derecha RENACER) y la Y del regalo; sin simulador,
+en PC, las cinco insignias quedan ocultas.

@@ -9,6 +9,8 @@
 		Y (Triángulo)  abre o cierra el regalo gratis (PlaytimeWindow, setGift)
 		A (Equis)      aprieta el botón marcado (lo hace Roblox)
 		B (Círculo)    cierra la ventana abierta
+	Cada uno de esos botones lleva el dibujo de su flecha o de la Y
+	(GamepadHints).
 	Al abrirse una ventana, la marca entra a su primer botón y no se sale de
 	ella (SelectionGroup); al cerrarla se quita. La marca es un
 	marco dorado. Select saca el cursor virtual de Roblox.
@@ -20,6 +22,7 @@ local GuiService = game:GetService("GuiService")
 local Players = game:GetService("Players")
 
 local InputHints = require(script.Parent.Parent.Interface.InputHints)
+local GamepadHints = require(script.Parent.GamepadHints)
 local HudButtons = require(script.Parent.HudButtons)
 local Window = require(script.Parent.Window)
 
@@ -130,6 +133,7 @@ end
 
 function GamepadNav.start()
 	Players.LocalPlayer.PlayerGui.SelectionImageObject = selectionImage()
+	GamepadHints.attach(Players.LocalPlayer.PlayerGui, ARROWS)
 	Window.onAnyChange(onWindow)
 	-- Con algo marcado o una ventana abierta, las flechas mueven la marca (Roblox).
 	ContextActionService:BindAction(
