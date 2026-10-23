@@ -3832,3 +3832,11 @@ usuario eligió por su link:
 
 **Probado en Studio:** evolución a etapa 2 y llenado por admin: `EvolveShine` suena a 1.7 s
 (tras `EvolveBurst`) y `GiantDefeat` al llenarse; sin errores de carga en el Output.
+
+## 2026-10-23 — Otro sonido al vencer al monstruo
+
+**Qué se hizo (pedido del usuario: «algo más suave pero victorioso»):** `GiantDefeat` pasa de
+APM «Ray Of Sunshine» a «Relaxing Jingle (used for when you win)» (3.5 s), elegido por el
+usuario entre cuatro candidatos. Ojo: lo subió un usuario, no una librería con licencia de
+Roblox; si lo moderan, el sonido deja de oírse y hay que cambiarlo. **Probado en Studio:**
+el audio carga (3.5 s) en el lugar; no se reinició Play porque el usuario lo estaba usando.
