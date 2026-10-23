@@ -65,9 +65,9 @@ end
 
 local function farewell(body: GiantBody.Body)
 	local height = body.height()
-	-- La fanfarria y su voz al irse se cambiaron por una cortinilla suave (pedido del usuario el
-	-- 2026-10-23); sin variar el tono, que es música.
-	Sounds.play("GiantDefeat", nil, 1, 1, true)
+	-- La fanfarria y su voz al irse se cambiaron por los brillos de la evolución (pedido del
+	-- usuario el 2026-10-23).
+	Sounds.play("EvolveShine")
 	Fx.sparkle(body.top(), UIConfig.Colors.Coins, 60)
 	tween(body.spin, body.spin.Value + 720, 1.8, Enum.EasingStyle.Quad)
 	local up = tween(body.lift, height * 0.5, 1, Enum.EasingStyle.Quad)

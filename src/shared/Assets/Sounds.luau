@@ -45,8 +45,7 @@ local Sounds: { [string]: string } = {
 	Spout = "rbxasset://sounds/action_swim.mp3",
 	BigSplash = "rbxasset://sounds/impact_water.mp3",
 	StageUp = "rbxassetid://3454671965", -- fanfarria (badge fanfare)
-	GiantDefeat = "rbxassetid://2881398164", -- "Relaxing Jingle (used for when you win)" (3.5 s): se llenó y se va
-	EvolveShine = "rbxassetid://9116394545", -- "Magic Glows Soft Clusters Of Chiming Hits 1" (1.4 s)
+	EvolveShine = "rbxassetid://9116394545", -- "Magic Glows Soft Clusters Of Chiming Hits 1" (1.4 s): evoluciona y al vencerlo
 	Roar = "rbxassetid://9113985604", -- "Creature Roar Mix Of Animals Gate Creaks 1" (PSE, 3.3 s)
 	-- Minotauro (biblioteca con licencia de Roblox: ProSoundEffects). Etapas y capas en
 	-- client/Audio/MinoVoces; el tono baja con la etapa.

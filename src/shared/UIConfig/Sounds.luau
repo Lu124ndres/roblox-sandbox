@@ -31,7 +31,6 @@ local Sounds: { [string]: SoundSettings } = {
 	Spout = { volume = 0.6, pitch = 0.7, rollOff = 180 },
 	BigSplash = { volume = 0.9, pitch = 0.6, rollOff = 260 },
 	StageUp = { volume = 0.7 },
-	GiantDefeat = { volume = 0.6 },
 	EvolveShine = { volume = 0.8 },
 	Coins = { volume = 0.6 },
 	CoinPop = { volume = 0.25, pitch = 1.5 },

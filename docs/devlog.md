@@ -3840,3 +3840,10 @@ APM «Ray Of Sunshine» a «Relaxing Jingle (used for when you win)» (3.5 s), e
 usuario entre cuatro candidatos. Ojo: lo subió un usuario, no una librería con licencia de
 Roblox; si lo moderan, el sonido deja de oírse y hay que cambiarlo. **Probado en Studio:**
 el audio carga (3.5 s) en el lugar; no se reinició Play porque el usuario lo estaba usando.
+
+## 2026-10-23 — Al vencer al monstruo suenan los brillos de la evolución
+
+**Qué se hizo (pedido del usuario: «no me gusta, mejor deja el de las evoluciones»):** la
+despedida toca `EvolveShine` («Magic Glows Soft Clusters Of Chiming Hits 1») y se borra
+`GiantDefeat` de `Assets.Sounds` y `UIConfig.Sounds`. **Probado en Studio:** al llenar la
+barra por admin suena `EvolveShine` al empezar la despedida.
