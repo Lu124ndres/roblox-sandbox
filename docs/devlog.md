@@ -3762,3 +3762,15 @@ roja de ¡OFERTA!. Su fila conserva el alto de antes y el ícono sobresale hacia
 fila creciera, la columna del menú (que se ajusta a la pantalla) achicaría todos sus botones.
 Los atajos de Poder y Monedas no cambian. **Probado en Studio (simulador de teléfono):**
 capturas antes y después; los botones de la columna quedan del mismo tamaño.
+
+## 2026-10-23 — Una moneda por cada pez que come el gigante
+
+**Qué se hizo (pedido del usuario: «que cada que alimente con un pez a la orca muestre monedas
+saliendo hacia mis monedas, no solo al final y todas de jalón»):** cada pez propio que llega a
+la boca suelta una moneda que sale de ahí (proyectada a la pantalla) y vuela al contador; si
+la boca queda fuera de cuadro, sale del centro. Seguidas, el «tin» sube de tono; a lo sumo una
+cada 0.06 s. `FeedThrow.onLocalArrive` avisa de cada pez del jugador local y
+`CoinBurst.drip` dibuja la moneda. La ráfaga del final (`FeedResult`) solo sale si no se vio
+ningún pez. El servidor no cambia: ya cobraba lote a lote. **Probado en Studio:** 24 peces
+simulados con `GiantFed` → 23 monedas repartidas en ~2.6 s, saliendo del volcán hacia el
+contador (captura a mitad del chorro).

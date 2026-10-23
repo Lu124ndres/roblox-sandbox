@@ -18,7 +18,7 @@
 	vuelan más de MAX_FLIGHTS a la vez (MAX_FLIGHTS_LOW_FX con efectos
 	reducidos). Los de jugadores a más de MAX_CAMERA_STUDS de la cámara no se
 	dibujan; los del jugador local se ven siempre. Al llegar se llama onArrive:
-	ahí el gigante muerde (GiantView). Solo efecto visual.
+	ahí muerde (GiantView); los del local avisan a onLocalArrive. Solo visual.
 ]]
 
 local Players = game:GetService("Players")
@@ -52,6 +52,7 @@ type Feeder =
 
 local rng = Random.new()
 local lastWhoosh = 0
+local localArrive: { (position: Vector3) -> () } = {} -- peces del local que llegan (FeedFeedback)
 
 -- Un pez (de la especie entregada) vuela girando desde la mano (from) hasta la
 -- boca (target se pide cada cuadro: la boca del gigante se mueve).
@@ -80,8 +81,17 @@ function FeedThrow.throw(
 	FeedFlights.launch(model, start, aim, height, EFFECTS.FeedThrowSeconds, 1, function()
 		FeedPool.give(model)
 		FeedPop.chomp(aim(), color, size or 20, isLocal == true)
+		if isLocal then
+			for _, listener in localArrive do
+				listener(aim())
+			end
+		end
 		onArrive()
 	end)
+end
+
+function FeedThrow.onLocalArrive(listener: (position: Vector3) -> ())
+	table.insert(localArrive, listener)
 end
 
 local function maxFlights(): number
