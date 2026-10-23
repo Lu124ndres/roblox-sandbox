@@ -300,6 +300,26 @@ tono ajustado (anotado como "sustituto").
 | ZorroHungry | Hambre del zorro adulto | `9113951479` | Coyote Cu Whimpering Yelping Crying 1 |
 | ZorroFull | Se calma: jadeo contento (sustituto: tigre) | `9120038042` | Tiger Breathing 9 |
 
+### Capas de la pesca y del entrenamiento (2026-10-22)
+
+ProSoundEffects, verificadas con `PreloadAsync`. Las usan `client/Audio/FishingSounds` y
+`TrainingSounds`.
+
+| Clave | Uso | ID | Nombre en PSE |
+|---|---|---|---|
+| FishReelClick | Cada toque del carrete (sube de tono con la barra) | `9126261241` | Wooden Ratchet Clicking Bursts Squeaking Wheel 5 |
+| FishReelZip | El sedal sale zumbando / el carrete al clavar | `9114451733` | Fishing Reel 5 |
+| FishRodSwish | Latigazo de la caña | `9119711846` | Swish Thin 1 |
+| FishBloop | Bloop del corcho, del pique y del escape | `9112751536` | Bubble Bloop High Pitched Cute 1 |
+| FishLineTug | Tirón del sedal al picar | `9125406760` | Bow Stretches Wood Creaking Ripping Tearing 5 |
+| FishLineSnap | Se corta el sedal | `9113612424` | Buggy Whip Quick Swish Crack 2 |
+| FishSplash | El pez rompe el agua | `9119481909` | Splash Thunking Impact 1 |
+| FishBasket | El pez entra a la canasta (sustituto: bolsa) | `9113246398` | Bag Dull Sprinkling Impact 3 |
+| FishTing | El pez llega a la mano | `9119937112` | Tea Cup Impacts 14 |
+| PowerTing | Notas de la escala del entrenamiento | `9116223604` | Large Metal Triangle Single Ringing Hits 1 |
+| PowerWhoosh | Cada 10 ticks: el "fiu" que sube | `9125805579` | Rising Whoosh Hissing Build Up Ascending Swoosh 2 |
+| PowerReward | Cada 10 ticks: acorde de premio | `9116394545` | Magic Glows Soft Clusters Of Chiming Hits 1 |
+
 La música es de catálogo con licencia de Roblox (APMOfficial / DistrokidOfficial), así
 que funciona en cualquier juego. Verificada con `IsLoaded` el 2026-10-13. Se silencia con
 el ajuste Música (SoundGroup `Musica`); los demás sonidos van a `Efectos`.

@@ -36,7 +36,7 @@ local DANGER = Color3.fromRGB(255, 80, 70)
 export type Params = { start: number, gain: number, drain: number, timeout: number }
 export type Bar = {
 	show: (params: Params, rarityId: string) -> (),
-	tap: () -> (),
+	tap: () -> number, -- devuelve cuánto lleva la barra (0..1)
 	hide: () -> (),
 }
 
@@ -169,16 +169,17 @@ function ReelBar.mount(screen: ScreenGui): Bar
 		TweenService:Create(appear, UIConfig.Tweens.Pop, { Scale = 1 }):Play()
 	end
 
-	local function tap()
+	local function tap(): number
 		local current = params
 		if not current then
-			return
+			return progress
 		end
 		progress = math.min(1, progress + current.gain)
 		pop.Scale = 1.05
 		TweenService:Create(pop, UIConfig.Tweens.Pop, { Scale = 1 }):Play()
 		tip.BackgroundTransparency = 0
 		TweenService:Create(tip, TweenInfo.new(0.25), { BackgroundTransparency = 0.2 }):Play()
+		return progress
 	end
 
 	local function hide()

@@ -20,6 +20,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
+local FishingSounds = require(script.Parent.Parent.Audio.FishingSounds)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local GiantName = require(script.Parent.Parent.GiantName)
 local Toasts = require(script.Parent.Parent.Toasts)
@@ -109,8 +110,7 @@ function FishingController.start(screen: ScreenGui, toasts: Toasts.Toasts)
 			return
 		end
 		lastTap = now
-		bar.tap()
-		Sounds.play("Click", nil, 0.9 + math.random() * 0.3)
+		FishingSounds.reel(bar.tap())
 		reelIn:FireServer()
 	end
 

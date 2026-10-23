@@ -17,7 +17,7 @@ local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local TrainingSounds = require(script.Parent.Parent.Audio.TrainingSounds)
 local Toasts = require(script.Parent.Parent.Toasts)
 local Purchases = require(script.Parent.Parent.Menus.Purchases)
 local PowerGainFx = require(script.Parent.Parent.Effects.PowerGainFx)
@@ -59,7 +59,7 @@ function TrainingController.start(toasts: Toasts.Toasts)
 		local character = player.Character
 		if character and type(gained) == "number" then
 			GainPopup.show(character, gained)
-			Sounds.play("PowerTick")
+			TrainingSounds.tick()
 			PowerGainFx.gain(gained)
 			PumpRhythm.beat(player)
 		end

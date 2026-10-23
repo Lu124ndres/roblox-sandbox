@@ -3709,3 +3709,29 @@ Es del catálogo con licencia de Roblox. Verificada con `PreloadAsync` en Studio
 
 **Qué sigue:** si no convence, hay otras dos verificadas: "Protector Of The Sky" (`9042799548`,
 aventura que crece) y "Hard Victory" (`1837864891`).
+
+## 2026-10-22 — Pesca y entrenamiento con sonido satisfactorio
+
+**Qué se hizo (pedido del usuario: «la pesca con sonido más satisfactorio y entrenar igual»):**
+- **Pesca por capas** (`Audio/FishingSounds`). Cada momento junta un sonido principal, un
+  detalle y la recompensa:
+  - latigazo de la caña y el sedal que sale zumbando;
+  - el corcho cae con plop y bloop;
+  - el pique suena con burbuja y tirón del sedal;
+  - al clavar, el carrete zumba y el pez rompe el agua;
+  - el pez llega a la mano con un "ting" más agudo cuanto más raro, y entra a la canasta con
+    un golpe blando;
+  - si se escapa, el sedal se corta con un chasquido.
+- **El carrete:** cada toque de "¡Toca rápido!" es un clic de trinquete que sube de tono con la
+  barra (`ReelBar.tap` ahora devuelve el avance). Casi llena, suma el zumbido del carrete.
+- **Entrenar** (`Audio/TrainingSounds`): cada tick toca la nota siguiente de una pentatónica de
+  dos octavas, así la racha es una melodía que sube. Cada 10 ticks suenan un "fiu" y un acorde
+  de premio (el mismo golpe del tirón grande de `PumpRhythm`) y la escala vuelve a empezar.
+  Para que las notas no desafinen, `Sounds.play` acepta `exact` (sin la variación al azar de
+  ±8 %).
+- Todas las claves nuevas son de ProSoundEffects (`docs/ui-assets.md`).
+
+**Probado en Studio (Play):** se registró cada sonido en lanzar, picar, sacar un Atún,
+escaparse y 11 ticks de entrenamiento. Todos suenan en orden y las notas suben exactas (0.85 →
+2.86) con el premio en el décimo. Faltó probar los toques del carrete con la barra real (salen
+con el pique del servidor).

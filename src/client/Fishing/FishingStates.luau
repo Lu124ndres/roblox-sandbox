@@ -14,7 +14,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local FishingSounds = require(script.Parent.Parent.Audio.FishingSounds)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 local Distance = require(script.Parent.Parent.Effects.Distance)
 local CatchPose = require(script.Parent.CatchPose)
@@ -89,7 +89,7 @@ function FishingStates.apply(player: Player, rig: Rig)
 		return
 	end
 	if built then
-		Sounds.play("RodOut", RigParts.headPosition(character))
+		FishingSounds.rodOut(RigParts.headPosition(character))
 	end
 	local pose = rig.pose
 
@@ -127,7 +127,7 @@ function FishingStates.apply(player: Player, rig: Rig)
 					rod.trail.Enabled = false
 				end)
 			end
-			Sounds.play("Cast", RigParts.headPosition(character))
+			FishingSounds.cast(RigParts.headPosition(character))
 			task.delay(CAST.release, function()
 				if rig.generation == generation then
 					FishingStates.launch(player, rig, target, false)
@@ -162,14 +162,14 @@ function FishingStates.apply(player: Player, rig: Rig)
 		end
 		bodyPose(rig, "biteReady", 0.18)
 		RigParts.showAlert(rig, character)
-		Sounds.play("Bite", target)
+		FishingSounds.bite(target, RigParts.headPosition(character))
 		if rig.rod and Distance.tier(player) == "near" then
 			Fx.sparkle(rig.rod.tip.WorldPosition, UIConfig.Colors.Coins, 10)
 		end
 	elseif state == "caught" then
 		RigParts.clearAlert(rig)
 		CatchPose.hookSet(rig)
-		Sounds.play("Reel", RigParts.headPosition(character))
+		FishingSounds.hook(RigParts.headPosition(character), target)
 		RigParts.catchFish(rig, player, character, target, function(level: number, hold: number)
 			CatchPose.landed(rig, generation, level, hold, POSE.hold)
 		end)
@@ -183,7 +183,7 @@ function FishingStates.apply(player: Player, rig: Rig)
 		if rig.bobber then
 			rig.bobber.setMode("sinking")
 		end
-		Sounds.play("Escape", target)
+		FishingSounds.escape(target, RigParts.headPosition(character))
 	end
 end
 

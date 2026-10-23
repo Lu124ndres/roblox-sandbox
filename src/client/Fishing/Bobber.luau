@@ -17,7 +17,7 @@ local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local Sounds = require(script.Parent.Parent.Audio.Sounds)
+local FishingSounds = require(script.Parent.Parent.Audio.FishingSounds)
 local Fx = require(script.Parent.Parent.Effects.Fx)
 
 export type Mode = "flying" | "floating" | "nibble" | "sinking"
@@ -98,7 +98,7 @@ function Bobber.cast(from: Vector3, target: Vector3, startFloating: boolean?): B
 		mode = pending or "floating"
 		modeTime = 0
 		Fx.splash(target, 0.6)
-		Sounds.play("Plop", target)
+		FishingSounds.land(target)
 	end
 
 	local connection = RunService.RenderStepped:Connect(function(dt: number)

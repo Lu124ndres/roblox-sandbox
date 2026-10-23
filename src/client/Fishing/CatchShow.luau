@@ -25,6 +25,7 @@ local RunService = game:GetService("RunService")
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local FishingSounds = require(script.Parent.Parent.Audio.FishingSounds)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Distance = require(script.Parent.Parent.Effects.Distance)
@@ -69,6 +70,7 @@ local function stash(model: Model, character: Model)
 		if t >= 1 then
 			connection:Disconnect()
 			Fx.sparkle(target, UIConfig.Colors.Coins, 6)
+			FishingSounds.stash(target)
 			model:Destroy()
 		end
 	end)
@@ -148,6 +150,7 @@ function CatchShow.play(
 				onLanded(level, holdSeconds)
 			end
 			Sounds.play("FishFlop", head.Position)
+			FishingSounds.landed(head.Position, level)
 			FishModel.flop(fish, above, holdSeconds, function()
 				stash(fish, character)
 			end)

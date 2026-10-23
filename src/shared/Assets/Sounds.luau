@@ -25,6 +25,20 @@ local Sounds: { [string]: string } = {
 	EpicCatch = "rbxassetid://112485797063762", -- "UI - Level Up"
 	LegendaryCatch = "rbxassetid://134821092416328", -- "Rewards Level Up Next Tier"
 	Whoosh = "rbxassetid://123796710194563", -- "Whoosh" (peces lanzados al gigante)
+	-- Capas de la pesca y del entrenamiento (ProSoundEffects): client/Audio/FishingSounds y
+	-- TrainingSounds.
+	FishReelClick = "rbxassetid://9126261241", -- "Wooden Ratchet Clicking Bursts Squeaking Wheel 5" (0.8 s)
+	FishReelZip = "rbxassetid://9114451733", -- "Fishing Reel 5" (0.5 s): el sedal sale zumbando
+	FishRodSwish = "rbxassetid://9119711846", -- "Swish Thin 1" (0.7 s): latigazo de la caña
+	FishBloop = "rbxassetid://9112751536", -- "Bubble Bloop High Pitched Cute 1" (0.9 s)
+	FishLineTug = "rbxassetid://9125406760", -- "Bow Stretches Wood Creaking Ripping Tearing 5" (1.3 s)
+	FishLineSnap = "rbxassetid://9113612424", -- "Buggy Whip Quick Swish Crack 2" (0.4 s): se corta
+	FishSplash = "rbxassetid://9119481909", -- "Splash Thunking Impact 1" (2.3 s): el pez rompe el agua
+	FishBasket = "rbxassetid://9113246398", -- "Bag Dull Sprinkling Impact 3" (1.5 s): a la canasta
+	FishTing = "rbxassetid://9119937112", -- "Tea Cup Impacts 14" (0.8 s): el pez llega a la mano
+	PowerTing = "rbxassetid://9116223604", -- "Large Metal Triangle Single Ringing Hits 1" (1.3 s): notas
+	PowerWhoosh = "rbxassetid://9125805579", -- "Rising Whoosh Hissing Build Up Ascending Swoosh 2" (1.1 s)
+	PowerReward = "rbxassetid://9116394545", -- "Magic Glows Soft Clusters Of Chiming Hits 1" (1.4 s)
 	-- Gigante
 	Chomp = "rbxassetid://99444504938110", -- mordida (eating sound)
 	OrcaCall = "rbxassetid://9126210261", -- "Whale Vocal Underwater Talk With Sea Creature 1" (PSE): adulta

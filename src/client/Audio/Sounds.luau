@@ -18,7 +18,9 @@
 
 	Sounds.define(ajustes) agrega volumen, tono y alcance de claves que no
 	están en UIConfig.Sounds (por ejemplo las voces del minotauro, MinoVoces).
-	Sounds.play acepta además un multiplicador de volumen (capas más suaves).
+	Sounds.play acepta además un multiplicador de volumen (capas más suaves) y
+	exact = true para tocar el tono justo, sin la variación al azar (notas de
+	una escala, como los ticks del entrenamiento).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -84,7 +86,13 @@ function Sounds.define(settings: { [string]: SoundSettings })
 	end
 end
 
-function Sounds.play(key: string, position: Vector3?, pitchScale: number?, volumeScale: number?)
+function Sounds.play(
+	key: string,
+	position: Vector3?,
+	pitchScale: number?,
+	volumeScale: number?,
+	exact: boolean?
+)
 	if (playing[key] or 0) >= Performance.SoundMaxPerKey then
 		return
 	end
@@ -95,7 +103,7 @@ function Sounds.play(key: string, position: Vector3?, pitchScale: number?, volum
 	if not sound then
 		return
 	end
-	local variation = 1 + rng:NextNumber(-PITCH_VARIATION, PITCH_VARIATION)
+	local variation = if exact then 1 else 1 + rng:NextNumber(-PITCH_VARIATION, PITCH_VARIATION)
 	sound.PlaybackSpeed *= variation * (pitchScale or 1)
 	sound.Volume *= volumeScale or 1
 	local holder: Instance = sound
