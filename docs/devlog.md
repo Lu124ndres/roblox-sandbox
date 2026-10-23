@@ -3699,3 +3699,13 @@ hambre y lleno, evolución propia, trucos mudos y llegada y despedida):**
 - Pro Sound Effects no tiene zorro, ternero, espiráculo ni cría de reptil. Hay sustitutos
   anotados: si aparecen audios con licencia mejores, se cambian solo en `Assets/Sounds`.
 - La Orca Fantasma comparte los efectos de la orca, así que también chilla de cría.
+
+## 2026-10-22 — Música épica al vencer al monstruo
+
+**Qué se hizo (pedido del usuario: «la música de cuando se vence a un monstruo, algo más
+épico»):** `MusicRest`, que suena en el descanso después de llenar al monstruo, pasa de "Work
+Like A Champion" a "Defender Of Men" (APM, 1:56): orquesta heroica con metales, cuerdas y coro.
+Es del catálogo con licencia de Roblox. Verificada con `PreloadAsync` en Studio.
+
+**Qué sigue:** si no convence, hay otras dos verificadas: "Protector Of The Sky" (`9042799548`,
+aventura que crece) y "Hard Victory" (`1837864891`).

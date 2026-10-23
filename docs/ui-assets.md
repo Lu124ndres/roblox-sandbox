@@ -272,7 +272,7 @@ en `UIConfig.Sounds`. Todos verificados con `IsLoaded` en Studio el 2026-10-12.
 | CoinPop | Cada moneda que llega al contador | `135483737426662` (Coins, más agudo) | coin collect |
 | MusicIsland | Música de la isla | `128770946473000` "The Fisherman's Small Boat" (DistroKid) | tropical island |
 | MusicCrater | Música del cráter | `1843867314` "Tension Repeat Drones 29" (APM) | epic boss battle |
-| MusicRest | Música del descanso | `9046678292` "Work Like A Champion" (APM) | epic boss battle |
+| MusicRest | Música del descanso (monstruo vencido) | `9042798478` "Defender Of Men" (APM, 2026-10-22) | epic victory orchestral |
 
 ### Voces de cría y momentos de los gigantes (2026-10-22)
 

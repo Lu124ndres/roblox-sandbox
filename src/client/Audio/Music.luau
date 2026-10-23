@@ -5,7 +5,7 @@
 	Música de fondo por zona, con fundido suave entre pistas:
 		isla      MusicIsland (bossa tranquila para pescar)
 		cráter    MusicCrater (drones de tensión, junto al ambiente de terror)
-		descanso  MusicRest   (pista animada mientras dura el descanso, en el cráter)
+		descanso  MusicRest   (orquesta heroica con coro: se venció al monstruo; en el cráter)
 
 	Las pistas van al SoundGroup Musica, que el ajuste "Música" silencia.
 	Las que no tienen ID se ignoran.

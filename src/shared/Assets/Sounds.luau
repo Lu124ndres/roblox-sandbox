@@ -165,7 +165,7 @@ local Sounds: { [string]: string } = {
 	-- Música (con licencia de Roblox: APM y DistroKid, se pueden usar en cualquier juego)
 	MusicIsland = "rbxassetid://128770946473000", -- "The Fisherman's Small Boat" (2:39)
 	MusicCrater = "rbxassetid://1843867314", -- "Tension Repeat Drones 29" (2:04)
-	MusicRest = "rbxassetid://9046678292", -- "Work Like A Champion" (2:25)
+	MusicRest = "rbxassetid://9042798478", -- "Defender Of Men" (APM, 1:56): orquesta heroica con coro
 	-- Cráter
 	HorrorAmbience = "rbxassetid://138890398994853", -- ambiente de terror (3:20)
 	Thunder = "rbxassetid://139319051979882", -- "Thunder"
