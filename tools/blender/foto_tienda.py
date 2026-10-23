@@ -23,6 +23,9 @@ ANGULO = math.radians(argumento("--angulo", 30.0))
 ELEV = math.radians(argumento("--elev", 8.0))
 LENTE = argumento("--lente", 50.0)
 LADO = argumento("--lado", 1600)
+ZOOM = argumento("--zoom", 1.0)  # >1 acerca la cámara (primer plano)
+# Punto al que mira la cámara, en fracciones de la caja del modelo (0..1 en x, y, z)
+MIRA = [float(v) for v in argumento("--mira", "0.5,0.5,0.5").split(",")]
 
 sc = bpy.context.scene
 mallas = []
@@ -35,7 +38,8 @@ for o in sc.objects:
 pts = [o.matrix_world @ Vector(c) for o in mallas for c in o.bound_box]
 lo = Vector([min(p[i] for p in pts) for i in range(3)])
 hi = Vector([max(p[i] for p in pts) for i in range(3)])
-centro, tam = (lo + hi) / 2, (hi - lo).length
+centro = Vector([lo[i] + (hi[i] - lo[i]) * MIRA[i] for i in range(3)])
+tam = (hi - lo).length / ZOOM
 
 # El frente de los modelos es -y en Blender (Rig.bind: frente -Z de Roblox)
 d = Vector((math.sin(ANGULO) * math.cos(ELEV), -math.cos(ANGULO) * math.cos(ELEV), math.sin(ELEV)))
