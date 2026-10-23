@@ -4,12 +4,12 @@
 
 	Avisos y ambiente del ciclo del gigante para el jugador local:
 		- carteles al llenarse, al empezar el descanso y al llegar el siguiente;
-		- "+1 Kill" (o "+N Kills" con un pase) cuando ayudó a llenar al monstruo;
 		- en el descanso el volcán se vacía (CraterDrain) y la guarida queda en
 		  el fondo, con destellos: sobre ella se entrena solo (GiantCycle);
 		- avisos al entrar o salir de la guarida y 10 s antes de que vuelva
 		  el agua (RestArena regresa a la orilla a los que sigan adentro).
-	El "+N poder" de cada segundo lo muestra TrainingController.
+	El "+N poder" de cada segundo lo muestra TrainingController. El cartel de
+	"+1 Kill" se quitó (pedido del usuario el 2026-10-23): las kills se ven en el HUD.
 ]]
 
 local Players = game:GetService("Players")
@@ -32,8 +32,6 @@ local CYCLE = Config.Giants.cycle
 local ATTR = Protocol.GiantAttributes
 local CHECK_SECONDS = 0.5
 local WARNING_SECONDS = 10
-local PLAYER = Protocol.PlayerAttributes
-local LOAD_QUIET = 5 -- segundos tras cargar los datos en que una subida de Kills no es una kill nueva
 local CENTER = WorldZones.craterCenter
 
 local CycleView = {}
@@ -110,31 +108,6 @@ function CycleView.start(toasts: Toasts.Toasts)
 	end
 	stateFolder:GetAttributeChangedSignal(ATTR.Drained):Connect(onDrained)
 	onDrained()
-
-	-- +N Kills: este jugador ayudó a llenar al monstruo (N con los pases con traje). Al entrar,
-	-- Kills pasa de 0 a lo guardado y no es una kill nueva. Los atributos llegan juntos (Kills y
-	-- DataLoaded en el mismo cuadro) y sus avisos en cualquier orden, así que no alcanza con
-	-- mirar DataLoaded: se ignora lo que suba hasta LOAD_QUIET segundos después de cargar.
-	local loadedAt: number? = if player:GetAttribute(PLAYER.DataLoaded) == true
-		then os.clock() - LOAD_QUIET
-		else nil
-	player:GetAttributeChangedSignal(PLAYER.DataLoaded):Connect(function()
-		loadedAt = if player:GetAttribute(PLAYER.DataLoaded) == true then os.clock() else nil
-	end)
-	local kills = player:GetAttribute(PLAYER.Kills)
-	player:GetAttributeChangedSignal(PLAYER.Kills):Connect(function()
-		local now = player:GetAttribute(PLAYER.Kills)
-		local settled = loadedAt ~= nil and os.clock() - loadedAt >= LOAD_QUIET
-		if settled and type(now) == "number" and type(kills) == "number" and now > kills then
-			-- Sin sonido: el de victoria se quitó (pedido del usuario el 2026-10-23).
-			local gained = now - kills
-			toasts.banner(
-				`+{gained} {if gained == 1 then "Kill" else "Kills"} · {GiantName.current(true)}`,
-				COLORS.Furious
-			)
-		end
-		kills = now
-	end)
 
 	local inside, warned = false, false
 	task.spawn(function()

@@ -22,7 +22,6 @@ local SpinStand = require(script.Parent.Ambient.SpinStand)
 local RestDawn = require(script.Parent.Ambient.RestDawn)
 local ZoneMood = require(script.Parent.Ambient.ZoneMood)
 local Music = require(script.Parent.Audio.Music)
-local Sounds = require(script.Parent.Audio.Sounds)
 local FeedFeedback = require(script.Parent.FeedFeedback)
 local FeedController = require(script.Parent.Feeding.FeedController)
 local FishingController = require(script.Parent.Fishing.FishingController)
@@ -97,8 +96,8 @@ local toasts = Toasts.mount(screen) -- el bono de Premium se ve en Interface/Boo
 
 local hungerPanel = HungerBar.mount(screen, function(stage: number)
 	local color = UIConfig.HungerStageColors[stage]
+	-- Sin fanfarria (pedido del usuario el 2026-10-23): ya suena el estallido de EvolveFx.
 	task.delay(EvolveLook.secondsToBurst() + 0.35, function() -- después del estallido (EvolveFx)
-		Sounds.play("StageUp")
 		toasts.banner(`¡{GiantName.current(true)} evolucionó!`, color)
 	end)
 end, function() -- sin fanfarria: sonaba fea al vencerlo (pedido del usuario el 2026-10-23)

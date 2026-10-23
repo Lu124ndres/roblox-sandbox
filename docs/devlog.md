@@ -3809,3 +3809,12 @@ resoplido `OrcaBlow`): `GiantCycleFx` ya no llama a `GiantMoments` en la despedi
 recetas `farewell` salen de `GiantMomentRecipes` (orca, minotauro, dragón, zorro y default).
 La llegada conserva su voz. **Probado en Studio:** llenando la barra por admin no se crea
 ningún sonido en la despedida (solo la gaviota del ambiente) y la orca se esconde a los 3 s.
+
+## 2026-10-23 — Sin fanfarria al evolucionar y sin cartel de +1 Kill
+
+**Qué se hizo (pedido del usuario: «cada evolución suena eso, igual quita el cartel de +1
+kill»):** el cartel «¡evolucionó!» ya no toca `StageUp` (quedan la carga y el estallido de
+`EvolveFx` y la voz del gigante) y `CycleView` deja de mostrar «+N Kills»: las kills se
+siguen contando y se ven en el HUD. **Probado en Studio:** evolución a etapa 2 y llenado por
+admin: suenan `EvolveCharge`, `EvolveBurst`, `OrcaCalfSqueak` y `OrcaBlow`, ningún
+`StageUp`; Kills pasó de 13 a 14 sin cartel.
