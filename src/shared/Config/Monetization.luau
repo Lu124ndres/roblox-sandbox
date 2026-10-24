@@ -17,7 +17,7 @@
 	personaje (`outfit`, ver server/Social/Outfits) y pescan más rápido:
 		ReyDelMar      pesca x2 más rápido (y x2 de fuerza), alimenta x2, x2 kills
 		DiosDelVolcan  pesca ultrarrápida (x5, de un toque), alimenta x4, x4 kills
-	Si tiene los dos, de cada ventaja vale la mejor.
+	Las ventajas de un traje solo valen con ese traje puesto (shared/EquippedOutfit).
 	Fill25/50/75: llena esa parte de la barra del monstruo actual.
 	Choose<idGigante>: elige el monstruo que sale después del descanso.
 	RestTime: +1 minuto de descanso en el volcán para todo el servidor.

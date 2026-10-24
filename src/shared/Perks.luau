@@ -4,6 +4,8 @@
 	atributos que solo pone el servidor (servidor y cliente calculan igual):
 		Pase_<clave> / Nivel<Power|Coins> / Estanque_<i>   pases (VIP: x1.5 monedas y
 		                                                   entrenamiento), x2^nivel, estanques
+		TrajeElegido                                       un pase con traje solo da sus
+		                                                   ventajas con ese traje puesto
 		MembershipType (Premium) / Renacimientos           x1.1 / x1.25^n poder y monedas
 		GrupoReclamado                                     +10 % de suerte (letrero del grupo)
 		Pez_<id>                                           suerte por sección completa (CollectionLuck)
@@ -16,6 +18,7 @@ local Workspace = game:GetService("Workspace")
 
 local CollectionLuck = require(script.Parent.CollectionLuck)
 local Config = require(ReplicatedStorage.Shared.Config)
+local EquippedOutfit = require(script.Parent.EquippedOutfit)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(script.Parent.RebirthMath)
 local RetentionBonus = require(script.Parent.RetentionBonus)
@@ -32,12 +35,18 @@ function Perks.hasPass(player: Player, key: string): boolean
 	return player:GetAttribute(`{ATTR.PassPrefix}{key}`) == true
 end
 
--- Producto de un campo numérico de todos los pases que tiene (1 si ninguno).
+-- Tiene el pase y, si es de traje, lo lleva puesto (EquippedOutfit).
+local function passActive(player: Player, key: string, pass: any): boolean
+	return Perks.hasPass(player, key)
+		and (pass.outfit == nil or pass.outfit == EquippedOutfit.of(player))
+end
+
+-- Producto de un campo numérico de todos los pases activos (1 si ninguno).
 local function passProduct(player: Player, field: string): number
 	local result = 1
 	for key, pass in MONETIZATION.passes do
 		local value = (pass :: any)[field]
-		if type(value) == "number" and Perks.hasPass(player, key) then
+		if type(value) == "number" and passActive(player, key, pass) then
 			result *= value
 		end
 	end
@@ -119,12 +128,12 @@ function Perks.dailyMultiplier(player: Player): number
 	return passProduct(player, "dailyMultiplier")
 end
 
--- Mejor valor de `field` entre sus pases (el menor si `lowest`); `fallback` si ninguno.
+-- Mejor valor de `field` entre sus pases activos (el menor si `lowest`); `fallback` si ninguno.
 local function passBest(player: Player, field: string, fallback: number, lowest: boolean): number
 	local best = fallback
 	for key, pass in MONETIZATION.passes do
 		local value = (pass :: any)[field]
-		if type(value) == "number" and Perks.hasPass(player, key) then
+		if type(value) == "number" and passActive(player, key, pass) then
 			best = if lowest then math.min(best, value) else math.max(best, value)
 		end
 	end
@@ -149,7 +158,7 @@ end
 
 function Perks.instantReel(player: Player): boolean
 	for key, pass in MONETIZATION.passes do
-		if pass.instantReel and Perks.hasPass(player, key) then
+		if pass.instantReel and passActive(player, key, pass) then
 			return true
 		end
 	end
@@ -166,7 +175,7 @@ function Perks.luckBonus(player: Player): number
 		+ Perks.groupLuck(player)
 		+ CollectionLuck.bonus(player)
 	for key, pass in MONETIZATION.passes do
-		if pass.luck and Perks.hasPass(player, key) then
+		if pass.luck and passActive(player, key, pass) then
 			bonus += pass.luck
 		end
 	end

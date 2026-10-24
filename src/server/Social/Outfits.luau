@@ -18,8 +18,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Config = require(ReplicatedStorage.Shared.Config)
-local Perks = require(ReplicatedStorage.Shared.Perks)
+local EquippedOutfit = require(ReplicatedStorage.Shared.EquippedOutfit)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Trajes = require(ReplicatedStorage.Shared.Trajes)
 local MeshOutfit = require(script.Parent.MeshOutfit)
@@ -28,7 +27,6 @@ local OutfitParts = require(script.Parent.OutfitParts)
 local PassLooks = require(script.Parent.PassLooks)
 local SailorParts = require(script.Parent.SailorParts)
 
-local PASSES = Config.Monetization.passes
 local FOLDER = "Traje"
 local SAILOR = "Marinero"
 local rgb = OutfitKit.rgb
@@ -73,22 +71,6 @@ local function skinOf(player: Player): Color3
 	return skin
 end
 
--- El que eligió en una vitrina (si lo tiene), o el del pase más caro, o marinero.
-local function outfitFor(player: Player): string
-	local chosen = player:GetAttribute(Trajes.CHOSEN)
-	local best, price = SAILOR, -1
-	for key, pass in PASSES do
-		if pass.outfit and Perks.hasPass(player, key) then
-			if pass.outfit == chosen then
-				return pass.outfit
-			elseif pass.robux > price then
-				best, price = pass.outfit, pass.robux
-			end
-		end
-	end
-	return if chosen == SAILOR then SAILOR else best
-end
-
 -- Quita lo que traiga del avatar (por si la apariencia llegó a cargar).
 local function strip(character: Model)
 	for _, item in character:GetChildren() do
@@ -125,7 +107,7 @@ local function dress(player: Player)
 	if not character then
 		return
 	end
-	local outfit = outfitFor(player)
+	local outfit = EquippedOutfit.of(player)
 	local old = character:FindFirstChild(FOLDER)
 	if old and old:GetAttribute("Outfit") == outfit then
 		return
