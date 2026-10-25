@@ -5,7 +5,8 @@
 	Mientras dura el tutorial, la interfaz muestra solo el tutorial (pedido del
 	usuario: «quita todo lo demás, solo deja el tutorial»): se ocultan las
 	columnas del menú y de estadísticas, los botones de arriba, el panel del
-	gigante, los potenciadores y los atajos de Robux. Lo que hace falta para
+	gigante, los potenciadores, los atajos de Robux y la cuenta regresiva
+	del evento (Interface/EventCountdown). Lo que hace falta para
 	jugar sigue: los botones de acción (Pescar, Alimentar), los avisos de los
 	ProximityPrompt, la barra de recoger y la tarjeta de captura.
 	En el paso de comprar aparece solo MEJORAS: el botón real se saca de su
@@ -18,7 +19,7 @@ local HudVisibility = require(script.Parent.Parent.Interface.HudVisibility)
 local Layout = require(script.Parent.Parent.Interface.Layout)
 
 local REASON = "tutorial"
-local OTHERS = { "Hambre", "Impulsos", "AtajosRobux" } -- hijos de la pantalla del HUD
+local OTHERS = { "Hambre", "Impulsos", "AtajosRobux", "ContadorEvento" } -- hijos de la pantalla del HUD
 local LIFT_Z = 5 -- debajo del velo de HudFocus (9) y de las ventanas (10)
 
 export type TutorialHud = { set: (active: boolean, lifted: GuiObject?) -> () }

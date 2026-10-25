@@ -3,9 +3,9 @@
 	HudFocus
 
 	En táctil, con una ventana abierta solo se ve la ventana: se ocultan las
-	columnas del HUD, el panel de hambre, los potenciadores (Interface/BoostBadges) y los botones
-	de arriba, y un velo oscuro tapa lo demás (Pescar, «Siguiente meta», el
-	aviso de los prompts y el juego). En un teléfono la ventana llena casi toda
+	columnas del HUD, el panel de hambre, los potenciadores (Interface/BoostBadges), la
+	cuenta regresiva del evento (Interface/EventCountdown) y los botones de arriba, y un
+	velo oscuro tapa lo demás (Pescar, el aviso de los prompts y el juego). En un teléfono la ventana llena casi toda
 	la pantalla y lo que asomaba por los costados se veía encimado (la X caía
 	sobre la barra de arriba). En PC las ventanas son más chicas y el HUD queda
 	a la vista, como siempre.
@@ -38,7 +38,7 @@ function HudFocus.start(screen: ScreenGui)
 	veil.Parent = screen
 
 	local hud: { GuiObject } = { Layout.stats(), Layout.menu(), Layout.topBar() }
-	for _, name in { "Hambre", "Impulsos", "AtajosRobux" } do
+	for _, name in { "Hambre", "Impulsos", "AtajosRobux", "ContadorEvento" } do
 		local object = screen:FindFirstChild(name)
 		if object and object:IsA("GuiObject") then
 			table.insert(hud, object)
