@@ -209,14 +209,16 @@ local function onRing(degrees: number): Vector3
 	return Vector3.new(spot.X, floor + 3, spot.Z)
 end
 
+-- El aviso va en una pieza hija del estanque (CentroEntrenar); el índice, en el estanque.
+local function pondOf(prompt: Instance): number?
+	local pond = prompt:FindFirstAncestor(Protocol.Map.TrainingPond)
+	local index = pond and pond:GetAttribute(Protocol.Map.PondIndexAttribute)
+	return if type(index) == "number" then index else nil
+end
+
 local function trainAtPond(index: number)
 	for _, descendant in Workspace:GetDescendants() do
-		if
-			descendant:IsA("ProximityPrompt")
-			and descendant.Parent
-			and descendant.Parent.Name == Protocol.Map.TrainingPond
-			and descendant.Parent:GetAttribute(Protocol.Map.PondIndexAttribute) == index
-		then
+		if descendant:IsA("ProximityPrompt") and pondOf(descendant) == index then
 			descendant:InputHoldBegin()
 			task.wait(0.15)
 			descendant:InputHoldEnd()
