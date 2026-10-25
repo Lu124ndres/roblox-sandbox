@@ -140,7 +140,7 @@ function PondSignView.build(
 
 	local capsule, border = pill(root, color, strokes)
 	local skull = icon(capsule, "skull", 1)
-	local kills = label(capsule, "Kills", WHITE, "small", strokes)
+	local kills = label(capsule, "Banquetes", WHITE, "small", strokes)
 	kills.LayoutOrder, kills.Size = 2, UDim2.fromScale(0.4, 0.72)
 	local robux = Instance.new("ImageLabel")
 	robux.Name = "Robux"

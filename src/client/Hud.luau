@@ -9,7 +9,7 @@
 		Monedas   (x de Monedas compradas)
 		Poder     (x de Poder: compras y entrenamiento del servidor)
 		Peces     en la canasta / capacidad («LLENA» bajo el ícono cuando no cabe más)
-		Kills     monstruos llenados
+		Banquetes monstruos llenados en los que ayudó
 	Solo muestra: los valores los decide el servidor.
 ]]
 
@@ -99,7 +99,7 @@ function Hud.mount(_screen: ScreenGui, player: Player): TextLabel
 	local coins = row(1, "coin", COLORS.Coins)
 	local power = row(2, "crystal", Color3.fromRGB(150, 205, 255))
 	local fish = row(3, "basketFish", COLORS.Fishing)
-	local kills = row(4, "skull", Color3.fromRGB(255, 120, 110))
+	local kills = row(4, "fed", Color3.fromRGB(255, 120, 110))
 	Kit.gold(coins.value)
 	Kit.gold(coins.badge)
 	Kit.gold(power.badge)

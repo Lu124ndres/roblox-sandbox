@@ -97,7 +97,7 @@ local Retention: Types.RetentionConfig = {
 		PrimerRaro = { name = "¡Raro!", description = "Pescaste un pez raro" },
 		PrimerLegendario = { name = "Leyenda del mar", description = "Pescaste un pez legendario" },
 		PrimerMitico = { name = "Mítico", description = "Pescaste el pez arcoíris" },
-		PrimeraKill = { name = "Primera kill", description = "Ayudaste a llenar a un monstruo" },
+		PrimeraKill = { name = "Primer banquete", description = "Ayudaste a llenar a un monstruo" },
 		DiezKills = { name = "Cazagigantes", description = "10 monstruos llenados" },
 		Coleccion = { name = "Colección completa", description = "Pescaste todas las especies" },
 		Tutorial = { name = "Pescador de verdad", description = "Terminaste el tutorial" },

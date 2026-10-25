@@ -99,7 +99,7 @@ local Loading: LoadingLook = {
 	tips = {
 		"Los peces raros llenan mucho más al gigante.",
 		"Entrena en los estanques para pescar más rápido.",
-		"Cuando el gigante se llena, todos los que ayudaron ganan una kill.",
+		"Cuando el gigante se llena, todos los que ayudaron ganan un banquete.",
 		"Una canasta más grande te deja llevar más peces al volcán.",
 		"Desde Legendario, todo el servidor ve tu pez.",
 		"Si el pez se escapa no pierdes nada: vuelve a intentarlo.",

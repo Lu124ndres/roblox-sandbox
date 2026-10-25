@@ -75,7 +75,7 @@ function RebirthWindow.start(screen: ScreenGui)
 	})
 	local keeps = RebirthParts.listCard(side, "TE QUEDAS", CARDS.Green, 0.51, 244, {
 		{ icon = "crown", label = "Títulos" },
-		{ icon = "fed", label = "Kills" },
+		{ icon = "fed", label = "Banquetes" },
 		{ icon = "pond", label = "Estanques" },
 		{ icon = "fish", label = "Colección" },
 		{ icon = "ticket", label = "Pases" },

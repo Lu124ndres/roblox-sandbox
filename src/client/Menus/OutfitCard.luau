@@ -9,7 +9,7 @@
 		su vitrina del mapa, Workspace.Vitrinas), delante de un chip de piedra
 		de su color con rayos que giran
 		nombre grande dorado y sus ventajas en dos líneas (salen del pase en Config)
-		etiqueta inclinada arriba a la derecha ("x2 Kills")
+		etiqueta inclinada arriba a la derecha ("x2 Banquetes")
 		botón con marco de lava: Robux y precio en dorado; si ya lo tiene,
 		Equipar o Desequipar (remote ElegirTraje) y el regalo rosa para
 		comprárselo a otro
@@ -86,7 +86,8 @@ local function card(
 		text(frame, `Ventaja{index}`, 34, 70 + (index - 1) * 38, 36).Text = line
 	end
 	if pass.kills and pass.kills > 1 then
-		local tag = ShopParts.tag(frame, `x{pass.kills} Kills`, TAG_COLORS[passKey] or CARDS.Red)
+		local tag =
+			ShopParts.tag(frame, `x{pass.kills} Banquetes`, TAG_COLORS[passKey] or CARDS.Red)
 		local holder = tag.Parent :: Frame
 		holder.AnchorPoint = Vector2.new(1, 0.5)
 		holder.Position = UDim2.new(1, 8, 0, 4)

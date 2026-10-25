@@ -29,7 +29,7 @@ local function fillPlayer(page: Page)
 		{
 			{ "Poder", "power" },
 			{ "Monedas", "coins" },
-			{ "Kills", "kills" },
+			{ "Banquetes", "kills" },
 			{ "Renacimientos", "rebirths" },
 		}
 	do

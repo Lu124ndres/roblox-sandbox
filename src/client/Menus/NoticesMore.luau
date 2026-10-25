@@ -53,7 +53,7 @@ function NoticesMore.handle(toasts: Toasts.Toasts, kind: unknown, a: unknown, b:
 		return true
 	elseif kind == "giantLeft" and type(a) == "string" then -- sin fanfarria (pedido del usuario el 2026-10-23)
 		toasts.banner(
-			if b == true then "¡Te llevas la kill igual!" else "Dale de comer al siguiente",
+			if b == true then "¡Te llevas el banquete igual!" else "Dale de comer al siguiente",
 			if b == true then COLORS.Success else COLORS.Warning,
 			"skull",
 			`¡{TextCase.upper(a)} SE CANSÓ DE ESPERAR Y SE FUE!`
