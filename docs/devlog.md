@@ -3919,3 +3919,21 @@ y se esconde 280 studs más abajo, por debajo también del futuro lago de -250 d
 
 **Probado en Studio:** `fill 1` → el volcán se vacía y el santuario sube de -300 a -20 con
 sus cuatro mallas (la lava en Neon); captura desde el borde del cráter.
+
+
+## 2026-10-25 — Origen de anuncio en el embudo de inicio
+
+**Qué se hizo (pedido del usuario, para las campañas de Ads Manager):**
+- El paso 1 del embudo («Cargo») lleva ahora el origen del jugador en el campo personalizado 1:
+  `Origen - ad_<campaña>` si entró por un anuncio cuyo launch data empieza con `ad_`, u
+  `Origen - Organico` si no (`Analytics/Origen`). Con eso se filtra el embudo por campaña en
+  Analytics → Funnel (los filtros solo miran el primer paso).
+- `Envio.funnel` acepta campos personalizados como los demás envíos.
+- El launch data se valida (prefijo `ad_`, solo letras, números y `_`, 40 caracteres como máximo);
+  cualquier otro valor cuenta como orgánico.
+
+**Probado en Studio (Play):** `ad_prueba` y `ad_engagement` dan su origen; `otra_cosa`, vacío, sin
+launch data, texto con símbolos, 50 caracteres o un `GetJoinData` que falla dan «Organico»; el
+jugador real da «Organico»; `Envio.funnel` con el campo manda el evento sin errores en el Output.
+`rojo build` y `stylua --check` limpios. `selene` no se pudo correr: no logró descargar la
+biblioteca estándar de Roblox desde esta máquina.

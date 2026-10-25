@@ -55,9 +55,10 @@ function Envio.custom(player: Player, name: string, value: number?, list: { stri
 end
 
 -- Embudo del primer minuto: cada paso se manda una sola vez por jugador (lo cuida Analytics).
-function Envio.funnel(player: Player, step: number, stepName: string)
+-- list: campos personalizados (el paso 1 lleva el origen del jugador).
+function Envio.funnel(player: Player, step: number, stepName: string, list: { string }?)
 	send(`embudo {step}`, function()
-		AnalyticsService:LogOnboardingFunnelStepEvent(player, step, stepName)
+		AnalyticsService:LogOnboardingFunnelStepEvent(player, step, stepName, fields(list))
 	end)
 end
 

@@ -5,7 +5,8 @@
 	Telemetría del servidor con AnalyticsService, para ajustar el balance y ver
 	dónde abandonan los jugadores. Nada sale del cliente. Los 10 eventos
 	(aprobados el 2026-10-19; ver docs/decisiones.md):
-		1. Embudo de inicio (LogOnboardingFunnelStepEvent): 1 cargó (solo nuevos),
+		1. Embudo de inicio (LogOnboardingFunnelStepEvent): 1 cargó (solo nuevos, con
+		   su origen: anuncio u orgánico, ver Analytics/Origen),
 		   2 primer pez, 3-6 cada paso del tutorial, 7 primera kill.
 		2. Fin de sesión (Analytics/Sesion).
 		3. Monstruo lleno: minutos, quiénes aportaron, jugadores, comida.
@@ -34,6 +35,7 @@ local Bus = require(script.Bus)
 local Economia = require(script.Economia)
 local Envio = require(script.Envio)
 local Monstruo = require(script.Monstruo)
+local Origen = require(script.Origen)
 local Sesion = require(script.Sesion)
 
 local FUNNEL =
@@ -44,7 +46,7 @@ local Analytics = {}
 
 local sent: { [Player]: { [number]: boolean } } = {} -- pasos del embudo ya mandados
 
-local function funnel(player: Player, step: number)
+local function funnel(player: Player, step: number, list: { string }?)
 	local done = sent[player]
 	if not done then
 		done = {}
@@ -52,7 +54,7 @@ local function funnel(player: Player, step: number)
 	end
 	if not done[step] and FUNNEL[step] then
 		done[step] = true
-		Envio.funnel(player, step, FUNNEL[step])
+		Envio.funnel(player, step, FUNNEL[step], list)
 	end
 end
 
@@ -63,7 +65,9 @@ local function loaded(player: Player)
 	end
 	Sesion.start(player, save)
 	if save.tutorial == 0 and save.stats.fishCaught == 0 then
-		funnel(player, 1) -- solo los nuevos: el embudo mide el primer minuto
+		-- solo los nuevos: el embudo mide el primer minuto. El origen (anuncio u
+		-- orgánico) va en el paso 1 para poder filtrar el embudo por campaña.
+		funnel(player, 1, { Origen.of(player) })
 	end
 end
 
