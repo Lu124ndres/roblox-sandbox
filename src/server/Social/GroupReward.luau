@@ -4,12 +4,14 @@
 
 	Regalo por unirse al grupo del juego (Config.Social.group): quien está en
 	el grupo y lleva `minutes` en esta partida lo reclama una vez (remote
-	ClaimGroup, desde el letrero de la plaza) y gana +luck de suerte para
-	siempre (atributo GrupoReclamado, Perks.groupLuck). El atributo EntroEn
+	ClaimGroup, desde el letrero de la plaza) y gana +luck de suerte y +power
+	de poder para siempre (atributo GrupoReclamado, Perks.groupLuck y
+	Perks.groupPowerMultiplier). El atributo EntroEn
 	(hora del servidor al entrar) deja que el cliente muestre la cuenta.
 	Con groupId = 0 el regalo está apagado.
 ]]
 
+local GroupService = game:GetService("GroupService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
@@ -27,11 +29,27 @@ local GroupReward = {}
 
 local joinedAt: { [Player]: number } = {}
 
+-- En el servidor IsInGroupAsync guarda la respuesta de cuando entró: quien se une desde el
+-- letrero a mitad de partida seguiría "fuera". Si dice que no, se pregunta a la web.
 local function isMember(player: Player): boolean
 	local ok, result = pcall(function()
 		return player:IsInGroupAsync(GROUP.groupId)
 	end)
-	return ok and result == true
+	if ok and result == true then
+		return true
+	end
+	local fetched, groups = pcall(function()
+		return GroupService:GetGroupsAsync(player.UserId)
+	end)
+	if not fetched or type(groups) ~= "table" then
+		return false
+	end
+	for _, info in groups do
+		if type(info) == "table" and info.Id == GROUP.groupId then
+			return true
+		end
+	end
+	return false
 end
 
 local inFlight: { [Player]: boolean } = {} -- una consulta al grupo por jugador a la vez
@@ -63,12 +81,13 @@ local function claim(player: Player)
 	elseif os.clock() - (joinedAt[player] or os.clock()) < GROUP.minutes * 60 then
 		return reply("wait")
 	end
-	-- El premio es el atributo mismo (lo publica PlayerData.edit): Perks.groupLuck suma la
-	-- suerte mientras esté reclamado.
+	-- El premio es el atributo mismo (lo publica PlayerData.edit): Perks.groupLuck y
+	-- Perks.groupPowerMultiplier lo leen mientras esté reclamado.
 	PlayerData.edit(player, function(data)
 		data.groupClaimed = true
 	end)
-	reply("ok", `+{math.round(GROUP.luck * 100)}% de suerte para siempre`)
+	local luck, power = math.round(GROUP.luck * 100), math.round(GROUP.power * 100)
+	reply("ok", `+{luck}% de suerte y +{power}% de poder para siempre`)
 end
 
 local function onJoin(player: Player)

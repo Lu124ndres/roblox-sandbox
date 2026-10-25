@@ -7,7 +7,7 @@
 		TrajeElegido                                       un pase con traje solo da sus
 		                                                   ventajas con ese traje puesto
 		MembershipType (Premium) / Renacimientos           x1.1 / x1.25^n poder y monedas
-		GrupoReclamado                                     +10 % de suerte (letrero del grupo)
+		GrupoReclamado                                     +10 % de suerte y x1.1 poder (grupo)
 		Pez_<id>                                           suerte por sección completa (CollectionLuck)
 		ReplicatedStorage.Impulsos                         entrenamiento del servidor (x2^nivel)
 		racha del diario / x2 monedas de la ruleta         RetentionBonus
@@ -102,11 +102,17 @@ function Perks.premiumMultiplier(player: Player): number
 		else 1
 end
 
+-- El poder que da haber reclamado el regalo del grupo (x1 si no); las monedas no.
+function Perks.groupPowerMultiplier(player: Player): number
+	return if player:GetAttribute(ATTR.GroupClaimed) == true then 1 + SOCIAL.group.power else 1
+end
+
 function Perks.powerMultiplier(player: Player): number
 	return 2 ^ Perks.level(player, "Power")
 		* 2 ^ Perks.serverBoostLevel()
 		* (if Perks.personalBoostSeconds(player) > 0 then SOCIAL.personalBoostMultiplier else 1)
 		* Perks.premiumMultiplier(player)
+		* Perks.groupPowerMultiplier(player)
 		* Perks.friendMultiplier(player)
 		* RebirthMath.bonusMultiplier(RebirthMath.count(player))
 		* RetentionBonus.powerMultiplier(player)

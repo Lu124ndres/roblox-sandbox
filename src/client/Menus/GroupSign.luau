@@ -7,7 +7,7 @@
 	de arriba):
 		1. Dale me gusta     (solo texto: Roblox no deja saber quién dio me gusta)
 		2. Únete al grupo
-		3. +10% de suerte para siempre
+		3. +10% de suerte y +10% de poder para siempre
 	y un botón RECLAMAR: si no está en el grupo abre la invitación de Roblox; si
 	ya está y jugó Config.Social.group.minutes, pide el premio (remote
 	ClaimGroup; el servidor lo revisa todo, server/Social/GroupReward).
@@ -140,20 +140,27 @@ function GroupSign.start()
 	panel.Parent = gui
 	Kit.skin(panel, "panel")
 
-	local luck = math.round(GROUP.luck * 100)
+	local luck, power = math.round(GROUP.luck * 100), math.round(GROUP.power * 100)
+	local gift = `+{luck}% suerte y +{power}% poder`
 	line(panel, "Paso1", "1. Dale me gusta", Color3.fromRGB(110, 235, 90), 0.08)
 	line(panel, "Paso2", "2. Únete al grupo", Color3.fromRGB(110, 200, 255), 0.27)
-	line(panel, "Paso3", `3. ¡+{luck}% de suerte gratis!`, Color3.fromRGB(255, 220, 90), 0.46)
+	line(panel, "Paso3", `3. ¡{gift}!`, Color3.fromRGB(255, 220, 90), 0.46)
 	local icon = Icons.view(panel, "group")
 	icon.AnchorPoint = Vector2.new(0.5, 0.5)
 	icon.Position = UDim2.fromScale(0.82, 0.34)
 	icon.Size = UDim2.fromScale(0.3, 0.52)
 	local prize = Style.text(panel, "Premio", 110, Color3.fromRGB(140, 255, 120), 7)
-	prize.Text = `+{luck}%`
+	prize.Text = if luck == power then `+{luck}%` else `+{luck}/{power}%`
 	prize.AnchorPoint = Vector2.new(0.5, 0.5)
 	prize.Position = UDim2.fromScale(0.82, 0.6)
 	prize.Size = UDim2.fromScale(0.32, 0.2)
 	prize.ZIndex = 3
+	local prizeDetail = Style.text(panel, "PremioDetalle", 60, Color3.fromRGB(140, 255, 120), 4)
+	prizeDetail.Text = "suerte y poder"
+	prizeDetail.AnchorPoint = Vector2.new(0.5, 0)
+	prizeDetail.Position = UDim2.fromScale(0.82, 0.71)
+	prizeDetail.Size = UDim2.fromScale(0.32, 0.1)
+	prizeDetail.ZIndex = 3
 	local status = Style.text(panel, "Estado", 50, nil, 4)
 	status.Position = UDim2.fromScale(0.06, 0.64)
 	status.Size = UDim2.fromScale(0.6, 0.1)
@@ -178,7 +185,7 @@ function GroupSign.start()
 		local claimed = player:GetAttribute(ATTR.GroupClaimed) == true
 		local left = math.ceil(secondsLeft())
 		status.Text = if claimed
-			then `¡Ya tienes +{luck}% de suerte!`
+			then `¡Ya tienes {gift}!`
 			elseif GROUP.groupId == 0 then "Muy pronto"
 			elseif not member then `Únete y juega {GROUP.minutes} minutos`
 			elseif left > 0 then string.format(

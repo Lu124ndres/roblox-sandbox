@@ -10,8 +10,9 @@
 		Amigos   +10 % por amigo de Roblox en el servidor (hasta 5); tocarlo abre
 		         la invitación de Roblox (SocialService), y si un amigo nuevo
 		         entra por ella los dos ganan premio (server/Social/Referrals)
-		Grupo    +10 % de suerte si ya reclamó el regalo del letrero de la plaza
-		         (Menus/GroupSign)
+		Grupo    +10 % si ya reclamó el regalo del letrero de la plaza
+		         (Menus/GroupSign); con el mouse encima dice que es +10 % de
+		         suerte y +10 % de poder (BadgeHint)
 	Después, mientras duran, los x2 personales de poder y monedas con su
 	tiempo (Interface/TimedBadges).
 	Siempre abajo a la izquierda. En táctil quedan detrás del joystick y son
@@ -26,16 +27,19 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SocialService = game:GetService("SocialService")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
+local Config = require(ReplicatedStorage.Shared.Config)
 local Events = require(ReplicatedStorage.Shared.Config.Events)
 local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local ServerEvents = require(ReplicatedStorage.Shared.ServerEvents)
+local BadgeHint = require(script.Parent.BadgeHint)
 local Device = require(script.Parent.Device)
 local Icons = require(script.Parent.Icons)
 local Layout = require(script.Parent.Layout)
 local Style = require(script.Parent.Style)
 local TimedBadges = require(script.Parent.TimedBadges)
 
+local GROUP = Config.Social.group
 local SIZE = 56 -- ancho y alto de cada insignia (el ícono; el número va encima de su borde de abajo)
 local GAP = 6
 local MARGIN = 12
@@ -144,9 +148,15 @@ function BoostBadges.start(screen: ScreenGui)
 		:Connect(refreshFriends)
 	refreshFriends()
 
+	-- La suerte y el poder del grupo valen lo mismo (+10 %): el número es uno, el texto dice los dos.
 	local function refreshGroup()
 		show(group, math.round(Perks.groupLuck(player) * 100))
 	end
+	BadgeHint.attach(group.button, function(): string
+		local luck, power = math.round(GROUP.luck * 100), math.round(GROUP.power * 100)
+		local gift = `+{luck}% suerte y +{power}% poder`
+		return if Perks.groupLuck(player) > 0 then gift else `Letrero de la plaza: {gift}`
+	end)
 	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.GroupClaimed):Connect(refreshGroup)
 	refreshGroup()
 
