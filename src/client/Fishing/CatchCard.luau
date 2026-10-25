@@ -35,19 +35,13 @@ function CatchCard.mount(screen: ScreenGui): Card
 	card.Name = "Captura"
 	card.Parent = screen
 	-- PC: a la izquierda, debajo de la columna del menú (no tapa ¡TIRA! ni Pescar).
-	-- Táctil: abajo al centro, encima de «Siguiente meta» (a la izquierda está el joystick).
+	-- Táctil: abajo al centro (a la izquierda está el joystick).
 	-- Se calcula al mostrarla (la columna cambia con la misión y la pantalla).
 	local function places(): (UDim2, UDim2)
 		local margin = UIConfig.Spacing.Margin
 		if Device.touch() then
 			card.AnchorPoint = Vector2.new(0.5, 1)
-			local bottom = screen.AbsoluteSize.Y
-			local goal = screen:FindFirstChild("SiguienteMeta")
-			if goal and goal:IsA("GuiObject") and goal.Visible then
-				bottom = goal.AbsolutePosition.Y - screen.AbsolutePosition.Y
-			end
-			local up = screen.AbsoluteSize.Y - bottom + margin
-			return UDim2.new(0.5, 0, 1, -up), UDim2.new(0.5, 0, 1, 200)
+			return UDim2.new(0.5, 0, 1, -margin), UDim2.new(0.5, 0, 1, 200)
 		end
 		card.AnchorPoint = Vector2.zero
 		local top = Layout.menuBottom() + margin

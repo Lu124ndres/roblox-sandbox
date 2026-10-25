@@ -2,42 +2,37 @@
 --[[
 	NextGoal
 
-	"Siguiente meta" cuando ya terminó el tutorial (mismo lugar que su panel):
-	siempre hay algo claro que perseguir, con su barra, en una placa de piedra
-	(Interface/Kit) con el título dorado. Elige entre
-		- algo que YA puede hacer: comprar la siguiente caña o renacer
-		  (la piedra se tiñe de verde);
-		- si no, la meta más avanzada entre el siguiente estanque y el siguiente
-		  título (monstruos llenados) y la siguiente caña (monedas).
-	Se recalcula cada segundo como mucho. Solo lee atributos del jugador.
+	Avisa la siguiente meta con un globo sobre el botón que la cumple (GoalBadge),
+	solo cuando ya terminó el tutorial y cargaron sus datos:
+		MEJORAS   la siguiente caña: "!" si ya le alcanzan las monedas, o el % de
+		          avance desde NEAR_FRACTION
+		RENACER   renacer: "!" si ya puede, o el % de avance (lo que va más atrás
+		          entre monedas y poder) desde NEAR_FRACTION
+	Los dos globos son independientes: pueden verse a la vez.
+	Antes era un panel «SIGUIENTE META» que además mostraba el siguiente estanque y
+	el siguiente título; el usuario lo cambió por el aviso en el botón (pedido del
+	2026-10-24: el panel no quedaba centrado y se veía fuera de lugar), y estanques
+	y títulos ya se ven en los carteles del mapa.
+	Se recalcula cada REFRESH_SECONDS como mucho. Solo lee atributos del jugador.
 ]]
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
-local Perks = require(ReplicatedStorage.Shared.Perks)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RebirthMath = require(ReplicatedStorage.Shared.RebirthMath)
-local Titles = require(ReplicatedStorage.Shared.Titles)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
-local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
-local CardParts = require(script.Parent.Parent.Interface.CardParts)
-local Icons = require(script.Parent.Parent.Interface.Icons)
-local Kit = require(script.Parent.Parent.Interface.Kit)
-local Layout = require(script.Parent.Parent.Interface.Layout)
-local Style = require(script.Parent.Parent.Interface.Style)
+local GoalBadge = require(script.Parent.GoalBadge)
+local HudButtons = require(script.Parent.HudButtons)
 
 local ATTR = Protocol.PlayerAttributes
-local TITLES = Config.Social.titles
-local PONDS = Config.Progression.ponds
-local PLATE_SLICE = 0.3 -- borde de la placa más fino que en las ventanas
-local READY_TINT = Color3.fromRGB(140, 255, 140) -- piedra verdosa: ya se puede
-local WHITE = Color3.new(1, 1, 1)
+local NEAR_FRACTION = 0.75 -- desde aquí "le falta poco" y se ve el % en el botón
+local REFRESH_SECONDS = 1
 
-type Goal = { icon: string, text: string, fraction: number, ready: boolean }
+type Goal = GoalBadge.Goal
+type Target = { button: string, goal: (player: Player) -> Goal?, badge: GoalBadge.Badge? }
 
 local NextGoal = {}
 
@@ -46,140 +41,67 @@ local function number(player: Player, attribute: string): number
 	return if type(value) == "number" then value else 0
 end
 
-local function goals(player: Player): { Goal }
-	local list: { Goal } = {}
+local function rodGoal(player: Player): Goal?
+	local nextRod = Upgrades.list("Rod")[Upgrades.level(player, "Rod") + 1]
+	if not nextRod then
+		return nil -- ya tiene la mejor caña
+	end
 	local coins = number(player, ATTR.Coins)
-	local kills = number(player, ATTR.Kills)
-	local power = number(player, ATTR.Power)
-	-- Siguiente estanque: solo se abre llenando monstruos.
-	for index, pond in PONDS do
-		if
-			not pond.robuxOnly
-			and WorldZones.pondExists(index)
-			and not Perks.pondOpen(player, index)
-		then
-			local missing = pond.requiredKills - kills
-			table.insert(list, {
-				icon = "pond",
-				text = `Llena {missing} {if missing == 1 then "monstruo" else "monstruos"} más: estanque x{pond.multiplier}`,
-				fraction = kills / math.max(pond.requiredKills, 1),
-				ready = false,
-			})
-			break
-		end
-	end
-	-- Siguiente caña.
-	local rods = Upgrades.list("Rod")
-	local nextRod = rods[Upgrades.level(player, "Rod") + 1]
-	if nextRod then
-		local ready = coins >= nextRod.price
-		table.insert(list, {
-			icon = "rod",
-			text = if ready
-				then `¡Ya puedes comprar la {nextRod.name}! (MEJORAS)`
-				else `Junta {NumberFormat.short(nextRod.price - coins)} monedas: {nextRod.name}`,
-			fraction = coins / math.max(nextRod.price, 1),
-			ready = ready,
-		})
-	end
-	-- Siguiente título (por monstruos llenados).
-	local title = math.max(number(player, ATTR.Title), 1)
-	local nextTitle = TITLES[title + 1]
-	if nextTitle then
-		table.insert(list, {
-			icon = "crown",
-			text = `Llena {nextTitle.kills - kills} monstruos más: título {Titles.name(title + 1)}`,
-			fraction = kills / nextTitle.kills,
-			ready = false,
-		})
-	end
-	-- Renacer: pide monedas y poder; da velocidad de alimentar y x1.25 monedas y poder.
+	local ready = coins >= nextRod.price
+	return {
+		text = if ready
+			then `¡Ya puedes comprar la {nextRod.name}!`
+			else `Te faltan {NumberFormat.short(nextRod.price - coins)} monedas para la {nextRod.name}`,
+		fraction = coins / math.max(nextRod.price, 1),
+		ready = ready,
+	}
+end
+
+-- Renacer pide monedas y poder; el texto dice lo que falta de cada uno.
+local function rebirthGoal(player: Player): Goal?
+	local coins, power = number(player, ATTR.Coins), number(player, ATTR.Power)
 	local rebirths = RebirthMath.count(player)
 	local cost, powerCost = RebirthMath.cost(rebirths), RebirthMath.powerCost(rebirths)
 	local ready = RebirthMath.canRebirth(coins, power, rebirths)
-	local speed = RebirthMath.speedText(rebirths + 1)
-	table.insert(list, {
-		icon = "arrow",
-		text = if ready
-			then `¡Puedes RENACER! Alimentas {speed} peces/s`
-			else `Renacer: {NumberFormat.short(cost)} monedas y {NumberFormat.short(powerCost)} poder`,
-		fraction = math.min(coins / cost, power / powerCost),
+	local missingCoins = NumberFormat.short(math.max(cost - coins, 0))
+	local missingPower = NumberFormat.short(math.max(powerCost - power, 0))
+	local text = if ready
+		then `¡Ya puedes renacer! Alimentarás {RebirthMath.speedText(rebirths + 1)} peces/s`
+		elseif
+			coins < cost and power < powerCost
+		then `Para renacer: te faltan {missingCoins} monedas y {missingPower} poder`
+		elseif coins < cost then `Para renacer: te faltan {missingCoins} monedas`
+		else `Para renacer: te falta {missingPower} poder`
+	return {
+		text = text,
+		fraction = math.min(coins / math.max(cost, 1), power / math.max(powerCost, 1)),
 		ready = ready,
-	})
-	return list
+	}
 end
 
--- Lo que ya puede hacer va primero; si no, la meta más avanzada.
-local function pick(list: { Goal }): Goal?
-	local best: Goal? = nil
-	for _, goal in list do
-		if goal.ready then
-			return goal
-		end
-		if not best or goal.fraction > best.fraction then
-			best = goal
-		end
-	end
-	return best
-end
-
-function NextGoal.start(screen: ScreenGui)
+function NextGoal.start(_screen: ScreenGui)
 	local player = Players.LocalPlayer
-	-- Como el tutorial: en PC en la columna de estadísticas; en pantallas táctiles abajo
-	-- al centro (a la izquierda estorbaría al joystick).
-	local touchOnly = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
-	local card = Instance.new("Frame")
-	card.Name = "SiguienteMeta"
-	card.Parent = if touchOnly then screen else Layout.stats()
-	local skin = Kit.skin(card, "panel")
-	skin.SliceScale = PLATE_SLICE
-	card.LayoutOrder = 21
-	if touchOnly then
-		card.AnchorPoint = Vector2.new(0.5, 1)
-		card.Position = UDim2.new(0.5, -40, 1, -8)
-		Layout.scaleWith(card)
-	end
-	card.Size = UDim2.fromOffset(250, 74)
-	card.Visible = false
-	local icon: GuiObject? = nil
-	local iconKind = ""
-	local head = Style.text(card, "Titulo", 16, nil, 2)
-	Kit.gold(head)
-	head.Text = "SIGUIENTE META"
-	head.TextXAlignment = Enum.TextXAlignment.Left
-	head.Position = UDim2.fromOffset(52, 4)
-	head.Size = UDim2.new(1, -58, 0, 16)
-	local text = Style.text(card, "Texto", 16, nil, 2)
-	text.TextXAlignment = Enum.TextXAlignment.Left
-	text.TextWrapped = true
-	text.Position = UDim2.fromOffset(52, 20)
-	text.Size = UDim2.new(1, -58, 0, 30)
-	local bar = CardParts.bar(card, Style.PALETTE.Cards.Green, 14)
-	bar.track.Position = UDim2.fromOffset(52, 52)
-	bar.track.Size = UDim2.new(1, -60, 0, 16)
+	local targets: { Target } = {
+		{ button = "Mejoras", goal = rodGoal },
+		{ button = "Renacer", goal = rebirthGoal },
+	}
 
 	local function refresh()
 		local tutorialDone = number(player, ATTR.Tutorial) >= #Config.Retention.tutorial
-		local goal = if tutorialDone and player:GetAttribute(ATTR.DataLoaded) == true
-			then pick(goals(player))
-			else nil
-		card.Visible = goal ~= nil
-		if not goal then
-			return
-		end
-		if goal.icon ~= iconKind then
-			iconKind = goal.icon
-			if icon then
-				icon:Destroy()
+		local active = tutorialDone and player:GetAttribute(ATTR.DataLoaded) == true
+		for _, target in targets do
+			-- El globo se arma al encontrar el botón (su módulo puede ponerlo después).
+			if not target.badge then
+				local button = HudButtons.sideButton(target.button)
+				target.badge = if button then GoalBadge.mount(button) else nil
 			end
-			local view = Icons.view(card, goal.icon)
-			view.Position = UDim2.fromOffset(4, 12)
-			view.Size = UDim2.fromOffset(46, 46)
-			icon = view
+			local badge = target.badge
+			if badge then
+				local goal = if active then target.goal(player) else nil
+				local near = goal and (goal.ready or goal.fraction >= NEAR_FRACTION)
+				badge.set(if near then goal else nil)
+			end
 		end
-		text.Text = goal.text
-		bar.set(goal.fraction, `{math.floor(math.clamp(goal.fraction, 0, 1) * 100)}%`)
-		Kit.tint(skin, if goal.ready then READY_TINT else WHITE)
 	end
 
 	local pending = false
@@ -188,7 +110,7 @@ function NextGoal.start(screen: ScreenGui)
 			return
 		end
 		pending = true
-		task.delay(1, function()
+		task.delay(REFRESH_SECONDS, function()
 			pending = false
 			refresh()
 		end)

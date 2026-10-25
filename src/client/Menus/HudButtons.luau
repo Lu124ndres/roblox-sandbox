@@ -47,12 +47,22 @@ export type HudButton = { button: TextButton, setAlert: (on: boolean) -> () }
 local HudButtons = {}
 
 local order = 0
-local sidePresses: { [string]: () -> () } = {} -- el apretón de cada botón grande, por nombre
+-- Cada botón grande con su apretón, por nombre (las flechas del mando y los globos de NextGoal).
+local sides: { [string]: { button: TextButton, press: () -> () } } = {}
 local sideRow: Frame? = nil
 local sideCount = 0 -- botones grandes ya puestos (van de dos en dos por fila)
 
 local alertDot = HudButtonParts.alertDot
 local press = HudButtonParts.press
+
+local function withDot(button: TextButton, dot: Frame): HudButton
+	return {
+		button = button,
+		setAlert = function(on: boolean)
+			dot.Visible = on
+		end,
+	}
+end
 
 -- Casilla con ícono y nombre dorado abajo. `lava`: con el marco de lava (si no, la casilla oscura). Todo el cuadro (ícono y
 -- nombre) es el botón: el ícono y el nombre no reciben toques, así el toque
@@ -112,19 +122,20 @@ function HudButtons.side(text: string, icon: string, onClick: () -> ()): HudButt
 	sideCount += 1
 	local button = HudButtons.iconButton(sideRow :: Frame, text, icon, SIDE_SIZE, LAVA[text])
 	button.LayoutOrder = SIDE_ORDER[text] or 10 + order
-	sidePresses[text] = press(button, onClick)
-	local dot = alertDot(button)
-	return {
-		button = button,
-		setAlert = function(on: boolean)
-			dot.Visible = on
-		end,
-	}
+	sides[text] = { button = button, press = press(button, onClick) }
+	return withDot(button, alertDot(button))
 end
 
 -- El apretón del botón grande `text` (para las flechas del mando, GamepadNav).
 function HudButtons.sidePress(text: string): (() -> ())?
-	return sidePresses[text]
+	local side = sides[text]
+	return if side then side.press else nil
+end
+
+-- El botón grande `text`, o nil si su módulo todavía no lo puso.
+function HudButtons.sideButton(text: string): TextButton?
+	local side = sides[text]
+	return if side then side.button else nil
 end
 
 -- Placa ancha arriba de la columna del menú (el Índice de peces): ícono a la
@@ -155,13 +166,7 @@ function HudButtons.wide(text: string, icon: string, onClick: () -> ()): HudButt
 	label.Text = TextCase.upper(text)
 	Kit.gold(label)
 	press(button, onClick)
-	local dot = alertDot(button)
-	return {
-		button = button,
-		setAlert = function(on: boolean)
-			dot.Visible = on
-		end,
-	}
+	return withDot(button, alertDot(button))
 end
 
 function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButton
@@ -187,12 +192,7 @@ function HudButtons.top(text: string, icon: string, onClick: () -> ()): HudButto
 	local dot = alertDot(button)
 	dot.Size = UDim2.fromOffset(11, 11)
 	dot.Position = UDim2.new(1, -4, 0, 4)
-	return {
-		button = button,
-		setAlert = function(on: boolean)
-			dot.Visible = on
-		end,
-	}
+	return withDot(button, dot)
 end
 
 return HudButtons
