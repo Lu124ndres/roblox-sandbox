@@ -38,4 +38,4 @@ el efecto esperado, y qué decide el usuario. No cambias `Config/`: eso lo hace 
 - Tu informe va al grano: lo que encontraste o hiciste, en listas cortas. Sin repetir el encargo.
 - Si la tarea te queda grande para tu modelo (no logras resolverla, dudas de tu resultado en
   algo crítico), dilo al empezar tu informe con «PEDIR MODELO MAYOR: <por qué>» en vez de
-  entregar algo flojo; el agente principal te vuelve a lanzar con un modelo más capaz.
+  entregar algo flojo; el agente principal decide si te relanza con otro modelo o te parte el encargo.
