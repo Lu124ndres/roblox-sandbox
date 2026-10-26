@@ -12,6 +12,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local CodeList = require(script.Parent.CodeList)
+local LikeGoal = require(script.Parent.LikeGoal)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
@@ -35,7 +36,7 @@ local function redeem(player: Player, raw: unknown)
 	if not save then
 		return
 	end
-	if not code then
+	if not code or LikeGoal.locked(code) then -- el de la meta de likes no existe hasta llegar
 		Remotes.Notice:FireClient(player, "code", "invalid")
 		return
 	elseif code.expires and os.time() > code.expires then

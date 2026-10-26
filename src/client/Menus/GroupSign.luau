@@ -2,7 +2,7 @@
 --[[
 	GroupSign
 
-	Letrero del regalo del grupo en la plaza, junto al Estanque de Jade y de cara
+	Letrero del regalo del grupo en la plaza (Menus/PlazaSign), junto al Estanque de Jade y de cara
 	al spawn (pedido del usuario el 2026-10-21; reemplaza el escudo de la barra
 	de arriba):
 		1. Dale me gusta     (solo texto: Roblox no deja saber quién dio me gusta)
@@ -23,10 +23,10 @@ local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
-local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
+local PlazaSign = require(script.Parent.PlazaSign)
 
 local GROUP = Config.Social.group
 local ATTR = Protocol.PlayerAttributes
@@ -36,77 +36,14 @@ local PALETTE = Style.PALETTE
 local SPOT = Vector2.new(-26, 102)
 local BOARD = Vector3.new(20, 11, 0.8) -- ancho, alto y grosor del tablero (studs)
 local LIFT = 3 -- el tablero empieza a esta altura sobre el suelo
-local POST = 1 -- grosor de los dos postes
-local STONE = Color3.fromRGB(70, 74, 86)
 local PIXELS_PER_STUD = 50
 local CHECK_MEMBER_SECONDS = 10
-local GROUND_TRIES = 120 -- cada medio segundo, hasta que aparezca la isla
 
 local GroupSign = {}
 
--- Lo más alto que hay ahí (los bloques del jardín o el terreno), sin contar a los jugadores.
-local function groundAt(x: number, z: number): number
-	-- Hasta que el servidor arma la isla, el rayo llega al fondo del mar: se espera
-	-- a encontrar suelo sobre el agua.
-	for _ = 1, GROUND_TRIES do
-		local params = RaycastParams.new()
-		params.FilterType = Enum.RaycastFilterType.Exclude
-		params.IgnoreWater = true
-		local characters = {}
-		for _, other in Players:GetPlayers() do
-			if other.Character then
-				table.insert(characters, other.Character)
-			end
-		end
-		params.FilterDescendantsInstances = characters
-		local hit = Workspace:Raycast(Vector3.new(x, 300, z), Vector3.new(0, -600, 0), params)
-		-- Las piezas invisibles (zonas, detectores) no son suelo: se saltan.
-		while hit and hit.Instance:IsA("BasePart") and hit.Instance.Transparency >= 1 do
-			params:AddToFilter(hit.Instance)
-			hit = Workspace:Raycast(Vector3.new(x, 300, z), Vector3.new(0, -600, 0), params)
-		end
-		if hit and hit.Position.Y > WorldLayout.waterLevel then
-			return hit.Position.Y
-		end
-		task.wait(0.5)
-	end
-	return WorldLayout.plateauHeight
-end
-
-local function part(folder: Folder, name: string, size: Vector3, cframe: CFrame): Part
-	local piece = Instance.new("Part")
-	piece.Name = name
-	piece.Anchored = true
-	piece.Size = size
-	piece.CFrame = cframe
-	piece.Color = STONE
-	piece.Material = Enum.Material.SmoothPlastic
-	piece.Parent = folder
-	return piece
-end
-
 -- Tablero y postes, de cara al spawn. Devuelve el tablero.
 local function build(): Part
-	local ground = groundAt(SPOT.X, SPOT.Y)
-	local spawn = WorldLayout.spawnPosition
-	local center = Vector3.new(SPOT.X, ground + LIFT + BOARD.Y / 2, SPOT.Y)
-	local facing = CFrame.lookAt(center, Vector3.new(spawn[1], center.Y, spawn[2]))
-	local folder = Instance.new("Folder")
-	folder.Name = "LetreroGrupo"
-	folder.Parent = Workspace
-	local board = part(folder, "Tablero", BOARD, facing)
-	local postHeight = LIFT + BOARD.Y
-	for _, side in { -1, 1 } do
-		local x = side * (BOARD.X / 2 - POST)
-		local y = -BOARD.Y / 2 - LIFT + postHeight / 2
-		part(
-			folder,
-			"Poste",
-			Vector3.new(POST, postHeight, POST),
-			facing * CFrame.new(x, y, BOARD.Z)
-		)
-	end
-	return board
+	return PlazaSign.build("LetreroGrupo", SPOT, BOARD, LIFT)
 end
 
 local function line(parent: Instance, name: string, text: string, color: Color3, y: number)

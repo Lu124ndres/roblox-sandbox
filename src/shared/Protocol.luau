@@ -207,6 +207,14 @@ local Protocol = {
 		Rebirths = "Renacimientos",
 	},
 
+	-- Folder en ReplicatedStorage con la meta de likes (server/Social/LikeGoal).
+	LikeGoalFolder = "MetaLikes",
+	LikeGoalAttributes = {
+		Likes = "Likes", -- likes del juego (-1 = no se pudieron leer)
+		Goal = "Meta", -- likes de la meta activa (0 = no hay meta)
+		Code = "Codigo", -- el código, solo cuando se llegó a la meta ("" = todavía no)
+	},
+
 	Map = ProtocolMap, -- piezas del mapa que el código busca por nombre (ProtocolMap)
 }
 

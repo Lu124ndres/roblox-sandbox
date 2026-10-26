@@ -85,6 +85,7 @@ local TrajesClient = require(script.Parent.Trajes)
 local CodesWindow = require(script.Parent.Menus.CodesWindow)
 local NewsWindow = require(script.Parent.Menus.NewsWindow)
 local GroupSign = require(script.Parent.Menus.GroupSign)
+local LikeSign = require(script.Parent.Menus.LikeSign)
 local HudFocus = require(script.Parent.Menus.HudFocus)
 local AutoTranslate = require(script.Parent.Lang.AutoTranslate)
 
@@ -138,6 +139,7 @@ RebirthWindow.start(screen)
 StarterOffer.start(screen)
 CodesWindow.start(screen)
 task.spawn(GroupSign.start) -- el letrero de la plaza espera el terreno
+task.spawn(LikeSign.start) -- el de la meta de likes espera el terreno y que haya meta
 BoostBadges.start(screen)
 HudFocus.start(screen) -- después del HUD: en táctil lo oculta con una ventana abierta
 BoostTimer.start(screen)

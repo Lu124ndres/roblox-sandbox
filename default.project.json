@@ -34,6 +34,12 @@
 				"$path": "world/Isla.model.json"
 			}
 		},
+		"HttpService": {
+			"$className": "HttpService",
+			"$properties": {
+				"HttpEnabled": true
+			}
+		},
 		"Lighting": {
 			"$className": "Lighting",
 			"$properties": {

@@ -1,6 +1,6 @@
 --!strict
--- Lang: cinta de la próxima actualización (Interface/UpdateRibbon) y ventana NOVEDADES
--- (Menus/NewsWindow), con los textos de cada actualización (Config/Updates).
+-- Lang: cinta de la próxima actualización (Interface/UpdateRibbon), ventana NOVEDADES
+-- (Menus/NewsWindow) con los textos de cada actualización (Config/Updates) y letrero de likes.
 return {
 	["Actualización en"] = "Update in",
 	["¡Nueva actualización!"] = "New update!",
@@ -8,6 +8,11 @@ return {
 	["¡Ya está aquí!"] = "It's here!",
 	["Llega en"] = "Arrives in",
 	["¡A jugar!"] = "Let's play!",
+	-- Letrero de la meta de likes (Menus/LikeSign)
+	["Meta de likes"] = "Likes goal",
+	["¡Meta cumplida!"] = "Goal reached!",
+	["Canjéalo en Códigos"] = "Redeem it in Codes",
+	["¡Dale like y se libera un código!"] = "Like the game to unlock a code!",
 	-- 2026-10-31
 	["Final de Halloween"] = "Halloween Finale",
 	["Vuelve a la ruleta solo este fin de semana"] = "Back in the roulette this weekend only",
