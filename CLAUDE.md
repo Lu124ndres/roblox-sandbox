@@ -118,6 +118,9 @@ Documentos en `docs/`:
 - Salidas largas (`selene` con muchos avisos, búsquedas grandes en `src/`) → subagente `infra`.
 - Revisión de seguridad de remotes antes de cerrar un sistema de red → subagente
   `remote-auditor`.
+- Una idea nueva (para este juego o un juego nuevo): skill `/nueva-idea`. Investigar, ver si es
+  viable y proponer opciones → subagente `disenador` (no escribe código; decide el usuario).
+- Probar en Studio lo que se construyó (Play, dispositivos, consola) → subagente `tester`.
 - Diseño, escritura de código, arquitectura, Blender y diagnóstico de bugs complejos los hace el
   agente principal o los agentes de una ola (`docs/guia_crear_monstruo.md`, sección 12), en su
   worktree y sin commit; nunca `infra`.
