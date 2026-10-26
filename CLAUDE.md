@@ -130,6 +130,23 @@ Documentos en `docs/`:
   agente principal o los agentes de una ola (`docs/guia_crear_monstruo.md`, sección 12), en su
   worktree y sin commit; nunca `infra`.
 
+## Modelos y costo de los agentes
+
+Cada agente tiene un modelo por defecto en su archivo (`.claude/agents/`): `haiku` para lo
+mecánico (infra, sonidista), `sonnet` para casi todo y `opus` donde un error sale caro
+(rigger, guardian-datos, director-arte). Al lanzar uno, el agente principal elige el modelo
+para **esa** tarea con el parámetro `model` de `Agent`, sin preguntarle al usuario:
+
+| Bajar a `haiku` | Dejar el de su archivo | Subir a `opus` |
+|---|---|---|
+| Buscar, leer, contar, listar, correr comandos, revisar un cambio de pocas líneas, textos cortos y repetidos | El trabajo típico del agente | Sistemas nuevos o grandes, criaturas y rigs nuevos, guardado y compras, seguridad de un sistema de red completo, veredicto de un juego nuevo, revisión visual antes de publicar |
+
+- Si un agente responde «PEDIR MODELO MAYOR», o su resultado no convence en algo crítico, se
+  relanza una vez con el siguiente modelo, con lo que ya encontró.
+- Varios agentes en paralelo solo cuando el trabajo de verdad es independiente; un agente con
+  un encargo claro y delimitado gasta mucho menos que uno con un encargo vago.
+- Nunca se usa el modelo más caro "por si acaso": se sube cuando la tarea lo pide.
+
 ## Convenciones
 
 - **PascalCase** para módulos y archivos (`InventoryService.luau`).
