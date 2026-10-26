@@ -122,8 +122,10 @@ Documentos en `docs/`:
   viable y proponer opciones → subagente `disenador` (no escribe código; decide el usuario).
 - Probar en Studio lo que se construyó (Play, dispositivos, consola) → subagente `tester`.
 - Lo visual (mapa, modelos, rig, animación, efectos, interfaz) lo producen `mapeador`,
-  `modelador`, `rigger`, `animador`, `vfx` y `artista-ui`, y **todo cambio visual pasa por
-  `director-arte` con capturas antes de cerrarse**. Para mejorar cómo se ve algo: `/pulido-visual`.
+  `modelador`, `rigger`, `animador`, `vfx` y `artista-ui`, y **lo visual grande pasa por
+  `director-arte` con capturas antes de cerrarse**: un modelo, una zona, una pantalla o un efecto
+  nuevos. Los retoques (un color, un tamaño, una posición) los cierra el agente principal con una
+  captura. Para mejorar cómo se ve algo: `/pulido-visual`.
 - Cambios al guardado o a las compras → `guardian-datos`. La experiencia de un jugador nuevo →
   `jugador`. Antes de publicar: `/revision-final`.
 - Diseño, escritura de código, arquitectura, Blender y diagnóstico de bugs complejos los hace el
@@ -144,6 +146,11 @@ el modelo para **esa** tarea con el parámetro `model` de `Agent`, sin preguntar
 | Tareas chicas o mecánicas: buscar, leer, contar, listar, correr comandos, revisar un cambio de pocas líneas, un retoque visual menor (un color, un tamaño) | El trabajo típico del agente |
 
 - Los agentes que no son visuales **nunca suben a `opus`**: su techo es `sonnet`.
+- Los agentes sin archivo (`general-purpose`, `Explore`, `Plan`) heredan el modelo del principal,
+  que es `opus`, así que siempre se les pasa `model`: `haiku` para buscar y leer (`Explore`),
+  `sonnet` para el resto y `opus` solo si el trabajo es visual (modelar, rig, mapa). Un `fork`
+  siempre corre en `opus`: no se usa para trabajos largos. Medido el 2026-10-26: estos agentes
+  sin archivo fueron casi todo el gasto en agentes.
 - Si un agente visual en `sonnet` (porque se bajó) responde «PEDIR MODELO MAYOR» o el resultado
   no convence, se relanza una vez en `opus`. Si uno no visual lo pide, se le da un encargo más
   chico y claro en vez de un modelo mayor.

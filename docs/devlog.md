@@ -4050,3 +4050,19 @@ servidores) aparece en el letrero y `SKELETON` se canjea; los dos botones nuevos
 
 **Ojo:** Studio tiene acceso a la API y escribe en el DataStore real: después de probar se
 volvió a poner el número real (1).
+
+## 2026-10-26 — Reglas de costo de los agentes
+
+**Qué se hizo:** se midió con las transcripciones cuánto gastaron los 110 agentes lanzados desde
+el 17 de octubre: el 41 % del gasto total, y casi todo en agentes sin archivo
+(`general-purpose`, `fork`, `Explore`) que heredaban `opus` del principal. Los del equipo que ya
+se usaron cuestan centavos (`remote-auditor` 0,26 $, `guardian-datos` 0,30 $, `infra` 0,09 $);
+los otros 16 aún no se han probado. Con eso, en `CLAUDE.md`: los agentes sin archivo siempre
+llevan `model` (`haiku` para buscar, `sonnet` para el resto, `opus` solo en lo visual), nada de
+`fork` para trabajos largos, y el `director-arte` revisa solo lo visual grande (los retoques se
+cierran con una captura). La medición quedó como herramienta en
+`roblox-guia/herramientas/costo_agentes.py`, y las reglas también en la plantilla.
+
+**Qué se rompió:** nada; solo cambian reglas de trabajo.
+
+**Qué sigue:** volver a medir después de usar por primera vez cada agente nuevo.
