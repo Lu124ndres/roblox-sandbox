@@ -4,10 +4,10 @@
 
 	Órdenes del panel de moderación sobre el jugador elegido. Como AdminPlayer:
 	reciben (objetivo, valor, admin). No se aplican a otro administrador.
-		kick      texto opcional: lo saca del servidor con ese motivo
+		kick      texto opcional: lo saca del servidor con ese motivo (filtrado)
 		ban       minutos (0 = para siempre): BanAsync en todo el juego
 		mute      no puede escribir en el chat hasta salir; unmute lo devuelve
-		freeze    no se puede mover; unfreeze lo suelta
+		freeze    no se puede mover (aunque reaparezca); unfreeze lo suelta
 		respawn   reaparece en el spawn
 	Para quitar un baneo (el jugador ya no está): `unban` en Admin/AdminFun.
 ]]
@@ -16,22 +16,27 @@ local Players = game:GetService("Players")
 local TextChatService = game:GetService("TextChatService")
 
 local Admins = require(script.Parent.Admins)
+local AdminFun = require(script.Parent.AdminFun)
 local AdminPlayer = require(script.Parent.AdminPlayer)
 
-local MAX_REASON = 120
 local DEFAULT_REASON = "Un administrador te sacó del servidor"
 local BAN_REASON = "Baneado por un administrador"
 local MAX_BAN_MINUTES = 60 * 24 * 365
 
 local muted: { [number]: boolean } = {}
+local frozen: { [number]: boolean } = {}
 
 local function notAdmin(target: Player, admin: Player)
 	assert(target == admin or not Admins.is(target), "no se puede con otro administrador")
 end
 
-local function reason(value: unknown, fallback: string): string
+-- El motivo lo ve el expulsado: se filtra como cualquier texto (si falla, el de siempre).
+local function reason(value: unknown, fallback: string, admin: Player): string
 	if type(value) == "string" and #value > 0 then
-		return string.sub(value, 1, MAX_REASON)
+		local ok, filtered = pcall(AdminFun.filter, value, admin.UserId)
+		if ok then
+			return filtered
+		end
 	end
 	return fallback
 end
@@ -62,7 +67,7 @@ local HANDLERS: { [string]: AdminPlayer.Handler } = {
 	kick = function(target, value, admin)
 		assert(target ~= admin, "no te puedes sacar a ti")
 		notAdmin(target, admin)
-		target:Kick(reason(value, DEFAULT_REASON))
+		target:Kick(reason(value, DEFAULT_REASON, admin))
 		return "Expulsado"
 	end,
 	ban = function(target, value, admin)
@@ -98,9 +103,11 @@ local HANDLERS: { [string]: AdminPlayer.Handler } = {
 		local root = rootOf(target)
 		assert(root, "no tiene personaje")
 		root.Anchored = true
+		frozen[target.UserId] = true
 		return "Congelado"
 	end,
 	unfreeze = function(target)
+		frozen[target.UserId] = nil
 		local root = rootOf(target)
 		assert(root, "no tiene personaje")
 		root.Anchored = false
@@ -118,8 +125,24 @@ TextChatService.DescendantAdded:Connect(function(child)
 		child.CanSend = false
 	end
 end)
+-- Un congelado sigue así si reaparece (por ejemplo, si se resetea).
+local function watchSpawns(player: Player)
+	player.CharacterAdded:Connect(function(character)
+		if frozen[player.UserId] then
+			local root = character:WaitForChild("HumanoidRootPart", 10)
+			if root and root:IsA("BasePart") then
+				root.Anchored = true
+			end
+		end
+	end)
+end
+Players.PlayerAdded:Connect(watchSpawns)
+for _, player in Players:GetPlayers() do
+	watchSpawns(player)
+end
 Players.PlayerRemoving:Connect(function(player)
 	muted[player.UserId] = nil
+	frozen[player.UserId] = nil
 end)
 
 return table.freeze({ HANDLERS = HANDLERS })

@@ -23,6 +23,7 @@ local CodeList = require(script.Parent.CodeList)
 local URL = "https://games.roproxy.com/v1/games/votes?universeIds=%d"
 local POLL_SECONDS = 300
 local FIRST_POLL_JITTER = 20 -- los servidores no piden todos a la vez
+local MAX_VOTES = 1e9
 local ATTR = Protocol.LikeGoalAttributes
 
 local LikeGoal = {}
@@ -55,7 +56,14 @@ local function fetch(): number?
 	end
 	local decoded, data = pcall(HttpService.JSONDecode, HttpService, body)
 	local entry = decoded and type(data) == "table" and type(data.data) == "table" and data.data[1]
-	return if type(entry) == "table" and type(entry.upVotes) == "number" then entry.upVotes else nil
+	local votes = if type(entry) == "table" then entry.upVotes else nil
+	-- Un número sano: el proxy es de terceros y un valor raro abriría el código para siempre.
+	return if type(votes) == "number"
+			and votes == votes
+			and votes >= 0
+			and votes < MAX_VOTES
+		then votes
+		else nil
 end
 
 local function publish(folder: Folder)

@@ -37,7 +37,11 @@ local AdminFun = {}
 -- texto de `fromUserId` para todos. Si el filtro falla, no se manda nada.
 function AdminFun.filter(raw: unknown, fromUserId: number): string
 	assert(type(raw) == "string", "falta el texto")
-	local text = string.sub((string.gsub(raw, "%s+", " ")), 1, MAX_TEXT)
+	local text = string.gsub(raw, "%s+", " ")
+	local cut = utf8.offset(text, MAX_TEXT + 1) -- por letras: no parte un acento ni un emoji
+	if cut then
+		text = string.sub(text, 1, cut - 1)
+	end
 	assert(#string.gsub(text, " ", "") > 0, "falta el texto")
 	local ok, result = pcall(function()
 		local filtered = TextService:FilterStringAsync(text, fromUserId)
@@ -50,7 +54,8 @@ end
 local HANDLERS: { [string]: AdminWorld.Handler } = {
 	announce = function(value, by, admin)
 		local text = if admin then AdminFun.filter(value, admin.UserId) else value
-		assert(type(text) == "string", "falta el texto")
+		-- Desde otro servidor ya viene filtrado (AdminGlobal); igual se limita el largo.
+		assert(type(text) == "string" and #text <= MAX_TEXT * 4, "falta el texto")
 		Remotes.Notice:FireAllClients("announce", by, text)
 		return "Anuncio enviado"
 	end,
