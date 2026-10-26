@@ -5,8 +5,9 @@
 	Atajo del pack de inicio arriba de la columna del menú (pedido del usuario
 	el 2026-10-21), con el mismo estilo que los de Poder y Monedas
 	(Interface/FloatShortcut): el regalo flotando, el precio en Robux y abajo
-	una cuenta regresiva de `timerHours` que vuelve a empezar al llegar a cero
-	(solo da urgencia). Aparece desde que el pack se le abrió solo (atributo
+	«Una sola vez» (es verdad: se compra una vez). Hasta el 2026-10-26 tenía
+	una cuenta regresiva que volvía a empezar al llegar a cero; Roblox no
+	permite urgencia falsa, así que se quitó. Aparece desde que el pack se le abrió solo (atributo
 	PackVistoEn, que pone el servidor) hasta que lo compra. Tocarlo abre la
 	ventana del pack.
 	Más grande y llamativo que los de Poder y Monedas (pedido del usuario el
@@ -17,7 +18,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
@@ -29,7 +29,7 @@ local Purchases = require(script.Parent.Purchases)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local PACK = Config.Monetization.starterPack
-local PERIOD = PACK.timerHours * 3600
+local LABEL = "Una sola vez"
 local SIZE = 170 -- los de Poder y Monedas miden 100: este tiene que destacar
 local ROW_HEIGHT = 112 -- alto de su fila en la columna (el de cuando medía 100)
 local HALO_COLOR = Color3.fromRGB(255, 130, 40)
@@ -39,11 +39,6 @@ local HALO_SPIN = TweenInfo.new(12, Enum.EasingStyle.Linear, Enum.EasingDirectio
 local ATTR = Protocol.PlayerAttributes
 
 local StarterShortcut = {}
-
-local function clock(seconds: number): string
-	local total = math.ceil(seconds)
-	return string.format("%d:%02d:%02d", total // 3600, total // 60 % 60, total % 60)
-end
 
 -- Lo que lo hace destacar sobre los otros atajos: halo, latido y cinta de oferta.
 local function dress(shortcut: FloatShortcut.Shortcut)
@@ -122,22 +117,9 @@ function StarterShortcut.mount(open: () -> ())
 		local value = player:GetAttribute(ATTR.StarterSeenAt)
 		return if type(value) == "number" then value else 0
 	end
-	local running = false
+	shortcut.label.Text = LABEL
 	local function refresh()
-		local shown = seenAt() > 0 and player:GetAttribute(ATTR.StarterPack) ~= true
-		holder.Visible = shown
-		if not shown or running then
-			return
-		end
-		running = true
-		task.spawn(function()
-			while holder.Visible do
-				local elapsed = math.max(0, Workspace:GetServerTimeNow() - seenAt())
-				shortcut.label.Text = clock(PERIOD - elapsed % PERIOD)
-				task.wait(1)
-			end
-			running = false
-		end)
+		holder.Visible = seenAt() > 0 and player:GetAttribute(ATTR.StarterPack) ~= true
 	end
 	player:GetAttributeChangedSignal(ATTR.StarterSeenAt):Connect(refresh)
 	player:GetAttributeChangedSignal(ATTR.StarterPack):Connect(refresh)

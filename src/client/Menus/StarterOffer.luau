@@ -108,7 +108,8 @@ function StarterOffer.start(screen: ScreenGui)
 	value.Size = UDim2.new(1, 0, 0, 28)
 	-- Con el precio que cobra Roblox (el del botón), no el de Config: si no, no coinciden
 	local function showValue(robuxPrice: number)
-		value.Text = `Solo el equipo, por separado: <s>{separate} R$</s>   ¡Hoy {robuxPrice} R$!`
+		value.Text =
+			`Solo el equipo, por separado: <s>{separate} R$</s>   en el pack {robuxPrice} R$`
 		value.Visible = separate > robuxPrice
 		setDiscount(discountFor(robuxPrice))
 	end

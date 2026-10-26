@@ -22,6 +22,7 @@ local Device = require(script.Parent.Parent.Interface.Device)
 local Style = require(script.Parent.Parent.Interface.Style)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local HudButtons = require(script.Parent.HudButtons)
+local Purchases = require(script.Parent.Purchases)
 local SpinOffers = require(script.Parent.SpinOffers)
 local SpinParts = require(script.Parent.SpinParts)
 local SpinWheelView = require(script.Parent.SpinWheelView)
@@ -77,6 +78,15 @@ function SpinWindow.start(screen: ScreenGui)
 	row.Parent = content
 	local buy1 = SpinParts.buyButton(row, "Spin1", 0)
 	local buy5 = SpinParts.buyButton(row, "Spin5", 1)
+	-- Comprar giros es un premio al azar pagado: no se ofrece donde Roblox no lo permite.
+	local function showBuy()
+		local allowed = Purchases.allowed("Spin1")
+		buy1.Visible, buy5.Visible = allowed, allowed
+	end
+	Players.LocalPlayer
+		:GetAttributeChangedSignal(Protocol.PlayerAttributes.PaidRandomRestricted)
+		:Connect(showBuy)
+	showBuy()
 	-- Girar es la acción estrella: botón de lava (gris apagado si no hay giros).
 	local spinButton = Style.lavaButton(if wide then content else row, "Girar", "")
 	spinButton.AnchorPoint = Vector2.new(0.5, 0)

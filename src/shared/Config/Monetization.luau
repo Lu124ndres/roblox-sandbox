@@ -78,7 +78,6 @@ export type MonetizationConfig = {
 		rod: number,
 		basket: number,
 		boots: number,
-		timerHours: number, -- cuenta del atajo del pack: vuelve a empezar al llegar a cero
 	},
 	sellPonds: boolean, -- vender estanques con Robux (false: se abren solo con kills)
 	receiptHistory: number, -- cuántas compras recientes se recuerdan por jugador
@@ -102,7 +101,7 @@ local Monetization: MonetizationConfig = {
 		VIP = {
 			name = "VIP",
 			-- Corta: la tarjeta de la tienda muestra dos líneas (el resto: placa dorada, suerte, diario x2).
-			description = "+50% monedas y +50% entrenamiento",
+			description = "+50% monedas, +50% entrenamiento y +20% suerte",
 			robux = 299,
 			luck = 0.2,
 			dailyMultiplier = 2,
@@ -178,7 +177,6 @@ local Monetization: MonetizationConfig = {
 		rod = 4,
 		basket = 3,
 		boots = 4,
-		timerHours = 24,
 	},
 	sellPonds = false,
 	receiptHistory = 50,

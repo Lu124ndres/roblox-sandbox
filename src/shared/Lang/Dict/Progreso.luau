@@ -14,6 +14,7 @@ return {
 	["Pesca 3 peces raros o mejores"] = "Catch 3 rare fish or better",
 	["Pesca 60 veces"] = "Fish 60 times",
 	["reclámala en MISIONES"] = "claim it in QUESTS",
+	["Misiones de ayer sin reclamar"] = "Yesterday's unclaimed quests",
 	["¡Cofre de misiones!"] = "Quest chest!",
 	-- Logros
 	["Ayudaste a llenar 10 monstruos"] = "You helped fill 10 monsters",
@@ -60,7 +61,7 @@ return {
 	["¡+1 giro de ruleta!"] = "+1 wheel spin!",
 	["¡+{} giros de ruleta!"] = "+{} wheel spins!",
 	-- Pases y productos
-	["+50% monedas y +50% entrenamiento"] = "+50% coins and +50% training",
+	["+50% monedas, +50% entrenamiento y +20% suerte"] = "+50% coins, +50% training and +20% luck",
 	["Dios del Volcán"] = "Volcano God",
 	["Rey del Mar"] = "Sea King",
 	["Entrenamiento para todos"] = "Training for everyone",

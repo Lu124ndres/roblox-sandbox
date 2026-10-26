@@ -6,6 +6,9 @@
 	Assets.GamePasses / Assets.Products) y lee su precio real. Mientras el ID
 	esté en 0 (juego sin publicar) avisa en vez de abrirla. Lo que se entrega
 	lo decide el servidor (Passes, Receipts).
+	No abre la compra de giros de la ruleta a quien no se le pueden vender
+	objetos al azar (atributo AzarPagadoRestringido, Monetization/RandomPolicy)
+	ni el pack de inicio a quien ya lo compró (es una sola vez).
 ]]
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -13,8 +16,13 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
+local Config = require(ReplicatedStorage.Shared.Config)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Toasts = require(script.Parent.Parent.Toasts)
+
+local ATTR = Protocol.PlayerAttributes
+local STARTER_PACK = "PackInicio"
 
 local Purchases = {}
 
@@ -41,7 +49,21 @@ function Purchases.promptPass(key: string): boolean
 	return true
 end
 
+-- ¿Se le puede vender este producto a este jugador? (los giros pagados son un premio al azar)
+function Purchases.allowed(key: string): boolean
+	local player = Players.LocalPlayer
+	if Config.Monetization.spinProducts[key] then
+		return player:GetAttribute(ATTR.PaidRandomRestricted) == false
+	elseif key == STARTER_PACK then
+		return player:GetAttribute(ATTR.StarterPack) ~= true
+	end
+	return true
+end
+
 function Purchases.promptProduct(key: string): boolean
+	if not Purchases.allowed(key) then
+		return false
+	end
 	local id = Assets.Products[key]
 	if not id or id == 0 then
 		return unavailable()
