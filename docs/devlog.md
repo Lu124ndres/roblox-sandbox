@@ -3998,3 +3998,14 @@ anuncio global y lista de servidores por MessagingService.
 
 **Qué falta:** HttpEnabled está apagado en Studio (Rojo no puede prenderlo): sin él el letrero
 muestra «👍 ? / 50». El proxy respondió 403 desde la PC; desde Roblox se verá al publicar.
+
+## 2026-10-26 — Varios eventos a la vez y cinta centrada
+
+**Qué se hizo:** los eventos que lanza el panel admin ya no reemplazan al programado: se suman
+como extra (`EventosExtra`, cada uno con sus minutos) y hay un botón «¡Todos!». `ServerEvents`
+junta todos los activos: la suerte se suma y monedas, poder y pique se multiplican. El contador
+dice «¡5 eventos!», el anuncio grande sale uno por uno y «Terminar todos» los corta. La cinta de
+la actualización perdió el sol y centra palabras y reloj como un solo bloque.
+
+**Probado en Studio:** todos + admin abuse = 5 activos, +1000 % suerte, x20 monedas y poder,
+pique x0.15; el HUD con x28.6 de monedas y la cinta centrada.
