@@ -275,7 +275,7 @@ sin afectar a la isla.
 
 ## 2026-10-13 — Crecimiento por etapas en múltiplos del alto de un jugador
 
-**Decisión:** `Config.Giants.stageHeightsInPlayers = { 3, 8, 15, 25 }` con un jugador de
+**Decisión:** `Config.Giants.stageHeightsInPlayers = { 3, 8, 9.75, 19.5 }` con un jugador de
 referencia de 5.5 studs; las etapas empiezan en 0, 25, 50 y 75 % de la barra. Se dejó el
 crecimiento continuo dentro de cada etapa.
 
@@ -377,7 +377,7 @@ mano del jugador y volando al gigante.
 
 **Decisión:** `Save/SaveStore` guarda `{ data, lock = { jobId, time } }` con `UpdateAsync`.
 Un servidor solo abre o escribe un registro si el bloqueo es suyo, no existe o venció
-(300 s sin renovar; el autoguardado lo renueva cada 60 s). Al entrar, si otro servidor
+(180 s sin renovar; el autoguardado lo renueva cada 60 s). Al entrar, si otro servidor
 aún lo tiene, se espera hasta 30 s y luego se expulsa con un mensaje amable. Se guardan
 también los peces de la canasta (nunca se pierden al salir). Sin DataStore disponible,
 una tabla en memoria con el mismo comportamiento.

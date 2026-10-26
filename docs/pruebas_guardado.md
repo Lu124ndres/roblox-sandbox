@@ -89,7 +89,7 @@ de verdad las llamadas al DataStore. Las compras en Studio son de prueba (no cob
 
 ## 7. Migración desde versiones viejas del esquema
 
-`SaveSchema.VERSION` es 11. Un guardado viejo tiene que cargar con todo lo que tenía y los
+`SaveSchema.VERSION` es 18. Un guardado viejo tiene que cargar con todo lo que tenía y los
 campos nuevos en cero. Hacerlo con **la cuenta de prueba**, nunca con una cuenta con datos
 reales que importen.
 
@@ -107,7 +107,7 @@ reales que importen.
       ```
 - [ ] Entrar con la cuenta de prueba: 1234 monedas, 567 de poder, 3 kills, la canasta con
       2 sardinas y 1 atún, las mejoras en 3/2/2, y renacimientos, giros y misiones en cero.
-- [ ] Salir y volver a entrar: ahora el guardado es de la versión 11 y sigue igual (con
+- [ ] Salir y volver a entrar: ahora el guardado es de la versión 18 y sigue igual (con
       `playMinutes` sumando).
 - [ ] **Versión más nueva:** escribir lo mismo con `version = 99` y entrar: tiene que salir el
       aviso "El juego se actualizó. Vuelve a entrar para jugar la versión nueva." **sin

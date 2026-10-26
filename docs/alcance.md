@@ -178,8 +178,8 @@ por si hace falta otra recompensa más adelante.
 - **Tutorial:** 4 misiones (pescar 3 peces, alimentar, entrenar, comprar desde MEJORAS).
   El novato aparece en la playa; en cada paso hay un anuncio grande, una línea de objetivo y
   flechas en el suelo hasta el destino. Paga 25–100 monedas por misión y 200 al terminar.
-- **Colección:** 12 especies; descubrir una da monedas según su rareza (25 a 25,000) y
-  completarla da 100,000.
+- **Colección:** 36 especies; descubrir una da monedas según su rareza (25 a 25,000) y
+  completarla da 250,000.
 - **Premio diario:** racha de 7 días (100, 200, 350, 500, 800, 1,200, 2,500); si se
   salta un día vuelve al 1.
 - **Insignias:** primer pez, primer raro, legendario y mítico, primera kill, 10 kills,
@@ -189,23 +189,23 @@ por si hace falta otra recompensa más adelante.
 
 ## Social
 
-- **Sobre la cabeza:** pirámide con las kills, VIP, título por poder (Novato 0, Aprendiz
-  100, Pescador 1K, Marinero 5K, Capitán 25K, Almirante 100K, Domador de Bestias 500K,
-  Señor del Abismo 5M, Rey de los Océanos 100M, Dios del Mar 10B) y nombre.
+- **Sobre la cabeza:** pirámide con las kills, VIP, título por kills (25 títulos: Novato 0,
+  Aprendiz 1, Capitán 10, Dios del Mar 100, Coloso Abisal 650, Más Allá del Infinito 5,000) y
+  nombre.
 - **Impulso de amigos:** +10 % de poder y monedas por amigo en el servidor (máx. +50 %).
 - **Códigos:** monedas y/o minutos de x2 poder; cada uno una vez por jugador.
-- **Grupo:** unirse + 15 min jugando = 1,500 monedas + 15 min de x2 poder (una vez).
+- **Grupo:** unirse + 15 min jugando = +10 % de suerte y x1.1 de poder, para siempre.
 
 ## Monetización
 
 | Compra | Tipo | Efecto | R$ |
 |---|---|---|---|
-| Poder x2^n | Producto (10 niveles) | Todo el poder, para siempre; cada compra duplica | 3, 7, 15, 29, 59, 99, 199, 349, 599, 999 |
+| Poder x2^n | Producto (10 niveles) | Todo el poder, para siempre; cada compra duplica | 3, 7, 15, 32, 76, 128, 229, 599, 999, 1,300 |
 | Monedas x2^n | Producto (10 niveles) | Monedas por entregar y descubrir | igual que Poder |
-| VIP | Pase | Etiqueta, +20 % suerte, diario x2 | 299 |
-| Entrenamiento para todos | Producto (6 niveles) | 15 min; otra compra reinicia el tiempo y duplica (x2 → x64); al vencer vuelve a x1 | 15, 29, 59, 99, 199, 349 |
+| VIP | Pase | Etiqueta, +50 % monedas, +50 % entrenamiento, +20 % suerte, diario x2 | 299 |
+| Entrenamiento para todos | Producto (6 niveles) | 15 min; otra compra reinicia el tiempo y duplica (x2 → x64); al vencer vuelve a x1 | 60, 129, 239, 416, 678, 880 |
 | Llenar 25 / 50 / 75 % | Producto | Barra del monstruo actual | 49 / 89 / 129 |
-| Elegir el siguiente monstruo | Producto por monstruo | Sale después del descanso (fila si ya hay uno elegido) | Orca 25, Minotauro 49, Dragón 79, Zorro 99 |
+| Elegir el siguiente monstruo | Producto por monstruo | Sale después del descanso (fila si ya hay uno elegido) | Orca 25, Minotauro 99, Dragón 265, Zorro 408 |
 | Estanque 2–10 | Producto | Abierto para siempre | 25 a 999 |
 
 Roblox no deja cambiar el precio de un producto según quién compra, así que cada nivel es

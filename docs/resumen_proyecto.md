@@ -103,8 +103,8 @@ después empuja; `GiantAttack`/`GiantHit`). Un bocado lo calma. Nunca se pierde 
 5. **Llegada (6 s).** El cráter se llena (agua, lava, arena o hielo) y llega el siguiente.
 
 **Tienda** (`Config/Shop.luau`, `server/ShopService`, `client/Shop/*`): tres mejoras que se
-compran en orden: Cañas (20 niveles, ×1 → ×6500 de poder y hasta +300 % de suerte), Canastas
-(14, capacidad ×1 → ×160) y Botas (14, velocidad al caminar de 22 a 52; el puente da 56).
+compran en orden: Cañas (40 niveles, solo suerte: hasta +1,500 %), Canastas
+(40, capacidad ×1 → ×160,000) y Botas (40, velocidad al caminar de 22 a 100; el puente da 56 si van más lento).
 Se ven en el personaje (`client/Fishing/RodBuilder`, `client/Effects/BasketBuilder`,
 `BootBuilder`).
 
@@ -117,18 +117,18 @@ canasta; se quedan kills, colección, pases, compras, códigos, insignias y misi
 
 `server/Retention/*` y `Config/Retention.luau`, `Config/Quests.luau`, `Config/Spin.luau`,
 `Config/Events.luau`:
-- **Tutorial** de 4 pasos (pescar 5, alimentar, entrenar, comprar) con flechas guía hasta el
+- **Tutorial** de 4 pasos (pescar 3, alimentar, entrenar, comprar) con flechas guía hasta el
   destino (`client/Menus/GuideArrow`, `GuidePath`, `GuideMarker`).
 - **Premio diario** (racha de 7 días), **regalos por tiempo jugado** (8, de 5 min a 2 h),
   **misiones diarias** (3 + 1 de monstruos + cofre).
-- **Ruleta** de 8 casillas: un giro gratis cada 6 h y uno cada 15 min jugados (máx. 4 por
+- **Ruleta** de 9 casillas: un giro gratis cada 6 h y uno cada 15 min jugados (máx. 4 por
   sesión).
-- **Eventos del servidor** (`server/Social/EventScheduler`): cada 12 min uno de 3 min (Pesca
-  dorada, Frenesí, Lluvia de monedas, Poder doble). Cambian el cielo (`client/Ambient/EventSky`).
+- **Eventos del servidor** (`server/Social/EventScheduler`): uno de 3 min seguido de 12 min de espera (un evento cada 15 min; Pesca
+  dorada, Frenesí, Lluvia de monedas, Poder doble). Los del panel de admin se suman al programado. Cambian el cielo (`client/Ambient/EventSky`).
 - **Insignias** (9), **rankings globales** (OrderedDataStore: poder, kills, renacimientos),
-  **títulos** sobre la cabeza por kills (24, `shared/Titles.luau`).
-- **Social:** +10 % por amigo en el servidor (hasta 5), Premium ×1.2, regalo del grupo
-  (`groupId` pendiente), invitaciones, códigos (`server/Social/CodeList.luau`).
+  **títulos** sobre la cabeza por kills (25, `shared/Titles.luau`).
+- **Social:** +10 % por amigo en el servidor (hasta 5), Premium ×1.1, regalo del grupo
+  (`groupId` 486234765), invitaciones, códigos (`server/Social/CodeList.luau`).
 - **Colección (FishDex):** pagos por descubrir cada especie, premio cada 6 y al completar las 36.
 
 ### 1.5 Monetización
@@ -137,14 +137,14 @@ canasta; se quedan kills, colección, pases, compras, códigos, insignias y misi
 cobro en `server/Monetization/Receipts` (ProcessReceipt idempotente: guarda los últimos
 `PurchaseId` en `receipts`).
 
-- **Pases:** VIP (299 R$: etiqueta, +20 % suerte, diario ×2), Rey del Mar (149 R$: traje,
-  pesca ×2, alimenta ×2, kills ×2), Dios del Volcán (399 R$: traje con aura, pesca de un toque,
+- **Pases:** VIP (299 R$: etiqueta, +50 % monedas, +50 % entrenamiento, +20 % suerte, diario ×2), Rey del Mar (149 R$: traje,
+  pesca ×2, alimenta ×2, kills ×2), Dios del Volcán (858 R$: traje con aura, pesca de un toque,
   alimenta ×4, kills ×4).
 - **Productos:** niveles de Poder y Monedas (×2^n), ×2 de entrenamiento para todo el servidor
   (15 min, acumulable hasta ×64), llenar la barra 25/50/75 %, elegir el próximo monstruo,
   +1 min de descanso, estanques, mejoras, giros, pack de inicio (19 R$, una vez).
 - **Regalos:** pases y varios productos se compran para otro jugador (`Monetization/Gifts`).
-- **Los IDs reales todavía no existen** (están en 0); se crean en el Creator Hub al publicar.
+- **Los IDs de productos y pases ya existen** (`Assets/Products.luau`, `Assets.GamePasses`); las insignias siguen en 0.
 
 ---
 
@@ -163,7 +163,7 @@ cobro en `server/Monetization/Receipts` (ProcessReceipt idempotente: guarda los 
 - Página del juego en Roblox (nombre, descripciones EN/ES, ícono, miniaturas) en revisión.
 
 **A medias:**
-- Guardado (esquema v11) y telemetría: implementados, pero **nunca probados con un DataStore
+- Guardado (esquema v18) y telemetría: implementados, pero **nunca probados con un DataStore
   ni AnalyticsService reales** (en Studio el guardado corre en memoria). Lista de pruebas:
   `docs/pruebas_guardado.md`.
 
@@ -304,7 +304,7 @@ mismo sin mandar nada.
   y, si no se libera, expulsa con un mensaje antes que arriesgar datos); autoguardado cada 60 s
   repartido entre jugadores; guarda y suelta al salir; `BindToClose` guarda a todos con 25 s
   de margen.
-- **Esquema** (`Save/SaveSchema`, `VERSION = 10`; campos de v8–v10 en `SaveExtra`):
+- **Esquema** (`Save/SaveSchema`, `VERSION = 18`; campos de v8–v10 en `SaveExtra`):
   `coins`, `power`, `carried` (canasta por especie), `species` (colección), `stats`,
   `kills`, `killsByGiant`, `upgrades`, `tutorial`, `daily`, `settings`, `badges`, `ponds`,
   `receipts`, `levels` (mejoras de Robux), `codes`, `groupClaimed`, `boostUntil`, `gifts`,

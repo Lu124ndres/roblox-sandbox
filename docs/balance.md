@@ -13,10 +13,9 @@ Studio. Aquí está cada perilla, su valor actual y qué mueve.
 | `rouletteWeight` | 50 / 30 / 15 / 5 (Orca fantasma 35 en Halloween) | Probabilidad en la ruleta al final del descanso (si nadie compró uno). Todos están en la ruleta, también el Zorro. |
 | Kill | — | Para **todos los que le dieron algo** (con un pez basta; `Feeding/Contributions`). Debajo del panel: tu aporte y el top 3. |
 | `multiplier` | 2 / 4 / 10 / 20 (Orca fantasma x6) | Multiplica las monedas que da cada pez y el entrenamiento de la guarida en el descanso que sigue a ese monstruo. |
-| `delivery.fishPerSecond` / `basketSeconds` | 6 / 5 s | Se alimenta **manteniendo E**: 6 peces/s × 1.35 por renacimiento o, si es más rápido, **la canasta llena en 5 s** (`RebirthMath.deliveryPerSecond`). Así el poder y la canasta sí aceleran al monstruo. |
-| `delivery.minSoloSeconds` | 180 | Tope por persona: nunca más de 1/180 de la barra por segundo: una persona sola tarda al menos 3 min. |
+| `delivery.fishPerSecond` / `basketSeconds` | 10 / 12 s | Se alimenta **manteniendo E**: 10 peces/s × 1.35 por renacimiento o, si es más rápido, **la canasta llena en 12 s** (`RebirthMath.deliveryPerSecond`). Así el poder y la canasta sí aceleran al monstruo. Sin tope por persona. |
 | Renacer (`Config/Rebirth.luau`) | monedas 40K x 2.8^n · poder 3K x 3^n | Pide monedas **y** poder: 40K/3K, 110K/9K, 310K/27K, 880K/81K, 2.5M/240K… (dos cifras). El 1º llega a los ~16 min; ~12 renacimientos en la primera semana (antes ~15). Da, para siempre, alimentar x1.35 y **monedas y poder x1.25** por renacimiento (`bonusGrowth`, se multiplica). |
-| `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/15/30 | Cuándo crece y cuánto mide. |
+| `stageThresholds` / `stageHeightsInPlayers` | 0/25/50/75 % · 3/8/9.75/19.5 | Cuándo crece y cuánto mide. |
 | `cycle.evolveSeconds` | 3 s | Al llenar cada cuarto de barra evoluciona: no come esos segundos (la entrega espera y sigue). |
 | `cycle.restSeconds` (máx.), `restBaseSeconds`, `restPerPlayerSeconds` | 120 · 60 · 1.2 | Descanso = 60 s + 1.2 s por jugador, máximo 120. |
 | `anger.*` | — | Cuánto tarda en enojarse y cada cuánto ataca. Con 3 jugadores o menos espera 150 s (`smallServerGraceSeconds`) en vez de 45. |
@@ -36,16 +35,14 @@ El poder es la **fuerza**, como en «Construye la Pirámide» (`Shared/FishingPo
 
 ## Estanques (`Config/Progression.luau`)
 
-| Estanque | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Multiplicador | x1 | x1.5 | x2 | x3 | x4 | x6 | x8 | x12 | x16 | x25 |
-| Monstruos llenados (`requiredKills`) | 0 | 1 | 3 | 6 | 9 | 15 | 22 | 40 | 62 | 95 |
-| **o** poder (`requiredPower`) | 0 | 3K | 15K | 150K | 1M | 20M | 500M | 50B | 1T | 20T |
-| Llega (simulación, mediana) | — | ~7 min | ~30 min | día 2 | día 3 | día 5 | día 7 | día 12 | día 19 | día 29 |
+| Estanque | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|---|
+| Multiplicador | x1 | x2 | x5 | x10 | x25 | x50 | x75 | x100 |
+| Monstruos llenados (`requiredKills`) | 0 | 1 | 3 | 8 | 15 | 25 | 50 | 100 |
 
-Cada estanque se abre con **monstruos llenados o con poder**, lo que llegue primero. Las kills
-son el camino principal (no se pierden al renacer); el poder es el atajo de quien entrena mucho
-sin renacer (se reinicia al renacer). El sagrado (x50, el doble del 10) solo con Robux (`pondRobux`).
+Cada estanque se abre **solo con monstruos llenados** (no se pierden al renacer); el poder ya no
+abre estanques. El 9 y el 10 se quitaron del mapa y conservan su número. El sagrado (x250) solo
+con Robux (`pondRobux`).
 
 Simulación (2026-10-16, `~/sim/sim3.py` en la VM): jugador de ~45 min al día que cobra el diario,
 gira la ruleta (gratis cada 6 h, diario y +1 cada 15 min), aporta a ~85 % de los monstruos (uno cada
@@ -55,9 +52,9 @@ abría casi todo. Un jugador menos constante (aporta a ~65 %) llega al 9 hacia e
 
 ## Tienda de monedas — MEJORAS (`Config/Shop.luau`)
 
-Cañas (precio → poder): 0 → x1, 150 → x1.5, 750 → x2, 3K → x3, 12K → x5, 45K → x8,
-150K → x12, 300K → x20, 800K → x35, 2M → x60 … hasta 16B → x6,500 (20 niveles).
-Canastas (14) y botas (14) en el mismo archivo. Monedas por minuto pescando con la Orca
+Cañas (precio → suerte): 0 → +0 %, 150 → +5 %, 750 → +10 %, 3K → +15 %, 12K → +20 %,
+45K → +30 %, 150K → +40 % … hasta 1.5e18 → +1,500 % (40 niveles; la caña ya no da poder).
+Canastas (40) y botas (40) en el mismo archivo. Monedas por minuto pescando con la Orca
 (simulación del 2026-10-16): novato ~200, poder 1K ~550, 10K con 1 renacer
 ~2.5K, 50K con 2 renacimientos ~10K.
 
@@ -69,14 +66,14 @@ Promedio actual: ~3.4 de comida y ~6.1 monedas por pez.
 ## Recoger el pez — minijuego (`Config/Reel.luau`)
 
 Al picar se decide el pez; la barra empieza en 25 %, cada toque suma `gain` y el pez
-la baja `drain` por segundo. A 7 toques/s con la caña 1: Común ~0.8 s, Raro ~1.8 s,
-Legendario ~3.8 s, Mítico ~5.5 s. Cada nivel de caña da +10 % de fuerza. Pases con
-traje: Rey del Mar (x2 fuerza, pique x2) y Dios del Volcán (un toque, pique x3).
+la baja `drain` por segundo. A 7 toques/s con la caña 1: Común ~0.65 s, Raro ~1.5 s,
+Legendario ~3 s, Mítico ~4.4 s. Cada nivel de caña suma 2.5 % de fuerza. Pases con
+traje: Rey del Mar (x2 fuerza, pique x2) y Dios del Volcán (un toque, pique x5).
 Desde Legendario se anuncia a todo el servidor (`announceFromRarity`).
 
 ## Entrenamiento (`Config/init.luau` → `Gameplay.training`)
 
-Cada **0.6 s** (`tickSeconds`) se gana `powerPerTick` x estanque x caña x multiplicadores,
+Cada **0.6 s** (`tickSeconds`) se gana `powerPerTick` x estanque x multiplicadores,
 en los estanques y en la guarida del descanso.
 
 ## Premios y social
@@ -85,14 +82,14 @@ en los estanques y en la guarida del descanso.
 - **Colección** (`Retention.collectionMilestone`, `shared/Collection`): cada 6 especies, lo mayor entre
   1,500 × hito y 0.4 de la siguiente caña; con las 36, `collectionBonus` (250K). La ventana Peces
   muestra el siguiente premio.
-- **Ruleta** (`Config/Spin.luau`, `Retention/SpinWheel`): 8 casillas con su % a la vista (los
+- **Ruleta** (`Config/Spin.luau`, `Retention/SpinWheel`): 9 casillas con su % a la vista (los
   pesos suman 100). Un giro **gratis cada 6 h** (`cooldownHours`) y **giros guardados**
   (`save.spins`): +1 cada 15 min conectado (máx. 4 por sesión, `playSpins`, `Retention/SpinTimer`),
   +1 por cobrar el diario (+3 el día 7, `Retention.dailySpins`), la casilla "+1 giro" y con Robux
   (`Spin1` 24 R$ = 1, `Spin5` 80 R$ = 5). Al girar se usa primero el gratis. Casillas:
-  monedas 300 / 5 % de la siguiente caña (30 %), 10 min x2 poder (20 %), +1 giro (8 %),
+  monedas 300 / 5 % de la siguiente caña (29.99 %), 10 min x2 poder (20 %), +1 giro (8 %),
   cofre 1.5K / 20 % (15 %), JACKPOT 10K / 100 % de la siguiente caña (2 %), llenar 5 % del
-  monstruo (10 %), 15 min x2 monedas (5 %, `coinBoostMultiplier`), 30 min x2 poder (10 %).
+  monstruo (10 %), 15 min x2 monedas (5 %, `coinBoostMultiplier`), 30 min x2 poder (10 %), ¡CAÑA SUPREMA! (0.01 %, solo una vez).
 - **Racha del diario** (`Retention.streakBonus`, `shared/RetentionBonus`): +10 % de monedas y
   poder por cada día seguido cobrado, hasta +100 % (día 10). Si se salta un día se corta (0 %
   hasta volver a cobrar). La ventana del diario muestra la racha y lo que da mañana.
@@ -111,7 +108,7 @@ en los estanques y en la guarida del descanso.
 - **Siguiente meta** (`client/Menus/NextGoal.luau`): al terminar el tutorial, un panel muestra
   siempre la meta más cercana (estanque, caña, título o renacer) con su barra.
 - Impulso de amigos (+10 % cada uno, máx. 5), regalo del grupo, títulos: `Config/Social.luau`.
-- Roblox Premium (`premiumMultiplier` en `Config/Social.luau`): x1.2 al poder y a las monedas,
+- Roblox Premium (`premiumMultiplier` en `Config/Social.luau`): x1.1 al poder y a las monedas,
   con su ícono sobre la cabeza (Overhead) y aviso al entrar.
 - Códigos: `src/server/Social/CodeList.luau` (solo servidor, para que nadie los lea).
 
@@ -119,13 +116,13 @@ en los estanques y en la guarida del descanso.
 
 | Producto | Precios actuales (R$) |
 |---|---|
-| Poder / Monedas x2 → x1024 (10 niveles) | 3, 7, 15, 32, 76, 128, 229, 599, 999, (10: por definir) |
+| Poder / Monedas x2 → x1024 (10 niveles) | 3, 7, 15, 32, 76, 128, 229, 599, 999, 1,300 |
 | VIP (pase) / regalar VIP | 299 / 299 |
 | Entrenamiento del servidor 15 min, x2 → x64 | 60, 129, 239, 416, 678, 880 |
 | Llenar 25 / 50 / 75 % | 49 / 89 / 129 |
-| Giros de ruleta: `Spin1` (+1) / `Spin5` (+5) | 24 / 80 |
+| Giros de ruleta: `Spin1` (+1) / `Spin5` (+5) | 24 / 80 (se esconden donde `PolicyService` no deja vender azar) |
 | Elegir siguiente monstruo | Orca 25, Minotauro 99, Dragón 265, Zorro 408 (se oculta con un solo monstruo) |
-| Estanques 2–10 | 25 … 999 |
+| Estanque sagrado (`Pond11`) | 1,200 (los 2–10 no se venden: `sellPonds = false`) |
 | MEJORAS en Robux | cañas 5 … 999, canastas 9 … 299, botas 5 … 199 |
 
 **⚠️ Para decidir:** Poder x1024 × servidor x64 × impulso personal x2 × amigos x1.5 se

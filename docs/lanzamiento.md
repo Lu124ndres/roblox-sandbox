@@ -10,12 +10,10 @@ Estado al 16/10/2026. Marcar con [x] lo que se vaya haciendo.
       `ModelosEquipo` y los respaldos; si no se publica, se pierden.
 - [ ] **Probar el guardado en el juego publicado** (en Studio sin publicar no hay DataStore):
       entrar, ganar monedas, salir, volver. Probar la migración de guardados viejos (versión 10).
-- [ ] **Crear los 41 productos con ID 0** en Creator Hub → Monetización → Productos y poner los
-      IDs en `src/shared/Assets/Products.luau` (precio en el comentario de cada uno):
-      Fill25/50/75, PackInicio (19 R$), Spin1 (24), Spin5 (80), RestTime, Pond2..10,
-      GiftVIP/GiftReyDelMar/GiftDiosDelVolcan, ChooseOrcaFantasma, Power10, Coins10,
-      Rod2..10, Basket2..6, Boots2..6. Con ID 0 la tienda los muestra pero no se pueden comprar.
-- [ ] **Crear los 3 pases** (VIP 299, ReyDelMar 149, DiosDelVolcan 399) y poner sus IDs en
+- [x] **Crear los productos** en Creator Hub → Monetización → Productos y poner los IDs en
+      `src/shared/Assets/Products.luau` (precio en el comentario de cada uno). Hecho el
+      2026-10-19: los 70 tienen ID (lista en `docs/productos.md`).
+- [x] **Crear los 3 pases** (VIP 299, ReyDelMar 149, DiosDelVolcan 858) y poner sus IDs en
       `Assets.GamePasses`.
 - [ ] **Recibos de compra:** comprar cada producto en un servidor de prueba (Roblox da compras
       de prueba en Studio) y comprobar que llega lo prometido una sola vez.
@@ -29,8 +27,9 @@ Estado al 16/10/2026. Marcar con [x] lo que se vaya haciendo.
 - [ ] **Insignias:** crear las 9 (PrimerPez, PrimerRaro, PrimerLegendario, PrimerMitico,
       PrimeraKill, DiezKills, Coleccion, Tutorial, EstanqueMaximo) y poner sus IDs en
       `Assets.Badges`. Las insignias suben la retención y salen en el perfil.
-- [ ] **Grupo:** crear el grupo y poner `groupId` en `Config/Social.luau` (el regalo del grupo
-      está apagado con 0). Pedir unirse al grupo + "me gusta" con un premio.
+- [x] **Grupo:** creado, con `groupId` 486234765 en `Config/Social.luau`. El regalo es +10 % de
+      suerte y x1.1 de poder para siempre. Falta el "me gusta" con un premio (la meta de likes
+      la pone el admin desde el panel).
 - [x] **Zorro de agua:** modelo v2 de bloques con sus 4 etapas, en la ruleta (5 %) y en
       "elegir siguiente" desde el 2026-10-19. La Orca fantasma quedó fuera de los dos.
 - [ ] **Probar con 5-10 personas reales** (amigos): comida según jugadores, kills compartidas,

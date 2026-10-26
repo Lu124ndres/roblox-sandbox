@@ -17,13 +17,13 @@ Se regeneran con `tools/productos/build.py` (fuentes en `assets/ui/iconos/`, fue
 
 ## Crea primero estos 18 (lo que más se ve y más vende)
 
-1. `PackInicio` (19) — oferta de bienvenida, se abre sola a los 2.5 min.
+1. `PackInicio` (19) — oferta de bienvenida, se abre sola una vez, 60 s después de terminar el tutorial; sin cuenta regresiva.
 2. Pases `VIP` (299), `ReyDelMar` (149), `DiosDelVolcan` (858) — sección Pases abajo.
 3. `Fill25` (49), `Fill50` (89), `Fill75` (129) — botones bajo la barra del monstruo.
 4. `ChooseOrca` (25), `ChooseMinotauro` (99), `ChooseDragonMarino` (265), `ChooseZorroDeAgua` (408) — botones del descanso. Para Halloween: `ChooseOrcaFantasma` (149).
 5. `ServerBoost1` (60), `ServerBoost2` (129), `ServerBoost3` (239) — banner de la tienda.
 6. `Power2` (7), `Coins1` (3), `Coins2` (7) — atajos de la columna derecha (Power1 ya existe).
-7. `Pond11` (799) — **Estanque sagrado x50** del centro de la isla; solo se abre con este producto (también sale en la TIENDA, sección Para siempre).
+7. `Pond11` (1200) — **Estanque sagrado x250** del centro de la isla; solo se abre con este producto (también sale en la TIENDA, sección Para siempre).
 
 Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren con kills;
 `sellPonds = false` en `Config/Monetization.luau`). El resto, cuando puedas.
@@ -74,7 +74,7 @@ Los estanques `Pond2`…`Pond10` **no hacen falta**: ya no se venden (se abren c
 | `Pond8` | Estanque 8 | 449 | Estanques para siempre | 3720102805 |
 | `Pond9` | Estanque 9 | 649 | Estanques para siempre | 3720102892 |
 | `Pond10` | Estanque 10 | 999 | Estanques para siempre | 3720102941 |
-| `Pond11` | Estanque sagrado x50 | 799 | Solo con Robux (centro de la isla) | 3718642542 |
+| `Pond11` | Estanque sagrado x250 | 1200 | Solo con Robux (centro de la isla) | 3718642542 |
 | `Spin1` | 1 giro de ruleta | 24 | Giros de la ruleta (se guardan; no se regalan) | 3720102974 |
 | `Spin5` | 5 giros de ruleta | 80 | Giros de la ruleta (se guardan; no se regalan) | 3720103018 |
 | `GiftVIP` | Regalar VIP | 299 | Regalar el pase VIP a otro jugador | 3720103057 |
