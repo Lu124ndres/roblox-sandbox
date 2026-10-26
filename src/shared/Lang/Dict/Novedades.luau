@@ -15,6 +15,8 @@ return {
 	["¡Dale like y se libera un código!"] = "Like the game to unlock a code!",
 	["⭐ Favorito"] = "⭐ Favorite",
 	["Unirme al grupo"] = "Join the group",
+	["Invitar"] = "Invite",
+	["Ahora no se pueden mandar invitaciones"] = "Invites are not available right now",
 	-- 2026-10-31
 	["Final de Halloween"] = "Halloween Finale",
 	["Vuelve a la ruleta solo este fin de semana"] = "Back in the roulette this weekend only",

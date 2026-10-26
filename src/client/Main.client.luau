@@ -84,6 +84,7 @@ local Overhead = require(script.Parent.Interface.Overhead)
 local StartZoom = require(script.Parent.Interface.StartZoom)
 local TrajesClient = require(script.Parent.Trajes)
 local CodesWindow = require(script.Parent.Menus.CodesWindow)
+local InviteButton = require(script.Parent.Menus.InviteButton)
 local NewsWindow = require(script.Parent.Menus.NewsWindow)
 local GroupSign = require(script.Parent.Menus.GroupSign)
 local LikeSign = require(script.Parent.Menus.LikeSign)
@@ -139,6 +140,7 @@ QuestsWindow.start(screen)
 RebirthWindow.start(screen)
 StarterOffer.start(screen)
 CodesWindow.start(screen)
+InviteButton.start(toasts) -- junto a Códigos: invitar amigos también desde el teléfono
 task.spawn(GroupSign.start) -- el letrero de la plaza espera el terreno
 task.spawn(LikeSign.start) -- el de la meta de likes espera el terreno y que haya meta
 BoostBadges.start(screen)
