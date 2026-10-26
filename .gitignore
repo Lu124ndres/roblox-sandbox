@@ -47,3 +47,6 @@ __pycache__/
 
 # Copias de respaldo automáticas de Blender
 *.blend1
+
+# Fotos y videos de referencia del usuario: pesados y personales, viven solo en disco.
+referencias/
