@@ -122,6 +122,8 @@ local Protocol = {
 		ChoicesQueued = "EleccionesEnFila", -- cuántas elecciones esperan su turno
 		Event = "Evento", -- id del evento del servidor activo (Config/Events; "" = ninguno)
 		EventUntil = "EventoHasta", -- hora del servidor en que termina
+		-- JSON { [id] = { inicio, fin } }: eventos que sumó el panel admin encima del programado
+		ExtraEvents = "EventosExtra",
 		NextEventAt = "EventoSiguiente", -- hora del servidor en que empieza el siguiente
 	},
 	GiantAttributes = {

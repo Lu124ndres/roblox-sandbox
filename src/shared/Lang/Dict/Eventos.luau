@@ -3,4 +3,5 @@
 -- de cada evento están en Nombres)
 return {
 	["Evento en"] = "Event in",
+	["¡{} eventos!"] = "{} events!",
 }

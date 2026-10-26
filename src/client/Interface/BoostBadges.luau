@@ -172,7 +172,11 @@ function BoostBadges.start(screen: ScreenGui)
 			then
 				eventIcon = wanted
 			end
-			show(event, eventPercent(kind))
+			local best = 0 -- con varios a la vez, el que más da
+			for _, entry in ServerEvents.list() do
+				best = math.max(best, eventPercent(entry.kind))
+			end
+			show(event, best)
 			task.wait(REFRESH_SECONDS)
 		end
 	end)

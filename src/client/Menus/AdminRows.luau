@@ -34,6 +34,7 @@ export type Button = {
 	confirm: boolean?,
 	run: (() -> ())?, -- en vez de mandar la orden, esto en el cliente
 	label: (() -> string)?, -- texto que cambia (con `run`)
+	suffix: boolean?, -- manda "valor:casilla" si la casilla tiene algo (ej. "Frenesi:30")
 }
 export type Page = {
 	frame: ScrollingFrame,
@@ -185,6 +186,8 @@ function AdminRows.page(
 				local value = spec.value
 				if value == nil then
 					value = readValue(box, asText)
+				elseif spec.suffix and box and box.Text ~= "" then
+					value = `{value}:{box.Text}`
 				end
 				send(spec.name, value)
 			end)

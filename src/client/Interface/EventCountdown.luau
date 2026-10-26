@@ -158,9 +158,10 @@ function EventCountdown.start(screen: ScreenGui)
 
 	local function refresh()
 		local kind = ServerEvents.active()
+		local count = #ServerEvents.list()
 		if kind then
 			setIcon(kind.icon)
-			title.Text = kind.name
+			title.Text = if count > 1 then `¡{count} eventos!` else kind.name
 			title.TextColor3 = kind.color
 			clockText.Text = `· {clock(ServerEvents.secondsLeft())}`
 			setPulse(false)

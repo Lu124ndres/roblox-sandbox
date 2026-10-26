@@ -20,6 +20,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local ServerEvents = require(ReplicatedStorage.Shared.ServerEvents)
 local Remotes = require(script.Parent.Parent.Remotes)
 local AdminFun = require(script.Parent.AdminFun)
 local AdminWorld = require(script.Parent.AdminWorld)
@@ -30,7 +31,6 @@ local PING = "__servidores"
 local COLLECT_SECONDS = 3
 local NOT_GLOBAL = { unban = true } -- el baneo ya vale para todo el juego
 local STATE = Protocol.GiantAttributes
-local BOOSTS = Protocol.BoostAttributes
 
 export type ServerInfo = {
 	job: string,
@@ -54,14 +54,16 @@ local collecting: { ServerInfo }? = nil
 
 local function info(): ServerInfo
 	local state = ReplicatedStorage:FindFirstChild(Protocol.GiantStateFolder)
-	local boosts = ReplicatedStorage:FindFirstChild(Protocol.BoostFolder)
 	local giant = state and state:GetAttribute(STATE.DisplayName)
-	local event = boosts and boosts:GetAttribute(BOOSTS.Event)
+	local names = {}
+	for _, entry in ServerEvents.list() do
+		table.insert(names, entry.kind.id)
+	end
 	return {
 		job = if game.JobId == "" then "Studio" else string.sub(game.JobId, 1, 8),
 		players = #Players:GetPlayers(),
 		giant = if type(giant) == "string" then giant else "?",
-		event = if type(event) == "string" then event else "",
+		event = table.concat(names, ", "),
 		minutes = math.floor((os.clock() - startedAt) / 60),
 	}
 end

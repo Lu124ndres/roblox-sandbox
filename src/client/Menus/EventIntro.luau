@@ -74,7 +74,7 @@ local function show(screen: ScreenGui, kind: Events.EventDef)
 	fill.Parent = title
 	local detail = Style.text(group, "Detalle", 32, WHITE, 3)
 	-- Los minutos reales: el panel admin puede lanzar uno más largo (o el admin abuse).
-	local left = math.round(ServerEvents.secondsLeft() / 60)
+	local left = math.round(ServerEvents.secondsLeftOf(kind.id) / 60)
 	detail.Text = `{kind.text} · {if left > 0 then left else Events.durationMinutes} min`
 	detail.AnchorPoint = Vector2.new(0.5, 0)
 	detail.Position = UDim2.fromScale(0.5, 0.84)
@@ -102,16 +102,31 @@ end
 
 function EventIntro.start(screen: ScreenGui)
 	local player = Players.LocalPlayer
-	local seen: string? = nil
+	-- Puede haber varios a la vez (el panel admin los suma): cada uno nuevo sale en fila.
+	local seen: { [string]: number } = {} -- id -> cuándo empezó
 	task.spawn(function()
 		while true do
 			if not inTutorial(player) then
-				local kind = ServerEvents.active()
-				local id = kind and kind.id
-				if kind and id ~= seen then
-					show(screen, kind)
+				local fresh = {}
+				local active: { [string]: boolean } = {}
+				for _, entry in ServerEvents.list() do
+					active[entry.kind.id] = true
+					if seen[entry.kind.id] ~= entry.started then
+						seen[entry.kind.id] = entry.started
+						table.insert(fresh, 1, entry.kind) -- el más viejo primero
+					end
 				end
-				seen = id
+				for id in seen do
+					if not active[id] then
+						seen[id] = nil
+					end
+				end
+				for index, kind in fresh do
+					show(screen, kind)
+					if index < #fresh then
+						task.wait(HOLD_SECONDS + LEAVE.Time)
+					end
+				end
 			end
 			task.wait(0.5)
 		end

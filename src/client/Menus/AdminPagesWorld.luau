@@ -70,17 +70,24 @@ local function fillWorld(page: Page)
 		{ text = "Noche", name = "time", value = 0, color = CARDS.Purple },
 		{ text = "Ciclo normal", name = "time", value = "auto", color = CARDS.Green },
 	})
-	page.section("Eventos", "empiezan ya; los minutos de la casilla cambian su duración")
+	page.section(
+		"Eventos",
+		"se suman: puede haber varios a la vez; con minutos en la casilla duran eso"
+	)
 	local events: { Button } = {}
 	for _, kind in Events.kinds do
 		if not kind.adminOnly then
-			table.insert(
-				events,
-				{ text = kind.name, name = "event", value = kind.id, color = CARDS.Pink }
-			)
+			table.insert(events, {
+				text = kind.name,
+				name = "event",
+				value = kind.id,
+				color = CARDS.Pink,
+				suffix = true,
+			})
 		end
 	end
-	page.row("Evento ya", events)
+	table.insert(events, { text = "¡Todos!", name = "allEvents", color = CARDS.Purple })
+	page.row("Evento ya", events, "minutos")
 	page.row("Admin abuse", {
 		{ text = "Minutos", name = "abuse", color = CARDS.Red },
 		{ text = "15 min", name = "abuse", value = 15, color = CARDS.Red },
@@ -88,7 +95,7 @@ local function fillWorld(page: Page)
 		{ text = "60 min", name = "abuse", value = 60, color = CARDS.Red },
 	}, "minutos")
 	page.row("Terminar", {
-		{ text = "Terminar evento", name = "stopEvent", value = 0, color = CARDS.Orange },
+		{ text = "Terminar todos", name = "stopEvent", value = 0, color = CARDS.Orange },
 	})
 	page.section("Entrenamiento")
 	local boosts: { Button } = {}

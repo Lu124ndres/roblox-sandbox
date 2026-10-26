@@ -11,9 +11,11 @@
 		fill      fracción 0..1 de la barra del monstruo
 		skipRest  termina el descanso del volcán
 		restTime  +1 min de descanso (como el producto RestTime)
-		event     "id" o "id:minutos": lanza ya ese evento (Config/Events)
+		event     "id" o "id:minutos": suma ya ese evento (Config/Events); se pueden
+		          tener varios a la vez, cada uno con sus minutos
+		allEvents minutos (opcional): todos los eventos normales a la vez
 		abuse     minutos: el evento AdminAbuse (x10 todo)
-		stopEvent termina el evento activo
+		stopEvent termina todos los eventos activos
 		time      hora 0..24: el cielo de todos se queda en esa hora (Workspace.HoraFija,
 		          la lee Ambient/SkyCycle); "auto" vuelve al ciclo de día y noche
 		boost     nivel: entrenamiento del servidor (como el producto ServerBoost<n>)
@@ -48,7 +50,7 @@ end
 
 local function startEvent(id: string, minutes: number?): string
 	assert(EventScheduler.force(id, minutes), "ese evento no existe")
-	return if minutes then `Evento {id} por {minutes} min` else `Evento {id} en camino`
+	return if minutes then `Evento {id} por {minutes} min` else `Evento {id} activo`
 end
 
 local HANDLERS: { [string]: Handler } = {
@@ -84,12 +86,19 @@ local HANDLERS: { [string]: Handler } = {
 		local minutes = tonumber(minutesText)
 		return startEvent(id, if minutes then math.clamp(minutes, 1, MAX_EVENT_MINUTES) else nil)
 	end,
+	allEvents = function(value)
+		local minutes = if value == nil
+			then nil
+			else math.floor(AdminPlayer.number(value, 1, MAX_EVENT_MINUTES))
+		local count = EventScheduler.all(minutes)
+		return `{count} eventos a la vez{if minutes then ` por {minutes} min` else ""}`
+	end,
 	abuse = function(value)
 		return startEvent(ABUSE, math.floor(AdminPlayer.number(value, 1, MAX_EVENT_MINUTES)))
 	end,
 	stopEvent = function()
 		EventScheduler.stop()
-		return "Evento terminado"
+		return "Eventos terminados"
 	end,
 	time = function(value)
 		if value == "auto" then
