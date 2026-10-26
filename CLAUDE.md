@@ -9,6 +9,12 @@ humana o asistida, que escriba código o documentación aquí.
 - Explicaciones breves, pero completas cuando se trate de bugs, red o tipos.
 - Edita los archivos directamente; no pegues scripts completos en el chat.
 
+## Guía general
+
+La guía para hacer juegos de Roblox (sacada de este juego) es la skill `roblox-guia`, en el repo
+`C:\Users\luisa\Desktop\roblox-guia`. Si choca con este archivo, **manda este archivo**. Al cerrar
+un hito, `/retro-roblox` lleva las lecciones nuevas a la guía.
+
 ## Stack
 
 - **Luau puro**. Sin roblox-ts ni transpiladores.
