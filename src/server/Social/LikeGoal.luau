@@ -2,33 +2,46 @@
 --[[
 	LikeGoal
 
-	Meta de likes de la actualización (pedido del usuario el 2026-10-26): cada
-	POLL_SECONDS lee los likes del juego y los publica en ReplicatedStorage
-	(carpeta MetaLikes: Likes, Meta y Codigo) para el letrero de la plaza
-	(client/Menus/LikeSign). La meta y su premio son el código de CodeList con
-	`likes` que no haya vencido; su nombre solo se publica al llegar, y
-	Social/Codes no lo acepta antes (LikeGoal.locked).
-	Roblox no deja leer los votos desde el juego, así que se piden a la API
-	pública de juegos por un proxy (roproxy.com). Si falla, Likes queda en -1 y
-	el letrero muestra solo la meta; el código se puede abrir a mano con
-	`unlocked = true`. Requiere "Permitir solicitudes HTTP" en los ajustes del juego.
+	Meta de likes de la actualización (pedido del usuario el 2026-10-26): los
+	likes los publica en ReplicatedStorage (carpeta MetaLikes: Likes, Meta y
+	Codigo) para el letrero de la plaza (client/Menus/LikeSign). La meta y su
+	premio son el código de CodeList con `likes` que no haya vencido; su nombre
+	solo se publica al llegar, y Social/Codes no lo acepta antes (LikeGoal.locked).
+	Roblox no deja leer los votos desde el juego, así que se piden a un
+	intermediario propio en Cloudflare (`WORKER_URL`, código y pasos en
+	tools/likes-worker/; no un proxy público). Si no hay worker o falla, vale el
+	número que pone el admin desde el panel (orden `likes`, AdminFun; para todos
+	los servidores con "g:likes"), guardado en el DataStore MetaLikes. Cada
+	servidor relee cada POLL_SECONDS. Sin número (-1), el letrero muestra solo la
+	meta; el código también se abre con `unlocked = true`. El worker necesita
+	"Permitir solicitudes HTTP" en los ajustes del juego.
 ]]
 
+local DataStoreService = game:GetService("DataStoreService")
 local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local CodeList = require(script.Parent.CodeList)
 
-local URL = "https://games.roproxy.com/v1/games/votes?universeIds=%d"
+-- Dirección del worker de tools/likes-worker ("" = solo el número del panel).
+local WORKER_URL = ""
+local STORE_NAME = "MetaLikes"
+local STORE_KEY = "likes"
 local POLL_SECONDS = 300
-local FIRST_POLL_JITTER = 20 -- los servidores no piden todos a la vez
-local MAX_VOTES = 1e9
+local FIRST_POLL_JITTER = 20 -- los servidores no leen todos a la vez
+local MAX_LIKES = 1e9
 local ATTR = Protocol.LikeGoalAttributes
 
 local LikeGoal = {}
 
-local likes = -1 -- el máximo leído en este servidor (-1 = todavía no se sabe)
+local likes = -1 -- el último número puesto por el admin (-1 = todavía no hay)
+local folder: Folder? = nil
+
+local function store(): DataStore?
+	local ok, result = pcall(DataStoreService.GetDataStore, DataStoreService, STORE_NAME)
+	return if ok then result else nil
+end
 
 -- La meta activa: el código con `likes` que no venció (nil si no hay).
 local function active(): (string?, CodeList.Code?)
@@ -46,46 +59,70 @@ function LikeGoal.locked(code: CodeList.Code): boolean
 	return goal ~= nil and not code.unlocked and likes < goal
 end
 
-local function fetch(): number?
-	if game.GameId == 0 then
-		return nil -- lugar sin publicar
+local function publish(target: Folder)
+	local key, code = active()
+	target:SetAttribute(ATTR.Likes, likes)
+	target:SetAttribute(ATTR.Goal, if code and code.likes then code.likes else 0)
+	target:SetAttribute(ATTR.Code, if key and code and not LikeGoal.locked(code) then key else "")
+end
+
+-- Orden del admin: los likes del juego ahora. Los guarda para los servidores que abran
+-- después (con "g:likes" cada servidor escribe el mismo número: son pocas escrituras).
+function LikeGoal.set(value: number): boolean
+	likes = math.clamp(math.floor(value), 0, MAX_LIKES)
+	if folder then
+		publish(folder)
 	end
-	local ok, body = pcall(HttpService.GetAsync, HttpService, string.format(URL, game.GameId))
+	local data = store()
+	local ok = data ~= nil and pcall(data.SetAsync, data, STORE_KEY, likes)
+	return ok == true
+end
+
+local function sane(value: unknown): number?
+	return if type(value) == "number"
+			and value == value
+			and value >= 0
+			and value < MAX_LIKES
+		then value
+		else nil
+end
+
+-- Los likes reales, del worker (nil si no hay worker o falla).
+local function fetch(): number?
+	if WORKER_URL == "" then
+		return nil
+	end
+	local ok, body = pcall(HttpService.GetAsync, HttpService, WORKER_URL)
 	if not ok then
 		return nil
 	end
 	local decoded, data = pcall(HttpService.JSONDecode, HttpService, body)
-	local entry = decoded and type(data) == "table" and type(data.data) == "table" and data.data[1]
-	local votes = if type(entry) == "table" then entry.upVotes else nil
-	-- Un número sano: el proxy es de terceros y un valor raro abriría el código para siempre.
-	return if type(votes) == "number"
-			and votes == votes
-			and votes >= 0
-			and votes < MAX_VOTES
-		then votes
-		else nil
+	return if decoded and type(data) == "table" then sane(data.likes) else nil
 end
 
-local function publish(folder: Folder)
-	local key, code = active()
-	folder:SetAttribute(ATTR.Likes, likes)
-	folder:SetAttribute(ATTR.Goal, if code and code.likes then code.likes else 0)
-	folder:SetAttribute(ATTR.Code, if key and code and not LikeGoal.locked(code) then key else "")
+local function read(): number?
+	local data = store()
+	if not data then
+		return nil
+	end
+	local ok, value = pcall(data.GetAsync, data, STORE_KEY)
+	return if ok then sane(value) else nil
 end
 
 function LikeGoal.init()
-	local folder = Instance.new("Folder")
-	folder.Name = Protocol.LikeGoalFolder
-	publish(folder)
-	folder.Parent = ReplicatedStorage
+	local created = Instance.new("Folder")
+	created.Name = Protocol.LikeGoalFolder
+	folder = created
+	publish(created)
+	created.Parent = ReplicatedStorage
 	task.spawn(function()
 		task.wait(math.random() * FIRST_POLL_JITTER)
 		while true do
-			local read = fetch()
-			if read then
-				likes = math.max(likes, read) -- un "ya no me gusta" no vuelve a cerrar el código
+			local saved = fetch() or read()
+			if saved then
+				likes = saved
 			end
-			publish(folder)
+			publish(created)
 			task.wait(POLL_SECONDS)
 		end
 	end)

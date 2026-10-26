@@ -6,7 +6,8 @@
 	que todos lo vean sin estorbar el juego). Muestra la barra «👍 37 / 50» y,
 	al llegar, el código para canjear. Lo que muestra lo decide el servidor
 	(server/Social/LikeGoal, carpeta MetaLikes); sin meta activa no se ve.
-	Si no se pudieron leer los likes, muestra solo la meta.
+	Si no se pudieron leer los likes, muestra solo la meta. Abajo, dos botones
+	con ventanas oficiales de Roblox: favorito y unirse al grupo (SupportPrompts).
 ]]
 
 local Players = game:GetService("Players")
@@ -18,11 +19,13 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local PlazaSign = require(script.Parent.PlazaSign)
+local SupportPrompts = require(script.Parent.SupportPrompts)
 
 local ATTR = Protocol.LikeGoalAttributes
 -- { x, z } a un lado del camino del spawn, de frente a quien llega, fuera del paso.
 local SPOT = Vector2.new(22, -22)
-local BOARD = Vector3.new(16, 9, 0.8) -- ancho, alto y grosor del tablero (studs)
+local BOARD = Vector3.new(16, 11, 0.8) -- ancho, alto y grosor del tablero (studs)
+local BUTTON_TEXT = 70 -- el botón trae el tamaño de pantalla; en el letrero hay más píxeles
 local LIFT = 2.5
 local PIXELS_PER_STUD = 50
 local GREEN = Color3.fromRGB(110, 235, 90)
@@ -35,8 +38,8 @@ local function bar(parent: Instance): Frame
 	local track = Instance.new("Frame")
 	track.Name = "Barra"
 	track.AnchorPoint = Vector2.new(0.5, 0)
-	track.Position = UDim2.fromScale(0.5, 0.56)
-	track.Size = UDim2.fromScale(0.84, 0.13)
+	track.Position = UDim2.fromScale(0.5, 0.45)
+	track.Size = UDim2.fromScale(0.84, 0.1)
 	track.BackgroundColor3 = TRACK
 	track.Parent = parent
 	local corner = Instance.new("UICorner")
@@ -83,16 +86,30 @@ function LikeSign.start()
 	Kit.skin(panel, "panel")
 
 	local title = Style.text(panel, "Titulo", 100, nil, 6)
-	title.Position = UDim2.fromScale(0.05, 0.07)
-	title.Size = UDim2.fromScale(0.9, 0.2)
+	title.Position = UDim2.fromScale(0.05, 0.05)
+	title.Size = UDim2.fromScale(0.9, 0.16)
 	Kit.gold(title)
 	local count = Style.text(panel, "Cuenta", 120, Color3.new(1, 1, 1), 7)
-	count.Position = UDim2.fromScale(0.05, 0.28)
-	count.Size = UDim2.fromScale(0.9, 0.25)
+	count.Position = UDim2.fromScale(0.05, 0.22)
+	count.Size = UDim2.fromScale(0.9, 0.2)
 	local fill = bar(panel)
-	local footer = Style.text(panel, "Pie", 70, GREEN, 5)
-	footer.Position = UDim2.fromScale(0.05, 0.76)
-	footer.Size = UDim2.fromScale(0.9, 0.15)
+	local footer = Style.text(panel, "Pie", 60, GREEN, 5)
+	footer.Position = UDim2.fromScale(0.05, 0.58)
+	footer.Size = UDim2.fromScale(0.9, 0.12)
+	local function button(name: string, text: string, color: Color3, x: number, run: () -> boolean)
+		local pressable = Style.button(panel, name, color, text)
+		pressable.AnchorPoint = Vector2.new(0.5, 1)
+		pressable.Position = UDim2.fromScale(x, 0.94)
+		pressable.Size = UDim2.fromScale(0.42, 0.18)
+		local label = pressable:FindFirstChild("Texto")
+		local limit = label and label:FindFirstChildOfClass("UITextSizeConstraint")
+		if limit then
+			limit.MaxTextSize = BUTTON_TEXT
+		end
+		pressable.Activated:Connect(run)
+	end
+	button("Favorito", "⭐ FAVORITO", Color3.fromRGB(255, 190, 40), 0.27, SupportPrompts.favorite)
+	button("Grupo", "UNIRME AL GRUPO", Color3.fromRGB(80, 170, 255), 0.73, SupportPrompts.joinGroup)
 
 	local function refresh()
 		local likes = folder:GetAttribute(ATTR.Likes)

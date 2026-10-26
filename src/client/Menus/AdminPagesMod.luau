@@ -46,6 +46,11 @@ end
 local function fillFun(page: Page)
 	page.section("Anuncio", "cartel grande para todos; Roblox filtra el texto")
 	page.row("Mensaje", { { text = "Enviar", name = "announce" } }, "escribe el mensaje", true)
+	page.section(
+		"Meta de likes",
+		"escribe los likes que tiene el juego; al llegar a la meta sale el código"
+	)
+	page.row("Likes del juego", { { text = "Poner", name = "likes" } }, "likes")
 	page.section("En vivo")
 	page.row("Fuegos", { { text = "¡Fuegos!", name = "fireworks", value = 0 } })
 	page.row("Lluvia de peces", {

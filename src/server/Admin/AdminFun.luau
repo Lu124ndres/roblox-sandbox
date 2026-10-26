@@ -12,6 +12,8 @@
 		giveSpins  n: giros de ruleta a cada jugador
 		fireworks  fuegos artificiales sobre cada jugador (Notice "fireworks")
 		unban      UserId: le quita el baneo (Admin/AdminModeration)
+		likes      n: los likes del juego para el letrero de la meta (Social/LikeGoal);
+		           al llegar a la meta se libera su código
 ]]
 
 local Players = game:GetService("Players")
@@ -20,6 +22,7 @@ local TextService = game:GetService("TextService")
 
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local PlayerData = require(script.Parent.Parent.PlayerData)
+local LikeGoal = require(script.Parent.Parent.Social.LikeGoal)
 local Remotes = require(script.Parent.Parent.Remotes)
 local AdminPlayer = require(script.Parent.AdminPlayer)
 local AdminWorld = require(script.Parent.AdminWorld)
@@ -91,6 +94,11 @@ local HANDLERS: { [string]: AdminWorld.Handler } = {
 	fireworks = function()
 		Remotes.Notice:FireAllClients("fireworks")
 		return "Fuegos artificiales"
+	end,
+	likes = function(value)
+		local count = math.floor(AdminPlayer.number(value, 0, 1e9))
+		local saved = LikeGoal.set(count)
+		return `Likes: {count}{if saved then "" else " (no se pudo guardar para otros servidores)"}`
 	end,
 	unban = function(value)
 		local userId = math.floor(AdminPlayer.number(value, 1, 1e15))
