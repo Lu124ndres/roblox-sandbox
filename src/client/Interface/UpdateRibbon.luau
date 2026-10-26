@@ -18,16 +18,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local UpdateClock = require(ReplicatedStorage.Shared.UpdateClock)
-local Icons = require(script.Parent.Icons)
 local Kit = require(script.Parent.Kit)
 local Style = require(script.Parent.Style)
 local UpdateRibbonLook = require(script.Parent.UpdateRibbonLook)
 
 local WIDTH, HEIGHT = 360, 30 -- antes de la escala del HUD
 local GAP = 6 -- aire debajo del panel
-local ICON_LEFT = 10
-local TEXT_LEFT = 36 -- después del ícono
-local WORDS_WIDTH = 170
+local TEXT_SIZE = 20
+local WORD_GAP = 8 -- entre las palabras y el reloj
 local REFRESH_SECONDS = 1
 local SOON_SECONDS = 24 * 3600 -- desde aquí late
 local PULSE = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
@@ -72,31 +70,32 @@ end
 
 function UpdateRibbon.mount(panel: GuiObject, openNews: () -> ())
 	local ribbon = UpdateRibbonLook.band(panel, Vector2.new(WIDTH, HEIGHT))
-	local icon = Icons.view(ribbon, "sunburst")
-	icon.AnchorPoint = Vector2.new(0, 0.5)
-	icon.Position = UDim2.new(0, ICON_LEFT, 0.5, 0)
-	icon.Size = UDim2.fromOffset(HEIGHT - 6, HEIGHT - 6)
-	if icon:IsA("ImageLabel") then
-		icon.ImageColor3 = Color3.fromRGB(255, 206, 84)
+	-- Palabras y reloj juntos, centrados como un solo bloque (pedido del usuario el 2026-10-26).
+	-- En etiquetas separadas: AutoTranslate solo traduce las palabras.
+	local line = Instance.new("Frame")
+	line.Name = "Linea"
+	line.BackgroundTransparency = 1
+	line.Size = UDim2.fromScale(1, 1)
+	line.Parent = ribbon
+	local layout = Instance.new("UIListLayout")
+	layout.FillDirection = Enum.FillDirection.Horizontal
+	layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	layout.VerticalAlignment = Enum.VerticalAlignment.Center
+	layout.Padding = UDim.new(0, WORD_GAP)
+	layout.SortOrder = Enum.SortOrder.LayoutOrder
+	layout.Parent = line
+	local function label(name: string, order: number): TextLabel
+		local text = Style.text(line, name, TEXT_SIZE)
+		text.LayoutOrder = order
+		text.TextScaled = false -- tamaño fijo: así el bloque mide lo que mide el texto
+		text.TextSize = TEXT_SIZE
+		text.AutomaticSize = Enum.AutomaticSize.X
+		text.Size = UDim2.new(0, 0, 1, -6)
+		return text
 	end
-	-- Palabras y reloj en etiquetas separadas: AutoTranslate solo traduce las palabras.
-	local words = Style.text(ribbon, "Texto", 20)
-	words.AnchorPoint = Vector2.new(0, 0.5)
+	local words = label("Texto", 1)
 	Kit.gold(words)
-	local clock = Style.text(ribbon, "Reloj", 20)
-	clock.AnchorPoint = Vector2.new(0, 0.5)
-	clock.TextXAlignment = Enum.TextXAlignment.Left
-	clock.Position = UDim2.new(0, TEXT_LEFT + WORDS_WIDTH + 8, 0.5, 0)
-	clock.Size = UDim2.new(0, WIDTH - TEXT_LEFT - WORDS_WIDTH - 18, 1, -6)
-	-- Cuenta regresiva: palabras a la izquierda del reloj. Recién salida: el aviso centrado.
-	local function arrange(countdown: boolean)
-		words.TextXAlignment = if countdown
-			then Enum.TextXAlignment.Right
-			else Enum.TextXAlignment.Center
-		words.Position = UDim2.new(0, TEXT_LEFT, 0.5, 0)
-		words.Size = UDim2.new(0, if countdown then WORDS_WIDTH else WIDTH - TEXT_LEFT - 10, 1, -6)
-		clock.Visible = countdown
-	end
+	local clock = label("Reloj", 2)
 	UpdateRibbonLook.shine(ribbon)
 	follow(panel, ribbon)
 	local scale = Instance.new("UIScale")
@@ -120,13 +119,13 @@ function UpdateRibbon.mount(panel: GuiObject, openNews: () -> ())
 		if upcoming then
 			local left = upcoming.at - UpdateClock.now()
 			words.Text = "ACTUALIZACIÓN EN"
-			arrange(true)
+			clock.Visible = true
 			clock.Text = UpdateClock.format(left)
 			clock.TextColor3 = Color3.new(1, 1, 1)
 			setPulse(left < SOON_SECONDS)
 		elseif fresh then
 			words.Text = "¡NUEVA ACTUALIZACIÓN!"
-			arrange(false)
+			clock.Visible = false
 			setPulse(true)
 		end
 		ribbon.Visible = upcoming ~= nil or fresh ~= nil
