@@ -8,20 +8,22 @@
 	Quien compra cuenta como participante (se lleva la kill si lo llena); si
 	ya se fue del servidor, la comida se aplica igual.
 
-	Límite conocido: la fila vive solo en memoria. Al cerrar el servidor
-	(BindToClose) se aplica de inmediato lo que quepa si el monstruo está
-	comiendo; si está descansando, lo que quede en fila se pierde (no hay
-	campo de guardado para un crédito pendiente). Las recompensas de una kill
-	causada en ese cierre pueden no alcanzar a guardarse, porque SaveService
-	guarda a todos en paralelo.
+	La fila vive en memoria, pero cada llenado está anotado como crédito en el
+	guardado del comprador (Monetization/ServerCredits) hasta que se aplica: si
+	el servidor cierra o el comprador sale antes, se vuelve a poner en fila en
+	el servidor donde entre (Grants.restore). Al cerrar no se aplica nada: el
+	guardado del cierre ya lleva el crédito y aplicarlo ahí lo duplicaría.
 ]]
+
+local Players = game:GetService("Players")
 
 local Remotes = require(script.Parent.Parent.Remotes)
 local GiantService = require(script.Parent.Parent.GiantService)
+local ServerCredits = require(script.Parent.ServerCredits)
 
 local CHECK_SECONDS = 1
 
-type Pending = { fraction: number, buyer: Player }
+type Pending = { fraction: number, buyer: Player, key: string }
 
 local GiantFill = {}
 
@@ -31,12 +33,14 @@ local function apply(item: Pending): boolean
 	if not GiantService.fill(item.fraction, item.buyer) then
 		return false
 	end
+	ServerCredits.consume(item.buyer, item.key)
 	Remotes.Notice:FireAllClients("fill", item.buyer.DisplayName, math.round(item.fraction * 100))
 	return true
 end
 
-function GiantFill.add(fraction: number, buyer: Player)
-	local item = { fraction = fraction, buyer = buyer }
+-- `key`: el producto (Fill25...), para borrar su crédito al aplicarlo.
+function GiantFill.add(fraction: number, buyer: Player, key: string)
+	local item = { fraction = fraction, buyer = buyer, key = key }
 	local waiting = #queue > 0
 	if waiting or not apply(item) then
 		table.insert(queue, item)
@@ -50,18 +54,15 @@ function GiantFill.add(fraction: number, buyer: Player)
 	end
 end
 
--- Cierre del servidor: aplica en orden mientras el monstruo siga comiendo.
-local function flush()
-	while queue[1] and GiantService.isFeeding() and apply(queue[1]) do
-		table.remove(queue, 1)
-	end
-	if #queue > 0 then
-		warn(`GiantFill: {#queue} llenado(s) en fila sin aplicar al cerrar el servidor`)
-	end
-end
-
 function GiantFill.init()
-	game:BindToClose(flush)
+	-- Si el comprador sale, su llenado deja la fila: el crédito viaja en su guardado.
+	Players.PlayerRemoving:Connect(function(player: Player)
+		for index = #queue, 1, -1 do
+			if queue[index].buyer == player then
+				table.remove(queue, index)
+			end
+		end
+	end)
 	task.spawn(function()
 		while true do
 			task.wait(CHECK_SECONDS)

@@ -8,10 +8,10 @@
 	La primera de la fila se publica en ReplicatedStorage.Impulsos para que
 	la tienda y los avisos la muestren.
 
-	Límite conocido: la fila vive solo en memoria. Si el servidor cierra con
-	elecciones pendientes, se pierden (no hay campo de guardado para un
-	crédito y una elección es un efecto del servidor, no del jugador). Al
-	cerrar se deja constancia en la consola para poder compensar a mano.
+	La fila vive en memoria, pero cada elección está anotada como crédito en el
+	guardado del comprador (Monetization/ServerCredits) hasta que se usa: si el
+	servidor cierra o el comprador sale antes, se vuelve a poner en fila en el
+	servidor donde entre (Grants.restore).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -20,22 +20,15 @@ local Config = require(ReplicatedStorage.Shared.Config)
 local GiantPool = require(ReplicatedStorage.Shared.GiantPool)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Remotes = require(script.Parent.Parent.Remotes)
+local ServerCredits = require(script.Parent.ServerCredits)
 
 local ATTR = Protocol.BoostAttributes
 
-type Choice = { def: Config.GiantDef, buyerName: string, buyerId: number }
+type Choice = { def: Config.GiantDef, buyer: Player, buyerName: string, buyerId: number }
 
 local GiantChoice = {}
 
 local queue: { Choice } = {}
-
-game:BindToClose(function()
-	for _, choice in queue do
-		warn(
-			`GiantChoice: elección sin usar al cerrar: {choice.def.id} de {choice.buyerName} ({choice.buyerId})`
-		)
-	end
-end)
 
 local function find(giantId: string): Config.GiantDef?
 	for _, def in Config.Giants.chain do
@@ -63,7 +56,10 @@ function GiantChoice.add(giantId: string, buyer: Player): boolean
 	if not def or not GiantPool.available(def) then
 		return false
 	end
-	table.insert(queue, { def = def, buyerName = buyer.DisplayName, buyerId = buyer.UserId })
+	table.insert(
+		queue,
+		{ def = def, buyer = buyer, buyerName = buyer.DisplayName, buyerId = buyer.UserId }
+	)
 	publish()
 	Remotes.Notice:FireAllClients("choose", buyer.DisplayName, def.id)
 	return true
@@ -76,7 +72,18 @@ function GiantChoice.take(): (Config.GiantDef?, string?)
 	if not head then
 		return nil, nil
 	end
+	ServerCredits.consume(head.buyer, `Choose{head.def.id}`)
 	return head.def, head.buyerName
 end
+
+-- Si el comprador sale, su elección deja la fila: el crédito viaja en su guardado.
+game:GetService("Players").PlayerRemoving:Connect(function(player: Player)
+	for index = #queue, 1, -1 do
+		if queue[index].buyer == player then
+			table.remove(queue, index)
+		end
+	end
+	publish()
+end)
 
 return GiantChoice

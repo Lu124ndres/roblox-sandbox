@@ -2,7 +2,7 @@
 --[[
 	SaveExtra
 
-	Campos del guardado que llegaron en las versiones 8 a 17 (SaveSchema los
+	Campos del guardado que llegaron en las versiones 8 a 18 (SaveSchema los
 	declara y llama a read; en un guardado viejo faltan y quedan en 0 o vacíos):
 		rebirths     veces que renació (Retention/Rebirth)
 		quests       misiones del día: día UTC, avance, cuáles se cumplieron y cuáles
@@ -24,6 +24,9 @@
 		superRod     sacó la caña suprema en la ruleta (v15, Retention/SpinWheel)
 		newsSeenAt   `at` de la última actualización que vio en NOVEDADES (v17,
 		             Retention/NewsService); en un guardado viejo, 0: la ve al entrar
+		serverCredits  claves de productos para todo el servidor (Choose*, Fill*) que
+		             pagó y todavía no se aplicaron (v18, Monetization/ServerCredits): si
+		             el servidor cierra antes, se aplican donde vuelva a entrar
 	También flags, que copia los `clave = true` de un mapa guardado.
 ]]
 
@@ -51,6 +54,9 @@ export type Settings = {
 	english: boolean,
 	langChosen: boolean,
 }
+
+-- Tope de seguridad: un crédito es una compra pagada, así que es muy alto a propósito.
+local MAX_SERVER_CREDITS = 500
 
 local SaveExtra = {}
 
@@ -110,7 +116,7 @@ local function outfit(value: unknown): string
 	return ""
 end
 
--- Lee lo de las versiones 8 a 17 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
+-- Lee lo de las versiones 8 a 18 de `source` (lo guardado) dentro de `data` (ya con valores por defecto).
 function SaveExtra.read(source: { [string]: any }, data: any)
 	data.rebirths = count(source.rebirths)
 	data.starterPack = source.starterPack == true
@@ -122,6 +128,18 @@ function SaveExtra.read(source: { [string]: any }, data: any)
 	data.starterSeenAt = count(source.starterSeenAt)
 	data.superRod = source.superRod == true
 	data.newsSeenAt = count(source.newsSeenAt)
+	if type(source.serverCredits) == "table" then
+		for _, key in source.serverCredits do
+			local valid = type(key) == "string"
+				and (
+					Config.Monetization.fills[key] ~= nil
+					or string.match(key, "^Choose[%w_]+$") ~= nil
+				)
+			if valid and #data.serverCredits < MAX_SERVER_CREDITS then
+				table.insert(data.serverCredits, key)
+			end
+		end
+	end
 	if type(source.passTests) == "table" then
 		for key, on in source.passTests do
 			if

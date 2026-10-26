@@ -10,7 +10,9 @@
 	misión de ese lugar en la lista de hoy y 0 el cofre, que se reclama con
 	las perDay cumplidas (la EXTRA paga igual pero el cofre no la pide). Paga
 	monedas x RewardScale, sin el multiplicador de monedas de Robux, e
-	impulso de poder. El cliente ve todo en el atributo Misiones (JSON), que
+	impulso de poder. Al cambiar el día, lo cumplido y sin reclamar del día
+	anterior (misiones y cofre) se paga solo, junto, con un aviso: el jugador
+	ya se lo ganó (antes del 2026-10-26 se perdía). El cliente ve todo en el atributo Misiones (JSON), que
 	se publica a lo sumo cada segundo.
 ]]
 
@@ -50,13 +52,40 @@ local function pay(player: Player, title: string, coins: number, boostMinutes: n
 	Remotes.Notice:FireClient(player, "questClaimed", title, text)
 end
 
+-- Lo cumplido y sin reclamar de `previous` (el día anterior), pagado junto.
+local function payLeftovers(player: Player, previous: any)
+	local list = QuestDay.list(previous.day)
+	local coins, boost = 0, 0
+	for _, quest in list do
+		if previous.done[quest.id] and not previous.claimed[quest.id] then
+			coins += quest.coins
+			boost += quest.boostMinutes or 0
+		end
+	end
+	if not previous.bonus and QuestDay.allDone(previous, list) then
+		coins += QUESTS.bonus.coins
+		boost += QUESTS.bonus.boostMinutes or 0
+	end
+	if coins > 0 or boost > 0 then
+		pay(player, "Misiones de ayer sin reclamar", coins, if boost > 0 then boost else nil)
+	end
+end
+
+-- Pasa al día de hoy si hace falta, pagando lo que quedó de ayer.
+local function rollover(player: Player, save: any)
+	local previous = QuestDay.ensure(save)
+	if previous then
+		payLeftovers(player, previous)
+	end
+end
+
 -- Avance de las misiones del día de tipo `kind` (ver Config/Quests).
 function Quests.add(player: Player, kind: string, amount: number)
 	local save = PlayerData.read(player) :: any -- Quests es dueño de save.quests
 	if not save or amount ~= amount or amount <= 0 or amount == math.huge then
 		return -- NaN o infinito dejarían el avance roto
 	end
-	QuestDay.ensure(save)
+	rollover(player, save)
 	local state = save.quests
 	local list = QuestDay.list(state.day)
 	local finished = false
@@ -86,7 +115,7 @@ local function claim(player: Player, index: unknown)
 	if not save then
 		return
 	end
-	QuestDay.ensure(save) -- si cambió el día, lo de ayer ya no se cobra
+	rollover(player, save) -- si cambió el día, lo de ayer se paga solo
 	local state = save.quests
 	local list = QuestDay.list(state.day)
 	if index == CHEST then
@@ -111,7 +140,7 @@ local function publish(player: Player)
 	if not save then
 		return
 	end
-	QuestDay.ensure(save)
+	rollover(player, save)
 	local state = save.quests
 	local list = {}
 	for index, quest in QuestDay.list(state.day) do

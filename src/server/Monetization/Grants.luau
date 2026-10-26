@@ -27,6 +27,7 @@ local RestTime = require(script.Parent.RestTime)
 local GiantChoice = require(script.Parent.GiantChoice)
 local GiantFill = require(script.Parent.GiantFill)
 local Passes = require(script.Parent.Passes)
+local ServerCredits = require(script.Parent.ServerCredits)
 local Remotes = require(script.Parent.Parent.Remotes)
 local ServerBoost = require(script.Parent.ServerBoost)
 local Analytics = require(script.Parent.Parent.Analytics)
@@ -70,8 +71,15 @@ local function giftPass(player: Player, key: string): string
 end
 
 -- Pack de inicio: monedas, impulso de poder y caña, canasta y botas mejores (nunca las baja).
+-- Se vende una sola vez: el cliente no lo vuelve a ofrecer (Menus/Purchases.allowed). Si
+-- igual llega un segundo pago (cliente modificado), se entrega: el jugador ya pagó y Roblox no
+-- devuelve una compra sin entregar, solo la reintenta; queda en la consola.
 local function starterPack(player: Player): string
 	local pack = MONETIZATION.starterPack
+	local before = PlayerData.read(player)
+	if before and before.starterPack then
+		warn(`Grants: {player.Name} ({player.UserId}) compró el pack de inicio otra vez`)
+	end
 	PlayerData.edit(player, function(save)
 		save.starterPack = true
 		save.coins += pack.coins
@@ -105,14 +113,22 @@ function Grants.grant(player: Player, key: string): (boolean, string?)
 		addSpins(player, spin.spins)
 		return true, nil
 	end
+	-- Para todo el servidor: el crédito se anota antes de ponerlo en fila (si se aplica en el
+	-- momento, ya se puede borrar) y se borra cuando se usa (Monetization/ServerCredits).
 	local fill = MONETIZATION.fills[key]
 	if fill then
-		GiantFill.add(fill.fraction, player)
+		ServerCredits.add(player, key)
+		GiantFill.add(fill.fraction, player, key)
 		return true, nil
 	end
 	local giantId = string.match(key, "^Choose(.+)$")
 	if giantId then
-		return GiantChoice.add(giantId, player), nil
+		ServerCredits.add(player, key)
+		if not GiantChoice.add(giantId, player) then
+			ServerCredits.consume(player, key)
+			return false, nil
+		end
+		return true, nil
 	end
 	local pass = string.match(key, "^Gift(%a+)$")
 	if pass and MONETIZATION.passGifts[pass] and MONETIZATION.passes[pass] then
@@ -134,6 +150,19 @@ function Grants.grant(player: Player, key: string): (boolean, string?)
 		return true, raiseUpgrade(player, name :: any, n)
 	end
 	return false, nil
+end
+
+-- Vuelve a poner en fila una compra para el servidor que quedó sin aplicar (el crédito ya
+-- está en su guardado). false si hoy no se puede (un monstruo de temporada fuera de fecha):
+-- el crédito se queda para la próxima vez.
+function Grants.restore(player: Player, key: string): boolean
+	local fill = MONETIZATION.fills[key]
+	if fill then
+		GiantFill.add(fill.fraction, player, key)
+		return true
+	end
+	local giantId = string.match(key, "^Choose(.+)$")
+	return giantId ~= nil and GiantChoice.add(giantId, player)
 end
 
 -- ¿Este producto se puede regalar a otro jugador? (lo del servidor, no).

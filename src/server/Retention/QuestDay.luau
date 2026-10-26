@@ -5,7 +5,8 @@
 	Qué misiones tocan hoy (Config/Quests) y el estado del día en el guardado.
 	Cada día UTC salen `perDay` de la lista, iguales para todos (sorteadas con
 	el día como semilla), y al final una EXTRA (QUESTS.extra) que el cofre no
-	pide. save.quests se reinicia al cambiar el día (ensure).
+	pide. save.quests se reinicia al cambiar el día (ensure), que devuelve lo
+	del día anterior para que Quests pague lo cumplido sin reclamar.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -35,11 +36,14 @@ function QuestDay.list(day: number): { QUESTS.QuestDef }
 end
 
 -- Si el guardado es de otro día, empieza de cero.
-function QuestDay.ensure(save: any)
+function QuestDay.ensure(save: any): SaveExtra.QuestsSave?
 	if save.quests.day ~= QuestDay.today() then
+		local previous = save.quests
 		save.quests = SaveExtra.quests()
 		save.quests.day = QuestDay.today()
+		return previous
 	end
+	return nil
 end
 
 -- ¿Cumplió las perDay (sin la extra)? Entonces el cofre se puede reclamar.

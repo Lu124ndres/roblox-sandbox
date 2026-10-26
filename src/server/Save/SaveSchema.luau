@@ -54,6 +54,7 @@ export type SaveData = {
 	starterSeenAt: number, -- unix en que se le abrió solo el pack de inicio (0 = nunca; v14)
 	superRod: boolean, -- sacó la caña suprema en la ruleta (v15)
 	newsSeenAt: number, -- `at` de la última actualización que vio en NOVEDADES (v17)
+	serverCredits: { string }, -- compras para el servidor pagadas y sin aplicar (v18)
 }
 
 local SaveSchema = {}
@@ -63,9 +64,9 @@ local SaveSchema = {}
 -- 8: renacer, misiones, pack de inicio; 9: ruleta gratis; 10: giros guardados y
 -- x2 monedas; 11: minutos jugados; 12: traje elegido; 13: pases de prueba del admin;
 -- 14: cuándo vio el pack de inicio; 15: caña suprema; 16: misiones reclamadas (quests.claimed;
--- así un servidor viejo no abre el guardado y la borra); 17: novedades vistas
--- (8 a 17 en SaveExtra; si falta, 0)
-SaveSchema.VERSION = 17
+-- así un servidor viejo no abre el guardado y la borra); 17: novedades vistas;
+-- 18: compras para el servidor sin aplicar (8 a 18 en SaveExtra; si falta, 0)
+SaveSchema.VERSION = 18
 
 function SaveSchema.default(): SaveData
 	return {
@@ -102,6 +103,7 @@ function SaveSchema.default(): SaveData
 		superRod = false,
 		-- Un jugador nuevo no ve las novedades de lo que ya había (SaveExtra.read lo pisa).
 		newsSeenAt = os.time(),
+		serverCredits = {},
 	}
 end
 

@@ -15,6 +15,8 @@
 		  recibió) se confirma la compra. Si no: NotProcessedYet.
 	Qué da cada producto: Grants. Si era un regalo (Gifts), lo recibe el otro
 	jugador y los dos ven el aviso.
+	Al cargar los datos de un jugador, sus compras para el servidor que
+	quedaron sin aplicar (Monetization/ServerCredits) vuelven a la fila.
 ]]
 
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -23,12 +25,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
 local Config = require(ReplicatedStorage.Shared.Config)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 local Remotes = require(script.Parent.Parent.Remotes)
 local SaveService = require(script.Parent.Parent.Save.SaveService)
 local GiantFill = require(script.Parent.GiantFill)
 local Gifts = require(script.Parent.Gifts)
 local Grants = require(script.Parent.Grants)
+local ServerCredits = require(script.Parent.ServerCredits)
 local ServerBoost = require(script.Parent.ServerBoost)
 local Analytics = require(script.Parent.Parent.Analytics)
 
@@ -129,11 +133,51 @@ local function process(receipt: { [string]: any }): Enum.ProductPurchaseDecision
 	return Enum.ProductPurchaseDecision.PurchaseGranted
 end
 
+-- Lo que pagó para el servidor y no se aplicó (cerró el servidor o salió antes): a la fila.
+local function restoreCredits(player: Player)
+	local pending = ServerCredits.pending(player)
+	local restored = 0
+	for _, key in pending do
+		if Grants.restore(player, key) then
+			restored += 1
+		else -- por ejemplo, un monstruo de temporada fuera de fecha: queda para otra vez
+			warn(
+				`Receipts: crédito {key} de {player.Name} ({player.UserId}) no se puede aplicar hoy`
+			)
+		end
+	end
+	if restored > 0 then
+		Remotes.Notice:FireClient(
+			player,
+			"purchase",
+			"Tu compra pendiente para el servidor se aplica aquí"
+		)
+	end
+end
+
 function Receipts.init()
 	ServerBoost.init()
 	GiantFill.init()
 	Gifts.init()
 	MarketplaceService.ProcessReceipt = process
+	local function watch(player: Player)
+		local attribute = Protocol.PlayerAttributes.DataLoaded
+		if player:GetAttribute(attribute) == true then
+			restoreCredits(player)
+			return
+		end
+		local connection: RBXScriptConnection
+		connection = player:GetAttributeChangedSignal(attribute):Connect(function()
+			if player:GetAttribute(attribute) == true then
+				connection:Disconnect()
+				restoreCredits(player)
+			end
+		end)
+	end
+	Players.PlayerAdded:Connect(watch)
+	for _, player in Players:GetPlayers() do
+		task.spawn(watch, player)
+	end
 end
 
 return Receipts
