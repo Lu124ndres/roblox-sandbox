@@ -1156,3 +1156,18 @@ para el generador). Las mallas no chocan: se camina sobre el `Piso` de primitiva
 tapa por 0.15 studs, y el `Borde` invisible de siempre; así `GuaridaSube` sigue midiendo con el
 `Piso`. Al flotar ya no llena el pozo de pared a pared: el radio baja a 100 y todo lo que cuelga
 queda dentro de la pared del lago a esa altura.
+
+## 2026-10-26 — Una actualización cada sábado a las 9:00 (UTC-6), por fases
+
+**Contexto:** el juego ya está publicado con los cuatro gigantes y los anuncios empezaron con
+8 USD/día. Hacía falta un ritmo de actualizaciones que traiga jugadores, no solo que sume
+contenido. **Decisión:** una por semana, siempre el sábado a las 9:00 de México (10:00 Este de
+EE. UU.), que es el pico de jugadores de Roblox y deja todo el fin de semana para lo nuevo. Se
+publica el viernes en la noche y el contenido se abre solo a la hora con un candado de fecha
+(la hora del servidor), sin reiniciar servidores. Los anuncios se concentran de jueves a
+domingo. Mientras la base sea chica, cada semana trae cuatro ganchos elegidos por el usuario
+(monstruo limitado, objeto raro limitado, meta de likes y admin abuse en vivo); mascotas e
+islas nuevas esperan a que haya jugadores (umbrales en `roadmap.md`), porque una
+actualización grande rinde más cuando hay quien la vea y la comparta. **Costo:** las
+variantes limitadas reusan rig y animaciones, así que se parecen a los gigantes base; el
+admin abuse pide que el usuario esté conectado los sábados a esa hora.

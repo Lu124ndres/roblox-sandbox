@@ -3937,3 +3937,12 @@ launch data, texto con símbolos, 50 caracteres o un `GetJoinData` que falla dan
 jugador real da «Organico»; `Envio.funnel` con el campo manda el evento sin errores en el Output.
 `rojo build` y `stylua --check` limpios. `selene` no se pudo correr: no logró descargar la
 biblioteca estándar de Roblox desde esta máquina.
+
+## 2026-10-26 — Plan de actualizaciones semanales
+
+Con el juego publicado y los anuncios en marcha, se fijó el ritmo: una actualización cada
+sábado a las 9:00 (UTC-6), con anuncios de jueves a domingo. El roadmap se reescribió (la v1.1
+y la v1.2 ya estaban cumplidas) con tres fases según los jugadores: ganchos semanales
+(monstruo limitado, objeto raro, meta de likes y admin abuse en vivo), luego mascotas y luego
+islas. La primera sale el sábado 31 para cerrar Halloween. Tareas en el backlog; el porqué en
+decisiones.

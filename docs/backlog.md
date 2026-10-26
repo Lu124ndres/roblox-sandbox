@@ -351,3 +351,32 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
 - [x] Durante el tutorial solo se ve el tutorial; en el paso de comprar, solo MEJORAS.
 - [x] Cielo fijo a mediodía y la guía del tutorial arriba en grande.
 - [ ] Probar el tutorial en el simulador de teléfono.
+
+## Actualizaciones semanales (plan del 2026-10-26)
+
+Una por sábado a las 9:00 (UTC-6). Fases y calendario en `roadmap.md`.
+
+### Sábado 31 oct — Cierre de Halloween (se publica el viernes 30)
+
+- [ ] Orca fantasma en la ruleta hasta el 3 de noviembre.
+- [ ] Pez de Halloween limitado (diseño a confirmar con el usuario).
+- [ ] Primera meta de likes con el código `HALLOWEEN` (meta a confirmar).
+- [ ] Admin abuse de 9:00 a 10:00 con el panel actual (solo en el servidor donde se esté).
+- [ ] Miniatura, título y anuncio de jueves a domingo.
+
+### Sábado 7 nov — Base de la fase 1 + monstruo limitado nº 1
+
+- [ ] Candado de fecha genérico: el `season` de los gigantes también para peces, trajes y
+      eventos, con la hora del servidor.
+- [ ] Admin abuse global: las órdenes de `Admin/AdminWorld` a todos los servidores con
+      `MessagingService`, y un evento «Admin abuse» x10 en `Config/Events`.
+- [ ] Cartel de la meta de likes en la plaza (meta y código en `Config/Social`).
+- [ ] Contador «Actualización en…» y «¡Admin abuse!» en `Interface/EventCountdown`.
+- [ ] Sección «Limitados» del índice.
+- [ ] Monstruo limitado nº 1 (variante a elegir por el usuario).
+
+### Sábados 14, 21 y 28 nov
+
+- [ ] Monstruo limitado nº 2, 3 y 4, con un objeto raro limitado cada semana.
+- [ ] Mascotas de pez en paralelo desde el 14 (sale cuando se cruce el umbral de la fase 2).
+- [ ] 28 nov: oferta de Black Friday en el pack de inicio.
