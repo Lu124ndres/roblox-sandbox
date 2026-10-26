@@ -21,8 +21,8 @@ local UpdateClock = require(ReplicatedStorage.Shared.UpdateClock)
 local Icons = require(script.Parent.Icons)
 local Kit = require(script.Parent.Kit)
 local Style = require(script.Parent.Style)
+local UpdateRibbonLook = require(script.Parent.UpdateRibbonLook)
 
-local NAME = "CintaActualizacion"
 local WIDTH, HEIGHT = 360, 30 -- antes de la escala del HUD
 local GAP = 6 -- aire debajo del panel
 local ICON_LEFT = 10
@@ -30,74 +30,11 @@ local TEXT_LEFT = 36 -- después del ícono
 local WORDS_WIDTH = 170
 local REFRESH_SECONDS = 1
 local SOON_SECONDS = 24 * 3600 -- desde aquí late
-local SHINE_EVERY = 8
-local SHINE = TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
 local PULSE = TweenInfo.new(0.8, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true)
 local PULSE_SCALE = 1.06
-local BAND = Color3.fromRGB(28, 18, 14)
 local FRESH = Color3.fromRGB(110, 226, 140)
 
 local UpdateRibbon = {}
-
-local function band(panel: GuiObject): TextButton
-	local ribbon = Instance.new("TextButton")
-	ribbon.Name = NAME
-	ribbon.Text = ""
-	ribbon.AutoButtonColor = false
-	ribbon.AnchorPoint = Vector2.new(0.5, 0)
-	ribbon.Size = UDim2.fromOffset(WIDTH, HEIGHT)
-	ribbon.BackgroundColor3 = BAND
-	ribbon.BackgroundTransparency = 0.2
-	ribbon.ClipsDescendants = true
-	ribbon.Visible = false
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0.5, 0)
-	corner.Parent = ribbon
-	local stroke = Instance.new("UIStroke")
-	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	stroke.Color = Kit.GOLD_OUTLINE
-	stroke.Thickness = 2
-	stroke.Parent = ribbon
-	-- Las puntas se desvanecen: parece una cinta y no un botón más.
-	local fade = Instance.new("UIGradient")
-	fade.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.55),
-		NumberSequenceKeypoint.new(0.15, 0),
-		NumberSequenceKeypoint.new(0.85, 0),
-		NumberSequenceKeypoint.new(1, 0.55),
-	})
-	fade.Parent = ribbon
-	ribbon.Parent = panel
-	return ribbon
-end
-
-local function shine(ribbon: GuiObject)
-	local light = Instance.new("Frame")
-	light.Name = "Brillo"
-	light.BackgroundColor3 = Color3.new(1, 1, 1)
-	light.BorderSizePixel = 0
-	light.Size = UDim2.fromScale(0.25, 1)
-	light.Position = UDim2.fromScale(-0.3, 0)
-	light.ZIndex = 3
-	local gradient = Instance.new("UIGradient")
-	gradient.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 1),
-		NumberSequenceKeypoint.new(0.5, 0.55),
-		NumberSequenceKeypoint.new(1, 1),
-	})
-	gradient.Rotation = 20
-	gradient.Parent = light
-	light.Parent = ribbon
-	task.spawn(function()
-		while ribbon.Parent do
-			task.wait(SHINE_EVERY)
-			if ribbon.Visible then
-				light.Position = UDim2.fromScale(-0.3, 0)
-				TweenService:Create(light, SHINE, { Position = UDim2.fromScale(1.05, 0) }):Play()
-			end
-		end
-	end)
-end
 
 -- Debajo del hijo visible más bajo del panel (en unidades del panel, antes de escalar).
 local function follow(panel: GuiObject, ribbon: GuiObject)
@@ -134,7 +71,7 @@ local function follow(panel: GuiObject, ribbon: GuiObject)
 end
 
 function UpdateRibbon.mount(panel: GuiObject, openNews: () -> ())
-	local ribbon = band(panel)
+	local ribbon = UpdateRibbonLook.band(panel, Vector2.new(WIDTH, HEIGHT))
 	local icon = Icons.view(ribbon, "sunburst")
 	icon.AnchorPoint = Vector2.new(0, 0.5)
 	icon.Position = UDim2.new(0, ICON_LEFT, 0.5, 0)
@@ -160,7 +97,7 @@ function UpdateRibbon.mount(panel: GuiObject, openNews: () -> ())
 		words.Size = UDim2.new(0, if countdown then WORDS_WIDTH else WIDTH - TEXT_LEFT - 10, 1, -6)
 		clock.Visible = countdown
 	end
-	shine(ribbon)
+	UpdateRibbonLook.shine(ribbon)
 	follow(panel, ribbon)
 	local scale = Instance.new("UIScale")
 	scale.Parent = ribbon
