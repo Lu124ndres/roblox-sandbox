@@ -4034,3 +4034,19 @@ llenados al cerrar, que los duplicaba, y no descartar créditos por tope).
 
 **Ojo:** no cambiar `Config/Quests` el mismo día que se publica: el pago de las misiones de
 ayer rearma la lista de ayer con la configuración actual.
+
+## 2026-10-26 — Likes desde el panel, favorito y grupo en el letrero
+
+**Qué se hizo:** el número de likes del letrero lo pone el admin desde el panel («Likes del
+juego», en Diversión o Global); se guarda en el DataStore MetaLikes y cada servidor lo relee
+cada 5 min. Se dejó roproxy. El letrero suma dos botones con ventanas oficiales de Roblox:
+⭐ FAVORITO (AvatarEditorService con el PlaceId) y UNIRME AL GRUPO (`Menus/SupportPrompts`).
+Roblox no tiene ventana para dar like dentro del juego. Queda listo, sin usar, un worker de
+Cloudflare para leer los likes reales (`tools/likes-worker/`, `WORKER_URL` vacío): el usuario
+eligió ponerlos a mano.
+
+**Probado en Studio:** con 37 likes el código no se acepta; con 50 (para todos los
+servidores) aparece en el letrero y `SKELETON` se canjea; los dos botones nuevos se ven.
+
+**Ojo:** Studio tiene acceso a la API y escribe en el DataStore real: después de probar se
+volvió a poner el número real (1).
