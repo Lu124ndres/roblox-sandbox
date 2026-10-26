@@ -3946,3 +3946,24 @@ y la v1.2 ya estaban cumplidas) con tres fases según los jugadores: ganchos sem
 (monstruo limitado, objeto raro, meta de likes y admin abuse en vivo), luego mascotas y luego
 islas. La primera sale el sábado 31 para cerrar Halloween. Tareas en el backlog; el porqué en
 decisiones.
+
+## 2026-10-26 — Actualización del 31 de octubre: Orca fantasma, pez esqueleto y código de likes
+
+**Qué se hizo:**
+- La Orca fantasma vuelve a la ruleta y a "elegir" solo del sábado 31 a las 9:00 (UTC-6) al
+  3 de noviembre (`season` en `Config/Giants`).
+- Peces limitados: `Config/FishLimited` con el Pez esqueleto (legendario, peso 6, mismas
+  fechas). Se queda en la lista para siempre (el guardado borra especies desconocidas), pero
+  `FishCatalog.roll` le da peso 0 fuera de sus fechas y `FishCatalog.collectible` lo deja fuera
+  de la colección completa, sus hitos, la suerte de la sección y la comida media. En el índice
+  su tarjeta solo se ve en sus fechas o si ya lo pescó.
+- Código `ESQUELETO` (alias `SKELETON`) para la meta de 50 likes: 5,000 monedas y 30 min de x2
+  poder, hasta el 3 de noviembre.
+
+**Probado en Studio:** en Edit con un clon de `Shared`, 200,000 tiradas con +100 % de suerte:
+0 esqueletos fuera de fechas y 880 dentro (1 de cada ~227); la colección sigue en 36. En Play,
+el índice muestra 21/36 y legendarios 2/6 con y sin el esqueleto; su tarjeta está oculta hasta
+pescarlo y después sale como «Skeleton Fish · Legendary». Se le quitaron las púas (parecía un
+pez globo).
+
+**Qué se rompió:** nada visto.

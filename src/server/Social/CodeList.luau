@@ -17,9 +17,12 @@ local CodeList: { [string]: Code } = {
 	ORCA = { boostMinutes = 15 },
 	LANZAMIENTO = { coins = 1000, boostMinutes = 10 },
 	HALLOWEEN = { coins = 3000, boostMinutes = 30, expires = 1793664000 }, -- hasta el 3 de noviembre
+	-- Meta de 50 likes de la actualización del 31 de octubre: se publica al llegar a la meta.
+	ESQUELETO = { coins = 5000, boostMinutes = 30, expires = 1793664000 }, -- hasta el 3 de noviembre
 	-- En inglés (Feed the Giants). ORCA y HALLOWEEN sirven igual en los dos idiomas.
 	GIANTS = { aliasOf = "GIGANTES" },
 	LAUNCH = { aliasOf = "LANZAMIENTO" },
+	SKELETON = { aliasOf = "ESQUELETO" },
 }
 
 return CodeList

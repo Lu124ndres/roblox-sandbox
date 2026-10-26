@@ -44,6 +44,9 @@ function Milestones.caught(player: Player, fishId: string, added: number, firstT
 		math.floor((RETENTION.discoveryCoins[rarity.id] or 0) * Perks.coinMultiplier(player))
 	PlayerData.addCoins(player, coins, "coleccion")
 	Remotes.Notice:FireClient(player, "newFish", fishId, coins)
+	if FishCatalog.isLimited(fishId) then
+		return -- fuera de la colección: ni sección ni hitos
+	end
 	-- Completó la sección de esa rareza: la suerte la suma Perks.luckBonus desde ya.
 	if CollectionLuck.complete(player, rarity.id) and CollectionLuck.value(rarity.id) > 0 then
 		Remotes.Notice:FireClient(player, "sectionLuck", rarity.id, CollectionLuck.value(rarity.id))
@@ -53,7 +56,7 @@ function Milestones.caught(player: Player, fishId: string, added: number, firstT
 		return
 	end
 	local found = 0
-	for _, fish in Config.Economy.fish do
+	for _, fish in FishCatalog.collectible do
 		found += if (save.species[fish.id] or 0) > 0 then 1 else 0
 	end
 	if not Collection.isMilestone(found) then

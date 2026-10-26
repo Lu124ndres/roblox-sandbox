@@ -2,7 +2,8 @@
 --[[
 	FishShapesMore2
 
-	Forma 3D de la tercera tanda de peces (Config/FishMore), con los mismos
+	Forma 3D de la tercera tanda de peces (Config/FishMore) y de los limitados
+	(Config/FishLimited), con los mismos
 	rasgos que FishShapes: tamaño, colores de lomo, panza y aletas, rayas,
 	púas, espada, aletas altas, brillo y arcoíris.
 ]]
@@ -106,6 +107,16 @@ local FishShapesMore2: { [string]: any } = {
 		tallFins = true,
 		glow = rgb(255, 235, 160),
 		rainbow = true,
+	},
+	-- Limitado del cierre de Halloween (Config/FishLimited): hueso con costillas oscuras y
+	-- brillo verde.
+	PezEsqueleto = {
+		size = Vector3.new(0.5, 1, 2.2),
+		body = rgb(235, 228, 205),
+		belly = rgb(200, 192, 170),
+		fin = rgb(220, 212, 190),
+		stripes = { color = rgb(45, 40, 50), count = 6, vertical = true },
+		glow = rgb(90, 255, 120),
 	},
 }
 

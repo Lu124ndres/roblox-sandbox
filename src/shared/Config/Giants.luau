@@ -109,7 +109,8 @@ local Giants: Types.GiantsConfig = {
 			inRoulette = true,
 		},
 		{
-			-- Evento de Halloween: del 17 de octubre al 3 de noviembre de 2026 (UTC).
+			-- Cierre de Halloween (actualización del sábado 31 de octubre): en la ruleta y en
+			-- "elegir" desde ese día a las 9:00 de México (15:00 UTC) hasta el 3 de noviembre.
 			id = "OrcaFantasma",
 			displayName = "Orca fantasma",
 			article = "la",
@@ -119,8 +120,8 @@ local Giants: Types.GiantsConfig = {
 			modelBase = "OrcaFantasma",
 			rouletteWeight = 35,
 			released = true,
-			inRoulette = false, -- fuera de la ruleta y de "elegir" (pedido del 2026-10-19)
-			season = { from = 1792195200, to = 1793664000 },
+			inRoulette = true,
+			season = { from = 1793458800, to = 1793664000 },
 		},
 	},
 	stageThresholds = { 0, 0.25, 0.5, 0.75 },

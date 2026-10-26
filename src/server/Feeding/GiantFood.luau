@@ -34,6 +34,9 @@ local AVERAGE_BITE = (FISHING.biteDelayMinSeconds + FISHING.biteDelayMaxSeconds)
 local AVERAGE_FOOD = (function(): number
 	local weight, food = 0, 0
 	for _, fish in Config.Economy.fish do
+		if fish.limited then
+			continue -- solo pica unos días
+		end
 		weight += fish.weight
 		food += fish.weight * fish.food
 	end

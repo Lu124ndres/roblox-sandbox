@@ -23,6 +23,9 @@ export type FishDef = {
 	weight: number, -- peso relativo en la tirada (no es un porcentaje)
 	food: number, -- puntos de comida que aporta al gigante
 	coins: number, -- monedas base; se multiplican por el gigante actual
+	-- Pez limitado (Config/FishLimited): solo pica entre esas fechas (unix UTC) y no cuenta
+	-- para la colección completa ni para la suerte de su sección.
+	limited: { from: number, to: number }?,
 }
 
 -- Un estanque de la zona de entrenamiento.

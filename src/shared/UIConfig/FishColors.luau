@@ -43,6 +43,7 @@ local FishColors = {
 		PezFenix = Color3.fromRGB(255, 140, 30),
 		PezEstelar = Color3.fromRGB(40, 50, 140),
 		PezCelestial = Color3.fromRGB(255, 240, 200),
+		PezEsqueleto = Color3.fromRGB(235, 228, 205),
 	} :: { [string]: Color3 },
 
 	-- Por id de rareza: cartel, borde de la tarjeta, haz de luz y destellos.

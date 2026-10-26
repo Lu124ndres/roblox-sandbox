@@ -10,10 +10,11 @@
 ]]
 
 local Config = require(script.Parent.Config)
+local FishCatalog = require(script.Parent.FishCatalog)
 local RewardScale = require(script.Parent.RewardScale)
 
 local MILESTONE = Config.Retention.collectionMilestone
-local TOTAL = #Config.Economy.fish
+local TOTAL = #FishCatalog.collectible -- sin los limitados
 
 local Collection = {}
 

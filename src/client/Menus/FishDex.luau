@@ -21,6 +21,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local FishDexCard = require(script.Parent.FishDexCard)
 local FishDexHeader = require(script.Parent.FishDexHeader)
@@ -80,8 +81,9 @@ function FishDex.start(screen: ScreenGui)
 	local grid = Instance.new("ScrollingFrame")
 	local cards: { [string]: Card } = {}
 	local found: { [string]: number } = {}
-	local totals: { [string]: number } = { [FishDexTabs.ALL] = #FISH }
-	for _, fish in FISH do
+	-- Los limitados no cuentan para la colección; su tarjeta solo se ve en sus fechas o si ya lo pescó.
+	local totals: { [string]: number } = { [FishDexTabs.ALL] = #FishCatalog.collectible }
+	for _, fish in FishCatalog.collectible do
 		totals[fish.rarity] = (totals[fish.rarity] or 0) + 1
 	end
 	local header = FishDexHeader.mount(window.content, side + 6)
@@ -89,7 +91,10 @@ function FishDex.start(screen: ScreenGui)
 		for _, fish in FISH do
 			local card = cards[fish.id]
 			if card then
-				card.box.Visible = filter == FishDexTabs.ALL or fish.rarity == filter
+				local shown = not fish.limited
+					or FishCatalog.available(fish)
+					or caught(player, fish.id) > 0
+				card.box.Visible = shown and (filter == FishDexTabs.ALL or fish.rarity == filter)
 			end
 		end
 		header.set(filter, found[filter] or 0, totals[filter] or 0)
@@ -126,7 +131,7 @@ function FishDex.start(screen: ScreenGui)
 		table.clear(found)
 		for _, fish in FISH do
 			local amount = caught(player, fish.id)
-			local known = if amount > 0 then 1 else 0
+			local known = if amount > 0 and not fish.limited then 1 else 0
 			found[FishDexTabs.ALL] = (found[FishDexTabs.ALL] or 0) + known
 			found[fish.rarity] = (found[fish.rarity] or 0) + known
 			local existing = cards[fish.id]

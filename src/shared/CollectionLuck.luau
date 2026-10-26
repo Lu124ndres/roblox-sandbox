@@ -26,7 +26,7 @@ end
 function CollectionLuck.progress(player: Player, rarityId: string): (number, number)
 	local found, total = 0, 0
 	for _, fish in Config.Economy.fish do
-		if fish.rarity == rarityId then
+		if fish.rarity == rarityId and not fish.limited then
 			total += 1
 			local amount = player:GetAttribute(`{PREFIX}{fish.id}`)
 			found += if type(amount) == "number" and amount > 0 then 1 else 0

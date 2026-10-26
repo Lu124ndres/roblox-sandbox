@@ -358,9 +358,10 @@ Una por sábado a las 9:00 (UTC-6). Fases y calendario en `roadmap.md`.
 
 ### Sábado 31 oct — Cierre de Halloween (se publica el viernes 30)
 
-- [ ] Orca fantasma en la ruleta hasta el 3 de noviembre.
-- [ ] Pez de Halloween limitado (diseño a confirmar con el usuario).
-- [ ] Primera meta de likes con el código `HALLOWEEN` (meta a confirmar).
+- [x] Orca fantasma en la ruleta y en "elegir" del sábado 31 a las 9:00 (UTC-6) al 3 de noviembre.
+- [x] Pez esqueleto limitado (legendario, mismas fechas). Los limitados no cuentan para la
+      colección ni la suerte de su sección (`Config/FishLimited`, `FishCatalog.collectible`).
+- [x] Meta de 50 likes con el código `ESQUELETO` / `SKELETON` (`HALLOWEEN` ya existía).
 - [ ] Admin abuse de 9:00 a 10:00 con el panel actual (solo en el servidor donde se esté).
 - [ ] Miniatura, título y anuncio de jueves a domingo.
 

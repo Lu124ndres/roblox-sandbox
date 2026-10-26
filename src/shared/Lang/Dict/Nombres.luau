@@ -45,6 +45,7 @@ return {
 	["Pez fénix"] = "Phoenix Fish",
 	["Pez estelar"] = "Star Fish",
 	["Pez celestial"] = "Celestial Fish",
+	["Pez esqueleto"] = "Skeleton Fish",
 	-- Gigantes
 	["Orca"] = "Orca",
 	["Minotauro"] = "Minotaur",

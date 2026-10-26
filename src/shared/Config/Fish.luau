@@ -119,4 +119,10 @@ for _, more in require(script.Parent.FishMore) do
 	table.insert(Fish.fish, more)
 end
 
+-- Los limitados de cada actualización: se quedan en la lista para siempre (el guardado
+-- borra las especies que no encuentra), pero solo pican en sus fechas.
+for _, limited in require(script.Parent.FishLimited) do
+	table.insert(Fish.fish, limited)
+end
+
 return Fish
