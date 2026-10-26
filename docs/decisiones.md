@@ -1171,3 +1171,16 @@ islas nuevas esperan a que haya jugadores (umbrales en `roadmap.md`), porque una
 actualización grande rinde más cuando hay quien la vea y la comparta. **Costo:** las
 variantes limitadas reusan rig y animaciones, así que se parecen a los gigantes base; el
 admin abuse pide que el usuario esté conectado los sábados a esa hora.
+
+## 2026-10-26 — Likes por roproxy y panel admin para todos los servidores
+
+**Contexto:** el usuario quería un letrero con los likes en vivo y un admin abuse que llegue a
+todos los servidores. **Decisión:** Roblox no deja leer los votos desde el juego, así que cada
+servidor los pide cada 5 min a `games.roproxy.com` (la API pública de juegos por un proxy).
+El código de la meta vive solo en el servidor y no se puede canjear antes de llegar, aunque
+alguien lo adivine; si el proxy falla, el letrero muestra solo la meta y el código se abre
+con `unlocked = true`. Las órdenes de servidor del panel se mandan a todos por MessagingService
+(`Admin/AdminGlobal`) y cada servidor las corre sin admin presente, por eso las de AdminWorld y
+AdminFun no dependen del jugador admin. **Costo:** depender de un proxy de terceros para un
+número que solo es decorativo; MessagingService tiene límites por minuto, suficientes para
+órdenes a mano.

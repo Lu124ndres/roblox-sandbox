@@ -362,17 +362,23 @@ Una por sábado a las 9:00 (UTC-6). Fases y calendario en `roadmap.md`.
 - [x] Pez esqueleto limitado (legendario, mismas fechas). Los limitados no cuentan para la
       colección ni la suerte de su sección (`Config/FishLimited`, `FishCatalog.collectible`).
 - [x] Meta de 50 likes con el código `ESQUELETO` / `SKELETON` (`HALLOWEEN` ya existía).
-- [ ] Admin abuse de 9:00 a 10:00 con el panel actual (solo en el servidor donde se esté).
+- [ ] Admin abuse de 9:00 a 10:00 desde el panel (sección Global: todos los servidores a la vez).
 - [ ] Miniatura, título y anuncio de jueves a domingo.
 
 ### Sábado 7 nov — Base de la fase 1 + monstruo limitado nº 1
 
 - [ ] Candado de fecha genérico: el `season` de los gigantes también para peces, trajes y
       eventos, con la hora del servidor.
-- [ ] Admin abuse global: las órdenes de `Admin/AdminWorld` a todos los servidores con
-      `MessagingService`, y un evento «Admin abuse» x10 en `Config/Events`.
-- [ ] Cartel de la meta de likes en la plaza (meta y código en `Config/Social`).
-- [ ] Contador «Actualización en…» y «¡Admin abuse!» en `Interface/EventCountdown`.
+- [x] Admin abuse global: las órdenes de `Admin/AdminWorld` y `Admin/AdminFun` a todos los
+      servidores con `MessagingService` (`Admin/AdminGlobal`), y el evento «Admin abuse» x10.
+- [x] Letrero de la meta de likes en la plaza con el contador en vivo (`Social/LikeGoal`,
+      `Menus/LikeSign`); el código de la meta no sirve hasta llegar.
+- [x] Cinta «Actualización en…» bajo la barra de hambre (`Interface/UpdateRibbon`) y ventana
+      NOVEDADES (`Menus/NewsWindow`, `Config/Updates`).
+- [x] Panel de admin rehecho por secciones (jugador, este servidor, todos, info) con buscador,
+      moderación, diversión, lista de servidores y registro.
+- [ ] Activar "Permitir solicitudes HTTP" en los ajustes del juego (el letrero lee los likes).
+- [ ] Probar las órdenes globales en el juego publicado con dos servidores.
 - [ ] Sección «Limitados» del índice.
 - [ ] Monstruo limitado nº 1 (variante a elegir por el usuario).
 

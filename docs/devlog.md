@@ -3967,3 +3967,34 @@ pescarlo y después sale como «Skeleton Fish · Legendary». Se le quitaron las
 pez globo).
 
 **Qué se rompió:** nada visto.
+
+## 2026-10-26 — Cinta de actualización, NOVEDADES, letrero de likes y panel de admin nuevo
+
+**Qué se hizo:**
+- Cinta dorada bajo la barra de hambre con la cuenta regresiva de la próxima actualización
+  (`Interface/UpdateRibbon`, `UpdateRibbonLook`): brillo cada 8 s, late las últimas 24 h y
+  dice «¡Nueva actualización!» 48 h después. Tocarla abre NOVEDADES.
+- Ventana NOVEDADES (`Menus/NewsWindow`) con las tarjetas de `Config/Updates`. Se abre sola una
+  vez por actualización (guardado v17, `newsSeenAt`, remote `NewsSeen`); un jugador nuevo no
+  ve la que ya estaba. El premio diario y el pack de inicio esperan a que no haya ventana
+  abierta (`Window.waitClosed`).
+- Letrero de la meta de likes junto al camino del spawn (`Menus/LikeSign`, con `PlazaSign`
+  sacado de `GroupSign`). El servidor lee los likes cada 5 min (`Social/LikeGoal`, por
+  roproxy) y solo publica el código al llegar; `Social/Codes` no lo acepta antes.
+- Panel de admin rehecho (`AdminPanel`, `AdminSections`, `AdminPagesMod`, `AdminLog`): columna
+  de secciones por alcance (JUGADOR, ESTE SERVIDOR, TODOS, INFO), franja de color que dice a
+  quién se aplica, buscador de jugadores, respuesta abajo y registro de la sesión.
+- Órdenes nuevas: anuncio filtrado, fuegos artificiales, lluvia de peces, monedas y giros a
+  todos (`Admin/AdminFun`); expulsar, banear, silenciar, congelar y reaparecer
+  (`Admin/AdminModeration`); evento con minutos, admin abuse x10 y terminar evento
+  (`AdminWorld`, `EventScheduler`); todo lo del servidor también en todos los servidores
+  (`Admin/AdminGlobal`, MessagingService) y la lista de servidores.
+
+**Probado en Studio:** la cinta en cuenta regresiva y en «¡Nueva actualización!»; NOVEDADES
+se abrió sola a los 3.5 s con una fecha de prueba y el servidor anotó la vista (no volvió a
+abrirse); el letrero con 37/50 y con la meta cumplida; `SKELETON` rechazado antes de la meta;
+anuncio, fuegos, admin abuse (+900 % suerte en el HUD), lluvia de peces, congelar, silenciar,
+anuncio global y lista de servidores por MessagingService.
+
+**Qué falta:** HttpEnabled está apagado en Studio (Rojo no puede prenderlo): sin él el letrero
+muestra «👍 ? / 50». El proxy respondió 403 desde la PC; desde Roblox se verá al publicar.
