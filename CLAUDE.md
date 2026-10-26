@@ -121,6 +121,11 @@ Documentos en `docs/`:
 - Una idea nueva (para este juego o un juego nuevo): skill `/nueva-idea`. Investigar, ver si es
   viable y proponer opciones → subagente `disenador` (no escribe código; decide el usuario).
 - Probar en Studio lo que se construyó (Play, dispositivos, consola) → subagente `tester`.
+- Lo visual (mapa, modelos, rig, animación, efectos, interfaz) lo producen `mapeador`,
+  `modelador`, `rigger`, `animador`, `vfx` y `artista-ui`, y **todo cambio visual pasa por
+  `director-arte` con capturas antes de cerrarse**. Para mejorar cómo se ve algo: `/pulido-visual`.
+- Cambios al guardado o a las compras → `guardian-datos`. La experiencia de un jugador nuevo →
+  `jugador`. Antes de publicar: `/revision-final`.
 - Diseño, escritura de código, arquitectura, Blender y diagnóstico de bugs complejos los hace el
   agente principal o los agentes de una ola (`docs/guia_crear_monstruo.md`, sección 12), en su
   worktree y sin commit; nunca `infra`.
