@@ -95,6 +95,7 @@ local Protocol = {
 		ClaimSpin = "ClaimSpin", -- cliente -> servidor: girar (el gratis si toca, si no uno guardado)
 		ChooseOutfit = "ElegirTraje", -- cliente -> servidor: (passKey) ponerse/quitarse ese traje
 		StarterSeen = "PackVisto", -- cliente -> servidor: se le abrió solo el pack de inicio
+		NewsSeen = "NovedadVista", -- cliente -> servidor: vio la ventana NOVEDADES (Config/Updates)
 		-- cliente -> servidor: (productKey: string, targetUserId: number). La próxima
 		-- compra de ese producto (en 2 min) es un regalo para ese jugador.
 		SetGift = "SetGift",
@@ -182,6 +183,7 @@ local Protocol = {
 		Share = "Aporte", -- fracción de la barra del monstruo actual que aportó (0..1)
 		StarterPack = "PackInicio", -- ya compró el pack de inicio
 		StarterSeenAt = "PackVistoEn", -- unix en que se le abrió solo el pack (0 = nunca)
+		NewsSeenAt = "NovedadVistaEn", -- `at` de la última actualización que vio en NOVEDADES
 		Quests = "Misiones", -- JSON con las misiones del día y su avance
 		Settings = "Settings", -- ajustes del jugador (JSON)
 		PassPrefix = "Pase_", -- Pase_<clave>: true si tiene ese pase de Robux

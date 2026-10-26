@@ -173,6 +173,7 @@ function StarterOffer.start(screen: ScreenGui)
 		end
 		scheduled = true
 		task.delay(DELAY_SECONDS, function()
+			Window.waitClosed()
 			if due() then
 				window.open()
 				seenRemote:FireServer()

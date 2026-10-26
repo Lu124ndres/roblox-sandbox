@@ -188,6 +188,7 @@ function DailyWindow.start(screen: ScreenGui)
 			task.wait(0.5)
 		end
 		task.wait(AUTO_OPEN_SECONDS)
+		Window.waitClosed() -- no le quita la pantalla a NOVEDADES ni a otra ventana
 		if available() then
 			window.open()
 		end

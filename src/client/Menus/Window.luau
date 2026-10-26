@@ -47,6 +47,14 @@ function Window.onAnyChange(listener: (window: Window, opened: boolean) -> ())
 	table.insert(changeListeners, listener)
 end
 
+-- Espera a que no haya ninguna ventana abierta (las que se abren solas no se pisan:
+-- abrir una cierra la que estaba).
+function Window.waitClosed()
+	while current do
+		task.wait(0.5)
+	end
+end
+
 Window.fit = WindowLayout.fit
 Window.share = WindowLayout.share
 
