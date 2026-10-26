@@ -1184,3 +1184,15 @@ con `unlocked = true`. Las órdenes de servidor del panel se mandan a todos por 
 AdminFun no dependen del jugador admin. **Costo:** depender de un proxy de terceros para un
 número que solo es decorativo; MessagingService tiene límites por minuto, suficientes para
 órdenes a mano.
+
+## 2026-10-26 — Compras para el servidor como crédito del comprador
+
+**Contexto:** elegir el siguiente monstruo o llenar la barra con Robux quedaba en una fila en
+memoria; si el servidor cerraba antes de aplicarlo, el jugador pagaba y no recibía nada.
+**Decisión:** cada compra se anota en el guardado de quien pagó (`serverCredits`) y se borra al
+aplicarse. Si el comprador sale con algo en fila, se quita de la fila y el crédito viaja con él:
+se aplica en el servidor donde vuelva a entrar. Al cerrar el servidor no se aplica nada (el
+guardado del cierre ya lleva el crédito). Un segundo pack de inicio se entrega igual porque
+Roblox no devuelve una compra sin entregar: la protección es no volver a ofrecerlo.
+**Costo:** si el comprador sale, los demás de ese servidor no ven su llenado; un crédito de un
+monstruo de temporada fuera de fecha espera a que vuelva.

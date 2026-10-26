@@ -4009,3 +4009,28 @@ la actualización perdió el sol y centra palabras y reloj como un solo bloque.
 
 **Probado en Studio:** todos + admin abuse = 5 activos, +1000 % suerte, x20 monedas y poder,
 pique x0.15; el HUD con x28.6 de monedas y la cinta centrada.
+
+## 2026-10-26 — Riesgos de políticas y compras (revisión de la guía)
+
+**Qué se hizo:**
+- `Monetization/RandomPolicy`: pregunta a PolicyService si al jugador se le pueden vender
+  premios al azar (atributo `AzarPagadoRestringido`; si falla, restringido). La ruleta esconde
+  la compra de giros y `Purchases.allowed` no abre esa compra a quien lo tenga.
+- El VIP dice su suerte con número («+20% suerte»).
+- El atajo del pack de inicio ya no tiene la cuenta de 24 h que volvía a empezar (urgencia
+  falsa, no permitida): dice «Una sola vez». Se quitó «¡Hoy … R$!» de la ventana.
+- El pack no se vuelve a ofrecer a quien lo compró; si igual llega un segundo pago, se entrega
+  (ya pagó) y queda en la consola.
+- Compras para el servidor (Choose*, Fill*) como crédito en el guardado del comprador
+  (`serverCredits`, versión 18, `Monetization/ServerCredits`) hasta que se aplican: si el
+  servidor cierra o el comprador sale antes, vuelven a la fila donde entre.
+- Las misiones cumplidas y sin reclamar del día anterior se pagan solas al cambiar el día.
+
+**Probado en Studio:** el atributo de la política llega; con la restricción los botones de
+comprar giros se esconden y vuelven al quitarla; el atajo dice «Una sola vez»; consola limpia.
+La entrega de compras no se pudo probar en Studio (no se puede llamar a ProcessReceipt desde
+fuera); la revisó `guardian-datos` en el código y se corrigieron sus dos hallazgos (no aplicar
+llenados al cerrar, que los duplicaba, y no descartar créditos por tope).
+
+**Ojo:** no cambiar `Config/Quests` el mismo día que se publica: el pago de las misiones de
+ayer rearma la lista de ayer con la configuración actual.
