@@ -3,8 +3,8 @@
 	AdminTarget
 
 	Arriba del panel admin: a quién se le aplican las órdenes de jugador. Una
-	tira con un botón por jugador del servidor (el tuyo primero, "Yo"); el
-	elegido se ve verde. Debajo, sus números en vivo (poder, monedas, kills,
+	casilla para buscar por nombre y una tira con un botón por jugador del
+	servidor que coincida (el tuyo primero, "Yo", siempre); el elegido se ve verde. Debajo, sus números en vivo (poder, monedas, kills,
 	renacimientos y peces en la canasta), leídos de sus atributos. Si el
 	elegido se va, vuelve a ti.
 ]]
@@ -14,6 +14,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local Style = require(script.Parent.Parent.Interface.Style)
 
 local ATTR = Protocol.PlayerAttributes
@@ -21,6 +22,7 @@ local CARDS = Style.PALETTE.Cards
 local CHIP_HEIGHT = 38
 local CHIP_WIDTH = 170
 local LABEL_WIDTH = 110
+local SEARCH_WIDTH = 190
 
 export type Target = {
 	height: number,
@@ -43,12 +45,37 @@ function AdminTarget.mount(parent: Instance): Target
 	title.TextXAlignment = Enum.TextXAlignment.Left
 	title.Size = UDim2.fromOffset(LABEL_WIDTH, CHIP_HEIGHT)
 
+	local search = Instance.new("TextBox")
+	search.Name = "Buscar"
+	search.PlaceholderText = "Buscar jugador"
+	search.Text = ""
+	search.ClearTextOnFocus = false
+	search.TextScaled = true
+	search.FontFace = UIConfig.Fonts.Title
+	search.BackgroundColor3 = Color3.fromRGB(245, 245, 250)
+	search.TextColor3 = Color3.fromRGB(20, 20, 30)
+	search.PlaceholderColor3 = Color3.fromRGB(150, 150, 165)
+	search.Position = UDim2.fromOffset(LABEL_WIDTH, 0)
+	search.Size = UDim2.fromOffset(SEARCH_WIDTH - 10, CHIP_HEIGHT)
+	local searchLimit = Instance.new("UITextSizeConstraint")
+	searchLimit.MaxTextSize = 22
+	searchLimit.Parent = search
+	local searchPad = Instance.new("UIPadding")
+	searchPad.PaddingLeft, searchPad.PaddingRight = UDim.new(0, 8), UDim.new(0, 8)
+	searchPad.PaddingTop, searchPad.PaddingBottom = UDim.new(0, 6), UDim.new(0, 6)
+	searchPad.Parent = search
+	local searchCorner = Instance.new("UICorner")
+	searchCorner.CornerRadius = UDim.new(0, 10)
+	searchCorner.Parent = search
+	Style.border(search, 2)
+	search.Parent = parent
+
 	local strip = Instance.new("ScrollingFrame")
 	strip.Name = "Jugadores"
 	strip.BackgroundTransparency = 1
 	strip.BorderSizePixel = 0
-	strip.Position = UDim2.fromOffset(LABEL_WIDTH, 0)
-	strip.Size = UDim2.new(1, -LABEL_WIDTH, 0, CHIP_HEIGHT + 8)
+	strip.Position = UDim2.fromOffset(LABEL_WIDTH + SEARCH_WIDTH, 0)
+	strip.Size = UDim2.new(1, -(LABEL_WIDTH + SEARCH_WIDTH), 0, CHIP_HEIGHT + 8)
 	strip.ScrollingDirection = Enum.ScrollingDirection.X
 	strip.AutomaticCanvasSize = Enum.AutomaticSize.X
 	strip.CanvasSize = UDim2.new()
@@ -94,7 +121,15 @@ function AdminTarget.mount(parent: Instance): Target
 				child:Destroy()
 			end
 		end
-		local list = Players:GetPlayers()
+		local query = string.lower(search.Text)
+		local list = {}
+		for _, player in Players:GetPlayers() do
+			local matches = string.find(string.lower(player.Name), query, 1, true)
+				or string.find(string.lower(player.DisplayName), query, 1, true)
+			if player == me or player == selected or matches then
+				table.insert(list, player)
+			end
+		end
 		table.sort(list, function(a, b)
 			if a == me or b == me then
 				return a == me
@@ -113,6 +148,9 @@ function AdminTarget.mount(parent: Instance): Target
 		end
 	end
 
+	search:GetPropertyChangedSignal("Text"):Connect(function()
+		rebuild()
+	end)
 	Players.PlayerAdded:Connect(rebuild)
 	Players.PlayerRemoving:Connect(function(player)
 		if player == selected then

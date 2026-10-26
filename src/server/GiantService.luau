@@ -146,7 +146,9 @@ local function advance(fraction: number, userId: number, food: number, capped: b
 		evolvingUntil = os.clock() + seconds
 		GiantPublish.set(ATTR.EvolvingUntil, Workspace:GetServerTimeNow() + seconds)
 	end
-	Contributions.add(userId, food)
+	if userId ~= 0 then
+		Contributions.add(userId, food)
+	end
 	Contributions.publish(totalFood)
 	GiantAnger.calm()
 	GiantPublish.progress(progress, progress >= 1 or GiantStages.stageFor(progress) > stageBefore)
@@ -171,11 +173,12 @@ function GiantService.feed(food: number, feeder: Player, count: number, fishId: 
 end
 
 -- Robux o ruleta: llena esa parte de la barra (false si no come; GiantFill espera).
-function GiantService.fill(fraction: number, buyer: Player): boolean
+-- buyer nil: el panel de administrador desde otro servidor (no se le anota a nadie).
+function GiantService.fill(fraction: number, buyer: Player?): boolean
 	if fraction <= 0 or not GiantService.isFeeding() then
 		return false
 	end
-	advance(fraction, buyer.UserId, fraction * totalFood, false)
+	advance(fraction, if buyer then buyer.UserId else 0, fraction * totalFood, false)
 	return true
 end
 

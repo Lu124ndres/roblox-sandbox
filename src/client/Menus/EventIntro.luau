@@ -73,7 +73,9 @@ local function show(screen: ScreenGui, kind: Events.EventDef)
 	fill.Color = ColorSequence.new(kind.color:Lerp(WHITE, 0.6), kind.color)
 	fill.Parent = title
 	local detail = Style.text(group, "Detalle", 32, WHITE, 3)
-	detail.Text = `{kind.text} · {Events.durationMinutes} min`
+	-- Los minutos reales: el panel admin puede lanzar uno más largo (o el admin abuse).
+	local left = math.round(ServerEvents.secondsLeft() / 60)
+	detail.Text = `{kind.text} · {if left > 0 then left else Events.durationMinutes} min`
 	detail.AnchorPoint = Vector2.new(0.5, 0)
 	detail.Position = UDim2.fromScale(0.5, 0.84)
 	detail.Size = UDim2.new(1, 0, 0, 34)

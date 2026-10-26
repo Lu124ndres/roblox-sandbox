@@ -108,7 +108,7 @@ function LikeSign.start()
 			footer.Text = "Canjéalo en Códigos"
 		else
 			title.Text = "META DE LIKES"
-			count.Text = if known then `👍 {likes} / {target}` else `👍 {target}`
+			count.Text = if known then `👍 {likes} / {target}` else `👍 ? / {target}`
 			fill.Parent.Visible = known
 			if known then
 				local ratio = math.clamp((likes :: number) / math.max(target, 1), 0, 1)

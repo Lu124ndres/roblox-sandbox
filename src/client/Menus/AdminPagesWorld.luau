@@ -2,10 +2,12 @@
 --[[
 	AdminPagesWorld
 
-	Pestañas del panel admin de moverse y del servidor (AdminPanel las arma):
+	Pestañas del panel admin de moverse y del servidor (AdminPanel las arma;
+	world y giants también van en la de todos los servidores):
 		moves   volar y sin colisión (solo tú, AdminMoves), velocidad, llevar a
 		        un lugar e ir con el jugador elegido / traerlo
-		world   la hora del cielo para todos, eventos y entrenamiento del servidor
+		world   la hora del cielo, eventos (y el admin abuse con sus minutos) y
+		        entrenamiento del servidor
 		giants  cada monstruo con un botón por etapa, la barra y el descanso
 ]]
 
@@ -60,7 +62,7 @@ local function fillMoves(page: Page)
 end
 
 local function fillWorld(page: Page)
-	page.section("Hora", "para todo el servidor")
+	page.section("Hora del cielo")
 	page.row("Cielo", {
 		{ text = "Día", name = "time", value = 8, color = CARDS.Yellow },
 		{ text = "Mediodía", name = "time", value = 12, color = CARDS.Yellow },
@@ -68,15 +70,27 @@ local function fillWorld(page: Page)
 		{ text = "Noche", name = "time", value = 0, color = CARDS.Purple },
 		{ text = "Ciclo normal", name = "time", value = "auto", color = CARDS.Green },
 	})
-	page.section("Servidor")
+	page.section("Eventos", "empiezan ya; los minutos de la casilla cambian su duración")
 	local events: { Button } = {}
 	for _, kind in Events.kinds do
-		table.insert(
-			events,
-			{ text = kind.name, name = "event", value = kind.id, color = CARDS.Pink }
-		)
+		if not kind.adminOnly then
+			table.insert(
+				events,
+				{ text = kind.name, name = "event", value = kind.id, color = CARDS.Pink }
+			)
+		end
 	end
 	page.row("Evento ya", events)
+	page.row("Admin abuse", {
+		{ text = "Minutos", name = "abuse", color = CARDS.Red },
+		{ text = "15 min", name = "abuse", value = 15, color = CARDS.Red },
+		{ text = "30 min", name = "abuse", value = 30, color = CARDS.Red },
+		{ text = "60 min", name = "abuse", value = 60, color = CARDS.Red },
+	}, "minutos")
+	page.row("Terminar", {
+		{ text = "Terminar evento", name = "stopEvent", value = 0, color = CARDS.Orange },
+	})
+	page.section("Entrenamiento")
 	local boosts: { Button } = {}
 	for level = 1, #Config.Monetization.serverBoost.robux do
 		table.insert(boosts, { text = `x{2 ^ level}`, name = "boost", value = level })

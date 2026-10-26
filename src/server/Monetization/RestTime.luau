@@ -18,9 +18,14 @@ local RestTime = {}
 local pending = 0
 
 function RestTime.add(buyer: Player): boolean
+	return RestTime.addAs(buyer.DisplayName)
+end
+
+-- Como add, a nombre de `name` (el panel de administrador, también desde otro servidor).
+function RestTime.addAs(name: string): boolean
 	local seconds = Config.Monetization.restTime.seconds
 	pending += seconds
-	Remotes.Notice:FireAllClients("restTime", buyer.DisplayName, seconds)
+	Remotes.Notice:FireAllClients("restTime", name, seconds)
 	return true
 end
 

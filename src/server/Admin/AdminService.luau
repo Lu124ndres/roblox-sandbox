@@ -16,6 +16,7 @@ local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local RateLimit = require(script.Parent.Parent.RateLimit)
 local Remotes = require(script.Parent.Parent.Remotes)
 local AdminCommands = require(script.Parent.AdminCommands)
+local AdminGlobal = require(script.Parent.AdminGlobal)
 local Admins = require(script.Parent.Admins)
 
 local AdminService = {}
@@ -35,7 +36,10 @@ local function onCommand(player: Player, name: unknown, value: unknown, targetId
 		text = "Ese jugador ya no está en el servidor"
 	else
 		local ok, result: any = pcall(AdminCommands.run, player, target, name, value)
-		text = if ok then tostring(result) else `Error: {result}`
+		-- Sin la ruta del script que traen los errores de assert («Modulo:63: »).
+		text = if ok
+			then tostring(result)
+			else `Error: {(string.gsub(tostring(result), "^.-:%d+: ", ""))}`
 		if target ~= player and AdminCommands.isPersonal(name) then
 			text = `{target.DisplayName}: {text}`
 		end
@@ -54,6 +58,7 @@ function AdminService.init()
 		mark(player)
 	end
 	Remotes.AdminCommand.OnServerEvent:Connect(RateLimit.wrap("AdminCommand", 10, 20, onCommand))
+	AdminGlobal.init()
 end
 
 return AdminService

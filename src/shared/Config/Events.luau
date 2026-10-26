@@ -14,6 +14,8 @@
 	Cada uno tiene su color y su ícono (Interface/Icons) para el anuncio y el
 	potenciador del HUD (BoostBadges); su cielo y sus efectos en el mundo están en client/Ambient
 	(EventSky, EventFx).
+	`adminOnly`: nunca sale al azar; solo lo lanza el panel de administrador
+	(el admin abuse de cada actualización, docs/roadmap.md).
 ]]
 
 export type EventDef = {
@@ -26,6 +28,7 @@ export type EventDef = {
 	biteDelay: number?,
 	coins: number?,
 	power: number?,
+	adminOnly: boolean?,
 }
 
 export type EventsConfig = {
@@ -71,6 +74,18 @@ local Events: EventsConfig = {
 			color = Color3.fromRGB(150, 110, 255),
 			icon = "crystal",
 			power = 2,
+		},
+		{
+			id = "AdminAbuse",
+			name = "¡ADMIN ABUSE!",
+			text = "x10 todo",
+			color = Color3.fromRGB(255, 70, 90),
+			icon = "crown",
+			luck = 9,
+			biteDelay = 0.3,
+			coins = 10,
+			power = 10,
+			adminOnly = true,
 		},
 	},
 }

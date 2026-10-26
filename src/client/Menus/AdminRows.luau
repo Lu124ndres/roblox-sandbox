@@ -2,11 +2,13 @@
 --[[
 	AdminRows
 
-	Páginas del panel admin: secciones con título y filas "nombre | botones".
-	Los botones van en una grilla de 4 columnas iguales que salta de renglón
-	sola, así nada se sale del panel y todos quedan del mismo tamaño. Una fila
-	puede tener una casilla para escribir un número (la usan los botones sin
-	valor propio). Los botones `confirm` piden un segundo toque ("¿Seguro?").
+	Páginas del panel admin: secciones con título (y una nota debajo) y filas
+	"nombre | botones". Los botones van en una grilla de 4 columnas iguales que
+	salta de renglón sola, así nada se sale del panel y todos quedan del mismo
+	tamaño. Una fila puede tener una casilla para escribir un número o un texto
+	(la usan los botones sin valor propio). Cada página tiene el color de su
+	alcance (jugador, este servidor, todos) para los botones sin color propio.
+	Los botones `confirm` piden un segundo toque ("¿Seguro?").
 	Los botones con `run` no mandan nada al servidor: hacen algo en este
 	cliente (volar, sin colisión) y su texto lo da `label` (se relee solo).
 ]]
@@ -36,13 +38,21 @@ export type Button = {
 export type Page = {
 	frame: ScrollingFrame,
 	section: (title: string, note: string?) -> (),
-	row: (title: string, buttons: { Button }, input: string?) -> (),
+	-- input: texto de ayuda de la casilla; asText: la casilla manda texto en vez de número.
+	row: (title: string, buttons: { Button }, input: string?, asText: boolean?) -> (),
 }
 
 local AdminRows = {}
 
 local function readNumber(box: TextBox?): number?
 	return if box then tonumber((string.gsub(box.Text, "[,%s]", ""))) else nil
+end
+
+local function readValue(box: TextBox?, asText: boolean?): any
+	if box and asText then
+		return box.Text
+	end
+	return readNumber(box)
 end
 
 local function inputCell(parent: Instance, hint: string): TextBox
@@ -72,7 +82,12 @@ local function inputCell(parent: Instance, hint: string): TextBox
 end
 
 -- `send(nombre, valor)` manda la orden (AdminPanel le agrega el jugador elegido).
-function AdminRows.page(parent: Instance, send: (name: string, value: any) -> ()): Page
+-- `color`: el de los botones sin color propio (el alcance de la página).
+function AdminRows.page(
+	parent: Instance,
+	send: (name: string, value: any) -> (),
+	color: Color3?
+): Page
 	local frame = Instance.new("ScrollingFrame")
 	frame.BackgroundTransparency = 1
 	frame.BorderSizePixel = 0
@@ -95,10 +110,18 @@ function AdminRows.page(parent: Instance, send: (name: string, value: any) -> ()
 		label.LayoutOrder = order
 		label.Size = UDim2.new(1, -16, 0, 32)
 		label.TextXAlignment = Enum.TextXAlignment.Left
-		label.Text = if note then `{title}  ·  {note}` else title
+		label.Text = title
+		if note then
+			order += 1
+			local hint = Style.text(frame, "Nota", 18, UIConfig.Colors.TextMuted, 1.5)
+			hint.LayoutOrder = order
+			hint.Size = UDim2.new(1, -16, 0, 20)
+			hint.TextXAlignment = Enum.TextXAlignment.Left
+			hint.Text = note
+		end
 	end
 
-	local function row(title: string, buttons: { Button }, input: string?)
+	local function row(title: string, buttons: { Button }, input: string?, asText: boolean?)
 		order += 1
 		local line = Instance.new("Frame")
 		line.Name = title
@@ -125,8 +148,8 @@ function AdminRows.page(parent: Instance, send: (name: string, value: any) -> ()
 		grid.Parent = cells
 		local box = if input then inputCell(cells, input) else nil
 		for index, spec in buttons do
-			local color = spec.color or CARDS.Blue
-			local button = Style.button(cells, spec.name, color, spec.text)
+			local tint = spec.color or color or CARDS.Blue
+			local button = Style.button(cells, spec.name, tint, spec.text)
 			button.LayoutOrder = index
 			local label = button:FindFirstChild("Texto") :: TextLabel
 			local run, read = spec.run, spec.label
@@ -161,7 +184,7 @@ function AdminRows.page(parent: Instance, send: (name: string, value: any) -> ()
 				label.Text = spec.text
 				local value = spec.value
 				if value == nil then
-					value = readNumber(box)
+					value = readValue(box, asText)
 				end
 				send(spec.name, value)
 			end)

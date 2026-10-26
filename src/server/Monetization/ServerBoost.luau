@@ -35,11 +35,16 @@ folder:SetAttribute(ATTR.BoughtBy, "")
 
 -- `bought`: el nivel que pagó (el producto ServerBoost<n>). Nunca baja el activo.
 function ServerBoost.add(buyer: Player, bought: number)
+	ServerBoost.addAs(buyer.DisplayName, bought)
+end
+
+-- Como add, a nombre de `name` (el panel de administrador, también desde otro servidor).
+function ServerBoost.addAs(name: string, bought: number)
 	local level = math.clamp(math.max(Perks.serverBoostLevel(), bought), 1, #BOOST.robux)
 	folder:SetAttribute(ATTR.TrainingLevel, level)
 	folder:SetAttribute(ATTR.TrainingUntil, Workspace:GetServerTimeNow() + BOOST.minutes * 60)
-	folder:SetAttribute(ATTR.BoughtBy, buyer.DisplayName)
-	Remotes.Notice:FireAllClients("boost", buyer.DisplayName, 2 ^ level)
+	folder:SetAttribute(ATTR.BoughtBy, name)
+	Remotes.Notice:FireAllClients("boost", name, 2 ^ level)
 end
 
 -- La carpeta va primero en Main: Perks la busca en ReplicatedStorage.

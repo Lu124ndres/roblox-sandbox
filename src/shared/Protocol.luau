@@ -28,6 +28,9 @@ export type NoticeKind =
 	| "daily" -- (day, coins) cobró la recompensa diaria
 	| "playtime" -- (index, text) cobró un regalo por tiempo jugado
 	| "admin" -- (text) resultado de una orden del panel de administrador
+	| "announce" -- (adminName, text) anuncio del panel admin para todo el servidor
+	| "fireworks" -- () fuegos artificiales del panel admin
+	| "adminServers" -- ({ ServerInfo }) servidores del juego (Admin/AdminGlobal)
 	| "event" -- (eventId) empezó un evento del servidor (Config/Events)
 	| "quest" -- (text, hint) cumplió una misión diaria (o el cofre): se reclama en MISIONES
 	| "questClaimed" -- (text, rewardText) reclamó una misión diaria (o el cofre)
