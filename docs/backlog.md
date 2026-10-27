@@ -254,9 +254,9 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
       reinicia el tiempo y lo duplica), llenar al monstruo 25/50/75 %, elegir el siguiente
       monstruo y estanques 2–10. `ProcessReceipt` anota cada PurchaseId en el guardado y
       solo confirma si se guardó (`Monetization/`, `Perks`, `RobuxShop`).
-- [ ] Crear el pase VIP y los 63 productos en el Creator Hub con los precios de
-      `Assets/Products.luau` y poner los IDs ahí y en `Assets.GamePasses` (los 21 nuevos:
-      GiftVIP, Rod2–10, Basket2–6, Boots2–6).
+- [x] Crear los 3 pases y los 70 productos en el Creator Hub con los precios de
+      `Assets/Products.luau` y poner los IDs ahí y en `Assets.GamePasses` (2026-10-19, desde
+      Cowork con el navegador).
 - [x] Rediseño estilo simulador: TIENDA (Robux) con banner y tarjetas con rayos, MEJORAS
       de madera con precio en monedas y en Robux, regalos a otro jugador y premio diario.
 - [ ] Probar un regalo real con 2 jugadores cuando existan los IDs (Studio: Prueba →
@@ -267,7 +267,10 @@ entrenamiento x2 en la guarida del volcán y la ruleta trae al siguiente (por ah
       piezas sueltas y con texturas nítidas (`tools/blender/marinero_v2*.py`).
 - [x] Rey del Mar y Dios del Volcán v2 desde cero (generador `traje_v2`, brillo real, capa,
       pisadas) y vitrinas nuevas con pedestal, aura y cartel (`Social/Showcase*`).
-- [ ] Página del juego: icono 512×512, 3+ miniaturas o video, nombre, descripción, género.
+- [x] Página del juego: íconos, miniaturas EN/ES con los gigantes v2 y descripción EN/ES
+      (`publicar/tienda/LEEME_publicar.md`, 2026-10-23). Falta subirlos al Creator Dashboard.
+- [x] Juego en inglés y español: `Lang` traduce la interfaz en vivo según el idioma de la
+      cuenta, con opción English en Ajustes (2026-10-23).
 - [ ] Cuestionario de madurez y cumplimiento (el cráter tiene calaveras y terror suave).
 - [ ] Ajustes del lugar: 50 jugadores, dispositivos, tipo de avatar, acceso a la API.
 - [ ] Publicar desde Studio con Rojo sincronizado; comprobar los sonidos en el juego

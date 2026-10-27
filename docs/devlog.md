@@ -2836,6 +2836,30 @@ real y elegir mejoras de `docs/rendimiento.md`.
 
 ---
 
+## 2026-10-19 — Productos y pases creados en el Creator Hub
+
+**Qué se hizo:**
+- Los 41 productos que faltaban (Poder 10, Monedas 10, Llenar 25/50/75, Pack de inicio, Elegir
+  Orca fantasma, Más descanso, Estanques 2–10, giros, regalos de pase, cañas 2–10, canastas 2–6
+  y botas 2–6) creados desde Cowork con Chrome, con los precios de `Config/Monetization.luau` y
+  precios administrados apagados como los 29 que ya existían. Total: 70 productos.
+- Pases: VIP (ya existía, ahora a 299 R$ y a la venta), Rey del Mar (149) y Dios del Volcán
+  (399) nuevos, con su descripción.
+- IDs en `Assets/Products.luau` (ninguno en 0) y `Assets.GamePasses`; corregido el ID de
+  `Power8` (estaba mal copiado: 3718640116 → 3718640196) y el precio del `PackInicio` en el
+  comentario (19 R$, el de `Monetization`).
+- `docs/productos.md` con todos los IDs; tarea marcada en el backlog.
+- Íconos: el usuario eligió los v4 pintados a mano (`assets/ui/iconos/v4/`) en vez de los
+  compuestos de `assets/ui/productos/`. Roblox respondía 504 al guardar imágenes; quedaron con
+  ícono los que se indican abajo y el resto se reintenta.
+
+**Pendiente:** en el Creator Hub hay un pase suelto «Poder 1 (x2)» (2037380432) creado por
+error en una sesión anterior; no se vende y se puede archivar a mano.
+
+**Qué se rompió:** nada; solo cambian IDs y documentación.
+
+---
+
 ## 2026-10-19 — Zorro de agua en la ruleta y ola 4 integrada
 
 **Qué se hizo:**
@@ -3328,6 +3352,84 @@ PC 720p igual que antes (sin velo, aviso flotante, columnas en su lugar); sin er
 lugar (1.25 × Pescar, tope 36 % del alto). En teléfonos bajos la columna derecha queda chica
 (botones de 36 pt, 7 mm): si se quiere más grande, habría que sacar algo de ella.
 
+## 2026-10-21 (1) — Cámara más lejos en móvil y placa del cartel más grande
+
+Pedido del usuario: en el teléfono el cartel sobre la cabeza se veía encimado y la placa de
+insignias chica.
+- **Cámara al aparecer** (`Interface/StartZoom`, solo táctil): arranca a 20 studs en vez de los
+  ~12.5 de Roblox. Sube medio segundo el `CameraMinZoomDistance` del jugador y lo devuelve, así
+  se puede volver a acercar con los dedos. En PC no cambia nada.
+- **Placa de insignias ×1.25** (`Overhead`, `OverheadBadges`): el cartel crece hacia arriba
+  (2.7 → 2.96 studs); título y nombre quedan del mismo tamaño y a la misma altura.
+
+**Probado en Studio (Play, táctil):** la cámara apareció a 20 studs, el mínimo volvió a 0.5 y el
+cartel se ve sobre la cabeza con la placa más grande; sin errores.
+
+## 2026-10-21 (2) — Potenciadores con ícono y porcentaje
+
+Pedido del usuario: en vez del aviso "Premium: x1.2 poder y monedas" y la placa "Amigos +20%",
+solo el ícono y el porcentaje, como en su referencia.
+- **`Interface/BoostBadges`** (reemplaza `FriendBoostLabel`): Premium, Evento y Amigos, cada uno
+  con su ícono y "+N%" debajo, sin placa; siempre visibles (blanco en +0%, verde si dan algo).
+  El de Evento toma el ícono del evento activo (rayo si no hay). Tocar Amigos invita como antes;
+  tocar Premium ofrece Premium a quien no lo tiene.
+- PC abajo a la izquierda; táctil abajo a la derecha, encima de Saltar (opción del usuario), y
+  la columna derecha lo esquiva. Con una ventana abierta en táctil se oculta (`HudFocus`).
+- Se quitó el aviso de Premium al entrar. El cartel de eventos de la columna derecha se queda.
+
+**Probado en Studio (simulador de teléfono + Play):** fila sobre Saltar sin encimarse con la
+columna; Premium +20%, Amigos +0%, y con Lluvia de monedas puesta desde el servidor el Evento
+pasó a la moneda con +100%; sin errores. **Falta:** verlo en PC (abajo a la izquierda).
+
+## 2026-10-21 (3) — HUD reacomodado y pack de inicio más chico
+
+Pedidos del usuario:
+- **Potenciadores** (`BoostBadges`) siempre abajo a la izquierda, también en táctil (detrás del
+  joystick); ahí no reciben toques, son solo para ver.
+- **Botones de arriba** (`TopBar`): en táctil, una sola fila y más chicos (7.5 % del alto, entre
+  28 y 40; antes dos filas de 38–50).
+- **Índice**: sale de arriba y pasa a una placa ancha arriba de la columna derecha
+  (`HudButtons.wide`), donde estaba el cartel de "Próximo evento", que se quitó (opción del
+  usuario). El anuncio grande al empezar un evento (`EventIntro`) sigue; lo arranca Main.
+- **Atajos x2 Poder / Monedas** (`QuickBuys`): salen de la columna y flotan bajo los botones de
+  arriba, sin casilla, de 100 (antes 88), con rayos dorados que giran detrás y un vaivén
+  desfasado entre los dos. La columna derecha empieza debajo.
+- **Pack de inicio** (`StarterOffer`): se abre 1 minuto después de terminar el tutorial (o de
+  entrar, si ya estaba terminado; antes a los 150 s de cada partida) y ocupa el 70 % de lo que
+  ocupan las otras ventanas (`Window.setShrink`).
+- `alertDot` y `press` pasan a `Menus/HudButtonParts` (HudButtons pasaba de 200 líneas).
+
+**Probado en Studio (simulador de teléfono + Play):** potenciadores abajo a la izquierda bajo el
+joystick; barra de arriba en una fila; ÍNDICE arriba de Mejoras/Tienda; x2 flotando bajo la
+barra sin encimarse; el pack mide 326×213 en una pantalla de 749×323 y se abrió solo a ~60 s de
+cargar con el tutorial hecho (4/4); sin errores. **Falta:** probar el pack con una cuenta nueva
+(que se abra 1 minuto después del último paso del tutorial).
+
+## 2026-10-21 (4) — Menú a la izquierda y atajo del pack con cuenta regresiva
+
+Pedidos del usuario:
+- **Columnas intercambiadas**: el menú (Índice, Mejoras, Tienda, Misiones, Renacer) va a la
+  izquierda, un poco más arriba del centro (`Columns.MENU_LIFT`), y las estadísticas a la derecha,
+  debajo de los atajos x2. `Layout.left/right` pasan a `Layout.stats/menu` (y `RIGHT_WIDTH` a
+  `MENU_WIDTH`): el nombre dice qué tiene, no de qué lado está. La tarjeta de captura en PC va
+  debajo del menú.
+- **Atajos x2** un poco más abajo (18 px bajo la barra). Su dibujo flotante pasa a
+  `Interface/FloatShortcut`, que comparten con el del pack.
+- **Pack de inicio**:
+  - Más centrado: las ventanas achicadas suben medio título, así queda centrado el panel.
+  - Se abre solo **una vez en la vida del jugador**: el cliente avisa con `PackVisto` y el
+    servidor guarda la hora (`starterSeenAt`, guardado v14, atributo `PackVistoEn`;
+    `Monetization/StarterSeen`). Sin argumentos, una sola vez, con el tutorial hecho y sin el
+    pack comprado.
+  - Desde ahí, su atajo flotante arriba del menú (`Menus/StarterShortcut`), con el precio y una
+    cuenta de 24 h (`Config.Monetization.starterPack.timerHours`) que vuelve a empezar al
+    llegar a cero (opción del usuario: solo da urgencia). Se va al comprarlo.
+
+**Probado en Studio (simulador de teléfono + Play):** columnas cambiadas de lado sin encimarse;
+el pack se abrió solo a ~54 s, el servidor guardó la hora y apareció el atajo con 23:59:48; al
+volver a entrar no se abrió solo en 75 s y la cuenta siguió (23:57:12); sin errores. Auditoría
+de `PackVisto` (remote-auditor): sin problemas.
+
 ## 2026-10-21 (5) — Calendario del diario y caña suprema en la ruleta
 
 **Qué se hizo (pedido del usuario):**
@@ -3763,6 +3865,16 @@ fila creciera, la columna del menú (que se ajusta a la pantalla) achicaría tod
 Los atajos de Poder y Monedas no cambian. **Probado en Studio (simulador de teléfono):**
 capturas antes y después; los botones de la columna quedan del mismo tamaño.
 
+## 2026-10-23 — Íconos, miniaturas y descripción con los gigantes v2
+
+**Qué se hizo (pedido del usuario: «íconos para mi juego, más thumbnails y una descripción»):**
+las miniaturas de la página mostraban los modelos viejos. `tools/blender/foto_tienda.py` saca
+cada gigante v2 con fondo transparente y `publicar/tienda/fuentes/piezas_v2.py` arma 3 íconos y
+4 miniaturas en inglés y español (`publicar/tienda/v2/`) con el mapa v9 y la fuente del juego.
+En Canva salió una miniatura IA (dragón en lava); las demás quedaron frenadas por la cuota. La
+descripción EN/ES de `LEEME_publicar.md` ahora nombra los 4 gigantes, los 8 estanques y los
+eventos de servidor, y queda debajo de los 1000 caracteres.
+
 ## 2026-10-23 — Una moneda por cada pez que come el gigante
 
 **Qué se hizo (pedido del usuario: «que cada que alimente con un pez a la orca muestre monedas
@@ -3919,6 +4031,119 @@ y se esconde 280 studs más abajo, por debajo también del futuro lago de -250 d
 
 **Probado en Studio:** `fill 1` → el volcán se vacía y el santuario sube de -300 a -20 con
 sus cuatro mallas (la lava en Neon); captura desde el borde del cráter.
+
+## 2026-10-23 — El juego en inglés y español, y portadas para la página
+
+**Qué se hizo (pedido del usuario: «que les salga en inglés a los de inglés y en español a los
+de español», «hazlo tú todo y déjalo impecable»):**
+- `shared/Lang` con unas 650 entradas (interfaz, peces, equipo, títulos, misiones, carga) y
+  `client/Lang/AutoTranslate`, que traduce en vivo.
+- Opción **English** en Ajustes, que se guarda con la partida.
+- Los avisos de expulsión del servidor salen en el idioma del jugador.
+- Los SoundGroup pasaron a `Settings/SoundGroups` para que `ClientSettings` siga debajo de 200
+  líneas.
+- Portadas IA en Canva con texto «FEED THE GIANTS» y «ALIMENTA A LOS GIGANTES», más 7 sin texto
+  con la moneda v4 (`publicar/tienda/LEEME_publicar.md`).
+
+**Probado en Studio (iPhone XR e iPhone 7):**
+- Pantalla de carga, HUD, Ajustes, carteles de estanques y avisos de interacción, en inglés.
+- Al cambiar la opción, todo pasa a inglés al instante y vuelve al español con los textos
+  originales; al volver a entrar, arranca en el idioma guardado.
+- El recorrido por todos los textos de la interfaz dejó solo el panel de admin en español (a
+  propósito: lo ve solo el dueño).
+- Las plantillas de avisos (pesca rara, códigos, misiones, ruleta, regalos) se probaron con
+  frases armadas.
+
+
+## 2026-10-23 — Revisión en teléfono y tableta, en inglés
+
+**Qué se hizo (pedido del usuario):** se recorrieron todas las ventanas en el simulador de
+iPhone 7 y de iPad 9.ª gen. con el juego en inglés.
+- Traducciones que faltaban: «PERSONAJES», «Estanques», «Pases» y la línea de premio del Índice.
+- Arreglo en `Lang`: «EXTRA · Ayuda a llenar 1 monstruo» quedaba a medias. Cuando varias
+  plantillas encajan, ahora gana la que deja menos pedazos sin traducir.
+- Mejoras abría la grilla en los niveles 26 a 35: al abrir, la grilla todavía no sabía cuántas
+  columnas tenía. Ahora espera un cuadro antes de desplazarse.
+- El pack de inicio decía «Hoy 19 R$» y el botón cobraba 12: el texto ahora usa el precio real
+  de Roblox, igual que el botón.
+
+**Probado en Studio:** todas las ventanas entran sin texto cortado en los dos tamaños. El
+recorrido de textos no dejó nada en español fuera del panel de admin. Después se arreglaron los
+detalles: en Mejoras, la última columna sobresalía de la grilla (5 tarjetas de 124 no entraban
+en unos 665 de ancho; ahora son de 120 y la grilla se limita a 5 columnas) y la cinta
+«¡SIGUIENTE!» se metió hacia adentro. El sello de descuento del pack también usa el precio real
+(-87 % con 12 R$). Faltaba traducir el contador del impulso («x2 Entrenamiento · 4:59»).
+
+
+## 2026-10-23 — Revisión de los multiplicadores
+
+**Qué se hizo (pedido del usuario):** se revisó cómo se combinan todos los multiplicadores.
+- Cómo funcionan: el poder y las monedas son el producto de todo lo que aplica (mejoras
+  x2^nivel, entrenamiento del servidor x2^nivel, x2 personal, Premium, amigos, renacimientos,
+  racha del diario, pases, evento). Las suertes se suman.
+- El x2 de poder personal (códigos, misiones, regalos, ruleta, invitaciones, pack de inicio) y
+  el x2 de monedas de la ruleta suman tiempo si se reclaman con uno activo: siguen en x2. El
+  usuario decidió mantenerlo así, pero no había forma de verlo. Ahora tienen insignias con su
+  ícono abajo a la izquierda, junto a las demás, con «x2» y el tiempo que queda; solo se ven
+  mientras duran (`Interface/TimedBadges`).
+- Arreglo en el HUD: el multiplicador de monedas no bajaba cuando vencía el x2 de la ruleta o
+  un evento (solo se recalculaba al cambiar un atributo). Ahora los dos se revisan cada segundo.
+- El comentario de `ServerBoost` decía que cada compra subía un nivel; desde que se entrega el
+  nivel pagado, no es así.
+
+**Probado en Studio:** con 15 min de x2 poder y 1 h 2 min de x2 monedas se ven las dos
+insignias con su reloj; al vencer desaparecen y el HUD baja de x4.8 a x2.4 (poder) y de x2.4 a
+x1.2 (monedas) sin que cambie ningún atributo.
+- Después (pedido del usuario): las ventajas de un pase con traje (Rey del Mar, Dios del Volcán)
+  solo valen con ese traje puesto; antes, con los dos pases valía lo mejor de cada uno aunque
+  fuera de marinero. Quién lleva qué traje sale de `shared/EquippedOutfit`, que usan `Perks` y
+  `Social/Outfits`, así lo que se ve y lo que da no pueden diferir. Probado en Studio: con Rey
+  pesca x2, fuerza x2, alimenta x2 y x2 kills; con Dios pesca x5 de un toque, alimenta x4 y x4
+  kills; de marinero, nada.
+
+
+## 2026-10-23 — Video de la página del juego (como `referencias/Ejemplo.mp4`)
+
+**Qué se hizo (pedido del usuario: «el video para el juego, que no abrume, atractivo»):** se
+rehízo el director del tráiler (`tools/trailer/`) con la estructura del video de referencia.
+- **Guion de 48 s:** pesca → canasta → puente → alimentar → entrenar → MEJORAS → amigos → el
+  Zorro de Agua evoluciona 1→4 → título sobre el gigante ya grande. Seis frases y el título
+  (antes eran diez con fundidos a negro); entre frase y frase se ve solo el juego.
+- **Frases** (`Textos.luau`): Luckiest Guy blanca con borde oscuro, entran palabra por palabra
+  con rebote, se van solas a los 2.4 s. El título va en dorado, abajo, sin corte de cámara.
+- **Cortes secos:** el cliente mueve al jugador en el mismo cuadro del cambio de escena.
+- **Sin HUD ni carteles 3D** salvo en MEJORAS (aparece cuando la ventana ya se abrió).
+- **Amigos:** los crea el servidor con `HumanoidDescription` (el cliente no puede) antes del corte.
+- **Guardado real en Studio:** el director copia los datos del jugador al empezar y los devuelve
+  al terminar; en la versión en inglés pone la interfaz en inglés y también la devuelve.
+- `grabar.py` lee la captura una sola vez (antes hacía ~1000 búsquedas con ffmpeg) y
+  `frente.ps1` trae Studio al frente para grabar con `gdigrab`.
+
+**Salida:** `renders/trailer/video_es.mp4` y `video_en.mp4` (1920x1080, 30 fps, sin audio, ~48 s).
+No se suben al repo. Probado: ocho tomas revisadas cuadro a cuadro; sin errores en el Output;
+datos del jugador restaurados al final de cada toma; director quitado de Studio.
+
+
+## 2026-10-24 — Prueba con bots, banquetes, avisos de metas, grupo y contador de eventos
+
+**Qué se hizo (pedidos del usuario antes de publicar):**
+- **Bots de prueba** (`tools/bots/`): juegan solos por los remotes (pescan, alimentan, siguen el
+  tutorial, entrenan y compran). Prueba con 8 clientes: barra compartida, los 8 con su banquete
+  al llenarse, varios en el mismo estanque, tutorial completo; servidor a 60 fps sin errores.
+- **Arena del Minotauro** (`Ambient/SandTerrain`): con el cráter en z = 722 las regiones de
+  vóxeles quedaban fuera de la cuadrícula de 4 y no se ponía el desierto; el origen se alinea.
+- **"Kill" → "Banquete"** en todo texto visible (tabla, HUD, carteles, pases, insignia, consejos).
+  Los nombres internos (save.kills, atributo Kills) no cambian.
+- **Siguiente meta:** sin panel; globo en MEJORAS / RENACER ("!" si ya puede, % desde el 75 %) con
+  el texto al pasar el mouse o tocar el globo (`Menus/GoalBadge`).
+- **Grupo 486234765:** el regalo del letrero da +10 % de suerte y +10 % de poder
+  (`Perks.groupPowerMultiplier`). Arreglo: quien se unía a mitad de partida no podía reclamar
+  (IsInGroupAsync guarda la respuesta; ahora se consulta también GetGroupsAsync).
+- **Contador del siguiente evento** abajo a la derecha (`Interface/EventCountdown`).
+
+**Probado en Studio:** globo "!" en MEJORAS con el texto de la caña, contador "Evento en 3:31" y
+"¡Pesca dorada! · 2:50" con evento activo, columna "Banquetes" en la tabla, sin errores en el Output.
+**Falta:** reclamar el regalo del grupo con una cuenta real (pide 15 min en partida).
 
 
 ## 2026-10-25 — Origen de anuncio en el embudo de inicio

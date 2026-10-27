@@ -798,6 +798,20 @@ zigzag cuando el tramo derecho le mostraría la cola a la puerta, y la E4 (287 s
 en el centro del lago: gira en el lugar y no camina.
 
 
+## 2026-10-18 — El alto del monstruo sale de la barra, con tope por etapa y sin encoger
+
+**Contexto:** el usuario quería que el monstruo creciera al alimentarlo, no solo al evolucionar.
+**Decisión:** `GiantStages.heightAt` interpola en proporción (geométrica: cada pez lo agranda el
+mismo tanto por ciento, parejo de cría y de gigante) desde el alto de la etapa hasta el 85 % del
+camino a la siguiente. El cliente (`GiantBody.grow`) le pasa la etapa que se ve: hasta que la
+evolución cambia el modelo no pasa de ese tope, así el último estirón llega con la forma nueva y
+la evolución sigue siendo un momento. **Lo no obvio:**
+- El cuerpo apunta al máximo entre lo que pide la barra y lo que ya alcanzó: si la barra baja
+  por el enojo no encoge.
+- Quien deduzca la etapa del alto tiene que tomar la etapa alcanzada (`altura >= alto de la
+  etapa`), no la más cercana: al 85 % del camino el alto ya queda más cerca de la siguiente.
+- El servidor no usa el alto; sigue decidiendo por etapa.
+
 ## 2026-10-19 — Un guardado más nuevo o corrupto no se toca, y la expulsión es el aviso
 
 **Contexto:** revisión del guardado antes de publicar. **Decisión:** `SaveStore.acquire` decide
@@ -1156,6 +1170,27 @@ para el generador). Las mallas no chocan: se camina sobre el `Piso` de primitiva
 tapa por 0.15 studs, y el `Borde` invisible de siempre; así `GuaridaSube` sigue midiendo con el
 `Piso`. Al flotar ya no llena el pozo de pared a pared: el radio baja a 100 y todo lo que cuelga
 queda dentro de la pared del lago a esa altura.
+
+## 2026-10-23 — El inglés se traduce en vivo sobre la interfaz en español
+
+**Contexto:** el juego estaba escrito solo en español (unos 900 textos en más de 60 archivos) y
+casi la mitad del público de Roblox juega en inglés. Reescribir cada texto como clave chocaba con
+las otras sesiones que tocan esos archivos. **Decisión:** los módulos siguen escribiendo en
+español y `client/Lang/AutoTranslate` cambia cada texto al inglés apenas se escribe (PlayerGui,
+carteles del mundo y ProximityPrompt), con el diccionario de `shared/Lang/Dict`. Las plantillas
+con `{}` cubren los textos con números y nombres, y lo capturado se traduce también. No se usó
+la LocalizationTable de Roblox: no admite plantillas, y con el idioma de origen en inglés en la
+página no traduciría para los jugadores en inglés. El idioma sale de la cuenta (`LocaleId`
+empieza con "es" → español) y se puede cambiar en Ajustes (`english`/`langChosen`, que se
+guardan). **Costo:** un texto nuevo sin entrada se ve en español; `tools/i18n/extraer_textos.py`
+lista los que faltan, y en Studio `AutoTranslate.missing` junta los que aparecen sin traducir.
+
+
+## 2026-10-23 — Las ventajas de un traje solo valen con él puesto
+
+Decidido por el usuario. Con los dos pases de traje ya no se toma lo mejor de cada uno: cuenta
+solo el traje que se ve (`shared/EquippedOutfit`, el mismo cálculo que usa `Social/Outfits`
+para vestir). De marinero no hay ventajas de traje. El VIP no es traje y siempre vale.
 
 ## 2026-10-26 — Una actualización cada sábado a las 9:00 (UTC-6), por fases
 
