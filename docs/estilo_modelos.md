@@ -85,7 +85,7 @@ Valores aprobados el 2026-10-16. Esta sección es la única referencia de topolo
 ### Escala
 
 Alto por etapa en veces el alto del jugador (5.5 studs; `stageHeightsInPlayers` y
-`playerHeightStuds` de `Config/Giants.luau`, comprobado el 2026-10-16). **Es global:**
+`playerHeightStuds` de `Config/Giants.luau`, comprobado el 2026-10-26). **Es global:**
 la misma tabla vale para los cinco gigantes (Orca, Minotauro, Dragón marino, Zorro de agua y
 Orca fantasma), no por monstruo:
 
@@ -93,8 +93,8 @@ Orca fantasma), no por monstruo:
 |---|---|---|---|
 | E1 | 3 | 16.5 | 3.1 |
 | E2 | 8 | 44 | 8.3 |
-| E3 | 15 | 82.5 | 15.5 |
-| E4 | 30 | 165 | 31.0 |
+| E3 | 9.75 | 53.6 | 10.1 |
+| E4 | 19.5 | 107.3 | 20.2 |
 
 - **Escala única de exportación: 5.32 studs por BU**, la misma para las cuatro etapas,
   aplicada una sola vez y con las transformaciones aplicadas (escala y rotación).
@@ -110,6 +110,7 @@ Orca fantasma), no por monstruo:
 | E2 | 0.3 | 28 | 8.4 | 44.7 (1.6 % más que la tabla: tiene que ser un número entero de módulos) |
 | E3 | 0.5 | 31 | 15.5 | 82.5 |
 | E4 | 1.0 | 31 | 31.0 | 165 |
+- Las alturas de modelado de arriba (E3 15.5 BU, E4 31.0 BU) son las del Blender de cuando la tabla era 3/8/15/30; en el juego `GiantBody` reescala cada etapa a la tabla de Escala (E3 53.6 y E4 107.3 studs). Fuente: `stageHeightsInPlayers` en `Config/Giants.luau` (al 2026-10-26).
 - La escala usada se registra en `docs/import_minotauro_v2.md`.
 
 ### Topología

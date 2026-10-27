@@ -329,7 +329,7 @@ mismo sin mandar nada.
 ### 5.1 Monstruos (gigantes)
 
 Definidos en `Config/Giants.luau` (`chain`). Tamaño por etapa: `stageHeightsInPlayers`
-{3, 8, 15, 30} × 5.5 studs = **16.5, 44, 82.5 y 165 studs**.
+{3, 8, 9.75, 19.5} × 5.5 studs = **16.5, 44, 53.6 y 107.3 studs**.
 
 | Id | Mult. | Comida mín. | Min. objetivo | Ruleta | Hábitat | Modelos |
 |---|---|---|---|---|---|---|
@@ -619,7 +619,7 @@ Todas con detalle en `docs/decisiones.md`.
 | Animación por código (`Bone.Transform`, resortes), sin keyframes | Sin assets de animación que subir; todo sincronizado con la hora del servidor |
 | Sincronía con `GetServerTimeNow()` + hash sin estado | Todos ven lo mismo sin mandar nada por red |
 | El gigante vive en un cráter aparte | Separa la pesca del alimentar y le da un lugar propio a cada hábitat |
-| Crecimiento por etapas en múltiplos del alto de un jugador, y continuo con la barra | Escala legible (3×, 8×, 15×, 30×); se ve crecer con cada pez |
+| Crecimiento por etapas en múltiplos del alto de un jugador, y continuo con la barra | Escala legible (3×, 8×, 9.75×, 19.5×); se ve crecer con cada pez |
 | La barra se dimensiona con los jugadores presentes (`GiantFood`, `FoodResize`) y sin tope por persona | Tarda lo mismo con 1 novato que con 40 jugadores fuertes, sin frenar los peces |
 | Guardado con bloqueo de sesión propio | Evita duplicar o pisar datos al cambiar de servidor |
 | Estanques solo con kills (o Robux) | Las kills no se pierden al renacer: un estanque abierto queda abierto |

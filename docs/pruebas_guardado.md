@@ -89,7 +89,7 @@ de verdad las llamadas al DataStore. Las compras en Studio son de prueba (no cob
 
 ## 7. Migración desde versiones viejas del esquema
 
-`SaveSchema.VERSION` es 18. Un guardado viejo tiene que cargar con todo lo que tenía y los
+`SaveSchema.VERSION` es 18 (al 2026-10-26; el número vigente se lee en `src/server/Save/SaveSchema.luau`). Un guardado viejo tiene que cargar con todo lo que tenía y los
 campos nuevos en cero. Hacerlo con **la cuenta de prueba**, nunca con una cuenta con datos
 reales que importen.
 

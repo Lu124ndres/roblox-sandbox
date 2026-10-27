@@ -19,7 +19,7 @@ de Studio o de Blender en el paso 0 del plan (`docs/plan_minotauro_v2.md`).
 
 ### Etapas y tamaños en el juego
 
-`Config/Giants.luau`: `playerHeightStuds = 5.5`, `stageHeightsInPlayers = { 3, 8, 15, 30 }`,
+`Config/Giants.luau`: `playerHeightStuds = 5.5`, `stageHeightsInPlayers = { 3, 8, 9.75, 19.5 }`,
 `stageThresholds = { 0, 0.25, 0.5, 0.75 }`. `GiantBody` escala cada modelo con
 `Model:ScaleTo` al alto que pide la etapa, así que el tamaño real del modelo importado no
 importa.
@@ -28,8 +28,8 @@ importa.
 |---|---|---|---|---|
 | E1 | `MinotauroE1` | becerro chibi | 0 % de la barra | 3 jugadores = 16.5 studs |
 | E2 | `MinotauroE2` | joven, tirante de cuero | 25 % | 8 jugadores = 44 studs |
-| E3 | `MinotauroE3` | adulto, hombrera con púas, puntas de oro | 50 % | 15 jugadores = 82.5 studs |
-| E4 | `MinotauroE4` | forma final, pelaje negro con grietas de lava | 75 % | 30 jugadores = 165 studs |
+| E3 | `MinotauroE3` | adulto, hombrera con púas, puntas de oro | 50 % | 9.75 jugadores = 53.6 studs |
+| E4 | `MinotauroE4` | forma final, pelaje negro con grietas de lava | 75 % | 19.5 jugadores = 107.3 studs |
 
 Otros datos del gigante en `Config/Giants.luau`: `id = "Minotauro"`, `modelBase = "Minotauro"`,
 `multiplier = 4`, `food = 600` (mínimo), `targetMinutes = 10`, `rouletteWeight = 30`,

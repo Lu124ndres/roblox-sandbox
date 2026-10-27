@@ -58,7 +58,7 @@ Los llamados largos por el MCP se cortan a los 60 s aunque Blender siga trabajan
 renders y exportaciones se usa `bpy.app.timers.register` y se espera el archivo.
 
 En el juego, cada etapa es un Model `<modelBase>E<n>` en ServerStorage (ver
-`GiantTemplates`); su tamaño real no importa: `GiantBody` lo escala a 3, 8, 15 y 30
+`GiantTemplates`); su tamaño real no importa: `GiantBody` lo escala a 3, 8, 9.75 y 19.5
 veces el alto de un jugador.
 
 **Orientación:** el modelo tiene que llegar a Studio parado (Y hacia arriba). Desde

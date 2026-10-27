@@ -1,14 +1,14 @@
-# Assets visuales (ForgeGUI)
+# Assets visuales
 
 Seguimiento de cada imagen generada para el juego: de dónde salió, dónde se usa y
 en qué estado está.
 
 ## Flujo
 
-1. Generar el PNG en ForgeGUI con el prompt registrado en la tabla.
+1. Producir el PNG (Canva, PIL o Blender, según la pieza; ForgeGUI nunca se usó) con el prompt o el script registrado en la tabla.
 2. Guardar el archivo fuente en `assets/textures/`.
 3. Subirlo en Studio: **Asset Manager** → **Images** → **Import**.
-4. Copiar el ID resultante a `src/shared/Assets.luau` (sección `UI` o `Textures`).
+4. Copiar el ID resultante a `src/shared/Assets/` (`init.luau` sección `UI`, o `Textures.luau`).
 5. Actualizar el estado en la tabla.
 
 Mientras un asset no exista, su entrada en `Assets.luau` queda como
@@ -22,7 +22,7 @@ Mientras un asset no exista, su entrada en `Assets.luau` queda como
 - Máximo 1024x1024.
 - Generar kits completos de una pasada en lugar de piezas sueltas, para mantener
   consistencia de estilo.
-- ForgeGUI produce imagen estática. Cualquier movimiento se hace por código.
+- Las piezas son imagen estática. Cualquier movimiento se hace por código.
 
 ## Estados
 
@@ -131,7 +131,7 @@ tablas de media de Canva de cada ícono quedan en el devlog del 2026-10-17 (17).
 
 | Hoja | Archivo | `Assets.UI` | Celdas (por filas) |
 |---|---|---|---|
-| 1 (HUD) | `v4/iconos_v4_hud.png` | IconSheet = 135004623117532 | moneda, poder, canasta con peces, **monstruo alimentado** (reemplaza la calavera de "monstruos llenados"), canasta, cofre, regalo, engranaje, pez, boleto, amigos, grupo, colmillo, cuenco de peces (insignia `fed`) |
+| 1 (HUD) | `v4/iconos_v4_hud.png` | IconSheet = 110280301406648 (código `Assets/init.luau`, 2026-10-26) | moneda, poder, canasta con peces, **monstruo alimentado** (reemplaza la calavera de "monstruos llenados"), canasta, cofre, regalo, engranaje, pez, boleto, amigos, grupo, colmillo, cuenco de peces (insignia `fed`) |
 | 2 | `v4/iconos_v4_hoja2.png` | IconSheet2 = 97933580602007 → 89496859008486 | caña, botas, corona, estanque, rayo, orca, minotauro, dragón (el nuevo), zorro, regalo rosa, flecha, carne, rayos y brillo (copiados de la hoja anterior) |
 
 **Hoja 3** (2026-10-21): `v4/iconos_v4_hoja3.png`, `Assets.UI.IconSheet3 = 101327392927525`

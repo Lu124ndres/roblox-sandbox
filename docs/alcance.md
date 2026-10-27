@@ -84,11 +84,11 @@ etapa actual: no encoge. Furioso, cada 9 s lanza un **Salpicón** contra un juga
 del cráter: círculo rojo de 18 studs durante 3 s y luego un empujón, sin perder nada. Un
 solo bocado lo calma. Valores en `Config/Giants.luau` (`anger`).
 
-**Entrenamiento.** En el centro de la isla hay 10 estanques (12.5 studs de radio, llenos
+**Entrenamiento.** En el centro de la isla hay 8 estanques (más el sagrado, solo por Robux; 12.5 studs de radio, llenos
 hasta el borde) donde caben todos los del servidor (40-50): cada uno pesca frente a sí.
 Con E el jugador se
 pone a pescar sin hacer nada (AFK) y gana 1 de poder de pesca por segundo multiplicado
-por el estanque (x1 a x100). Los estanques se abren **solo llenando monstruos** (kills; el
+por el estanque (x1 a x100; el sagrado, x250). Los ids llegan a 11, con el 9 y el 10 quitados del mapa (`Config/Progression.luau`). Los estanques se abren **solo llenando monstruos** (kills; el
 poder no los abre desde el 2026-10-18), o comprándolos con Robux. El poder
 hace **pescar más y más rápido** (`Shared/FishingPower.luau`):
 
@@ -122,17 +122,20 @@ que se compran en orden (`Config/Shop.luau`):
 
 Cuatro, en cadena por servidor. Un solo modelo por gigante que **crece por etapas**
 según su barra: etapa 1 desde 0 %, etapa 2 desde 25 %, etapa 3 desde 50 % y etapa 4
-desde 75 %. Mide **3, 8, 15 y 25 veces el alto de un jugador** (16.5, 44, 82.5 y 137.5
-studs). Cada cambio de etapa es un momento: rugido, temblor de cámara, pirueta y olas.
+desde 75 %. Mide **3, 8, 9.75 y 19.5 veces el alto de un jugador** (16.5, 44, 53.6 y 107.3
+studs; `Config/Giants.luau`, `stageHeightsInPlayers` y `playerHeightStuds` = 5.5). Cada cambio de etapa es un momento: rugido, temblor de cámara, pirueta y olas.
 
 | # | Gigante | Multiplicador | Comida para llenarlo | Dificultad | Ataque | Versión |
 |---|---|---|---|---|---|---|
-| 1 | Orca | x1 | 2,500 | la más fácil | Salpicón | **v1** |
-| 2 | Minotauro | x3 | 15,000 (x6) | pide jugadores con poder | Embestida | **v1** |
-| 3 | Dragón marino | x8 (provisional) | 75,000 (x5) | difícil | Marejada | Evento 1 |
-| 4 | Zorro de agua | x20 (provisional) | 300,000 (x4) | la más difícil | Fuegos fatuos | Evento 2 |
+| 1 | Orca | x2 | 400 (mínimo) | la más fácil | Salpicón | **v1** |
+| 2 | Minotauro | x4 | 600 (mínimo) | pide jugadores con poder | Embestida | **v1** |
+| 3 | Dragón marino | x10 | 900 (mínimo) | difícil | Marejada | Evento 1 |
+| 4 | Zorro de agua | x20 | 1,500 (mínimo) | la más difícil | Fuegos fatuos | Evento 2 |
 
-Los multiplicadores de partida eran x1, x3, x10 y x30. La sección
+Al 2026-10-26 los multiplicadores y la comida base salen de `Config/Giants.luau`
+(`multiplier`, `food`). La comida es un **mínimo**: `src/server/Feeding/GiantFood.luau` la
+escala con los jugadores presentes y nunca baja de ese valor. También hay una Orca fantasma
+de temporada (x6, 600). Los multiplicadores de partida eran x1, x3, x10 y x30. La sección
 [Calibración](#calibración) explica por qué la v1 los mantiene y por qué los eventos
 arrancan en x8 y x20.
 
@@ -232,6 +235,10 @@ Reglas para todos los gigantes:
 
 ## Calibración
 
+> Histórico: los números de esta sección son del modelo original (x1/x3/x8/x20 y comida fija
+> 2,500 / 15,000 / 75,000 / 300,000). El código vigente es el de la tabla de Gigantes (x2/x4/x10/x20,
+> comida escalada por jugadores); ver `Config/Giants.luau` y `Feeding/GiantFood.luau`.
+
 Los números salen de un modelo de ritmo de juego. Son la base para la v1; cuando haya
 telemetría real (ver backlog H4) se reemplazan en `src/shared/Config.luau`.
 
@@ -299,5 +306,5 @@ Lectura:
 ## Fuera de alcance de la v1
 
 - Dragón marino y Zorro de agua (son los eventos 1 y 2, ver `roadmap.md`).
-- Comercio entre jugadores, cañas con estadísticas, mascotas, pases de juego.
+- Comercio entre jugadores, cañas con estadísticas, mascotas. (Los pases ya existen: VIP, Rey del Mar y Dios del Volcán; `Config/Monetization.luau`.)
 - Modelos de arte para todo lo que no sea un gigante (fase 2, ver `CLAUDE.md`).

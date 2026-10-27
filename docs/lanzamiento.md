@@ -1,5 +1,7 @@
 # Lista para lanzar "Pesca y Alimenta Gigantes"
 
+Estado al 2026-10-26: el juego está publicado (placeId 129133484868369).
+
 Estado al 16/10/2026. Marcar con [x] lo que se vaya haciendo.
 
 ## 1. Bloqueantes (sin esto no se puede abrir al público)

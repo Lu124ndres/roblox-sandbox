@@ -78,7 +78,7 @@ ejemplo: ¿colores de la referencia o los del juego? ¿Qué hábitat?
 ## 3. Escala y módulo
 
 El juego escala cada etapa a `stageHeightsInPlayers` × `playerHeightStuds` (`Config/Giants`):
-**3, 8, 15 y 30 jugadores × 5.5 = 16.5, 44, 82.5 y 165 studs.** `GiantTemplates` mide el
+**3, 8, 9.75 y 19.5 jugadores × 5.5 = 16.5, 44, 53.6 y 107.3 studs.** `GiantTemplates` mide el
 modelo y guarda `BaseHeight`:
 
 - **Los que caminan o nadan** se miden por el **alto**.
@@ -326,7 +326,7 @@ El MCP de Studio **no importa FBX**: lo hace el usuario.
    `<Modelo>E<n>_v2` con el nombre `<Modelo>E<n>`, así que el resto del código no cambia. Borrar
    esa línea vuelve al modelo anterior.
 6. En Play, en el servidor, se revisa `ReplicatedStorage.ModelosGigantes.<Modelo>E<n>`: MeshId y
-   `BaseHeight` (16.5, 44, 82.5 y 165).
+   `BaseHeight` (16.5, 44, 53.6 y 107.3).
 7. Se le recuerda al usuario: **Ctrl+S** (los modelos viven en el `.rbxl`) y **Alt+P** para
    publicar.
 8. Después de guardar con Ctrl+S: ejecutar `bash tools/respaldo_rbxl.sh` (copia el `.rbxl` con
