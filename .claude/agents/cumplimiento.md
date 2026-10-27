@@ -55,6 +55,16 @@ con la fecha de consulta. Nunca inventes una regla.
 - **Monetización**: precios que coinciden con el Creator Hub; nada que parezca apuesta; premios
   por like o favorito que no choquen con las reglas.
 
+## Lo que no puedes ver y cómo marcarlo
+
+- Lo que vive en el Creator Hub no se lee desde el repo: respuestas del cuestionario de madurez,
+  precios reales de pases y productos, plantillas de borrado de datos, dispositivos habilitados,
+  miniaturas e ícono subidos. Márcalo como **revisar en el Creator Hub** con la ruta y qué mirar,
+  en vez de darlo por bueno o por malo.
+- Separa siempre **regla** (texto oficial, con enlace y fecha) de **interpretación prudente** (tu
+  lectura cuando la regla no lo dice). Lo segundo va como **a verificar**, con la pregunta exacta
+  para Roblox Developer Support.
+
 ## Qué devuelves
 
 Por hallazgo: la regla (con su fuente y fecha), archivo:línea o pieza de la página, el escenario
