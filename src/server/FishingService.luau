@@ -29,6 +29,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Config = require(ReplicatedStorage.Shared.Config)
 local FishCatalog = require(ReplicatedStorage.Shared.FishCatalog)
 local FishingPower = require(ReplicatedStorage.Shared.FishingPower)
+local LuckOdds = require(ReplicatedStorage.Shared.LuckOdds)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Perks = require(ReplicatedStorage.Shared.Perks)
@@ -102,7 +103,7 @@ local function onBite(player: Player, session: Session)
 		endSession(player, "cancelled")
 		return
 	end
-	local fish = FishCatalog.roll(rng, Upgrades.rodLuck(player) + Perks.luckBonus(player))
+	local fish = FishCatalog.roll(rng, LuckOdds.total(player)) -- la misma suerte que muestra el cliente
 	local rarity, rarityIndex = FishCatalog.rarity(fish.id)
 	local strength = ReelFight.strength(Upgrades.level(player, "Rod"), Perks.reelStrength(player))
 	local fight = ReelFight.new(rarityIndex, strength, Perks.instantReel(player), os.clock())

@@ -27,8 +27,10 @@ local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
 local FishDexTabs = require(script.Parent.FishDexTabs)
+local LuckWindow = require(script.Parent.LuckWindow)
 
 local HEIGHT = 96
+local ODDS_WIDTH = 190
 local COLORS = UIConfig.Colors
 
 export type Header = {
@@ -74,7 +76,15 @@ function FishDexHeader.mount(parent: Instance, left: number): Header
 	local rewardIcon = reward:FindFirstChildWhichIsA("ImageLabel")
 	local bar = CardParts.bar(frame, Style.PALETTE.Cards.Green, 20)
 	bar.track.Position = UDim2.fromOffset(94, 50)
-	bar.track.Size = UDim2.new(1, -106, 0, 34)
+	bar.track.Size = UDim2.new(1, -106 - ODDS_WIDTH - 8, 0, 34)
+	-- Abre la tabla de probabilidades de la suerte (política de Roblox).
+	local odds = Style.button(frame, "Probabilidades", Style.PALETTE.Cards.Blue, "% PROBABILIDADES")
+	odds.AnchorPoint = Vector2.new(1, 0)
+	odds.Position = UDim2.new(1, -12, 0, 50)
+	odds.Size = UDim2.fromOffset(ODDS_WIDTH, 34)
+	odds.Activated:Connect(function()
+		LuckWindow.open()
+	end)
 
 	local function set(id: string, found: number, total: number)
 		if not Icons.paint(medal, FishDexTabs.icon(id)) then

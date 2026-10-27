@@ -58,6 +58,14 @@ function Upgrades.rodLuck(player: Player): number
 	return Upgrades.current(player, "Rod").value * superRodMultiplier(player)
 end
 
+-- La suerte que daría la caña `level` (la caña nunca baja: si ya tiene una mejor, la suya),
+-- con la caña suprema si la tiene. Para mostrar el antes y el después de una compra.
+function Upgrades.rodLuckAt(player: Player, level: number): number
+	local list = Upgrades.list("Rod")
+	local best = math.max(Upgrades.level(player, "Rod"), math.clamp(math.floor(level), 1, #list))
+	return list[best].value * superRodMultiplier(player)
+end
+
 local function times(value: number): string
 	return if value % 1 == 0 then NumberFormat.short(value) else string.format("%.1f", value)
 end

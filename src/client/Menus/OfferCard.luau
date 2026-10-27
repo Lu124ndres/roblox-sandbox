@@ -12,10 +12,16 @@
 	cualquier pantalla; el resto se acomoda arriba de ellos.
 ]]
 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Config = require(ReplicatedStorage.Shared.Config)
+local LuckOdds = require(ReplicatedStorage.Shared.LuckOdds)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
+local LuckLine = require(script.Parent.LuckLine)
 local RobuxOffers = require(script.Parent.RobuxOffers)
 local ShopStone = require(script.Parent.ShopStone)
 
@@ -24,6 +30,8 @@ type Offer = RobuxOffers.Offer
 local PALETTE = Style.PALETTE
 local BUTTON_HEIGHT = 56
 local MARGIN = 14 -- deja ver el borde biselado de la piedra
+local LUCK_HEIGHT = 72 -- línea de suerte de los pases que la dan (dos filas: % y botón)
+local PASSES = Config.Monetization.passes
 local DESCRIPTION_MIN_TEXT = 20
 local DESCRIPTION_MAX_TEXT = 22
 
@@ -73,6 +81,17 @@ function OfferCard.new(
 		limit.MinTextSize = DESCRIPTION_MIN_TEXT
 	end
 
+	-- Pases que dan suerte (campo `luck` en Config): la línea con los números va debajo
+	-- de la descripción, que se acorta para dejarle sitio.
+	local luckBox = Instance.new("Frame")
+	luckBox.Name = "Suerte"
+	luckBox.BackgroundTransparency = 1
+	luckBox.Visible = false
+	luckBox.Position = UDim2.new(0, MARGIN, 1, -BUTTON_HEIGHT - MARGIN - 4 - LUCK_HEIGHT)
+	luckBox.Size = UDim2.new(1, -2 * MARGIN, 0, LUCK_HEIGHT)
+	luckBox.Parent = card
+	local luckLine: LuckLine.Line? = nil
+
 	local price = ShopParts.price(card, PALETTE.Buy, "robux")
 	price.button.AnchorPoint = Vector2.new(0, 1)
 	price.button.Position = UDim2.new(0, MARGIN, 1, -MARGIN)
@@ -105,6 +124,24 @@ function OfferCard.new(
 		title.Text = current.title
 		description.Text = current.description
 		layout(current.gift ~= nil)
+		local pass = if current.isPass then PASSES[current.key] else nil
+		local hasLuck = pass ~= nil and pass.luck ~= nil
+		luckBox.Visible = hasLuck
+		local passName = if pass then pass.name else ""
+		description.Size = UDim2.new(
+			1,
+			-2 * MARGIN,
+			1,
+			-122 - BUTTON_HEIGHT - MARGIN - 4 - (if hasLuck then LUCK_HEIGHT + 2 else 0)
+		)
+		if hasLuck and not luckLine then
+			local key = current.key
+			luckLine = LuckLine.mount(luckBox, passName, function()
+				return LuckOdds.withPass(Players.LocalPlayer, key)
+			end)
+		elseif luckLine then
+			luckLine.refresh()
+		end
 		if current.blocked then
 			price.set(current.blocked, false)
 		else

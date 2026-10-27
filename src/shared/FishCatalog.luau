@@ -78,23 +78,44 @@ function FishCatalog.chance(fishId: string): number
 	return fish.weight / (totalWeight + if fish.limited then fish.weight else 0)
 end
 
--- Tirada ponderada. luck (de la caña) sube el peso de todo lo que no es común.
--- Un limitado fuera de sus fechas pesa 0.
-function FishCatalog.roll(rng: Random, luck: number?): Config.FishDef
-	local boost = 1 + math.max(0, luck or 0)
-	local function weightOf(fish: Config.FishDef): number
-		if not FishCatalog.available(fish) then
-			return 0
-		end
-		return if (rarityIndex[fish.rarity] or 1) > 1 then fish.weight * boost else fish.weight
+-- Peso de un pez en la tirada: la suerte multiplica todo lo que no es común; un limitado
+-- fuera de sus fechas pesa 0. La misma cuenta para sortear y para mostrar probabilidades.
+local function weightOf(fish: Config.FishDef, boost: number): number
+	if not FishCatalog.available(fish) then
+		return 0
 	end
+	return if (rarityIndex[fish.rarity] or 1) > 1 then fish.weight * boost else fish.weight
+end
+
+-- Probabilidad (0 a 100) de cada rareza con esta suerte, de común a la más rara.
+function FishCatalog.rarityChances(luck: number?): { { id: string, name: string, chance: number } }
+	local boost = 1 + math.max(0, luck or 0)
+	local byRarity: { [string]: number } = {}
 	local total = 0
 	for _, fish in ECONOMY.fish do
-		total += weightOf(fish)
+		local weight = weightOf(fish, boost)
+		byRarity[fish.rarity] = (byRarity[fish.rarity] or 0) + weight
+		total += weight
+	end
+	local result = {}
+	for _, rarity in ECONOMY.rarities do
+		local weight = byRarity[rarity.id] or 0
+		local chance = if total > 0 then weight / total * 100 else 0
+		table.insert(result, { id = rarity.id, name = rarity.displayName, chance = chance })
+	end
+	return result
+end
+
+-- Tirada ponderada. luck (de la caña y los extras) sube el peso de todo lo que no es común.
+function FishCatalog.roll(rng: Random, luck: number?): Config.FishDef
+	local boost = 1 + math.max(0, luck or 0)
+	local total = 0
+	for _, fish in ECONOMY.fish do
+		total += weightOf(fish, boost)
 	end
 	local roll = rng:NextNumber(0, total)
 	for _, fish in ECONOMY.fish do
-		local weight = weightOf(fish)
+		local weight = weightOf(fish, boost)
 		roll -= weight
 		if weight > 0 and roll <= 0 then
 			return fish

@@ -20,6 +20,7 @@ local GearIcons = require(script.Parent.Parent.Interface.GearIcons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local ShopParts = require(script.Parent.Parent.Interface.ShopParts)
 local Style = require(script.Parent.Parent.Interface.Style)
+local Parts = require(script.Parent.UpgradeDetailParts)
 
 local PALETTE = Style.PALETTE
 local WHITE = Color3.new(1, 1, 1)
@@ -43,20 +44,8 @@ export type Detail = {
 
 local UpgradeDetail = {}
 
-local function box(parent: Instance, name: string, color: Color3): Frame
-	local frame = Instance.new("Frame")
-	frame.Name = name
-	frame.BackgroundColor3 = color
-	frame.BorderSizePixel = 0
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 14)
-	corner.Parent = frame
-	frame.Parent = parent
-	return frame
-end
-
 function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () -> ()): Detail
-	local panel = box(parent, "Detalle", PALETTE.Panel)
+	local panel = Parts.box(parent, "Detalle", PALETTE.Panel)
 	panel.Size = UDim2.new(0.37, -8, 1, 0)
 	Kit.skin(panel, "hondo")
 
@@ -76,7 +65,7 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	pedestal.Size = UDim2.fromScale(0.94, 0.62)
 	pedestal.Parent = panel
 
-	local art = box(panel, "Arte", WHITE)
+	local art = Parts.box(panel, "Arte", WHITE)
 	art.ClipsDescendants = true
 	art.Position = UDim2.fromScale(0.06, 0.09)
 	art.Size = UDim2.fromScale(0.88, 0.36)
@@ -102,6 +91,11 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	statList.Padding = UDim.new(0, 2)
 	statList.Parent = stats
 
+	-- En las cañas, la línea de probabilidades (dos filas) va entre los datos y la barra.
+	local luckBox, luckSet = Parts.luckLine(panel)
+	luckBox.Position = UDim2.fromScale(0.05, 0.625)
+	luckBox.Size = UDim2.fromScale(0.9, 0.13)
+
 	local bar = CardParts.bar(panel, PALETTE.Coins, 20)
 	bar.track.Position = UDim2.fromScale(0.06, 0.71)
 	bar.track.Size = UDim2.fromScale(0.88, 0.065)
@@ -121,14 +115,6 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 	local note = Style.text(buttons, "Nota", 24, SOFT, 2)
 	note.Size = UDim2.fromScale(1, 1)
 
-	local function statRow(text: string, order: number)
-		local row = Style.text(stats, "Dato", 24, SOFT, 2)
-		row.LayoutOrder = order
-		row.Size = UDim2.fromScale(1, 0.48)
-		row.RichText = true
-		row.Text = text
-	end
-
 	local function update(spec: DetailSpec)
 		local tier = GearIcons.tierColor(spec.category, spec.level)
 		for _, child in art:GetChildren() do
@@ -146,22 +132,12 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 		levelChip.Text = `Nivel {spec.level}/{spec.count}`
 		name.Text = spec.def.name
 
-		for _, child in stats:GetChildren() do
-			if child:IsA("TextLabel") then
-				child:Destroy()
-			end
-		end
-		local now = Upgrades.stats(spec.category, spec.currentDef)
-		for index, stat in Upgrades.stats(spec.category, spec.def) do
-			local before = now[index] and now[index].value
-			local compare = spec.level > spec.owned and before ~= nil and before ~= stat.value
-			statRow(
-				if compare
-					then `{stat.label}: {before} → <font color="#7CFF6B">{stat.value}</font>`
-					else `{stat.label}: {stat.value}`,
-				index
-			)
-		end
+		Parts.stats(stats, spec)
+		luckSet(spec)
+		local rod = spec.category == "Rod"
+		stats.Size = UDim2.fromScale(0.84, if rod then 0.075 else 0.15)
+		bar.track.Position = UDim2.fromScale(0.06, if rod then 0.762 else 0.71)
+		bar.track.Size = UDim2.fromScale(0.88, if rod then 0.035 else 0.065)
 
 		local isNext = spec.level == spec.owned + 1
 		local afford = spec.coins >= spec.def.price
@@ -185,16 +161,7 @@ function UpgradeDetail.mount(parent: Instance, onCoins: () -> (), onRobux: () ->
 			robuxButton.set(tostring(spec.robux), true)
 		end
 		note.Visible = not isNext
-		if spec.level == spec.owned then
-			status.Text = if spec.owned == spec.count then "¡NIVEL MÁXIMO!" else "EQUIPADA"
-			note.Text = "La estás usando"
-		elseif spec.level < spec.owned then
-			status.Text, note.Text = "YA LA TIENES", "Tienes una mejor"
-		elseif isNext then
-			status.Text = "SIGUIENTE MEJORA"
-		else
-			status.Text, note.Text = "BLOQUEADA", `Compra antes el Nivel {spec.owned + 1}`
-		end
+		Parts.caption(spec, isNext, status, note)
 	end
 
 	return { update = update, buyButton = coinsButton.button }

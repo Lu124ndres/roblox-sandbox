@@ -21,11 +21,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local LuckOdds = require(ReplicatedStorage.Shared.LuckOdds)
 local NumberFormat = require(ReplicatedStorage.Shared.NumberFormat)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Upgrades = require(ReplicatedStorage.Shared.Upgrades)
 local Kit = require(script.Parent.Parent.Interface.Kit)
 local Style = require(script.Parent.Parent.Interface.Style)
+local LuckLine = require(script.Parent.LuckLine)
 local Purchases = require(script.Parent.Purchases)
 local ShopStone = require(script.Parent.ShopStone)
 local StarterParts = require(script.Parent.StarterParts)
@@ -104,8 +106,17 @@ function StarterOffer.start(screen: ScreenGui)
 
 	local value = Style.text(content, "Valor", 24, Color3.fromRGB(255, 214, 200), 2)
 	value.RichText = true
-	value.Position = UDim2.fromOffset(0, 310)
-	value.Size = UDim2.new(1, 0, 0, 28)
+	value.Position = UDim2.fromOffset(0, 300)
+	value.Size = UDim2.new(1, 0, 0, 26)
+	-- La suerte que da la caña del pack, entre el valor y el botón (el botón empieza en ~360).
+	local luckBox = Instance.new("Frame")
+	luckBox.Name = "Suerte"
+	luckBox.BackgroundTransparency = 1
+	luckBox.Position = UDim2.new(0.15, 0, 0, 328)
+	luckBox.Size, luckBox.Parent = UDim2.new(0.7, 0, 0, 44), content
+	LuckLine.mount(luckBox, "Pack de inicio", function()
+		return LuckOdds.withRod(player, PACK.rod)
+	end)
 	-- Con el precio que cobra Roblox (el del botón), no el de Config: si no, no coinciden
 	local function showValue(robuxPrice: number)
 		value.Text =
@@ -118,7 +129,7 @@ function StarterOffer.start(screen: ScreenGui)
 	local buy = Style.lavaButton(content, "Comprar", "¡LO QUIERO!")
 	buy.AnchorPoint = Vector2.new(0.5, 1)
 	buy.Position = UDim2.new(0.5, 0, 1, -8)
-	buy.Size = UDim2.new(0.56, 0, 0, 78)
+	buy.Size = UDim2.new(0.56, 0, 0, 62)
 	local label = buy:FindFirstChild("Texto") :: TextLabel
 	label.Position = UDim2.new(0.04, 0, 0, 8)
 	label.Size = UDim2.new(0.54, 0, 1, -16)
