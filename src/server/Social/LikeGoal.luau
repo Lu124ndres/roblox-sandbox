@@ -7,25 +7,20 @@
 	Codigo) para el letrero de la plaza (client/Menus/LikeSign). La meta y su
 	premio son el código de CodeList con `likes` que no haya vencido; su nombre
 	solo se publica al llegar, y Social/Codes no lo acepta antes (LikeGoal.locked).
-	Roblox no deja leer los votos desde el juego, así que se piden a un
-	intermediario propio en Cloudflare (`WORKER_URL`, código y pasos en
-	tools/likes-worker/; no un proxy público). Si no hay worker o falla, vale el
-	número que pone el admin desde el panel (orden `likes`, AdminFun; para todos
-	los servidores con "g:likes"), guardado en el DataStore MetaLikes. Cada
-	servidor relee cada POLL_SECONDS. Sin número (-1), el letrero muestra solo la
-	meta; el código también se abre con `unlocked = true`. El worker necesita
-	"Permitir solicitudes HTTP" en los ajustes del juego.
+	Roblox no deja leer los votos desde el juego, y el usuario decidió el
+	2026-10-26 no leerlos de forma automática: el número lo pone el admin desde
+	el panel (orden `likes`, AdminFun; para todos los servidores con "g:likes"),
+	guardado en el DataStore MetaLikes. Cada servidor relee cada POLL_SECONDS. Sin
+	número (-1), el letrero muestra solo la meta; el código también se abre con
+	`unlocked = true`.
 ]]
 
 local DataStoreService = game:GetService("DataStoreService")
-local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local CodeList = require(script.Parent.CodeList)
 
--- Dirección del worker de tools/likes-worker ("" = solo el número del panel).
-local WORKER_URL = ""
 local STORE_NAME = "MetaLikes"
 local STORE_KEY = "likes"
 local POLL_SECONDS = 300
@@ -87,19 +82,6 @@ local function sane(value: unknown): number?
 		else nil
 end
 
--- Los likes reales, del worker (nil si no hay worker o falla).
-local function fetch(): number?
-	if WORKER_URL == "" then
-		return nil
-	end
-	local ok, body = pcall(HttpService.GetAsync, HttpService, WORKER_URL)
-	if not ok then
-		return nil
-	end
-	local decoded, data = pcall(HttpService.JSONDecode, HttpService, body)
-	return if decoded and type(data) == "table" then sane(data.likes) else nil
-end
-
 local function read(): number?
 	local data = store()
 	if not data then
@@ -118,7 +100,7 @@ function LikeGoal.init()
 	task.spawn(function()
 		task.wait(math.random() * FIRST_POLL_JITTER)
 		while true do
-			local saved = fetch() or read()
+			local saved = read()
 			if saved then
 				likes = saved
 			end
