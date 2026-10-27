@@ -1,5 +1,6 @@
 {
 	"name": "sandbox",
+	"servePort": 34000,
 	"tree": {
 		"$className": "DataModel",
 		"ServerScriptService": {
