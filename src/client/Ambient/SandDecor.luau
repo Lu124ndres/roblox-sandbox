@@ -5,7 +5,8 @@
 	Lo que asoma de la arena del desierto del cráter, con primitivas (fase 1):
 	el costillar de una bestia enorme (arcos de hueso que salen de la arena),
 	un fémur gigante semienterrado, huesitos sueltos y piedras. Todo anclado,
-	sin colisión (no traba a nadie) y local, como la arena.
+	sin colisión (no traba a nadie) y local, como la arena. Lo suelto queda
+	dentro del primer anillo del laberinto (LOOSE_*), para no cruzar sus muros.
 	show() lo hace subir desde la arena (como si el viento lo destapara) y
 	hide() lo quita. Se arma una sola vez, la primera vez que se muestra.
 ]]
@@ -22,6 +23,10 @@ local BONE = Color3.fromRGB(232, 222, 196)
 local STONE = Color3.fromRGB(150, 112, 82)
 local RISE = 5 -- studs que suben al destaparse
 local RISE_SECONDS = 1.2
+-- Huesitos y piedras sueltas: entre el gigante (Config.Habitats.giantClearRadius) y el
+-- anillo de muros de 130 del laberinto del hábitat completo (tools/blender/habitat_minotauro.py:
+-- cara de adentro en 127,5 y nada más alto que una losa hasta 126). Más afuera cruzarían muros.
+local LOOSE_MIN, LOOSE_MAX = 96, 120
 
 local SandDecor = {}
 
@@ -96,7 +101,7 @@ local function build()
 	end
 	local rng = Random.new(7) -- siempre el mismo desierto
 	for _ = 1, 6 do -- huesitos sueltos
-		local angle, radius = rng:NextNumber(0, 360), rng:NextNumber(100, 172)
+		local angle, radius = rng:NextNumber(0, 360), rng:NextNumber(LOOSE_MIN, LOOSE_MAX)
 		local length = rng:NextNumber(2.5, 5)
 		local center = spot(angle, radius, 0.2)
 		local dir = CFrame.Angles(0, rng:NextNumber(0, math.pi), 0).LookVector
@@ -105,7 +110,7 @@ local function build()
 	for _ = 1, 14 do -- piedras
 		local size = rng:NextNumber(1.5, 4.5)
 		local tilt = CFrame.Angles(rng:NextNumber(-0.4, 0.4), rng:NextNumber(0, 6.3), 0)
-		local at = spot(rng:NextNumber(0, 360), rng:NextNumber(90, 178), size * 0.2)
+		local at = spot(rng:NextNumber(0, 360), rng:NextNumber(LOOSE_MIN, LOOSE_MAX), size * 0.2)
 		local shape = if rng:NextNumber() < 0.5 then Enum.PartType.Ball else Enum.PartType.Block
 		piece(
 			shape,

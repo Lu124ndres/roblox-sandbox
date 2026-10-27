@@ -11,21 +11,20 @@
 		         mordidas; chocan los dos. En cada mordida, trozos caídos, uno que
 		         se fue flotando y una grieta; arriba, nieve.
 		chicos   SMALL_COUNT sueltos que no chocan, de tamaños muy distintos (los
-		         mordidos, con su escalón), sin pisar los grandes ni las rocas.
+		         mordidos, con su escalón), sin pisar los grandes ni las rocas (ni
+		         la banquisa del hábitat completo: COMPLETE_MAX_RADIUS).
 	Los arma una vez IceLair; IceLift los sube y los hunde con el lago.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Guarida = require(ReplicatedStorage.Shared.Zorro.Guarida)
-local IceMarks = require(script.Parent.IceMarks)
-local IceParts = require(script.Parent.IceParts)
 local IcePolygon = require(script.Parent.IcePolygon)
 local IceShards = require(script.Parent.IceShards)
 local LairParts = require(script.Parent.LairParts)
 
-local I = IceParts
-local M = IceMarks
+local I = require(script.Parent.IceParts)
+local M = require(script.Parent.IceMarks)
 local P = IcePolygon
 local around = IcePolygon.around
 local S = IceShards
@@ -43,15 +42,15 @@ local GLACIER = { material = Enum.Material.Glacier }
 local DRIFT: IceShards.Spec = { sides = 5, low = 0.6, high = 1.3, stretch = 0.5, bites = 0 }
 local DRIFT_LIFT = 0.35 -- lo que asoma un trozo suelto (más bajo que la repisa: no titila)
 local SMALL_COUNT = 18
-local SMALL_MIN_RADIUS, SMALL_MAX_RADIUS = 26, 164
+local SMALL_MIN_RADIUS, SMALL_MAX_RADIUS, COMPLETE_MAX_RADIUS = 26, 164, 120 -- (IceHabitat)
 local SMALL_SIZE = NumberRange.new(3, 16)
 local SMALL_GAP = 8 -- distancia mínima entre témpanos
 local ROCK_FLARE = 24 -- cuánto más ancha que su cima es una roca en el agua (IceRocks)
 
 local IceFloes = {}
 
-local rng = Random.new(29) -- siempre los mismos lugares (las formas salen de seeds)
-local nextSeed = 1000
+local SEED, FIRST_SEED = 29, 1000 -- los lugares y las formas: iguales si IceLair rearma
+local rng, nextSeed = Random.new(SEED), FIRST_SEED
 
 export type Placed = { at: Vector3, reach: number }
 
@@ -151,7 +150,7 @@ local function free(at: Vector3, reach: number, placed: { Placed }): boolean
 end
 
 -- Muchos chicos y pocos medianos; los más grandes, con más lados y alguna mordida.
-local function small(parent: Instance, placed: { Placed })
+local function small(parent: Instance, placed: { Placed }, maxRadius: number)
 	for _ = 1, 40 do -- intentos hasta encontrar un hueco
 		local size = SMALL_SIZE.Min + (SMALL_SIZE.Max - SMALL_SIZE.Min) * rng:NextNumber() ^ 1.6
 		local spec: IceShards.Spec = {
@@ -164,7 +163,7 @@ local function small(parent: Instance, placed: { Placed })
 		local shape = S.shape(seed(), size, spec)
 		local ledge = if spec.bites > 0 then S.under(shape, seed(), LEDGE_GROW) else nil
 		local reach = P.reach(ledge or shape.corners)
-		local r = rng:NextNumber(SMALL_MIN_RADIUS, SMALL_MAX_RADIUS - reach)
+		local r = rng:NextNumber(SMALL_MIN_RADIUS, maxRadius - reach)
 		local at = LairParts.at(rng:NextNumber(0, TAU), r, WATER + rng:NextNumber(0.35, 0.8))
 		if free(at, reach, placed) then
 			table.insert(placed, { at = at, reach = reach })
@@ -183,7 +182,8 @@ local function small(parent: Instance, placed: { Placed })
 end
 
 -- avoid: lo que ya ocupa el lago (las rocas de la orilla), para no poner témpanos encima.
-function IceFloes.build(parent: Instance, avoid: { Placed })
+function IceFloes.build(parent: Instance, avoid: { Placed }, complete: boolean)
+	rng, nextSeed = Random.new(SEED), FIRST_SEED
 	local placed: { Placed } = table.clone(avoid)
 	for _, spot in Guarida.spots do
 		if spot.kind == "tempano" then
@@ -193,7 +193,7 @@ function IceFloes.build(parent: Instance, avoid: { Placed })
 		end
 	end
 	for _ = 1, SMALL_COUNT do
-		small(parent, placed)
+		small(parent, placed, if complete then COMPLETE_MAX_RADIUS else SMALL_MAX_RADIUS)
 	end
 end
 

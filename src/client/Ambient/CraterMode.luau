@@ -8,7 +8,7 @@
 		"lava"   el lago de lava del dragón (CraterLava)
 		"sand"   el desierto del minotauro (CraterSand)
 		"empty"  vacío: descanso y ruleta
-	Lo leen quienes cambian según el relleno (ZoneMood, SkyCycle, AbyssRescue,
+	Lo leen quienes cambian según el relleno (ZoneMood, SkyCycle,
 	SeaLife, DesertAir...). sandBlend() sube de 0 a 1 en FADE_SECONDS al llegar
 	el desierto y baja igual al irse (para mezclar la luz cálida sin saltos);
 	lavaBlend() hace lo mismo con la lava (la luz roja de la guarida) e

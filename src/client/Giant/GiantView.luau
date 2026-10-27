@@ -81,6 +81,7 @@ local streak, lastFed = 0, -math.huge
 local function onFed(body: GiantBody.Body, character: Model, fishId: string)
 	local from = character:GetPivot().Position
 	body.lookAt(from, EFFECTS.GiantAttentionSeconds)
+	body.gulp() -- se infla un poquito al tragar (a lo sumo cada GiantGulpGap)
 	local scale = body.height() / GiantStages.heightFor(1)
 	streak = if os.clock() - lastFed > FedInfo.STREAK_GAP then 1 else streak + 1
 	lastFed = os.clock()
@@ -159,6 +160,7 @@ function GiantView.start()
 			currentId, lastStage = id, stage
 			local spawned = GiantBody.spawn(def, BASE)
 			spawned.setStage(stage, true)
+			spawned.grow(progress, true) -- si llega a mitad de etapa, ya del alto que le toca
 			body = spawned
 			return
 		end
@@ -167,6 +169,9 @@ function GiantView.start()
 				evolution.finish() -- otra antes de terminar (admin): la anterior se aplica ya
 			end
 			evolution = GiantEvolution.begin(body, defsById[id], stage, progress)
+		end
+		if body then
+			body.grow(progress) -- crece con cada pez (hasta el tope de su etapa hasta evolucionar)
 		end
 		lastStage = stage
 	end

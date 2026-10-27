@@ -1,0 +1,135 @@
+{
+ "ancho": 406.62,
+ "alto": 54.581,
+ "centroY": 12.563,
+ "mallas": [
+  {
+   "nombre": "ZorroDeAguaHabitat1",
+   "brillo": null,
+   "flota": false
+  },
+  {
+   "nombre": "ZorroDeAguaHabitat2",
+   "brillo": null,
+   "flota": false
+  },
+  {
+   "nombre": "ZorroDeAguaHabitat3",
+   "brillo": null,
+   "flota": true
+  },
+  {
+   "nombre": "ZorroDeAguaHabitat4",
+   "brillo": null,
+   "flota": false
+  },
+  {
+   "nombre": "ZorroDeAguaHabitat5",
+   "brillo": null,
+   "flota": false
+  },
+  {
+   "nombre": "ZorroDeAguaHabitatBrillo1",
+   "brillo": [
+    170,
+    228,
+    255
+   ],
+   "flota": false
+  }
+ ],
+ "luces": [
+  {
+   "pos": [
+    87.32,
+    7.0,
+    -164.23
+   ],
+   "color": [
+    170,
+    220,
+    255
+   ],
+   "rango": 32
+  },
+  {
+   "pos": [
+    -70.05,
+    8.88,
+    173.38
+   ],
+   "color": [
+    170,
+    220,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    -161.95,
+    8.88,
+    93.5
+   ],
+   "color": [
+    170,
+    220,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    153.18,
+    8.88,
+    -107.26
+   ],
+   "color": [
+    170,
+    220,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    -166.33,
+    13.0,
+    -60.54
+   ],
+   "color": [
+    170,
+    220,
+    255
+   ],
+   "rango": 30
+  },
+  {
+   "pos": [
+    173.87,
+    8.0,
+    -46.59
+   ],
+   "color": [
+    170,
+    220,
+    255
+   ],
+   "rango": 30
+  },
+  {
+   "pos": [
+    84.75,
+    8.0,
+    146.79
+   ],
+   "color": [
+    170,
+    220,
+    255
+   ],
+   "rango": 39
+  }
+ ],
+ "fuegos": []
+}

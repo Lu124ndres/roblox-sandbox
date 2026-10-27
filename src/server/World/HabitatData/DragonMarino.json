@@ -1,0 +1,220 @@
+{
+ "ancho": 402.299,
+ "alto": 105.799,
+ "centroY": 7.769,
+ "mallas": [
+  {
+   "nombre": "DragonMarinoHabitat1",
+   "brillo": null,
+   "sube": false,
+   "soloConLava": false
+  },
+  {
+   "nombre": "DragonMarinoHabitat2",
+   "brillo": null,
+   "sube": false,
+   "soloConLava": false
+  },
+  {
+   "nombre": "DragonMarinoHabitat3",
+   "brillo": null,
+   "sube": true,
+   "soloConLava": false
+  },
+  {
+   "nombre": "DragonMarinoHabitat4",
+   "brillo": null,
+   "sube": true,
+   "soloConLava": false
+  },
+  {
+   "nombre": "DragonMarinoHabitatBrillo1",
+   "brillo": [
+    255,
+    98,
+    22
+   ],
+   "sube": false,
+   "soloConLava": true
+  },
+  {
+   "nombre": "DragonMarinoHabitatBrillo2",
+   "brillo": [
+    255,
+    176,
+    64
+   ],
+   "sube": false,
+   "soloConLava": false
+  },
+  {
+   "nombre": "DragonMarinoHabitatBrillo3",
+   "brillo": [
+    255,
+    98,
+    22
+   ],
+   "sube": true,
+   "soloConLava": false
+  }
+ ],
+ "luces": [
+  {
+   "pos": [
+    161.0,
+    16.92,
+    -0.0
+   ],
+   "color": [
+    255,
+    98,
+    22
+   ],
+   "rango": 26
+  },
+  {
+   "pos": [
+    -158.0,
+    17.4,
+    0.0
+   ],
+   "color": [
+    255,
+    98,
+    22
+   ],
+   "rango": 26
+  },
+  {
+   "pos": [
+    14.99,
+    16.85,
+    -171.35
+   ],
+   "color": [
+    255,
+    98,
+    22
+   ],
+   "rango": 26
+  },
+  {
+   "pos": [
+    128.69,
+    3.2,
+    128.69
+   ],
+   "color": [
+    255,
+    176,
+    64
+   ],
+   "rango": 20
+  },
+  {
+   "pos": [
+    -176.76,
+    3.38,
+    47.36
+   ],
+   "color": [
+    255,
+    176,
+    64
+   ],
+   "rango": 20
+  },
+  {
+   "pos": [
+    144.99,
+    3.55,
+    -113.28
+   ],
+   "color": [
+    255,
+    176,
+    64
+   ],
+   "rango": 20
+  },
+  {
+   "pos": [
+    56.8,
+    48.0,
+    164.41
+   ],
+   "color": [
+    255,
+    176,
+    64
+   ],
+   "rango": 30
+  },
+  {
+   "pos": [
+    105.58,
+    42.0,
+    -126.8
+   ],
+   "color": [
+    255,
+    176,
+    64
+   ],
+   "rango": 30
+  },
+  {
+   "pos": [
+    157.8,
+    52.0,
+    -60.86
+   ],
+   "color": [
+    255,
+    176,
+    64
+   ],
+   "rango": 30
+  },
+  {
+   "pos": [
+    0.0,
+    17.0,
+    180.0
+   ],
+   "color": [
+    255,
+    176,
+    64
+   ],
+   "rango": 28
+  }
+ ],
+ "fuegos": [
+  {
+   "pos": [
+    161.0,
+    13.53,
+    -0.0
+   ],
+   "tam": 9.5
+  },
+  {
+   "pos": [
+    -158.0,
+    14.0,
+    0.0
+   ],
+   "tam": 10.0
+  },
+  {
+   "pos": [
+    14.99,
+    13.45,
+    -171.35
+   ],
+   "tam": 8.5
+  }
+ ],
+ "lava": -25.0
+}

@@ -3,7 +3,7 @@
 	OrcaMotion/Path/Rumbo
 
 	Las reglas del rumbo del plan, en radios del lago:
-		- la puerta del cráter (WorldZones.bridgeEnds(), el punto final) queda a más o
+		- la puerta del cráter (WorldZones.craterDoor()) queda a más o
 		  menos radios según la etapa, así que se mira hacia una dirección entre la de la
 		  cría y la de la anciana, con un margen que cubre a las dos;
 		- `facing` es el ángulo del rumbo contra esa dirección (0 = de frente a la rampa,
@@ -28,8 +28,7 @@ local LOOK = 0.35 -- radios: cuánto mira adelante para no ir contra la orilla
 local PUSH = 0.35 -- cuánto se aparta de la orilla al ir contra ella
 local BEHIND = math.rad(160) -- el lugar queda casi justo detrás: sigue por el lado que va
 
-local _, finish = WorldZones.bridgeEnds() -- la puerta: el final del puente
-local door = finish - WorldZones.craterCenter
+local door = WorldZones.craterDoor() - WorldZones.craterCenter -- la puerta: donde sale el túnel
 local DOOR_X, DOOR_Z = door.X, door.Z -- studs desde el centro del lago
 
 local Rumbo = {}

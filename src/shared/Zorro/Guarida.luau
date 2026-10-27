@@ -21,7 +21,7 @@
 		water   altura del agua (Y)
 	point(spot) da la cima (Vector3); yaw(spot) el rumbo con la convención de Zorro
 	(CFrame.Angles(0, yaw, 0) mira a (-sin yaw, 0, -cos yaw)), de frente a la puerta
-	del cráter (WorldZones.bridgeEnds(), el punto final: por ahí llegan los
+	del cráter (WorldZones.craterDoor(), donde sale el túnel: por ahí llegan los
 	jugadores); cframe(spot) junta las dos cosas. Las cuatro etapas (16.5, 44, 82.5 y
 	165 de alto) usan los mismos lugares: la cría se para en el medio y la forma final
 	ocupa casi toda la losa.
@@ -119,10 +119,10 @@ function Guarida.point(spot: Spot): Vector3
 	)
 end
 
--- La puerta del cráter: donde termina el puente (a la altura del agua).
+-- La puerta del cráter: donde el túnel sale al paseo (a la altura del agua).
 function Guarida.door(): Vector3
-	local _, finish = WorldZones.bridgeEnds()
-	return Vector3.new(finish.X, WATER, finish.Z)
+	local door = WorldZones.craterDoor()
+	return Vector3.new(door.X, WATER, door.Z)
 end
 
 function Guarida.yaw(spot: Spot): number

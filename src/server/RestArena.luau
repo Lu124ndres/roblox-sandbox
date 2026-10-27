@@ -2,17 +2,16 @@
 --[[
 	RestArena
 
-	El descanso es en el volcán vacío. La guarida (world/GuaridaDescanso.model.json,
-	en ServerStorage, vestida con el santuario flotante de Blender si está en
-	ServerStorage.PropsMapa: tools/blender/guarida_santuario.py) flota en el medio y queda ENTERRADA
-	(restArenaSink studs más abajo) mientras se alimenta al gigante. Al empezar el
-	descanso sube a su lugar y se publica VolcanVacio = true: cada cliente vacía el
-	lago (Ambient/CraterDrain, en Config.Giants.cycle.drainSeconds) y la ve subir
-	desde el fondo (Ambient/GuaridaSube; aquí se mueve de una vez, allá se anima);
-	el botón IR A LA GUARIDA (enter) deja al jugador sobre ella cuando ya no hay
-	agua. Al terminar, quien siga dentro del volcán vuelve a la orilla, junto a
-	la puerta donde llega el puente, y el agua sube de nuevo con el siguiente
-	monstruo.
+	El descanso es en el medio del volcán, con su hábitat puesto (el relleno no se
+	va). La guarida (world/GuaridaDescanso.model.json, en ServerStorage, vestida con
+	el santuario flotante de Blender si está en ServerStorage.PropsMapa:
+	tools/blender/guarida_santuario.py) queda ENTERRADA (restArenaSink studs más
+	abajo) mientras se alimenta al gigante. Al empezar el descanso sube con su
+	puente hasta flotar sobre el relleno (restArenaTop) y se publica VolcanVacio =
+	true (cada cliente la ve subir: Ambient/GuaridaSube; aquí se mueve de una vez);
+	el tramo de la pared del paseo donde llega el puente (MuroGuarida) se abre
+	mientras dura. También se llega con el botón IR A LA GUARIDA (enter). Al
+	terminar, quien siga dentro del volcán vuelve a la orilla, junto a la puerta.
 ]]
 
 local Players = game:GetService("Players")
@@ -31,8 +30,11 @@ local Proximity = require(script.Parent.Proximity)
 local RestArena = {}
 
 local SINK = Vector3.new(0, -WorldLayout.restArenaSink, 0)
+local GATE_WALL = "MuroGuarida" -- en world/Isla.model.json (tools/generar_isla.py)
 
 local arena: Model? = nil
+local upFrame = CFrame.identity -- su lugar arriba, flotando sobre el relleno (restArenaTop)
+local gate: BasePart? = nil -- el tramo de la pared del paseo donde llega el puente
 local up = false
 local drainedAt = 0
 local rng = Random.new()
@@ -63,13 +65,17 @@ function RestArena.init(_map: Instance)
 		end
 	end
 	model.ModelStreamingMode = Enum.ModelStreamingMode.Persistent
-	model:PivotTo(model:GetPivot() + SINK) -- enterrada hasta el descanso
+	upFrame = model:GetPivot()
+	model:PivotTo(upFrame + SINK) -- enterrada hasta el descanso
 	model.Parent = Workspace
 	arena = model
+	local island = Workspace:FindFirstChild(Protocol.Map.Root)
+	local wall = island and island:FindFirstChild(GATE_WALL, true)
+	gate = if wall and wall:IsA("BasePart") then wall else nil
 	GiantPublish.set(Protocol.GiantAttributes.Drained, false)
 end
 
--- El monstruo fue derrotado: se vacía el volcán.
+-- El monstruo fue derrotado: sube la guarida con su puente y se abre la pared del paseo.
 function RestArena.show()
 	if up then
 		return
@@ -77,7 +83,10 @@ function RestArena.show()
 	up = true
 	drainedAt = os.clock()
 	if arena then
-		arena:PivotTo(arena:GetPivot() - SINK) -- sube (los clientes lo animan)
+		arena:PivotTo(upFrame) -- sube (los clientes lo animan)
+	end
+	if gate then
+		gate.CanCollide = false
 	end
 	GiantPublish.set(Protocol.GiantAttributes.Drained, true)
 end
@@ -96,7 +105,10 @@ function RestArena.hide()
 		end
 	end
 	if arena then
-		arena:PivotTo(arena:GetPivot() + SINK) -- se hunde otra vez
+		arena:PivotTo(upFrame + SINK) -- se hunde otra vez
+	end
+	if gate then
+		gate.CanCollide = true
 	end
 	GiantPublish.set(Protocol.GiantAttributes.Drained, false)
 end

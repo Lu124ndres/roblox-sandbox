@@ -141,9 +141,10 @@ local Protocol = {
 		RouletteAt = "RuletaInicio", -- hora del servidor en que empezó a girar
 		TopShares = "TopAportes", -- JSON: los 3 que más aportaron [{n = nombre, s = 0..1}]
 		EvolvingUntil = "EvolucionHasta", -- hora del servidor en que termina de evolucionar (0 = no)
-		Drained = "VolcanVacio", -- true en el descanso: el agua del cráter se va y queda la guarida
+		Drained = "VolcanVacio", -- true en el descanso: la guarida sube a flotar sobre el relleno
 		RestFrom = "DescansoDesde", -- hora del servidor en que empieza a contar el descanso
 		Refilling = "VolcanLlenando", -- true: el cráter se llena (agua o lava) antes de que llegue
+		DeepLake = "LagoHondo", -- true: el lago tiene la forma honda y plana (World/LakeShape)
 	},
 
 	-- Folder en ReplicatedStorage con las plantillas de los gigantes (los anima el cliente, GiantView).
@@ -210,7 +211,7 @@ local Protocol = {
 	Leaderstats = { -- tabla de jugadores (Tab), en este orden
 		Power = "Poder",
 		Coins = "Monedas",
-		Kills = "Kills",
+		Kills = "Banquetes",
 		Rebirths = "Renacimientos",
 	},
 

@@ -121,6 +121,7 @@ end
 function SkyCycle.start()
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
 	local correction = Lighting:FindFirstChildOfClass("ColorCorrectionEffect")
+	local baseAmbient = Lighting.Ambient
 	local baseSaturation = if correction then correction.Saturation else 0
 	local baseContrast = if correction then correction.Contrast else 0
 	local lastHour, lastZone, lastDawn, lastHot, lastLair, lastIce, sinceWrite =
@@ -159,6 +160,7 @@ function SkyCycle.start()
 		local shown = (hour + toCrater * zone) % 24
 		Lighting.ClockTime = (shown + ((SkyMoods.dawnHour - shown) % 24) * dawn) % 24
 		Lighting.Brightness = mix(brightness, DAWN.brightness, dawn)
+		Lighting.Ambient = baseAmbient:Lerp(SkyMoods.caveAmbient, zone) -- adentro de la cueva
 		Lighting.OutdoorAmbient =
 			a.ambient:Lerp(b.ambient, t):Lerp(crater.ambient, zone):Lerp(DAWN.ambient, dawn)
 		if atmosphere then

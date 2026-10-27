@@ -64,29 +64,34 @@
 	"bridgeWidth": 34,
 	"craterCenter": [
 		0,
-		520
+		722
 	],
 	"craterLakeRadius": 190,
 	"craterCliffRadius": 205,
 	"craterRimOuter": 265,
+	"craterGateRadius": 464,
 	"craterBaseRadius": 320,
 	"craterRimHeight": 30,
 	"craterFloor": -150,
 	"craterFlatRadius": 75,
 	"craterShelfDepth": 10,
+	"deepLakeFloor": -250,
+	"deepLakeWallRadius": 184,
 	"craterShelfWidth": 40,
 	"craterWalkWidth": 30,
 	"craterPeakHeight": 70,
 	"pedestalTop": 0.5,
 	"craterDeckHeight": 30.6,
-	"restArenaRadius": 119,
-	"restArenaTop": -60,
-	"restArenaSink": 104,
+	"restArenaRadius": 100,
+	"restArenaTop": 6,
+	"restArenaSink": 280,
+	"restBridgeAngle": 272.5,
+	"restBridgeWidth": 14,
 	"boundaryCenter": [
 		0,
-		225
+		300
 	],
-	"boundaryRadius": 1000,
+	"boundaryRadius": 1060,
 	"hills": [
 		[
 			-138.7,

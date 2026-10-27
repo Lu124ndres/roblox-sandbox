@@ -2,8 +2,8 @@
 --[[
 	BridgeBoost
 
-	El puente al volcán tiene "corriente": mientras el jugador camina sobre
-	él va mucho más rápido (Config.Gameplay.bridge.walkSpeed), así llevar
+	El puente al volcán y el túnel hasta la cueva tienen "corriente": mientras
+	el jugador camina por ahí va mucho más rápido (Config.Gameplay.bridge.walkSpeed), así llevar
 	los peces al gigante y volver toma pocos segundos. La cámara se abre un
 	poco para que se sienta la velocidad.
 
@@ -57,7 +57,8 @@ function BridgeBoost.start()
 		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if humanoid and root and root:IsA("BasePart") and humanoid.Health > 0 then
-			setBoost(humanoid, WorldZones.isOnBridge(root.Position))
+			local position = root.Position
+			setBoost(humanoid, WorldZones.isOnBridge(position) or WorldZones.isInTunnel(position))
 		end
 	end)
 end

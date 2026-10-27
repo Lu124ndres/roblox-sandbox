@@ -14,8 +14,8 @@
 	para no trabar el juego.
 
 	Con streaming el terreno del cráter puede no haber llegado todavía (quien
-	entra lejos): antes de escribir se pide y se espera a que el paseo del
-	borde exista, si no la arena taparía un cráter que aún no está.
+	entra lejos): antes de escribir se pide y se espera a que el fondo del
+	lago exista, si no la arena taparía un cráter que aún no está.
 ]]
 
 local Players = game:GetService("Players")
@@ -31,7 +31,12 @@ local MATERIAL = Enum.Material
 local VOXEL = 4
 local HALF_VOXEL = VOXEL / 2
 local CENTER = WorldZones.craterCenter
-local HALF = math.ceil(SandShape.REACH / VOXEL) * VOXEL
+-- Un vóxel de margen: el origen se corre a la cuadrícula y no debe perderse el borde.
+local HALF = math.ceil(SandShape.REACH / VOXEL) * VOXEL + VOXEL
+-- Esquina de la caja alineada a los vóxeles: ReadVoxels/WriteVoxels/ReplaceMaterial fallan
+-- con regiones fuera de la cuadrícula, y el centro del cráter (z = 722) no es múltiplo de 4.
+local ORIGIN_X = math.floor((CENTER.X - HALF) / VOXEL) * VOXEL
+local ORIGIN_Z = math.floor((CENTER.Z - HALF) / VOXEL) * VOXEL
 local Y_MIN = math.floor((L.waterLevel - SandShape.SHELL) / VOXEL) * VOXEL
 local Y_MAX = math.ceil(SandShape.MAX_TOP / VOXEL) * VOXEL + VOXEL
 local QUARTER = HALF / VOXEL -- columnas por lado de cada cuarto
@@ -55,8 +60,8 @@ local function surface(): { { Column? } }
 	for ix = 1, side do
 		built[ix] = {}
 		for iz = 1, side do
-			local x = CENTER.X - HALF + (ix - 0.5) * VOXEL
-			local z = CENTER.Z - HALF + (iz - 0.5) * VOXEL
+			local x = ORIGIN_X + (ix - 0.5) * VOXEL
+			local z = ORIGIN_Z + (iz - 0.5) * VOXEL
 			local dx, dz = x - CENTER.X, z - CENTER.Z
 			if dx * dx + dz * dz <= SandShape.REACH * SandShape.REACH then
 				local top, material = SandShape.sample(x, z)
@@ -71,8 +76,8 @@ end
 -- Un cuarto: columnas desde (cx, cz) (índices 0-based en la cuadrícula de surface()).
 local function writeQuarter(cx: number, cz: number)
 	local grid = surface()
-	local x0 = CENTER.X - HALF + cx * VOXEL
-	local z0 = CENTER.Z - HALF + cz * VOXEL
+	local x0 = ORIGIN_X + cx * VOXEL
+	local z0 = ORIGIN_Z + cz * VOXEL
 	local region = Region3.new(
 		Vector3.new(x0, Y_MIN, z0),
 		Vector3.new(x0 + QUARTER * VOXEL, Y_MAX, z0 + QUARTER * VOXEL)
@@ -102,9 +107,11 @@ local function writeQuarter(cx: number, cz: number)
 	terrain:WriteVoxels(region, VOXEL, materials, occupancies)
 end
 
--- ¿Llegó el terreno del cráter? Mira un vóxel macizo del paseo del borde.
+-- ¿Llegó el terreno del cráter? Mira un vóxel macizo del fondo del lago (el paseo y el
+-- acantilado son de la malla del volcán, World/BlockVolcano).
 local function loaded(): boolean
-	local spot = CENTER + Vector3.new(0, L.craterRimHeight - 8, -(L.craterCliffRadius + 14))
+	local radius = L.craterLakeRadius - 20
+	local spot = CENTER + Vector3.new(0, WorldZones.lakeFloor(radius) - 6, -radius)
 	local region = Region3.new(spot, spot + Vector3.one * VOXEL):ExpandToGrid(VOXEL)
 	local materials = terrain:ReadVoxels(region, VOXEL)
 	local first = materials[1] and materials[1][1] and materials[1][1][1]
@@ -148,8 +155,8 @@ end
 -- Quita la arena y las rocas (vuelve a quedar el cráter vacío).
 function SandTerrain.clear()
 	local region = Region3.new(
-		Vector3.new(CENTER.X - HALF, Y_MIN, CENTER.Z - HALF),
-		Vector3.new(CENTER.X + HALF, Y_MAX, CENTER.Z + HALF)
+		Vector3.new(ORIGIN_X, Y_MIN, ORIGIN_Z),
+		Vector3.new(ORIGIN_X + 2 * HALF, Y_MAX, ORIGIN_Z + 2 * HALF)
 	)
 	terrain:ReplaceMaterial(region, VOXEL, MATERIAL.Sand, MATERIAL.Air)
 	terrain:ReplaceMaterial(region, VOXEL, MATERIAL.Sandstone, MATERIAL.Air)

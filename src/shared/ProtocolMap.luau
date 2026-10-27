@@ -20,4 +20,5 @@ return table.freeze({
 	Habitat = "Habitat", -- Workspace.Habitat: los props del hábitat del gigante actual (HabitatService)
 	BlockIsland = "IslaBloques", -- Workspace.IslaBloques: el suelo de la isla en mallas (BlockIsland)
 	PondWaterPrefix = "Lamina_", -- Lamina_<n>: el agua de color del estanque n, dentro de IslaBloques
+	BlockVolcano = "VolcanBloques", -- Workspace.VolcanBloques: montaña, cueva y túnel en mallas (BlockVolcano)
 })

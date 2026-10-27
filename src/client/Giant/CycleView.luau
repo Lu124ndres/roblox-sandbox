@@ -102,7 +102,7 @@ function CycleView.start(toasts: Toasts.Toasts)
 	end)
 	onPhase(false)
 
-	-- Destellos solo mientras el volcán está vacío.
+	-- Destellos solo durante el descanso.
 	local function onDrained()
 		sparkles.Enabled = stateFolder:GetAttribute(ATTR.Drained) == true
 	end

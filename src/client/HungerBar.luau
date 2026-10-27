@@ -108,8 +108,8 @@ function HungerBar.mount(
 			fraction, color = 1, UIConfig.Colors.Feeding
 		elseif phase == "rest" and spinning then
 			title.Text, detail.Text, amount.Text, fraction = "¡Ruleta de monstruos!", "", "...", 1
-		elseif phase == "rest" and wait > 0 then -- el agua baja: todavía no cuenta
-			title.Text, detail.Text = "¡Baja el agua del volcán!", "La guarida abre en"
+		elseif phase == "rest" and wait > 0 then -- la guarida sube: todavía no cuenta
+			title.Text, detail.Text = "¡Sube la guarida!", "La guarida abre en"
 			amount.Text, fraction = `{math.ceil(wait)}`, 1
 		elseif phase == "rest" then
 			title.Text = "Descanso del volcán"

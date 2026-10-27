@@ -22,6 +22,7 @@ export type GiantDef = {
 	lava: boolean?, -- con él el cráter se llena de lava en vez de agua (vuela: el dragón)
 	sand: boolean?, -- con él el fondo del cráter es un desierto de arena en vez de agua
 	ice: boolean?, -- con él el cráter sigue con agua, pero con témpanos, escarcha y aire frío
+	deepLake: boolean?, -- con él el lago es plano y hondo (deepLakeFloor): el servidor lo rehace al llegar
 }
 export type AngerConfig = {
 	graceSeconds: number, -- segundos sin comer antes de empezar a enojarse
@@ -68,11 +69,18 @@ export type SizingConfig = {
 	tripSeconds: number, -- ida y vuelta de la orilla al volcán
 }
 
+-- Crecimiento continuo: el monstruo crece con cada pez, no solo al evolucionar.
+export type GrowthConfig = {
+	towardNext: number, -- en cada etapa crece esta parte del camino al alto de la siguiente
+	finalHeightInPlayers: number, -- la última etapa crece hasta este alto (en jugadores) al llenarse
+}
+
 export type GiantsConfig = {
 	chain: { GiantDef }, -- orden de aparición en el servidor
 	stageThresholds: { number }, -- fracción de la barra donde EMPIEZA cada etapa
 	playerHeightStuds: number, -- alto de referencia de un personaje
 	stageHeightsInPlayers: { number }, -- alto del gigante en cada etapa, en jugadores
+	growth: GrowthConfig,
 	anger: AngerConfig,
 	cycle: CycleConfig,
 	delivery: DeliveryConfig,

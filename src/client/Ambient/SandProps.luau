@@ -13,12 +13,15 @@
 	arena en el punto más bajo de su base (SandShape.lowest: no flota en una
 	loma). Los que el servidor puso más arriba (en la ladera) no se mueven.
 	Se mueven con PivotTo: el fuego de HabitatFx va dentro del modelo y los sigue.
+	Los de un hábitat completo (atributo Completo y sus fuegos) no: ya están a
+	ras de la arena y los baja y esconde SandHabitat, que se engancha aquí.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local SandHabitat = require(script.Parent.SandHabitat)
 local SandShape = require(script.Parent.SandShape)
 
 local SINK = 1.2 -- studs que la base queda bajo la arena
@@ -39,8 +42,8 @@ local function track(child: Instance)
 	if not child:IsA("Model") then
 		return
 	end
-	if props[child] then
-		return
+	if props[child] or SandHabitat.owns(child) then
+		return -- el hábitat completo y sus fuegos los mueve SandHabitat
 	end
 	local base = child:GetPivot()
 	local _, size = child:GetBoundingBox()
@@ -78,6 +81,7 @@ function SandProps.start()
 		for _, child in folder:GetChildren() do
 			track(child)
 		end
+		SandHabitat.watch(folder)
 	end)
 end
 

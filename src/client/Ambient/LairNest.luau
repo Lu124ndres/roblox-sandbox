@@ -8,7 +8,8 @@
 	sus escamas) con grietas de fuego que brillan y una luz adentro que late,
 	como si algo se moviera. Al lado, un huevo ya abierto (la base rota de la
 	cáscara, con su resplandor) y cáscaras sueltas. Lo arma una vez LavaLair
-	y sube y se hunde con las rocas.
+	y sube y se hunde con las rocas. Las luces de los huevos y las brasas que
+	suben van aparte (`kept`): quedan también con el nido de Blender.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -61,7 +62,7 @@ local function surface(
 	return egg * localPoint, egg:VectorToWorldSpace(normal)
 end
 
-local function egg(parent: Instance, nest: Vector3, spec: { number })
+local function egg(parent: Instance, kept: Instance, nest: Vector3, spec: { number })
 	local height = spec[3]
 	local a, b = height * 0.35, height * 0.5
 	local tilt = CFrame.Angles(
@@ -70,7 +71,7 @@ local function egg(parent: Instance, nest: Vector3, spec: { number })
 		rng:NextNumber(-0.15, 0.15)
 	)
 	local cframe = CFrame.new(nest + Vector3.new(spec[1], 0.6 + b * 0.9, spec[2])) * tilt
-	local shell = ellipsoid(parent, Vector3.new(a * 2, b * 2, a * 2), cframe, SHELL[spec[4]])
+	ellipsoid(parent, Vector3.new(a * 2, b * 2, a * 2), cframe, SHELL[spec[4]])
 	for k = 1, 4 do -- manchas
 		local point, normal =
 			surface(cframe, a, b, k * 1.7 + rng:NextNumber(0, 0.6), rng:NextNumber(-0.4, 0.6))
@@ -102,7 +103,7 @@ local function egg(parent: Instance, nest: Vector3, spec: { number })
 			last = point
 		end
 	end
-	local light = P.light(shell, GLOW, 0.6, height * 1.4)
+	local light = P.light(P.holder(kept, cframe), GLOW, 0.6, height * 1.4)
 	P.pulse(light, { Brightness = 2.4 }, rng:NextNumber(1.4, 2))
 end
 
@@ -129,7 +130,7 @@ local function hatched(parent: Instance, at: Vector3)
 	P.pulse(glow, { Transparency = 0.5 }, 1.1)
 end
 
-function LairNest.build(parent: Instance)
+function LairNest.build(parent: Instance, kept: Instance)
 	local nest = Guarida.point(Guarida.perches[Guarida.nest.perch]) + Guarida.nest.offset
 	-- Cama de ceniza y brasas.
 	P.column(parent, nest, 0.6, RIM + 0.5, P.ASH, { material = Enum.Material.Slate })
@@ -163,7 +164,7 @@ function LairNest.build(parent: Instance)
 		P.bar(parent, mid - along, mid + along, 0.55, 0.55, if k % 2 == 0 then BONE else CHAR)
 	end
 	for _, spec in EGGS do
-		egg(parent, nest, spec)
+		egg(parent, kept, nest, spec)
 	end
 	hatched(parent, nest + Vector3.new(0.6, 0, -5.4))
 	for _ = 1, 6 do -- cáscaras sueltas
@@ -176,11 +177,8 @@ function LairNest.build(parent: Instance)
 		})
 	end
 	-- Brasas que suben del nido.
-	local air = P.holder(
-		parent,
-		CFrame.new(nest + Vector3.new(0, 1.5, 0)),
-		Vector3.new(RIM * 2, 1, RIM * 2)
-	)
+	local air =
+		P.holder(kept, CFrame.new(nest + Vector3.new(0, 1.5, 0)), Vector3.new(RIM * 2, 1, RIM * 2))
 	local sparks = P.emitter(
 		air,
 		Assets.Particles.Brasa,

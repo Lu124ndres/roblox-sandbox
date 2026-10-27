@@ -1,0 +1,193 @@
+{
+ "ancho": 405.914,
+ "alto": 96.772,
+ "centroY": 7.209,
+ "mallas": [
+  {
+   "nombre": "OrcaFantasmaHabitat1",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaFantasmaHabitat2",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaFantasmaHabitat3",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaFantasmaHabitat4",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaFantasmaHabitat5",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaFantasmaHabitat6",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaFantasmaHabitatBrillo1",
+   "brillo": [
+    110,
+    230,
+    255
+   ]
+  },
+  {
+   "nombre": "OrcaFantasmaHabitatBrillo2",
+   "brillo": [
+    175,
+    110,
+    255
+   ]
+  }
+ ],
+ "luces": [
+  {
+   "pos": [
+    -132.35,
+    46.96,
+    3.26
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 40
+  },
+  {
+   "pos": [
+    -109.66,
+    18.64,
+    156.61
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 50
+  },
+  {
+   "pos": [
+    152.19,
+    3.14,
+    76.4
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 30
+  },
+  {
+   "pos": [
+    114.98,
+    17.81,
+    144.67
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    -23.03,
+    19.3,
+    183.36
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    -181.38,
+    16.68,
+    -35.4
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    -105.36,
+    17.61,
+    -151.82
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    129.58,
+    16.69,
+    -131.76
+   ],
+   "color": [
+    110,
+    230,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    -24.83,
+    18.5,
+    140.83
+   ],
+   "color": [
+    175,
+    110,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    91.75,
+    23.0,
+    -158.92
+   ],
+   "color": [
+    175,
+    110,
+    255
+   ],
+   "rango": 34
+  },
+  {
+   "pos": [
+    -145.01,
+    34.0,
+    -67.62
+   ],
+   "color": [
+    175,
+    110,
+    255
+   ],
+   "rango": 34
+  }
+ ],
+ "fuegos": []
+}

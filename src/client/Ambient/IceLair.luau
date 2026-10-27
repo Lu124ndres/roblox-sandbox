@@ -13,7 +13,12 @@
 		          apaga, la escarcha se derrite y los témpanos se hunden, antes de
 		          que baje el agua o de que la guarida del descanso suba.
 	Los lugares fijos (dónde se para, duerme o vigila el zorro) salen de
-	Zorro/Guarida. Se arma todo una sola vez, la primera vez que llega el hielo.
+	Zorro/Guarida. Se arma todo la primera vez que llega el hielo.
+	Con el hábitat completo de Blender (IceHabitat) la orilla (costra, escarcha,
+	nieve, racimos y rocas de la repisa) y sus luces ya vienen en las mallas del
+	servidor: no se arman, y la banquisa de la malla sube y baja con los témpanos
+	(IceLift.float). Si el hábitat llega tarde (streaming) o se va, el lago se
+	rearma con lo que corresponde (las mismas formas: salen de seeds).
 ]]
 
 local RunService = game:GetService("RunService")
@@ -21,6 +26,7 @@ local Workspace = game:GetService("Workspace")
 
 local IceAir = require(script.Parent.IceAir)
 local IceFloes = require(script.Parent.IceFloes)
+local IceHabitat = require(script.Parent.IceHabitat)
 local IceLift = require(script.Parent.IceLift)
 local IceRocks = require(script.Parent.IceRocks)
 local IceShore = require(script.Parent.IceShore)
@@ -38,19 +44,29 @@ local shore = Instance.new("Folder") -- lo que no flota: se escarcha y se derrit
 shore.Name = "Orilla"
 
 local built = false
+local complete = false -- se armó para el hábitat completo (sin orilla de primitivas)
+local active = false -- el hielo está (entre arrive y leave)
+local lake: Folder? = nil
 local frost: { BasePart } = {}
 local clear: { number } = {} -- la transparencia de cada pieza de la orilla, escarchada
 local frostAmount = 0 -- 0 derretida, 1 escarchada
 local fading: RBXScriptConnection? = nil
 
-local function build()
-	built = true
-	local lake = Instance.new("Folder")
-	lake.Name = "Lago"
-	IceShore.build(lake, shore)
-	IceRocks.build(lake)
-	IceFloes.build(lake, IceShore.rocks())
-	IceLift.track(lake, root)
+local function build(withHabitat: boolean)
+	if lake then
+		lake:Destroy()
+	end
+	shore:ClearAllChildren()
+	table.clear(frost)
+	table.clear(clear)
+	built, complete = true, withHabitat
+	local floating = Instance.new("Folder")
+	floating.Name = "Lago"
+	IceShore.build(floating, shore, withHabitat)
+	IceRocks.build(floating)
+	IceFloes.build(floating, IceShore.rocks(withHabitat), withHabitat)
+	IceLift.track(floating, root)
+	lake = floating
 	for _, d in shore:GetDescendants() do
 		if d:IsA("BasePart") then
 			table.insert(frost, d)
@@ -61,7 +77,7 @@ end
 
 local function showFrost(amount: number)
 	frostAmount = amount
-	shore.Parent = if amount > 0 then root else nil
+	shore.Parent = if amount > 0 and not complete then root else nil
 	if amount <= 0 then
 		return
 	end
@@ -97,12 +113,26 @@ local function frostTo(target: number, delay: number, instant: boolean)
 	fading = connection
 end
 
+-- El hábitat completo apareció o se fue: su banquisa a IceLift y, si el hielo ya
+-- está y se había armado para el otro caso, el lago de nuevo.
+local function onHabitat()
+	local model = IceHabitat.model()
+	IceLift.float(if model then IceHabitat.floating(model) else {})
+	if active and (model ~= nil) ~= complete then
+		build(model ~= nil)
+		showFrost(frostAmount)
+		IceAir.show(complete)
+	end
+end
+
 function IceLair.arrive(instant: boolean)
-	if not built then
-		build()
+	active = true
+	local withHabitat = IceHabitat.model() ~= nil
+	if not built or withHabitat ~= complete then
+		build(withHabitat)
 	end
 	root.Parent = Workspace
-	IceAir.show()
+	IceAir.show(complete)
 	if instant then
 		IceLift.snap(1)
 		frostTo(1, 0, true)
@@ -113,6 +143,7 @@ function IceLair.arrive(instant: boolean)
 end
 
 function IceLair.leave(instant: boolean)
+	active = false
 	IceAir.hide()
 	if not built then
 		return
@@ -124,5 +155,7 @@ function IceLair.leave(instant: boolean)
 	end
 	IceLift.go(0, SINK_SECONDS, 0)
 end
+
+IceHabitat.watch(onHabitat)
 
 return table.freeze(IceLair)

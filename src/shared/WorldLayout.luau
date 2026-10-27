@@ -79,19 +79,24 @@ export type WorldLayout = {
 	craterLakeRadius: number,
 	craterCliffRadius: number,
 	craterRimOuter: number,
+	craterGateRadius: number, -- del centro del cráter al arco, al pie del volcán (ahí llega el puente)
 	craterBaseRadius: number,
 	craterRimHeight: number,
 	craterFloor: number, -- fondo del lago en el centro (ahí está la guarida del descanso)
 	craterFlatRadius: number, -- radio del fondo plano
+	deepLakeFloor: number, -- fondo plano del lago hondo (GiantDef.deepLake: la orca)
+	deepLakeWallRadius: number, -- hasta aquí llega ese fondo; de ahí sube la pared hasta la orilla
 	craterShelfDepth: number, -- hondura de la plataforma clara junto al acantilado
 	craterShelfWidth: number, -- ancho de esa plataforma
 	craterWalkWidth: number, -- paseo plano desde el borde del acantilado
 	craterPeakHeight: number, -- alto máximo de las montañas del anillo sobre el paseo
 	pedestalTop: number,
 	craterDeckHeight: number,
-	restArenaRadius: number, -- guarida del descanso: llena el fondo del lago de pared a pared
-	restArenaTop: number, -- altura de su piso (se ve al vaciarse el volcán)
+	restArenaRadius: number, -- guarida del descanso: el radio de su piso
+	restArenaTop: number, -- altura de su piso: flota sobre el relleno (agua, lava o arena)
 	restArenaSink: number, -- cuánto queda enterrada bajo el fondo mientras no hay descanso
+	restBridgeAngle: number, -- el puente del paseo a la guarida (grados, como los del cráter)
+	restBridgeWidth: number, -- ancho de su rampa (entre sus paredes invisibles)
 	boundaryCenter: { number },
 	boundaryRadius: number,
 	hills: { { number } }, -- { x, z, radio }

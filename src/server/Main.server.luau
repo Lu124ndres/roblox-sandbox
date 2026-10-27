@@ -48,6 +48,7 @@ local HabitatService = require(script.Parent.World.HabitatService)
 local PropDresser = require(script.Parent.World.PropDresser)
 local TerrainBuilder = require(script.Parent.World.TerrainBuilder)
 local BlockIsland = require(script.Parent.World.BlockIsland)
+local BlockVolcano = require(script.Parent.World.BlockVolcano)
 local TrainingService = require(script.Parent.TrainingService)
 local Analytics = require(script.Parent.Analytics)
 
@@ -92,6 +93,7 @@ PlayerCollision.init()
 -- en la pieza de aparición). Así EstadoGigante y los remotes existen desde el principio.
 TerrainBuilder.build()
 BlockIsland.place() -- el suelo de la isla en mallas, si está en ServerStorage
+BlockVolcano.place() -- la montaña, la cueva y el túnel en mallas (antes del hábitat: se apoya)
 PropDresser.dress()
 HabitatService.init() -- se apoya en el terreno: va después
 Workspace:SetAttribute(Protocol.WorldReadyAttribute, true) -- la pantalla de carga lo espera

@@ -6,15 +6,16 @@
 	en lugar del lago. Como la lava (CraterLava), local de cada cliente:
 		rise()  la arena llena el pozo: cae en cortinas desde el acantilado y
 		        sube un disco de arena del ancho del pozo (SandDisc), que empuja
-		        hacia arriba los props del hábitat (SandProps); al llegar se
+		        hacia arriba los props del hábitat (SandProps) y el hábitat
+		        completo del minotauro (SandHabitat); al llegar se
 		        asienta: se escribe el terreno con dunas, ondas y rocas
 		        (SandTerrain), nube de polvo y asoman los huesos (SandDecor).
 		sink()  en el descanso se escurre por el centro, como un reloj de arena:
-		        el terreno se vuelve disco, que baja con los props mientras un
+		        el terreno se vuelve disco, que baja con los props (el hábitat
+		        completo baja un poco y se esconde) mientras un
 		        remolino de polvo gira en el medio.
 	La superficie queda en waterLevel (más dunas): ahí apoya los pies el
-	minotauro, igual que en el agua. Se puede pisar; quien cae lo rescata
-	AbyssRescue al rato.
+	minotauro, igual que en el agua. Se puede pisar.
 ]]
 
 local Players = game:GetService("Players")
@@ -29,6 +30,7 @@ local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local SandDecor = require(script.Parent.SandDecor)
 local SandDisc = require(script.Parent.SandDisc)
 local SandFx = require(script.Parent.SandFx)
+local SandHabitat = require(script.Parent.SandHabitat)
 local SandProps = require(script.Parent.SandProps)
 local SandTerrain = require(script.Parent.SandTerrain)
 
@@ -45,11 +47,17 @@ local CraterSand = {}
 local level = BOTTOM -- dónde está ahora la arena (el disco, o TOP si ya es terreno)
 local generation = 0
 
+-- La arena d studs bajo su lugar: los props sueltos y el hábitat completo con ella.
+local function setDepth(d: number)
+	SandProps.setDepth(d)
+	SandHabitat.setDepth(d)
+end
+
 -- La arena a la altura y: el disco ahí y los props apoyados encima.
 local function place(y: number)
 	level = y
 	SandDisc.place(y)
-	SandProps.setDepth(TOP - y)
+	setDepth(TOP - y)
 end
 
 local function rumble(strength: number)
@@ -89,7 +97,7 @@ local function settle(instant: boolean)
 		return -- mientras se escribía empezó a irse
 	end
 	level = TOP
-	SandProps.setDepth(0)
+	setDepth(0)
 	if written then
 		SandDisc.hide()
 	else
@@ -137,7 +145,7 @@ function CraterSand.sink(instant: boolean)
 	if instant then
 		SandDisc.hide()
 		level = BOTTOM
-		SandProps.setDepth(math.huge)
+		setDepth(math.huge)
 		return
 	end
 	place(TOP)
@@ -149,7 +157,7 @@ function CraterSand.sink(instant: boolean)
 		return t * t -- se escurre cada vez más rápido
 	end, function()
 		SandDisc.hide()
-		SandProps.setDepth(math.huge)
+		setDepth(math.huge)
 	end)
 end
 

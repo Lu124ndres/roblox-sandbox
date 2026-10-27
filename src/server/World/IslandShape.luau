@@ -15,7 +15,7 @@
 	Lejos de los dos todo es mar abierto (openSea): touches dice si un cuadrado toca
 	la isla o el cráter, y así TerrainBuilder no muestrea los bloques de mar.
 	Con la isla de bloques (World/BlockIsland) el suelo de la isla es de mallas: el terreno
-	solo pone el cráter y el mar (craterOnly, touchesCrater).
+	solo pone el cráter y el mar (touchesCrater y CraterShape.onSea).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -162,21 +162,12 @@ function IslandShape.touches(x0: number, z0: number, size: number): boolean
 	return false
 end
 
--- Como touches, pero solo el cráter (la isla es de mallas).
-function IslandShape.touchesCrater(x0: number, z0: number, size: number): boolean
-	return reaches(CRATER_REACH, x0, z0, size)
-end
+local LAKE_REACH: Reach = { center = CRATER, radius = L.craterLakeRadius }
 
--- El cráter sobre el mar abierto, sin la isla.
-function IslandShape.craterOnly(x: number, z: number): (number, Enum.Material, number)
-	local height, material, waterTop = IslandShape.openSea(x, z)
-	local offset = Vector2.new(x, z) - CRATER
-	local rho, angle = offset.Magnitude, math.atan2(offset.Y, offset.X)
-	local crater = CraterShape.height(rho, angle)
-	if crater and (crater > height or rho < L.craterCliffRadius) then
-		height, material = crater, CraterShape.material(rho, angle, crater)
-	end
-	return height, material, waterTop
+-- Como touches, pero solo el cráter (la isla es de mallas); lakeOnly: solo el lago (el
+-- volcán también es de mallas, World/BlockVolcano).
+function IslandShape.touchesCrater(x0: number, z0: number, size: number, lakeOnly: boolean): boolean
+	return reaches(if lakeOnly then LAKE_REACH else CRATER_REACH, x0, z0, size)
 end
 
 function IslandShape.sample(x: number, z: number): (number, Enum.Material, number)

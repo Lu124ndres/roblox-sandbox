@@ -34,8 +34,17 @@ end
 -- Altura del fondo del lago del cráter a `radius` del centro: una plataforma
 -- poco honda junto al acantilado y, hacia el centro, un pozo hondo con el
 -- fondo plano (la guarida del descanso, que se ve al vaciarse el volcán).
--- Misma curva que fondo_lago() en tools/generar_isla.py.
-function WorldZones.lakeFloor(radius: number): number
+-- Misma curva que fondo_lago() en tools/generar_isla.py. Con deep, el lago hondo
+-- de los gigantes con GiantDef.deepLake: plano a deepLakeFloor hasta la orilla.
+function WorldZones.lakeFloor(radius: number, deep: boolean?): number
+	if deep then -- lago hondo: plano y, al final, una pared hasta la orilla de la repisa
+		local t = math.clamp(
+			(radius - L.deepLakeWallRadius) / (L.craterLakeRadius - L.deepLakeWallRadius),
+			0,
+			1
+		)
+		return L.deepLakeFloor + (L.waterLevel - 3 - L.deepLakeFloor) * t
+	end
 	local shelfStart = L.craterLakeRadius - L.craterShelfWidth
 	local shelf = L.waterLevel - L.craterShelfDepth
 	if radius >= shelfStart then
@@ -107,16 +116,40 @@ function WorldZones.pondMaxRadius(index: number): number
 	return WorldZones.pondRadius(index) * (1 + wobble[1] + wobble[2] + wobble[3])
 end
 
--- Puente: del borde de la meseta a la puerta del cráter, en línea recta.
+local BRIDGE_DIRECTION =
+	Vector3.new(math.cos(math.rad(L.bridgeAngle)), 0, math.sin(math.rad(L.bridgeAngle)))
+local TUNNEL_HALF_WIDTH = 24 -- el túnel del volcán (tools/blender/volcan_cueva_forma.py)
+local TUNNEL_TOP = 64 -- sobre el paseo
+
+-- Puente: del borde de la meseta al arco, al pie del volcán, en línea recta.
 -- Misma geometría que puente() en tools/generar_isla.py.
 function WorldZones.bridgeEnds(): (Vector3, Vector3)
-	local direction =
-		Vector3.new(math.cos(math.rad(L.bridgeAngle)), 0, math.sin(math.rad(L.bridgeAngle)))
-	local start = direction * L.bridgeStartRadius + Vector3.new(0, L.deckHeight, 0)
+	local start = BRIDGE_DIRECTION * L.bridgeStartRadius + Vector3.new(0, L.deckHeight, 0)
 	local finish = WorldZones.craterCenter
-		- direction * (L.craterRimOuter - 2)
+		- BRIDGE_DIRECTION * (L.craterGateRadius + 1)
 		+ Vector3.new(0, L.craterDeckHeight, 0)
 	return start, finish
+end
+
+-- La puerta del cráter por dentro: donde el túnel sale al paseo, frente al lago (por ahí
+-- llegan los jugadores y hacia ahí miran los gigantes).
+function WorldZones.craterDoor(): Vector3
+	return WorldZones.craterCenter
+		- BRIDGE_DIRECTION * (L.craterRimOuter - 2)
+		+ Vector3.new(0, L.craterDeckHeight, 0)
+end
+
+-- ¿Está en el túnel del volcán? (del arco al paseo; la corriente del puente sigue ahí)
+function WorldZones.isInTunnel(position: Vector3): boolean
+	local offset = flat(position) - WorldZones.craterCenter
+	local along = -offset:Dot(BRIDGE_DIRECTION)
+	local lateral = (offset + BRIDGE_DIRECTION * along).Magnitude
+	local walkEnd = L.craterCliffRadius + L.craterWalkWidth
+	return along >= walkEnd
+		and along <= L.craterGateRadius + 2
+		and lateral <= TUNNEL_HALF_WIDTH
+		and position.Y >= L.craterRimHeight - 4
+		and position.Y <= L.craterRimHeight + TUNNEL_TOP
 end
 
 -- ¿Está sobre el puente? (para la corriente que acelera al jugador)
@@ -142,8 +175,8 @@ function WorldZones.isOnCraterShore(position: Vector3): boolean
 		and position.Y <= L.craterRimHeight + 14
 end
 
--- Guarida del descanso: la plataforma del fondo del volcán vacío. Solo ahí
--- se gana poder durante el descanso (las rampas no cuentan).
+-- Guarida del descanso: la plataforma que flota en el medio del volcán (sobre el agua,
+-- la lava o la arena). Solo ahí se gana poder durante el descanso (el puente no cuenta).
 function WorldZones.isInRestArena(position: Vector3): boolean
 	return WorldZones.distanceToCrater(position) <= L.restArenaRadius + 1
 		and position.Y >= L.restArenaTop - 1

@@ -1,0 +1,173 @@
+{
+ "ancho": 403.0,
+ "alto": 73.0,
+ "centroY": 29.0,
+ "mallas": [
+  {
+   "nombre": "MinotauroHabitat1",
+   "brillo": null
+  },
+  {
+   "nombre": "MinotauroHabitat2",
+   "brillo": null
+  },
+  {
+   "nombre": "MinotauroHabitat3",
+   "brillo": null
+  },
+  {
+   "nombre": "MinotauroHabitat4",
+   "brillo": null
+  },
+  {
+   "nombre": "MinotauroHabitat5",
+   "brillo": null
+  },
+  {
+   "nombre": "MinotauroHabitat6",
+   "brillo": null
+  },
+  {
+   "nombre": "MinotauroHabitat7",
+   "brillo": null
+  },
+  {
+   "nombre": "MinotauroHabitatBrillo1",
+   "brillo": [
+    255,
+    140,
+    40
+   ]
+  }
+ ],
+ "luces": [
+  {
+   "pos": [
+    -59.94,
+    26.22,
+    -148.35
+   ],
+   "color": [
+    255,
+    150,
+    50
+   ],
+   "rango": 32
+  },
+  {
+   "pos": [
+    59.94,
+    24.13,
+    -148.35
+   ],
+   "color": [
+    255,
+    150,
+    50
+   ],
+   "rango": 32
+  },
+  {
+   "pos": [
+    48.82,
+    26.55,
+    150.27
+   ],
+   "color": [
+    255,
+    150,
+    50
+   ],
+   "rango": 32
+  },
+  {
+   "pos": [
+    -48.82,
+    24.64,
+    150.27
+   ],
+   "color": [
+    255,
+    150,
+    50
+   ],
+   "rango": 32
+  },
+  {
+   "pos": [
+    168.0,
+    32.9,
+    22.0
+   ],
+   "color": [
+    255,
+    150,
+    50
+   ],
+   "rango": 32
+  },
+  {
+   "pos": [
+    168.0,
+    32.9,
+    -22.0
+   ],
+   "color": [
+    255,
+    150,
+    50
+   ],
+   "rango": 32
+  }
+ ],
+ "fuegos": [
+  {
+   "pos": [
+    -59.94,
+    24.22,
+    -148.35
+   ],
+   "tam": 7
+  },
+  {
+   "pos": [
+    59.94,
+    22.13,
+    -148.35
+   ],
+   "tam": 7
+  },
+  {
+   "pos": [
+    48.82,
+    24.55,
+    150.27
+   ],
+   "tam": 7
+  },
+  {
+   "pos": [
+    -48.82,
+    22.64,
+    150.27
+   ],
+   "tam": 7
+  },
+  {
+   "pos": [
+    168.0,
+    30.9,
+    22.0
+   ],
+   "tam": 7
+  },
+  {
+   "pos": [
+    168.0,
+    30.9,
+    -22.0
+   ],
+   "tam": 7
+  }
+ ]
+}

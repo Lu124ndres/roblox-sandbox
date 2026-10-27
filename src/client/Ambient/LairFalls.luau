@@ -10,7 +10,9 @@
 	encima, un Beam con la textura del humo teñida de fuego que avanza y hace
 	que se vea correr. Al pie, salpicaduras de fuego, humo y una luz.
 	Ángulos elegidos para no cruzar las rocas (Dragon/Guarida) ni los props
-	del hábitat (Config.Habitats).
+	del hábitat (Config.Habitats). Los Beams y las salpicaduras van en `kept`;
+	el neón, la grieta, el marco y el charco en `parent` (LavaLair los saca
+	cuando el hábitat completo de Blender trae sus propias cascadas).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -74,8 +76,8 @@ local function segment(
 end
 
 -- Salpicadura continua al pie (fuego y humo) con su luz.
-local function splash(parent: Instance, at: Vector3, size: number)
-	local holder = P.holder(parent, CFrame.new(at), Vector3.new(size, 1, size))
+local function splash(kept: Instance, at: Vector3, size: number)
+	local holder = P.holder(kept, CFrame.new(at), Vector3.new(size, 1, size))
 	local fire = P.emitter(
 		holder,
 		Assets.Particles.Spark,
@@ -102,11 +104,11 @@ local function splash(parent: Instance, at: Vector3, size: number)
 	P.light(holder, P.MAGMA, 2, 26)
 end
 
-local function fall(parent: Instance, degrees: number)
+local function fall(parent: Instance, kept: Instance, degrees: number)
 	local angle = math.rad(degrees)
 	local out = Vector3.new(math.cos(angle), 0, math.sin(angle))
 	local side = Vector3.new(-out.Z, 0, out.X)
-	local holder = P.holder(parent, CFrame.new(P.at(angle, 170, 0)))
+	local holder = P.holder(kept, CFrame.new(P.at(angle, 170, 0)))
 	holder.Name = `Cascada{degrees}`
 	-- Grieta en el acantilado: de donde sale.
 	local source = P.at(angle, FALL[1] - GAP, P.ground(FALL[1]) + 1)
@@ -139,7 +141,7 @@ local function fall(parent: Instance, degrees: number)
 		P.MAGMA,
 		{ material = Enum.Material.Neon }
 	)
-	splash(parent, pool + Vector3.new(0, 1, 0), 8)
+	splash(kept, pool + Vector3.new(0, 1, 0), 8)
 	last = pool + Vector3.new(0, 0.25, 0)
 	for k = 2, #RIVER do
 		local radius, swing = RIVER[k][1], RIVER[k][2]
@@ -155,12 +157,12 @@ local function fall(parent: Instance, degrees: number)
 		segment(parent, holder, last, nextPoint, 6, 0.5)
 		last = nextPoint
 	end
-	splash(parent, last + Vector3.new(0, 0.5, 0), 6)
+	splash(kept, last + Vector3.new(0, 0.5, 0), 6)
 end
 
-function LairFalls.build(parent: Instance)
+function LairFalls.build(kept: Instance, parent: Instance)
 	for _, degrees in ANGLES do
-		fall(parent, degrees)
+		fall(parent, kept, degrees)
 	end
 end
 

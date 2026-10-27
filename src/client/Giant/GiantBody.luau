@@ -1,7 +1,8 @@
 --!strict
 --[[
-	GiantBody: el gigante en el cliente crece hacia el alto de su etapa con el
-	modelo de esa etapa (<base>E1..E4), respira, se mece y mira alrededor, con un
+	GiantBody: el gigante en el cliente crece con la barra (GiantGrowth: resorte
+	suave y un inflarse al tragar) con el modelo de su etapa (<base>E1..E4),
+	respira, se mece y mira alrededor, con un
 	contorno que late con el enojo (GiantOutline). "Palancas": salto, giro, atención.
 	ScaleTo solo al cambiar la escala más de GiantScaleStep. Con huesos: la orca nada
 	(OrcaSwim), el dragón vuela (DragonFly), el minotauro y el zorro se animan (*Stand).
@@ -12,12 +13,12 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
-local GiantStages = require(ReplicatedStorage.Shared.GiantStages)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local Performance = require(ReplicatedStorage.Shared.UIConfig.Performance)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
+local GiantGrowth = require(script.Parent.GiantGrowth)
 local GiantOutline = require(script.Parent.GiantOutline)
 local OrcaSwim = require(script.Parent.OrcaSwim)
 local DragonFly = require(script.Parent.DragonFly)
@@ -32,6 +33,8 @@ export type Body = {
 	lift: NumberValue, -- studs extra hacia arriba (saltos)
 	spin: NumberValue, -- grados extra de giro (piruetas)
 	setStage: (stage: number, instant: boolean?) -> (),
+	grow: (progress: number, instant: boolean?) -> (), -- avance de la barra: crece con cada pez
+	gulp: () -> (), -- traga un pez: se infla un poquito
 	lookAt: (position: Vector3, seconds: number) -> (),
 	height: () -> number,
 	top: () -> Vector3, -- punto sobre la cabeza
@@ -96,23 +99,16 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 	local outline = GiantOutline.attach(model)
 	local stateFolder = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
 	local lift, spin = Instance.new("NumberValue"), Instance.new("NumberValue")
-	local currentHeight = GiantStages.heightFor(1)
-	local targetHeight = currentHeight
-	local yaw, attentionYaw, attentionUntil = 0, 0, 0
-	local elapsed = 0
+	local growth = GiantGrowth.new()
+	local currentHeight = growth.height() -- el de GiantGrowth, leído cada cuadro
+	local yaw, attentionYaw, attentionUntil, elapsed = 0, 0, 0, 0
 
 	local function updateScale(dt: number)
-		currentHeight += (targetHeight - currentHeight) * (1 - math.exp(
-			-dt / EFFECTS.GiantGrowthSeconds
-		))
-		if math.abs(targetHeight - currentHeight) < targetHeight * Performance.GiantScaleStep then
-			currentHeight = targetHeight -- ya casi llegó: se termina de golpe
-		end
-		local scale = currentHeight / baseHeight
+		growth.step(dt)
+		currentHeight = growth.height()
+		local scale = currentHeight * (1 + growth.swell()) / baseHeight
 		local change = if shownScale > 0 then math.abs(scale / shownScale - 1) else math.huge
-		if
-			change > Performance.GiantScaleStep or (currentHeight == targetHeight and change > 0)
-		then
+		if change > Performance.GiantScaleStep or (growth.settled() and change > 0) then
 			model:ScaleTo(scale)
 			shownScale = scale
 		end
@@ -162,12 +158,16 @@ function GiantBody.spawn(def: Config.GiantDef, base: CFrame): Body
 		lift = lift,
 		spin = spin,
 		setStage = function(stage: number, instant: boolean?)
-			targetHeight = GiantStages.heightFor(stage)
+			growth.setStage(stage, instant)
+			currentHeight = growth.height()
 			dress(stage) -- cada etapa puede tener su propio modelo (más grande y feroz)
-			if instant then
-				currentHeight = targetHeight
-			end
 		end,
+		-- Avance de la barra (0 a 1): el cuerpo crece hacia su alto (GiantGrowth).
+		grow = function(progress: number, instant: boolean?)
+			growth.grow(progress, instant)
+			currentHeight = growth.height()
+		end,
+		gulp = growth.gulp, -- traga: se infla un poquito y vuelve
 		lookAt = function(position: Vector3, seconds: number)
 			attentionYaw = angleTowards(base.Position, position)
 			attentionUntil = os.clock() + seconds

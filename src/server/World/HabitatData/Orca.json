@@ -1,0 +1,141 @@
+{
+ "ancho": 391.653,
+ "alto": 259.728,
+ "centroY": -125.591,
+ "mallas": [
+  {
+   "nombre": "OrcaHabitat1",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaHabitat2",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaHabitat3",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaHabitat4",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaHabitat5",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaHabitat6",
+   "brillo": null
+  },
+  {
+   "nombre": "OrcaHabitatBrillo1",
+   "brillo": [
+    252,
+    248,
+    255
+   ]
+  },
+  {
+   "nombre": "OrcaHabitatBrillo2",
+   "brillo": [
+    120,
+    255,
+    230
+   ]
+  }
+ ],
+ "luces": [
+  {
+   "pos": [
+    -33.29,
+    -243.96,
+    121.86
+   ],
+   "color": [
+    255,
+    220,
+    150
+   ],
+   "rango": 22
+  },
+  {
+   "pos": [
+    -163.1,
+    -170.96,
+    -72.62
+   ],
+   "color": [
+    250,
+    238,
+    255
+   ],
+   "rango": 24
+  },
+  {
+   "pos": [
+    98.34,
+    -234.11,
+    -137.32
+   ],
+   "color": [
+    250,
+    238,
+    255
+   ],
+   "rango": 28
+  },
+  {
+   "pos": [
+    59.55,
+    -231.7,
+    -147.39
+   ],
+   "color": [
+    250,
+    238,
+    255
+   ],
+   "rango": 28
+  },
+  {
+   "pos": [
+    25.03,
+    -235.32,
+    -168.1
+   ],
+   "color": [
+    250,
+    238,
+    255
+   ],
+   "rango": 28
+  },
+  {
+   "pos": [
+    -32.69,
+    -242.4,
+    4.91
+   ],
+   "color": [
+    120,
+    255,
+    230
+   ],
+   "rango": 30
+  },
+  {
+   "pos": [
+    40.7,
+    -242.4,
+    -46.73
+   ],
+   "color": [
+    120,
+    255,
+    230
+   ],
+   "rango": 30
+  }
+ ],
+ "fuegos": []
+}

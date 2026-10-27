@@ -10,7 +10,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
-local AbyssRescue = require(script.Parent.Ambient.AbyssRescue)
 local AfkNotice = require(script.Parent.Ambient.AfkNotice)
 local BridgeBoost = require(script.Parent.Ambient.BridgeBoost)
 local Flocks = require(script.Parent.Ambient.Flocks)
@@ -79,6 +78,7 @@ local FillChips = require(script.Parent.Interface.FillChips)
 local Layout = require(script.Parent.Interface.Layout)
 local QuickBuys = require(script.Parent.Interface.QuickBuys)
 local BoostBadges = require(script.Parent.Interface.BoostBadges)
+local EventCountdown = require(script.Parent.Interface.EventCountdown)
 local UpdateRibbon = require(script.Parent.Interface.UpdateRibbon)
 local Overhead = require(script.Parent.Interface.Overhead)
 local StartZoom = require(script.Parent.Interface.StartZoom)
@@ -144,6 +144,7 @@ InviteButton.start(toasts) -- junto a Códigos: invitar amigos también desde el
 task.spawn(GroupSign.start) -- el letrero de la plaza espera el terreno
 task.spawn(LikeSign.start) -- el de la meta de likes espera el terreno y que haya meta
 BoostBadges.start(screen)
+EventCountdown.start(screen) -- antes de HudFocus y TutorialGuide: la ocultan por su nombre
 HudFocus.start(screen) -- después del HUD: en táctil lo oculta con una ventana abierta
 BoostTimer.start(screen)
 EventIntro.start(screen) -- el anuncio grande al empezar un evento
@@ -159,7 +160,6 @@ PondSigns.start()
 PondFx.start()
 PondGlow.start() -- de noche cada estanque se alumbra de su color
 PondLife.start()
-AbyssRescue.start(screen)
 BridgeBoost.start()
 GiantAttacks.start(screen, toasts)
 AfkNotice.start(toasts)

@@ -60,7 +60,7 @@ local Textures: { [string]: { string } } = {
 	TrajeMarinero = { "rbxassetid://133730397975971" }, -- v2: paleta y dibujos, en el TextureID
 	-- v2: color y máscara de brillo (EmissiveMaskContent de la SurfaceAppearance).
 	TrajeDiosDelVolcan = { "rbxassetid://130580727380840", "rbxassetid://77506412592128" },
-	TrajeReyDelMar = { "rbxassetid://97009037020054", "rbxassetid://114700820982396" },
+	TrajeReyDelMar = { "rbxassetid://88639375479294", "rbxassetid://114700820982396" },
 	-- Paleta de los props del mapa (palmeras, arbustos, rocas, crestas, bordes de estanque):
 	-- ServerStorage.PropsMapa, de tools/blender/props_mapa.py. Solo color.
 	PropsMapa = {

@@ -2,17 +2,15 @@
 --[[
 	CraterDrain
 
-	Decide qué llena el volcán en este cliente, según EstadoGigante.VolcanVacio
-	(lo publica RestArena) y el monstruo:
-		- al empezar el descanso se va lo que haya (el agua baja, LakeFill; la
-		  lava se hunde, CraterLava; la arena se escurre, CraterSand) mientras
-		  la guarida sube desde el fondo (GuaridaSube, que también la hunde al
-		  terminar el descanso);
-		- vacío también en la ruleta; después (VolcanLlenando) se llena según
-		  el que salió: agua, lava (GiantDef.lava), arena (GiantDef.sand) o
-		  agua con hielo (GiantDef.ice: con el agua arriba suben los témpanos,
-		  IceLair), y recién entonces llega el monstruo. Entre agua y agua con
-		  hielo el agua se queda: solo llega o se va el hielo.
+	Decide qué llena el volcán en este cliente, según el monstruo:
+		- en el descanso y la ruleta se queda el relleno del que se fue (pedido
+		  del usuario: la ambientación sigue), y la guarida sube a flotar encima
+		  (GuaridaSube, que también la hunde al terminar el descanso);
+		- al llenarse para el siguiente (VolcanLlenando) cambia según el que
+		  salió: agua, lava (GiantDef.lava), arena (GiantDef.sand) o agua con
+		  hielo (GiantDef.ice: con el agua arriba suben los témpanos, IceLair),
+		  y recién entonces llega el monstruo. Entre agua y agua con hielo el
+		  agua se queda: solo llega o se va el hielo.
 	Todo es de cada cliente (los personajes se simulan en su propio cliente).
 	Quien entra lo ve como está, al instante. El modo queda en CraterMode;
 	onShown avisa a CraterWater para esconder el abismo, las motas y las
@@ -34,6 +32,8 @@ local SandProps = require(script.Parent.SandProps)
 
 type Mode = CraterMode.Mode
 
+local RESHAPE_CHECKS = { 0.5, 1.5, 3 } -- s después de LagoHondo: el terreno nuevo ya llegó
+
 local CraterDrain = {}
 
 local defs: { [string]: Config.GiantDef } = {}
@@ -47,18 +47,8 @@ function CraterDrain.start(onShown: (boolean) -> ())
 	local ATTR = Protocol.GiantAttributes
 	GuaridaSube.watch(stateFolder)
 	SandProps.start()
-	-- Vacío en el descanso y en la ruleta: se llena cuando llega el siguiente.
 	local function wanted(): Mode
 		local refilling = stateFolder:GetAttribute(ATTR.Refilling) == true
-		if
-			not refilling
-			and (
-				stateFolder:GetAttribute(ATTR.Drained) == true
-				or stateFolder:GetAttribute(ATTR.Phase) == "rest"
-			)
-		then
-			return "empty"
-		end
 		-- Al llenarse antes de que llegue, el relleno es el del que salió en la ruleta.
 		local id = stateFolder:GetAttribute(if refilling then ATTR.RouletteResult else ATTR.Id)
 		local def = defs[id :: any]
@@ -109,11 +99,22 @@ function CraterDrain.start(onShown: (boolean) -> ())
 			CraterSand.rise(instant)
 		end
 	end
-	for _, attribute in { ATTR.Drained, ATTR.Phase, ATTR.Id, ATTR.Refilling } do
+	for _, attribute in { ATTR.Drained, ATTR.Phase, ATTR.Id, ATTR.Refilling, ATTR.DeepLake } do
 		stateFolder:GetAttributeChangedSignal(attribute):Connect(function()
 			apply(false)
 		end)
 	end
+	-- El servidor rehízo el lago (World/LakeShape, al llenarse): vuelve con su agua. Si
+	-- aquí no hay agua, se saca de una apenas llega (el terreno tarda en replicarse).
+	stateFolder:GetAttributeChangedSignal(ATTR.DeepLake):Connect(function()
+		for _, seconds in RESHAPE_CHECKS do
+			task.delay(seconds, function()
+				if not CraterMode.isWet() then
+					LakeFill.drain(true)
+				end
+			end)
+		end
+	end)
 	apply(true) -- quien entra lo ve como está, al instante
 	CraterGuard.start() -- con streaming, el agua del servidor puede volver encima
 end

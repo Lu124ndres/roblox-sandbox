@@ -13,6 +13,8 @@
 	La puerta (por donde llega el puente) queda libre: nada tapa la vista del lago.
 	build(lake, shore): las rocas van en `lake` (suben y bajan con los témpanos),
 	el resto en `shore`. rocks() da dónde están, para que los témpanos no las pisen.
+	Con el hábitat completo de Blender (IceHabitat, `complete`) la orilla ya viene en
+	sus mallas: build() no arma nada y rocks() da una lista vacía.
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -53,7 +55,8 @@ local ROCK_REACH = 22 -- cuánto más ancha que su cima es una roca en el agua
 
 local IceShore = {}
 
-local rng = Random.new(67) -- siempre la misma orilla
+local SEED = 67 -- siempre la misma orilla (también si IceLair la rearma)
+local rng = Random.new(SEED)
 
 local function nearDoor(a: number): boolean
 	return math.abs((a - DOOR + math.pi) % TAU - math.pi) < DOOR_GAP
@@ -144,9 +147,12 @@ local function clusters(parent: Instance)
 	end
 end
 
--- Dónde están las rocas de la repisa (para IceFloes).
-function IceShore.rocks(): { { at: Vector3, reach: number } }
+-- Dónde están las rocas de la repisa (para IceFloes); ninguna con el hábitat completo.
+function IceShore.rocks(complete: boolean): { { at: Vector3, reach: number } }
 	local list: { { at: Vector3, reach: number } } = {}
+	if complete then
+		return list
+	end
 	for _, rock in ROCKS do
 		local at = P.at(math.rad(rock[1]), rock[2], WATER + rock[3])
 		table.insert(list, { at = at, reach = rock[4] + ROCK_REACH })
@@ -154,7 +160,11 @@ function IceShore.rocks(): { { at: Vector3, reach: number } }
 	return list
 end
 
-function IceShore.build(lake: Instance, shore: Instance)
+function IceShore.build(lake: Instance, shore: Instance, complete: boolean)
+	if complete then
+		return
+	end
+	rng = Random.new(SEED)
 	for _, rock in ROCKS do
 		if not nearDoor(math.rad(rock[1])) then
 			IceRocks.rock(

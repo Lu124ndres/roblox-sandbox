@@ -135,6 +135,9 @@ SkyMoods.day = {
 SkyMoods.crater =
 	mood(0, 2.1, rgb(255, 130, 80), rgb(200, 70, 40), 0.24, rgb(255, 232, 214), rgb(205, 140, 115))
 SkyMoods.craterHour = 15.5
+-- La cueva del volcán de bloques (World/BlockVolcano) no ve el cielo: la luz de adentro
+-- (Lighting.Ambient) se vuelve cálida, de lava, al entrar al cráter.
+SkyMoods.caveAmbient = rgb(150, 98, 80)
 SkyMoods.craterSaturation = 0.12
 SkyMoods.craterContrast = 0.12
 

@@ -13,6 +13,10 @@
 		          puente (ahí el camino sigue plano hasta la entrada).
 		ladera    baja hasta el fondo del mar.
 	Misma curva que altura_crater() en tools/generar_isla.py (piezas encima).
+	onSea(x, z, lakeOnly) da el cráter sobre el mar abierto, sin la isla (la isla de bloques
+	es de mallas); lakeOnly: solo el lago, porque el volcán de bloques (World/BlockVolcano)
+	pone el acantilado, el paseo y la montaña, y el lago sigue siendo terreno (lo llenan el
+	agua, la arena, la ceniza y el hielo).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -49,11 +53,11 @@ local function peak(angle: number): number
 end
 
 -- Altura del suelo a `rho` del centro en la dirección `angle` (radianes, atan2(z, x)).
-function CraterShape.height(rho: number, angle: number): number?
+function CraterShape.height(rho: number, angle: number, deep: boolean?): number?
 	if rho >= L.craterBaseRadius then
 		return nil
 	elseif rho < L.craterLakeRadius then
-		return WorldZones.lakeFloor(rho)
+		return WorldZones.lakeFloor(rho, deep)
 	elseif rho < L.craterCliffRadius then
 		local foot = WorldZones.lakeFloor(L.craterLakeRadius)
 		local t = (rho - L.craterLakeRadius) / (L.craterCliffRadius - L.craterLakeRadius)
@@ -92,6 +96,29 @@ function CraterShape.material(rho: number, angle: number, height: number): Enum.
 	return if height > L.craterRimHeight + L.craterPeakHeight * 0.55
 		then MATERIAL.Asphalt
 		else MATERIAL.Basalt
+end
+
+function CraterShape.onSea(
+	x: number,
+	z: number,
+	lakeOnly: boolean,
+	deep: boolean?
+): (number, Enum.Material, number)
+	local height, material, waterTop = L.seaFloorHeight, MATERIAL.Sand, L.waterLevel
+	local offset = Vector2.new(x, z) - Vector2.new(L.craterCenter[1], L.craterCenter[2])
+	local rho, angle = offset.Magnitude, math.atan2(offset.Y, offset.X)
+	if lakeOnly and rho >= L.craterLakeRadius then
+		-- Con el lago hondo se ve el costado de estas columnas (bajan hasta su fondo): basalto.
+		return height, if deep then MATERIAL.Basalt else material, waterTop
+	end
+	local crater = CraterShape.height(rho, angle, deep)
+	if crater and (crater > height or rho < L.craterCliffRadius) then
+		height, material = crater, CraterShape.material(rho, angle, crater)
+		if deep and rho < L.craterLakeRadius then
+			material = MATERIAL.Basalt -- el lago hondo no tiene repisa clara: roca oscura
+		end
+	end
+	return height, material, waterTop
 end
 
 return table.freeze(CraterShape)

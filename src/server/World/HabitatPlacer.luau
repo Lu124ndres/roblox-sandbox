@@ -19,6 +19,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 
@@ -30,12 +31,19 @@ local HabitatPlacer = {}
 
 local rayParams = RaycastParams.new()
 rayParams.FilterType = Enum.RaycastFilterType.Include
-rayParams.FilterDescendantsInstances = { Workspace.Terrain }
 rayParams.IgnoreWater = true
+
+-- El fondo es el terreno del lago y, del acantilado para afuera, la malla del volcán
+-- (World/BlockVolcano): los rayos chocan con los dos.
+local function grounds(): { Instance }
+	local volcano = Workspace:FindFirstChild(Protocol.Map.BlockVolcano)
+	return if volcano then { Workspace.Terrain, volcano } else { Workspace.Terrain }
+end
 
 -- Altura del terreno bajo (x, z), o nil si el rayo no encuentra nada.
 local function groundAt(point: Vector3): number?
 	local origin = Vector3.new(point.X, HABITATS.rayTopHeight, point.Z)
+	rayParams.FilterDescendantsInstances = grounds()
 	local hit = Workspace:Raycast(origin, Vector3.new(0, -HABITATS.rayLength, 0), rayParams)
 	return if hit then hit.Position.Y else nil
 end

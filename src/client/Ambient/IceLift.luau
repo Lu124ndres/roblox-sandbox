@@ -9,6 +9,9 @@
 	emerge se anima con go() (un Heartbeat solo mientras se mueve) y se mueven
 	todas juntas con BulkMoveTo. Al romper la superficie, el agua salpica
 	alrededor de cada lugar del contrato.
+	También mueve la banquisa del hábitat completo (IceHabitat.floating, float()):
+	es del servidor, así que no se saca del Workspace; con emerge en 0 queda
+	hundida e invisible en este cliente (LocalTransparencyModifier).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -30,11 +33,32 @@ local home: Instance? = nil
 local parts: { BasePart } = {}
 local rest: { CFrame } = {}
 local frames: { CFrame } = {}
+local extra: { BasePart } = {} -- la banquisa del hábitat completo (del servidor)
+local restOf: { [BasePart]: CFrame } = setmetatable({}, { __mode = "k" }) :: any
 local emerge, from, to, startAt, seconds = 0, 0, 0, 0, 1
 local splashed = true -- ya salpicó en esta subida (o no sube)
 local connection: RBXScriptConnection? = nil
 
+-- Mueve la banquisa del hábitat completo (la que siga en el Workspace).
+local function applyExtra(down: Vector3)
+	local moving: { BasePart }, targets: { CFrame } = {}, {}
+	local hidden = if emerge > 0 then 0 else 1
+	for _, part in extra do
+		if part:IsDescendantOf(Workspace) then
+			part.LocalTransparencyModifier = hidden
+			table.insert(moving, part)
+			table.insert(targets, restOf[part] - down)
+		end
+	end
+	if #moving > 0 then
+		Workspace:BulkMoveTo(moving, targets, Enum.BulkMoveMode.FireCFrameChanged)
+	end
+end
+
 local function apply()
+	local e = emerge * emerge * (3 - 2 * emerge)
+	local down = Vector3.new(0, DEPTH * (1 - e), 0)
+	applyExtra(down)
 	local target = folder
 	if not target then
 		return
@@ -46,8 +70,6 @@ local function apply()
 	if emerge <= 0 then
 		return
 	end
-	local e = emerge * emerge * (3 - 2 * emerge)
-	local down = Vector3.new(0, DEPTH * (1 - e), 0)
 	for i, cframe in rest do
 		frames[i] = cframe - down
 	end
@@ -76,8 +98,11 @@ local function splashOut()
 end
 
 -- Las piezas de `floating` (ya armadas en su lugar final) se moverán dentro de `parent`.
+-- Reemplaza lo que se seguía antes (IceLair rearma el lago si cambia el hábitat).
 function IceLift.track(floating: Instance, parent: Instance)
 	folder, home = floating, parent
+	table.clear(parts)
+	table.clear(rest)
 	for _, d in floating:GetDescendants() do
 		if d:IsA("BasePart") then
 			table.insert(parts, d)
@@ -85,6 +110,18 @@ function IceLift.track(floating: Instance, parent: Instance)
 		end
 	end
 	frames = table.create(#parts)
+	apply()
+end
+
+-- La banquisa del hábitat completo: piezas del servidor en su lugar final (la primera
+-- vez que se ven; después ya las movió este cliente). Lista vacía si no hay hábitat.
+function IceLift.float(list: { BasePart })
+	extra = list
+	for _, part in list do
+		if not restOf[part] then
+			restOf[part] = part.CFrame
+		end
+	end
 	apply()
 end
 

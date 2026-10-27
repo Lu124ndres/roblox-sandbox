@@ -8,7 +8,8 @@
 		de hielo  aire a poca altura sobre el agua
 		vaho      niebla fría y baja que se arrastra sobre el agua y los témpanos
 		          (el agua más tibia que el aire humea)
-		escarcha  un brillo frío y suave sobre la orilla
+		escarcha  un brillo frío y suave sobre la orilla (no con el hábitat completo
+		          de Blender, IceHabitat: ese trae sus luces)
 	La luz fría del cielo y la niebla de la atmósfera las mezcla SkyCycle
 	(SkyMoods.ice según CraterMode.iceBlend); la bruma del cráter la pone ZoneMood.
 	Todo local; los emisores pasan por FxQuality (modo rápido = sin partículas).
@@ -39,6 +40,8 @@ local IceAir = {}
 
 local folder = Instance.new("Folder")
 folder.Name = "AireFrio"
+local glows = Instance.new("Folder") -- las luces de la orilla
+glows.Name = "LucesOrilla"
 
 local function fade(a: number, b: number, c: number): NumberSequence
 	return NumberSequence.new({
@@ -130,14 +133,16 @@ local function build()
 	for k = 1, SHORE_GLOWS do
 		local angle = (k + 0.25) / SHORE_GLOWS * math.pi * 2
 		local at = P.at(angle, L.craterLakeRadius - 12, WATER + 10)
-		P.light(P.holder(folder, CFrame.new(at)), SHORE_LIGHT, 0.6, 60)
+		P.light(P.holder(glows, CFrame.new(at)), SHORE_LIGHT, 0.6, 60)
 	end
 end
 
-function IceAir.show()
+-- complete: está el hábitat completo (sin las luces de la orilla).
+function IceAir.show(complete: boolean)
 	if #folder:GetChildren() == 0 then
 		build()
 	end
+	glows.Parent = if complete then nil else folder
 	folder.Parent = Workspace
 end
 

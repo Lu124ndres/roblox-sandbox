@@ -85,8 +85,7 @@ local function place(name: string): Vector3?
 	if name == "orilla" then
 		return polar(L.pierAngles[1], L.shoreRadius - 6, L.plateauHeight + 4)
 	elseif name == "volcan" then
-		local _, finish = WorldZones.bridgeEnds()
-		return finish + Vector3.new(0, 4, 0)
+		return WorldZones.craterDoor() + Vector3.new(0, 4, 0)
 	elseif name == "plaza" then
 		return WorldZones.spawnPoint() + Vector3.new(0, 4, 0)
 	elseif name == "tienda" then

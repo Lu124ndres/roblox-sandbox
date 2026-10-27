@@ -6,11 +6,14 @@
 	ServerStorage.Habitats.<GiantId> repartidos según Config.Habitats, en
 	Workspace.Habitat (HabitatPlacer coloca cada uno).
 
-	Cambia cuando cambia el gigante (atributo Id de EstadoGigante) y ya
-	mientras el cráter se llena para el siguiente (VolcanLlenando: se arma el
-	de RuletaResultado), así el que llega encuentra su casa puesta. Un gigante
+	Cambia cuando cambia el gigante (atributo Id de EstadoGigante) y ya cuando el
+	cráter se llena para el siguiente (VolcanLlenando: se arma el de
+	RuletaResultado), así el que llega encuentra su casa puesta. En el descanso y
+	la ruleta se queda el del que se fue (la ambientación sigue). Un gigante
 	sin carpeta en ServerStorage.Habitats (o sin entrada en Config) deja el
-	cráter vacío.
+	cráter vacío. Si el gigante tiene hábitat completo de Blender
+	(HabitatComplete), va ese en vez de los props. Antes se le da al lago la
+	forma de ese gigante (LakeShape: el lago hondo de la orca).
 
 	Los props se apoyan en el fondo de verdad (bajo el agua en la repisa). Con
 	el desierto del minotauro la arena llega más arriba: cada cliente los sube
@@ -23,11 +26,22 @@ local Workspace = game:GetService("Workspace")
 
 local Config = require(ReplicatedStorage.Shared.Config)
 local Protocol = require(ReplicatedStorage.Shared.Protocol)
+local HabitatComplete = require(script.Parent.HabitatComplete)
+local LakeShape = require(script.Parent.LakeShape)
 local HabitatPlacer = require(script.Parent.HabitatPlacer)
 
 local ATTRS = Protocol.GiantAttributes
 
 local HabitatService = {}
+
+local function defFor(giantId: string): Config.GiantDef?
+	for _, def in Config.Giants.chain do
+		if def.id == giantId then
+			return def
+		end
+	end
+	return nil
+end
 
 local folder: Folder
 local builtFor: string? = nil
@@ -39,6 +53,16 @@ local function build(giantId: string)
 	end
 	builtFor = giantId
 	folder:ClearAllChildren()
+	local def = defFor(giantId)
+	LakeShape.set(def ~= nil and def.deepLake == true) -- tarda unos cuadros
+	if builtFor ~= giantId then
+		return -- mientras tanto se pidió otro gigante: ese arma el suyo
+	end
+	if HabitatComplete.build(giantId, folder) then
+		folder:SetAttribute("GiantId", giantId)
+		print(`HabitatService: hábitat completo de {giantId}`)
+		return
+	end
 	local library = ServerStorage:FindFirstChild("Habitats")
 	local models = library and library:FindFirstChild(giantId)
 	local entries = Config.Habitats.byGiant[giantId]
@@ -80,7 +104,7 @@ function HabitatService.init()
 			build(nextId)
 		end
 	end)
-	current()
+	task.spawn(current) -- rehacer el lago tarda unos cuadros: no frena al resto de Main
 end
 
 return HabitatService

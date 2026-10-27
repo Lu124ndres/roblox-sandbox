@@ -9,6 +9,9 @@
 	en 1 la cima queda justo donde dice Dragon/Guarida. emerge se anima con
 	go() (un Heartbeat solo mientras se mueve) y se mueven todas juntas con
 	BulkMoveTo. Al romper la superficie, salpican fuego alrededor.
+	Las mallas del hábitat completo que suben (LairMeshes) bajan lo mismo, y
+	con emerge en 0 se esconden. refresh() vuelve a leer qué piezas hay en la
+	carpeta (LavaLair saca o pone las primitivas según haya hábitat completo).
 ]]
 
 local Players = game:GetService("Players")
@@ -21,6 +24,7 @@ local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local Sounds = require(script.Parent.Parent.Audio.Sounds)
 local CameraShake = require(script.Parent.Parent.Effects.CameraShake)
 local Fx = require(script.Parent.Parent.Effects.Fx)
+local LairMeshes = require(script.Parent.LairMeshes)
 local LairParts = require(script.Parent.LairParts)
 
 local LAVA = Guarida.lava
@@ -32,7 +36,7 @@ local LairLift = {}
 local folder: Instance? = nil
 local home: Instance? = nil
 local parts: { BasePart } = {}
-local rest: { CFrame } = {}
+local restOf: { [BasePart]: CFrame } = {} -- dónde se armó cada pieza (su lugar final)
 local frames: { CFrame } = {}
 local level = LAVA
 local emerge, from, to, startAt, seconds = 0, 0, 0, 0, 1
@@ -40,6 +44,9 @@ local splashed = true -- ya salpicó en esta subida (o no sube)
 local connection: RBXScriptConnection? = nil
 
 local function apply()
+	local e = emerge * emerge * (3 - 2 * emerge)
+	local down = Vector3.new(0, (LAVA - level) + DEPTH * (1 - e), 0)
+	LairMeshes.place(down, emerge > 0)
 	local target = folder
 	if not target then
 		return
@@ -51,10 +58,8 @@ local function apply()
 	if emerge <= 0 then
 		return
 	end
-	local e = emerge * emerge * (3 - 2 * emerge)
-	local down = Vector3.new(0, (LAVA - level) + DEPTH * (1 - e), 0)
-	for i, cframe in rest do
-		frames[i] = cframe - down
+	for i, part in parts do
+		frames[i] = restOf[part] - down
 	end
 	Workspace:BulkMoveTo(parts, frames, Enum.BulkMoveMode.FireCFrameChanged)
 end
@@ -93,10 +98,22 @@ end
 -- Las piezas de `rocks` (ya armadas en su lugar final) se moverán dentro de `parent`.
 function LairLift.track(rocks: Instance, parent: Instance)
 	folder, home = rocks, parent
-	for _, d in rocks:GetDescendants() do
+	LairLift.refresh()
+end
+
+-- Vuelve a juntar las piezas que hay ahora en la carpeta (cada una recuerda dónde se armó).
+function LairLift.refresh()
+	local target = folder
+	if not target then
+		return
+	end
+	table.clear(parts)
+	for _, d in target:GetDescendants() do
 		if d:IsA("BasePart") then
+			if not restOf[d] then
+				restOf[d] = d.CFrame
+			end
 			table.insert(parts, d)
-			table.insert(rest, d.CFrame)
 		end
 	end
 	frames = table.create(#parts)
@@ -136,5 +153,7 @@ function LairLift.go(target: number, duration: number, delay: number)
 		end
 	end)
 end
+
+apply() -- las mallas del hábitat que lleguen antes que la lava, ya hundidas
 
 return table.freeze(LairLift)

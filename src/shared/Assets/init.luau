@@ -152,7 +152,7 @@ local Assets: Assets = {
 		-- textura dibujada y máscara de brillo (EmissiveMask). Los de Meshy quedaron en
 		-- ServerStorage.Respaldos.Traje*_meshy.
 		TrajeDiosDelVolcan = "rbxassetid://140208758172851", -- 15,812 triángulos, 16 huesos
-		TrajeReyDelMar = "rbxassetid://77866847879162", -- 14,784 triángulos, 18 huesos (capa)
+		TrajeReyDelMar = "rbxassetid://70894311941236", -- 14,232 triángulos, 16 huesos (sin capa)
 		DragonMarinoE1 = "rbxassetid://122661699655092", -- cría (15,679 triángulos)
 		DragonMarinoE2 = "rbxassetid://110887980669740", -- joven (17,639)
 		DragonMarinoE3 = "rbxassetid://115962400260493", -- adulto (18,619)

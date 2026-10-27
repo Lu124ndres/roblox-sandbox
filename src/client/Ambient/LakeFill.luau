@@ -26,7 +26,9 @@ local CYCLE = Config.Giants.cycle
 local VOXEL = 4
 local STEP = 8 -- studs de agua por capa
 local HALF = math.ceil((L.craterLakeRadius + 8) / VOXEL) * VOXEL
-local BOTTOM = math.floor(L.craterFloor / VOXEL) * VOXEL - VOXEL
+-- Hasta el fondo más hondo: el del lago hondo (World/LakeShape) si lo hay; con el
+-- cuenco, las capas de abajo son roca y no cambian.
+local BOTTOM = math.floor(math.min(L.craterFloor, L.deepLakeFloor) / VOXEL) * VOXEL - VOXEL
 local SURFACE = math.floor(L.waterLevel / VOXEL) * VOXEL -- fila de la superficie (agua a medias)
 local CENTER = WorldZones.craterCenter
 

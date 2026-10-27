@@ -155,7 +155,10 @@ local UIConfig: UIConfig = {
 		CatchCardSeconds = 2.4, -- tarjeta de la captura abajo al centro
 		CoinFlySeconds = 0.7, -- monedas que vuelan al contador
 		-- Gigante
-		GiantGrowthSeconds = 1.2, -- constante de tiempo del crecimiento suave
+		GiantGrowthSeconds = 1.2, -- el resorte del crecimiento llega casi al alto en ~1.7 s (Giant/GiantGrowth)
+		GiantGulpSwell = 0.02, -- al tragar se infla 2 % y vuelve
+		GiantGulpSeconds = 0.35,
+		GiantGulpGap = 0.5, -- a lo sumo un inflado cada medio segundo (el chorro de peces no lo hace temblar)
 		GiantBobAmplitude = 0.45,
 		GiantBobSeconds = 3.4,
 		GiantSwayDegrees = 3,

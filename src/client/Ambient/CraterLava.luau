@@ -8,7 +8,7 @@
 	paredes y al dragón desde abajo, brasas que suben, burbujas de fuego que
 	revientan y humo. rise() la hace subir desde el fondo y sink() bajar (en
 	el descanso), ajustando el ancho al del pozo en cada altura. Se puede
-	pisar (quien cae lo rescata AbyssRescue). Local de cada cliente.
+	pisar. Local de cada cliente.
 	La guarida volcánica (rocas, nido, cascadas, géiseres...) va con ella:
 	LavaLair, que sigue su altura en cada cuadro.
 ]]

@@ -10,7 +10,9 @@
 		- espuma y vapor donde el agua toca el acantilado caliente;
 		- fumarolas en el fondo (CraterVents);
 		- en el descanso se vacía y se vuelve a llenar (CraterDrain): mientras
-		  está vacío se quitan las motas, la espuma y el abismo.
+		  está vacío se quitan las motas, la espuma y el abismo;
+		- con el lago hondo (EstadoGigante.LagoHondo, la orca) el fondo es de verdad
+		  y tiene su hábitat: se esconden el abismo y el brillo de las fumarolas.
 	Los emisores pasan por FxQuality (modo rápido = sin partículas).
 ]]
 
@@ -19,10 +21,12 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local WorldLayout = require(ReplicatedStorage.Shared.WorldLayout)
 local WorldZones = require(ReplicatedStorage.Shared.WorldZones)
 local ClientSettings = require(script.Parent.Parent.Settings.ClientSettings)
 local FxQuality = require(script.Parent.Parent.Settings.FxQuality)
+local CraterAbyss = require(script.Parent.CraterAbyss)
 local CraterDrain = require(script.Parent.CraterDrain)
 local CraterMode = require(script.Parent.CraterMode)
 local CraterVents = require(script.Parent.CraterVents)
@@ -37,9 +41,6 @@ local LAKE_REFLECTANCE = 0.12 -- poco reflejo: si no, la bruma naranja lo vuelve
 local LAKE_WAVES = 0.32 -- un poco más agitada que el mar
 local GLOW = Color3.fromRGB(120, 255, 230)
 local FOAM = Color3.fromRGB(235, 252, 250)
--- Capas del abismo: radio (en radios del lago), hondura bajo el agua y color.
-local ABYSS_LAYERS = 7 -- discos: más capas = degradado más suave
-local ABYSS_SHORE, ABYSS_DEEP = Color3.fromRGB(14, 66, 80), Color3.fromRGB(2, 12, 22)
 local EDGE_PIECES = 20 -- tramos de espuma alrededor del acantilado
 
 local CraterWater = {}
@@ -79,28 +80,6 @@ local function emitter(
 end
 
 -- Motas que brillan apenas sobre el agua, en todo el lago.
--- El agua de Roblox muestra la bruma del cielo donde no ve fondo cerca (y el
--- lago es muy hondo): unos discos oscuros apenas bajo la superficie hacen de
--- "abismo", del turquesa de la orilla al azul casi negro del centro. Lo que
--- baja más hondo (el gigante al zambullirse) se pierde en la oscuridad.
-local function abyss()
-	for index = 1, ABYSS_LAYERS do
-		local t = (index - 1) / (ABYSS_LAYERS - 1)
-		local radius = L.craterLakeRadius * (1.02 - 0.8 * t)
-		local disc = holder(
-			`Abismo{index}`,
-			Vector3.new(0.4, radius * 2, radius * 2),
-			CFrame.new(CENTER + Vector3.new(0, WATER - 14.5 - 5 * t, 0))
-				* CFrame.Angles(0, 0, math.rad(90))
-		)
-		disc.Shape = Enum.PartType.Cylinder
-		disc.Transparency = 0
-		disc.Color = ABYSS_SHORE:Lerp(ABYSS_DEEP, t)
-		disc.Material = Enum.Material.SmoothPlastic
-		disc.CastShadow = false
-	end
-end
-
 local function motes()
 	local size = L.craterLakeRadius * 1.6
 	local box = holder(
@@ -160,7 +139,7 @@ end
 
 -- getBlend: 0 fuera del cráter, 1 adentro (ZoneMood).
 function CraterWater.start(getBlend: () -> number)
-	abyss()
+	CraterAbyss.build(folder)
 	motes()
 	edge()
 	folder.Parent = Workspace
@@ -190,6 +169,12 @@ function CraterWater.start(getBlend: () -> number)
 		end
 	end)
 	CraterVents.start(folder, getBlend)
+	local state = ReplicatedStorage:WaitForChild(Protocol.GiantStateFolder)
+	local function deep()
+		CraterAbyss.show(folder, state:GetAttribute(Protocol.GiantAttributes.DeepLake) ~= true)
+	end
+	state:GetAttributeChangedSignal(Protocol.GiantAttributes.DeepLake):Connect(deep)
+	deep()
 	-- En el descanso el volcán se vacía: sin agua no hay abismo, motas ni fumarolas.
 	CraterDrain.start(function(visible: boolean)
 		folder.Parent = if visible then Workspace else nil

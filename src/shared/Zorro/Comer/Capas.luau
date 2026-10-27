@@ -7,7 +7,7 @@
 		play    la avanza: suma su pose con un peso y dispara sus eventos
 		retire / fades   apaga las que se van, cada una desde el peso que tenía (dos
 		        reemplazos seguidos no cortan de golpe la primera)
-		stageFor  la etapa más cercana al alto actual
+		stageFor  la etapa que ya alcanzó con su alto actual
 	Peso por etapa: PACE estira los tiempos (la E4 tarda 40 % más: más pesada,
 	anticipación más larga) y LIFT baja los saltos (la E4 salta menos en
 	proporción). Qué reacción hace cada etapa lo decide Comer/Elegir.
@@ -40,13 +40,14 @@ local Capas = {}
 
 Capas.PACE = PACE
 
--- Etapa más cercana al alto actual (al crecer, el alto pasa de una a otra).
+-- La etapa más alta cuyo alto ya alcanzó. Crece con cada pez (GiantStages.heightAt)
+-- hasta casi el alto de la siguiente: la "más cercana" la daría por evolucionado antes
+-- de tiempo; la nueva empieza cuando el estirón de la evolución llega a su alto.
 function Capas.stageFor(height: number): number
-	local best, distance = 1, math.huge
-	for stage = 1, GiantStages.count do
-		local d = math.abs(math.log(height / GiantStages.heightFor(stage)))
-		if d < distance then
-			best, distance = stage, d
+	local best = 1
+	for stage = 2, GiantStages.count do
+		if height >= GiantStages.heightFor(stage) * 0.98 then
+			best = stage
 		end
 	end
 	return math.clamp(best, 1, #PACE)

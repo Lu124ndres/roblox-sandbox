@@ -23,7 +23,12 @@
 	Crecen por etapas: cada etapa empieza en stageThresholds[i] de la barra y
 	mide stageHeightsInPlayers[i] veces el alto de un jugador. Con un jugador
 	de 5.5 studs: 16.5, 44, 53.6 y 107.3 studs (la 3 y la 4 bajaron un 35 %, pedido
-	del usuario del 2026-10-20).
+	del usuario del 2026-10-20). Y crecen con cada pez (growth,
+	pedido del usuario): dentro de una etapa van de su alto hacia el de la
+	siguiente (towardNext del camino); el último estirón y el cambio de forma
+	llegan juntos al evolucionar. La forma final sigue hasta
+	finalHeightInPlayers (128.7 studs) al llenarse. Si se enoja y la barra baja,
+	no encoge.
 
 	Enojo: si nadie le da de comer en graceSeconds, se enoja poco a poco
 	(0 -> 1 en rampSeconds). Desde angryThreshold la barra baja sola (nunca por
@@ -56,6 +61,7 @@ local Giants: Types.GiantsConfig = {
 			-- Modelo de bloques v2 (docs/plan_orca_v2.md): OrcaE1_v2..E4_v2. Sin esta línea vuelve
 			-- todo al actual.
 			modelSuffix = "_v2",
+			deepLake = true, -- toda el agua igual de honda, a 250 (pedido del usuario)
 			rouletteWeight = 50,
 			released = true,
 			inRoulette = true,
@@ -127,6 +133,10 @@ local Giants: Types.GiantsConfig = {
 	stageThresholds = { 0, 0.25, 0.5, 0.75 },
 	playerHeightStuds = 5.5,
 	stageHeightsInPlayers = { 3, 8, 9.75, 19.5 },
+	growth = {
+		towardNext = 0.85, -- llega al 85 % del camino; el último estirón llega con la evolución
+		finalHeightInPlayers = 23.4, -- la forma final sigue creciendo de 19.5 a 23.4 hasta llenarse
+	},
 	anger = {
 		graceSeconds = 45,
 		smallServerPlayers = 3,

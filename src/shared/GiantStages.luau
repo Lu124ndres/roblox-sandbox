@@ -4,7 +4,8 @@
 
 	El gigante crece por etapas. La etapa sale del progreso de la barra
 	(Config.Giants.stageThresholds marca dónde empieza cada una) y el alto de
-	cada etapa es un múltiplo del alto de un jugador.
+	cada etapa es un múltiplo del alto de un jugador. Dentro de una etapa
+	sigue creciendo con la barra (heightAt, Config.Giants.growth).
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -33,6 +34,23 @@ end
 function GiantStages.heightFor(stage: number): number
 	local multiple = GIANTS.stageHeightsInPlayers[math.clamp(stage, 1, GiantStages.count)]
 	return multiple * GIANTS.playerHeightStuds
+end
+
+-- Alto en studs según el avance de la barra. Dentro de una etapa crece de su alto
+-- hacia el de la siguiente (growth.towardNext del camino); la última, hasta
+-- growth.finalHeightInPlayers. Crece en proporción (cada pez lo agranda el mismo
+-- tanto por ciento), que se ve parejo tanto de cría como de gigante. Con `stage`, no
+-- pasa del tope de esa etapa: el último estirón llega con la evolución.
+function GiantStages.heightAt(progress: number, stage: number?): number
+	local s = math.clamp(stage or GiantStages.stageFor(progress), 1, GiantStages.count)
+	local thresholds = GIANTS.stageThresholds
+	local from, to = thresholds[s], thresholds[s + 1] or 1
+	local t = math.clamp((progress - from) / math.max(to - from, 1e-6), 0, 1)
+	local start = GiantStages.heightFor(s)
+	local goal = if s < GiantStages.count
+		then start + (GiantStages.heightFor(s + 1) - start) * GIANTS.growth.towardNext
+		else GIANTS.growth.finalHeightInPlayers * GIANTS.playerHeightStuds
+	return start * (goal / start) ^ t
 end
 
 -- Comida total que necesita un gigante para llenarse. Si es el gigante actual,
