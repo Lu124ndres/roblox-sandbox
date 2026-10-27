@@ -133,7 +133,8 @@ Documentos en `docs/`:
   nuevos. Los retoques (un color, un tamaño, una posición) los cierra el agente principal con una
   captura. Para mejorar cómo se ve algo: `/pulido-visual`.
 - Cambios al guardado o a las compras → `guardian-datos`. La experiencia de un jugador nuevo →
-  `jugador`. Antes de publicar: `/revision-final`.
+  `jugador`. Reglas de Roblox (azar pagado, texto de jugadores, licencias, marcas, página) →
+  `cumplimiento`. Antes de publicar: `/revision-final`.
 - Diseño, escritura de código, arquitectura, Blender y diagnóstico de bugs complejos los hace el
   agente principal o los agentes de una ola (`docs/guia_crear_monstruo.md`, sección 12), en su
   worktree y sin commit; nunca `infra`.
