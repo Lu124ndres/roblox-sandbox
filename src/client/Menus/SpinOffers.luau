@@ -3,7 +3,9 @@
 	SpinOffers
 
 	Ayudas para la ventana de la ruleta (SpinWindow), solo para mostrar:
-		percent(index)      % de la casilla (su peso sobre el total de Config/Spin)
+		percent(index, hasSuperRod)  % de la casilla para este jugador: si ya tiene la
+		                    caña suprema, esa casilla no sale (0 %) y su parte se reparte
+		                    entre las demás, igual que el sorteo del servidor (SpinWheel)
 		prizeText(p, prize) texto de la casilla: las de monedas con la cantidad de
 		                    este jugador (RewardScale, igual que el servidor), el
 		                    resto su `label`
@@ -26,18 +28,22 @@ local SpinOffers = {}
 
 SpinOffers.keys = { "Spin1", "Spin5" } -- en este orden en la ventana
 
-local totalWeight = 0
-for _, prize in SPIN.prizes do
-	totalWeight += prize.weight
+-- Peso de una casilla para este jugador (la misma regla que server/Retention/SpinWheel).
+local function weight(prize: SPIN.Prize, hasSuperRod: boolean): number
+	return if prize.kind == "rod" and hasSuperRod then 0 else prize.weight
 end
 
--- % de la casilla `index` (los pesos de Config/Spin suman 100).
-function SpinOffers.percent(index: number): number
+-- % de la casilla `index` para quien tiene (o no) la caña suprema.
+function SpinOffers.percent(index: number, hasSuperRod: boolean): number
 	local prize = SPIN.prizes[index]
-	if not prize or totalWeight <= 0 then
+	local total = 0
+	for _, other in SPIN.prizes do
+		total += weight(other, hasSuperRod)
+	end
+	if not prize or total <= 0 then
 		return 0
 	end
-	return prize.weight / totalWeight * 100
+	return weight(prize, hasSuperRod) / total * 100
 end
 
 function SpinOffers.prizeText(player: Player, prize: SPIN.Prize): string

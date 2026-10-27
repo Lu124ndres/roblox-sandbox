@@ -69,7 +69,9 @@ export type MonetizationConfig = {
 	pondRobux: { [number]: number }, -- precio de cada estanque (2..11)
 	upgradeRobux: { [string]: { number } }, -- MEJORAS en Robux: Rod/Basket/Boots, por nivel
 	passGifts: { [string]: number }, -- precio del producto Gift<pase>
-	spinProducts: { [string]: { robux: number, spins: number } }, -- Spin<n>: giros de ruleta
+	-- Spin<n>: giros de ruleta. A quien PolicyService no deja comprar premios al azar se le da en su
+	-- lugar `fixedBoostMinutes` de impulso personal (x2 poder): un premio fijo del mismo valor.
+	spinProducts: { [string]: { robux: number, spins: number, fixedBoostMinutes: number } },
 	-- Pack de inicio (producto PackInicio): una sola vez, mucho valor por poco.
 	starterPack: {
 		robux: number,
@@ -168,7 +170,10 @@ local Monetization: MonetizationConfig = {
 		Boots = { 0, 5, 19, 39, 79, 199 },
 	},
 	passGifts = { VIP = 299, ReyDelMar = 149, DiosDelVolcan = 858 }, -- lo mismo que el pase
-	spinProducts = { Spin1 = { robux = 24, spins = 1 }, Spin5 = { robux = 80, spins = 5 } },
+	spinProducts = {
+		Spin1 = { robux = 24, spins = 1, fixedBoostMinutes = 15 },
+		Spin5 = { robux = 80, spins = 5, fixedBoostMinutes = 75 },
+	},
 	-- 19 R$: el producto PackInicio tiene que tener ese precio en el panel de Roblox.
 	starterPack = {
 		robux = 19,

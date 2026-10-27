@@ -15,7 +15,8 @@
 		Pond<n>           estanque abierto para siempre
 		Rod/Basket/Boots<n>  nivel n de MEJORAS (nunca baja)
 		Gift<pase>        el pase, regalado (queda en el guardado)
-		Spin1/Spin5       giros guardados de la ruleta (avisa aquí mismo)
+		Spin1/Spin5       giros guardados de la ruleta (avisa aquí mismo); a quien no se
+		                  le puede vender azar, un impulso fijo en su lugar (RandomPolicy)
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -27,11 +28,13 @@ local RestTime = require(script.Parent.RestTime)
 local GiantChoice = require(script.Parent.GiantChoice)
 local GiantFill = require(script.Parent.GiantFill)
 local Passes = require(script.Parent.Passes)
+local RandomPolicy = require(script.Parent.RandomPolicy)
 local ServerCredits = require(script.Parent.ServerCredits)
 local Remotes = require(script.Parent.Parent.Remotes)
 local ServerBoost = require(script.Parent.ServerBoost)
 local Analytics = require(script.Parent.Parent.Analytics)
 local Bus = require(script.Parent.Parent.Analytics.Bus)
+local Rewards = require(script.Parent.Parent.Social.Rewards)
 
 local MONETIZATION = Config.Monetization
 local PONDS = Config.Progression.ponds
@@ -110,6 +113,18 @@ function Grants.grant(player: Player, key: string): (boolean, string?)
 	end
 	local spin = MONETIZATION.spinProducts[key]
 	if spin then
+		local restricted = RandomPolicy.restricted(player)
+		if restricted == nil or not player.Parent then
+			return false, nil -- no se sabe o se fue: Roblox reintenta la entrega más tarde
+		elseif restricted then
+			-- No se le puede vender azar (llegó la compra igual, p. ej. con un cliente
+			-- modificado): recibe un premio fijo del mismo valor, decidido el 2026-10-26.
+			local minutes = spin.fixedBoostMinutes
+			Rewards.give(player, { boostMinutes = minutes }, "giros_fijos")
+			local text = `¡{minutes} min de x{Config.Social.personalBoostMultiplier} poder!`
+			Remotes.Notice:FireClient(player, "purchase", text)
+			return true, nil
+		end
 		addSpins(player, spin.spins)
 		return true, nil
 	end

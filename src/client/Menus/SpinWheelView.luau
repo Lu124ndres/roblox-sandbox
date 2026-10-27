@@ -6,15 +6,18 @@
 	(Assets.UI.RuedaRuleta: piedra volcánica y lava, una casilla por premio de
 	Config/Spin con la 1 arriba; la de la caña suprema es violeta)
 	y, encima de cada casilla, su ícono, su premio cerca del borde y su % dorado
-	cerca del centro; la gema de lava de arriba marca la casilla que sale. Todo
+	cerca del centro (el de este jugador: con la caña suprema, su casilla da 0 %
+	y el resto sube, como el sorteo del servidor); la gema de lava de arriba marca la casilla que sale. Todo
 	va en `rotor`, que gira.
 	La usan la ventana (SpinWindow) y la rueda del mundo (SpinStand).
 ]]
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
 local Assets = require(ReplicatedStorage.Shared.Assets)
+local Protocol = require(ReplicatedStorage.Shared.Protocol)
 local SPIN = require(ReplicatedStorage.Shared.Config.Spin)
 local Icons = require(script.Parent.Parent.Interface.Icons)
 local Kit = require(script.Parent.Parent.Interface.Kit)
@@ -34,7 +37,9 @@ local COLORS: { [string]: Color3 } = {
 
 -- "30%", "2.5%" o "0.01%": con los decimales que hagan falta para no mostrar 0.
 local function percentText(value: number): string
-	if value >= 1 then
+	if value <= 0 then
+		return "0%"
+	elseif value >= 1 then
 		return `{math.round(value)}%`
 	end
 	local text = string.format(if value >= 0.1 then "%.1f" else "%.2f", value)
@@ -82,6 +87,7 @@ function SpinWheelView.build(parent: Instance, textScale: number?): Wheel
 	image.Parent = rotor
 
 	local labels: { TextLabel } = {}
+	local percents: { TextLabel } = {}
 	for index, prize in SPIN.prizes do
 		local angle = (index - 1) * SLICE
 		local color = COLORS[prize.kind] or Color3.new(1, 1, 1)
@@ -97,11 +103,21 @@ function SpinWheelView.build(parent: Instance, textScale: number?): Wheel
 		local percent = Style.text(rotor, "Probabilidad", math.floor(28 * big), nil, 2.5)
 		place(percent, angle, RIM * 0.35, 0.1)
 		percent.Size = UDim2.fromScale(0.09, 0.05) -- angosto: con 9 casillas no se pisan
-		local value = SpinOffers.percent(index)
-		percent.Text = percentText(value)
 		percent.ZIndex = 3
 		Kit.gold(percent)
+		percents[index] = percent
 	end
+
+	-- Las probabilidades de este jugador; se repintan si saca la caña suprema.
+	local player = Players.LocalPlayer
+	local function paintPercents()
+		local hasSuperRod = player:GetAttribute(Protocol.PlayerAttributes.SuperRod) == true
+		for index, label in percents do
+			label.Text = percentText(SpinOffers.percent(index, hasSuperRod))
+		end
+	end
+	paintPercents()
+	player:GetAttributeChangedSignal(Protocol.PlayerAttributes.SuperRod):Connect(paintPercents)
 
 	local pointer = Instance.new("ImageLabel")
 	pointer.Name = "Flecha"
