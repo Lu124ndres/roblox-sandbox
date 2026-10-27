@@ -9,7 +9,9 @@
 		mount(parent, label, after) -> { frame, refresh }
 			label  nombre de la compra para la tabla ("VIP")
 			after  función que da la suerte con la compra (se llama al repintar)
-	Se repinta sola cuando cambia algo del jugador (caña, pase, colección).
+	Se repinta sola cuando cambia algo del jugador (caña, pase, colección). En táctil
+	toda la línea es un solo botón (el % arriba, "Ver probabilidades" abajo) para que el
+	dedo tenga todo el alto del hueco.
 ]]
 
 local Players = game:GetService("Players")
@@ -17,6 +19,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local LuckOdds = require(ReplicatedStorage.Shared.LuckOdds)
 local UIConfig = require(ReplicatedStorage.Shared.UIConfig)
+local Device = require(script.Parent.Parent.Interface.Device)
 local Style = require(script.Parent.Parent.Interface.Style)
 local LuckWindow = require(script.Parent.LuckWindow)
 
@@ -43,8 +46,22 @@ function LuckLine.mount(parent: Instance, label: string, after: () -> number): L
 		LuckWindow.open(after, label)
 	end)
 
-	-- En un hueco angosto (tarjeta de la tienda), dos filas: el % arriba y el botón abajo.
+	text.ZIndex = button.ZIndex + 2 -- encima del botón en táctil; no atrapa el toque
+
+	-- Táctil: un solo botón con el % arriba. Angosto (tarjeta): dos filas. Ancho: lado a lado.
 	local function place()
+		local caption = button:FindFirstChild("Texto") :: TextLabel?
+		if Device.touch() then
+			button.AnchorPoint, button.Position = Vector2.zero, UDim2.fromScale(0, 0)
+			button.Size = UDim2.fromScale(1, 1)
+			text.Size, text.TextXAlignment = UDim2.fromScale(1, 0.55), Enum.TextXAlignment.Center
+			if caption then
+				caption.Text = "Ver probabilidades"
+				caption.Position = UDim2.new(0, 7, 0.55, 0)
+				caption.Size = UDim2.new(1, -14, 0.45, -4)
+			end
+			return
+		end
 		local narrow = frame.AbsoluteSize.X < NARROW
 		text.Size = if narrow then UDim2.fromScale(1, 0.48) else UDim2.fromScale(0.62, 1)
 		text.TextXAlignment = if narrow
@@ -53,9 +70,10 @@ function LuckLine.mount(parent: Instance, label: string, after: () -> number): L
 		button.AnchorPoint = if narrow then Vector2.new(0.5, 1) else Vector2.new(1, 0)
 		button.Position = if narrow then UDim2.fromScale(0.5, 1) else UDim2.fromScale(1, 0)
 		button.Size = if narrow then UDim2.fromScale(0.9, 0.5) else UDim2.fromScale(0.36, 1)
-		local caption = button:FindFirstChild("Texto") :: TextLabel?
 		if caption then -- angosto: la palabra sola, así la letra no se achica
 			caption.Text = if narrow then "Probabilidades" else "Ver probabilidades"
+			caption.Position = UDim2.fromOffset(7, 5)
+			caption.Size = UDim2.new(1, -14, 1, -12)
 		end
 	end
 	place()

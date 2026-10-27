@@ -4327,3 +4327,24 @@ devolvió a 1 y se comprobó.
 
 **Qué sigue:** explicar la suerte con números (VIP +20 %, cañas) para cumplir la política de
 modificadores de probabilidad; actualización del sábado 31.
+
+## 2026-10-26 — La suerte que se vende, explicada con números
+
+**Qué se hizo (política de Roblox sobre modificadores de probabilidad que se venden; el usuario
+eligió explicar con números sin cambiar lo que se vende):**
+- `shared/LuckOdds`: la suerte total del jugador y el % de cada rareza (`FishCatalog.rarityChances`,
+  misma cuenta que el sorteo; `FishingService` sortea con `LuckOdds.total`).
+- Ventana "Tus probabilidades" (`Menus/LuckWindow`, botón "% PROBABILIDADES" en el Índice) con
+  las 6 rarezas y, si la abre una compra, la columna con esa compra.
+- `Menus/LuckLine` ("Legendario 0.72 % → 0.77 %" y "Ver probabilidades") en la tarjeta del VIP,
+  el panel de cañas de MEJORAS y el pack de inicio. En táctil, toda la línea es un solo botón.
+- La tienda: tarjetas de 370 de alto para que entre la línea y la descripción completa.
+  `UpgradeDetail` se partió en `UpgradeDetailParts` (límite de 200 líneas).
+
+**Probado en Studio:** los % coinciden con el cálculo aparte (Legendario 0.64 % sin suerte, 0.72 %
+con el VIP); la tabla y la línea se repintan al cambiar la caña; el botón abre la tabla con la
+compra; en PC todo se lee. En el Galaxy A06 la tabla se lee bien (3.6 mm por fila).
+
+**Queda (decisión del usuario: solo lo nuevo):** en teléfono la línea mide 6.0 mm en la tienda,
+4.7 en MEJORAS y 2.9 en el pack; el pack entero se dibuja al 34 % (su botón de comprar mide
+4.3 mm) y la tienda va en tres columnas con descripciones cortadas. Viene de antes.
