@@ -4291,3 +4291,39 @@ cierran con una captura). La medición quedó como herramienta en
 **Qué se rompió:** nada; solo cambian reglas de trabajo.
 
 **Qué sigue:** volver a medir después de usar por primera vez cada agente nuevo.
+
+## 2026-10-26 — Ruleta de pago revisada en el servidor, likes solo manuales y puerto de Rojo
+
+**Qué se hizo:**
+- **Ruleta y política de azar pagado:** el servidor también revisa `PolicyService` al entregar
+  giros comprados (`Monetization/Grants`, `RandomPolicy.restricted`): a quien no se le puede
+  vender azar le da `fixedBoostMinutes` de x2 poder (15 por Spin1, 75 por Spin5) en vez de
+  giros. Si la política aún no se sabe o el jugador salió, `NotProcessedYet` para que Roblox
+  reintente. `Receipts` lleva los recibos en vuelo para no entregar dos veces durante la espera;
+  la devolución de compras para el servidor pasó a `Monetization/CreditRestore` (límite de 200
+  líneas). La rueda muestra las probabilidades de cada jugador: con la caña suprema su casilla
+  da 0 % y el resto se reparte (`SpinOffers`, `SpinWheelView`).
+- **Likes:** solo manuales (pedido del usuario). `Social/LikeGoal` ya no usa HttpService y se
+  borró `tools/likes-worker/`.
+- **Rojo:** Windows reservó el rango 34816-34915 y `rojo serve` daba "os error 10013" en el
+  34872. `default.project.json` fija `servePort` = 34000; en el plugin de Studio hay que
+  conectar a ese puerto.
+- **Docs al día con el código:** `alcance.md` (multiplicadores, comida, estanques, pases),
+  alturas de etapa en cinco docs, `ui-assets.md` (sin ForgeGUI; ID de la hoja de íconos del
+  HUD corregido), `pruebas_guardado.md` y `lanzamiento.md`.
+- **Trabajo sin commit guardado:** volcán de bloques, hábitats completos, lago hondo,
+  crecimiento con cada pez, contador de eventos, mapa, scripts y docs de los días 18 al 26.
+  Quedan fuera de git a propósito los `.fbx`, `.blend`, texturas, renders y `publicar/`.
+
+**Probado en Studio:** compila, `selene src` y `stylua --check src` limpios. La rueda pasa de
+0.01 % a 0 % al tener la caña suprema; `RandomPolicy.restricted` responde en 0.3 s; la orden
+`likes` llega al letrero. Prueba de humo del agente `tester`: arranque sin errores nuevos,
+hábitat de los cinco gigantes, crecimiento, ventanas y descanso del volcán. `remote-auditor`
+revisó la ruleta (sus tres hallazgos, aplicados). Una compra real de un jugador restringido no
+se puede simular en Studio.
+
+**Qué se rompió:** nada. **Ojo:** la prueba de likes escribió 42 en el DataStore real; se
+devolvió a 1 y se comprobó.
+
+**Qué sigue:** explicar la suerte con números (VIP +20 %, cañas) para cumplir la política de
+modificadores de probabilidad; actualización del sábado 31.

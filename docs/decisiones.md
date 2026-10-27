@@ -1231,3 +1231,27 @@ guardado del cierre ya lleva el crédito). Un segundo pack de inicio se entrega 
 Roblox no devuelve una compra sin entregar: la protección es no volver a ofrecerlo.
 **Costo:** si el comprador sale, los demás de ese servidor no ven su llenado; un crédito de un
 monstruo de temporada fuera de fecha espera a que vuelva.
+
+## 2026-10-26 — Giros pagados a un jugador restringido: premio fijo
+
+**Contexto:** `PolicyService` dice si a un jugador no se le pueden vender premios al azar. El
+botón de comprar giros ya se escondía, pero un cliente modificado podía comprar igual y el
+servidor entregaba los giros. **Decisión (del usuario):** el servidor revisa al entregar y, si
+está restringido, da un premio fijo del mismo valor (`Config.Monetization.spinProducts`,
+`fixedBoostMinutes`) en vez de giros. Si la política no se sabe todavía, `NotProcessedYet`.
+**Alternativas descartadas:** entregar los giros y solo registrarlo (sigue siendo azar pagado);
+no entregar (el jugador queda sin lo que pagó).
+
+## 2026-10-26 — Los likes del letrero son solo manuales
+
+Reemplaza la parte de "Likes por roproxy" del 2026-10-26: Roblox no deja leer los likes desde el
+juego, el proxy público daba 403 y el usuario no quiere lectura automática. El número lo pone
+el admin desde el panel (`likes`, o `g:likes` para todos los servidores). Se borró el worker de
+Cloudflare que había quedado sin usar. Ya no hace falta "Permitir solicitudes HTTP".
+
+## 2026-10-26 — Rojo en el puerto 34000
+
+Windows reservó el rango 34816-34915 (lo hacen Hyper-V, WSL o Docker) y el puerto de siempre
+(34872) daba "os error 10013". `default.project.json` fija `servePort` = 34000. Si vuelve a
+pasar: `netsh interface ipv4 show excludedportrange protocol=tcp` y elegir otro fuera de los
+rangos.
