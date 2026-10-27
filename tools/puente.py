@@ -33,7 +33,7 @@ class Marco:
     def __init__(self):
         self.d = gi.direccion(L["bridgeAngle"])
         self.inicio = gi.polar(L["bridgeAngle"], L["bridgeStartRadius"], gi.CUBIERTA_Y)
-        fin = gi.add(gi.CRATER, self.d, -(L["craterRimOuter"] - 2))
+        fin = gi.add(gi.CRATER, self.d, -(L["craterGateRadius"] + 1))  # el arco, al pie del volcán
         self.fin = (fin[0], gi.DECK_ABISMO, fin[2])
         self.largo = math.dist((self.inicio[0], self.inicio[2]), (self.fin[0], self.fin[2]))
         self.subida = self.fin[1] - self.inicio[1]

@@ -37,7 +37,7 @@ class Marco:
     def __init__(self):
         a = L["bridgeAngle"] + 180  # del cráter hacia la isla
         self.r = gi.base_con_z(gi.direccion(a))
-        base = gi.polar_crater(a, L["craterRimOuter"] - 3, 0)
+        base = gi.polar_crater(a, L["craterGateRadius"], 0)  # al pie del volcán, donde llega el puente
         self.base = (base[0], gi.RIM_Y, base[2])
 
     def en(self, x, y, z=0):

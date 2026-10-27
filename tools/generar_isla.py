@@ -548,12 +548,8 @@ def anillo_espuma(nombre, centro, radio, n):
 
 
 def espuma():
+    # Solo la isla: la orilla del volcán de bloques es irregular (no hay anillo que seguir).
     hijos = anillo_espuma("Isla", (0, 0, 0), L["shoreRadius"], 96)
-    # Orilla exterior del cráter: donde su ladera corta el agua.
-    fin_paseo = L["craterCliffRadius"] + L["craterWalkWidth"]
-    t = ((RIM_Y - AGUA_Y) / (RIM_Y - L["seaFloorHeight"])) ** (1 / 1.6)
-    rho = fin_paseo + t * (L["craterBaseRadius"] - fin_paseo)
-    hijos += anillo_espuma("Crater", CRATER, rho, 110)
     return grupo("Espuma", hijos, "Folder")
 
 
@@ -754,69 +750,6 @@ def puerta_abismo():
     return construir()
 
 
-def cresta(nombre, angulo, rho, humo=False):
-    """Cresta de roca volcánica en el borde exterior del cráter: un pico de bloques de
-    basalto que se afinan hacia arriba (como una montaña chica) y rocas sueltas al pie;
-    algunas echan humo por la punta."""
-    y = altura_crater(rho + 5, angulo) - 2
-    base = polar_crater(angulo, rho, 0)
-    hijos, ancho = [], rng.uniform(10, 15)
-    alto_total = rng.uniform(16, 34)
-    for k in range(3):
-        alto = alto_total * (0.42, 0.33, 0.25)[k] + 1
-        p = (base[0] + rng.uniform(-1.5, 1.5), y + alto / 2, base[2] + rng.uniform(-1.5, 1.5))
-        giro = mat(ry(rng.uniform(0, 90)), mat(rx(rng.uniform(-9, 9)), rz(rng.uniform(-9, 9))))
-        roca = pieza(f"Pico{k}", (ancho, alto, ancho * rng.uniform(0.7, 0.95)), p, BASALTO[k % 3], "Basalt", giro)
-        if k == 2 and humo:
-            roca["children"] = [{"name": "Humo", "className": "Smoke", "properties": {
-                "Color": color((70, 62, 62)), "Opacity": 0.14, "RiseVelocity": 7, "Size": 16}}]
-        hijos.append(roca)
-        y += alto - 1
-        ancho *= 0.62
-    for k in range(rng.randint(1, 2)):  # rocas sueltas al pie
-        s = rng.uniform(4, 7)
-        q = add(base, polar(rng.uniform(0, 360), rng.uniform(7, 10), altura_crater(rho + 5, angulo) - 1 + s * 0.3))
-        hijos.append(con_prop(pieza(f"Roca{k}", (s * 1.3, s, s), q, BASALTO[(k + 1) % 3], "Basalt", mat(ry(rng.uniform(0, 90)), rx(rng.uniform(-15, 15)))),
-                              f"Roca{1 + k % 2}"))
-    # Modelo 3D del pico (Cresta1/2 de Blender) en lugar de los bloques; el humo va aparte.
-    n = int("".join(c for c in nombre if c.isdigit()) or 0)
-    hijos.append(ancla(f"Cresta{1 + n % 2}", (base[0], altura_crater(rho + 5, angulo) - 2, base[2]), (12, alto_total + 2, 12),
-                       ry(n * 37), "alto", "Pico"))
-    if humo:
-        hijos.append({"name": "Humo", "className": "Part", "properties": {
-            **pieza("Humo", (2, 2, 2), (base[0], altura_crater(rho + 5, angulo) - 2 + alto_total, base[2]), BASALTO[0], **INVISIBLE,
-                    CanCollide=False)["properties"]},
-            "children": [{"name": "Humo", "className": "Smoke", "properties": {
-                "Color": color((70, 62, 62)), "Opacity": 0.14, "RiseVelocity": 7, "Size": 16}}]})
-    return grupo(nombre, hijos)
-
-
-def cascada_lava(nombre, angulo):
-    """Río de lava que baja por la ladera exterior hasta el mar, con vapor al tocar el agua."""
-    rho0, rho1 = L["craterRimOuter"] - 2, L["craterBaseRadius"] - 14
-    pasos, ancho = 9, rng.uniform(3.2, 4.6)
-    hijos, puntos = [], []
-    for k in range(pasos + 1):
-        rho = rho0 + (rho1 - rho0) * k / pasos
-        a = angulo + math.sin(k * 0.9 + angulo) * 1.3
-        puntos.append(polar_crater(a, rho, max(altura_crater(rho, a), AGUA_Y) + 0.3))
-    for k in range(pasos):
-        p0, p1 = puntos[k], puntos[k + 1]
-        d = norm(tuple(p1[i] - p0[i] for i in range(3)))
-        largo = math.dist(p0, p1) + 0.8
-        medio = tuple((p0[i] + p1[i]) / 2 for i in range(3))
-        tramo = pieza(f"Tramo{k}", (ancho * (1 + k * 0.04), 0.5, largo), medio, LAVA, "Neon", base_con_z(d), **FANTASMA)
-        if k % 4 == 1:
-            tramo["children"] = [luz(18, 1.1, LAVA)]
-        hijos.append(tramo)
-    fin = puntos[-1]
-    charco = pieza("Charco", (0.4, 10, 10), (fin[0], AGUA_Y + 0.1, fin[2]), LAVA, "Neon", VERTICAL, "Cylinder", **FANTASMA)
-    charco["children"] = [{"name": "Vapor", "className": "Smoke", "properties": {
-        "Color": color((235, 235, 240)), "Opacity": 0.12, "RiseVelocity": 5, "Size": 9}}]
-    hijos.append(charco)
-    return grupo(nombre, hijos)
-
-
 def paseo_crater():
     """Paseo de obsidiana pulida al borde del acantilado (desde aquí se alimenta), con
     filos de oro y obeliscos con fuego cada 30 grados (menos en la puerta)."""
@@ -874,29 +807,24 @@ def crater():
     hijos.append(puerta_abismo())
     llegada = L["bridgeAngle"] + 180
 
-    def libre(a, margen):
-        return abs((a - llegada + 180) % 360 - 180) > margen
-
     hijos.append(paseo_crater())
-    # Corona de crestas de roca en el borde exterior (con hueco en la puerta).
-    crestas, n = [], 40
-    for k in range(n):
-        a = k * 360 / n + rng.uniform(-3, 3)
-        if libre(a, 18):
-            rho = L["craterRimOuter"] + rng.uniform(-3, 2)
-            crestas.append(cresta(f"Cresta{k}", a, rho, humo=k % 5 == 0))
-    hijos.append(grupo("Crestas", crestas, "Folder"))
-    hijos.append(grupo("Lava", [cascada_lava(f"Cascada{k}", a) for k, a in enumerate((20, 62, 108, 150, 192, 228, 318, 345))], "Folder"))
+    # Sin crestas ni cascadas de lava en el borde: la montaña, la cueva y la lava son la malla
+    # del volcán de bloques (server/World/BlockVolcano, tools/blender/volcan_*.py).
     hijos.append(esqueleto("Esqueleto1", llegada + 55, L["craterCliffRadius"] + 26, 26))
     hijos.append(esqueleto("Esqueleto2", llegada - 120, L["craterCliffRadius"] + 25, 20))
     hijos.append(grupo("Cristales", [cristales(f"Cristales{k}", llegada + d, L["craterCliffRadius"] + L["craterWalkWidth"] - 6) for k, d in enumerate((30, 95, 160, 205, 250, 320))], "Folder"))
-    # Pared invisible al borde del acantilado, sin huecos: nadie cae al abismo.
+    # Pared invisible al borde del acantilado, sin huecos: nadie cae al abismo. El tramo
+    # donde llega el puente de la guarida (MuroGuarida) lo abre RestArena en el descanso.
     muros, m = [], 72
     rho = L["craterCliffRadius"] + 0.5
+    g0, g1 = hueco_puente(rho)
     for k in range(m):
         a0, a1 = k * 360 / m, (k + 1) * 360 / m
-        p0, p1 = polar_crater(a0, rho, 0), polar_crater(a1, rho, 0)
-        muros.append(muro(f"Muro{k}", (p0[0], p0[2]), (p1[0], p1[2]), RIM_Y, 8))
+        for b0, b1 in restar_arco(a0, a1, g0, g1):
+            p0, p1 = polar_crater(b0, rho, 0), polar_crater(b1, rho, 0)
+            muros.append(muro(f"Muro{k}", (p0[0], p0[2]), (p1[0], p1[2]), RIM_Y, 8))
+    p0, p1 = polar_crater(g0, rho, 0), polar_crater(g1, rho, 0)
+    muros.append(muro("MuroGuarida", (p0[0], p0[2]), (p1[0], p1[2]), RIM_Y, 8))
     hijos.append(grupo("Borde", muros, "Folder"))
     # Línea coral brillante en el borde: se alimenta desde cualquier punto de la orilla.
     orilla, rho = [], L["craterCliffRadius"] + 2.6
@@ -946,6 +874,60 @@ def linea(nombre, a, b, y, ancho, alto, rgb, material, **extra):
     dx, dz = b[0] - a[0], b[1] - a[1]
     return pieza(nombre, (ancho, alto, math.hypot(dx, dz)), ((a[0] + b[0]) / 2, y, (a[1] + b[1]) / 2), rgb, material,
                  ry(math.degrees(math.atan2(dx, dz))), **extra)
+
+
+def hueco_puente(radio):
+    """Ángulos (grados) que ocupa el puente de la guarida a `radio` del centro del cráter."""
+    medio = math.degrees((L["restBridgeWidth"] / 2) / radio)
+    return L["restBridgeAngle"] - medio, L["restBridgeAngle"] + medio
+
+
+def restar_arco(a0, a1, g0, g1):
+    """Lo que queda del arco [a0, a1] sin el hueco [g0, g1] (todo en grados, sin dar la vuelta)."""
+    if g1 <= a0 or g0 >= a1:
+        return [(a0, a1)]
+    return [(b0, b1) for b0, b1 in ((a0, g0), (g1, a1)) if b1 - b0 > 0.05]
+
+
+def tramo(nombre, p0, p1, ancho, alto, rgb, material, **extra):
+    """Bloque de `ancho` x `alto` que va de p0 a p1 (centro de la cara de arriba en cada punta)."""
+    d = tuple(p1[i] - p0[i] for i in range(3))
+    largo = math.sqrt(sum(v * v for v in d))
+    z = tuple(v / largo for v in d)
+    x = (z[2], 0, -z[0])  # horizontal, a lo ancho
+    nx = math.hypot(x[0], x[2])
+    x = (x[0] / nx, 0, x[2] / nx)
+    y = (z[1] * x[2] - z[2] * x[1], z[2] * x[0] - z[0] * x[2], z[0] * x[1] - z[1] * x[0])
+    r = tuple(tuple((x, y, z)[j][i] for j in range(3)) for i in range(3))
+    centro = add(tuple((p0[i] + p1[i]) / 2 for i in range(3)), y, -alto / 2)
+    return pieza(nombre, (ancho, alto, largo), centro, rgb, material, r, **extra)
+
+
+def puente_guarida(R, top):
+    """Rampa del paseo (borde del acantilado, a RIM_Y) al piso de la guarida (a `top`), en
+    restBridgeAngle: tablero de basalto, bordillos con una línea de lava, postes con brasas y
+    paredes invisibles a los dos lados (nadie se cae al relleno). Es parte de la guarida:
+    sube y se hunde con ella."""
+    a, ancho = L["restBridgeAngle"], L["restBridgeWidth"]
+    r0, r1 = R - 1.5, L["craterCliffRadius"] + 4
+    abajo, arriba = polar_crater(a, r0, top + 0.12), polar_crater(a, r1, RIM_Y + 0.05)
+    lado = add(polar_crater(a + 90, 1, 0), CRATER, -1)  # vector unitario a lo ancho
+    hijos = [tramo("Tablero", abajo, arriba, ancho, 1.4, BASALTO[1], "Basalt"),
+             tramo("Runa", add(abajo, (0, 0.06, 0)), add(arriba, (0, 0.06, 0)), 0.6, 0.12, LAVA, "Neon", **FANTASMA)]
+    for s in (-1, 1):
+        off = (lado[0] * s * (ancho / 2 - 0.6), 0, lado[2] * s * (ancho / 2 - 0.6))
+        b0, b1 = add(abajo, off), add(arriba, off)
+        hijos.append(tramo(f"Bordillo{s + 1}", add(b0, (0, 1.2, 0)), add(b1, (0, 1.2, 0)), 1.2, 1.5, BASALTO[0], "Basalt"))
+        hijos.append(tramo(f"Veta{s + 1}", add(b0, (0, 0.5, 0)), add(b1, (0, 0.5, 0)), 1.3, 0.25, LAVA, "Neon", **FANTASMA))
+        w = (lado[0] * s * (ancho / 2 + 0.3), 0, lado[2] * s * (ancho / 2 + 0.3))
+        hijos.append(tramo(f"Pared{s + 1}", add(add(abajo, w), (0, 9, 0)), add(add(arriba, w), (0, 9, 0)), 0.6, 9, BASALTO[0],
+                           "SmoothPlastic", **INVISIBLE))
+        for k in range(6):  # postes con brasas
+            t = (k + 0.5) / 6
+            p = add(tuple(b0[i] + (b1[i] - b0[i]) * t for i in range(3)), (0, 2.6, 0))
+            hijos.append(pieza(f"Poste{s + 1}_{k}", (1.6, 3.2, 1.6), p, BASALTO[2], "Basalt"))
+            hijos.append(pieza(f"Brasa{s + 1}_{k}", (1.1, 0.5, 1.1), add(p, (0, 1.85, 0)), LAVA, "Neon", **FANTASMA))
+    return grupo("Puente", hijos)
 
 
 def guarida_descanso():
@@ -998,27 +980,59 @@ def guarida_descanso():
     tope = piso + 1.4
     hijos.append(pieza("NucleoOro", (0.1, 10, 10), (cx, tope + 0.04, cz), ORO, "Metal", VERTICAL, "Cylinder", **FANTASMA))
     hijos.append(pieza("Nucleo", (0.12, 9, 9), (cx, tope + 0.07, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder", **FANTASMA))
-    hijos.append(pieza("Haz", (7, 1.6, 1.6), (cx, tope + 3.6, cz), AZUL_PODER, "Neon", VERTICAL, "Cylinder",
-                       Transparency=0.75, **FANTASMA))
-    cristal = pieza("CristalPoder", (3.6, 3.6, 3.6), (cx, top + 9, cz), AZUL_PODER, "Neon", mat(rx(45), rz(35)), **FANTASMA)
-    cristal["children"] = [luz(20, 1.2, AZUL_PODER)]
+    alto_cristal = top + 13  # en el centro de los anillos cruzados del santuario (GIRO_Z)
+    hijos.append(pieza("Haz", (alto_cristal - tope, 1.6, 1.6), (cx, (tope + alto_cristal) / 2, cz), AZUL_PODER, "Neon",
+                       VERTICAL, "Cylinder", Transparency=0.75, **FANTASMA))
+    cristal = pieza("CristalPoder", (4.4, 4.4, 4.4), (cx, alto_cristal, cz), AZUL_PODER, "Neon", mat(rx(45), rz(35)),
+                    **FANTASMA)
+    cristal["children"] = [luz(24, 1.4, AZUL_PODER)]
     hijos.append(cristal)
     for k in range(4):
-        p = polar_crater(k * 90 + 45, 5.5, top + 9)
+        p = polar_crater(k * 90 + 45, 5.5, alto_cristal)
         hijos.append(pieza(f"Orbita{k}", (1, 1, 1), p, AZUL_PODER, "Neon", mat(rx(45), rz(35)), **FANTASMA))
     # Muro bajo alrededor, con remate de oro (más la pared invisible alta, abajo).
     hijos += anillo_tallado("Parapeto", cx, cz, R - 0.9, 64, 1.6, 2.6, top + 2.7, (BASALTO[1], BASALTO[0]), "Basalt")
     hijos += anillo_tallado("Remate", cx, cz, R - 0.9, 64, 2, 0.35, top + 3, ORO, "Metal", **DECORADO)
     for k in range(12):  # obeliscos con fuego sobre el muro
         hijos.append(obelisco(f"Obelisco{k + 1}", k * 30 + 15, R - 0.9, piso))
-    # Pared invisible alta al borde, sin huecos: nadie se cae al lago.
+    # Pared invisible alta al borde: nadie se cae al relleno. Solo se abre donde llega el
+    # puente, que tiene sus propias paredes.
     muros, m = [], 64
+    g0, g1 = hueco_puente(R + 0.2)
     for k in range(m):
         a0, a1 = k * 360 / m, (k + 1) * 360 / m
-        p0, p1 = polar_crater(a0, R + 0.2, 0), polar_crater(a1, R + 0.2, 0)
-        muros.append(muro(f"Muro{k}", (p0[0], p0[2]), (p1[0], p1[2]), top, 8))
+        for b0, b1 in restar_arco(a0, a1, g0, g1):
+            p0, p1 = polar_crater(b0, R + 0.2, 0), polar_crater(b1, R + 0.2, 0)
+            muros.append(muro(f"Muro{k}", (p0[0], p0[2]), (p1[0], p1[2]), top, 8))
     hijos.append(grupo("Borde", muros, "Folder"))
+    hijos.append(puente_guarida(R, top))
+    hijos += anclas_santuario(top)
     return grupo("GuaridaDescanso", hijos)
+
+
+SANTUARIO = RAIZ / "assets" / "blender" / "GuaridaSantuario.json"
+# Lo que el santuario de Blender reemplaza; quedan el Piso (se choca y GuaridaSube lo usa
+# para medir), el Borde invisible y el cristal de poder con su haz.
+SANTUARIO_REEMPLAZA = ("Cimiento,Base,Aro,LineaLava,Anillo,Radio,Rombo,Estrado,Labio,NucleoOro,Nucleo,"
+                       "Parapeto,Remate,Obelisco")
+
+
+def anclas_santuario(top):
+    """Anclas del santuario flotante (tools/blender/guarida_santuario.py): sus mallas comparten
+    una caja, así que todas van con ajuste "caja" en el mismo lugar. El piso de la malla queda
+    0.15 por encima del Piso de primitivas para taparlo (las juntas muestran la obsidiana)."""
+    if not SANTUARIO.exists():
+        return []
+    caja = json.loads(SANTUARIO.read_text(encoding="utf-8"))
+    tam = (caja["ancho"], caja["alto"], caja["ancho"])
+    base = (CRATER[0], top + 0.15 + caja["centroY"] - caja["alto"] / 2, CRATER[2])
+    anclas = []
+    for k, malla in enumerate(caja["mallas"]):
+        nodo = ancla(malla, base, tam, ajuste="caja", reemplaza=SANTUARIO_REEMPLAZA if k == 0 else "")
+        if malla == caja["lava"]:
+            nodo["attributes"]["Brillo"] = {"Color3": color(LAVA)}
+        anclas.append(nodo)
+    return anclas
 
 
 def main():

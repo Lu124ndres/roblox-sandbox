@@ -19,7 +19,9 @@ El arco: un hueco de 2 x ARCO_MEDIO de ancho y de 30 a ARCO_ALTO para el modelo,
 túnel plano a 30 de 2 x TUNEL_MEDIO de ancho y techo a TUNEL_ALTO hasta el paseo.
 """
 
-FONDO = L["craterFloor"] - 12  # todo lo sólido empieza acá abajo (no se ve)
+# Todo lo sólido empieza acá abajo (no se ve): por debajo también del lago hondo de la orca
+# (deepLakeFloor), así la pared del lago baja hasta su fondo.
+FONDO = min(L["craterFloor"], L["deepLakeFloor"]) - 12
 MAR = L["seaFloorHeight"]
 PASEO = L["craterRimHeight"]
 WALK_END = L["craterCliffRadius"] + L["craterWalkWidth"]

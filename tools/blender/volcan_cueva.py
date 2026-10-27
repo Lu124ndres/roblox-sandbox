@@ -39,6 +39,10 @@ NOMBRES[:] = [f"{c}_{l}" for c in COLORES for l in CARAS]
 N = int(math.ceil(R_MAX / CELDA))
 DIRECCIONES = ((0, -1), (1, 0), (0, 1), (-1, 0))
 SUELO_MAR = [(FONDO, MAR)]  # lo que hay donde no hay columna
+# El fondo del lago es terreno de Roblox en el juego (el agua, la arena, la ceniza y el hielo
+# del cráter lo escriben): las columnas más adentro que esto no llevan piso, solo el techo, y
+# el acantilado de la malla baja hasta FONDO tapando la unión.
+LAGO_TERRENO = L["craterLakeRadius"] - 2
 
 
 class Tramo:
@@ -91,7 +95,7 @@ def armar():
                 mat_techo = material_techo((b0 + 1) * CELDA, (b1 + 1) * CELDA)
             else:
                 techo_alto, mat_techo = techo_fijo, "techo"
-            tramos = [Tramo(FONDO, piso, mat_piso, mat_piso, "piso")]
+            tramos = [] if rho < LAGO_TERRENO else [Tramo(FONDO, piso, mat_piso, mat_piso, "piso")]
             if afuera is not None:
                 alto = max(alto, techo_alto + 18)  # la roca del techo nunca es una cáscara
                 tramos.append(Tramo(techo_alto, alto, mat, mat, "cima", mat_techo))
