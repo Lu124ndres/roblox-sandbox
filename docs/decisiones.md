@@ -1255,3 +1255,10 @@ Windows reservó el rango 34816-34915 (lo hacen Hyper-V, WSL o Docker) y el puer
 (34872) daba "os error 10013". `default.project.json` fija `servePort` = 34000. Si vuelve a
 pasar: `netsh interface ipv4 show excludedportrange protocol=tcp` y elegir otro fuera de los
 rangos.
+
+## 2026-10-26 — Los rankings no incluyen administradores ni jugadores de prueba
+
+Las cuentas de admin tienen números de pruebas con el panel (el admin salía primero en Poder con
+710M contra 16.7K del segundo) y los jugadores de prueba de Studio (UserId negativo) se habían
+escrito en los rankings reales. `Leaderboards` no sube ni muestra ninguno de los dos, ni los
+valores en 0.

@@ -4348,3 +4348,19 @@ compra; en PC todo se lee. En el Galaxy A06 la tabla se lee bien (3.6 mm por fil
 **Queda (decisión del usuario: solo lo nuevo):** en teléfono la línea mide 6.0 mm en la tienda,
 4.7 en MEJORAS y 2.9 en el pack; el pack entero se dibuja al 34 % (su botón de comprar mide
 4.3 mm) y la tienda va en tres columnas con descripciones cortadas. Viene de antes.
+
+## 2026-10-26 — Rankings sin jugadores de prueba, sin ceros y sin admins
+
+**Qué se hizo (el usuario veía los tableros raros):** en los rankings reales había UserIds
+negativos (-1 a -8): los jugadores de prueba de Studio de las pruebas con varios clientes y los
+bots. Salían como "?" y ocupaban los primeros puestos de Kills. El de renacimientos estaba lleno
+de ceros. `Retention/Leaderboards` ya no sube ni muestra UserIds negativos, valores en 0 ni
+administradores (`Admins.isId`; decisión del usuario); lee 20 para quedarse con 10 válidos, y un
+nombre que falla ya no queda guardado como "?". Se borraron de `RankingPoder`, `RankingKills` y
+`RankingRenacimientos` las 8 llaves de prueba y la del admin (9 por ranking).
+
+**Probado en Studio:** los tres tableros muestran solo jugadores reales con su nombre; jugando
+con la cuenta admin no se vuelve a escribir su llave.
+
+**Qué sigue:** publicar. Los servidores con el código viejo pueden volver a escribir la llave
+del admin si juega en vivo antes; el código nuevo igual no la muestra.

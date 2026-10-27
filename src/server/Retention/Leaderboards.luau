@@ -11,7 +11,8 @@
 	jugadores de este servidor y se actualiza cada LOCAL_REFRESH_SECONDS.
 	No se suben ni se muestran los jugadores de prueba de Studio (UserId negativo: Player1,
 	Player2... y los bots) ni los valores en 0: las pruebas con varios clientes los habían
-	escrito en los rankings reales y salían como "?".
+	escrito en los rankings reales y salían como "?". Tampoco los administradores (decisión
+	del usuario del 2026-10-26): sus números salen de pruebas con el panel.
 ]]
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -19,6 +20,7 @@ local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Admins = require(script.Parent.Parent.Admin.Admins)
 local PlayerData = require(script.Parent.Parent.PlayerData)
 
 local REFRESH_SECONDS = 120
@@ -67,10 +69,15 @@ local function stores(): { [string]: OrderedDataStore }?
 	return if ok then result else nil
 end
 
--- nil si sus datos todavía no cargaron: un 0 falso no se muestra ni se sube.
+-- ¿Puede estar en el ranking? Ni jugadores de prueba de Studio (UserId negativo) ni admins.
+local function ranked(userId: number): boolean
+	return userId > 0 and not Admins.isId(userId)
+end
+
+-- nil si sus datos todavía no cargaron o no va al ranking: un 0 falso no se muestra ni se sube.
 local function valueOf(player: Player, board: string): number?
 	local save = PlayerData.read(player)
-	if not save then
+	if not save or not ranked(player.UserId) then
 		return nil
 	end
 	local value = if board == "Poder"
@@ -99,7 +106,7 @@ local function globalTop(store: OrderedDataStore, board: string): { Entry }?
 	for _, player in Players:GetPlayers() do
 		local value = valueOf(player, board)
 		local userId = player.UserId
-		if value and value > 0 and userId > 0 and written[userId] ~= value then
+		if value and value > 0 and written[userId] ~= value then
 			local ok = pcall(function()
 				store:SetAsync(tostring(userId), value)
 			end)
@@ -117,7 +124,7 @@ local function globalTop(store: OrderedDataStore, board: string): { Entry }?
 	local list = {}
 	for _, item in (pages :: DataStorePages):GetCurrentPage() do
 		local userId = tonumber(item.key) or 0
-		if userId > 0 and type(item.value) == "number" and item.value > 0 and #list < TOP then
+		if ranked(userId) and type(item.value) == "number" and item.value > 0 and #list < TOP then
 			table.insert(list, { name = nameOf(userId), value = item.value })
 		end
 	end

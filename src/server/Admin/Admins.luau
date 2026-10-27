@@ -18,4 +18,9 @@ function Admins.is(player: Player): boolean
 	return ADMINS[player.UserId] == true
 end
 
+-- Por UserId, para lo que no tiene al jugador a mano (las llaves de los rankings).
+function Admins.isId(userId: number): boolean
+	return ADMINS[userId] == true
+end
+
 return table.freeze(Admins)
